@@ -1,0 +1,71 @@
+[tool.poetry]
+name = "scopussearcher"
+version = "0.1.0"
+description = "API for Bibliographic Survey of Scopus Articles for Final Papers"
+authors = ["Mauricio <sir.silvabmauricio@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = {extras = ["all"], version = "^0.109.2"}
+pandas = "^2.2.0"
+bs4 = "^0.0.2"
+requests = "^2.31.0"
+pyarrow = "^15.0.0"
+setuptools = ">=65.5.1"
+
+[tool.poetry.group.dev.dependencies]
+isort = "^5.13.2"
+pip-audit = "^2.7.0"
+flake8 = "3.8.3"
+blue = "^0.9.1"
+pylint = "^3.0.3"
+bandit = {extras = ["toml"], version = "^1.7.7"}
+radon = {extras = ["toml"], version = "^6.0.1"}
+poetry-plugin-export = "^1.6.0"
+mypy = "^1.8.0"
+types-requests = "^2.31.0.20240218"
+types-beautifulsoup4 = "^4.12.0.20240106"
+pandas-stubs = "^2.2.0.240218"
+
+[tool.poetry.group.test.dependencies]
+pytest = "^8.0.0"
+pytest-mock = "^3.12.0"
+pytest-asyncio = "^0.23.5"
+coverage = "^7.4.3"
+
+[tool.poetry.group.docs.dependencies]
+mkdocs = "^1.5.3"
+mkdocs-material = "^9.5.9"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pylint]
+disable = ["C0114", "C0115", "C0116", "R0903", "E1136", "E0611", "E1131"]
+
+[tool.bandit]
+exclude_dirs = [".venv"]
+skips = ["B105", "B101"]
+
+[tool.isort]
+multi_line_output = 3
+include_trailing_comma = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests/"]
+
+[tool.coverage.run]
+omit = [
+    "app/utils/lifespan.py",
+    "app/utils/logger.py"
+]
+
+
+[tool.mypy]
+python_version = "3.11"
+disable_error_code = ["assignment", "no-redef", "arg-type"]
+
+[tool.black]
+target-version = ["py311"]

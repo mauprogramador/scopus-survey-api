@@ -1,0 +1,25 @@
+runtime: python311
+
+handlers:
+
+- url: /styles
+  static_dir: app/web/static/css
+
+- url: /icons
+  static_dir: app/web/static/icon
+
+- url: /images
+  static_dir: app/web/static/img
+
+- url: /scripts
+  static_dir: app/web/static/js
+
+- url: /svgs
+  static_dir: app/web/static/svg
+
+- url: /.*
+  script: auto
+
+automatic_scaling:
+  min_instances: 0
+  max_instances: 1

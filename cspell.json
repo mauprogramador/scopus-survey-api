@@ -1,0 +1,29 @@
+{
+  "version": "0.2",
+  "ignorePaths": [],
+  "dictionaryDefinitions": [],
+  "dictionaries": [],
+  "words": [
+    "Asyncio",
+    "citedby",
+    "httpx",
+    "ifms",
+    "Isort",
+    "Mkdocs",
+    "pydantic",
+    "Pylint",
+    "pymdownx",
+    "Pytest",
+    "referer",
+    "Scopus",
+    "starlette",
+    "svgs",
+    "venv",
+    "werkzeug"
+  ],
+  "ignoreWords": [],
+  "import": [],
+  "ignoreRegExpList": [
+    "#.*"
+  ]
+}
