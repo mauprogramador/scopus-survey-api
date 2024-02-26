@@ -10,7 +10,7 @@
 
 ---
 
-**Documentation**: <http://>
+**Documentation**: <https://mauprogramador.github.io/scopus-searcher-api/>
 
 **Swagger UI**: <http://127.0.0.1:8000>
 
