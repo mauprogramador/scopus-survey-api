@@ -1,0 +1,37 @@
+:root {
+  --orange: #E9711C;
+  --blue: #007398;
+  --gray-32: #323232;
+  --gray-50: #505050;
+  --gray-70: #707070;
+}
+* {
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  box-sizing: border-box;
+}
+body {
+  background-color: #333;
+}
+
+.language {
+  display: none;
+}
+.show {
+  display: block !important;
+}
+
+.background-image {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.valid {
+  border-color: #3B8754 !important;
+  outline: 3px solid #A3CFBB !important;
+}
+.invalid {
+  border-color: #DD4145 !important;
+  outline: 3px solid #F1AEB5 !important;
+}
