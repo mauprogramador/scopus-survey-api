@@ -2,7 +2,7 @@
 
 ## Clone
 
-First you need to clone the project from the GitHub repository: <https://github.com/mauprogramador/scopus-searcher-api.git>{:target="_blank"}
+First you need to clone the project from the GitHub repository: <https://github.com/mauprogramador/scopus-searcher-api>{:target="_blank"}
 
 On the Bash terminal:
 

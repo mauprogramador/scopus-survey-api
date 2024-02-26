@@ -6,7 +6,7 @@ Brasil - MS - Três Lagoas - 26 de Fevereiro de 2024<br/>
 
 **API para Levantamento Bibliográfico de Artigos da Scopus** <br/>
 
-**Código Fonte:** <https://github.com/mauprogramador/scopus-searcher-api.git>{:target="_blank"}
+**Código Fonte:** <https://github.com/mauprogramador/scopus-searcher-api>{:target="_blank"}
 
 ---
 

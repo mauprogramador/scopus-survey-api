@@ -6,7 +6,7 @@ Brazil - MS - Três Lagoas - February 26, 2024<br/>
 
 **API for Bibliographic Survey of Scopus Articles** <br/>
 
-**Source Code:** <https://github.com/mauprogramador/scopus-searcher-api.git>{:target="_blank"}
+**Source Code:** <https://github.com/mauprogramador/scopus-searcher-api>{:target="_blank"}
 
 ---
 
