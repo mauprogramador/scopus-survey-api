@@ -2,7 +2,7 @@ site_name: Scopus Searcher API
 site_url: http://127.0.0.1:8000
 site_description: API for bibliographic survey of Scopus articles
 site_author: MauProgramador
-repo_url: https://github.com/mauprogramador/scopus-searcher
+repo_url: https://github.com/mauprogramador/scopus-searcher-api.git
 
 theme:
   name: material
