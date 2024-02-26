@@ -1,0 +1,16 @@
+FROM python:3.11.1-buster
+
+ENV WORKDIR=/usr/src/scopussearcherapi
+WORKDIR $WORKDIR
+
+RUN python3 -m pip install --upgrade pip
+
+COPY ./requirements/requirements-docs.txt $WORKDIR
+RUN pip3 install --no-cache-dir -r requirements-docs.txt
+
+COPY ./docs $WORKDIR/docs
+COPY ./mkdocs.yml $WORKDIR
+
+EXPOSE 8000
+
+CMD ["mkdocs", "serve", "--dev-addr", "0.0.0.0:8000"]
