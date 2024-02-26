@@ -2,7 +2,7 @@ class ApiConfig:
     API_URL = (
         'https://api.elsevier.com/content/search/scopus'
         '?query=TITLE-ABS-KEY({query})&field={fields}&date={date}'
-        '&suppressNavLinks=true&count=2'
+        '&suppressNavLinks=true'
     )
 
     FIELDS = (
