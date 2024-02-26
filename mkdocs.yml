@@ -1,0 +1,96 @@
+site_name: Scopus Searcher API
+site_url: http://127.0.0.1:8000
+site_description: API for bibliographic survey of Scopus articles
+site_author: MauProgramador
+repo_url: https://github.com/mauprogramador/scopus-searcher
+
+theme:
+  name: material
+  language: en
+  favicon: images/favicon.png
+  features:
+    - navigation.path
+    - navigation.indexes
+    - navigation.top
+    - toc.follow
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.code.select
+  palette:
+    - scheme: slate
+      primary: orange
+      accent: pink
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+    - scheme: default
+      primary: orange
+      accent: red
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+
+nav:
+- Home: index.md
+- English:
+  - Scopus Searcher API: en/index.md
+  - Requirements: en/requirements.md
+  - Environment: en/environment.md
+  - Getting Started: en/getting-started.md
+  - Scopus Search API: en/scopus-search-api.md
+  - Web Scraping: en/web-scraping.md
+  - Data Survey: en/data-survey.md
+  - Responses and Errors: en/responses-and-errors.md
+  - Testing: en/testing.md
+  - Technologies: en/technologies.md
+  - Contact: en/contact.md
+- Português:
+  - Scopus Searcher API: pt/index.md
+  - Requisitos: pt/requirements.md
+  - Ambiente: pt/environment.md
+  - Primeiros Passos: pt/getting-started.md
+  - Scopus Search API: pt/scopus-search-api.md
+  - Web Scraping: pt/web-scraping.md
+  - Levantamento de Dados: pt/data-survey.md
+  - Respostas e Erros: pt/responses-and-errors.md
+  - Teste: pt/testing.md
+  - Tecnologias: pt/technologies.md
+  - Contato: pt/contact.md
+
+extra:
+  generator: false
+  alternate:
+    - name: English
+      link: /en/
+      lang: en
+    - name: Português
+      link: /pt/
+      lang: pt-BR
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/mauprogramador
+    - icon: fontawesome/brands/linkedin
+      link: https://www.linkedin.com/in/mauricio-silva-batista-0ba90322b/
+    - icon: fontawesome/brands/twitter
+      link: https://twitter.com/Maurcio77788085
+    - icon: fontawesome/brands/instagram
+      link: https://www.instagram.com/mauricio_cap_tl/
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.mark
+  - pymdownx.keys
+  - footnotes
+  - admonition
+  - attr_list
+  - md_in_html
+  - tables
+
+copyright:
+  Copyright © 2024 GPL v1.0.0. All rights reserved. Developed by <a href="https://github.com/mauprogramador" target="_blank" rel="noopener">MauProgramador</a>
