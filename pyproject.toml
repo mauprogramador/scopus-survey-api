@@ -1,7 +1,7 @@
 [tool.poetry]
-name = "scopussearcher"
-version = "0.1.0"
-description = "API for Bibliographic Survey of Scopus Articles for Final Papers"
+name = "scopussearcherapi"
+version = "0.0.0"
+description = "API for Bibliographic Survey of Scopus Articles"
 authors = ["Mauricio <sir.silvabmauricio@gmail.com>"]
 readme = "README.md"
 
