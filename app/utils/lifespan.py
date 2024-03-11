@@ -10,5 +10,5 @@ from app.utils.logger import Logger
 @asynccontextmanager
 async def lifespan(_: FastAPI):
     yield
-    Logger.info('\033[93mCleaning up the Temporary Directory\033[m')
+    Logger.info('Cleaning up the Temporary Directory')
     rmtree(DIRECTORY)

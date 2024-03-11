@@ -44,7 +44,7 @@ class ScopusApiError(HttpException):
         super().__init__(422, message)
         self.status = status
         self.detail = detail
-        self.success = success if success else False
+        self.success = success or False
 
     def to_dict(self):
         return {

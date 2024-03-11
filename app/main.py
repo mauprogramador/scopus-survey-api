@@ -17,4 +17,4 @@ app.add_middleware(**CORS)
 app.add_middleware(TraceControl)
 
 
-Logger.info('\033[33mScopus API was initialized 🚀\033[m')
+Logger.info('Scopus API was initialized 🚀')

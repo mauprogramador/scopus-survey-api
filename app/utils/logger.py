@@ -22,11 +22,11 @@ class Logger:
 
     @classmethod
     def info(cls, message: str) -> None:
-        cls.log('\033[92mINFO', message)
+        cls.log('\033[92mINFO', f'\033[93m{message}\033[m')
 
     @classmethod
-    def error(cls, message: str) -> None:
-        cls.log('\033[91mERROR', message)
+    def error(cls, prefix: str, message: str) -> None:
+        cls.log('\033[91mERROR', f'\033[93m{prefix} \033[91m{message}\033[m')
 
     @classmethod
     def exception(cls, exception: Exception) -> None:
@@ -58,7 +58,7 @@ class Logger:
         process_time = f'\033[93m{process_time:.2f}ms\033[m'
 
         point = '\033[95m\u2022\033[m'
-        status_color = 32 if status_code in (200, 201) else 31
+        status_color = 32 if status_code == 200 else 31
 
         method = f'{cls.METHOD[request.method]: <6}'
         url = f'{point} http://{host}:{port}{request.url}'
@@ -77,7 +77,7 @@ class Logger:
         process_time = f'\033[93m{process_time:.2f}ms\033[m'
 
         point = '\033[95m\u2022\033[m'
-        status_color = 32 if status_code in (200, 201) else 31
+        status_color = 32 if status_code == 200 else 31
         url = f"{cls.METHOD['GET']: <6} {point} {url}"
 
         status = f'\033[{status_color}m{status_code} {status_phrase}'
