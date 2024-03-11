@@ -7,7 +7,7 @@ class FakeResponse:
     def __init__(self, content: dict | str = None, status_code: int = None):
         if content or (isinstance(content, str) and len(content) == 0):
             self.text = content if isinstance(content, str) else dumps(content)
-        self.status_code = status_code if status_code else 200
+        self.status_code = status_code or 200
 
 
 class Article(BaseModel):
