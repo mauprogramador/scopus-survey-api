@@ -43,6 +43,7 @@ nav:
   - Data Survey: en/data-survey.md
   - Responses and Errors: en/responses-and-errors.md
   - Testing: en/testing.md
+  - Hooks and Actions: en/hooks-actions.md
   - Technologies: en/technologies.md
   - Contact: en/contact.md
 - Português:
@@ -55,6 +56,7 @@ nav:
   - Levantamento de Dados: pt/data-survey.md
   - Respostas e Erros: pt/responses-and-errors.md
   - Teste: pt/testing.md
+  - Hooks e Actions: pt/hooks-actions.md
   - Tecnologias: pt/technologies.md
   - Contato: pt/contact.md
 
