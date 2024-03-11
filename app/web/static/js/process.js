@@ -8,7 +8,8 @@ const successFeedback = document.getElementById('success-feedback');
 const errorFeedback = document.getElementById('error-feedback');
 
 const loader = document.getElementById('loader');
-const buttonSelector = '.submit-button.language.show';
+const submitBtnSelector = '.submit-button.language.show';
+const tableBtnSelector = '.table-button.language.show';
 
 const headers = {
   'Accept': 'text/csv',
@@ -22,16 +23,21 @@ document.querySelectorAll('.banner-close').forEach(element => {
     element.parentElement.classList.remove('visible');
   });
 });
+document.querySelectorAll('.table-button').forEach(element => {
+  element.href = `${window.location.href}/table`;
+});
 
 
 form.addEventListener('submit', (event) => {
   event.preventDefault();
 
-  const submitButton = document.querySelector(buttonSelector);
-  loader.classList.toggle('show');
+  const tableButton = document.querySelector(tableBtnSelector);
+  const submitButton = document.querySelector(submitBtnSelector);
 
+  loader.classList.toggle('show');
   submitButton.toggleAttribute('disabled');
   submitButton.classList.toggle('disable-button');
+  tableButton.classList.add('disable-button');
 
   const baseURL = `${window.location.href}/search-articles`;
   const myUrl = new URL(baseURL);
@@ -61,6 +67,7 @@ form.addEventListener('submit', (event) => {
     if (response.ok) {
 
       response.blob().then((blob) => {
+        window.csvBlob = blob;
         downloadLink.href = window.URL.createObjectURL(blob);
         downloadLink.setAttribute('download', 'articles.csv');
         downloadLink.click();
@@ -72,6 +79,8 @@ form.addEventListener('submit', (event) => {
           successFeedback.classList.remove('visible');
         }, 5000);
       });
+
+      tableButton.classList.remove('disable-button');
 
     } else {
       response.json().then(json => {

@@ -58,8 +58,7 @@
             Tecnologia em Análise e Desenvolvimento de Sistemas - TADS
           </p>
         </div>
-        <form id="scopus-api-form-data" action="#" method="get"
-          enctype="application/x-www-form-urlencoded">
+        <form id="scopus-api-form-data" action="#" method="get" enctype="application/x-www-form-urlencoded">
           <section class="Keywords-section">
             <h2 class="language show">Keywords</h2>
             <h2 class="language">Palavras-chave</h2>
@@ -73,13 +72,13 @@
             </p>
             <div class="fields">
               <input id="keyword1" name="keywords" type="text" placeholder="Ex.: Python" minlength="2" maxlength="120"
-                pattern="^[a-zA-Z0-9_ ]{2,120}$" autocomplete="off" required />
+                pattern="^[a-zA-Z0-9_ ]{2,120}$" autocomplete="on" required />
               <input id="keyword2" name="keywords" type="text" placeholder="Ex.: Machine Learning" minlength="2"
-                maxlength="120" pattern="^[a-zA-Z0-9_ ]{2,120}$" autocomplete="off" required />
+                maxlength="120" pattern="^[a-zA-Z0-9_ ]{2,120}$" autocomplete="on" required />
               <input id="keyword3" name="keywords" type="text" placeholder="Ex.: Data Science" minlength="2"
-                maxlength="120" pattern="^(?:(?![ ]+$)[a-zA-Z0-9_ ]{2,120})?$" autocomplete="off" />
+                maxlength="120" pattern="^(?:(?![ ]+$)[a-zA-Z0-9_ ]{2,120})?$" autocomplete="on" />
               <input id="keyword4" name="keywords" type="text" placeholder="Ex.: Neural Networks" minlength="2"
-                maxlength="120" pattern="^(?:(?![ ]+$)[a-zA-Z0-9_ ]{2,120})?$" autocomplete="off" />
+                maxlength="120" pattern="^(?:(?![ ]+$)[a-zA-Z0-9_ ]{2,120})?$" autocomplete="on" />
             </div>
           </section>
           <section class="apikey-section">
@@ -101,17 +100,27 @@
               </p>
               <div class="fields">
                 <input id="apikey" name="apikey" type="text" placeholder="Ex.: 439f55d263c..." minlength="32"
-                  maxlength="32" pattern="^[a-zA-Z0-9]{32}$" autocomplete="off" required />
+                  maxlength="32" pattern="^[a-zA-Z0-9]{32}$" autocomplete="on" required />
               </div>
             </div>
-            <div class="search-button-container">
-              <button type="submit" class="submit-button language show">
-                Search Articles
-              </button>
-              <button type="submit" class="submit-button language">
-                Procurar Artigos
-              </button>
-              <div id="loader"></div>
+            <div class="buttons-container">
+              <div class="search-button-container">
+                <button type="submit" class="submit-button language show">
+                  Search Articles
+                </button>
+                <button type="submit" class="submit-button language">
+                  Procurar Artigos
+                </button>
+                <div id="loader"></div>
+              </div>
+              <div class="table-button-container">
+                <a href="" role="button" target="_blank" class="table-button language show disable-button">
+                  Show Table
+                </a>
+                <a href="" role="button" target="_blank" class="table-button language disable-button">
+                  Mostrar Tabela
+                </a>
+              </div>
             </div>
           </section>
         </form>
@@ -124,7 +133,8 @@
         <nav aria-label="Institution and Github Links">
           <a class="background-image ifms-link" href="https://www.ifms.edu.br/campi/campus-tres-lagoas"
             target="_blank"></a>
-          <a class="background-image git-link" href="https://github.com/mauprogramador/scopus-searcher-api" target="_blank"></a>
+          <a class="background-image git-link" href="https://github.com/mauprogramador/scopus-searcher-api"
+            target="_blank"></a>
         </nav>
       </footer>
     </div>

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="/icons/favicon.png" type="image/x-icon" />
+    <link rel="stylesheet" href="/styles/styles.css" />
+    <link rel="stylesheet" href="/styles/index.css" />
+    <link rel="stylesheet" href="/styles/feedback.css" />
+    <link rel="stylesheet" href="/styles/table.css" />
+    <title>Scopus Searcher API</title>
+  </head>
+
+  <body>
+    <header>
+      <div class="title">
+        <h1 translate="no">Scopus Searcher API <span class="version">v1.0.0</span></h1>
+        <p class="language show">
+          API for bibliographic survey of Scopus articles
+        </p>
+        <p class="language">
+          API para levantamento bibliográfico de artigos da Scopus
+        </p>
+      </div>
+      <nav aria-label="language Button and Swagger Link">
+        <button id="language-button" title="Language" class="background-image show"></button>
+        <a href="http://127.0.0.1:8000" target="_blank" translate="no" class="link">
+          Swagger FastAPI
+          <div id="open-in-new-tab-icon" class="background-image"></div>
+        </a>
+      </nav>
+    </header>
+    <main>
+      {% if content %}
+      <table aria-describedby="Articles from CSV file">
+        <caption>
+          <span class="language show">All articles found</span>
+          <span class="language">Todos os artigos encontrados</span>
+        </caption>
+        <colgroup>
+          <col id="index-column">
+          <col id="url-column">
+          <col id="scopus-id-column">
+          <col id="authors-column">
+          <col id="title-column">
+          <col id="publication-name-column">
+          <col id="abstract-column">
+          <col id="volume-column">
+          <col id="date-column">
+          <col id="doi-column">
+          <col id="citations-column">
+        </colgroup>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>URL</th>
+            <th>
+              <span class="language show">Scopus ID</span>
+              <span class="language">ID Scopus</span>
+            </th>
+            <th>
+              <span class="language show">Authors</span>
+              <span class="language">Autores</span>
+            </th>
+            <th>
+              <span class="language show">Title</span>
+              <span class="language">Título</span>
+            </th>
+            <th>
+              <span class="language show">Publication Name</span>
+              <span class="language">Nome de Publicação</span>
+            </th>
+            <th>
+              <span class="language show">Abstract</span>
+              <span class="language">Resumo</span>
+            </th>
+            <th>Volume</th>
+            <th>
+              <span class="language show">Date</span>
+              <span class="language">Data</span>
+            </th>
+            <th>DOI</th>
+            <th>
+              <span class="language show">Citations</span>
+              <span class="language">Citações</span>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in content %}
+          <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ row[0] }}</td>
+            <td>{{ row[1] }}</td>
+            <td>{{ row[2] }}</td>
+            <td>{{ row[3] }}</td>
+            <td>{{ row[4] }}</td>
+            <td>{{ row[5] }}</td>
+            <td>{{ row[6] }}</td>
+            <td>{{ row[7] }}</td>
+            <td>{{ row[8] }}</td>
+            <td>{{ row[9] }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="10">Total</td>
+            <td>{{ content|length }}</td>
+          </tr>
+        </tfoot>
+      </table>
+      {% else %}
+      <div class="no-file-message language show">
+        No CSV file found. Try <a href="" class="link">searching the articles</a> first.
+      </div>
+      <div class="no-file-message language">
+        Nenhum arquivo CSV encontrado. Tente <a href="" class="link">pesquisar os artigos</a> primeiro.
+      </div>
+      {% endif %}
+    </main>
+    <footer>
+      <p translate="no">
+        Copyright © 2024 GPL v1.0.0. All rights reserved. Developed by
+        <a href="mailto:sir.silvabmauricio@gmail.com?subject=Hello. Let's talk." class="link">MauProgramador</a>
+      </p>
+      <nav aria-label="Institution and Github Links">
+        <a class="background-image ifms-link" href="https://www.ifms.edu.br/campi/campus-tres-lagoas"
+          target="_blank"></a>
+        <a class="background-image git-link" href="https://github.com/mauprogramador/scopus-searcher-api"
+          target="_blank"></a>
+      </nav>
+    </footer>
+    <script src="/scripts/language.js" type="text/javascript"></script>
+    <script src="/scripts/table.js" type="text/javascript"></script>
+  </body>
+
+</html>
