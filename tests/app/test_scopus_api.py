@@ -6,12 +6,13 @@ from app.gateway.api_config import ApiConfig
 from app.gateway.scopus_api import ScopusApi
 from tests.data import mocks
 from tests.data.request import app_request
+from tests.data.utils import assert_csv_response
 
 
 @pytest.mark.asyncio
 async def test_unit_search_articles_200(mocker: MockerFixture):
     mocker.patch(
-        mocks.HTTP_HELPER_REQUEST, return_value=mocks.FAKE_SEARCH_ARTICLES_200
+        mocks.HTTP_HELPER_REQUEST, return_value=mocks.FAKE_RESPONSE_FOUND
     )
     assert ScopusApi.search_articles(mocks.FAKE_API_PARAMS)
 
@@ -23,7 +24,7 @@ async def test_search_articles_invalid_responses(
 ):
     mocker.patch(
         mocks.HTTP_HELPER_REQUEST,
-        return_value=mocks.FAKE_HTTP_HELPER_REQUEST[code],
+        return_value=mocks.FAKE_HTTP_RESPONSES[code],
     )
     response = await app_request(mocks.URL)
     assert response.status_code == 422
@@ -38,7 +39,7 @@ async def test_search_articles_invalid_responses(
 async def test_search_articles_404(mocker: MockerFixture):
     mocker.patch(
         mocks.HTTP_HELPER_REQUEST,
-        return_value=mocks.FAKE_HTTP_HELPER_REQUEST[404],
+        return_value=mocks.FAKE_HTTP_RESPONSES[404],
     )
     response = await app_request(mocks.URL)
     assert response.status_code == 422
@@ -53,7 +54,7 @@ async def test_search_articles_404(mocker: MockerFixture):
 async def test_search_articles_decoding_error(mocker: MockerFixture):
     mocker.patch(
         mocks.HTTP_HELPER_REQUEST,
-        return_value=mocks.FAKE_SEARCH_ARTICLES_DECODING_ERROR,
+        return_value=mocks.FAKE_RESPONSE_NO_CONTENT,
     )
     response = await app_request(mocks.URL)
     assert response.status_code == 500
@@ -65,7 +66,7 @@ async def test_search_articles_decoding_error(mocker: MockerFixture):
 async def test_search_articles_empty_content(mocker: MockerFixture):
     mocker.patch(
         mocks.HTTP_HELPER_REQUEST,
-        return_value=mocks.FAKE_SEARCH_ARTICLES_EMPTY_CONTENT,
+        return_value=mocks.FAKE_RESPONSE_DECODING_200,
     )
     response = await app_request(mocks.URL)
     assert response.status_code == 424
@@ -77,7 +78,7 @@ async def test_search_articles_empty_content(mocker: MockerFixture):
 async def test_search_articles_not_found(mocker: MockerFixture):
     mocker.patch(
         mocks.HTTP_HELPER_REQUEST,
-        return_value=mocks.FAKE_SEARCH_ARTICLES_NOT_FOUND,
+        return_value=mocks.FAKE_RESPONSE_NOT_FOUND,
     )
     response = await app_request(mocks.URL)
     assert response.status_code == 404
@@ -87,41 +88,37 @@ async def test_search_articles_not_found(mocker: MockerFixture):
 
 @pytest.mark.asyncio
 async def test_unit_scraping_article_200(mocker: MockerFixture):
-    mocker.patch(
-        mocks.HTTP_HELPER_REQUEST, return_value=mocks.FAKE_SCRAPING_ARTICLE_200
-    )
-    response = ScopusApi.scraping_article(mocks.FAKE_SCOPUS_ID)
-    assert response[0] == ApiConfig.get_article_page_url(mocks.FAKE_ARTICLE_ID)
-    assert len(response[1])
+    mocker.patch(mocks.HTTP_HELPER_REQUEST, return_value=mocks.FAKE_TEMPLATE)
+    response = ScopusApi.scraping_article('SCOPUS:123')
+    assert response[0] == ApiConfig.get_article_page_url('123')
+    assert response[1]
 
 
 @pytest.mark.asyncio
 async def test_scraping_article_400(mocker: MockerFixture):
     mocker.patch(
         mocks.SCOPUS_API_SEARCH_ARTICLES,
-        return_value=mocks.FAKE_SCOPUS_API_SEARCH_ARTICLES,
+        return_value=mocks.FAKE_ARTICLES,
     )
+    mocker.patch(mocks.RANGE, return_value=range(2, 3))
     mocker.patch(
-        mocks.HTTP_HELPER_REQUEST,
-        return_value=mocks.FAKE_HTTP_HELPER_REQUEST[400],
+        mocks.SESSION_SEND,
+        return_value=mocks.FAKE_HTTP_RESPONSES[400],
     )
     response = await app_request(mocks.URL)
-    assert response.status_code == 424
-    assert not response.json()['success']
-    assert response.json()['message'] == mocks.INVALID_ARTICLE_PAGE
+    assert_csv_response(response)
 
 
 @pytest.mark.asyncio
 async def test_scraping_empty_content(mocker: MockerFixture):
     mocker.patch(
         mocks.SCOPUS_API_SEARCH_ARTICLES,
-        return_value=mocks.FAKE_SCOPUS_API_SEARCH_ARTICLES,
+        return_value=mocks.FAKE_ARTICLES,
     )
     mocker.patch(
         mocks.HTTP_HELPER_REQUEST,
-        return_value=mocks.FAKE_SCRAPING_ARTICLE_EMPTY_CONTENT,
+        return_value=mocks.FAKE_RESPONSE_NO_CONTENT,
     )
+    mocker.patch(mocks.RANGE, return_value=range(2, 3))
     response = await app_request(mocks.URL)
-    assert response.status_code == 424
-    assert not response.json()['success']
-    assert response.json()['message'] == mocks.INVALID_ARTICLE_PAGE
+    assert_csv_response(response)
