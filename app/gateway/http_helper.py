@@ -1,4 +1,5 @@
-from time import time
+from http import HTTPStatus
+from time import sleep, time
 
 from requests import Request, Response, Session
 from requests.adapters import HTTPAdapter
@@ -11,30 +12,70 @@ from app.utils.logger import Logger
 
 
 class HttpHelper(Helper):
-    @staticmethod
-    def make_request(url: str, headers: dict) -> Response:
+    METHOD = 'GET'
+    PREFIX = 'https://'
+
+    def __init__(self) -> None:
+        self.__request = Request()
+        self.__check_status = True
+        self.__start_time = 0.0
+        self.__process_time = 0.0
+
+    def send_request(self, session: Session) -> Response:
+        try:
+            response = session.send(self.__request.prepare(), timeout=15)
+
+            if self.__check_status and response.status_code != 200:
+                raise FailedDependency(
+                    f'Unexpected status error {response.status_code} '
+                    f'{HTTPStatus(response.status_code).phrase}'
+                )
+
+            return response
+
+        except FailedDependency as error:
+            raise error
+
+        except Timeout as error:
+            raise FailedDependency('Request Connection Timeout') from error
+
+        except ConnectError as error:
+            raise FailedDependency('Connection Error in Request') from error
+
+        except Exception as error:
+            message = f'Unexpected Error from Request: {error.args[0]}'
+            raise FailedDependency(message) from error
+
+    def make_request(
+        self, url: str, headers: dict, check_status: bool = None
+    ) -> Response:
+
         adapter = HTTPAdapter(max_retries=3)
-        request = Request('GET', url, headers)
+        self.__request = Request(self.METHOD, url, headers)
+
+        if check_status is not None:
+            self.__check_status = check_status
 
         with Session() as session:
-            session.mount('https://', adapter)
-            start_time = time()
+            session.mount(self.PREFIX, adapter)
 
-            try:
-                response = session.send(request.prepare(), timeout=15)
+            for count in range(3):
+                try:
+                    self.__start_time = time()
+                    response = self.send_request(session)
+                    self.__process_time = (time() - self.__start_time) * 1000
 
-            except Timeout as exc:
-                raise FailedDependency('Request Connection Timeout') from exc
+                    Logger.service(url, response, self.__process_time)
+                    break
 
-            except ConnectError as exc:
-                raise FailedDependency('Connection Error in Request') from exc
+                except FailedDependency as error:
+                    if count >= 2:
+                        raise error
 
-            except Exception as exc:
-                message = f'Unexpected Error from Request: {exc.args[0]}'
-                raise FailedDependency(message) from exc
+                    process_time = (time() - self.__start_time) * 1000
+                    Logger.service(url, error, process_time)
 
-        process_time = (time() - start_time) * 1000
-
-        Logger.service(url, response, process_time)
+                    Logger.info('Retrying the request')
+                    sleep(5)
 
         return response

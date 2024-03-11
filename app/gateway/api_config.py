@@ -36,6 +36,26 @@ class ApiConfig:
         'citedby-count': 'Citations',
     }
 
+    TEMPLATE = """
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8"/>
+            <title>Article Page</title>
+        </head>
+        <body>
+            <section id="authorlist">
+            <ul class="list-inline">
+                <li><span class="previewTxt">Any Author</span></li>
+            </ul>
+            </section>
+            <section id="abstractSection">
+                <p>Any Abstract</p>
+            </section>
+        </body>
+        </html>
+    """
+
     @classmethod
     def get_search_articles_url(cls, query: str) -> str:
         return cls.API_URL.format(
