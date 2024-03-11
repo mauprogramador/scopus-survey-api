@@ -2,7 +2,7 @@ from abc import ABCMeta, abstractmethod
 from typing import TypeAlias
 
 from fastapi.responses import FileResponse
-from requests import Response
+from requests import Response, Session
 
 
 class ApiParams(metaclass=ABCMeta):
@@ -15,9 +15,8 @@ class ApiParams(metaclass=ABCMeta):
 class UseCase(metaclass=ABCMeta):
     ParamsType: TypeAlias = ApiParams
 
-    @classmethod
     @abstractmethod
-    def search_articles(cls, data: ParamsType) -> FileResponse:
+    def search_articles(self, data: ParamsType) -> FileResponse:
         pass
 
 
@@ -25,9 +24,9 @@ class GatewaySearch(metaclass=ABCMeta):
     ParamsType: TypeAlias = ApiParams
     SearchType: TypeAlias = list[dict[str, str]]
 
-    @staticmethod
+    @classmethod
     @abstractmethod
-    def search_articles(data: ParamsType) -> SearchType:
+    def search_articles(cls, data: ParamsType) -> SearchType:
         pass
 
 
@@ -41,7 +40,20 @@ class GatewayScraping(metaclass=ABCMeta):
 
 
 class Helper(metaclass=ABCMeta):
-    @staticmethod
     @abstractmethod
-    def make_request(url: str, headers: dict) -> Response:
+    def make_request(
+        self, url: str, headers: dict, check_status: bool = None
+    ) -> Response:
+        pass
+
+    @abstractmethod
+    def send_request(self, session: Session) -> Response:
+        pass
+
+
+class CSVData(metaclass=ABCMeta):
+    TableType: TypeAlias = list[list[str]] | None
+
+    @abstractmethod
+    def handle(self) -> TableType:
         pass
