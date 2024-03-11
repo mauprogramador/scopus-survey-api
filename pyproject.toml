@@ -2,10 +2,41 @@
 name = "scopussearcherapi"
 version = "1.0.0"
 description = "API for Bibliographic Survey of Scopus Articles"
-authors = ["Mauricio <sir.silvabmauricio@gmail.com>"]
+authors = ["mauprogramador <sir.silvabmauricio@gmail.com>"]
 readme = "README.md"
+license = "MIT"
+repository = "https://github.com/mauprogramador/scopus-searcher-api"
+documentation = "https://mauprogramador.github.io/scopus-searcher-api/"
+keywords = ["scopus", "articles", "theoretical reference", "bibliographic survey"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Web Environment :: Mozilla",
+    "Framework :: FastAPI",
+    "Framework :: Pytest",
+    "Framework :: MkDocs",
+    "Framework :: Flake8",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Education",
+    "Intended Audience :: End Users/Desktop",
+    "Intended Audience :: Information Technology",
+    "Intended Audience :: Science/Research",
+    "License :: Free For Educational Use",
+    "License :: Freeware",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: English",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: JavaScript",
+    "Topic :: Documentation",
+    "Topic :: Education",
+    "Topic :: Internet :: WWW/HTTP :: Indexing/Search",
+    "Topic :: Internet :: WWW/HTTP :: WSGI :: Application",
+    "Topic :: Software Development",
+    "Topic :: Software Development :: Libraries :: Application Frameworks"
+]
 
 [tool.poetry.dependencies]
+requires-python = ">=3.11"
 python = "^3.11"
 fastapi = {extras = ["all"], version = "^0.109.2"}
 pandas = "^2.2.0"
@@ -13,6 +44,8 @@ bs4 = "^0.0.2"
 requests = "^2.31.0"
 pyarrow = "^15.0.0"
 setuptools = ">=65.5.1"
+fuzzywuzzy = "^0.18.0"
+python-levenshtein = "^0.25.0"
 
 [tool.poetry.group.dev.dependencies]
 isort = "^5.13.2"
@@ -27,6 +60,8 @@ mypy = "^1.8.0"
 types-requests = "^2.31.0.20240218"
 types-beautifulsoup4 = "^4.12.0.20240106"
 pandas-stubs = "^2.2.0.240218"
+fuzzywuzzy-stubs = "^0.0.1"
+dill = "^0.3.8"
 
 [tool.poetry.group.test.dependencies]
 pytest = "^8.0.0"
@@ -55,13 +90,15 @@ include_trailing_comma = true
 
 [tool.pytest.ini_options]
 testpaths = ["tests/"]
+filterwarnings = [
+    "ignore::DeprecationWarning",
+]
 
 [tool.coverage.run]
 omit = [
     "app/utils/lifespan.py",
     "app/utils/logger.py"
 ]
-
 
 [tool.mypy]
 python_version = "3.11"

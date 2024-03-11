@@ -34,18 +34,18 @@ docs:
 # Tests
 
 test:
-	@poetry run pytest
+	@poetry run pytest -v --color=yes
 
 test-docker:
-	@docker exec -it scopus-api pytest
+	@docker exec -it scopus-api pytest -v --color=yes
 
 coverage:
 	@poetry run coverage erase
 	@poetry run coverage run -m pytest -q
-	@poetry run coverage report --format=total
+	@poetry run coverage report
 
 coverage-docker:
-	@docker exec -it scopus-api make coverage
+	@docker exec -it scopus-api coverage erase && coverage run -m pytest -q && coverage report
 
 
 # Vulnerability audit
