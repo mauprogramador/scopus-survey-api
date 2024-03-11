@@ -2,7 +2,7 @@ name: Linting and Testing
 on:
   push:
     branches:
-      - main
+      - master
 jobs:
   verification:
     runs-on: ubuntu-latest
