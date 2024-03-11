@@ -1,6 +1,6 @@
 # Web Scraping
 
-After obtaining the data for each article from the [Scopus Search API](https://dev.elsevier.com/documentation/SCOPUSSearchAPI.wadl){:target="_blank"}, the next step is to obtain information about the `authors` and the `abstract` of each article, as this is not normally provided by the API itself. To do this, we need to make a request using the `Scopus ID` that we get from the API to get the article [preview page in Scopus](https://www.scopus.com/home.uri?zone=header&origin=recordpage){:target="_blank"}, the request will retrieve this page as an HTML template, which we will submit to the [BeautifulSoup](https://beautiful-soup-4.readthedocs.io/en/latest/){:target="_blank"} library for scraping and recovery, to later format this information we need.
+After obtaining the data for each article from the [Scopus Search API](https://dev.elsevier.com/documentation/SCOPUSSearchAPI.wadl){:target="\_blank"}, the next step is to obtain information about the `authors` and the `abstract` of each article, as this is not normally provided by the **API** itself. To do this, we need to make a request using the `Scopus ID` that we get from the **API** to get the article [preview page in Scopus](https://www.scopus.com/home.uri?zone=header&origin=recordpage){:target="\_blank"}, the request will retrieve this page as an HTML template, which we will submit to the [BeautifulSoup](https://beautiful-soup-4.readthedocs.io/en/latest/){:target="\_blank"} library for scraping and recovery, to later format this information we need.
 
 ![Article Preview Page](../images/article-preview-page.png)
 
@@ -14,7 +14,7 @@ https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=...&origin=inwar
 
 ## Article Page Headers
 
-Since the article page is served to [Elsevier](https://www.elsevier.com/pt-br){:target="_blank"} by [Cloudflare](https://www.cloudflare.com/pt-br/){:target="_blank"}, we need to send the appropriate headers in the request to not get a [forbidden](https://developer.mozilla.org/pt-BR/docs/Web/HTTP/Status/403){:target="_blank"}, denied permission, or some [other error](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status#client_error_responses){:target="_blank"}.
+Since the article page is served to [Elsevier](https://www.elsevier.com/pt-br){:target="\_blank"} by [Cloudflare](https://www.cloudflare.com/pt-br/){:target="\_blank"}, we need to send the appropriate headers in the request to not get a [forbidden](https://developer.mozilla.org/pt-BR/docs/Web/HTTP/Status/403){:target="\_blank"}, denied permission, or some [other error](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status#client_error_responses){:target="\_blank"}.
 
 ```json
 "Cache-Control": "no-cache",

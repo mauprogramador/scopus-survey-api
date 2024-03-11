@@ -1,8 +1,8 @@
 # Welcome to Scopus Searcher API Documentation
 
-**Source Code:** <https://github.com/mauprogramador/scopus-searcher-api>{:target="_blank"}
+**Source Code:** <https://github.com/mauprogramador/scopus-searcher-api>{:target="\_blank"}
 
-**Documentation**: <https://mauprogramador.github.io/scopus-searcher-api/>{:target="_blank"}
+**Documentation**: <https://mauprogramador.github.io/scopus-searcher-api/>{:target="\_blank"}
 
 <br/>
 

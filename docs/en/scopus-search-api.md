@@ -1,9 +1,8 @@
-
 # Scopus Search API
 
-To search the articles and retrieve the information we need from them, we are using the [Scopus Search API](https://dev.elsevier.com/documentation/SCOPUSSearchAPI.wadl){:target="_blank"}, which is one of the APIs made available by [Elsevier](https://www.elsevier.com/){:target="_blank"}. It is a search interface associated with the Scopus cluster, which contains Scopus abstracts.
+To search the articles and retrieve the information we need from them, we are using the [Scopus Search API](https://dev.elsevier.com/documentation/SCOPUSSearchAPI.wadl){:target="\_blank"}, which is one of the APIs made available by [Elsevier](https://www.elsevier.com/){:target="\_blank"}. It is a search interface associated with the Scopus cluster, which contains Scopus abstracts.
 
-To use the API we need to make a request to the API url and pass some parameters. Below are some details:
+To use the **API** we need to make a request to the **API** url and pass some parameters. Below are some details:
 
 ## Base Url
 
@@ -15,7 +14,7 @@ https://api.elsevier.com/content/search/scopus
 
 ## Query
 
-As our search is based on keywords, we are using a query parameter with [Scopus Search Tip](https://dev.elsevier.com/sc_search_tips.html){:target="_blank"} to specify our search method, which is `TITLE-ABS-KEY`, a combined field that will search for keywords in abstracts, keywords, and titles of articles.
+As our search is based on keywords, we are using a query parameter with [Scopus Search Tip](https://dev.elsevier.com/sc_search_tips.html){:target="\_blank"} to specify our search method, which is `TITLE-ABS-KEY`, a combined field that will search for keywords in abstracts, keywords, and titles of articles.
 
 ```text
 query=TITLE-ABS-KEY(keyword1 AND keyword2 AND ...)
@@ -23,7 +22,7 @@ query=TITLE-ABS-KEY(keyword1 AND keyword2 AND ...)
 
 ## Fields
 
-To return only the information that interests us from the articles, we can specify some [Scopus Fields](https://dev.elsevier.com/sc_search_views.html){:target="_blank"} to filter the response.
+To return only the information that interests us from the articles, we can specify some [Scopus Fields](https://dev.elsevier.com/sc_search_views.html){:target="\_blank"} to filter the response.
 
 ```text
 field=field1,field2,field3,...
@@ -58,7 +57,7 @@ https://api.elsevier.com/content/search/scopus?query=TITLE-ABS-KEY(Python AND Ma
 
 ## Response Headers
 
-After the search is complete, the API will return some information about the availability of using your `Api Key` in the response [Headers](https://dev.elsevier.com/api_key_settings.html){:target="_blank"}, so be sure to check it carefully, especially if you use the API for free as a part of an educational institution.
+After the search is complete, the **API** will return some information about the availability of using your `Api Key` in the response [Headers](https://dev.elsevier.com/api_key_settings.html){:target="\_blank"}, so be sure to check it carefully, especially if you use the **API** for free as a part of an educational institution.
 
 ```json
 "X-RateLimit-Limit": "Shows API quota setting",
