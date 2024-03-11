@@ -15,7 +15,7 @@
     <img alt="Documentation Action" src="https://img.shields.io/github/actions/workflow/status/mauprogramador/scopus-searcher-api/documentation.yml?branch=master&event=push&logo=github&label=Docs&color=4CA9E8">
   </a>
   <img src="https://img.shields.io/badge/Coverage-99%25-81CC2B" alt="Coverage">
-  <a href="https://github.com/mauprogramador/scopus-searcher-api/releases/tag/v1.0.0" target="_blank">
+  <a href="https://github.com/mauprogramador/scopus-searcher-api/releases/tag/v2.0.0" target="_blank">
     <img src="https://img.shields.io/github/v/tag/mauprogramador/scopus-searcher-api?logo=github&label=API Version&color=E9711C" alt="API Version">
   </a>
   <a href="https://www.python.org/" target="_blank">

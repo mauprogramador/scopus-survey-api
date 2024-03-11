@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "scopussearcherapi"
-version = "1.0.0"
+version = "2.0.0"
 description = "API for Bibliographic Survey of Scopus Articles"
 authors = ["mauprogramador <sir.silvabmauricio@gmail.com>"]
 readme = "README.md"
@@ -36,7 +36,6 @@ classifiers = [
 ]
 
 [tool.poetry.dependencies]
-requires-python = ">=3.11"
 python = "^3.11"
 fastapi = {extras = ["all"], version = "^0.109.2"}
 pandas = "^2.2.0"
@@ -75,6 +74,7 @@ mkdocs-material = "^9.5.9"
 
 [build-system]
 requires = ["poetry-core"]
+requires-python = "^3.11"
 build-backend = "poetry.core.masonry.api"
 
 [tool.pylint]

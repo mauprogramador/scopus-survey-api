@@ -2,7 +2,7 @@ from app.exceptions import HANDLERS, BaseExceptionResponse
 from app.utils.lifespan import lifespan
 
 TITLE = 'Scopus-Searcher-API'
-VERSION = 'v1.0.0'
+VERSION = 'v2.0.0'
 SUMMARY = 'API for Bibliographic Survey of Scopus Articles'
 DESCRIPTION = """
 [**Web Application**](http://127.0.0.1:8000/scopus-searcher/api)

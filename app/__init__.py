@@ -6,8 +6,8 @@ Scopus Searcher API
 API for Bibliographic Survey of Scopus Articles
 """
 
-__version__ = '1.0.0'
-__license__ = 'GPL'
+__version__ = '2.0.0'
+__license__ = 'MIT'
 
 __author__ = 'mauprogramador'
 __contact__ = 'sir.silvabmauricio@gmail.com'
