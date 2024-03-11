@@ -1,6 +1,41 @@
 # Releases
 
-## v1.0.0
+## [v2.0.0](https://github.com/mauprogramador/scopus-searcher-api/releases/tag/v2.0.0) (2024-03-11)
+
+### Features
+
+- [#a5a6249](https://github.com/mauprogramador/scopus-searcher-api/commit/a5a62495e8279c1da265393ef47d757242431c78) - feat: update api version and metadata
+- [#8dca155](https://github.com/mauprogramador/scopus-searcher-api/commit/8dca155b6f036c6eebad04aa7b2b50c0f63aa188) - feat: update readme
+- [#38d3d34](https://github.com/mauprogramador/scopus-searcher-api/commit/38d3d3434a4b5e4aafe323f0e98aae28e5e50d90) - feat: add csv table web page
+- [#a866ce5](https://github.com/mauprogramador/scopus-searcher-api/commit/a866ce5993adf372ba924f87cd60ad8d4b250994) - feat: add similarity filter
+- [#fc6f515](https://github.com/mauprogramador/scopus-searcher-api/commit/fc6f515a5f84265ec5add3d45a1a314f79625c6f) - feat: add request retriever
+- [#c1d359c](https://github.com/mauprogramador/scopus-searcher-api/commit/c1d359c365586e9377f119800fa4227dc2125468) - feat: update interfaces and add new route
+- [#6015603](https://github.com/mauprogramador/scopus-searcher-api/commit/6015603691f22da43aa0e290b92437e1867ffd5f) - feat: add table route, descriptions and web tag
+- [#2e2b52a](https://github.com/mauprogramador/scopus-searcher-api/commit/2e2b52a6b88a00783ef3bdf51bcc1fb84693b8d2) - feat: update info log method
+- [#9a0f568](https://github.com/mauprogramador/scopus-searcher-api/commit/9a0f5687781e718ddc22e5e851669c06ecc7c652) - feat: add fuzzywuzzy library
+- [#ae30c01](https://github.com/mauprogramador/scopus-searcher-api/commit/ae30c01e1f49bc296b27fbe00298d51dfaa25f77) - feat: update commands and metadata
+
+### Fixes
+
+- [#d12d403](https://github.com/mauprogramador/scopus-searcher-api/commit/d12d403fccbec8bc333d589f522bf02447ad7916) - fix: fix branch to master in workflows
+
+## Documentation
+
+- [#7e931cd](https://github.com/mauprogramador/scopus-searcher-api/commit/7e931cd827f129229c76d6334090abfa9901a05c) - docs: add permission note
+- [#fc023d6](https://github.com/mauprogramador/scopus-searcher-api/commit/fc023d668570fcf3ba9e60e51b542018d7662988) - docs: update and add images assets
+- [#3059752](https://github.com/mauprogramador/scopus-searcher-api/commit/30597529f7610e7e3cb2c16adf94384eda68ae12) - docs: update nav and add csv asset
+- [#1b9141d](https://github.com/mauprogramador/scopus-searcher-api/commit/1b9141d0735858acd1718709ecb008482e6fdcb4) - docs: update order and add table page
+- [#09134f6](https://github.com/mauprogramador/scopus-searcher-api/commit/09134f6ba5d89a22c6107dcaa686085578ea1d58) - docs: add similarity filter
+- [#39e8327](https://github.com/mauprogramador/scopus-searcher-api/commit/39e8327eb60af69820be83b09a75ff0a3863a344) - docs: add similarity technology
+- [#a7c91c5](https://github.com/mauprogramador/scopus-searcher-api/commit/a7c91c5efe28af64c0abf7d2fefd6b900cf401c7) - docs: add hooks, actions and new error
+- [#8ee58e8](https://github.com/mauprogramador/scopus-searcher-api/commit/8ee58e8d5bf252724b92445ae60337145518cd84) - docs: update links and strong API
+
+## Tests
+
+- [#c37bd71](https://github.com/mauprogramador/scopus-searcher-api/commit/c37bd71c5f1acc0ea67c5b03b99d6b02a0d831c3) - test: update and add app
+- [#2378c93](https://github.com/mauprogramador/scopus-searcher-api/commit/2378c934221ecf8df866e27c0ac472bccfb20bde) - test: update and add data
+
+## [v1.0.0](https://github.com/mauprogramador/scopus-searcher-api/releases/tag/v1.0.0) (2024-02-27)
 
 - [#b2a7605](https://github.com/mauprogramador/scopus-searcher-api/commit/b2a7605272ee1e76bf01ab7298dd3f2ea10cc333) - docker: add configuration files
 - [#67a48f9](https://github.com/mauprogramador/scopus-searcher-api/commit/67a48f9c29b43a1d85295b19ce62462a4a9ac508) - config: add requirements files
