@@ -29,6 +29,10 @@ fi
 make test
 ```
 
+!!! note
+
+    Não se esqueça de conceder as permissões necessárias para os arquivos de hooks com `chmod +x .git/hooks/pre-commit`.
+
 ## GitHub Actions
 
 No **lado do servidor**, esta **API** usa o [GitHub Actions](https://github.com/features/actions){:target="\_blank"} para criar **fluxos de trabalho** que serão acionados automaticamente quando um evento `push` ocorrer no repositório remoto do [GitHub](https://github.com/){:target="\_blank"}, automatizando os trabalhos de verificação e implantação para executarem automaticamente.

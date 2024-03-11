@@ -29,6 +29,10 @@ fi
 make test
 ```
 
+!!! note
+
+    Don't forget to grant the necessary permissions to the hook files with `chmod +x .git/hooks/pre-commit`.
+
 ## GitHub Actions
 
 On the **server-side**, this **API** uses [GitHub Actions](https://github.com/features/actions){:target="\_blank"} to create **workflows** that will automatically trigger when a `push` event occurs to the remote [GitHub](https://github.com/){:target="\_blank"} repository, automating verification and deployment jobs to run automatically.
