@@ -4,12 +4,14 @@ from re import sub
 
 from bs4 import BeautifulSoup, PageElement, Tag
 from fastapi.responses import FileResponse
+from fuzzywuzzy.fuzz import WRatio
 from pandas import DataFrame, Series
 
 from app.core.config import DIRECTORY, SPACES_PATTERN
 from app.core.interfaces import UseCase
 from app.gateway.api_config import ApiConfig
 from app.gateway.scopus_api import ScopusApi
+from app.utils.logger import Logger
 
 
 class Scopus(UseCase):
@@ -21,66 +23,109 @@ class Scopus(UseCase):
     ABSTRACT_COLUMN = 'Abstract'
     URL_COLUMN = 'prism:url'
     TITLE_COLUMN = 'Title'
+    LINK_COLUMN = '@_fa'
     FILENAME = 'articles.csv'
 
-    @classmethod
-    def __format_abstract(cls, result: str, data: PageElement):
+    def __init__(self) -> None:
+        self.__file_path = join(DIRECTORY, self.FILENAME)
+        self.__dataframe = DataFrame()
+
+    def search_articles(self, data: UseCase.ParamsType) -> FileResponse:
+        articles = ScopusApi.search_articles(data)
+        dataframe = DataFrame(articles)
+        del dataframe[self.LINK_COLUMN]
+
+        dataframe = dataframe.drop_duplicates()
+        dataframe.insert(2, self.AUTHORS_COLUMN, '')
+        dataframe.insert(5, self.ABSTRACT_COLUMN, '')
+
+        dataframe: DataFrame = dataframe.apply(
+            self.__get_scraping_data, axis=1, raw=False, result_type='reduce'
+        )
+
+        dataframe = dataframe.rename(columns=ApiConfig.MAPPINGS)
+        subset = [self.TITLE_COLUMN, self.AUTHORS_COLUMN]
+        dataframe = dataframe.drop_duplicates(subset)
+
+        dataframe = self.__filter_dataframe(dataframe)
+        dataframe.to_csv(self.__file_path, sep=';', index=False)
+
+        return FileResponse(
+            self.__file_path,
+            status_code=200,
+            media_type='text/csv',
+            filename=self.FILENAME,
+        )
+
+    def __format_abstract(self, result: str, data: PageElement):
         content = data.text.strip().replace('\n', '')
         content = sub(SPACES_PATTERN, '', content)
 
         if not content or content.isspace():
             return result
 
-        result = result + content
+        result += content
 
         return result
 
-    @classmethod
-    def __format_names(cls, data: Tag) -> str:
+    def __format_names(self, data: Tag) -> str:
         return data.text.strip().replace(',', '')
 
-    @classmethod
-    def __get_scraping_data(cls, row: Series):
-        url, template = ScopusApi.scraping_article(row[cls.SCOPUS_ID_KEY])
-        page = BeautifulSoup(template, features=cls.PARSER)
+    def __get_scraping_data(self, row: Series) -> Series:
+        url, template = ScopusApi.scraping_article(row[self.SCOPUS_ID_KEY])
+        page = BeautifulSoup(template, features=self.PARSER)
 
-        authors_names = page.select(cls.AUTHORS_SELECTOR)
-        authors_names = ', '.join(map(cls.__format_names, authors_names))
+        authors_names = page.select(self.AUTHORS_SELECTOR)
+        authors_names = ', '.join(map(self.__format_names, authors_names))
 
-        abstract = page.select_one(cls.ABSTRACT_SELECTOR)
+        abstract = page.select_one(self.ABSTRACT_SELECTOR)
         if abstract:
-            abstract = reduce(cls.__format_abstract, abstract, '')
+            abstract = reduce(self.__format_abstract, abstract, '')
 
-        row[cls.URL_COLUMN] = url
-        row[cls.AUTHORS_COLUMN] = authors_names
-        row[cls.ABSTRACT_COLUMN] = abstract
+        row[self.URL_COLUMN] = url
+        row[self.AUTHORS_COLUMN] = authors_names
+        row[self.ABSTRACT_COLUMN] = abstract
 
         return row
 
-    @classmethod
-    def search_articles(cls, data: UseCase.ParamsType) -> FileResponse:
-        articles = ScopusApi.search_articles(data)
-        dataframe = DataFrame(articles)
-        del dataframe['@_fa']
+    def __get_row_index(self, title: str) -> int:
+        return self.__dataframe.loc[
+            self.__dataframe[self.TITLE_COLUMN] == title
+        ].index[0]
 
-        dataframe = dataframe.drop_duplicates()
-        dataframe.insert(2, cls.AUTHORS_COLUMN, '')
-        dataframe.insert(5, cls.ABSTRACT_COLUMN, '')
+    def __filter_dataframe(self, dataframe: DataFrame) -> DataFrame:
+        grouped_dataframe = dataframe.groupby(self.AUTHORS_COLUMN)
 
-        dataframe: DataFrame = dataframe.apply(
-            cls.__get_scraping_data, axis=1, raw=False, result_type='reduce'
-        )
+        if grouped_dataframe.ngroups == dataframe.shape[0]:
+            return dataframe
 
-        dataframe = dataframe.rename(columns=ApiConfig.MAPPINGS)
-        subset = [cls.TITLE_COLUMN, cls.AUTHORS_COLUMN]
-        dataframe = dataframe.drop_duplicates(subset, keep=False)
+        similar_titles = []
+        self.__dataframe = dataframe
 
-        file_path = join(DIRECTORY, cls.FILENAME)
-        dataframe.to_csv(file_path, sep=';', index=False)
+        for _, group in grouped_dataframe:
 
-        return FileResponse(
-            file_path,
-            status_code=200,
-            media_type='text/csv',
-            filename=cls.FILENAME,
-        )
+            if group.shape[0] < 2:
+                continue
+
+            titles = group[self.TITLE_COLUMN].tolist()
+
+            if len(titles) == 2:
+                if WRatio(titles[0], titles[1]) > 80:
+                    similar_titles.append(self.__get_row_index(titles[0]))
+            else:
+                for index, title in enumerate(titles[:-1]):
+                    similar_titles.extend(
+                        self.__get_row_index(title)
+                        for comparative_title in titles[index + 1 :]
+                        if WRatio(title, comparative_title) > 80
+                    )
+
+        similar_titles = list(set(similar_titles))
+        rows_before = dataframe.shape[0]
+
+        dataframe = dataframe.drop(similar_titles)
+        total_loss = ((rows_before - dataframe.shape[0]) / rows_before) * 100
+
+        Logger.info(f'Total Articles Loss: {total_loss:.2f}%')
+
+        return dataframe
