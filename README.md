@@ -1,4 +1,3 @@
-<!-- cSpell:disable -->
 # Scopus Searcher API
 
 <p align="center">
@@ -9,12 +8,12 @@
 </p>
 <p align="center">
   <a href="https://github.com/mauprogramador/scopus-searcher-api/actions/workflows/verification.yml" target="_blank">
-    <img alt="Linting and Testing Action" src="https://img.shields.io/github/actions/workflow/status/mauprogramador/scopus-searcher-api/verification.yml?branch=master&event=push&logo=github&label=Lint | Test&color=C7D41B">
+    <img alt="Linting and Testing Action" src="https://img.shields.io/github/actions/workflow/status/mauprogramador/scopus-searcher-api/verification.yml?branch=master&event=push&logo=github&label=Lint | Test&color=FF5722">
   </a>
   <a href="https://github.com/mauprogramador/scopus-searcher-api/actions/workflows/documentation.yml" target="_blank">
-    <img alt="Documentation Action" src="https://img.shields.io/github/actions/workflow/status/mauprogramador/scopus-searcher-api/documentation.yml?branch=master&event=push&logo=github&label=Docs&color=4CA9E8">
+    <img alt="Documentation Action" src="https://img.shields.io/github/actions/workflow/status/mauprogramador/scopus-searcher-api/documentation.yml?branch=master&event=push&logo=github&label=Docs&color=2196F3">
   </a>
-  <img src="https://img.shields.io/badge/Coverage-99%25-81CC2B" alt="Coverage">
+  <img src="https://img.shields.io/badge/Coverage-99%25-4CAF50" alt="Coverage">
   <a href="https://github.com/mauprogramador/scopus-searcher-api/releases/tag/v2.0.0" target="_blank">
     <img src="https://img.shields.io/github/v/tag/mauprogramador/scopus-searcher-api?logo=github&label=API Version&color=E9711C" alt="API Version">
   </a>
@@ -22,8 +21,6 @@
     <img src="https://img.shields.io/badge/Python-v3.11-3776AB?logo=python&logoColor=FFF" alt="Python Version">
   </a>
 </p>
-<!-- <img src="https://github.com/mauprogramador/scopus-searcher-api/workflows/Documentation/badge.svg?event=push&branch=master" alt="Linting and Testing">
-<img alt="Python Version from PEP 621 TOML" src="https://img.shields.io/python/required-version-toml?tomlFilePath=https%3A%2F%2Fraw.githubusercontent.com%2Fmauprogramador%2Fscopus-searcher-api%2Fmaster%2Fpyproject.toml"> -->
 
 ---
 
