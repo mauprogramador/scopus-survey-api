@@ -8,10 +8,10 @@ Below is the mapping of the information fields:
 | :-------------------- | :--------------- | :--------------------------------- |
 | prism:publicationName | Publication Name | Source Title                       |
 | prism:coverDate       | Date             | Publication Date                   |
-| dc:identifier         | Scopus Id        | -                                  |
+| dc:identifier         | Scopus Id        | Scopus Id                          |
 | prism:url             | URL              | Content Abstract Retrieval API URI |
 | dc:title              | Title            | Article Title                      |
-| prism:volume          | Volume           | -                                  |
+| prism:volume          | Volume           | Volume                             |
 | prism:doi             | DOI              | Document Object Identifier         |
 | citedby-count         | Citations        | Cited-by Count                     |
 | -                     | Authors          | Complete Author list               |

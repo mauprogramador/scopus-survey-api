@@ -8,10 +8,10 @@ Abaixo segue o mapeamento dos campos de informações:
 | :-------------------- | :----------------- | :---------------------------------------------- |
 | prism:publicationName | Nome da Publicação | Título da Fonte                                 |
 | prism:coverDate       | Data               | Data de publicação                              |
-| dc:identifier         | Scopus ID          | -                                               |
+| dc:identifier         | Scopus ID          | Scopus ID                                       |
 | prism:url             | URL                | URI da API de recuperação de resumo de conteúdo |
 | dc:title              | Título             | Título do Artigo                                |
-| prism:volume          | Volume             | -                                               |
+| prism:volume          | Volume             | Volume                                          |
 | prism:doi             | DOI                | Identificador de objeto de documento            |
 | citedby-count         | Citações           | Contagem de citações                            |
 | -                     | Autores            | Lista completa de Autores                       |
