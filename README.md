@@ -44,7 +44,7 @@ To perform the search, you will need [Python3.11](https://www.python.org/) or [D
 
 ```bash
 # Create Python Virtual Environment
-make venv v=3.11
+make venv
 
 # Activate Venv
 source .venv/bin/activate
