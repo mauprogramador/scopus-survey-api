@@ -4,7 +4,7 @@
 # Environment
 
 venv:
-	@bash venv.sh $(v)
+	@bash venv.sh
 
 install:
 	@poetry install --no-root
