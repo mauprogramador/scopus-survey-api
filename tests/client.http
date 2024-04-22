@@ -1,9 +1,9 @@
 
 @apikey =
-@keywords = Images, Machine Learning, Artificial Inteligence, Computer Vision
-@date = 2018-2023
+@keywords = Images, Machine Learning, Artificial Intelligence, Computer Vision
+@date = 2021-2024
 @id = SCOPUS_ID:0037368024
-@fields = dc:identifier,dc:title,prism:publicationName,prism:volume,prism:coverDate,prism:doi,citedby-count
+@fields = prism:coverDate,prism:url,prism:publicationName,citedby-count,prism:volume,dc:title,prism:doi,dc:identifier
 
 
 ### Scopus API - Search Articles
