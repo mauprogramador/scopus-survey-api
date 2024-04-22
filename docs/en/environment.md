@@ -6,24 +6,11 @@ It is necessary to prepare an environment with the correct dependencies to work 
 
 Create the [Python Virtual Environment - Venv](https://docs.python.org/3/library/venv.html){:target="\_blank"}, and install **all** necessary dependencies.
 
-### Pip
-
-```zsh
-# Create Venv
-make venv v=3.11
-
-# Activate Venv
-source .venv/bin/activate
-
-# Install all dependencies
-(.venv) pip3 install -r requirements/requirements-all.txt
-```
-
 ### Poetry
 
 ```zsh
 # Create Venv
-make venv v=3.11
+make venv
 
 # Activate Venv
 source .venv/bin/activate
@@ -32,7 +19,22 @@ source .venv/bin/activate
 (.venv) make install
 ```
 
-**After installing the dependencies you can [get started](./getting-started.md).**
+### Pip
+
+```zsh
+# Create Venv
+make venv
+
+# Activate Venv
+source .venv/bin/activate
+
+# Install all dependencies
+(.venv) pip3 install -r requirements/requirements-all.txt
+```
+
+!!! note
+
+    **After installing the dependencies you can [Get Started](./getting-started.md).**
 
 ### Formatting, Linting and Audit Vulnerability
 
@@ -56,7 +58,7 @@ Create the [Python Virtual Environment - Venv](https://docs.python.org/3/library
 
 ```zsh
 # Create Venv
-make venv v=3.11
+make venv
 
 # Activate Venv
 source .venv/bin/activate
@@ -71,7 +73,7 @@ Create the [Python Virtual Environment - Venv](https://docs.python.org/3/library
 
 ```zsh
 # Create Venv
-make venv v=3.11
+make venv
 
 # Activate Venv
 source .venv/bin/activate
@@ -86,7 +88,7 @@ Create the [Python Virtual Environment - Venv](https://docs.python.org/3/library
 
 ```zsh
 # Create Venv
-make venv v=3.11
+make venv
 
 # Activate Venv
 source .venv/bin/activate

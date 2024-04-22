@@ -6,24 +6,11 @@
 
 Crie o [Ambiente Virtual Python - Venv](https://docs.python.org/3/library/venv.html){:target="\_blank"} e instale **todas** as dependências necessárias.
 
-### Pip
-
-```zsh
-# Crie o Venv
-make venv v=3.11
-
-# Ative o Venv
-source .venv/bin/activate
-
-# Instale todas as dependências
-(.venv) pip3 install -r requirements/requirements-all.txt
-```
-
 ### Poetry
 
 ```zsh
 # Crie o Venv
-make venv v=3.11
+make venv
 
 # Ative o Venv
 source .venv/bin/activate
@@ -32,7 +19,22 @@ source .venv/bin/activate
 (.venv) make install
 ```
 
-**Depois de instalar as dependências, você pode [começar](./getting-started.md).**
+### Pip
+
+```zsh
+# Crie o Venv
+make venv
+
+# Ative o Venv
+source .venv/bin/activate
+
+# Instale todas as dependências
+(.venv) pip3 install -r requirements/requirements-all.txt
+```
+
+!!! note
+
+    **Depois de instalar as dependências, você pode [Começar](./getting-started.md).**
 
 ### Formatação, Linting and Auditoria de Vulnerabilidade
 
@@ -56,7 +58,7 @@ Crie o [Ambiente Virtual Python - Venv](https://docs.python.org/3/library/venv.h
 
 ```zsh
 # Crie o Venv
-make venv v=3.11
+make venv
 
 # Ative o Venv
 source .venv/bin/activate
@@ -71,7 +73,7 @@ Crie o [Ambiente Virtual Python - Venv](https://docs.python.org/3/library/venv.h
 
 ```zsh
 # Crie o Venv
-make venv v=3.11
+make venv
 
 # Ative o Venv
 source .venv/bin/activate
@@ -86,7 +88,7 @@ Crie o [Ambiente Virtual Python - Venv](https://docs.python.org/3/library/venv.h
 
 ```zsh
 # Crie o Venv
-make venv v=3.11
+make venv
 
 # Ative o Venv
 source .venv/bin/activate
