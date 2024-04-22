@@ -4,13 +4,23 @@ After obtaining the data for each article from the [Scopus Search API](https://d
 
 ![Article Preview Page](../images/article-preview-page.png)
 
-## Article Url
+## Article URL
 
-This is an example URL for the article preview page.
+This is the base URL of the article preview page.
 
 ```text
 https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=...&origin=inward
 ```
+
+This is an example URL with `0037368024` as the Scopus article Id.
+
+```text
+https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=0037368024&origin=inward
+```
+
+!!! note
+
+    [Click here](https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=0037368024&origin=inward){:target="\_blank"} to see an example of an article preview page.
 
 ## Article Page Headers
 

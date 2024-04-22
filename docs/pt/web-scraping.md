@@ -6,11 +6,21 @@ Após obter os dados de cada artigo na [Scopus Search API](https://dev.elsevier.
 
 ## URL do Artigo
 
-Este é um exemplo de URL para a página de visualização do artigo.
+Este é a URL base da página de visualização do artigo.
 
 ```text
 https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=...&origin=inward
 ```
+
+Este é um exemplo de URL com `0037368024` como ID do artigo Scopus.
+
+```text
+https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=0037368024&origin=inward
+```
+
+!!! note
+
+    [Clique aqui](https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=0037368024&origin=inward){:target="\_blank"} e veja um exemplo de página de visualização de artigo.
 
 ## Cabeçalhos da Página do Artigo
 
