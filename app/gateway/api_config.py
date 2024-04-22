@@ -1,3 +1,6 @@
+from app.core.config import CURRENT_YEAR
+
+
 class ApiConfig:
     API_URL = (
         'https://api.elsevier.com/content/search/scopus'
@@ -10,7 +13,7 @@ class ApiConfig:
         'citedby-count,prism:volume,dc:title,prism:doi,dc:identifier'
     )
 
-    DATE_RANGE = '2018-2023'
+    DATE_RANGE = f'{CURRENT_YEAR - 3}-{CURRENT_YEAR}'
 
     LINK_REF_SCOPUS = (
         'https://www.scopus.com/inward/record.uri'

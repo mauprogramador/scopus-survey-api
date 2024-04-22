@@ -1,3 +1,4 @@
+from datetime import datetime
 from re import compile as compile_pattern
 from tempfile import mkdtemp
 from uuid import uuid4
@@ -19,6 +20,7 @@ STATIC = {
 
 
 DIRECTORY = mkdtemp()
+CURRENT_YEAR = datetime.now().year
 TOKEN = str(uuid4().hex)
 
 
