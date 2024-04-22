@@ -7,7 +7,7 @@ readme = "README.md"
 license = "MIT"
 repository = "https://github.com/mauprogramador/scopus-searcher-api"
 documentation = "https://mauprogramador.github.io/scopus-searcher-api/"
-keywords = ["scopus", "articles", "theoretical reference", "bibliographic survey"]
+keywords = ["scopus search api", "theoretical reference", "python", "clean architecture"]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Environment :: Web Environment :: Mozilla",
