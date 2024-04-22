@@ -18,11 +18,17 @@ On Vs Code using [Git Extension](https://git-scm.com/book/en/v2/Appendix-A%3A-Gi
 - Paste the repository URL: <https://github.com/mauprogramador/scopus-searcher-api.git>{:target="\_blank"}
 - Press `Enter` or click on `Clone from URL` and select a directory
 
-**Note**: take a look at [Source Control Docs](https://code.visualstudio.com/docs/sourcecontrol/overview){:target="\_blank"}.
+!!! note
+
+    Take a look at [Source Control Docs](https://code.visualstudio.com/docs/sourcecontrol/overview){:target="\_blank"}.
 
 ## Run
 
 With Python3:
+
+!!! note
+
+    First you need to create the [Environment](./environment.md#development-environment).
 
 ```zsh
 # Run the App locally
@@ -107,21 +113,12 @@ After **successfully** completing the search processing, in addition to download
 ![Web Loading](../images/web-loading-en.png)
 ![Web Table](../images/web-table-en.png)
 
-The table below exemplifies the results of a search. Using **Python** and **Machine Learning** as `Keywords`, a total of **6786** articles were returned from the [Scopus Search API](https://dev.elsevier.com/documentation/SCOPUSSearchAPI.wadl){:target="\_blank"}. To avoid time-consuming processing, we reduced the total to just **14**, there was no [loss due to similarity](./data-survey.md#filtering) and it took around **34,012.64ms**.
+### Search Example
+
+The table below exemplifies the results of a search. Using **Python** and **Machine Learning** as `Keywords`, a total of **6786** articles were returned from the [Scopus Search API](https://dev.elsevier.com/documentation/SCOPUSSearchAPI.wadl){:target="\_blank"}. To avoid time-consuming processing, we [reduced](./scopus-search-api.md#reducing-the-count) the total to just **14**, there was no [loss due to similarity](./data-survey.md#filtering) and it took around **34,012.64ms**.
 
 ![Web Table](../images/csv-table.png)
 
 !!! note
 
     [Click here](../example.csv){:download="example.csv"} to download the CSV file for the survey example above.
-
-If you want, you can reduce the number of articles that will be returned by going to `app/gateway/api_config.py` and adding the **count** field in the **API_URL** attribute of the **ApiConfig** class.
-
-```py title="api_config.py" linenums="1" hl_lines="5"
-class ApiConfig:
-    API_URL = (
-        'https://api.elsevier.com/content/search/scopus'
-        '?query=TITLE-ABS-KEY({query})&field={fields}&date={date}'
-        '&suppressNavLinks=true&count=14'
-    )
-```

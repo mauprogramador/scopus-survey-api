@@ -18,11 +18,17 @@ No Vs Code usando a [Extensão do Git](https://git-scm.com/book/en/v2/Appendix-A
 - Cole a URL do repositório: <https://github.com/mauprogramador/scopus-searcher-api.git>{:target="\_blank"}
 - Pressione `Enter` ou clique em `Clone from URL` e selecione um diretório
 
-**Nota**: dê uma olhada na [Documentação do Controle de Versão](https://code.visualstudio.com/docs/sourcecontrol/overview){:target="\_blank"}.
+!!! note
+
+    Dê uma olhada na [Documentação do Controle de Versão](https://code.visualstudio.com/docs/sourcecontrol/overview){:target="\_blank"}.
 
 ## Execute
 
 Com Python3:
+
+!!! note
+
+    Primeiro você precisa criar o [Ambiente](./environment.md#ambiente-de-desenvolvimento).
 
 ```zsh
 # Execute a aplicação localmente
@@ -100,28 +106,19 @@ Você também pode verificar no inspecionar [DevTools](https://developer.chrome.
 
 ![Inspect Error](../images/inspect-error.png)
 
-## CSV Table
+## Tabela CSV
 
 Após o término **com sucesso** do processamento da busca, além do download do [arquivo CSV](https://pt.wikipedia.org/wiki/Comma-separated_values){:target="\_blank"}, o botão **Mostrar Tabela** também será liberado, e ao clicar nele você será redirecionado para uma nova página na qual uma tabela exibirá uma visualização prévia de todos os dados dos artigos encontrados.
 
 ![Web Loading](../images/web-loading-pt.png)
 ![Web Table](../images/web-table-pt.png)
 
-A tabela abaixo exemplifica os resultados de uma busca. Usando **Python** e **Machine Learning** como `Palavras-chave`, um total de **6786** artigos foi retornado da [Scopus Search API](https://dev.elsevier.com/documentation/SCOPUSSearchAPI.wadl){:target="\_blank"}. Para evitar um longo processamento, nós reduzimos o total para apenas **14**, não houve [perda por similaridade](./data-survey.md#filtragem) e demorou cerca de **34.012,64ms**.
+### Exemplo de Busca
+
+A tabela abaixo exemplifica os resultados de uma busca. Usando **Python** e **Machine Learning** como `Palavras-chave`, um total de **6786** artigos foi retornado da [Scopus Search API](https://dev.elsevier.com/documentation/SCOPUSSearchAPI.wadl){:target="\_blank"}. Para evitar um longo processamento, nós [reduzimos](./scopus-search-api.md#reduzindo-a-contagem) o total para apenas **14**, não houve [perda por similaridade](./data-survey.md#filtragem) e demorou cerca de **34.012,64ms**.
 
 ![Web Table](../images/csv-table.png)
 
 !!! note
 
     [Clique aqui](../example.csv){:download="example.csv"} para baixar o arquivo CSV do exemplo de pesquisa acima.
-
-Se você quiser, você pode reduzir o número de artigos que serão retornados indo em `app/gateway/api_config.py` e adicionando o campo **count** no atributo **API_URL** da classe **ApiConfig**.
-
-```py title="api_config.py" linenums="1" hl_lines="5"
-class ApiConfig:
-    API_URL = (
-        'https://api.elsevier.com/content/search/scopus'
-        '?query=TITLE-ABS-KEY({query})&field={fields}&date={date}'
-        '&suppressNavLinks=true&count=14'
-    )
-```
