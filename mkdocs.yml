@@ -36,8 +36,8 @@ nav:
 - English:
   - Scopus Searcher API: en/index.md
   - Requirements: en/requirements.md
-  - Environment: en/environment.md
   - Getting Started: en/getting-started.md
+  - Environment: en/environment.md
   - Scopus Search API: en/scopus-search-api.md
   - Web Scraping: en/web-scraping.md
   - Data Survey: en/data-survey.md
@@ -49,8 +49,8 @@ nav:
 - Português:
   - Scopus Searcher API: pt/index.md
   - Requisitos: pt/requirements.md
-  - Ambiente: pt/environment.md
   - Primeiros Passos: pt/getting-started.md
+  - Ambiente: pt/environment.md
   - Scopus Search API: pt/scopus-search-api.md
   - Web Scraping: pt/web-scraping.md
   - Levantamento de Dados: pt/data-survey.md
