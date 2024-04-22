@@ -2,7 +2,7 @@
 
 Instituto Federal de Mato Grosso do Sul ([IFMS - Campus Três Lagoas](https://www.ifms.edu.br/campi/campus-tres-lagoas){:target="\_blank"}) <br/>
 Tecnologia em Análise de Desenvolvimento de Sistemas ([TADS](https://www.ifms.edu.br/campi/campus-tres-lagoas/cursos/graduacao/analise-e-desenvolvimento-de-sistemas){:target="\_blank"}) <br/>
-Brasil - MS - Três Lagoas - 26 de Fevereiro de 2024<br/>
+Brasil - MS - Três Lagoas <br/>
 
 **API para Levantamento Bibliográfico de Artigos da Scopus** <br/>
 
