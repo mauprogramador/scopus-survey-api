@@ -75,7 +75,7 @@ class ScopusApi(GatewaySearch, GatewayScraping):
                 return url, ApiConfig.TEMPLATE
 
         except FailedDependency as error:
-            Logger.error('Article Preview Page:', error.message)
+            Logger.error(error.message)
             return url, ApiConfig.TEMPLATE
 
         return url, response.text
