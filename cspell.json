@@ -21,6 +21,7 @@
     "Scopus",
     "starlette",
     "svgs",
+    "uvicorn",
     "venv",
     "werkzeug"
   ],
