@@ -59,6 +59,27 @@ class ApiConfig:
         </html>
     """
 
+    PAGE_HEADERS = {
+        'Cache-Control': 'no-cache',
+        'Pragma': 'no-cache',
+        'Referer': 'https://www.scopus.com/',
+        'Connection': 'keep-alive',
+        'Content-Type': 'text/plain',
+        'Origin': 'https://www.scopus.com',
+        'Accept-Encoding': 'gzip, deflate, br',
+        'Accept-Charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.3',
+        'Accept-Language': 'pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7',
+        'Accept': (
+            'text/html,application/xhtml+xml,application/xml;q=0.9'
+            ',image/avif,image/webp,image/apng,*/*;q=0.8,application/'
+            'signed-exchange;v=b3;q=0.7'
+        ),
+        'User-Agent': (
+            'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36'
+            ' (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36'
+        ),
+    }
+
     @classmethod
     def get_search_articles_url(cls, query: str) -> str:
         return cls.API_URL.format(
@@ -68,3 +89,12 @@ class ApiConfig:
     @classmethod
     def get_article_page_url(cls, scopus_id: str) -> str:
         return cls.LINK_REF_SCOPUS.format(scopus_id=scopus_id)
+
+    @classmethod
+    def get_api_headers(cls, api_key: str) -> dict[str, str]:
+        return {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'User-Agent': 'Mozilla/5.0',
+            'X-ELS-APIKey': api_key,
+        }

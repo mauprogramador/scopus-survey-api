@@ -2,14 +2,12 @@ from http import HTTPStatus
 from json import JSONDecodeError, loads
 from urllib.parse import quote_plus
 
-from app.adapters.gateway.models import ApiHeaders, PageHeaders
+from app.adapters.gateway.api_config import ApiConfig
+from app.adapters.helpers.http_helper import HttpHelper
 from app.core.exceptions import ScopusApiError
 from app.core.interfaces import GatewayScraping, GatewaySearch
 from app.framework.exceptions import FailedDependency, InternalError, NotFound
 from app.utils.logger import Logger
-
-from ..helpers.http_helper import HttpHelper
-from .api_config import ApiConfig
 
 
 class ScopusApi(GatewaySearch, GatewayScraping):
@@ -25,7 +23,7 @@ class ScopusApi(GatewaySearch, GatewayScraping):
         cls,
         data: GatewaySearch.ParamsType,
     ) -> GatewaySearch.SearchType:
-        headers = ApiHeaders(apikey=data.api_key).model_dump(by_alias=True)
+        headers = ApiConfig.get_api_headers(data.api_key)
         query = quote_plus(cls.BOOLEAN_OPERATOR.join(data.keywords))
 
         url = ApiConfig.get_search_articles_url(query)
@@ -61,7 +59,7 @@ class ScopusApi(GatewaySearch, GatewayScraping):
 
     @staticmethod
     def scraping_article(scopus_id: str) -> GatewayScraping.ScrapType:
-        headers = PageHeaders().model_dump(by_alias=True)
+        headers = ApiConfig.PAGE_HEADERS
         url = ApiConfig.get_article_page_url(scopus_id.split(':')[1])
 
         try:
