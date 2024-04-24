@@ -36,6 +36,25 @@ source .venv/bin/activate
 
     **Depois de instalar as dependências, você pode [Começar](./getting-started.md).**
 
+### Configuração do PyProject
+
+Você pode configurar alguns parâmetros para a aplicação no arquivo `pyproject.toml`, tais como:
+
+- **Debug:** Habilita a saída dos logs de depuração. Padrão: `false`.
+- **Logging_file:** Habilita o salvamento dos registros dos logs em um arquivo na pasta logs ao executar o aplicativo. Padrão: `false`.
+- **Host:** Vincule o soquete a este endereço de host. Defina `0.0.0.0` para disponibilizar a aplicação em sua rede local. Padrão: `127.0.0.1`.
+- **Port:** Vincule-se a um soquete e execute a aplicação com esta porta. Padrão: `8000`.
+- **Reload:** Habilita o recarregamento automático do aplicativo quando os arquivos forem modificados. Padrão: `false`.
+
+```toml title="pyproject.toml" linenums="81"
+[application]
+debug = false
+logging_file = false
+host = "127.0.0.1"
+port = 8000
+reload = false
+```
+
 ### Formatação, Linting and Auditoria de Vulnerabilidade
 
 ```zsh
