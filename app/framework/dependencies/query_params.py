@@ -4,7 +4,7 @@ from fastapi import Query
 
 from app.core.config import API_KEY_PATTERN, KEYWORD_PATTERN
 from app.core.interfaces import ApiParams
-from app.exceptions import Forbidden, UnprocessableContent
+from app.framework.exceptions import Forbidden, UnprocessableContent
 
 
 class QueryParams(ApiParams):

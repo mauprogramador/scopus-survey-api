@@ -1,7 +1,7 @@
 from pandas import DataFrame
 from pytest_mock import MockerFixture
 
-from app.utils.csv_table import LoadCSVData
+from app.adapters.presenters.csv_table import LoadCSVData
 from tests.data import mocks
 
 

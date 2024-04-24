@@ -7,10 +7,10 @@ from fastapi.responses import FileResponse
 from fuzzywuzzy.fuzz import WRatio
 from pandas import DataFrame, Series
 
+from app.adapters.gateway.api_config import ApiConfig
+from app.adapters.gateway.scopus_api import ScopusApi
 from app.core.config import DIRECTORY, SPACES_PATTERN
 from app.core.interfaces import UseCase
-from app.gateway.api_config import ApiConfig
-from app.gateway.scopus_api import ScopusApi
 from app.utils.logger import Logger
 
 

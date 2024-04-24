@@ -7,7 +7,7 @@ from requests.exceptions import ConnectionError as ConnectError
 from requests.exceptions import Timeout
 
 from app.core.interfaces import Helper
-from app.exceptions.http_exceptions import FailedDependency
+from app.framework.exceptions.http_exceptions import FailedDependency
 from app.utils.logger import Logger
 
 

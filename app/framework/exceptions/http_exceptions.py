@@ -37,24 +37,6 @@ class FailedDependency(HttpException):
         super().__init__(424, message)
 
 
-class ScopusApiError(HttpException):
-    def __init__(
-        self, message: str, status: str, detail: str, success: bool = None
-    ) -> None:
-        super().__init__(422, message)
-        self.status = status
-        self.detail = detail
-        self.success = success or False
-
-    def to_dict(self):
-        return {
-            'success': self.success,
-            'message': self.message,
-            'status': self.status,
-            'detail': self.detail,
-        }
-
-
 class InternalError(HttpException):
     def __init__(self, message: str) -> None:
         super().__init__(500, message)

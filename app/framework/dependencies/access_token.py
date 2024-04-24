@@ -2,8 +2,9 @@ from typing import Annotated
 
 from fastapi import Header, Request
 
-from app.core.config import OPENAPI_EXAMPLE, TOKEN, TOKEN_PATTERN
-from app.exceptions import Unauthorized
+from app.core.config import TOKEN, TOKEN_PATTERN
+from app.framework.exceptions import Unauthorized
+from app.framework.fastapi.config import OPENAPI_EXAMPLE
 
 
 class AccessToken:

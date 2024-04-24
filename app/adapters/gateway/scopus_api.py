@@ -2,18 +2,14 @@ from http import HTTPStatus
 from json import JSONDecodeError, loads
 from urllib.parse import quote_plus
 
+from app.adapters.gateway.models import ApiHeaders, PageHeaders
+from app.core.exceptions import ScopusApiError
 from app.core.interfaces import GatewayScraping, GatewaySearch
-from app.core.models import ApiHeaders, PageHeaders
-from app.exceptions import (
-    FailedDependency,
-    InternalError,
-    NotFound,
-    ScopusApiError,
-)
+from app.framework.exceptions import FailedDependency, InternalError, NotFound
 from app.utils.logger import Logger
 
+from ..helpers.http_helper import HttpHelper
 from .api_config import ApiConfig
-from .http_helper import HttpHelper
 
 
 class ScopusApi(GatewaySearch, GatewayScraping):

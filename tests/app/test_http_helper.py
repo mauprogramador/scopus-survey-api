@@ -3,9 +3,9 @@ from pytest_mock import MockerFixture
 from requests.exceptions import ConnectionError as ConnectError
 from requests.exceptions import Timeout
 
-from app.exceptions import ScopusApiError
-from app.gateway.api_config import ApiConfig
-from app.gateway.http_helper import HttpHelper
+from app.adapters.gateway.api_config import ApiConfig
+from app.adapters.helpers.http_helper import HttpHelper
+from app.core.exceptions import ScopusApiError
 from tests.data import mocks
 from tests.data.request import app_request
 from tests.data.utils import assert_csv_response

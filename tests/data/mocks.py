@@ -1,7 +1,7 @@
 from pydantic_core import InitErrorDetails
 from requests.exceptions import Timeout
 
-from app.dependencies import QueryParams
+from app.framework.dependencies import QueryParams
 from tests.data.models import Article, FakeResponse
 from tests.data.utils import get_api_response, load_groups
 
@@ -18,16 +18,17 @@ HTML_CONTENT_TYPE = ('content-type', 'text/html; charset=utf-8')
 TABLE_URL = f'{BASE_URL}/table'
 
 SESSION_SEND = 'requests.sessions.Session.send'
-HTTP_HELPER_REQUEST = 'app.gateway.http_helper.HttpHelper.make_request'
-BASE_SCOPUS_API = 'app.gateway.scopus_api.ScopusApi'
+HELPER_PATH = "app.adapters.helpers.http_helper"
+HTTP_HELPER_REQUEST = f'{HELPER_PATH}.HttpHelper.make_request'
+BASE_SCOPUS_API = 'app.adapters.gateway.scopus_api.ScopusApi'
 SCOPUS_API_SEARCH_ARTICLES = f'{BASE_SCOPUS_API}.search_articles'
 SCOPUS_API_SCRAPING_ARTICLE = f'{BASE_SCOPUS_API}.scraping_article'
 SEARCH_ARTICLES = 'app.core.usecase.Scopus.search_articles'
 RENAME_DATAFRAME = 'pandas.core.frame.DataFrame.rename'
-RANGE = 'app.gateway.http_helper.range'
-SLEEP = 'app.gateway.http_helper.sleep'
-CSV_TABLE = 'app.utils.csv_table.LoadCSVData.handle'
-READ_CSV = 'app.utils.csv_table.read_csv'
+RANGE = f'{HELPER_PATH}.range'
+SLEEP = f'{HELPER_PATH}.sleep'
+CSV_TABLE = 'app.adapters.presenters.csv_table.LoadCSVData.handle'
+READ_CSV = "app.adapters.presenters.csv_table.read_csv"
 
 TEMPLATE = """
     <!DOCTYPE html>

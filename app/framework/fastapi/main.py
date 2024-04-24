@@ -1,9 +1,8 @@
 from fastapi import FastAPI
 
-from app.api.middleware import TraceControl
-from app.api.routes import router
-from app.api.swagger import FASTAPI
-from app.core.config import CORS, STATIC
+from app.framework.fastapi.config import CORS, FASTAPI, STATIC
+from app.framework.fastapi.routes import router
+from app.framework.middleware.tracing import TraceControl
 from app.utils.logger import Logger
 
 app = FastAPI(**FASTAPI)

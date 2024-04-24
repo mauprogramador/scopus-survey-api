@@ -1,9 +1,9 @@
 import pytest
 from pytest_mock import MockerFixture
 
-from app.exceptions import ScopusApiError
-from app.gateway.api_config import ApiConfig
-from app.gateway.scopus_api import ScopusApi
+from app.adapters.gateway.api_config import ApiConfig
+from app.adapters.gateway.scopus_api import ScopusApi
+from app.core.exceptions import ScopusApiError
 from tests.data import mocks
 from tests.data.request import app_request
 from tests.data.utils import assert_csv_response

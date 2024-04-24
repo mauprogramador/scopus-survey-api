@@ -4,8 +4,8 @@ import pytest
 from pandas import DataFrame, Series
 from pytest_mock import MockerFixture
 
+from app.adapters.gateway.api_config import ApiConfig
 from app.core.usecase import Scopus
-from app.gateway.api_config import ApiConfig
 from tests.data import mocks
 from tests.data.request import app_request
 

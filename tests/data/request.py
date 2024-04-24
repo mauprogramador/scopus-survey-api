@@ -1,7 +1,7 @@
 from httpx import AsyncClient, Response
 
 from app.core.config import TOKEN
-from app.main import app
+from app.framework.fastapi.main import app
 
 
 async def app_request(url: str, headers: dict | None = None) -> Response:

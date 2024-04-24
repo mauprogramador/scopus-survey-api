@@ -4,15 +4,16 @@ from fastapi import Depends, Request
 from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.routing import APIRouter
 
-from app.api.swagger import (
-    API_ROUTE_DESCRIPTION,
+from app.adapters.presenters.csv_table import LoadCSVData
+from app.core.config import TOKEN
+from app.core.usecase import Scopus
+from app.framework.dependencies import AccessToken, QueryParams
+from app.framework.fastapi.config import (
+    SEARCH_ROUTE_DESCRIPTION,
+    TEMPLATES,
     WEB_API_ROUTE_DESCRIPTION,
     WEB_TABLE_ROUTE_DESCRIPTION,
 )
-from app.core.config import TEMPLATES, TOKEN
-from app.core.usecase import Scopus
-from app.dependencies import AccessToken, QueryParams
-from app.utils.csv_table import LoadCSVData
 
 router = APIRouter(prefix='/scopus-searcher/api')
 
@@ -23,7 +24,7 @@ router = APIRouter(prefix='/scopus-searcher/api')
     tags=['API'],
     summary='Searches Scopus Articles',
     response_description='Articles found',
-    description=API_ROUTE_DESCRIPTION,
+    description=SEARCH_ROUTE_DESCRIPTION,
     response_class=FileResponse,
     dependencies=[Depends(AccessToken())],
 )
