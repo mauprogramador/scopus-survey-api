@@ -57,3 +57,7 @@ class CSVData(metaclass=ABCMeta):
     @abstractmethod
     def handle(self) -> TableType:
         pass
+
+
+class Toml(metaclass=ABCMeta):
+    ApplicationType: TypeAlias = dict[str, bool | str | int]

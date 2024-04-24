@@ -3,7 +3,7 @@ from fastapi.openapi.models import Example
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
-from app.core.config import TOKEN
+from app.core.config import TOKEN, TOML
 from app.framework.exceptions.handle_exceptions import (
     BaseExceptionResponse,
     ExceptionHandler,
@@ -13,8 +13,8 @@ from app.framework.fastapi.lifespan import lifespan
 TITLE = 'Scopus-Searcher-API'
 VERSION = 'v2.0.0'
 SUMMARY = 'API for Bibliographic Survey of Scopus Articles'
-DESCRIPTION = """
-[**Web Application**](http://127.0.0.1:8000/scopus-searcher/api)
+DESCRIPTION = f"""
+[**Web Application**]({TOML.url}/scopus-searcher/api)
 &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
 [**Documentation**](https://mauprogramador.github.io/scopus-searcher-api/)
 """
@@ -24,11 +24,11 @@ SEARCH_ROUTE_DESCRIPTION = """
 letters, numbers, underscores and spaces, from 2 to 120 characters <br/><br/>
 **Ex.:** Python, Machine Learning, Data Science, Neural Networks
 """
-WEB_API_ROUTE_DESCRIPTION = """
-**Web API:** <http://127.0.0.1:8000/scopus-searcher/api>
+WEB_API_ROUTE_DESCRIPTION = f"""
+**Web API:** <{TOML.url}/scopus-searcher/api>
 """
-WEB_TABLE_ROUTE_DESCRIPTION = """
-**Web Table:** <http://127.0.0.1:8000/scopus-searcher/api/table>
+WEB_TABLE_ROUTE_DESCRIPTION = f"""
+**Web Table:** <{TOML.url}/scopus-searcher/api/table>
 """
 
 RESPONSES = {

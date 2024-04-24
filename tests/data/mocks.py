@@ -1,11 +1,12 @@
 from pydantic_core import InitErrorDetails
 from requests.exceptions import Timeout
 
+from app.core.config import TOML
 from app.framework.dependencies import QueryParams
 from tests.data.models import Article, FakeResponse
 from tests.data.utils import get_api_response, load_groups
 
-BASE_URL = 'http://127.0.0.1:8000/scopus-searcher/api'
+BASE_URL = f'{TOML.url}/scopus-searcher/api'
 API_KEY = '6bd9327547a3cf4c56586324df4b7d92'
 KEYWORDS = ['Python', 'Machine Learning']
 QUERY_PARAMS = f"?apikey={API_KEY}&keywords={','.join(KEYWORDS)}"
@@ -18,7 +19,7 @@ HTML_CONTENT_TYPE = ('content-type', 'text/html; charset=utf-8')
 TABLE_URL = f'{BASE_URL}/table'
 
 SESSION_SEND = 'requests.sessions.Session.send'
-HELPER_PATH = "app.adapters.helpers.http_helper"
+HELPER_PATH = 'app.adapters.helpers.http_helper'
 HTTP_HELPER_REQUEST = f'{HELPER_PATH}.HttpHelper.make_request'
 BASE_SCOPUS_API = 'app.adapters.gateway.scopus_api.ScopusApi'
 SCOPUS_API_SEARCH_ARTICLES = f'{BASE_SCOPUS_API}.search_articles'
@@ -28,7 +29,7 @@ RENAME_DATAFRAME = 'pandas.core.frame.DataFrame.rename'
 RANGE = f'{HELPER_PATH}.range'
 SLEEP = f'{HELPER_PATH}.sleep'
 CSV_TABLE = 'app.adapters.presenters.csv_table.LoadCSVData.handle'
-READ_CSV = "app.adapters.presenters.csv_table.read_csv"
+READ_CSV = 'app.adapters.presenters.csv_table.read_csv'
 
 TEMPLATE = """
     <!DOCTYPE html>

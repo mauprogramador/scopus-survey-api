@@ -3,10 +3,12 @@ from re import compile as compile_pattern
 from tempfile import mkdtemp
 from uuid import uuid4
 
+from app.utils.toml import LoadPyprojectToml
+
 DIRECTORY = mkdtemp()
 CURRENT_YEAR = datetime.now().year
 TOKEN = str(uuid4().hex)
-
+TOML = LoadPyprojectToml()
 
 # Match: no spaces, only letters and numbers; length of exactly 32.
 API_KEY_PATTERN = r'^[a-zA-Z0-9]{32}$'
