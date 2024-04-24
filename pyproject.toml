@@ -61,6 +61,7 @@ types-beautifulsoup4 = "^4.12.0.20240106"
 pandas-stubs = "^2.2.0.240218"
 fuzzywuzzy-stubs = "^0.0.1"
 dill = "^0.3.8"
+types-toml = "^0.10.8.20240310"
 
 [tool.poetry.group.test.dependencies]
 pytest = "^8.0.0"
@@ -76,6 +77,13 @@ mkdocs-material = "^9.5.9"
 requires = ["poetry-core"]
 requires-python = "^3.11"
 build-backend = "poetry.core.masonry.api"
+
+[application]
+debug = false
+logging_file = false
+host = "127.0.0.1"
+port = 8000
+reload = false
 
 [tool.pylint]
 disable = ["C0114", "C0115", "C0116", "R0903", "E1136", "E0611", "E1131"]
