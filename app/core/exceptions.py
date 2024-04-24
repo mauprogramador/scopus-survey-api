@@ -1,5 +1,4 @@
 class ScopusApiError(Exception):
-
     def __init__(
         self, message: str, status: str, detail: str, success: bool = None
     ) -> None:
