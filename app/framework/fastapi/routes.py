@@ -4,8 +4,7 @@ from fastapi import Depends, Request
 from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.routing import APIRouter
 
-from app.adapters.presenters.csv_table import LoadCSVData
-from app.core.config import TOKEN
+from app.adapters.presenters import LoadCSVData, TemplateContext
 from app.core.usecase import Scopus
 from app.framework.dependencies import AccessToken, QueryParams
 from app.framework.fastapi.config import (
@@ -44,7 +43,7 @@ async def search_articles(
     response_class=HTMLResponse,
 )
 async def render_web_application(request: Request):
-    context = {'request': request, 'token': TOKEN}
+    context = TemplateContext.get_application_context(request)
     return TEMPLATES.TemplateResponse(request, 'index.html', context)
 
 
@@ -59,5 +58,5 @@ async def render_web_application(request: Request):
 )
 async def render_web_table(request: Request):
     data = LoadCSVData().handle()
-    context = {'request': request, 'content': data}
+    context = TemplateContext.get_table_context(request, data)
     return TEMPLATES.TemplateResponse(request, 'table.html', context)

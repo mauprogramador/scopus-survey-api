@@ -32,7 +32,7 @@
     <div class="container">
       <header>
         <div class="title">
-          <h1 translate="no">Scopus Searcher API <span class="version">v2.0.0</span></h1>
+          <h1 translate="no">Scopus Searcher API <span class="version">v{{ version }}</span></h1>
           <p class="language show">
             API for bibliographic survey of Scopus articles
           </p>
@@ -42,7 +42,7 @@
         </div>
         <nav aria-label="language Button and Swagger Link">
           <button id="language-button" title="Language" class="background-image show"></button>
-          <a href="http://127.0.0.1:8000" target="_blank" translate="no" class="link">
+          <a href="{{ url }}" target="_blank" translate="no" class="link">
             Swagger FastAPI
             <div id="open-in-new-tab-icon" class="background-image"></div>
           </a>
@@ -127,7 +127,7 @@
       </main>
       <footer>
         <p translate="no">
-          Copyright © 2024 MIT v2.0.0. All rights reserved. Developed by
+          Copyright © 2024 MIT v{{ version }}. All rights reserved. Developed by
           <a href="mailto:sir.silvabmauricio@gmail.com?subject=Hello. Let's talk." class="link">MauProgramador</a>
         </p>
         <nav aria-label="Institution and Github Links">
