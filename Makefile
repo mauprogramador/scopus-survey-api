@@ -13,16 +13,7 @@ install:
 # Run application
 
 run:
-	@poetry run uvicorn app.main:app
-
-reload:
-	@poetry run uvicorn app.main:app --reload
-
-run-host:
-	@poetry run uvicorn app.main:app --host 0.0.0.0
-
-reload-host:
-	@poetry run uvicorn app.main:app --reload --host 0.0.0.0
+	@poetry run python3 -m app.framework.fastapi.main
 
 
 # Documentation

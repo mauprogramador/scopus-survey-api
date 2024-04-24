@@ -1,5 +1,7 @@
+import uvicorn
 from fastapi import FastAPI
 
+from app.core.config import TOML
 from app.framework.fastapi.config import CORS, FASTAPI, STATIC
 from app.framework.fastapi.routes import router
 from app.framework.middleware.tracing import TraceControl
@@ -16,4 +18,6 @@ app.add_middleware(**CORS)
 app.add_middleware(TraceControl)
 
 
-Logger.info('Scopus API was initialized 🚀')
+if __name__ == '__main__':
+    Logger.info('Scopus API was initialized 🚀')
+    uvicorn.run(**TOML.uvicorn)
