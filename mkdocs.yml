@@ -1,5 +1,5 @@
 site_name: Scopus Searcher API
-site_url: http://127.0.0.1:8000
+site_url: http://127.0.0.1:8000/scopus-searcher-api
 site_description: API for bibliographic survey of Scopus articles
 site_author: MauProgramador
 repo_url: https://github.com/mauprogramador/scopus-searcher-api
@@ -64,10 +64,10 @@ extra:
   generator: false
   alternate:
     - name: English
-      link: /en/
+      link: /scopus-searcher-api/en/
       lang: en
     - name: Português
-      link: /pt/
+      link: /scopus-searcher-api/pt/
       lang: pt-BR
   social:
     - icon: fontawesome/brands/github
