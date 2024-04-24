@@ -6,8 +6,9 @@ from os import mkdir, path
 from re import compile as regex_compile
 from sys import exc_info
 
-from fastapi import Request, Response
-from requests import Response as RequestsResponse
+from fastapi import Request
+
+from app.core.config import TOML
 
 
 class Logger:
@@ -50,33 +51,34 @@ class Logger:
         self.__logger = getLogger(__name__)
         self.__logger.setLevel(INFO)
 
-        now = datetime.now().strftime('%d-%m-%Y_%H-%M-%S')
-        filename = f'logs/{now}_app.log'
-
-        if not path.exists('logs'):
-            mkdir('logs')
-
         stream_formatter = Formatter(self.LOG_RULE, self.DATE_RULE)
         stream_handler = StreamHandler()
         stream_handler.setFormatter(stream_formatter)
         self.__logger.addHandler(stream_handler)
 
-        file_formatter = self.CleanFormatter(self.LOG_RULE, self.DATE_RULE)
-        file_handler = FileHandler(filename)
-        file_handler.setFormatter(file_formatter)
-        self.__logger.addHandler(file_handler)
+        if TOML.logging_file:
+            now = datetime.now().strftime('%d-%m-%Y_%H-%M-%S')
+            filename = f'logs/{now}_app.log'
+
+            if not path.exists('logs'):
+                mkdir('logs')
+
+            file_formatter = self.CleanFormatter(self.LOG_RULE, self.DATE_RULE)
+            file_handler = FileHandler(filename)
+            file_handler.setFormatter(file_formatter)
+            self.__logger.addHandler(file_handler)
 
     def log(self, level: Level, message: str) -> None:
         log = f'{level.value: <24} \033[93m{message}\033[m'
         self.__logger.info(log)
 
     @classmethod
-    def get_status(cls, response: Response, time: float) -> tuple[str, str]:
-        status_phrase = HTTPStatus(response.status_code).phrase
+    def get_status(cls, status_code: int, time: float) -> tuple[str, str]:
+        status_phrase = HTTPStatus(status_code).phrase
         process_time = f'\033[93m{time:.2f}ms\033[m'
 
-        status_color = 32 if response.status_code == 200 else 31
-        status = f'\033[{status_color}m{response.status_code} {status_phrase}'
+        status_color = 32 if status_code == 200 else 31
+        status = f'\033[{status_color}m{status_code} {status_phrase}'
 
         return process_time, status
 
@@ -106,23 +108,21 @@ class Logger:
             Logger().log(cls.Level.EXCEPTION, message)
 
     @classmethod
-    def trace(cls, request: Request, response: Response, time: float) -> None:
+    def trace(cls, request: Request, status_code: int, time: float) -> None:
         host = request.client.host if request.client else '127.0.0.1'
         port = request.client.port if request.client else '8000'
 
         method = f'{cls.Method[request.method].value: <6}'
         url = f'{cls.POINT} http://{host}:{port}{request.url}'
 
-        process_time, status = cls.get_status(response, time)
+        process_time, status = cls.get_status(status_code, time)
         message = f'{method} {url} {cls.POINT} {status} {process_time}'
 
         Logger().log(cls.Level.TRACE, message)
 
     @classmethod
-    def service(
-        cls, url: str, response: RequestsResponse, time: float
-    ) -> None:
-        process_time, status = cls.get_status(response, time)
+    def service(cls, url: str, status_code: int, time: float) -> None:
+        process_time, status = cls.get_status(status_code, time)
         url = f'{cls.Method.GET.value: <6} {cls.POINT} {url}'
         message = f'{url} {cls.POINT} {status} {process_time}'
 

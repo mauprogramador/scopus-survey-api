@@ -30,6 +30,6 @@ class TraceControl(BaseHTTPMiddleware):
 
         end_time = (time() - start_time) * 1000
 
-        Logger.trace(request, response, end_time)
+        Logger.trace(request, response.status_code, end_time)
 
         return response
