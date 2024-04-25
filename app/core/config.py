@@ -1,13 +1,13 @@
 from datetime import datetime
 from re import compile as compile_pattern
+from secrets import token_hex
 from tempfile import mkdtemp
-from uuid import uuid4
 
 from app.utils.toml import PyprojectToml
 
 DIRECTORY = mkdtemp()
 CURRENT_YEAR = datetime.now().year
-TOKEN = str(uuid4().hex)
+TOKEN = token_hex(16)
 TOML = PyprojectToml()
 
 # Match: no spaces, only letters and numbers; length of exactly 32.
