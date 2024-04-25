@@ -59,5 +59,5 @@ class CSVData(metaclass=ABCMeta):
         pass
 
 
-class Toml(metaclass=ABCMeta):
-    ApplicationType: TypeAlias = dict[str, bool | str | int]
+class Pyproject(metaclass=ABCMeta):
+    TomlType: TypeAlias = dict[str, bool | str | int]

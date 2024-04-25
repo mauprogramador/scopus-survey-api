@@ -1,9 +1,9 @@
 from toml import load
 
-from app.core.interfaces import Toml
+from app.core.interfaces import Pyproject
 
 
-class LoadPyprojectToml(Toml):
+class PyprojectToml:
     FILENAME = 'pyproject.toml'
     ENCODING = 'utf-8'
 
@@ -15,7 +15,7 @@ class LoadPyprojectToml(Toml):
         poetry: dict[str, str | list[str]] = tools.get('poetry', {})
         self.version = poetry.get('version', '2.0.0')
 
-        application: Toml.ApplicationType = pyproject.get('application', {})
+        application: Pyproject.TomlType = pyproject.get('application', {})
         self.reload: bool = application.get('reload', False)
 
         self.debug = application.get('debug', False)
@@ -28,7 +28,7 @@ class LoadPyprojectToml(Toml):
         self.port = port if isinstance(port, int) else 8000
 
     @property
-    def uvicorn(self) -> Toml.ApplicationType:
+    def uvicorn(self) -> Pyproject.TomlType:
         return {
             'app': 'app.framework.fastapi.main:app',
             'host': self.host,
