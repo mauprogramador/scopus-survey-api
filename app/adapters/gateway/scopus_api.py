@@ -4,10 +4,10 @@ from urllib.parse import quote_plus
 
 from app.adapters.gateway.api_config import ApiConfig
 from app.adapters.helpers.http_helper import HttpHelper
+from app.core.config import LOG
 from app.core.exceptions import ScopusApiError
 from app.core.interfaces import GatewayScraping, GatewaySearch
 from app.framework.exceptions import FailedDependency, InternalError, NotFound
-from app.utils.logger import Logger
 
 
 class ScopusApi(GatewaySearch, GatewayScraping):
@@ -53,7 +53,7 @@ class ScopusApi(GatewaySearch, GatewayScraping):
         if int(total_results) == 0:
             raise NotFound('None articles has been found')
 
-        Logger.info(f'Total Articles Found: {total_results}')
+        LOG.info(f'Total Articles Found: {total_results}')
 
         return content[cls.RESULTS_KEY][cls.ENTRY_KEY]
 
@@ -69,7 +69,7 @@ class ScopusApi(GatewaySearch, GatewayScraping):
                 return url, ApiConfig.TEMPLATE
 
         except FailedDependency as error:
-            Logger.error(error.message)
+            LOG.error(error.message)
             return url, ApiConfig.TEMPLATE
 
         return url, response.text

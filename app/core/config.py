@@ -3,12 +3,14 @@ from re import compile as compile_pattern
 from secrets import token_hex
 from tempfile import mkdtemp
 
-from app.utils.toml import PyprojectToml
+from app.utils import Logging, PyprojectToml
 
 DIRECTORY = mkdtemp()
 CURRENT_YEAR = datetime.now().year
 TOKEN = token_hex(16)
+
 TOML = PyprojectToml()
+LOG = Logging(TOML.logging_file)
 
 # Match: no spaces, only letters and numbers; length of exactly 32.
 API_KEY_PATTERN = r'^[a-zA-Z0-9]{32}$'

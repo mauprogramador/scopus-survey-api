@@ -9,9 +9,8 @@ from pandas import DataFrame, Series
 
 from app.adapters.gateway.api_config import ApiConfig
 from app.adapters.gateway.scopus_api import ScopusApi
-from app.core.config import DIRECTORY, SPACES_PATTERN
+from app.core.config import DIRECTORY, LOG, SPACES_PATTERN
 from app.core.interfaces import UseCase
-from app.utils.logger import Logger
 
 
 class Scopus(UseCase):
@@ -126,6 +125,6 @@ class Scopus(UseCase):
         dataframe = dataframe.drop(similar_titles)
         total_loss = ((rows_before - dataframe.shape[0]) / rows_before) * 100
 
-        Logger.info(f'Total Articles Loss: {total_loss:.2f}%')
+        LOG.info(f'Total Articles Loss: {total_loss:.2f}%')
 
         return dataframe

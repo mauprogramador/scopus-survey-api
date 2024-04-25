@@ -7,7 +7,7 @@ from starlette.middleware.base import (
     RequestResponseEndpoint,
 )
 
-from app.utils.logger import Logger
+from app.core.config import LOG
 
 
 class TraceControl(BaseHTTPMiddleware):
@@ -23,13 +23,13 @@ class TraceControl(BaseHTTPMiddleware):
             response = await call_next(request)
 
         except Exception as exception:
-            Logger.exception(exception)
+            LOG.exception(exception)
             print_exc()
 
             raise exception
 
         end_time = (time() - start_time) * 1000
 
-        Logger.trace(request, response.status_code, end_time)
+        LOG.trace(request, response.status_code, end_time)
 
         return response

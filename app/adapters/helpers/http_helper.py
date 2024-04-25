@@ -6,9 +6,9 @@ from requests.adapters import HTTPAdapter
 from requests.exceptions import ConnectionError as ConnectError
 from requests.exceptions import Timeout
 
+from app.core.config import LOG
 from app.core.interfaces import Helper
 from app.framework.exceptions.http_exceptions import FailedDependency
-from app.utils.logger import Logger
 
 
 class HttpHelper(Helper):
@@ -65,9 +65,7 @@ class HttpHelper(Helper):
                     response = self.send_request(session)
                     self.__process_time = (time() - self.__start_time) * 1000
 
-                    Logger.service(
-                        url, response.status_code, self.__process_time
-                    )
+                    LOG.service(url, response.status_code, self.__process_time)
                     break
 
                 except FailedDependency as error:
@@ -75,9 +73,9 @@ class HttpHelper(Helper):
                         raise error
 
                     process_time = (time() - self.__start_time) * 1000
-                    Logger.service(url, error.status_code, process_time)
+                    LOG.service(url, error.status_code, process_time)
 
-                    Logger.info('Retrying the request')
+                    LOG.info('Retrying the request')
                     sleep(5)
 
         return response
