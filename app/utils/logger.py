@@ -5,7 +5,9 @@ from logging import (
     ERROR,
     INFO,
     FileHandler,
+    Filter,
     Formatter,
+    LogRecord,
     StreamHandler,
     getLogger,
 )
@@ -14,13 +16,16 @@ from re import compile as regex_compile
 from sys import exc_info
 
 from fastapi import Request
+from uvicorn.config import LOGGING_CONFIG
 
 
 class Logging:
     FMT = '%(asctime)s %(message)s'
     DATEFMT = '%d-%m-%Y %H:%M:%S'
-    FOLDER = 'logs'
+    UVICORN_FMT = '%(asctime)s %(levelprefix)s %(message)s'
+    UVICORN_LOGGER = 'uvicorn.access'
     POINT = '\033[95m\u2022\033[m'
+    FOLDER = 'logs'
 
     class CleanFormatter(Formatter):
         ANSI_ESCAPE_PATTERN = regex_compile(r'\x1b\[[3|9][0-7]m|\x1b\[m')
@@ -28,6 +33,10 @@ class Logging:
         def format(self, record) -> str:
             message = super().format(record)
             return self.ANSI_ESCAPE_PATTERN.sub('', message, 20)
+
+    class EndpointFilter(Filter):
+        def filter(self, record: LogRecord) -> bool:
+            return record.getMessage().find('/') == -1
 
     class Method(Enum):
         GET = '\033[94mGET\033[m'
@@ -38,6 +47,7 @@ class Logging:
 
     def __init__(self, logging_file: bool) -> None:
         self.__logger = getLogger(__name__)
+        self.__disable_uvicorn_logging()
 
         stream_formatter = Formatter(self.FMT, self.DATEFMT)
         stream_handler = StreamHandler()
@@ -58,6 +68,11 @@ class Logging:
         file_handler = FileHandler(filename)
         file_handler.setFormatter(file_formatter)
         self.__logger.addHandler(file_handler)
+
+    def __disable_uvicorn_logging(self):
+        getLogger(self.UVICORN_LOGGER).addFilter(self.EndpointFilter())
+        formater = {'fmt': self.UVICORN_FMT, 'datefmt': self.DATEFMT}
+        LOGGING_CONFIG['formatters']['default'].update(formater)
 
     def __get_status(self, status_code: int, time: float) -> tuple[str, str]:
         status_phrase = HTTPStatus(status_code).phrase
