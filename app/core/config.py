@@ -10,7 +10,10 @@ CURRENT_YEAR = datetime.now().year
 TOKEN = token_hex(16)
 
 TOML = PyprojectToml()
-LOG = Logging(TOML.logging_file)
+LOG = Logging(TOML.debug, TOML.logging_file)
+
+LOG.debug(TOML.pyproject)
+
 
 # Match: no spaces, only letters and numbers; length of exactly 32.
 API_KEY_PATTERN = r'^[a-zA-Z0-9]{32}$'

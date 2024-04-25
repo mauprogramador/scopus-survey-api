@@ -49,6 +49,7 @@ class HttpHelper(Helper):
     def make_request(
         self, url: str, headers: dict, check_status: bool = None
     ) -> Response:
+        LOG.debug({'url': url, 'headers': headers})
 
         adapter = HTTPAdapter(max_retries=3)
         self.__request = Request(self.METHOD, url, headers)

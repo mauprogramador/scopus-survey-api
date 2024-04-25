@@ -1,7 +1,9 @@
 from datetime import datetime
 from enum import Enum
 from http import HTTPStatus
+from json import dumps
 from logging import (
+    DEBUG,
     ERROR,
     INFO,
     FileHandler,
@@ -26,13 +28,23 @@ class Logging:
     UVICORN_LOGGER = 'uvicorn.access'
     POINT = '\033[95m\u2022\033[m'
     FOLDER = 'logs'
+    TABLE = str.maketrans(
+        {
+            '{': '\033[93m{\033[m',
+            '}': '\033[93m}\033[m',
+            '[': '\033[93m[\033[m',
+            ']': '\033[93m]\033[m',
+            ':': '\033[93m:\033[m',
+            ',': '\033[93m,\033[m',
+        }
+    )
 
     class CleanFormatter(Formatter):
         ANSI_ESCAPE_PATTERN = regex_compile(r'\x1b\[[3|9][0-7]m|\x1b\[m')
 
         def format(self, record) -> str:
             message = super().format(record)
-            return self.ANSI_ESCAPE_PATTERN.sub('', message, 20)
+            return self.ANSI_ESCAPE_PATTERN.sub('', message)
 
     class EndpointFilter(Filter):
         def filter(self, record: LogRecord) -> bool:
@@ -45,7 +57,8 @@ class Logging:
         PATCH = '\033[96mPATCH\033[m'
         DELETE = '\033[91mDELETE\033[m'
 
-    def __init__(self, logging_file: bool) -> None:
+    def __init__(self, debug: bool, logging_file: bool) -> None:
+        self.__debug = debug
         self.__logger = getLogger(__name__)
         self.__disable_uvicorn_logging()
 
@@ -87,6 +100,11 @@ class Logging:
         level = f'\033[93m[\033[{level}\033[93m]:\033[m'
         return f'{level: <27} \033[93m{message}\033[m'
 
+    def __json(self, data: dict):
+        args = (2, '\n') if len(dumps(data)) > 150 else (None, '')
+        json = dumps(data, indent=args[0]).translate(self.TABLE)
+        return f'JSON: \033[m{args[1]}{json}'
+
     def info(self, message: str) -> None:
         self.__logger.setLevel(INFO)
         self.__logger.info(self.__format('92mINFO', message))
@@ -95,6 +113,11 @@ class Logging:
         message = f'\033[93mArticle Preview Page: \033[91m{message}\033[m'
         self.__logger.setLevel(ERROR)
         self.__logger.error(self.__format('91mERROR', message))
+
+    def debug(self, data: dict) -> None:
+        if self.__debug:
+            self.__logger.setLevel(DEBUG)
+            self.__logger.debug(self.__format('95mDEBUG', self.__json(data)))
 
     def exception(self, exception: Exception) -> None:
         exception_type, exception_value, exception_traceback = exc_info()

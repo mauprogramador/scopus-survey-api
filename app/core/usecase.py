@@ -85,6 +85,8 @@ class Scopus(UseCase):
         row[self.AUTHORS_COLUMN] = authors_names
         row[self.ABSTRACT_COLUMN] = abstract
 
+        LOG.debug({'authors_names': authors_names, 'abstract': abstract})
+
         return row
 
     def __get_row_index(self, title: str) -> int:
@@ -100,6 +102,9 @@ class Scopus(UseCase):
 
         similar_titles = []
         self.__dataframe = dataframe
+        LOG.debug(
+            {'groups': grouped_dataframe.ngroups, 'rows': dataframe.shape[0]}
+        )
 
         for _, group in grouped_dataframe:
 
@@ -107,6 +112,7 @@ class Scopus(UseCase):
                 continue
 
             titles = group[self.TITLE_COLUMN].tolist()
+            LOG.debug({'titles_group': titles})
 
             if len(titles) == 2:
                 if WRatio(titles[0], titles[1]) > 80:
@@ -121,6 +127,8 @@ class Scopus(UseCase):
 
         similar_titles = list(set(similar_titles))
         rows_before = dataframe.shape[0]
+
+        LOG.debug({'similar_titles': similar_titles})
 
         dataframe = dataframe.drop(similar_titles)
         total_loss = ((rows_before - dataframe.shape[0]) / rows_before) * 100

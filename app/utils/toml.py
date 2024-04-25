@@ -39,3 +39,14 @@ class PyprojectToml:
     @property
     def url(self) -> str:
         return f'http://{self.host}:{self.port}'
+
+    @property
+    def pyproject(self) -> dict:
+        return {
+            'version': self.version,
+            'debug': self.debug,
+            'logging_file': self.logging_file,
+            'host': self.host,
+            'port': self.port,
+            'reload': self.reload,
+        }

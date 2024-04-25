@@ -42,6 +42,8 @@ class ScopusApi(GatewaySearch, GatewayScraping):
 
         try:
             content: dict = loads(response.text.encode(cls.ENCODING))
+            LOG.debug(content)
+
             if not content:
                 raise FailedDependency('Invalid Response from Scopus API')
 

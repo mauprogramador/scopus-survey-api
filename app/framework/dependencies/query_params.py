@@ -2,7 +2,7 @@ from typing import Annotated
 
 from fastapi import Query
 
-from app.core.config import API_KEY_PATTERN, KEYWORD_PATTERN
+from app.core.config import API_KEY_PATTERN, KEYWORD_PATTERN, LOG
 from app.core.interfaces import ApiParams
 from app.framework.exceptions import Forbidden, UnprocessableContent
 
@@ -33,6 +33,7 @@ class QueryParams(ApiParams):
             raise Forbidden('Missing ApiKey required query parameter')
 
         self.api_key = api_key
+        LOG.debug({'api_key': self.api_key})
 
         if not keywords or not any(keywords):
             raise UnprocessableContent(
@@ -43,6 +44,7 @@ class QueryParams(ApiParams):
             keywords = keywords[0].split(',')
 
         self.keywords = list(filter(self.__filter, keywords))
+        LOG.debug({'Keywords': self.keywords})
 
         if len(self.keywords) < 2:
             raise UnprocessableContent('There must be at least two keywords')

@@ -2,7 +2,7 @@ from typing import Annotated
 
 from fastapi import Header, Request
 
-from app.core.config import TOKEN, TOKEN_PATTERN
+from app.core.config import LOG, TOKEN, TOKEN_PATTERN
 from app.framework.exceptions import Unauthorized
 from app.framework.fastapi.config import OPENAPI_EXAMPLE
 
@@ -25,6 +25,9 @@ class AccessToken:
         if access_token:
             if access_token != TOKEN:
                 raise Unauthorized('Invalid access token')
+
+            LOG.debug({'token': access_token})
+
             return None
 
         access_token_header = request.headers.get('X-Access-Token')
@@ -34,3 +37,5 @@ class AccessToken:
 
         if access_token_header != TOKEN:
             raise Unauthorized('Invalid access token')
+
+        LOG.debug({'token': access_token_header})
