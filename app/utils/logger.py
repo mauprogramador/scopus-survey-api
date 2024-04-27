@@ -140,10 +140,11 @@ class Logging:
 
     def trace(self, request: Request, status_code: int, time: float) -> None:
         host = request.client.host if request.client else '127.0.0.1'
-        port = request.client.port if request.client else '8000'
+        port = request.client.port if request.client else 8000
 
         method = f'{self.Method[request.method].value: <6}'
-        url = f'{self.POINT} http://{host}:{port}{request.url}'
+        client = f'{host}\033[93m:\033[m{port}'
+        url = f'{self.POINT} {client} {self.POINT} {request.url}'
 
         process_time, status = self.__get_status(status_code, time)
         message = f'{method} {url} {self.POINT} {status} {process_time}'
