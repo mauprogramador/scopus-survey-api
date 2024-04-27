@@ -27,7 +27,7 @@ async def test_unit_usecase_200(mocker: MockerFixture):
 
 
 @pytest.mark.asyncio
-async def test_usecase_remove_column(mocker: MockerFixture):
+async def test_usecase_remove_link_column(mocker: MockerFixture):
     mocker.patch(
         mocks.SCOPUS_API_SEARCH_ARTICLES,
         return_value=mocks.FAKE_ARTICLES,
@@ -47,7 +47,7 @@ async def test_usecase_remove_column(mocker: MockerFixture):
 
 
 @pytest.mark.asyncio
-async def test_usecase_remove_all_duplicates(mocker: MockerFixture):
+async def test_usecase_drop_exact_duplicates(mocker: MockerFixture):
     mocker.patch(
         mocks.SCOPUS_API_SEARCH_ARTICLES,
         return_value=mocks.FAKE_DUPLICATES_ARTICLES,
@@ -81,7 +81,7 @@ async def test_usecase_insert_two_columns(mocker: MockerFixture):
     )
 
     input_spy = mocker.spy(DataFrame, 'drop_duplicates')
-    output_spy = mocker.spy(DataFrame, 'apply')
+    output_spy = mocker.spy(DataFrame, 'rename')
 
     response = await app_request(mocks.URL)
 
@@ -93,21 +93,25 @@ async def test_usecase_insert_two_columns(mocker: MockerFixture):
 
 
 @pytest.mark.asyncio
-async def test_usecase_scraping_data(mocker: MockerFixture):
+async def test_usecase_was_inserted_scraping_data(mocker: MockerFixture):
     mocker.patch(
         mocks.SCOPUS_API_SEARCH_ARTICLES,
         return_value=mocks.FAKE_DUPLICATES_ARTICLES,
     )
     mocker.patch(mocks.HTTP_HELPER_REQUEST, return_value=mocks.FAKE_TEMPLATE)
 
-    input_spy = mocker.spy(DataFrame, 'apply')
+    input_spy = mocker.spy(DataFrame, 'drop_duplicates')
     output_spy = mocker.spy(DataFrame, 'rename')
 
     response = await app_request(mocks.URL)
 
-    input_series: Series = input_spy.call_args_list[0].args[0].loc[0]
+    input_dataframe: DataFrame = input_spy.call_args_list[0].args[0]
     output_series: Series = output_spy.call_args_list[0].args[0].loc[0]
 
+    input_dataframe.insert(2, Scopus.AUTHORS_COLUMN, '')
+    input_dataframe.insert(5, Scopus.ABSTRACT_COLUMN, '')
+
+    input_series = input_dataframe.loc[0]
     scopus_id = output_series[Scopus.SCOPUS_ID_KEY].split(':')[1]
     output_url = ApiConfig.get_article_page_url(scopus_id)
 
@@ -175,7 +179,7 @@ async def test_usecase_rename_columns(mocker: MockerFixture):
 
 
 @pytest.mark.asyncio
-async def test_usecase_remove_duplicates(mocker: MockerFixture):
+async def test_usecase_drop_same_title_and_authors(mocker: MockerFixture):
     mocker.patch(
         mocks.SCOPUS_API_SEARCH_ARTICLES,
         return_value=mocks.FAKE_DUPLICATES_ARTICLES,
@@ -196,7 +200,7 @@ async def test_usecase_remove_duplicates(mocker: MockerFixture):
 
 
 @pytest.mark.asyncio
-async def test_usecase_no_groups(mocker: MockerFixture):
+async def test_usecase_filter_no_groups(mocker: MockerFixture):
     mocker.patch(
         mocks.SCOPUS_API_SEARCH_ARTICLES,
         return_value=mocks.FAKE_DUPLICATE_AUTHORS_ARTICLES,
@@ -220,7 +224,7 @@ async def test_usecase_no_groups(mocker: MockerFixture):
 
 
 @pytest.mark.asyncio
-async def test_usecase_one_group(mocker: MockerFixture):
+async def test_usecase_filter_one_group(mocker: MockerFixture):
     mocker.patch(
         mocks.SCOPUS_API_SEARCH_ARTICLES,
         return_value=mocks.FAKE_DUPLICATE_AUTHORS_ARTICLES,
@@ -256,7 +260,7 @@ async def test_usecase_one_group(mocker: MockerFixture):
 
 
 @pytest.mark.asyncio
-async def test_usecase_groups(mocker: MockerFixture):
+async def test_usecase_filter_groups(mocker: MockerFixture):
     mocker.patch(
         mocks.SCOPUS_API_SEARCH_ARTICLES,
         return_value=mocks.FAKE_DUPLICATE_AUTHORS_ARTICLES,

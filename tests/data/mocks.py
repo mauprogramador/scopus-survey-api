@@ -83,8 +83,8 @@ FAKE_AUTHORS = 'Any1 A., Any2 B.'
 FAKE_DUPLICATES_ARTICLES = [
     FAKE_ARTICLES[0],
     FAKE_ARTICLES[0],
-    Article(title='any_title_2').model_dump(by_alias=True),
-    Article(title='any_title_2').model_dump(by_alias=True),
+    Article(title='any_title_2', doi='123').model_dump(by_alias=True),
+    Article(title='any_title_2', doi='456').model_dump(by_alias=True),
 ]
 FAKE_DUPLICATE_AUTHORS_ARTICLES = [
     Article(title='any_title_2').model_dump(by_alias=True),
