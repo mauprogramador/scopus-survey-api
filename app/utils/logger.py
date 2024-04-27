@@ -151,10 +151,14 @@ class Logging:
         self.__logger.setLevel(INFO)
         self.__logger.info(self.__format('94mTRACE', message))
 
-    def service(self, url: str, status_code: int, time: float) -> None:
+    def request(
+        self, check_status: bool, url: str, status_code: int, time: float
+    ) -> None:
+        prefix = 'SCOPUS' if not check_status else 'SCRAPING'
         process_time, status = self.__get_status(status_code, time)
+
         url = f'{self.Method.GET.value: <6} {self.POINT} {url}'
         message = f'{url} {self.POINT} {status} {process_time}'
 
         self.__logger.setLevel(INFO)
-        self.__logger.info(self.__format('96mSERVICE', message))
+        self.__logger.info(self.__format(f'96m{prefix}', message))

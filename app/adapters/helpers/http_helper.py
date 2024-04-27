@@ -19,7 +19,6 @@ class HttpHelper(Helper):
         self.__request = Request()
         self.__check_status = True
         self.__start_time = 0.0
-        self.__process_time = 0.0
 
     def send_request(self, session: Session) -> Response:
         try:
@@ -64,9 +63,14 @@ class HttpHelper(Helper):
                 try:
                     self.__start_time = time()
                     response = self.send_request(session)
-                    self.__process_time = (time() - self.__start_time) * 1000
+                    process_time = (time() - self.__start_time) * 1000
 
-                    LOG.service(url, response.status_code, self.__process_time)
+                    LOG.request(
+                        self.__check_status,
+                        url,
+                        response.status_code,
+                        process_time,
+                    )
                     break
 
                 except FailedDependency as error:
@@ -74,7 +78,12 @@ class HttpHelper(Helper):
                         raise error
 
                     process_time = (time() - self.__start_time) * 1000
-                    LOG.service(url, error.status_code, process_time)
+                    LOG.request(
+                        self.__check_status,
+                        url,
+                        error.status_code,
+                        process_time,
+                    )
 
                     LOG.info('Retrying the request')
                     sleep(5)
