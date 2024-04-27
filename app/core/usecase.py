@@ -1,11 +1,13 @@
+from concurrent.futures import ThreadPoolExecutor
 from functools import reduce
+from multiprocessing import cpu_count
 from os.path import join
 from re import sub
 
 from bs4 import BeautifulSoup, PageElement, Tag
 from fastapi.responses import FileResponse
 from fuzzywuzzy.fuzz import WRatio
-from pandas import DataFrame, Series
+from pandas import DataFrame
 
 from app.adapters.gateway.api_config import ApiConfig
 from app.adapters.gateway.scopus_api import ScopusApi
@@ -24,30 +26,37 @@ class Scopus(UseCase):
     TITLE_COLUMN = 'Title'
     LINK_COLUMN = '@_fa'
     FILENAME = 'articles.csv'
+    RATIO = 80
 
     def __init__(self) -> None:
         self.__file_path = join(DIRECTORY, self.FILENAME)
         self.__dataframe = DataFrame()
+        self.__cpu_count = cpu_count()
+
+    def __total_rows(self) -> int:
+        return self.__dataframe.shape[0]
 
     def search_articles(self, data: UseCase.ParamsType) -> FileResponse:
         articles = ScopusApi.search_articles(data)
-        dataframe = DataFrame(articles)
-        del dataframe[self.LINK_COLUMN]
+        self.__dataframe = DataFrame(articles)
+        del self.__dataframe[self.LINK_COLUMN]
 
-        dataframe = dataframe.drop_duplicates()
-        dataframe.insert(2, self.AUTHORS_COLUMN, '')
-        dataframe.insert(5, self.ABSTRACT_COLUMN, '')
+        self.__dataframe = self.__dataframe.drop_duplicates()
+        self.__dataframe = self.__dataframe.reset_index(drop=True)
+        self.__dataframe.insert(2, self.AUTHORS_COLUMN, '')
+        self.__dataframe.insert(5, self.ABSTRACT_COLUMN, '')
 
-        dataframe: DataFrame = dataframe.apply(
-            self.__get_scraping_data, axis=1, raw=False, result_type='reduce'
-        )
+        with ThreadPoolExecutor(max_workers=self.__cpu_count) as executor:
+            for index in range(self.__total_rows()):
+                executor.submit(self.__get_scraping_data, index)
 
-        dataframe = dataframe.rename(columns=ApiConfig.MAPPINGS)
+        self.__dataframe = self.__dataframe.rename(columns=ApiConfig.MAPPINGS)
         subset = [self.TITLE_COLUMN, self.AUTHORS_COLUMN]
-        dataframe = dataframe.drop_duplicates(subset)
+        self.__dataframe = self.__dataframe.drop_duplicates(subset)
+        self.__dataframe = self.__dataframe.reset_index(drop=True)
 
-        dataframe = self.__filter_dataframe(dataframe)
-        dataframe.to_csv(self.__file_path, sep=';', index=False)
+        self.__filter_dataframe_data_by_similarity()
+        self.__dataframe.to_csv(self.__file_path, sep=';', index=False)
 
         return FileResponse(
             self.__file_path,
@@ -55,6 +64,9 @@ class Scopus(UseCase):
             media_type='text/csv',
             filename=self.FILENAME,
         )
+
+    def __format_names(self, data: Tag) -> str:
+        return data.text.strip().replace(',', '')
 
     def __format_abstract(self, result: str, data: PageElement):
         content = data.text.strip().replace('\n', '')
@@ -67,11 +79,9 @@ class Scopus(UseCase):
 
         return result
 
-    def __format_names(self, data: Tag) -> str:
-        return data.text.strip().replace(',', '')
-
-    def __get_scraping_data(self, row: Series) -> Series:
-        url, template = ScopusApi.scraping_article(row[self.SCOPUS_ID_KEY])
+    def __get_scraping_data(self, index: int) -> None:
+        scopus_id = self.__dataframe.loc[index, self.SCOPUS_ID_KEY]
+        url, template = ScopusApi.scraping_article(scopus_id)
         page = BeautifulSoup(template, features=self.PARSER)
 
         authors_names = page.select(self.AUTHORS_SELECTOR)
@@ -81,29 +91,26 @@ class Scopus(UseCase):
         if abstract:
             abstract = reduce(self.__format_abstract, abstract, '')
 
-        row[self.URL_COLUMN] = url
-        row[self.AUTHORS_COLUMN] = authors_names
-        row[self.ABSTRACT_COLUMN] = abstract
+        self.__dataframe.loc[index, self.URL_COLUMN] = url
+        self.__dataframe.loc[index, self.AUTHORS_COLUMN] = authors_names
+        self.__dataframe.loc[index, self.ABSTRACT_COLUMN] = abstract
 
         LOG.debug({'authors_names': authors_names, 'abstract': abstract})
-
-        return row
 
     def __get_row_index(self, title: str) -> int:
         return self.__dataframe.loc[
             self.__dataframe[self.TITLE_COLUMN] == title
         ].index[0]
 
-    def __filter_dataframe(self, dataframe: DataFrame) -> DataFrame:
-        grouped_dataframe = dataframe.groupby(self.AUTHORS_COLUMN)
+    def __filter_dataframe_data_by_similarity(self) -> None:
+        grouped_dataframe = self.__dataframe.groupby(self.AUTHORS_COLUMN)
 
-        if grouped_dataframe.ngroups == dataframe.shape[0]:
-            return dataframe
+        if grouped_dataframe.ngroups == self.__total_rows():
+            return None
 
         similar_titles = []
-        self.__dataframe = dataframe
         LOG.debug(
-            {'groups': grouped_dataframe.ngroups, 'rows': dataframe.shape[0]}
+            {'groups': grouped_dataframe.ngroups, 'rows': self.__total_rows()}
         )
 
         for _, group in grouped_dataframe:
@@ -115,24 +122,25 @@ class Scopus(UseCase):
             LOG.debug({'titles_group': titles})
 
             if len(titles) == 2:
-                if WRatio(titles[0], titles[1]) > 80:
+                if WRatio(titles[0], titles[1]) > self.RATIO:
                     similar_titles.append(self.__get_row_index(titles[0]))
             else:
                 for index, title in enumerate(titles[:-1]):
                     similar_titles.extend(
                         self.__get_row_index(title)
                         for comparative_title in titles[index + 1 :]
-                        if WRatio(title, comparative_title) > 80
+                        if WRatio(title, comparative_title) > self.RATIO
                     )
 
         similar_titles = list(set(similar_titles))
-        rows_before = dataframe.shape[0]
+        quantity_before = self.__dataframe.shape[0]
 
         LOG.debug({'similar_titles': similar_titles})
 
-        dataframe = dataframe.drop(similar_titles)
-        total_loss = ((rows_before - dataframe.shape[0]) / rows_before) * 100
+        self.__dataframe = self.__dataframe.drop(similar_titles)
+        quantity_result = quantity_before - self.__total_rows()
+        total_loss = (quantity_result / quantity_before) * 100
 
         LOG.info(f'Total Articles Loss: {total_loss:.2f}%')
 
-        return dataframe
+        return None
