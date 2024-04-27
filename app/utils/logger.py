@@ -28,6 +28,7 @@ class Logging:
     UVICORN_LOGGER = 'uvicorn.access'
     POINT = '\033[95m\u2022\033[m'
     FOLDER = 'logs'
+    BAR_SIZE = 30
     TABLE = str.maketrans(
         {
             '{': '\033[93m{\033[m',
@@ -163,3 +164,18 @@ class Logging:
 
         self.__logger.setLevel(INFO)
         self.__logger.info(self.__format(f'96m{prefix}', message))
+
+    def progress(self, index: int, total: int) -> None:
+        part = int(index / (total / self.BAR_SIZE))
+        percentage = f'{((index) / total) * 100:.2f}'
+
+        progress_bar = '\x1b[92m\u25AC\x1b[m' * part
+        progress_bar += '\x1b[91m\u25AC\x1b[m' * (self.BAR_SIZE - part)
+
+        message = (
+            f"\u25FE{str(index).rjust(len(str(total)), ' ')}/{total}"
+            f' {progress_bar}\x1b[93m {percentage:>6}%\x1b[m'
+        )
+
+        self.__logger.setLevel(INFO)
+        self.__logger.info(self.__format('92mINFO', message))

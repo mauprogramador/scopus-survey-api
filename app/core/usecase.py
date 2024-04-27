@@ -1,4 +1,4 @@
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from functools import reduce
 from multiprocessing import cpu_count
 from os.path import join
@@ -47,8 +47,12 @@ class Scopus(UseCase):
         self.__dataframe.insert(5, self.ABSTRACT_COLUMN, '')
 
         with ThreadPoolExecutor(max_workers=self.__cpu_count) as executor:
-            for index in range(self.__total_rows()):
+            futures = [
                 executor.submit(self.__get_scraping_data, index)
+                for index in range(self.__total_rows())
+            ]
+            for index, _ in enumerate(as_completed(futures)):
+                LOG.progress(index + 1, self.__total_rows())
 
         self.__dataframe = self.__dataframe.rename(columns=ApiConfig.MAPPINGS)
         subset = [self.TITLE_COLUMN, self.AUTHORS_COLUMN]
