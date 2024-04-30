@@ -6,11 +6,11 @@ from app.adapters.gateway.api_config import ApiConfig
 from app.adapters.helpers.http_helper import HttpHelper
 from app.core.config import LOG
 from app.core.exceptions import ScopusApiError
-from app.core.interfaces import GatewayScraping, GatewaySearch
+from app.core.interfaces import Gateway
 from app.framework.exceptions import FailedDependency, InternalError, NotFound
 
 
-class ScopusApi(GatewaySearch, GatewayScraping):
+class ScopusApi(Gateway):
     BOOLEAN_OPERATOR = ' AND '
     ENCODING = 'utf-8'
     DEFAULT_DETAIL = 'null'
@@ -19,10 +19,7 @@ class ScopusApi(GatewaySearch, GatewayScraping):
     ENTRY_KEY = 'entry'
 
     @classmethod
-    def search_articles(
-        cls,
-        data: GatewaySearch.ParamsType,
-    ) -> GatewaySearch.SearchType:
+    def search_articles(cls, data: Gateway.ParamsType) -> Gateway.SearchType:
         headers = ApiConfig.get_api_headers(data.api_key)
         query = quote_plus(cls.BOOLEAN_OPERATOR.join(data.keywords))
 
@@ -42,6 +39,7 @@ class ScopusApi(GatewaySearch, GatewayScraping):
 
         try:
             content: dict = loads(response.text.encode(cls.ENCODING))
+
             LOG.debug(content)
 
             if not content:
@@ -52,6 +50,7 @@ class ScopusApi(GatewaySearch, GatewayScraping):
             raise InternalError(message) from error
 
         total_results = content[cls.RESULTS_KEY][cls.TOTAL_KEY]
+
         if int(total_results) == 0:
             raise NotFound('None articles has been found')
 
@@ -60,7 +59,7 @@ class ScopusApi(GatewaySearch, GatewayScraping):
         return content[cls.RESULTS_KEY][cls.ENTRY_KEY]
 
     @staticmethod
-    def scraping_article(scopus_id: str) -> GatewayScraping.ScrapType:
+    def scraping_article(scopus_id: str) -> Gateway.ScrapType:
         headers = ApiConfig.PAGE_HEADERS
         url = ApiConfig.get_article_page_url(scopus_id.split(':')[1])
 
@@ -71,7 +70,9 @@ class ScopusApi(GatewaySearch, GatewayScraping):
                 return url, ApiConfig.TEMPLATE
 
         except FailedDependency as error:
+
             LOG.error(error.message)
+
             return url, ApiConfig.TEMPLATE
 
         return url, response.text

@@ -20,18 +20,15 @@ class UseCase(metaclass=ABCMeta):
         pass
 
 
-class GatewaySearch(metaclass=ABCMeta):
+class Gateway(metaclass=ABCMeta):
     ParamsType: TypeAlias = ApiParams
     SearchType: TypeAlias = list[dict[str, str]]
+    ScrapType: TypeAlias = tuple[str, str]
 
     @classmethod
     @abstractmethod
     def search_articles(cls, data: ParamsType) -> SearchType:
         pass
-
-
-class GatewayScraping(metaclass=ABCMeta):
-    ScrapType: TypeAlias = tuple[str, str]
 
     @staticmethod
     @abstractmethod
