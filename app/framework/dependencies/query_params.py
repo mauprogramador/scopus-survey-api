@@ -33,6 +33,7 @@ class QueryParams(ApiParams):
             raise Forbidden('Missing ApiKey required query parameter')
 
         self.api_key = api_key
+
         LOG.debug({'api_key': self.api_key})
 
         if not keywords or not any(keywords):
@@ -44,6 +45,7 @@ class QueryParams(ApiParams):
             keywords = keywords[0].split(',')
 
         self.keywords = list(filter(self.__filter, keywords))
+
         LOG.debug({'Keywords': self.keywords})
 
         if len(self.keywords) < 2:
