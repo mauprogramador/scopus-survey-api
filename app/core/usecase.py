@@ -3,6 +3,8 @@ from functools import reduce
 from multiprocessing import cpu_count
 from os.path import join
 from re import sub
+from signal import SIGINT, signal
+from threading import Event
 
 from bs4 import BeautifulSoup, PageElement, Tag
 from fastapi.responses import FileResponse
@@ -32,6 +34,11 @@ class Scopus(UseCase):
         self.__file_path = join(DIRECTORY, self.FILENAME)
         self.__dataframe = DataFrame()
         self.__cpu_count = cpu_count()
+        self.__shutdown_event = Event()
+        signal(SIGINT, self.__handle_interruption)
+
+    def __handle_interruption(self, *_):
+        self.__shutdown_event.set()
 
     def __total_rows(self) -> int:
         return self.__dataframe.shape[0]
@@ -53,6 +60,8 @@ class Scopus(UseCase):
             ]
             for index, _ in enumerate(as_completed(futures)):
                 LOG.progress(index + 1, self.__total_rows())
+
+            executor.shutdown(wait=True)
 
         self.__dataframe = self.__dataframe.rename(columns=ApiConfig.MAPPINGS)
         subset = [self.TITLE_COLUMN, self.AUTHORS_COLUMN]
@@ -84,6 +93,9 @@ class Scopus(UseCase):
         return result
 
     def __get_scraping_data(self, index: int) -> None:
+        if self.__shutdown_event.is_set():
+            return None
+
         scopus_id = self.__dataframe.loc[index, self.SCOPUS_ID_KEY]
         url, template = self.__scopus_api.scraping_article(scopus_id)
         page = BeautifulSoup(template, features=self.PARSER)
@@ -100,6 +112,8 @@ class Scopus(UseCase):
         self.__dataframe.loc[index, self.ABSTRACT_COLUMN] = abstract
 
         LOG.debug({'authors_names': authors_names, 'abstract': abstract})
+
+        return None
 
     def __get_row_index(self, title: str) -> int:
         return self.__dataframe.loc[
