@@ -1,7 +1,63 @@
 import pytest
 
+from app.core.config import TOKEN
+from app.framework.dependencies.access_token import AccessToken
+from app.framework.exceptions import Unauthorized
 from tests.data import mocks
+from tests.data.models import Request
 from tests.data.request import app_request
+
+
+@pytest.mark.asyncio
+async def test_unit_200_access_token_parameter():
+    access_token = AccessToken()
+    assert await access_token(Request(), TOKEN) is None
+
+
+@pytest.mark.asyncio
+async def test_unit_invalid_access_token_parameter():
+    access_token = AccessToken()
+    with pytest.raises(Unauthorized) as error:
+        await access_token(Request(), 'any')
+    assert not error.value.success
+    assert error.value.status_code == 401
+    assert error.value.message == mocks.INVALID_ACCESS_TOKEN
+
+
+@pytest.mark.asyncio
+async def test_unit_missing_access_token_parameter():
+    access_token = AccessToken()
+    with pytest.raises(Unauthorized) as error:
+        await access_token(Request(), None)
+    assert not error.value.success
+    assert error.value.status_code == 401
+    assert error.value.message == mocks.MISSING_ACCESS_TOKEN
+
+
+@pytest.mark.asyncio
+async def test_unit_200_access_token_header():
+    access_token = AccessToken()
+    assert await access_token(Request(TOKEN), None) is None
+
+
+@pytest.mark.asyncio
+async def test_unit_invalid_access_token_header():
+    access_token = AccessToken()
+    with pytest.raises(Unauthorized) as error:
+        await access_token(Request('any'), None)
+    assert not error.value.success
+    assert error.value.status_code == 401
+    assert error.value.message == mocks.INVALID_ACCESS_TOKEN
+
+
+@pytest.mark.asyncio
+async def test_unit_missing_access_token_header():
+    access_token = AccessToken()
+    with pytest.raises(Unauthorized) as error:
+        await access_token(Request(None), None)
+    assert not error.value.success
+    assert error.value.status_code == 401
+    assert error.value.message == mocks.MISSING_ACCESS_TOKEN
 
 
 @pytest.mark.asyncio

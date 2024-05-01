@@ -3,6 +3,11 @@ from json import dumps, loads
 from pydantic import BaseModel, Field
 
 
+class Request:
+    def __init__(self, token: str | None = None):
+        self.headers = {'X-Access-Token': token}
+
+
 class FakeResponse:
     def __init__(self, content: dict | str = None, status_code: int = None):
         if content or (isinstance(content, str) and len(content) == 0):

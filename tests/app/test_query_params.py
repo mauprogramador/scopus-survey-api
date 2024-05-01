@@ -1,7 +1,55 @@
 import pytest
 
+from app.framework.dependencies.query_params import QueryParams
+from app.framework.exceptions import Forbidden, UnprocessableContent
 from tests.data import mocks
 from tests.data.request import app_request
+
+
+def test_unit_200_query_params():
+    query_params = QueryParams('any', ['any,any'])
+    assert query_params.api_key == 'any'
+    assert query_params.keywords == ['any', 'any']
+
+
+def test_unit_missing_api_key():
+    with pytest.raises(Forbidden) as error:
+        QueryParams(None, ['any,any'])
+    assert not error.value.success
+    assert error.value.status_code == 403
+    assert error.value.message == mocks.MISSING_API_KEY
+
+
+def test_unit_missing_keywords():
+    with pytest.raises(UnprocessableContent) as error:
+        QueryParams('any', None)
+    assert not error.value.success
+    assert error.value.status_code == 422
+    assert error.value.message == mocks.MISSING_KEYWORDS
+
+
+def test_unit_not_any_keywords():
+    with pytest.raises(UnprocessableContent) as error:
+        QueryParams('any', [])
+    assert not error.value.success
+    assert error.value.status_code == 422
+    assert error.value.message == mocks.MISSING_KEYWORDS
+
+
+def test_unit_blank_space_keywords():
+    with pytest.raises(UnprocessableContent) as error:
+        QueryParams('any', [' '])
+    assert not error.value.success
+    assert error.value.status_code == 422
+    assert error.value.message == mocks.INVALID_MINIMUM_LENGTH_KEYWORDS
+
+
+def test_unit_invalid_pattern_keywords():
+    with pytest.raises(UnprocessableContent) as error:
+        QueryParams('any', ['a'])
+    assert not error.value.success
+    assert error.value.status_code == 422
+    assert error.value.message == mocks.INVALID_KEYWORD
 
 
 @pytest.mark.asyncio
