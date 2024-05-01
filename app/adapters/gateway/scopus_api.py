@@ -18,10 +18,9 @@ class ScopusApi(Gateway):
     TOTAL_KEY = 'opensearch:totalResults'
     ENTRY_KEY = 'entry'
 
-    @classmethod
-    def search_articles(cls, data: Gateway.ParamsType) -> Gateway.SearchType:
+    def search_articles(self, data: Gateway.ParamsType) -> Gateway.SearchType:
         headers = ApiConfig.get_api_headers(data.api_key)
-        query = quote_plus(cls.BOOLEAN_OPERATOR.join(data.keywords))
+        query = quote_plus(self.BOOLEAN_OPERATOR.join(data.keywords))
 
         url = ApiConfig.get_search_articles_url(query)
         response = HttpHelper().make_request(url, headers, False)
@@ -32,13 +31,13 @@ class ScopusApi(Gateway):
 
             status = f'{response.status_code} - {status_phrase}'
             detail = ApiConfig.RESPONSES.get(
-                response.status_code, cls.DEFAULT_DETAIL
+                response.status_code, self.DEFAULT_DETAIL
             )
 
             raise ScopusApiError(message, status, detail)
 
         try:
-            content: dict = loads(response.text.encode(cls.ENCODING))
+            content: dict = loads(response.text.encode(self.ENCODING))
 
             LOG.debug(content)
 
@@ -49,14 +48,14 @@ class ScopusApi(Gateway):
             message = 'Error in decoding response from Scopus API'
             raise InternalError(message) from error
 
-        total_results = content[cls.RESULTS_KEY][cls.TOTAL_KEY]
+        total_results = content[self.RESULTS_KEY][self.TOTAL_KEY]
 
         if int(total_results) == 0:
             raise NotFound('None articles has been found')
 
         LOG.info(f'Total Articles Found: {total_results}')
 
-        return content[cls.RESULTS_KEY][cls.ENTRY_KEY]
+        return content[self.RESULTS_KEY][self.ENTRY_KEY]
 
     @staticmethod
     def scraping_article(scopus_id: str) -> Gateway.ScrapType:

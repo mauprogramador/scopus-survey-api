@@ -25,9 +25,8 @@ class Gateway(metaclass=ABCMeta):
     SearchType: TypeAlias = list[dict[str, str]]
     ScrapType: TypeAlias = tuple[str, str]
 
-    @classmethod
     @abstractmethod
-    def search_articles(cls, data: ParamsType) -> SearchType:
+    def search_articles(self, data: ParamsType) -> SearchType:
         pass
 
     @staticmethod
