@@ -5,7 +5,7 @@ from pandas import DataFrame, Series
 from pytest_mock import MockerFixture
 
 from app.adapters.gateway.api_config import ApiConfig
-from app.core.usecase import Scopus
+from app.core.factory import Scopus, make_usecase
 from tests.data import mocks
 from tests.data.request import app_request
 
@@ -20,7 +20,7 @@ async def test_unit_usecase_200(mocker: MockerFixture):
         mocks.SCOPUS_API_SCRAPING_ARTICLE,
         return_value=mocks.FAKE_SCOPUS_API_SCRAPING_ARTICLE,
     )
-    response = Scopus().search_articles(mocks.FAKE_API_PARAMS)
+    response = make_usecase().search_articles(mocks.FAKE_API_PARAMS)
     assert response.status_code == 200
     assert response.media_type == 'text/csv'
     assert mocks.CSV_CONTENT_TYPE in response.headers.items()
