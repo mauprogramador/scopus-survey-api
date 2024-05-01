@@ -1,4 +1,3 @@
-from http import HTTPStatus
 from json import JSONDecodeError, loads
 from urllib.parse import quote_plus
 
@@ -13,7 +12,6 @@ from app.framework.exceptions import FailedDependency, InternalError, NotFound
 class ScopusApi(Gateway):
     BOOLEAN_OPERATOR = ' AND '
     ENCODING = 'utf-8'
-    DEFAULT_DETAIL = 'null'
     RESULTS_KEY = 'search-results'
     TOTAL_KEY = 'opensearch:totalResults'
     ENTRY_KEY = 'entry'
@@ -26,15 +24,7 @@ class ScopusApi(Gateway):
         response = HttpHelper().make_request(url, headers, False)
 
         if response.status_code != 200:
-            message = 'Invalid Response from Scopus API'
-            status_phrase = HTTPStatus(response.status_code).phrase
-
-            status = f'{response.status_code} - {status_phrase}'
-            detail = ApiConfig.RESPONSES.get(
-                response.status_code, self.DEFAULT_DETAIL
-            )
-
-            raise ScopusApiError(message, status, detail)
+            raise ScopusApiError(response)
 
         try:
             content: dict = loads(response.text.encode(self.ENCODING))
