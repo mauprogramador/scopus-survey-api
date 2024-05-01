@@ -1,4 +1,4 @@
-from json import dumps
+from json import dumps, loads
 
 from pydantic import BaseModel, Field
 
@@ -10,9 +10,12 @@ class FakeResponse:
         self.status_code = status_code or 200
         self.body = 'any'.encode()
 
+    def json(self) -> dict:
+        return loads(self.text)
+
 
 class Article(BaseModel):
-    link: bool = Field(serialization_alias='@_fa', default=True)
+    link: str = Field(serialization_alias='@_fa', default='true')
     url: str = Field(serialization_alias='prism:url', default='any')
     volume: str = Field(serialization_alias='prism:volume', default='any')
     date: str = Field(serialization_alias='prism:coverDate', default='any')

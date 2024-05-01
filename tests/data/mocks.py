@@ -52,6 +52,13 @@ TEMPLATE = """
     </html>
 """
 
+SCOPUS_RESPONSE_JSON = {
+    'search-results': {
+        'opensearch:totalResults': 156,
+        'opensearch:itemsPerPage': 25,
+        'entry': [],
+    },
+}
 
 FAKE_HTTP_RESPONSES = {
     400: FakeResponse(None, 400),
@@ -68,11 +75,15 @@ FAKE_TEMPLATE = FakeResponse(TEMPLATE)
 FAKE_API_PARAMS = QueryParams(api_key=API_KEY, keywords=KEYWORDS)
 FAKE_SCOPUS_API_SCRAPING_ARTICLE = (FAKE_LINK, TEMPLATE)
 
-FAKE_RESPONSE_FOUND = get_api_response()
-FAKE_RESPONSE_NOT_FOUND = get_api_response(0)
-FAKE_RESPONSE_200 = get_api_response(entry=FAKE_ARTICLES)
-FAKE_RESPONSE_NO_CONTENT = FakeResponse('')
-FAKE_RESPONSE_DECODING_200 = FakeResponse('{}')
+FAKE_RESPONSE_FOUND = get_api_response('1', [{'any': 'any'}])
+FAKE_RESPONSE_PAGINATION = [
+    get_api_response('32', [{'A': 'any'}]),
+    get_api_response('32', [{'B': 'any'}]),
+]
+FAKE_RESPONSE_NOT_FOUND = get_api_response('0', [])
+FAKE_RESPONSE_200 = get_api_response('1', FAKE_ARTICLES)
+FAKE_RESPONSE_NO_CONTENT = get_api_response('None')
+FAKE_RESPONSE_DECODING_200 = FakeResponse('')
 
 FAKE_CSV_DATA = [['any'], ['any']]
 FAKE_LINE_ERRORS = [InitErrorDetails(type='missing', input='any')]

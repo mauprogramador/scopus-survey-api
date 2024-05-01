@@ -19,12 +19,13 @@ def load_body(response: JSONResponse) -> dict:
 
 
 def get_api_response(
-    total_results: int = 1, entry: bool | list = True
+    total_results: str, entry: list[dict[str, str]] = None
 ) -> FakeResponse:
     return FakeResponse(
         {
             'search-results': {
                 'opensearch:totalResults': total_results,
+                'opensearch:itemsPerPage': '25',
                 'entry': entry,
             }
         }

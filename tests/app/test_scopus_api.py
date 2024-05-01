@@ -17,6 +17,16 @@ async def test_unit_search_articles_200(mocker: MockerFixture):
 
 
 @pytest.mark.asyncio
+async def test_unit_search_articles_pagination(mocker: MockerFixture):
+    mocker.patch(
+        mocks.HTTP_HELPER_REQUEST, side_effect=mocks.FAKE_RESPONSE_PAGINATION
+    )
+    entry = ScopusApi().search_articles(mocks.FAKE_API_PARAMS)
+    assert len(entry) == 2
+    assert entry == [{'A': 'any'}, {'B': 'any'}]
+
+
+@pytest.mark.asyncio
 @pytest.mark.parametrize('code', ApiConfig.RESPONSES.keys())
 async def test_search_articles_invalid_responses(
     mocker: MockerFixture, code: int
@@ -116,7 +126,7 @@ async def test_scraping_empty_content(mocker: MockerFixture):
     )
     mocker.patch(
         mocks.HTTP_HELPER_REQUEST,
-        return_value=mocks.FAKE_RESPONSE_NO_CONTENT,
+        return_value=mocks.FAKE_RESPONSE_DECODING_200,
     )
     mocker.patch(mocks.RANGE, return_value=range(2, 3))
     response = await app_request(mocks.URL)
