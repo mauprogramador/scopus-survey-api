@@ -5,7 +5,7 @@ from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.routing import APIRouter
 
 from app.adapters.presenters import LoadCSVData, TemplateContext
-from app.core.usecase import Scopus
+from app.core.factory import make_usecase
 from app.framework.dependencies import AccessToken, QueryParams
 from app.framework.fastapi.config import (
     SEARCH_ROUTE_DESCRIPTION,
@@ -30,7 +30,7 @@ router = APIRouter(prefix='/scopus-searcher/api')
 async def search_articles(
     query_params: Annotated[QueryParams, Depends(QueryParams)]
 ):
-    return Scopus().search_articles(query_params)
+    return make_usecase().search_articles(query_params)
 
 
 @router.get(

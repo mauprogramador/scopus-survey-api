@@ -10,9 +10,8 @@ from fuzzywuzzy.fuzz import WRatio
 from pandas import DataFrame
 
 from app.adapters.gateway.api_config import ApiConfig
-from app.adapters.gateway.scopus_api import ScopusApi
 from app.core.config import DIRECTORY, LOG, SPACES_PATTERN
-from app.core.interfaces import UseCase
+from app.core.interfaces import Gateway, UseCase
 
 
 class Scopus(UseCase):
@@ -28,7 +27,8 @@ class Scopus(UseCase):
     FILENAME = 'articles.csv'
     RATIO = 80
 
-    def __init__(self) -> None:
+    def __init__(self, scopus_api: Gateway) -> None:
+        self.__scopus_api = scopus_api
         self.__file_path = join(DIRECTORY, self.FILENAME)
         self.__dataframe = DataFrame()
         self.__cpu_count = cpu_count()
@@ -37,7 +37,7 @@ class Scopus(UseCase):
         return self.__dataframe.shape[0]
 
     def search_articles(self, data: UseCase.ParamsType) -> FileResponse:
-        articles = ScopusApi.search_articles(data)
+        articles = self.__scopus_api.search_articles(data)
         self.__dataframe = DataFrame(articles)
         del self.__dataframe[self.LINK_COLUMN]
 
@@ -85,7 +85,7 @@ class Scopus(UseCase):
 
     def __get_scraping_data(self, index: int) -> None:
         scopus_id = self.__dataframe.loc[index, self.SCOPUS_ID_KEY]
-        url, template = ScopusApi.scraping_article(scopus_id)
+        url, template = self.__scopus_api.scraping_article(scopus_id)
         page = BeautifulSoup(template, features=self.PARSER)
 
         authors_names = page.select(self.AUTHORS_SELECTOR)
