@@ -14,7 +14,7 @@ async def test_unit_search_articles_200(mocker: MockerFixture):
     mocker.patch(
         mocks.HTTP_HELPER_REQUEST, return_value=mocks.FAKE_RESPONSE_FOUND
     )
-    assert ScopusApi.search_articles(mocks.FAKE_API_PARAMS)
+    assert ScopusApi().search_articles(mocks.FAKE_API_PARAMS)
 
 
 @pytest.mark.asyncio
