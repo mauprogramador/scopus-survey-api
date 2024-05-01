@@ -1,4 +1,5 @@
 import pytest
+from fastapi import Response
 from fastapi.exceptions import RequestValidationError, ResponseValidationError
 from pydantic_core import ValidationError
 
@@ -64,14 +65,16 @@ async def test_handler_http_exception():
 
 @pytest.mark.asyncio
 async def test_handler_scopus_api_error():
-    error = ScopusApiError('any', 'any', 'any')
+    response = Response('any', 500)
+    error = ScopusApiError(response)
     handler = ExceptionHandler()
     response = await handler.scopus_api_error_handler(None, error)
-    body = ScopusApiError(**load_body(response))
+    json_body = load_body(response)
     assert response.status_code == 422
-    assert not body.success
-    assert body.message == 'any'
-    assert body.detail == 'any'
+    assert not json_body['success']
+    assert json_body['message'] == error.message
+    assert json_body['detail'] == error.detail
+    assert json_body['body'] == error.body
 
 
 @pytest.mark.asyncio

@@ -3,7 +3,6 @@ from pytest_mock import MockerFixture
 
 from app.adapters.gateway.api_config import ApiConfig
 from app.adapters.gateway.scopus_api import ScopusApi
-from app.core.exceptions import ScopusApiError
 from tests.data import mocks
 from tests.data.request import app_request
 from tests.data.utils import assert_csv_response
@@ -28,11 +27,11 @@ async def test_search_articles_invalid_responses(
     )
     response = await app_request(mocks.URL)
     assert response.status_code == 422
-    data = ScopusApiError(**response.json())
-    assert not data.success
-    assert data.message == mocks.INVALID_RESPONSE
-    assert data.status.startswith(f'{code}')
-    assert data.detail == ApiConfig.RESPONSES[code]
+    data = response.json()
+    assert not data['success']
+    assert data['message'] == mocks.INVALID_RESPONSE
+    assert data['status'].startswith(f'{code}')
+    assert data['detail'] == ApiConfig.RESPONSES[code]
 
 
 @pytest.mark.asyncio
@@ -43,11 +42,11 @@ async def test_search_articles_404(mocker: MockerFixture):
     )
     response = await app_request(mocks.URL)
     assert response.status_code == 422
-    data = ScopusApiError(**response.json())
-    assert not data.success
-    assert data.message == mocks.INVALID_RESPONSE
-    assert data.status.startswith('404')
-    assert data.detail == 'null'
+    data = response.json()
+    assert not data['success']
+    assert data['message'] == mocks.INVALID_RESPONSE
+    assert data['status'].startswith('404')
+    assert data['detail'] == 'null'
 
 
 @pytest.mark.asyncio

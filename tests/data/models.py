@@ -8,6 +8,7 @@ class FakeResponse:
         if content or (isinstance(content, str) and len(content) == 0):
             self.text = content if isinstance(content, str) else dumps(content)
         self.status_code = status_code or 200
+        self.body = 'any'.encode()
 
 
 class Article(BaseModel):

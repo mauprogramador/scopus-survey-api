@@ -5,7 +5,6 @@ from requests.exceptions import Timeout
 
 from app.adapters.gateway.api_config import ApiConfig
 from app.adapters.helpers.http_helper import HttpHelper
-from app.core.exceptions import ScopusApiError
 from tests.data import mocks
 from tests.data.request import app_request
 from tests.data.utils import assert_csv_response
@@ -119,12 +118,12 @@ async def test_http_helper_search_status_error(
         mocks.SESSION_SEND, return_value=mocks.FAKE_HTTP_RESPONSES[code]
     )
     response = await app_request(mocks.URL)
-    data = ScopusApiError(**response.json())
+    data = response.json()
     assert response.status_code == 422
-    assert not data.success
-    assert data.message == mocks.INVALID_RESPONSE
-    assert data.status.startswith(f'{code}')
-    assert data.detail == ApiConfig.RESPONSES.get(code, 'null')
+    assert not data['success']
+    assert data['message'] == mocks.INVALID_RESPONSE
+    assert data['status'].startswith(f'{code}')
+    assert data['detail'] == ApiConfig.RESPONSES.get(code, 'null')
 
 
 @pytest.mark.asyncio
