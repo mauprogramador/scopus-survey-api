@@ -5,7 +5,7 @@ class ApiConfig:
     API_URL = (
         'https://api.elsevier.com/content/search/scopus'
         '?query=TITLE-ABS-KEY({query})&field={fields}&date={date}'
-        '&suppressNavLinks=true'
+        '&suppressNavLinks=true&start={start}'
     )
 
     FIELDS = (
@@ -81,9 +81,9 @@ class ApiConfig:
     }
 
     @classmethod
-    def get_search_articles_url(cls, query: str) -> str:
+    def get_search_articles_url(cls, query: str, start: int) -> str:
         return cls.API_URL.format(
-            query=query, fields=cls.FIELDS, date=cls.DATE_RANGE
+            query=query, fields=cls.FIELDS, date=cls.DATE_RANGE, start=start
         )
 
     @classmethod
