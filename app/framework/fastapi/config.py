@@ -53,12 +53,12 @@ FASTAPI = {
     "responses": RESPONSES,
 }
 
-TEMPLATES = Jinja2Templates(directory="app/framework/web/templates")
+TEMPLATES = Jinja2Templates(directory="web/templates")
 STATIC = {
-    "/styles": StaticFiles(directory="app/framework/web/static/css"),
-    "/images": StaticFiles(directory="app/framework/web/static/img"),
-    "/scripts": StaticFiles(directory="app/framework/web/static/js"),
-    "/svgs": StaticFiles(directory="app/framework/web/static/svg"),
+    "/styles": StaticFiles(directory="web/static/css"),
+    "/images": StaticFiles(directory="web/static/img"),
+    "/scripts": StaticFiles(directory="web/static/js"),
+    "/svgs": StaticFiles(directory="web/static/svg"),
 }
 
 DESCRIPTION = (

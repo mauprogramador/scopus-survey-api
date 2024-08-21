@@ -72,13 +72,3 @@ class GatewayTimeout(HTTPException):
     def __init__(self, message: str) -> None:
         """HTTP error status code 504"""
         super().__init__(504, message)
-
-
-class Forbidden(HTTPException):
-    def __init__(self, message: str) -> None:
-        super().__init__(403, message)
-
-
-class FailedDependency(HTTPException):
-    def __init__(self, message: str) -> None:
-        super().__init__(424, message)
