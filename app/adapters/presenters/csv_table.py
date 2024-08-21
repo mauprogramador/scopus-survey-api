@@ -2,7 +2,7 @@ from os.path import join
 
 from pandas import read_csv
 
-from app.core.config import DIRECTORY
+from app.core.config.config import DIRECTORY
 from app.core.interfaces import CSVData
 
 

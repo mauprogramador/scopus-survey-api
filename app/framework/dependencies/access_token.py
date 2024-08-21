@@ -2,7 +2,8 @@ from typing import Annotated
 
 from fastapi import Header, Request
 
-from app.core.config import LOG, TOKEN, TOKEN_PATTERN
+from app.core.config.config import LOG, TOKEN
+from app.core.common.patterns import TOKEN_PATTERN
 from app.framework.exceptions import Unauthorized
 from app.framework.fastapi.config import OPENAPI_EXAMPLE
 

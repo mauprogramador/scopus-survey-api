@@ -12,7 +12,8 @@ from fuzzywuzzy.fuzz import WRatio
 from pandas import DataFrame
 
 from app.adapters.gateway.api_config import ApiConfig
-from app.core.config import DIRECTORY, LOG, SPACES_PATTERN
+from app.core.config.config import DIRECTORY, LOG
+from app.core.common.patterns import SPACES_PATTERN
 from app.core.interfaces import Gateway, UseCase
 
 

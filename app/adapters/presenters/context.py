@@ -1,6 +1,6 @@
 from fastapi import Request
 
-from app.core.config import TOKEN, TOML
+from app.core.config.config import TOKEN, TOML
 from app.core.interfaces import CSVData
 
 

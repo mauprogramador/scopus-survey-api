@@ -3,7 +3,7 @@ from shutil import rmtree
 
 from fastapi import FastAPI
 
-from app.core.config import DIRECTORY, LOG
+from app.core.config.config import DIRECTORY, LOG
 
 
 @asynccontextmanager

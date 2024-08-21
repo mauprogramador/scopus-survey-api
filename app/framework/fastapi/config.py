@@ -3,7 +3,7 @@ from fastapi.openapi.models import Example
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
-from app.core.config import TOKEN, TOML
+from app.core.config.config import TOKEN, TOML
 from app.framework.exceptions.handle_exceptions import (
     BaseExceptionResponse,
     ExceptionHandler,

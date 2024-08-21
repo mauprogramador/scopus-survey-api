@@ -7,7 +7,7 @@ from starlette.middleware.base import (
     RequestResponseEndpoint,
 )
 
-from app.core.config import LOG
+from app.core.config.config import LOG
 
 
 class TraceControl(BaseHTTPMiddleware):

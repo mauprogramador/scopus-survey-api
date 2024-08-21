@@ -1,6 +1,6 @@
 import pytest
 
-from app.core.config import TOKEN
+from app.core.config.config import TOKEN
 from app.framework.dependencies.access_token import AccessToken
 from app.framework.exceptions import Unauthorized
 from tests.data import mocks

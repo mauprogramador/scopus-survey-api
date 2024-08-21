@@ -6,7 +6,7 @@ from requests.adapters import HTTPAdapter
 from requests.exceptions import ConnectionError as ConnectError
 from requests.exceptions import Timeout
 
-from app.core.config import LOG
+from app.core.config.config import LOG
 from app.core.interfaces import Helper
 from app.framework.exceptions.http_exceptions import FailedDependency
 

@@ -4,7 +4,7 @@ import pytest
 from fastapi.templating import Jinja2Templates
 from pytest_mock import MockerFixture
 
-from app.core.config import TOKEN
+from app.core.config.config import TOKEN
 from tests.data import mocks
 from tests.data.request import app_request
 from tests.data.utils import get_csv_file

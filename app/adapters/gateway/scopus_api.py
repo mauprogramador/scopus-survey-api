@@ -2,7 +2,7 @@ from urllib.parse import quote_plus
 
 from app.adapters.gateway.api_config import ApiConfig
 from app.adapters.helpers.http_helper import HttpHelper
-from app.core.config import LOG
+from app.core.config.config import LOG
 from app.core.exceptions import ScopusApiError
 from app.core.interfaces import Gateway
 from app.core.model import ScopusResponse

@@ -1,7 +1,7 @@
 from pydantic_core import InitErrorDetails
 from requests.exceptions import Timeout
 
-from app.core.config import TOML
+from app.core.config.config import TOML
 from app.framework.dependencies import QueryParams
 from tests.data.models import Article, FakeResponse
 from tests.data.utils import get_api_response, load_groups

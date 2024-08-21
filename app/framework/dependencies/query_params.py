@@ -2,7 +2,8 @@ from typing import Annotated
 
 from fastapi import Query
 
-from app.core.config import API_KEY_PATTERN, KEYWORD_PATTERN, LOG
+from app.core.config.config import LOG
+from app.core.common.patterns import API_KEY_PATTERN, KEYWORD_PATTERN
 from app.core.interfaces import ApiParams
 from app.framework.exceptions import Forbidden, UnprocessableContent
 
