@@ -4,59 +4,53 @@ from fastapi import Depends, Request
 from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.routing import APIRouter
 
-from app.adapters.presenters import LoadCSVData, TemplateContext
-from app.core.factory import make_usecase
+from app.adapters.factories.usecase_factory import make_usecase
+from app.adapters.presenters.template_context import TemplateContextBuilder
+from app.core.common.types import SearchParams
 from app.framework.dependencies import AccessToken, QueryParams
-from app.framework.fastapi.config import (
-    SEARCH_ROUTE_DESCRIPTION,
-    TEMPLATES,
-    WEB_API_ROUTE_DESCRIPTION,
-    WEB_TABLE_ROUTE_DESCRIPTION,
-)
+from app.framework.fastapi.config import SEARCH_ROUTE_DESCRIPTION, TEMPLATES
 
-router = APIRouter(prefix='/scopus-searcher/api')
+router = APIRouter(prefix="/scopus-searcher/api")
 
 
 @router.get(
-    '/search-articles',
+    "/search-articles",
     status_code=200,
-    tags=['API'],
-    summary='Searches Scopus Articles',
-    response_description='Articles found',
+    tags=["API"],
+    summary="Downloads the CSV file of found articles",
+    response_description="CSV file of found articles downloaded",
     description=SEARCH_ROUTE_DESCRIPTION,
     response_class=FileResponse,
     dependencies=[Depends(AccessToken())],
 )
 async def search_articles(
-    query_params: Annotated[QueryParams, Depends(QueryParams)]
+    query_params: Annotated[QueryParams, Depends(QueryParams())]
 ):
-    return make_usecase().search_articles(query_params)
+    search_params = SearchParams.model_validate(query_params.to_dict())
+    return make_usecase().get_articles(search_params)
 
 
 @router.get(
-    '',
+    "",
     status_code=200,
-    tags=['Web'],
-    summary='Render Web API Interface',
-    response_description='Web API Interface loaded',
-    description=WEB_API_ROUTE_DESCRIPTION,
+    tags=["Web"],
+    summary="Renders the application API web page",
+    response_description="application API web page loaded",
     response_class=HTMLResponse,
 )
 async def render_web_application(request: Request):
-    context = TemplateContext.get_application_context(request)
-    return TEMPLATES.TemplateResponse(request, 'index.html', context)
+    context = TemplateContextBuilder(request).get_web_app_context()
+    return TEMPLATES.TemplateResponse(*context)
 
 
 @router.get(
-    '/table',
+    "/table",
     status_code=200,
-    tags=['Web'],
-    summary='Render Web CSV Table',
-    response_description='Web CSV Table Interface loaded',
-    description=WEB_TABLE_ROUTE_DESCRIPTION,
+    tags=["Web"],
+    summary="Renders the articles table web page",
+    response_description="articles table web page loaded",
     response_class=HTMLResponse,
 )
 async def render_web_table(request: Request):
-    data = LoadCSVData().handle()
-    context = TemplateContext.get_table_context(request, data)
-    return TEMPLATES.TemplateResponse(request, 'table.html', context)
+    context = TemplateContextBuilder(request).get_table_context()
+    return TEMPLATES.TemplateResponse(*context)
