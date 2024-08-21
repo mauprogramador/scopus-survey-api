@@ -51,18 +51,18 @@ audit:
 
 format:
 	@poetry run isort .
-	@poetry run blue .
+	@poetry run black .
 
 lint:
 	@poetry run isort app/ --check
-	@poetry run blue app/ --check
+	@poetry run black app/ --check
 	@poetry run pylint app/
 	@poetry run mypy app/
 	@poetry run radon cc app/ -a -nc
 
 lint-tests:
 	@poetry run isort tests/ --check
-	@poetry run blue tests/ --check
+	@poetry run black tests/ --check
 	@poetry run pylint tests/
 	@poetry run mypy tests/
 	@poetry run radon cc tests/ -a -nc
