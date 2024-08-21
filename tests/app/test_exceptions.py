@@ -5,7 +5,7 @@ from pydantic_core import ValidationError
 
 from app.core.exceptions import ScopusApiError
 from app.framework.exceptions.handle_exceptions import ExceptionHandler
-from app.framework.exceptions.http_exceptions import HttpException
+from app.framework.exceptions.http_exceptions import HTTPException
 from app.framework.exceptions.http_responses import (
     BaseExceptionResponse,
     PydanticValidationExceptionResponse,
@@ -54,13 +54,12 @@ async def test_handler_pydantic_validation_error():
 
 @pytest.mark.asyncio
 async def test_handler_http_exception():
-    error = HttpException(400, 'any')
+    error = HTTPException(400, 'any')
     handler = ExceptionHandler()
     response = await handler.http_exception_handler(None, error)
     body = load_body(response)
     assert response.status_code == 400
-    assert not body['success']
-    assert body['message'] == 'any'
+    assert body == 'any'
 
 
 @pytest.mark.asyncio

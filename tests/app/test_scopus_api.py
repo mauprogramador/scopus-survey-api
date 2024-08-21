@@ -67,8 +67,7 @@ async def test_search_articles_decoding_error(mocker: MockerFixture):
     )
     response = await app_request(mocks.URL)
     assert response.status_code == 500
-    assert not response.json()['success']
-    assert response.json()['message'] == mocks.DECODING_ERROR
+    assert response.json() == mocks.DECODING_ERROR
 
 
 @pytest.mark.asyncio
@@ -79,8 +78,7 @@ async def test_search_articles_empty_content(mocker: MockerFixture):
     )
     response = await app_request(mocks.URL)
     assert response.status_code == 424
-    assert not response.json()['success']
-    assert response.json()['message'] == mocks.INVALID_RESPONSE
+    assert response.json() == mocks.INVALID_RESPONSE
 
 
 @pytest.mark.asyncio
@@ -91,8 +89,7 @@ async def test_search_articles_not_found(mocker: MockerFixture):
     )
     response = await app_request(mocks.URL)
     assert response.status_code == 404
-    assert not response.json()['success']
-    assert response.json()['message'] == mocks.NOT_FOUND
+    assert response.json() == mocks.NOT_FOUND
 
 
 @pytest.mark.asyncio
