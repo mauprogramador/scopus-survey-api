@@ -71,6 +71,10 @@ class Logging:
         if logging_file:
             self.__enable_logging_file()
 
+    @property
+    def logger(self):
+        return [self.__logger]
+
     def __enable_logging_file(self):
         now = datetime.now().strftime(self.DATEFMT.replace(' ', '_'))
         filename = f'{self.FOLDER}/{now}_app.log'
