@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<!-- cspell:ignoreRegExp >(.*?)< -->
+<html lang="pt-br">
+
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="/images/favicon.png" type="image/x-icon" />
+    <link rel="stylesheet" href="/styles/styles.css" type="text/css" />
+    <link rel="stylesheet" href="/styles/index.css" type="text/css" />
+    <link rel="stylesheet" href="/styles/index-responsive.css" type="text/css" />
+    <link rel="stylesheet" href="/styles/alerts.css" type="text/css" />
+    <title>Scopus Searcher API</title>
+  </head>
+
+  <body>
+    <a id="download-link" rel="external" download="{{ filename }}" type="text/csv" hidden>&#8203;</a>
+    <span id="token" hidden>{{ token }}</span>
+    <div id="alerts-container">
+      <dialog id="info-alert" role="alert">
+        <img class="alert-icon" src="/svgs/info.svg" alt="Info icon" loading="lazy" />
+        <div class="alert-message">
+          <span lang="en-us">Processing in progress... searching for articles!</span>
+          <span lang="pt-br">Processamento em andamento... buscando artigos!</span>
+        </div>
+        <img class="alert-close" src="/svgs/close.svg" alt="Close icon" loading="lazy" />
+      </dialog>
+      <dialog id="success-alert" role="alert">
+        <img class="alert-icon" src="/svgs/success.svg" alt="Info icon" loading="lazy" />
+        <div class="alert-message">
+          <span lang="en-us">Articles found successfully!</span>
+          <span lang="pt-br">Artigos encontrados com sucesso!</span>
+        </div>
+        <img class="alert-close" src="/svgs/close.svg" alt="Close icon" loading="lazy" />
+      </dialog>
+      <dialog id="error-alert" role="alert">
+        <img class="alert-icon" src="/svgs/error.svg" alt="Info icon" loading="lazy" />
+        <div class="alert-message">
+          <span lang="en-us">Unexpected error occurred!</span>
+          <span lang="pt-br">Ocorreu um erro inesperado!</span>
+          <div id="alert-error-description"></div>
+        </div>
+        <img class="alert-close" src="/svgs/close.svg" alt="Close icon" loading="lazy" />
+      </dialog>
+    </div>
+    <article>
+      <header>
+        <div>
+          <h1 id="api-name" translate="no">
+            Scopus Searcher API <span id="api-version">v{{ version }}</span>
+          </h1>
+          <p id="api-description">
+            <span lang="en-us">API for bibliographic survey of Scopus articles</span>
+            <span lang="pt-br">API para levantamento bibliográfico de artigos da Scopus</span>
+          </p>
+        </div>
+        <div id="language">
+          <select id="language-select" title="Language selector" required>
+            <option value="pt-br" selected>Português (pt-br)</option>
+            <option value="en-us">English (en-us)</option>
+          </select>
+          <div id="language-flag" title="Language flag">
+            <span lang="en-us">
+              <img src="/images/en.png" alt="USA flag" loading="lazy" />
+            </span>
+            <span lang="pt-br">
+              <img src="/images/br.png" alt="Brazil flag" loading="lazy" />
+            </span>
+          </div>
+        </div>
+      </header>
+      <main>
+        <section id="ifms-tads">
+          <p id="institution">
+            <span lang="pt-br">
+              Instituto Federal de
+              <span class="ifms-slice">Educação, Ciência e Tecnologia de</span>
+              Mato Grosso do Sul
+            </span>
+            <span lang="en-us">
+              Federal Institute of
+              <span class="ifms-slice">Education, Science and Technology of</span>
+              Mato Grosso do Sul
+            </span>
+            <span class="separator">&#9900;</span>
+            <a class="link" translate="no" href="https://www.ifms.edu.br/campi/campus-tres-lagoas" target="_blank"
+              rel="external" title="IFMS - Campus Três Lagoas">
+              IFMS Três Lagoas
+            </a>
+          </p>
+          <p id="course">
+            <span lang="pt-br">Tecnologia em Análise e Desenvolvimento de Sistemas</span>
+            <span lang="en-us">Technology in Systems Analysis and Development</span>
+            <span class="separator">&#9900;</span>
+            <a class="link" translate="no"
+              href="https://www.ifms.edu.br/campi/campus-tres-lagoas/cursos/graduacao/analise-e-desenvolvimento-de-sistemas"
+              target="_blank" rel="external" title="IFMS Três Lagoas - TADS">
+              TADS
+            </a>
+          </p>
+          <p id="acronyms">
+            <a class="link" translate="no" href="https://www.ifms.edu.br/campi/campus-tres-lagoas" target="_blank"
+              rel="external" title="IFMS - Campus Três Lagoas">
+              IFMS Três Lagoas
+            </a>
+            <span class="separator">&#9900;</span>
+            <a class="link" translate="no"
+              href="https://www.ifms.edu.br/campi/campus-tres-lagoas/cursos/graduacao/analise-e-desenvolvimento-de-sistemas"
+              target="_blank" rel="external" title="IFMS Três Lagoas - TADS">
+              TADS
+            </a>
+          </p>
+        </section>
+        <section>
+          <h2>
+            <span lang="pt-br">Visão Geral</span>
+            <span lang="en-us">Overview</span>
+          </h2>
+          <p>
+            <span lang="pt-br">
+              Esta
+              <abbr title="Interface de Programação de Aplicação">API</abbr>
+              foi desenvolvida para facilitar a busca de artigos para pesquisa e desenvolvimento de referenciais
+              teóricos, utilizando a
+              <a class="link" translate="no" href="https://dev.elsevier.com/documentation/SCOPUSSearchAPI.wadl"
+                target="_blank" rel="external help" title="Scopus Search API">Scopus Search API</a>
+              para consultar a base de dados da
+              <a class="link" translate="no" href="https://www.scopus.com/home.uri" target="_blank" rel="external help"
+                title="Scopus Preview">Scopus</a>.
+              Para realizar a busca, insira as devidas informações, caso algum
+              artigo seja encontrado, será retornado um
+              <abbr title="Valores separados por vírgula, um formato de arquivo">arquivo CSV</abbr>
+              com todas as informações.
+            </span>
+            <span lang="en-us">
+              This
+              <abbr title="Application Programming Interface">API</abbr> was
+              developed to facilitate the search for articles for research and the development of theoretical
+              references, using the
+              <a class="link" translate="no" href="https://dev.elsevier.com/documentation/SCOPUSSearchAPI.wadl"
+                target="_blank" rel="external help" title="Scopus Search API">Scopus Search API</a>
+              to query the
+              <a class="link" translate="no" href="https://www.scopus.com/home.uri" target="_blank" rel="external help"
+                title="Scopus Preview">Scopus</a>
+              database. To perform the search, enter the appropriate
+              information, if an article is found, a
+              <abbr title="Comma-separated Values, a file format">CSV file</abbr>
+              with all the information will be returned.
+            </span>
+          </p>
+        </section>
+        <form id="search-params-form-data" action="{{ search_url }}">
+          <section>
+            <h2>
+              <span lang="pt-br">Palavras-chave</span>
+              <span lang="en-us">Keywords</span>
+            </h2>
+            <p>
+              <span lang="en-us">
+                Based on the theme or subject of your research, you must select a minimum of two and a maximum of four
+                keywords, which will be used as parameters and filters when searching for articles in the <abbr
+                  title="Application Programming Interface">API</abbr>. Each keyword must be written in english,
+                containing only letters, numbers, spaces and underscores, with a minimum of 2 and a maximum of 50
+                characters.
+              </span>
+              <span lang="pt-br">
+                Com base no tema ou assunto de sua pesquisa, você deve selecionar no mínimo duas e no máximo quatro
+                palavras-chave, que serão utilizadas como parâmetros e filtros na busca de artigos na <abbr
+                  title="Interface de Programação de Aplicação">API</abbr>. Cada Palavra-chave deve ser escrita em
+                inglês, contendo apenas letras, números, espaços e sublinhados, com mínimo de 2 e máximo de 50
+                caracteres.
+              </span>
+            </p>
+            <div class="fields">
+              <input id="keyword1" class="keywords" name="keywords" type="text" title="Keyword #1"
+                placeholder="ex.: Python" minlength="2" maxlength="50" pattern="^[a-zA-Z0-9_ ]{2,50}$" autocomplete="on"
+                spellcheck="true" required value="Computer Vision" />
+              <input id="keyword2" class="keywords" name="keywords" type="text" title="Keyword #2"
+                placeholder="ex.: Machine Learning" minlength="2" maxlength="50" pattern="^[a-zA-Z0-9_ ]{2,50}$"
+                autocomplete="on" spellcheck="true" required value="Scopus" />
+              <input id="keyword3" class="keywords" name="keywords" type="text" title="Keyword #3"
+                placeholder="ex.: Data Science" minlength="2" maxlength="50"
+                pattern="^(?:(?![ ]+$)[a-zA-Z0-9_ ]{2,50})?$" autocomplete="on" spellcheck="true"
+                value="Machine Learning" />
+              <input id="keyword4" class="keywords" name="keywords" type="text" title="Keyword #4"
+                placeholder="ex.: Neural Networks" minlength="2" maxlength="50"
+                pattern="^(?:(?![ ]+$)[a-zA-Z0-9_ ]{2,50})?$" autocomplete="on" spellcheck="true"
+                value="Bibliometric" />
+            </div>
+          </section>
+          <section id="apikey-and-buttons">
+            <div id="apikey-container">
+              <h2>
+                <span lang="en-us">API Key</span>
+                <span lang="pt-br">Chave da API</span>
+              </h2>
+              <p>
+                <span lang="en-us">
+                  It is required to access the
+                  <abbr title="Application Programming Interface">API</abbr>, it
+                  can be obtained by accessing the
+                  <a class="link" translate="no" href="https://dev.elsevier.com/" target="_blank" rel="external help"
+                    title="Elsevier Developer Portal">Elsevier Portal</a>. It has no spaces and is made up of 32
+                  characters containing
+                  only letters and numbers.
+                </span>
+                <span lang="pt-br">
+                  É necessária para acessar a
+                  <abbr title="Interface de Programação de Aplicação">API</abbr>, pode ser obtida acessando o
+                  <a class="link" translate="no" href="https://dev.elsevier.com/" target="_blank" rel="external help"
+                    title="Elsevier Developer Portal">Portal Elsevier</a>. Não possui espaços e é composta por 32
+                  caracteres contendo
+                  apenas letras e números.
+                </span>
+              </p>
+              <input id="apikey" name="apikey" type="text" title="API Key" placeholder="ex.: 439f55d263c..."
+                minlength="32" maxlength="32" pattern="^[a-zA-Z0-9]{32}$" autocomplete="on" required
+                value="a333def09d942bddc8e8a0fc590608c8" />
+            </div>
+            <div id="buttons-container">
+              <div id="loader-container">
+                <button id="search-button" class="button" type="submit" title="Search articles button">
+                  <img src="/svgs/search.svg" alt="Search icon" loading="lazy" />
+                  <span lang="en-us">Search Articles</span>
+                  <span lang="pt-br">Procurar Artigos</span>
+                </button>
+                <div id="loader"></div>
+              </div>
+              <a id="table-link" href="{{ table_url }}" target="_blank" rel="alternate next">
+                <button id="table-button" class="button" type="button" disabled title="Show table page button">
+                  <img src="/svgs/table.svg" alt="Table icon" loading="lazy" />
+                  <span lang="en-us">Show Table</span>
+                  <span lang="pt-br">Mostrar Tabela</span>
+                </button>
+              </a>
+            </div>
+          </section>
+        </form>
+      </main>
+      <footer>
+        <p translate="no">
+          <span class="footer-item">ScopusSearcherAPI
+            <small>v{{ version }} <time datetime="2024-08">Ago 2024</time></small></span>
+          <span class="footer-item">
+            <a class="footer-item link" href="https://github.com/mauprogramador/scopus-searcher-api/blob/master/LICENSE"
+              target="_blank" rel="license" title="MIT License">MIT License</a>
+          </span>
+          <span class="footer-item">Developed by
+            <a class="link" href="https://github.com/mauprogramador" target="_blank" rel="author"
+              title="Developer GitHub profile">@mauprogramador</a>
+          </span>
+        </p>
+        <nav>
+          <a href="mailto:sir.silvabmauricio@gmail.com" target="_blank" rel="author" title="Developer email contact">
+            <img src="/images/gmail.png" alt="Gmail logo" loading="lazy" />
+          </a>
+          <a href="https://www.ifms.edu.br/campi/campus-tres-lagoas" target="_blank" rel="external"
+            title="IFMS - Campus Três Lagoas">
+            <img src="/images/ifms.jpg" alt="IFMS logo" loading="lazy" />
+          </a>
+          <a href="https://github.com/mauprogramador/scopus-searcher-api" target="_blank" rel="external"
+            title="Source code GitHub repository">
+            <img src="/svgs/github.svg" alt="GitHub logo" loading="lazy" />
+          </a>
+          <a href="{{ swagger_url }}" target="_blank" rel="alternate prev" title="API Swagger UI">
+            <img src="/images/swagger.png" alt="Swagger logo" loading="lazy" />
+          </a>
+        </nav>
+      </footer>
+    </article>
+    <script src="/scripts/index.js" type="module"></script>
+    <script src="/scripts/search.js" type="module"></script>
+    <script src="/scripts/validation.js" type="module"></script>
+    <script src="/scripts/submit.js" type="module"></script>
+  </body>
+
+</html>
