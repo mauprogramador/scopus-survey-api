@@ -41,7 +41,7 @@ class ExceptionHandler:
     async def starlette_http_exception(
         self, request: Request, exc: StarletteHTTPException
     ) -> ExceptionJSON:
-        LOG.error(exc.detail)
+        LOG.error(exc.detail, False)
         return ExceptionJSON(request, exc.status_code, exc.detail)
 
     async def fastapi_http_exception(
@@ -49,7 +49,7 @@ class ExceptionHandler:
     ) -> ExceptionJSON:
         if not exc.detail.isalnum():
             exc.detail = dumps(exc.detail)
-        LOG.error(exc.detail)
+        LOG.error(exc.detail, False)
         return ExceptionJSON(request, exc.status_code, exc.detail)
 
     async def request_validation_error(
@@ -58,7 +58,7 @@ class ExceptionHandler:
         first_error: dict = exc.errors()[0]
         message = REQUEST_ERROR.format(first_error.get("msg", NULL))
 
-        LOG.error(message)
+        LOG.error(message, False)
         return ExceptionJSON(request, 422, message, exc.errors())
 
     async def response_validation_error(
@@ -67,14 +67,14 @@ class ExceptionHandler:
         first_error: dict = exc.errors()[0]
         message = RESPONSE_ERROR.format(first_error.get("msg", NULL))
 
-        LOG.error(message)
+        LOG.error(message, False)
         return ExceptionJSON(request, 500, message, exc.errors())
 
     async def pydantic_validation_error(
         self, request: Request, exc: ValidationError
     ) -> ExceptionJSON:
         message = PYDANTIC_ERROR.format(exc.error_count(), exc.title)
-        LOG.error(message)
+        LOG.error(message, False)
         return ExceptionJSON(request, 500, message, exc.errors())
 
     async def http_exception(

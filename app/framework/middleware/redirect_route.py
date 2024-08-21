@@ -34,8 +34,7 @@ class RedirectNotFoundRoutes(BaseHTTPMiddleware):
         allowed_route = bool(is_main_route) or bool(is_reload_route)
 
         if response.status_code == 404 and not allowed_route:
-            LOG.error("Route Not Found")
-            # LOG.error("Route Not Found", False)
+            LOG.error("Route Not Found", False)
             return RedirectResponse(url=self.__MAIN_ROUTE)
 
         if self.__handler.event.is_set():
