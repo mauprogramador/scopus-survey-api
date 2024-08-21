@@ -1,52 +1,103 @@
 from toml import load
 
-from app.core.interfaces import Pyproject
+from app.core.common.types import Poetry, PyprojectTool, TomlSettings
+from app.core.config.scopus import NULL
 
 
 class PyprojectToml:
-    FILENAME = 'pyproject.toml'
-    ENCODING = 'utf-8'
+    """Loads and retrieves Pyproject.toml configuration data"""
+
+    __FILENAME = "pyproject.toml"
+    __ENCODING = "utf-8"
+    __APP = "app.framework.fastapi.main:app"
+    __VERSION = "2.0.0"
+    __HOST = "127.0.0.1"
+    __PORT = 8000
 
     def __init__(self) -> None:
-        with open(self.FILENAME, encoding=self.ENCODING) as file:
+        """Loads and retrieves Pyproject.toml configuration data"""
+        with open(self.__FILENAME, encoding=self.__ENCODING) as file:
             pyproject = load(file)
 
-        tools: dict[str, dict] = pyproject.get('tool', {})
-        poetry: dict[str, str | list[str]] = tools.get('poetry', {})
-        self.version = poetry.get('version', '2.0.0')
-
-        application: Pyproject.TomlType = pyproject.get('application', {})
-        self.reload: bool = application.get('reload', False)
-
-        self.debug = application.get('debug', False)
-        self.logging_file = application.get('logging_file', False)
-
-        host: str = application.get('host', '127.0.0.1')
-        self.host = host if isinstance(host, str) else '127.0.0.1'
-
-        port: int = application.get('port', 8000)
-        self.port = port if isinstance(port, int) else 8000
+        tools: PyprojectTool = pyproject.get("tool", {})
+        self.__application: TomlSettings = pyproject.get("application", {})
+        self.__poetry: Poetry = tools.get("poetry", {})
+        self.__author: str = self.__poetry.get("authors", [NULL])[0]
 
     @property
-    def uvicorn(self) -> Pyproject.TomlType:
+    def title(self) -> str:
+        name = self.__poetry.get("name", NULL)
+        return name if isinstance(name, str) else NULL
+
+    @property
+    def version(self) -> str:
+        version = self.__poetry.get("version", self.__VERSION)
+        return version if isinstance(version, str) else self.__VERSION
+
+    @property
+    def description(self) -> str:
+        description = self.__poetry.get("description", NULL)
+        return description if isinstance(description, str) else NULL
+
+    @property
+    def name(self) -> str:
+        return self.__author[: self.__author.rindex(" ")]
+
+    @property
+    def email(self) -> str:
+        start, end = self.__author.index("<"), self.__author.rindex(">")
+        return self.__author[start + 1 : end]
+
+    @property
+    def documentation(self) -> str:
+        documentation = self.__poetry.get("documentation", NULL)
+        return documentation if isinstance(documentation, str) else NULL
+
+    @property
+    def reload(self) -> bool:
+        reload = self.__application.get("reload", False)
+        return reload if isinstance(reload, bool) else False
+
+    @property
+    def debug(self) -> bool:
+        debug = self.__application.get("debug", False)
+        return debug if isinstance(debug, bool) else False
+
+    @property
+    def logging_file(self) -> bool:
+        logging_file = self.__application.get("logging_file", False)
+        return logging_file if isinstance(logging_file, bool) else False
+
+    @property
+    def host(self) -> str:
+        host = self.__application.get("host", self.__HOST)
+        return host if isinstance(host, str) else self.__HOST
+
+    @property
+    def port(self) -> int:
+        port = self.__application.get("port", self.__PORT)
+        return port if isinstance(port, int) else self.__PORT
+
+    @property
+    def uvicorn(self) -> TomlSettings:
         return {
-            'app': 'app.framework.fastapi.main:app',
-            'host': self.host,
-            'port': self.port,
-            'reload': self.reload,
+            "app": self.__APP,
+            "host": self.host,
+            "port": self.port,
+            "reload": self.reload,
         }
 
     @property
     def url(self) -> str:
-        return f'http://{self.host}:{self.port}'
+        return f"http://{self.host}:{self.port}"
 
     @property
-    def pyproject(self) -> dict:
+    def pyproject(self) -> TomlSettings:
         return {
-            'version': self.version,
-            'debug': self.debug,
-            'logging_file': self.logging_file,
-            'host': self.host,
-            'port': self.port,
-            'reload': self.reload,
+            "version": self.version,
+            "debug": self.debug,
+            "logging_file": self.logging_file,
+            "host": self.host,
+            "port": self.port,
+            "reload": self.reload,
         }
