@@ -45,6 +45,9 @@ pyarrow = "^15.0.0"
 setuptools = ">=65.5.1"
 fuzzywuzzy = "^0.18.0"
 python-levenshtein = "^0.25.0"
+cachecontrol = "^0.14.0"
+qrcode = "^7.4.2"
+tqdm = "^4.66.5"
 
 [tool.poetry.group.dev.dependencies]
 isort = "^5.13.2"
@@ -62,6 +65,8 @@ fuzzywuzzy-stubs = "^0.0.1"
 dill = "^0.3.8"
 types-toml = "^0.10.8.20240310"
 black = "^24.4.2"
+types-tqdm = "^4.66.0.20240417"
+types-qrcode = "^7.4.0.20240408"
 
 [tool.poetry.group.test.dependencies]
 pytest = "^8.0.0"
