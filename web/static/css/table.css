@@ -1,0 +1,102 @@
+body {
+  background-color: var(--white);
+}
+.no-file-message {
+  text-align: center;
+  font-weight: bold;
+  margin: 4.375rem 0;
+  font-size: 1.25rem;
+  width: 100%;
+}
+#search-link {
+  justify-content: center;
+  font-size: 1rem;
+  margin: 3rem 0;
+  display: flex;
+  width: 100%;
+}
+#search-link a {
+  border: 0.125rem solid var(--ocean);
+  background-color: var(--ocean);
+  padding: 0.5rem 0.75rem;
+  justify-content: center;
+  border-radius: 0.5rem;
+  text-decoration: none;
+  align-items: center;
+  color: var(--white);
+  text-align: center;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  gap: 0.625rem;
+}
+#search-link a:hover,
+#search-link a:focus-visible {
+  background-color: var(--orange);
+  border-color: var(--orange);
+  outline: none;
+}
+
+table {
+  border-collapse: collapse;
+  table-layout: fixed;
+  width: 100%;
+}
+caption {
+  margin-bottom: 1.25rem;
+  color: var(--gray-50);
+  font-size: 1.25rem;
+}
+
+th {
+  border-bottom: 0.125rem solid var(--dark-ocean);
+  color: var(--gray-50);
+  text-align: left;
+  position: sticky;
+  padding: 0.5rem;
+  z-index: 2;
+  top: 0;
+}
+th,
+th span,
+th span abbr {
+  transition: all 0.2s;
+}
+thead tr[data-stuck] th {
+  background-color: var(--dark-ocean);
+  border-right: 1px solid var(--white);
+  border-left: 1px solid var(--white);
+  color: var(--white);
+}
+td {
+  border-bottom: 0.0625rem solid var(--light-gray);
+  padding: 0.75rem 0.5rem;
+  text-overflow: ellipsis;
+  color: var(--gray-50);
+  white-space: nowrap;
+  overflow: hidden;
+}
+tfoot td {
+  border-top: 0.125rem solid var(--dark-ocean);
+  font-weight: bold;
+  border-bottom: 0;
+}
+
+tbody tr {
+  transition: 0.3s;
+}
+tbody tr:nth-child(even) {
+  background-color: var(--white-F5);
+}
+tbody tr:hover {
+  background-color: var(--light-yellow);
+}
+
+tbody tr td {
+  transition: 0.3s;
+  cursor: pointer;
+}
+tbody tr:hover td {
+  font-weight: bold;
+}

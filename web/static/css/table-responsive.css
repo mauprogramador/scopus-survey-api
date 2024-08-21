@@ -1,0 +1,130 @@
+@media only screen and (min-width: 1351px) {
+  col[data-column="index"] {
+    width: 2%;
+  }
+  col[data-column="url"] {
+    width: 4%;
+  }
+  col[data-column="scopus-id"] {
+    width: 6%;
+  }
+  col[data-column="authors"] {
+    width: 10%;
+  }
+  col[data-column="publication-name"] {
+    width: 10%;
+  }
+  col[data-column="abstract"] {
+    width: 9%;
+  }
+  col[data-column="volume"] {
+    width: 5%;
+  }
+  col[data-column="date"] {
+    width: 6%;
+  }
+  col[data-column="citations"] {
+    width: 5%;
+  }
+  col[data-column="doi"] {
+    width: 3%;
+  }
+  col[data-column="title"] {
+    width: 40%;
+  }
+  #search-link a {
+    width: 30%;
+  }
+}
+
+@media only screen and (max-width: 1350px) {
+  col[data-column="index"] {
+    width: 5%;
+  }
+  col[data-column="authors"] {
+    width: 20%;
+  }
+  col[data-column="date"] {
+    width: 9%;
+  }
+  col[data-column="citations"] {
+    width: 8%;
+  }
+  [data-column="url"],
+  [data-column="scopus-id"],
+  [data-column="publication-name"],
+  [data-column="abstract"],
+  [data-column="volume"],
+  [data-column="doi"] {
+    display: none;
+  }
+  #search-link a {
+    width: 40%;
+  }
+}
+
+@media only screen and (max-width: 1200px) {
+  col[data-column="index"] {
+    width: 6%;
+  }
+  col[data-column="authors"] {
+    width: 20%;
+  }
+  col[data-column="date"] {
+    width: 12%;
+  }
+  [data-column="citations"] {
+    display: none;
+  }
+  #search-link a {
+    width: 50%;
+  }
+}
+
+@media only screen and (max-width: 850px) {
+  col[data-column="index"] {
+    width: 7%;
+  }
+  col[data-column="date"] {
+    width: 13%;
+  }
+  [data-column="authors"] {
+    display: none;
+  }
+  #search-link a {
+    width: 60%;
+  }
+}
+
+@media only screen and (max-width: 509px) {
+  col[data-column="index"] {
+    width: 12%;
+  }
+  [data-column="date"] {
+    display: none;
+  }
+  #total-lenght {
+    text-align: right;
+  }
+}
+
+@media only screen and (max-width: 389px) {
+  col[data-column="index"] {
+    width: 15%;
+  }
+}
+
+@media only screen and (max-width: 275px) {
+  body {
+    min-width: 275px;
+  }
+  col[data-column="index"] {
+    width: 20%;
+  }
+  col[data-column="title"] {
+    width: 80%;
+  }
+  #search-link a {
+    width: 100%;
+  }
+}

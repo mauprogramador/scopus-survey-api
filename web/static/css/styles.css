@@ -1,0 +1,97 @@
+:root {
+  --black-02: rgba(0, 0, 0, 0.2);
+  --black-07: rgba(0, 0, 0, 0.7);
+  --light-yellow: #FFFBD7;
+  --dark-orange: #B16129;
+  --light-green: #A3CFBB;
+  --dark-ocean: #265A88;
+  --light-aqua: #A3DFE6;
+  --light-gray: #DDDDDD;
+  --light-red: #F1AEB5;
+  --white-F5: #F5F5F5;
+  --gray-99A: #9999AA;
+  --gray-50: #505050;
+  --orange: #E9711C;
+  --gray-5: #555555;
+  --gray-3: #333333;
+  --gray-2: #222222;
+  --gray-C: #CCCCCC;
+  --yellow: #FFFF00;
+  --white: #FFFFFF;
+  --black: #000000;
+  --green: #3B8754;
+  --azure: #2196F3;
+  --ocean: #007398;
+  --aqua: #00A9BE;
+  --red: #DD4145;
+}
+
+* {
+  font-family: Arial, Helvetica, sans-serif;
+  transition: all 0.5s ease-in-out;
+  box-sizing: border-box;
+  margin: 0;
+}
+
+html {
+  font-size: 16px;
+}
+body {
+  background-color: var(--gray-3);
+  color-scheme: light;
+}
+
+p {
+  color: var(--gray-50);
+}
+abbr {
+  text-decoration: underline var(--orange) dashed 0.125rem;
+  display: inline-block;
+  position: relative;
+  font-weight: bold;
+  transition: 0.3s;
+  cursor: help;
+  z-index: 0;
+}
+abbr:hover {
+  background-color: var(--yellow);
+}
+@media (pointer: coarse), (hover: none) {
+  abbr:hover:after {
+    background-color: var(--gray-2);
+    border-radius: 0.2rem;
+    content: attr(title);
+    color: var(--gray-C);
+    position: absolute;
+    text-align: center;
+    width: fit-content;
+    min-width: 250%;
+    padding: 0.5rem;
+    border: none;
+    z-index: 1;
+    top: 110%;
+    left: 0;
+  }
+}
+
+.link {
+  border-bottom: 0.125rem solid transparent;
+  text-decoration: none;
+  color: var(--ocean);
+  transition: 0.3s;
+}
+.link:hover,
+.link:focus-visible {
+  border-color: var(--orange);
+  color: var(--orange);
+  outline: none;
+}
+
+html[lang="en-us"] span[lang="en-us"],
+html[lang="pt-br"] span[lang="pt-br"] {
+  display: block;
+}
+html[lang="en-us"] span[lang="pt-br"],
+html[lang="pt-br"] span[lang="en-us"] {
+  display: none;
+}

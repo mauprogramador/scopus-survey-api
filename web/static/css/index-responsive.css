@@ -1,0 +1,166 @@
+@media only screen and (min-width: 1401px) {
+  article {
+    max-width: 1400px;
+  }
+  dialog {
+    max-width: 1350px;
+  }
+  .alert-message {
+    height: auto;
+  }
+}
+
+@media only screen and (min-width: 992px) {
+  article {
+    border-radius: 0.9375rem;
+    margin-top: 2.5rem;
+  }
+  dialog {
+    border-radius: 0.625rem;
+    margin-top: 2.7rem;
+  }
+  header {
+    border-top-right-radius: 0.9375rem;
+    border-top-left-radius: 0.9375rem;
+  }
+  footer {
+    border-bottom-right-radius: 0.9375rem;
+    border-bottom-left-radius: 0.9375rem;
+  }
+}
+
+@media only screen and (min-width: 770px) and (max-width: 991px) {
+  dialog {
+    margin-top: 1.45rem;
+  }
+  article {
+    margin-top: 1.25rem;
+  }
+}
+
+@media only screen and (max-width: 785px) {
+  html {
+    font-size: 15px;
+  }
+  #ifms-tads {
+    border-bottom: 0;
+    padding: 0;
+  }
+  #ifms-tads p:not(#acronyms) .separator,
+  #ifms-tads p:not(#acronyms) .link {
+    display: none;
+  }
+  #acronyms {
+    justify-content: center;
+    display: flex;
+  }
+  #apikey-and-buttons {
+    flex-direction: column;
+  }
+  #buttons-container {
+    align-items: center;
+    margin-top: 0;
+    gap: 1.5rem;
+  }
+  #loader-container,
+  #table-link {
+    width: 40%;
+  }
+  footer {
+    padding: 1rem 1.875rem;
+    flex-direction: column;
+    gap: 1.7rem;
+  }
+  footer nav {
+    gap: 3rem;
+  }
+}
+
+@media only screen and (max-width: 639px) {
+  dialog {
+    padding: 1rem;
+  }
+  .alert-message {
+    white-space: break-spaces !important;
+    padding: 0 0.7rem !important;
+  }
+  header {
+    flex-direction: column-reverse;
+    padding: 1rem !important;
+    gap: 1.5rem;
+  }
+  #language {
+    justify-content: flex-end;
+  }
+  .ifms-slice {
+    display: none;
+  }
+  main,
+  footer {
+    padding: 1rem;
+  }
+  .fields {
+    grid-template-columns: 1fr;
+  }
+  #loader-container,
+  #table-link {
+    width: 50%;
+  }
+}
+
+@media only screen and (max-width: 619px) {
+  footer p {
+    justify-content: center;
+  }
+  footer p span:nth-of-type(2) {
+    padding-right: 0;
+    border-right: 0;
+    margin-right: 0;
+  }
+  footer p span:nth-of-type(3) {
+    margin-top: 0.5rem;
+    flex-basis: 100%;
+  }
+}
+
+@media only screen and (max-width: 509px) {
+  #loader-container,
+  #table-link {
+    width: 60%;
+  }
+}
+
+@media only screen and (max-width: 469px) {
+  html {
+    font-size: 14px;
+  }
+  #institution,
+  #course {
+    display: none !important;
+  }
+}
+
+@media only screen and (max-width: 389px) {
+  #loader-container,
+  #table-link {
+    width: 100%;
+  }
+  footer p span:nth-of-type(1) {
+    padding-right: 0;
+    border-right: 0;
+    margin-right: 0;
+  }
+  footer p span:nth-of-type(2) {
+    margin-top: 0.5rem;
+    flex-basis: 100%;
+  }
+  footer nav {
+    gap: 2rem;
+  }
+}
+
+@media only screen and (max-width: 275px) {
+  body {
+    min-width: 275px;
+  }
+}
