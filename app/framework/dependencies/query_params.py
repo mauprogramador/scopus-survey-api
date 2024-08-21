@@ -1,64 +1,66 @@
-from typing import Annotated
+from typing import Annotated, Self
 
-from fastapi import Query
+from fastapi import Request
 
-from app.core.config.config import LOG
-from app.core.common.patterns import API_KEY_PATTERN, KEYWORD_PATTERN
-from app.core.interfaces import ApiParams
-from app.framework.exceptions import Forbidden, UnprocessableContent
+from app.core.common.messages import (
+    INVALID_KEYWORD,
+    INVALID_KEYWORDS_LENGTH,
+    MISSING_API_KEY,
+    MISSING_KEYWORDS,
+)
+from app.core.common.patterns import KEYWORD_PATTERN
+from app.core.common.types import Keywords
+from app.core.config.config import API_KEY_HEADER, KEYWORDS_HEADER, LOG
+from app.framework.exceptions import Unauthorized, UnprocessableContent
+from app.framework.fastapi.types import APIKeyQuery, KeywordsQuery
 
 
-class QueryParams(ApiParams):
-    API_KEY_QUERY = Query(
-        alias='apikey',
-        description='Your Scopus API Key',
-        min_length=32,
-        max_length=32,
-        pattern=API_KEY_PATTERN,
-    )
-    KEYWORDS_QUERY = Query(
-        alias='keywords',
-        description='Keywords to search for in the articles',
-        min_length=1,
-        max_length=6,
-    )
+class QueryParams:
+    """Get and validate the query params"""
 
-    def __init__(
+    def __init__(self) -> None:
+        """Get and validate the query params"""
+        self.api_key: str = None
+        self.keywords: Keywords = None
+
+    def equals(self, api_key: str, keywords: list[str]) -> bool:
+        return (self.api_key, self.keywords) == (api_key, keywords)
+
+    def to_dict(self) -> dict[str, str | Keywords]:
+        return {"api_key": self.api_key, "keywords": self.keywords}
+
+    async def __call__(
         self,
-        api_key: Annotated[str | None, API_KEY_QUERY] = None,
-        keywords: Annotated[list[str] | None, KEYWORDS_QUERY] = None,
-    ) -> None:
-        super().__init__()
-
+        request: Request,
+        api_key: Annotated[str | None, APIKeyQuery] = None,
+        keywords: Annotated[Keywords | None, KeywordsQuery] = None,
+    ) -> Self:
         if not api_key:
-            raise Forbidden('Missing ApiKey required query parameter')
+            api_key = request.query_params.get(API_KEY_HEADER)
+
+            if not api_key:
+                raise Unauthorized(MISSING_API_KEY)
 
         self.api_key = api_key
+        LOG.debug({"api_key": api_key})
 
-        LOG.debug({'api_key': self.api_key})
+        if not keywords:
+            keywords = request.query_params.getlist(KEYWORDS_HEADER)
 
-        if not keywords or not any(keywords):
-            raise UnprocessableContent(
-                'Missing keywords required query parameter'
-            )
+            if not keywords:
+                raise UnprocessableContent(MISSING_KEYWORDS)
 
         if len(keywords) == 1:
-            keywords = keywords[0].split(',')
+            keywords = keywords[0].split(",")
 
-        self.keywords = list(filter(self.__filter, keywords))
+        if len(keywords) < 2:
+            raise UnprocessableContent(INVALID_KEYWORDS_LENGTH)
 
-        LOG.debug({'Keywords': self.keywords})
+        for keyword in keywords:
+            if not KEYWORD_PATTERN.match(keyword):
+                raise UnprocessableContent(INVALID_KEYWORD)
 
-        if len(self.keywords) < 2:
-            raise UnprocessableContent('There must be at least two keywords')
+        self.keywords = keywords
+        LOG.debug({"keywords": keywords})
 
-    def __filter(self, keyword: str):
-        keyword = keyword.strip()
-
-        if not keyword or keyword.isspace():
-            return False
-
-        if not KEYWORD_PATTERN.search(keyword):
-            raise UnprocessableContent('Invalid keyword')
-
-        return True
+        return self

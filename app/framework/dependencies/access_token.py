@@ -1,42 +1,38 @@
 from typing import Annotated
 
-from fastapi import Header, Request
+from fastapi import Request
+from pydantic import ValidationError
 
-from app.core.config.config import LOG, TOKEN
-from app.core.common.patterns import TOKEN_PATTERN
+from app.core.common.messages import INVALID_ACCESS_TOKEN, MISSING_ACCESS_TOKEN
+from app.core.common.types import Token
+from app.core.config.config import LOG, TOKEN, TOKEN_HEADER
 from app.framework.exceptions import Unauthorized
-from app.framework.fastapi.config import OPENAPI_EXAMPLE
+from app.framework.fastapi.types import TokenHeader
 
 
 class AccessToken:
-    TOKEN_HEADER = Header(
-        alias='X-Access-Token',
-        description='The Validation Access Token',
-        min_length=32,
-        max_length=32,
-        pattern=TOKEN_PATTERN,
-        openapi_examples=OPENAPI_EXAMPLE,
-    )
+    """Get and validate the access token"""
+
+    def __init__(self) -> None:
+        """Get and validate the access token"""
 
     async def __call__(
         self,
         request: Request,
-        access_token: Annotated[str | None, TOKEN_HEADER] = None,
+        access_token: Annotated[str | None, TokenHeader] = None,
     ) -> None:
-        if access_token:
-            if access_token != TOKEN:
-                raise Unauthorized('Invalid access token')
+        if not access_token:
+            access_token = request.headers.get(TOKEN_HEADER)
 
-            LOG.debug({'token': access_token})
+            if not access_token:
+                raise Unauthorized(MISSING_ACCESS_TOKEN)
 
-            return None
+        try:
+            Token.validate_strings(access_token)
+        except ValidationError as error:
+            raise Unauthorized(INVALID_ACCESS_TOKEN) from error
 
-        access_token_header = request.headers.get('X-Access-Token')
+        if access_token != TOKEN:
+            raise Unauthorized(INVALID_ACCESS_TOKEN)
 
-        if not access_token_header:
-            raise Unauthorized('No access token provided')
-
-        if access_token_header != TOKEN:
-            raise Unauthorized('Invalid access token')
-
-        LOG.debug({'token': access_token_header})
+        LOG.debug({"token": access_token})
