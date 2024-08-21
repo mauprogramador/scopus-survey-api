@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "scopussearcherapi"
+name = "ScopusSearcherAPI"
 version = "2.0.0"
 description = "API for Bibliographic Survey of Scopus Articles"
 authors = ["mauprogramador <sir.silvabmauricio@gmail.com>"]
@@ -86,7 +86,7 @@ port = 8000
 reload = false
 
 [tool.pylint]
-disable = ["C0114", "C0115", "C0116", "R0903", "E1136", "E0611", "E1131"]
+disable = ["C0114", "C0115", "C0116", "R0903", "E1136", "E0611", "E1131", "R0801"]
 
 [tool.bandit]
 exclude_dirs = [".venv"]
@@ -104,8 +104,8 @@ filterwarnings = [
 
 [tool.coverage.run]
 omit = [
-    "app/utils/lifespan.py",
-    "app/utils/logger.py"
+    "app/framework/fastapi/lifespan.py",
+    "app/utils/*"
 ]
 
 [tool.mypy]
