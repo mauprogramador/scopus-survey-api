@@ -1,7 +1,9 @@
 from .http_exceptions import (
     FailedDependency,
     Forbidden,
-    HttpException,
+    BadGateway,
+    GatewayTimeout,
+    HTTPException,
     InternalError,
     NotFound,
     Unauthorized,
@@ -9,11 +11,13 @@ from .http_exceptions import (
 )
 
 __all__ = [
-    'FailedDependency',
-    'Forbidden',
-    'HttpException',
-    'InternalError',
-    'NotFound',
-    'Unauthorized',
-    'UnprocessableContent',
+    "HTTPException",
+    "FailedDependency",
+    "Forbidden",
+    "InternalError",
+    "NotFound",
+    "Unauthorized",
+    "UnprocessableContent",
+    "BadGateway",
+    "GatewayTimeout",
 ]

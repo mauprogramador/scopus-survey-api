@@ -5,7 +5,7 @@ from fastapi.responses import JSONResponse
 from pydantic_core import ValidationError
 
 from app.core.exceptions import ScopusApiError
-from app.framework.exceptions.http_exceptions import HttpException
+from app.framework.exceptions.http_exceptions import HTTPException
 from app.framework.exceptions.http_responses import (
     BaseExceptionResponse,
     PydanticValidationExceptionResponse,
@@ -19,7 +19,7 @@ class ExceptionHandler:
             RequestValidationError: self.fastapi_validation_error_handler,
             ResponseValidationError: self.fastapi_validation_error_handler,
             ValidationError: self.pydantic_validation_error_handler,
-            HttpException: self.http_exception_handler,
+            HTTPException: self.http_exception_handler,
             ScopusApiError: self.scopus_api_error_handler,
             Exception: self.exception_handler,
         }
@@ -39,8 +39,8 @@ class ExceptionHandler:
         response = PydanticValidationExceptionResponse.make(exception)
         return JSONResponse(response.model_dump(), 500)
 
-    async def http_exception_handler(self, _, exception: HttpException):
-        return JSONResponse(exception.to_dict(), exception.status_code)
+    async def http_exception_handler(self, _, exception: HTTPException):
+        return JSONResponse(exception.detail, exception.status_code)
 
     async def scopus_api_error_handler(self, _, exception: ScopusApiError):
         return JSONResponse(exception.to_dict(), exception.status_code)
