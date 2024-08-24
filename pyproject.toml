@@ -48,6 +48,7 @@ python-levenshtein = "^0.25.0"
 cachecontrol = "^0.14.0"
 qrcode = "^7.4.2"
 tqdm = "^4.66.5"
+toml = "^0.10.2"
 
 [tool.poetry.group.dev.dependencies]
 isort = "^5.13.2"
