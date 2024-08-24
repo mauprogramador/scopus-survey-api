@@ -13,8 +13,10 @@ RUN pip3 install --no-cache-dir -r requirements-test.txt
 
 COPY ./app $WORKDIR/app
 COPY ./tests $WORKDIR/tests
+COPY ./web $WORKDIR/web
+COPY ./pyproject.toml $WORKDIR
 COPY ./Makefile $WORKDIR
 
 EXPOSE 8000
 
-CMD ["uvicorn", "app.main:app", "--reload", "--host", "0.0.0.0"]
+CMD ["uvicorn", "app.framework.fastapi.main:app", "--reload", "--host", "0.0.0.0"]
