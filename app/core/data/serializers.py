@@ -1,6 +1,7 @@
 from datetime import datetime
 from math import ceil
 
+from fuzzywuzzy.fuzz import partial_ratio
 from pydantic import BaseModel, Field, field_serializer, model_validator
 
 from app.core.common.types import Articles
@@ -70,6 +71,5 @@ class ScopusHeaders(BaseModel):
         return epoch.strftime("%d-%m-%Y at %H:%M:%S")
 
     @property
-    def quota_exceeded(self) -> bool:
-        # pylint: disable=E1135
-        return QUOTA_EXCEEDED in self.status
+    def quota_exceeded(self) -> int:
+        return partial_ratio(QUOTA_EXCEEDED, self.status)

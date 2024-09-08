@@ -25,6 +25,7 @@ class ScopusSearchAPI(SearchAPI):
     """Search and retrieve articles via the Scopus Search API"""
 
     __PAGE_TWO_INDEX = 1
+    __RATIO = 90
     __START = 1
     __PID = 0
 
@@ -66,7 +67,7 @@ class ScopusSearchAPI(SearchAPI):
 
         if response.status_code == 429:
             headers = ScopusHeaders.model_validate(response.headers)
-            if headers.quota_exceeded:
+            if headers.quota_exceeded >= self.__RATIO:
                 LOG.error(QUOTA_LOG.format(headers.reset_datetime), False)
                 LOG.info(LINK_LOG)
 

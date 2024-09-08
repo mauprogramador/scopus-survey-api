@@ -11,7 +11,7 @@ SEARCH_RESULTS_FIELD = "search-results"
 
 RESET_HEADER = "X-RateLimit-Reset"
 STATUS_HEADER = "X-ELS-Status"
-QUOTA_EXCEEDED = "QUOTA_EXCEEDED"
+QUOTA_EXCEEDED = "QUOTA_EXCEEDED - Quota Exceeded"
 
 QUOTA_LOG = (
     "Your APIKey has exceeded the request quota. Please try again on {}"
