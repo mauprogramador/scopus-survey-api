@@ -2,7 +2,7 @@ import pytest
 from pandas import DataFrame
 from pytest_mock import MockerFixture
 
-from app.adapters.gateway.scopus_article_page import ScopusArticlesPage
+from app.adapters.gateway.scopus_articles_page import ScopusArticlesPage
 from app.core.common.messages import INTERRUPT_ERROR
 from app.core.config.scopus import ABSTRACT_COLUMN, AUTHORS_COLUMN, NULL
 from app.core.usecases.articles_page_scraper import ArticlesPageScraper

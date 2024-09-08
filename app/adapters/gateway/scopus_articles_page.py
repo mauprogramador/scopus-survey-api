@@ -9,11 +9,11 @@ from app.core.config.scopus import (
     NULL,
     SCOPUS_ID_COLUMN,
     SCRAPING_HEADERS,
-    TEMPLATE_COLUMN,
+    PAGE_COLUMN,
     URL_COLUMN,
 )
 from app.core.domain.exceptions import InterruptError
-from app.core.domain.metaclasses import ArticlesPage, HttpRetry, UrlBuilder
+from app.core.domain.metaclasses import ArticlesPage, HTTPRetry, URLBuilder
 from app.framework.exceptions import BadGateway, GatewayTimeout
 from app.utils.progress_bar import ProgressBar
 
@@ -24,7 +24,7 @@ class ScopusArticlesPage(ArticlesPage):
     __ONE_ROW_INDEX = 0
     __PID = 0
 
-    def __init__(self, http_helper: HttpRetry, url_helper: UrlBuilder) -> None:
+    def __init__(self, http_helper: HTTPRetry, url_helper: URLBuilder) -> None:
         """Retrieves Scopus articles preview pages via HTTP requests"""
         self.__http_helper = http_helper
         self.__url_helper = url_helper
@@ -33,7 +33,7 @@ class ScopusArticlesPage(ArticlesPage):
 
     def get_articles_page(self, subset: DataFrame) -> DataFrame:
         self.__dataframe = subset
-        self.__dataframe.loc[:, TEMPLATE_COLUMN] = Series()
+        self.__dataframe.loc[:, PAGE_COLUMN] = Series()
 
         self.__http_helper.mount_session(SCRAPING_HEADERS)
         self.__total_rows = self.__dataframe.shape[0]
@@ -62,7 +62,7 @@ class ScopusArticlesPage(ArticlesPage):
             page = self.__get_article_preview_page(url)
 
         self.__dataframe.loc[index, URL_COLUMN] = url
-        self.__dataframe.loc[index, TEMPLATE_COLUMN] = page
+        self.__dataframe.loc[index, PAGE_COLUMN] = page
 
     def __get_article_preview_page(self, url: str) -> str:
         try:

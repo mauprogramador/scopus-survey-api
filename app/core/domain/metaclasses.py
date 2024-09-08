@@ -8,7 +8,7 @@ from app.core.common.types import Context, Headers, Keywords, SearchParams
 from app.core.data.dtos import ScrapeData
 
 
-class HttpRetry(metaclass=ABCMeta):
+class HTTPRetry(metaclass=ABCMeta):
     @abstractmethod
     def mount_session(self, headers: Headers) -> None:
         pass
@@ -22,7 +22,7 @@ class HttpRetry(metaclass=ABCMeta):
         pass
 
 
-class UrlBuilder(metaclass=ABCMeta):
+class URLBuilder(metaclass=ABCMeta):
     @abstractmethod
     def get_search_url(self, keywords: Keywords) -> str:
         pass

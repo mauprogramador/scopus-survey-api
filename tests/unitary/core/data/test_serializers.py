@@ -1,14 +1,14 @@
 from math import ceil
 
 from app.core.config.scopus import QUOTA_EXCEEDED
-from app.core.data.serializers import Article, ScopusHeaders, ScopusJsonSchema
+from app.core.data.serializers import Article, ScopusHeaders, ScopusJSONSchema
 from tests.helpers.data import article
 from tests.helpers.models import HeadersResponse
 from tests.mocks.common import SCOPUS_API_JSON
 
 
 def test_validate_scopus_json_schema():
-    scopus_json = ScopusJsonSchema.model_validate(SCOPUS_API_JSON)
+    scopus_json = ScopusJSONSchema.model_validate(SCOPUS_API_JSON)
 
     assert scopus_json.total_results == 156
     assert scopus_json.items_per_page == 25

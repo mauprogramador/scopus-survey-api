@@ -14,9 +14,9 @@ from app.core.common.messages import (
 from app.core.common.types import SearchParams
 from app.core.config.config import HANDLER, LOG
 from app.core.config.scopus import LINK_LOG, QUOTA_LOG, get_search_headers
-from app.core.data.serializers import ScopusJsonSchema, ScopusHeaders
+from app.core.data.serializers import ScopusJSONSchema, ScopusHeaders
 from app.core.domain.exceptions import InterruptError, ScopusAPIError
-from app.core.domain.metaclasses import HttpRetry, SearchAPI, UrlBuilder
+from app.core.domain.metaclasses import HTTPRetry, SearchAPI, URLBuilder
 from app.framework.exceptions import BadGateway, InternalError, NotFound
 from app.utils.progress_bar import ProgressBar
 
@@ -25,16 +25,16 @@ class ScopusSearchAPI(SearchAPI):
     """Search and retrieve articles via the Scopus Search API"""
 
     __PAGE_TWO_INDEX = 1
-    __PID = 0
     __START = 1
+    __PID = 0
 
     def __init__(
-        self, http_helper: HttpRetry, url_builder: UrlBuilder
+        self, http_helper: HTTPRetry, url_builder: URLBuilder
     ) -> None:
         """Search and retrieve articles via the Scopus Search API"""
         self.__http_helper = http_helper
         self.__url_builder = url_builder
-        self.__scopus_response: ScopusJsonSchema = None
+        self.__scopus_response: ScopusJSONSchema = None
 
     def search_articles(self, search_params: SearchParams) -> DataFrame:
         headers = get_search_headers(search_params.api_key)
@@ -61,7 +61,7 @@ class ScopusSearchAPI(SearchAPI):
 
         return DataFrame(self.__scopus_response.articles)
 
-    def __get_scopus_response(self, url: str) -> ScopusJsonSchema:
+    def __get_scopus_response(self, url: str) -> ScopusJSONSchema:
         response = self.__http_helper.request(url)
 
         if response.status_code == 429:
@@ -79,7 +79,7 @@ class ScopusSearchAPI(SearchAPI):
         try:
             LOG.debug(response.json())
 
-            return ScopusJsonSchema.model_validate(response.json())
+            return ScopusJSONSchema.model_validate(response.json())
 
         except JSONDecodeError as error:
             raise InternalError(DECODING_ERROR) from error

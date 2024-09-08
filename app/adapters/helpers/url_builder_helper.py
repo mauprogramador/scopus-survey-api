@@ -9,10 +9,10 @@ from app.core.config.scopus import (
     FIELDS,
     PAGINATION_SUFFIX,
 )
-from app.core.domain.metaclasses import UrlBuilder
+from app.core.domain.metaclasses import URLBuilder
 
 
-class UrlBuilderHelper(UrlBuilder):
+class URLBuilderHelper(URLBuilder):
     """Generate and format URLs for HTTP requests"""
 
     __SEP = ":"

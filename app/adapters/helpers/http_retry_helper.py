@@ -12,11 +12,11 @@ from app.core.common.messages import (
 )
 from app.core.common.types import Headers
 from app.core.config.config import LOG
-from app.core.domain.metaclasses import HttpRetry
+from app.core.domain.metaclasses import HTTPRetry
 from app.framework.exceptions import BadGateway, GatewayTimeout
 
 
-class HttpRetryHelper(HttpRetry):
+class HTTPRetryHelper(HTTPRetry):
     """Make HTTP requests with throttling and retry mechanisms"""
 
     __METHOD = "GET"

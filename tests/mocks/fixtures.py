@@ -9,9 +9,10 @@ from pydantic_core import InitErrorDetails, ValidationError
 from requests.sessions import Session
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
-from app.adapters.gateway.scopus_article_page import ScopusArticlesPage
+from app.adapters.gateway.scopus_articles_page import ScopusArticlesPage
 from app.adapters.gateway.scopus_search_api import ScopusSearchAPI
-from app.adapters.helpers import HttpRetryHelper, UrlBuilderHelper
+from app.adapters.helpers.http_retry_helper import HTTPRetryHelper
+from app.adapters.helpers.url_builder_helper import URLBuilderHelper
 from app.adapters.presenters.template_context import TemplateContextBuilder
 from app.core.domain.exceptions import ApplicationError, ScopusAPIError
 from app.core.usecases import (
@@ -30,7 +31,7 @@ from tests.mocks.common import ANY_DICT, ERROR_RESPONSES
 # Targets paths
 
 SEND = path(Session.send)
-REQUEST = path(HttpRetryHelper.request)
+REQUEST = path(HTTPRetryHelper.request)
 
 IS_SET = path(Event.is_set)
 READ_CSV = f"{TemplateContextBuilder.__module__}.read_csv"
@@ -51,8 +52,8 @@ HANDLER = ExceptionHandler()
 ACCESS_TOKEN = AccessToken()
 QUERY_PARAMS = QueryParams()
 
-HTTP_HELPER = HttpRetryHelper()
-URL_BUILDER = UrlBuilderHelper()
+HTTP_HELPER = HTTPRetryHelper()
+URL_BUILDER = URLBuilderHelper()
 
 SEARCH_API = ScopusSearchAPI(HTTP_HELPER, URL_BUILDER)
 ARTICLES_PAGE = ScopusArticlesPage(HTTP_HELPER, URL_BUILDER)
