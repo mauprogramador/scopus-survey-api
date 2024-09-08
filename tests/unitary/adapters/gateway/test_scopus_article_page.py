@@ -1,6 +1,6 @@
 from pytest_mock import MockerFixture
 
-from app.core.config.scopus import NULL, TEMPLATE_COLUMN
+from app.core.config.scopus import NULL, PAGE_COLUMN
 from app.framework.exceptions import BadGateway, GatewayTimeout
 from tests.mocks import common as data
 from tests.mocks import unitary as mock
@@ -32,14 +32,14 @@ def test_status_error(mocker: MockerFixture):
     mocker.patch(REQUEST, return_value=data.ERROR_RESPONSES[500])
     result = ARTICLES_PAGE.get_articles_page(mock.ONE_ROW.copy())
     assert result is not None and result.shape == (1, 3)
-    assert result.loc[0, TEMPLATE_COLUMN] == NULL
+    assert result.loc[0, PAGE_COLUMN] == NULL
 
 
 def test_empty_response(mocker: MockerFixture):
     mocker.patch(REQUEST, return_value=data.EMPTY_RESPONSE)
     result = ARTICLES_PAGE.get_articles_page(mock.ONE_ROW.copy())
     assert result is not None and result.shape == (1, 3)
-    assert result.loc[0, TEMPLATE_COLUMN] == NULL
+    assert result.loc[0, PAGE_COLUMN] == NULL
 
 
 def test_exceptions(mocker: MockerFixture):
@@ -47,7 +47,7 @@ def test_exceptions(mocker: MockerFixture):
     mocker.patch(REQUEST, side_effect=exceptions)
     result = ARTICLES_PAGE.get_articles_page(mock.ONE_ROW.copy())
     assert result is not None and result.shape == (1, 3)
-    assert result.loc[0, TEMPLATE_COLUMN] == NULL
+    assert result.loc[0, PAGE_COLUMN] == NULL
 
 
 def test_second_chance(mocker: MockerFixture):

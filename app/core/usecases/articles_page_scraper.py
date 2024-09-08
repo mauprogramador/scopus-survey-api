@@ -9,7 +9,7 @@ from app.core.config.scopus import (
     ABSTRACT_SELECTOR,
     AUTHORS_SELECTOR,
     NULL,
-    TEMPLATE_COLUMN,
+    PAGE_COLUMN,
     URL_COLUMN,
 )
 from app.core.data.dtos import ScrapeData
@@ -38,16 +38,16 @@ class ArticlesPageScraper(ArticlesScraper):
             raise InterruptError()
 
         url = self.__subset.loc[index, URL_COLUMN]
-        template = self.__subset.loc[index, TEMPLATE_COLUMN]
+        page = self.__subset.loc[index, PAGE_COLUMN]
 
-        if template == NULL:
+        if page == NULL:
             return ScrapeData(index, str(url), NULL, NULL)
 
-        page = BeautifulSoup(template, features=self.__PARSER)
-        author_name_tags = page.select(AUTHORS_SELECTOR)
+        template = BeautifulSoup(page, features=self.__PARSER)
+        author_name_tags = template.select(AUTHORS_SELECTOR)
         authors_names = ", ".join(map(self.__format_names, author_name_tags))
 
-        abstract_tag = page.select_one(ABSTRACT_SELECTOR)
+        abstract_tag = template.select_one(ABSTRACT_SELECTOR)
         abstract = self.__format_abstract(abstract_tag)
 
         return ScrapeData(index, str(url), authors_names, abstract)

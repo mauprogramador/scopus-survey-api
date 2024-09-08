@@ -29,7 +29,7 @@ URL_COLUMN = "prism:url"
 LINK_COLUMN = "@_fa"
 AUTHORS_COLUMN = "Authors"
 ABSTRACT_COLUMN = "Abstract"
-TEMPLATE_COLUMN = "Template"
+PAGE_COLUMN = "Page"
 TITLE_COLUMN = "Title"
 
 API_URL = (

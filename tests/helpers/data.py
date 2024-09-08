@@ -5,7 +5,7 @@ from app.core.config.scopus import (
     ARTICLE_PAGE_URL,
     AUTHORS_COLUMN,
     SCOPUS_ID_COLUMN,
-    TEMPLATE_COLUMN,
+    PAGE_COLUMN,
     TITLE_COLUMN,
     URL_COLUMN,
 )
@@ -59,7 +59,7 @@ def article_page_subsets() -> tuple[DataFrame, DataFrame]:
     data = {SCOPUS_ID_COLUMN: ids_rows, URL_COLUMN: any_rows}
     df_in = DataFrame(data.copy())
     data[URL_COLUMN] = [ARTICLE_PAGE_URL.format(scopus_id="any")] * 7
-    data[TEMPLATE_COLUMN] = any_rows
+    data[PAGE_COLUMN] = any_rows
     return df_in, DataFrame(data)
 
 
@@ -96,13 +96,13 @@ def template(authors: list[str] = None, abstract: str = None) -> str:
     """
 
 
-def scrap_subset(template_column: str | list[str]) -> DataFrame:
-    if isinstance(template_column, str):
-        data = [{URL_COLUMN: "any", TEMPLATE_COLUMN: template_column}]
+def scrap_subset(page_column: str | list[str]) -> DataFrame:
+    if isinstance(page_column, str):
+        data = [{URL_COLUMN: "any", PAGE_COLUMN: page_column}]
     else:
         data = [
-            {URL_COLUMN: "any", TEMPLATE_COLUMN: template}
-            for template in template_column
+            {URL_COLUMN: "any", PAGE_COLUMN: page}
+            for page in page_column
         ]
     return DataFrame(data)
 
@@ -122,11 +122,11 @@ def similar_articles(
     total = sum(context.values())
     similar = (similar, similar) if isinstance(similar, bool) else similar
     articles: list[dict[str, str]] = []
-    templates: list[Response] = []
+    pages: list[Response] = []
     for key, value in context.items():
         for index in range(value):
             title = f"any{value}-{index+1}" if similar[0] else str(index)
             articles.append(article(f"{key}{title}"))
             authors = [key] if similar[1] else [f"any{index}, {key}."]
-            templates.append(Response(template(authors)))
-    return [Response(scopus_json(total, articles)), *templates]
+            pages.append(Response(template(authors)))
+    return [Response(scopus_json(total, articles)), *pages]
