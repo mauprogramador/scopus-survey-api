@@ -19,10 +19,10 @@ class ApplicationError(Exception):
 
 
 class InterruptError(ApplicationError):
-    """Shutdown signal exit interrupt exception"""
+    """Shutdown/exit interruption signal exception"""
 
     def __init__(self) -> None:
-        """Shutdown signal exit interrupt exception"""
+        """Shutdown/exit interruption signal exception"""
         super().__init__(500, INTERRUPT_ERROR)
 
 

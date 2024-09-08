@@ -16,7 +16,7 @@ from app.core.config.scopus import (
 
 
 class Article(BaseModel):
-    """Validator for Article JSON schema response"""
+    """Serializer for Article JSON schema response"""
 
     link: str = Field(default=NULL, alias="@_fa", exclude=True)
     url: str = Field(default=NULL, alias="prism:url")
@@ -36,8 +36,8 @@ class Article(BaseModel):
             return date
 
 
-class ScopusJsonSchema(BaseModel):
-    """Validator for Scopus Search API JSON schema response"""
+class ScopusJSONSchema(BaseModel):
+    """Serializer for Scopus Search API JSON schema response"""
 
     total_results: int = Field(validation_alias=TOTAL_RESULTS_FIELD)
     items_per_page: int = Field(validation_alias=ITEMS_PER_PAGE_FIELD)
@@ -59,7 +59,7 @@ class ScopusJsonSchema(BaseModel):
 
 
 class ScopusHeaders(BaseModel):
-    """Validator for Scopus Search API headers response"""
+    """Serializer for Scopus Search API headers response"""
 
     reset: float = Field(validation_alias=RESET_HEADER)
     status: str = Field(validation_alias=STATUS_HEADER)

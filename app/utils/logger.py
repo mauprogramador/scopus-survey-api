@@ -25,7 +25,7 @@ from app.core.common.messages import UNEXPECTED_ERROR
 
 
 class Logger:
-    """Configure and customize application registration"""
+    """Configure and customize application logging"""
 
     __FMT = "%(asctime)s %(message)s"
     __DATEFMT = "%d-%m-%Y %H:%M:%S"
@@ -63,7 +63,7 @@ class Logger:
         DELETE = "\033[91mDELETE\033[m"
 
     def __init__(self, debug: bool, logging_file: bool) -> None:
-        """Configure and customize application registration"""
+        """Configure and customize application logging"""
         self.__debug = debug
         self.__logger = getLogger(__name__)
 

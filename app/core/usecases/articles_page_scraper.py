@@ -18,7 +18,7 @@ from app.core.domain.metaclasses import ArticlesPage, ArticlesScraper
 
 
 class ArticlesPageScraper(ArticlesScraper):
-    """Download article pages, parse the HTML, and scrape their data"""
+    """Download article pages, parse and scrape their data"""
 
     __PARSER = "html.parser"
 
@@ -26,7 +26,7 @@ class ArticlesPageScraper(ArticlesScraper):
         self,
         articles_page: ArticlesPage,
     ) -> None:
-        """Download article pages, parse the HTML, and scrape their data"""
+        """Download article pages, parse and scrape their data"""
         self.__articles_page = articles_page
         self.__subset: DataFrame = None
 

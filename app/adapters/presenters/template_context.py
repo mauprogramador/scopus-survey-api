@@ -7,7 +7,7 @@ from app.core.domain.metaclasses import TemplateContext
 
 
 class TemplateContextBuilder(TemplateContext):
-    """Generates context data for template responses"""
+    """Generates context values for template responses"""
 
     __WEB_APP_URL = "/scopus-searcher/api"
     __INDEX_HTML = "index.html"
@@ -23,7 +23,7 @@ class TemplateContextBuilder(TemplateContext):
     }
 
     def __init__(self, request: Request) -> None:
-        """Generates context data for template responses"""
+        """Generates context values for template responses"""
         self.__request = request
         self.__data = {
             "request": request,

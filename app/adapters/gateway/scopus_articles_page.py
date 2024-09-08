@@ -9,7 +9,7 @@ from app.core.config.scopus import (
     NULL,
     SCOPUS_ID_COLUMN,
     SCRAPING_HEADERS,
-    PAGE_COLUMN,
+    TEMPLATE_COLUMN,
     URL_COLUMN,
 )
 from app.core.domain.exceptions import InterruptError
@@ -33,7 +33,7 @@ class ScopusArticlesPage(ArticlesPage):
 
     def get_articles_page(self, subset: DataFrame) -> DataFrame:
         self.__dataframe = subset
-        self.__dataframe.loc[:, PAGE_COLUMN] = Series()
+        self.__dataframe.loc[:, TEMPLATE_COLUMN] = Series()
 
         self.__http_helper.mount_session(SCRAPING_HEADERS)
         self.__total_rows = self.__dataframe.shape[0]
@@ -62,7 +62,7 @@ class ScopusArticlesPage(ArticlesPage):
             page = self.__get_article_preview_page(url)
 
         self.__dataframe.loc[index, URL_COLUMN] = url
-        self.__dataframe.loc[index, PAGE_COLUMN] = page
+        self.__dataframe.loc[index, TEMPLATE_COLUMN] = page
 
     def __get_article_preview_page(self, url: str) -> str:
         try:

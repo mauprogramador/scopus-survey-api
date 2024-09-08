@@ -25,7 +25,7 @@ from app.utils.progress_bar import ProgressBar
 
 
 class ScopusArticlesAggregator(ArticlesAggregator):
-    """Aggregates, filters and compiles data from Scopus articles"""
+    """Gathers, filters and compiles data from Scopus articles"""
 
     __SCRAPE_COLUMNS = [URL_COLUMN, AUTHORS_COLUMN, ABSTRACT_COLUMN]
     __SUBSET_COLUMNS = [SCOPUS_ID_COLUMN, URL_COLUMN]
@@ -42,7 +42,7 @@ class ScopusArticlesAggregator(ArticlesAggregator):
         articles_scraper: ArticlesScraper,
         similarity_filter: SimilarityFilter,
     ) -> None:
-        """Aggregates, filters and compiles data from Scopus articles"""
+        """Gathers, filters and compiles data from Scopus articles"""
         self.__search_api = search_api
         self.__articles_scraper = articles_scraper
         self.__similarity_filter = similarity_filter
