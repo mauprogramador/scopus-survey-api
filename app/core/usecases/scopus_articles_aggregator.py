@@ -66,7 +66,7 @@ class ScopusArticlesAggregator(ArticlesAggregator):
 
         else:
             scrape_data = self.__articles_scraper.scrape(self.__ONE_ROW_INDEX)
-            index, data = scrape_data.unpack()
+            index, data = scrape_data.get_values()
             self.__dataframe.loc[index, self.__SCRAPE_COLUMNS] = data
 
         self.__dataframe = self.__dataframe.rename(columns=COLUMNS_MAPPING)
@@ -107,7 +107,7 @@ class ScopusArticlesAggregator(ArticlesAggregator):
                 for index in range(self.__dataframe.shape[0])
             ]
             for future in as_completed(futures):
-                index, data = future.result().unpack()
+                index, data = future.result().get_values()
                 self.__dataframe.loc[index, self.__SCRAPE_COLUMNS] = data
 
                 progress_bar.step_progress()

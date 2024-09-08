@@ -41,7 +41,7 @@ class ArticlesPageScraper(ArticlesScraper):
         page = self.__subset.loc[index, PAGE_COLUMN]
 
         if page == NULL:
-            return ScrapeData(index, str(url), NULL, NULL)
+            return ScrapeData(index, url, NULL, NULL)
 
         template = BeautifulSoup(page, features=self.__PARSER)
         author_name_tags = template.select(AUTHORS_SELECTOR)
@@ -50,7 +50,7 @@ class ArticlesPageScraper(ArticlesScraper):
         abstract_tag = template.select_one(ABSTRACT_SELECTOR)
         abstract = self.__format_abstract(abstract_tag)
 
-        return ScrapeData(index, str(url), authors_names, abstract)
+        return ScrapeData(index, url, authors_names, abstract)
 
     def __format_names(self, data: Tag) -> str:
         content = data.text.strip().replace(",", "")
