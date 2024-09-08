@@ -1,4 +1,4 @@
-from fuzzywuzzy.fuzz import ratio
+from thefuzz.fuzz import ratio
 from pandas import DataFrame
 
 from app.core.config.config import LOG

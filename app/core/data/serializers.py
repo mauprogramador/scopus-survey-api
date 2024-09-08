@@ -1,7 +1,7 @@
 from datetime import datetime
 from math import ceil
 
-from fuzzywuzzy.fuzz import partial_ratio
+from thefuzz.fuzz import partial_ratio
 from pydantic import BaseModel, Field, field_serializer, model_validator
 
 from app.core.common.types import Articles
