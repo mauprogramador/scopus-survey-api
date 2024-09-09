@@ -43,11 +43,11 @@ class ArticlesPageScraper(ArticlesScraper):
         if page == NULL:
             return ScrapeData(index, url, NULL, NULL)
 
-        template = BeautifulSoup(page, features=self.__PARSER)
-        author_name_tags = template.select(AUTHORS_SELECTOR)
+        soup = BeautifulSoup(page, features=self.__PARSER)
+        author_name_tags = soup.select(AUTHORS_SELECTOR)
         authors_names = ", ".join(map(self.__format_names, author_name_tags))
 
-        abstract_tag = template.select_one(ABSTRACT_SELECTOR)
+        abstract_tag = soup.select_one(ABSTRACT_SELECTOR)
         abstract = self.__format_abstract(abstract_tag)
 
         return ScrapeData(index, url, authors_names, abstract)
