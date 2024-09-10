@@ -1,4 +1,5 @@
 from typing import Any
+
 from fastapi import HTTPException as FastAPIHTTPException
 from pydantic import BaseModel
 

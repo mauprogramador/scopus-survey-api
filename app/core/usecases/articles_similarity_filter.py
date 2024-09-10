@@ -1,5 +1,5 @@
-from thefuzz.fuzz import ratio
 from pandas import DataFrame
+from thefuzz.fuzz import ratio
 
 from app.core.config.config import LOG
 from app.core.config.scopus import AUTHORS_COLUMN, TITLE_COLUMN

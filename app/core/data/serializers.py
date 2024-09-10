@@ -1,18 +1,18 @@
 from datetime import datetime
 from math import ceil
 
-from thefuzz.fuzz import partial_ratio
 from pydantic import BaseModel, Field, field_serializer, model_validator
+from thefuzz.fuzz import partial_ratio
 
 from app.core.common.types import Articles
 from app.core.config.scopus import (
     ITEMS_PER_PAGE_FIELD,
     NULL,
-    SEARCH_RESULTS_FIELD,
-    TOTAL_RESULTS_FIELD,
-    RESET_HEADER,
-    STATUS_HEADER,
     QUOTA_EXCEEDED,
+    RESET_HEADER,
+    SEARCH_RESULTS_FIELD,
+    STATUS_HEADER,
+    TOTAL_RESULTS_FIELD,
 )
 
 

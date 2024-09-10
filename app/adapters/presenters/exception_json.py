@@ -40,5 +40,5 @@ class ExceptionJSON(JSONResponse):
             "port": request.client.port if request.client else 8000,
             "method": request.method,
             "url": request.url.path,
-            "headers": request.headers.items()
+            "headers": request.headers.items(),
         }
