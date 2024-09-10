@@ -4,10 +4,11 @@ from tqdm import tqdm
 class ProgressBar:
     """Display a progress bar for running tasks"""
 
-    __PREFIX = "\x1b[93m[\x1b[92mPROGRESS\x1b[93m]:\x1b[m"
+    __PREFIX = "\x1b[93m[\x1b[92mPROGRESS\x1b[93m]\x1b[m"
     __FORMAT = (
         "{desc}\x1b[93m {n_fmt}/{total_fmt} \u2503\x1b[m{bar}\x1b[93m\u2503 "
-        "{percentage:.2f}% \u25FE[{elapsed_s:.3f}s, {rate_fmt}]"
+        "{percentage:.2f}% \x1b[35m\u25FE\x1b[93m[{elapsed_s:.3f}s, "
+        "{rate_fmt}]"
     )
     __COLOR = "green"
     __POSITION = 0
