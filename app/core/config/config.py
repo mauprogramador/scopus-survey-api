@@ -3,7 +3,7 @@ from secrets import token_hex
 from tempfile import mkdtemp
 
 from app.core.common.types import Token
-from app.utils.logger import Logger
+from app.utils.logger import AppLogger
 from app.utils.signal_handler import SignalHandler
 from app.utils.toml import PyprojectToml
 
@@ -20,6 +20,6 @@ FILE_PATH = join(DIRECTORY, FILENAME)
 
 HANDLER = SignalHandler()
 TOML = PyprojectToml()
-LOG = Logger(TOML.debug, TOML.logging_file)
+LOG = AppLogger(TOML.debug, TOML.logging_file)
 
 LOG.debug(TOML.pyproject)
