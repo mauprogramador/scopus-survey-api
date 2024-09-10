@@ -14,7 +14,7 @@ from app.core.common.messages import (
 from app.core.common.types import SearchParams
 from app.core.config.config import HANDLER, LOG
 from app.core.config.scopus import LINK_LOG, QUOTA_LOG, get_search_headers
-from app.core.data.serializers import ScopusJSONSchema, ScopusHeaders
+from app.core.data.serializers import ScopusHeaders, ScopusJSONSchema
 from app.core.domain.exceptions import InterruptError, ScopusAPIError
 from app.core.domain.metaclasses import HTTPRetry, SearchAPI, URLBuilder
 from app.framework.exceptions import BadGateway, InternalError, NotFound
@@ -68,7 +68,7 @@ class ScopusSearchAPI(SearchAPI):
         if response.status_code == 429:
             headers = ScopusHeaders.model_validate(response.headers)
             if headers.quota_exceeded >= self.__RATIO:
-                LOG.error(QUOTA_LOG.format(headers.reset_datetime), False)
+                LOG.error(QUOTA_LOG.format(headers.reset_datetime))
                 LOG.info(LINK_LOG)
 
         if response.status_code != 200:
@@ -78,8 +78,6 @@ class ScopusSearchAPI(SearchAPI):
             raise BadGateway(SCOPUS_API_ERROR)
 
         try:
-            LOG.debug(response.json())
-
             return ScopusJSONSchema.model_validate(response.json())
 
         except JSONDecodeError as error:

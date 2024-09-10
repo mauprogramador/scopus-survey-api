@@ -7,9 +7,9 @@ from tqdm.contrib.logging import logging_redirect_tqdm
 from app.core.config.config import HANDLER, LOG
 from app.core.config.scopus import (
     NULL,
+    PAGE_COLUMN,
     SCOPUS_ID_COLUMN,
     SCRAPING_HEADERS,
-    PAGE_COLUMN,
     URL_COLUMN,
 )
 from app.core.domain.exceptions import InterruptError
@@ -58,7 +58,7 @@ class ScopusArticlesPage(ArticlesPage):
         page = self.__get_article_preview_page(url)
 
         if page == NULL:
-            LOG.info('Retrying article page...')
+            LOG.info("Retrying article page...")
             page = self.__get_article_preview_page(url)
 
         self.__dataframe.loc[index, URL_COLUMN] = url
@@ -69,12 +69,12 @@ class ScopusArticlesPage(ArticlesPage):
             response = self.__http_helper.request(url)
 
             if response.status_code != 200 or not response.text:
-                LOG.error("Invalid response from article page")
+                LOG.error("Invalid response from article page", prefix=True)
                 return NULL
 
         except (BadGateway, GatewayTimeout) as error:
-            LOG.error("Invalid response from article page")
-            LOG.error(repr(error))
+            LOG.error("Invalid response from article page", prefix=True)
+            LOG.error(repr(error), prefix=True)
             return NULL
 
         return response.text

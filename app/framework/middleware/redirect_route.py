@@ -16,7 +16,7 @@ class RedirectNotFoundRoutes(BaseHTTPMiddleware):
     """Middleware to redirect any request for routes not found"""
 
     __MAIN_ROUTE = "/scopus-searcher/api"
-    __RELOAD_ROUTE = '/livereload'
+    __RELOAD_ROUTE = "/livereload"
 
     def __init__(self, app: FastAPI):
         """Middleware to redirect any request for routes not found"""
@@ -34,7 +34,7 @@ class RedirectNotFoundRoutes(BaseHTTPMiddleware):
         allowed_route = bool(is_main_route) or bool(is_reload_route)
 
         if response.status_code == 404 and not allowed_route:
-            LOG.error("Route Not Found", False)
+            LOG.error("Route Not Found")
             return RedirectResponse(url=self.__MAIN_ROUTE)
 
         if self.__handler.event.is_set():
