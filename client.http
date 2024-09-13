@@ -1,0 +1,47 @@
+
+@apikey = a333def09d942bddc8e8a0fc590608c8
+@keywords = Computer Vision, Scopus, Machine Learning, Bibliometric
+@date = 2021-2024
+@scopus_id = SCOPUS_ID:85197125619
+@doi = 10.3390/ani14121832
+@eid = 2-s2.0-85197125619
+@search-fields = eid,prism:coverDate,prism:publicationName,citedby-count,prism:volume,dc:title,prism:doi,dc:identifier,author
+@abstract-fields = eid,dc:title,dc:description,prism:publicationName,citedby-count,prism:volume,prism:coverDate,prism:doi,dc:identifier,authors
+
+
+### Scopus Search API <https://dev.elsevier.com/documentation/ScopusSearchAPI.wadl>
+
+GET https://api.elsevier.com/content/search/scopus?query=TITLE-ABS-KEY({{keywords}})&date={{date}}&suppressNavLinks=true&field={{search-fields}}
+User-Agent: rest-client
+Content-Type: application/json
+Accept: application/json
+X-ELS-APIKey: {{apikey}}
+
+
+### Abstract Retrieval API <https://dev.elsevier.com/documentation/AbstractRetrievalAPI.wadl>
+
+GET http://api.elsevier.com/content/abstract/scopus_id/{{scopus_id}}?field={{abstract-fields}}
+User-Agent: rest-client
+Content-Type: application/json
+Accept: application/json
+X-ELS-APIKey: {{apikey}}
+
+### Article Full Text Retrieval API <https://dev.elsevier.com/documentation/ArticleRetrievalAPI.wadl>
+
+GET https://api.elsevier.com/content/article/scopus_id/{{scopus_id}}
+User-Agent: rest-client
+Content-Type: application/json
+Accept: application/json
+X-ELS-APIKey: {{apikey}}
+
+### Scopus Article Preview Page <https://www.scopus.com/record/display.uri>
+
+GET https://www.scopus.com/record/display.uri?eid=2-s2.0-{{scopus_id}}&origin=inward
+
+### Scopus Article Preview Page <https://www.scopus.com/inward/record.uri>
+
+GET https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp={{scopus_id}}&origin=inward
+
+### Local
+
+POST http://127.0.0.1:8000
