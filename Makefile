@@ -3,8 +3,8 @@
 
 # Environment
 
-venv:
-	@bash venv.sh
+setup:
+	@bash setup.sh
 
 install:
 	@poetry install --no-root
