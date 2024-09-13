@@ -74,10 +74,6 @@ docker:
 	@docker build -q -t scopus-searcher-api -f docker/Dockerfile .
 	@docker run -d -p 8000:8000 --name scopus-api scopus-searcher-api
 
-docker-docs:
-	@docker build -q -t scopus-searcher-docs -f docker/Dockerfile.docs .
-	@docker run -d -p 8001:8000 --name scopus-docs scopus-searcher-docs
-
 
 # Requirements
 
