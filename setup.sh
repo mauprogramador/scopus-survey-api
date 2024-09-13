@@ -2,21 +2,23 @@
 
 echo -e "\033[35;1m>\033[m Checking Prerequisites..."
 
-version=$(python3 -V | grep -oP '\d+\.\K\d+')
-
 # Checking if Python3 (and which of it) is installed
 if command -v python3 &>/dev/null; then
-    if [ "$version" -eq 11 ]; then
+
+    if command -v python3.11 &>/dev/null; then
         echo -e "-\033[92m $(python3.11 -V) installed ✔\033[m"
+        version="11"
     else
+        version=$(ls -1 /usr/bin/python3* | grep -Eo 'python3\.[0-9]*$' | sort -V | uniq | tail -n 1 | grep -oP '\d+\.\K\d+')
+
         echo -e "-\033[91m Python 3.11 not installed ✘\033[m"
         echo -e "\033[93mWARNING:\033[m This application was built on \033[37;1mPython3.11.0rc1\033[m, so some unexpected errors may occur when using a different version."
 
-        echo -ne "\033[35;1m?\033[m Would you like to continue with \033[37;1m$(python3 -V)\033[m? [\033[32my\033[m/\033[31mn\033[m]: "
+        echo -ne "\033[35;1m?\033[m Would you like to continue with \033[37;1m$(python3."$version" -V)\033[m? [\033[32my\033[m/\033[31mn\033[m]: "
         read answer
 
         if [ "$answer" = "Y" ] || [ "$answer" = "y" ]; then
-            echo -e "-\033[92m Running with $(python3 -V) ✔\033[m"
+            echo -e "-\033[92m Running with $(python3."$version" -V) ✔\033[m"
         else
             echo -e "\033[35;1m!\033[m Please install \033[37;1mPython\033[m at least version \033[37;1m3.11\033[m. For further information visit https://docs.python-guide.org/starting/install3/linux/"
             exit 1
