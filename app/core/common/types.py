@@ -28,6 +28,8 @@ Poetry: TypeAlias = dict[str, str | list[str]]
 
 Errors: TypeAlias = list[dict[str, Any]] | None
 
+Env: TypeAlias = bool | str | int
+
 Token = TypeAdapter(
     Annotated[str, Field(min_length=32, max_length=32, pattern=TOKEN_PATTERN)]
 )

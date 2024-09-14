@@ -5,7 +5,7 @@ from tempfile import mkdtemp
 from app.core.common.types import Token
 from app.utils.logger import AppLogger
 from app.utils.signal_handler import SignalHandler
-from app.utils.toml import PyprojectToml
+from app.utils.toml_env import TomlEnv
 
 DIRECTORY = mkdtemp()
 TOKEN = Token.validate_strings(token_hex(16))
@@ -19,7 +19,7 @@ HEADERS = {"Content-Disposition": f"attachment; filename={FILENAME}"}
 FILE_PATH = join(DIRECTORY, FILENAME)
 
 HANDLER = SignalHandler()
-TOML = PyprojectToml()
-LOG = AppLogger(TOML.debug, TOML.logging_file)
+TOML_ENV = TomlEnv()
+LOG = AppLogger(TOML_ENV.debug, TOML_ENV.logging_file)
 
-LOG.debug(TOML.pyproject)
+LOG.debug(TOML_ENV.pyproject)

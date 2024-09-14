@@ -1,7 +1,7 @@
 import uvicorn
 from fastapi import FastAPI
 
-from app.core.config.config import LOG, TOML
+from app.core.config.config import LOG, TOML_ENV
 from app.framework.fastapi.config import CORS, FASTAPI, STATIC
 from app.framework.fastapi.routes import router
 from app.framework.middleware import (
@@ -24,5 +24,5 @@ app.add_middleware(TraceExceptionControl)
 
 if __name__ == "__main__":
     LOG.info("Scopus Searcher API was initialized 🚀")
-    ShowAccessQRCode(TOML.port)
-    uvicorn.run(**TOML.uvicorn)
+    ShowAccessQRCode(TOML_ENV.port)
+    uvicorn.run(**TOML_ENV.uvicorn)

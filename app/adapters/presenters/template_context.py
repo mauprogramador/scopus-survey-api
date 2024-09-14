@@ -2,7 +2,7 @@ from fastapi import Request
 from pandas import read_csv
 
 from app.core.common.types import Context, Table
-from app.core.config.config import FILE_PATH, FILENAME, TOKEN, TOML
+from app.core.config.config import FILE_PATH, FILENAME, TOKEN, TOML_ENV
 from app.core.domain.metaclasses import TemplateContext
 
 
@@ -19,7 +19,7 @@ class TemplateContextBuilder(TemplateContext):
         "filename": FILENAME,
         "table_url": "/scopus-searcher/api/table",
         "search_url": "/scopus-searcher/api/search-articles",
-        "description": TOML.description,
+        "description": TOML_ENV.description,
     }
 
     def __init__(self, request: Request) -> None:
@@ -27,7 +27,7 @@ class TemplateContextBuilder(TemplateContext):
         self.__request = request
         self.__data = {
             "request": request,
-            "version": TOML.version,
+            "version": TOML_ENV.version,
             "swagger_url": "/",
         }
 

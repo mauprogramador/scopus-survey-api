@@ -3,7 +3,7 @@ from fastapi.openapi.models import Example
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
-from app.core.config.config import TOKEN, TOKEN_HEADER, TOML
+from app.core.config.config import TOKEN, TOKEN_HEADER, TOML_ENV
 from app.framework.exceptions.exception_handler import ExceptionHandler
 from app.framework.exceptions.http_exceptions import BaseExceptionResponse
 from app.framework.fastapi.lifespan import lifespan
@@ -17,13 +17,13 @@ letters, numbers, underscores and spaces, from 2 to 50 characters <br/><br/>
 DESCRIPTION = f"""
 [**Web Application**](/scopus-searcher/api)
 &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-[**Documentation**]({TOML.documentation})
+[**Documentation**]({TOML_ENV.documentation})
 """
 
 CONTACT = {
-    "name": TOML.name,
+    "name": TOML_ENV.name,
     "url": "https://github.com/mauprogramador",
-    "email": TOML.email,
+    "email": TOML_ENV.email,
 }
 LICENSE = {
     "name": "MIT License",
@@ -40,11 +40,11 @@ RESPONSES = {
     }
 }
 FASTAPI = {
-    "debug": TOML.debug,
-    "title": TOML.title,
-    "summary": TOML.description,
+    "debug": TOML_ENV.debug,
+    "title": TOML_ENV.title,
+    "summary": TOML_ENV.description,
     "description": DESCRIPTION,
-    "version": f"v{TOML.version}",
+    "version": f"v{TOML_ENV.version}",
     "docs_url": "/",
     "exception_handlers": ExceptionHandler().handlers,
     "lifespan": lifespan,
