@@ -49,6 +49,7 @@ qrcode = "^7.4.2"
 tqdm = "^4.66.5"
 toml = "^0.10.2"
 thefuzz = "^0.22.1"
+python-dotenv = "^1.0.1"
 
 [tool.poetry.group.dev.dependencies]
 isort = "^5.13.2"
