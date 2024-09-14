@@ -1,10 +1,7 @@
 from threading import Event
 
-from fastapi.exceptions import (
-    HTTPException as FastAPIHTTPException,
-    RequestValidationError,
-    ResponseValidationError,
-)
+from fastapi.exceptions import HTTPException as FastAPIHTTPException
+from fastapi.exceptions import RequestValidationError, ResponseValidationError
 from pydantic_core import InitErrorDetails, ValidationError
 from requests.sessions import Session
 from starlette.exceptions import HTTPException as StarletteHTTPException

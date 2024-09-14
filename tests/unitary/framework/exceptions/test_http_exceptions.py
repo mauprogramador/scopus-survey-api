@@ -5,9 +5,9 @@ from fastapi.encoders import jsonable_encoder
 
 from app.core.common.messages import (
     PYDANTIC_ERROR,
-    UNEXPECTED_ERROR,
     REQUEST_ERROR,
-    RESPONSE_ERROR
+    RESPONSE_ERROR,
+    UNEXPECTED_ERROR,
 )
 from app.core.config.scopus import API_ERRORS, NULL
 from tests.helpers.utils import exception_response

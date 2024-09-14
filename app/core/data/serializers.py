@@ -2,7 +2,7 @@ from datetime import datetime
 from math import ceil
 
 from pydantic import BaseModel, Field, field_serializer, model_validator
-from thefuzz.fuzz import partial_ratio
+from thefuzz.fuzz import partial_ratio  # type: ignore
 
 from app.core.common.types import Articles
 from app.core.config.scopus import (

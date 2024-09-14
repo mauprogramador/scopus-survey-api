@@ -10,7 +10,7 @@ from tests.helpers.data import (
     similar_data,
     template,
 )
-from tests.helpers.models import Request, Response, HeadersResponse
+from tests.helpers.models import HeadersResponse, Request, Response
 
 # adapters/gateway/scopus_search_api
 

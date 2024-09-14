@@ -6,9 +6,9 @@ from pytest_mock import MockerFixture
 
 from app.core.common.messages import (
     PYDANTIC_ERROR,
-    UNEXPECTED_ERROR,
     REQUEST_ERROR,
-    RESPONSE_ERROR
+    RESPONSE_ERROR,
+    UNEXPECTED_ERROR,
 )
 from app.core.config.scopus import API_ERRORS, NULL
 from app.framework.exceptions.http_exceptions import BaseExceptionResponse

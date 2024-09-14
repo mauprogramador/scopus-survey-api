@@ -4,8 +4,8 @@ from app.core.common.types import Articles
 from app.core.config.scopus import (
     ARTICLE_PAGE_URL,
     AUTHORS_COLUMN,
-    SCOPUS_ID_COLUMN,
     PAGE_COLUMN,
+    SCOPUS_ID_COLUMN,
     TITLE_COLUMN,
     URL_COLUMN,
 )
@@ -100,10 +100,7 @@ def scrap_subset(page_column: str | list[str]) -> DataFrame:
     if isinstance(page_column, str):
         data = [{URL_COLUMN: "any", PAGE_COLUMN: page_column}]
     else:
-        data = [
-            {URL_COLUMN: "any", PAGE_COLUMN: page}
-            for page in page_column
-        ]
+        data = [{URL_COLUMN: "any", PAGE_COLUMN: page} for page in page_column]
     return DataFrame(data)
 
 

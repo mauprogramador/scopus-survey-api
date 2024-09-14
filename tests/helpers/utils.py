@@ -3,7 +3,8 @@ from json import loads
 from types import MethodType
 
 from fastapi.responses import JSONResponse
-from httpx import AsyncClient, Response as HttpxResponse
+from httpx import AsyncClient
+from httpx import Response as HttpxResponse
 from pandas import DataFrame, read_csv
 
 from app.core.config.config import TOKEN, TOKEN_HEADER
