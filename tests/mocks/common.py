@@ -1,7 +1,7 @@
 from pandas import DataFrame
 
 from app.core.common.types import SearchParams
-from app.core.config.config import TOML
+from app.core.config.config import TOML_ENV
 from app.core.config.scopus import ABSTRACT_COLUMN, AUTHORS_COLUMN, URL_COLUMN
 from tests.helpers.data import article, scopus_json
 from tests.helpers.models import Response
@@ -21,7 +21,7 @@ EMPTY_RESPONSE = Response("")
 ANY_RESPONSE = Response("any")
 
 __PARAMS = f"?apikey={API_KEY}&keywords={','.join(KEYWORDS)}"
-BASE_URL = f"{TOML.url}/scopus-searcher/api"
+BASE_URL = f"{TOML_ENV.url}/scopus-searcher/api"
 
 URL = f"{BASE_URL}/search-articles{__PARAMS}"
 TABLE_URL = f"{BASE_URL}/table"

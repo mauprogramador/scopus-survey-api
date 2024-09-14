@@ -1,4 +1,4 @@
-from app.core.config.config import TOML
+from app.core.config.config import TOML_ENV
 from app.core.config.scopus import ABSTRACT_COLUMN, AUTHORS_COLUMN
 from app.framework.exceptions import BadGateway, GatewayTimeout
 from tests.helpers.data import article, scopus_json, similar_articles, template
@@ -31,7 +31,7 @@ SECOND_CHANCE_RESPONSE = [
 
 # framework/dependencies/query_params
 
-NO_PARAMS_URL = f"{TOML.url}/scopus-searcher/api/search-articles"
+NO_PARAMS_URL = f"{TOML_ENV.url}/scopus-searcher/api/search-articles"
 API_KEY_URL = f"{NO_PARAMS_URL}?apikey="
 NO_KEYWORDS_URL = f"{API_KEY_URL}{API_KEY}"
 KEYWORDS_URL = f"{NO_KEYWORDS_URL}&keywords="
