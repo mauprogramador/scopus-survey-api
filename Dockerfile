@@ -14,6 +14,4 @@ COPY ./app $WORKDIR/app
 COPY ./tests $WORKDIR/tests
 COPY ./web $WORKDIR/web
 
-EXPOSE 8000
-
-CMD ["poetry", "run", "python3", "-m", "app.framework.fastapi.main"]
+CMD ["poetry", "run", "python3", "-m", "app"]

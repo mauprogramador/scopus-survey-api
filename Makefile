@@ -16,11 +16,11 @@ install:
 # Run application
 
 run:
-	@poetry run python3 -m app.framework.fastapi.main
+	@poetry run python3 -m app
 
 docker:
 	@docker build -q -t scopus-searcher-api .
-	@docker run -d --env HOST=0.0.0.0 --env-file .env --name scopus-searcher -p ${PORT}:8000 scopus-searcher-api
+	@docker run -d --env HOST=0.0.0.0 --env-file .env --name scopus-searcher -p ${PORT}:${PORT} scopus-searcher-api
 
 
 # Documentation
