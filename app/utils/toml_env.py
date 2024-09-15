@@ -1,20 +1,22 @@
-from typing import Type
+from os import getenv
+from typing import Any, Type
 
-from dotenv import dotenv_values
+from dotenv import load_dotenv
 from toml import load
 
-from app.core.common.types import Env, Poetry, PyprojectTool, TomlSettings
+from app.core.common.types import Poetry, PyprojectTool, TomlSettings
 from app.core.config.scopus import NULL
 
 
 class TomlEnv:
     """Loads and retrieves Pyproject.toml and ENV configuration data"""
 
-    __FILENAME = "pyproject.toml"
-    __ENCODING = "utf-8"
     __APP = "app.framework.fastapi.main:app"
-    __VERSION = "2.0.0"
+    __FILENAME = "pyproject.toml"
+    __AUTHORS = ["null <null@null>"]
     __HOST = "127.0.0.1"
+    __ENCODING = "utf-8"
+    __VERSION = "2.0.0"
     __PORT = 8000
 
     def __init__(self) -> None:
@@ -22,26 +24,29 @@ class TomlEnv:
         with open(self.__FILENAME, encoding=self.__ENCODING) as file:
             pyproject = load(file)
 
-        self.__env_values = dotenv_values()
+        load_dotenv()
         tools: PyprojectTool = pyproject.get("tool", {})
         self.__application: TomlSettings = pyproject.get("application", {})
         self.__poetry: Poetry = tools.get("poetry", {})
-        self.__author: str = self.__poetry.get("authors", [NULL])[0]
+
+        value = self.__poetry.get("authors")
+        authors: list = self.__assure(value, list, self.__AUTHORS)
+        self.__author: str = self.__assure(authors[0], str, self.__AUTHORS[0])
 
     @property
     def title(self) -> str:
-        name = self.__poetry.get("name", NULL)
-        return name if isinstance(name, str) else NULL
+        value = self.__poetry.get("name")
+        return self.__assure(value, str, NULL)
 
     @property
     def version(self) -> str:
-        version = self.__poetry.get("version", self.__VERSION)
-        return version if isinstance(version, str) else self.__VERSION
+        value = self.__poetry.get("version")
+        return self.__assure(value, str, self.__VERSION)
 
     @property
     def description(self) -> str:
-        description = self.__poetry.get("description", NULL)
-        return description if isinstance(description, str) else NULL
+        value = self.__poetry.get("description")
+        return self.__assure(value, str, NULL)
 
     @property
     def name(self) -> str:
@@ -54,38 +59,28 @@ class TomlEnv:
 
     @property
     def documentation(self) -> str:
-        documentation = self.__poetry.get("documentation", NULL)
-        return documentation if isinstance(documentation, str) else NULL
+        value = self.__poetry.get("documentation")
+        return self.__assure(value, str, NULL)
 
     @property
     def reload(self) -> bool:
-        reload = self.__application.get("reload", False)
-        reload = self.__getenv("RELOAD", bool, reload)
-        return reload if isinstance(reload, bool) else False
+        return self.__getenv("reload", bool, False)
 
     @property
     def debug(self) -> bool:
-        debug = self.__application.get("debug", False)
-        debug = self.__getenv("DEBUG", bool, debug)
-        return debug if isinstance(debug, bool) else False
+        return self.__getenv("debug", bool, False)
 
     @property
     def logging_file(self) -> bool:
-        logging_file = self.__application.get("logging_file", False)
-        logging_file = self.__getenv("LOGGING_FILE", bool, logging_file)
-        return logging_file if isinstance(logging_file, bool) else False
+        return self.__getenv("logging_file", bool, False)
 
     @property
     def host(self) -> str:
-        host = self.__application.get("host", self.__HOST)
-        host = self.__getenv("HOST", str, host)
-        return host if isinstance(host, str) else self.__HOST
+        return self.__getenv("host", str, self.__HOST)
 
     @property
     def port(self) -> int:
-        port = self.__application.get("port", self.__PORT)
-        port = self.__getenv("PORT", int, port)
-        return port if isinstance(port, int) else self.__PORT
+        return self.__getenv("port", int, self.__PORT)
 
     @property
     def uvicorn(self) -> TomlSettings:
@@ -111,13 +106,20 @@ class TomlEnv:
             "reload": self.reload,
         }
 
-    def __getenv(self, name: str, convert_type: Type, default: Env) -> Env:
-        env_variable = self.__env_values.get(name)
+    def __assure(self, value: Any, spected_type: Type, default: Any) -> Any:
+        if value is None or type(value) is not spected_type:
+            return default
+        return value
+
+    def __getenv(self, name: str, spected_type: Type, default: Any) -> Any:
+        value = self.__application.get(name)
+        toml_config = self.__assure(value, spected_type, default)
+        env_variable = getenv(name.upper())
         if env_variable is not None:
-            if convert_type is bool:
+            if spected_type is bool:
                 env_variable = env_variable.title()
             try:
-                return convert_type(env_variable)
+                return spected_type(env_variable)
             except ValueError:
-                return default
-        return default
+                return toml_config
+        return toml_config
