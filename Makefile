@@ -1,7 +1,10 @@
+include .env
 .PHONY: $(MAKECMDGOALS)
 
+PORT ?= 8000
 
-# Environment
+
+# Environment setup
 
 setup:
 	@bash setup.sh
@@ -14,6 +17,10 @@ install:
 
 run:
 	@poetry run python3 -m app.framework.fastapi.main
+
+docker:
+	@docker build -q -t scopus-searcher-api .
+	@docker run -d --env HOST=0.0.0.0 --env-file .env --name scopus-searcher -p ${PORT}:8000 scopus-searcher-api
 
 
 # Documentation
@@ -28,7 +35,7 @@ test:
 	@poetry run pytest -v --color=yes
 
 test-docker:
-	@docker exec -it scopus-api pytest -v --color=yes
+	@docker exec -it scopus-searcher poetry run pytest -v --color=yes
 
 coverage:
 	@poetry run coverage erase
@@ -36,15 +43,7 @@ coverage:
 	@poetry run coverage report
 
 coverage-docker:
-	@docker exec -it scopus-api coverage erase && coverage run -m pytest -q && coverage report
-
-
-# Vulnerability audit
-
-audit:
-	@poetry run pip-audit
-	@poetry run bandit -r app/ -c "pyproject.toml"
-	@poetry run bandit -r tests/ -c "pyproject.toml"
+	@docker exec -it scopus-searcher poetry run coverage erase && coverage run -m pytest -q && coverage report
 
 
 # Formatting and Linting
@@ -68,11 +67,12 @@ lint-tests:
 	@poetry run radon cc tests/ -a -nc
 
 
-# Docker: build image and run container
+# Vulnerability audit
 
-docker:
-	@docker build -q -t scopus-searcher-api -f docker/Dockerfile .
-	@docker run -d -p 8000:8000 --name scopus-api scopus-searcher-api
+audit:
+	@poetry run pip-audit
+	@poetry run bandit -r app/ -c "pyproject.toml"
+	@poetry run bandit -r tests/ -c "pyproject.toml"
 
 
 # Requirements
