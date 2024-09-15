@@ -11,7 +11,7 @@ from app.core.config.scopus import NULL
 class TomlEnv:
     """Loads and retrieves Pyproject.toml and ENV configuration data"""
 
-    __APP = "app.framework.fastapi.main:app"
+    __APP = "app.framework.fastapi.app:app"
     __FILENAME = "pyproject.toml"
     __AUTHORS = ["null <null@null>"]
     __HOST = "127.0.0.1"

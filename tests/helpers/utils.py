@@ -9,7 +9,7 @@ from pandas import DataFrame, read_csv
 
 from app.core.config.config import TOKEN, TOKEN_HEADER
 from app.framework.exceptions.http_exceptions import BaseExceptionResponse
-from app.framework.fastapi.main import app
+from app.framework.fastapi.app import app
 from tests.helpers.models import Response
 
 
