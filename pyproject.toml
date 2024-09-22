@@ -95,7 +95,7 @@ port = 8000
 reload = false
 
 [tool.pylint]
-disable = ["C0114", "C0115", "C0116", "R0903", "E1136", "E0611", "E1131", "R0801"]
+disable = ["C0114", "C0115", "C0116", "C0123", "R0903", "E1136", "E0611", "E1131", "R0801"]
 
 [tool.bandit]
 exclude_dirs = [".venv"]
@@ -119,7 +119,7 @@ omit = [
 
 [tool.mypy]
 python_version = "3.11"
-disable_error_code = ["assignment", "no-redef", "arg-type"]
+disable_error_code = ["assignment", "no-redef", "arg-type", "import-untyped"]
 
 [tool.black]
 target-version = ["py311"]
