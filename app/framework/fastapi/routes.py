@@ -6,7 +6,7 @@ from fastapi.routing import APIRouter
 
 from app.adapters.factories.usecase_factory import make_usecase
 from app.adapters.presenters.template_context import TemplateContextBuilder
-from app.core.common.types import SearchParams
+from app.core.data.dtos import SearchParams
 from app.framework.dependencies import AccessToken, QueryParams
 from app.framework.fastapi.config import SEARCH_ROUTE_DESCRIPTION, TEMPLATES
 
