@@ -2,7 +2,7 @@ from http import HTTPStatus
 
 from requests.models import Response
 
-from app.core.common.messages import INTERRUPT_ERROR, SCOPUS_API_ERROR
+from app.core.common.messages import INTERRUPT_ERROR
 from app.core.common.types import Errors
 from app.core.config.scopus import API_ERRORS, NULL
 
@@ -29,7 +29,7 @@ class InterruptError(ApplicationError):
 class ScopusAPIError(ApplicationError):
     """Scopus Search API HTTP status error exception"""
 
-    def __init__(self, response: Response) -> None:
+    def __init__(self, response: Response, message: str) -> None:
         """Scopus Search API HTTP status error exception"""
         code = response.status_code
         errors = [
@@ -39,4 +39,4 @@ class ScopusAPIError(ApplicationError):
                 "content": response.json(),
             }
         ]
-        super().__init__(502, SCOPUS_API_ERROR, errors)
+        super().__init__(502, message, errors)
