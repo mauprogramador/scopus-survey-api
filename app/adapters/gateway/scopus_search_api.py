@@ -2,19 +2,22 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from json.decoder import JSONDecodeError
 from os import sched_getaffinity
 
-from pandas import DataFrame
 from tqdm.contrib.logging import logging_redirect_tqdm
 
 from app.core.common.messages import (
     DECODING_ERROR,
     NOT_FOUND_ERROR,
-    SCOPUS_API_ERROR,
+    SEARCH_API_ERROR,
     VALIDATE_ERROR,
 )
-from app.core.common.types import SearchParams
 from app.core.config.config import HANDLER, LOG
-from app.core.config.scopus import LINK_LOG, QUOTA_LOG, get_search_headers
-from app.core.data.serializers import ScopusHeaders, ScopusJSONSchema
+from app.core.config.scopus import (
+    FURTHER_INFO_LINK,
+    QUOTA_WARNING,
+    get_scopus_headers,
+)
+from app.core.data.dtos import SearchParams
+from app.core.data.serializers import ScopusHeaders, ScopusResult, ScopusSearch
 from app.core.domain.exceptions import InterruptError, ScopusAPIError
 from app.core.domain.metaclasses import HTTPRetry, SearchAPI, URLBuilder
 from app.framework.exceptions import BadGateway, InternalError, NotFound
@@ -35,15 +38,17 @@ class ScopusSearchAPI(SearchAPI):
         """Search and retrieve articles via the Scopus Search API"""
         self.__http_helper = http_helper
         self.__url_builder = url_builder
-        self.__scopus_response: ScopusJSONSchema = None
+        self.__scopus_response: ScopusSearch = None
 
-    def search_articles(self, search_params: SearchParams) -> DataFrame:
-        headers = get_search_headers(search_params.api_key)
+    def search_articles(
+        self, search_params: SearchParams
+    ) -> list[ScopusResult]:
+        headers = get_scopus_headers(search_params.api_key)
         url = self.__url_builder.get_search_url(search_params.keywords)
-
         self.__http_helper.mount_session(headers)
+
         try:
-            scopus_response = self.__get_scopus_response(url)
+            scopus_response = self.__get_search_response(url)
             self.__scopus_response = scopus_response
 
             if scopus_response.total_results == 0:
@@ -60,25 +65,25 @@ class ScopusSearchAPI(SearchAPI):
         finally:
             self.__http_helper.close()
 
-        return DataFrame(self.__scopus_response.articles)
+        return self.__scopus_response.entry
 
-    def __get_scopus_response(self, url: str) -> ScopusJSONSchema:
+    def __get_search_response(self, url: str) -> ScopusSearch:
         response = self.__http_helper.request(url)
 
         if response.status_code == 429:
             headers = ScopusHeaders.model_validate(response.headers)
             if headers.quota_exceeded >= self.__RATIO:
-                LOG.error(QUOTA_LOG.format(headers.reset_datetime))
-                LOG.info(LINK_LOG)
+                LOG.error(QUOTA_WARNING.format(headers.reset_datetime))
+                LOG.info(FURTHER_INFO_LINK)
 
         if response.status_code != 200:
-            raise ScopusAPIError(response)
+            raise ScopusAPIError(response, SEARCH_API_ERROR)
 
         if not response.text:
-            raise BadGateway(SCOPUS_API_ERROR)
+            raise BadGateway(SEARCH_API_ERROR)
 
         try:
-            return ScopusJSONSchema.model_validate(response.json())
+            return ScopusSearch.model_validate(response.json())
 
         except JSONDecodeError as error:
             raise InternalError(DECODING_ERROR) from error
@@ -93,7 +98,7 @@ class ScopusSearchAPI(SearchAPI):
         page = index * self.__scopus_response.items_per_page
         url = self.__url_builder.get_pagination_url(page)
 
-        scopus_response = self.__get_scopus_response(url)
+        scopus_response = self.__get_search_response(url)
         self.__scopus_response.entry.extend(scopus_response.entry)
 
     def __get_multiple_articles_by_pagination(self) -> None:
@@ -103,7 +108,7 @@ class ScopusSearchAPI(SearchAPI):
         max_workers = min(pages_count, cpu_count)
 
         LOG.debug({"max_workers": max_workers})
-        LOG.info("Getting Multiple Articles by Pagination")
+        LOG.info("Getting multiple articles by pagination")
         progress_bar = ProgressBar(
             self.__scopus_response.total_results,
             self.__scopus_response.items_per_page,
