@@ -13,6 +13,16 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
 
+      - name: Check commit message and files
+        run: |
+          if [[ ! "$(git log -1 --format='%s')" =~ ^docs ]]; then
+            echo "Commit message does not start with 'docs'. Skipping workflow."
+            exit 1
+          elif [[ ! "$(git diff --name-only --cached)" =~ ^docs/|^mkdocs\.yml$ ]]; then
+            echo "Committed files are not in the 'docs' folder or the 'mkdocs.yml' file. Skipping workflow."
+            exit 1
+          fi
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -25,4 +35,6 @@ jobs:
           path: .cache
 
       - run: pip3 install mkdocs-material
+      - run: pip3 install mkdocs-static-i18n
+      - run: pip3 install mkdocs-markdownextradata-plugin
       - run: mkdocs gh-deploy --force
