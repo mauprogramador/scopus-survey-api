@@ -43,6 +43,5 @@ def test_drop_similar(mocker: MockerFixture):
     similar_titles: set = spy_in.call_args_list[0].args[1]
     df_out: DataFrame = spy_out.call_args_list[0].args[0]
 
-    assert result.shape[0] == 1
-    assert len(similar_titles) == 1
+    assert result.shape[0] == 1 and len(similar_titles) == 1
     assert df_in.shape[0] == 2 and df_out.shape[0] == 1

@@ -114,7 +114,7 @@ async def test_application_error():
 
 @pytest.mark.asyncio
 async def test_scopus_api_error():
-    error = fix.SCOPUS_API_ERROR
+    error = fix.SEARCH_API_ERROR
     response = await fix.HANDLER.application_error(EMPTY_REQUEST, error)
     exc_response = exception_response(response)
     status = f"{500} {HTTPStatus(500).phrase}"

@@ -2,8 +2,9 @@ from pydantic_core import ValidationError
 from pytest import raises
 
 from app.core.common.messages import INVALID_KEYWORD
-from app.core.common.types import SearchParams, Token
+from app.core.common.types import Token
 from app.core.config.config import TOKEN
+from app.core.data.dtos import SearchParams
 from tests.mocks import common as data
 from tests.mocks import fixtures as fix
 

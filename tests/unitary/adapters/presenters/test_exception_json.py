@@ -1,8 +1,6 @@
-from pydantic_core import PydanticUndefined
-
 from app.adapters.presenters.exception_json import ExceptionJSON
 from tests.helpers.utils import exception_response
-from tests.mocks.unitary import EMPTY_REQUEST
+from tests.mocks.unitary import EMPTY_REQUEST, ERRORS, ERRORS_UNDEFINED
 
 
 def test_success():
@@ -18,8 +16,7 @@ def test_success():
 
 
 def test_errors():
-    errors = [{"type": "any", "loc": "any"}]
-    response = ExceptionJSON(EMPTY_REQUEST, 500, "any", errors)
+    response = ExceptionJSON(EMPTY_REQUEST, 500, "any", ERRORS)
     exc_response = exception_response(response)
 
     assert not exc_response.success
@@ -32,8 +29,7 @@ def test_errors():
 
 
 def test_filter():
-    errors = [{"input": PydanticUndefined}]
-    response = ExceptionJSON(EMPTY_REQUEST, 500, "any", errors)
+    response = ExceptionJSON(EMPTY_REQUEST, 500, "any", ERRORS_UNDEFINED)
     exc_response = exception_response(response)
 
     assert not exc_response.success

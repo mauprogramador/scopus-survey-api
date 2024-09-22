@@ -13,6 +13,6 @@ def test_pagination_url():
     assert url.count("7") == 1
 
 
-def test_article_page_url():
-    url = URL_BUILDER.get_article_page_url("any:any")
+def test_abstract_url():
+    url = URL_BUILDER.get_abstract_url("any")
     assert url and url.count("any") == 1
