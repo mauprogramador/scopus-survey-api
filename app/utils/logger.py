@@ -127,7 +127,7 @@ class AppLogger:
         self.__logger.info(self.__message("94mTRACE", message))
 
     def request(self, scopus: bool, url: str, code: int, time: float) -> None:
-        prefix = "SCOPUS" if scopus else "ARTICLE"
+        prefix = "SEARCH" if scopus else "ABSTRACT"
         message = self.__format(code, time, "GET", url)
 
         self.__logger.setLevel(INFO)

@@ -2,7 +2,8 @@ from time import time
 
 from cachecontrol import CacheControlAdapter
 from requests import Request, Response, Session
-from requests.exceptions import ConnectionError as ConnectError, Timeout
+from requests.exceptions import ConnectionError as ConnectError
+from requests.exceptions import Timeout
 from urllib3.util import Retry
 
 from app.core.common.messages import (
@@ -37,10 +38,10 @@ class HTTPRetryHelper(HTTPRetry):
         raise_on_status=False,
     )
 
-    def __init__(self, for_scopus: bool = None) -> None:
+    def __init__(self, for_search: bool = None) -> None:
         """Make HTTP requests with throttling and retry mechanisms"""
         self.__adapter = CacheControlAdapter(max_retries=self.__RETRY)
-        self.__for_scopus = True if for_scopus is None else for_scopus
+        self.__for_search = True if for_search is None else for_search
         self.__headers: Headers = None
         self.__session: Session = None
 
@@ -65,7 +66,7 @@ class HTTPRetryHelper(HTTPRetry):
             process_time = (time() - start_time) * 1000
 
             LOG.request(
-                self.__for_scopus,
+                self.__for_search,
                 url,
                 response.status_code,
                 process_time,
