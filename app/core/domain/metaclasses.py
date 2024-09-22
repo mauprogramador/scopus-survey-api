@@ -4,8 +4,9 @@ from fastapi.responses import FileResponse
 from pandas import DataFrame
 from requests import Response
 
-from app.core.common.types import Context, Headers, Keywords, SearchParams
-from app.core.data.dtos import ScrapeData
+from app.core.common.types import Context, Headers, Keywords
+from app.core.data.dtos import SearchParams
+from app.core.data.serializers import ScopusResult
 
 
 class HTTPRetry(metaclass=ABCMeta):
@@ -32,35 +33,29 @@ class URLBuilder(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def get_article_page_url(self, scopus_id: str) -> str:
+    def get_abstract_url(self, url: str) -> str:
         pass
 
 
 class SearchAPI(metaclass=ABCMeta):
     @abstractmethod
-    def search_articles(self, search_params: SearchParams) -> DataFrame:
+    def search_articles(
+        self, search_params: SearchParams
+    ) -> list[ScopusResult]:
         pass
 
 
-class ArticlesPage(metaclass=ABCMeta):
+class AbstractAPI(metaclass=ABCMeta):
     @abstractmethod
-    def get_articles_page(self, subset: DataFrame) -> DataFrame:
+    def retrieve_abstracts(
+        self, api_key: str, entry: list[ScopusResult]
+    ) -> DataFrame:
         pass
 
 
 class ArticlesAggregator(metaclass=ABCMeta):
     @abstractmethod
     def get_articles(self, params: SearchParams) -> FileResponse:
-        pass
-
-
-class ArticlesScraper(metaclass=ABCMeta):
-    @abstractmethod
-    def set_subset(self, subset: DataFrame) -> None:
-        pass
-
-    @abstractmethod
-    def scrape(self, index: int) -> ScrapeData:
         pass
 
 
