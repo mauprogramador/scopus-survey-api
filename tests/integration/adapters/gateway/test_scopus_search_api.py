@@ -4,7 +4,7 @@ from pytest_mock import MockerFixture
 from app.core.common.messages import (
     DECODING_ERROR,
     NOT_FOUND_ERROR,
-    SCOPUS_API_ERROR,
+    SEARCH_API_ERROR,
     VALIDATE_ERROR,
 )
 from app.core.config.scopus import API_ERRORS
@@ -50,7 +50,7 @@ async def test_quota_exceeded(mocker: MockerFixture):
     assert response.status_code == 502
     assert not exc_response.success
     assert exc_response.code == 502
-    assert exc_response.message == SCOPUS_API_ERROR
+    assert exc_response.message == SEARCH_API_ERROR
     assert exc_response.errors is not None
 
 
@@ -67,7 +67,7 @@ async def test_scopus_api_error(mocker: MockerFixture, code: int):
     assert response.status_code == 502
     assert not exc_response.success
     assert exc_response.code == 502
-    assert exc_response.message == SCOPUS_API_ERROR
+    assert exc_response.message == SEARCH_API_ERROR
     assert exc_response.errors is not None
 
 
@@ -80,7 +80,7 @@ async def test_empty_content(mocker: MockerFixture):
     assert response.status_code == 502
     assert not exc_response.success
     assert exc_response.code == 502
-    assert exc_response.message == SCOPUS_API_ERROR
+    assert exc_response.message == SEARCH_API_ERROR
     assert exc_response.errors is None
 
 

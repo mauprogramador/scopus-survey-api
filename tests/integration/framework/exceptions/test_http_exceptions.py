@@ -118,7 +118,7 @@ async def test_application_error(mocker: MockerFixture):
 
 @pytest.mark.asyncio
 async def test_scopus_api_error(mocker: MockerFixture):
-    error = fix.SCOPUS_API_ERROR
+    error = fix.SEARCH_API_ERROR
     mocker.patch(fix.SEARCH_ARTICLES, side_effect=error)
     response = await app_request(URL)
     exc_response = BaseExceptionResponse.model_validate(response.json())

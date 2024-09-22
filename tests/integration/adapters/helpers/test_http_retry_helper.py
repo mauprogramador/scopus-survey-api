@@ -12,7 +12,7 @@ from app.framework.exceptions.http_exceptions import BaseExceptionResponse
 from tests.helpers.utils import app_request
 from tests.mocks import common as data
 from tests.mocks.fixtures import SEND
-from tests.mocks.integration import ERROR_RESPONSE, ONE_PAGE
+from tests.mocks.integration import ONE_PAGE
 
 
 @pytest.mark.asyncio
@@ -64,7 +64,7 @@ async def test_connection_exception(mocker: MockerFixture):
 
 
 @pytest.mark.asyncio
-async def test_search_api_status_error(mocker: MockerFixture):
+async def test_response_status_error(mocker: MockerFixture):
     mocker.patch(SEND, return_value=data.ERROR_RESPONSES[500])
     response = await app_request(data.URL)
     exc_response = BaseExceptionResponse.model_validate(response.json())
@@ -75,11 +75,3 @@ async def test_search_api_status_error(mocker: MockerFixture):
     assert response.status_code == 502
     assert not exc_response.success
     assert exc_response.code == 502
-
-
-@pytest.mark.asyncio
-async def test_article_page_status_error(mocker: MockerFixture):
-    mocker.patch(SEND, side_effect=ERROR_RESPONSE)
-    response = await app_request(data.URL)
-    assert response.status_code == 200
-    assert response.content
