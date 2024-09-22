@@ -9,8 +9,7 @@ from app.core.config.config import (
     KEYWORDS_HEADER,
     TOKEN_HEADER,
 )
-from app.core.data.dtos import ScrapeData
-from app.core.domain.metaclasses import ArticlesScraper, SimilarityFilter
+from app.core.domain.metaclasses import SimilarityFilter
 
 
 class Request:
@@ -76,15 +75,6 @@ class HeadersResponse:
 
     def json(self) -> dict:
         return {"any": "any"}
-
-
-class MockArticlesScraper(ArticlesScraper):
-
-    def set_subset(self, subset: DataFrame) -> None:
-        pass
-
-    def scrape(self, index: int) -> ScrapeData:
-        return ScrapeData(index, "any", "any", "any")
 
 
 class MockSimilarityFilter(SimilarityFilter):
