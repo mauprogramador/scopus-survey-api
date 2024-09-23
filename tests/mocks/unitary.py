@@ -11,6 +11,7 @@ ENTRIES = [entry_item(index) for index in range(7)]
 ONE_PAGE = pagination(ENTRIES[:1])
 TWO_PAGES = pagination(ENTRIES[:2])
 MORE_PAGES = pagination(ENTRIES)
+RESULTS = [ScopusResult(**art) for art in ENTRIES]
 EXCEEDED_RESPONSE = HeadersResponse()
 
 # adapters/gateway/abstract_retrieval_api

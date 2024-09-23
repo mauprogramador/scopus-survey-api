@@ -7,7 +7,6 @@ from app.core.common.messages import (
     SEARCH_API_ERROR,
     VALIDATE_ERROR,
 )
-from app.core.data.serializers import ScopusResult
 from app.core.domain.exceptions import ScopusAPIError
 from app.framework.exceptions import BadGateway, InternalError, NotFound
 from tests.mocks import common as data
@@ -19,21 +18,21 @@ def test_one_page(mocker: MockerFixture):
     mocker.patch(REQUEST, return_value=mock.ONE_PAGE[0])
     result = SEARCH_API.search_articles(data.SEARCH_PARAMS)
     assert result is not None and len(result) == 1
-    assert result[0] == ScopusResult(**mock.ENTRIES[0])
+    assert result[0] == mock.RESULTS[0]
 
 
 def test_two_pages(mocker: MockerFixture):
     mocker.patch(REQUEST, side_effect=mock.TWO_PAGES)
     result = SEARCH_API.search_articles(data.SEARCH_PARAMS)
     assert result is not None and len(result) == 2
-    assert result == [ScopusResult(**art) for art in mock.ENTRIES[:2]]
+    assert result == mock.RESULTS[:2]
 
 
 def test_more_pages(mocker: MockerFixture):
     mocker.patch(REQUEST, side_effect=mock.MORE_PAGES)
     result = SEARCH_API.search_articles(data.SEARCH_PARAMS)
     assert result is not None and len(result) == 7
-    assert result == [ScopusResult(**art) for art in mock.ENTRIES]
+    assert result == mock.RESULTS
 
 
 def test_quota_exceeded(mocker: MockerFixture):
