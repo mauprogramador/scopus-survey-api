@@ -1,6 +1,5 @@
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from json.decoder import JSONDecodeError
-from os import sched_getaffinity
 
 from pandas import DataFrame
 from tqdm.contrib.logging import logging_redirect_tqdm
@@ -11,16 +10,8 @@ from app.core.common.messages import (
     VALIDATE_ERROR,
 )
 from app.core.config.config import HANDLER, LOG
-from app.core.config.scopus import (
-    FURTHER_INFO_LINK,
-    QUOTA_WARNING,
-    get_scopus_headers,
-)
-from app.core.data.serializers import (
-    ScopusArticle,
-    ScopusHeaders,
-    ScopusResult,
-)
+from app.core.config.scopus import get_scopus_headers
+from app.core.data.serializers import ScopusAbstract, ScopusResult
 from app.core.domain.exceptions import InterruptError, ScopusAPIError
 from app.core.domain.metaclasses import AbstractAPI, HTTPRetry, URLBuilder
 from app.framework.exceptions import BadGateway
@@ -28,15 +19,14 @@ from app.framework.exceptions.http_exceptions import InternalError
 from app.utils.progress_bar import ProgressBar
 
 
-class AbstractRetrievalAPI(AbstractAPI):
-    """Retrieves Scopus articles preview pages via HTTP requests"""
+class ScopusAbstractRetrievalAPI(AbstractAPI):
+    """Retrieves Scopus abstracts via the Scopus Abstract Retrieval API"""
 
     __ONE_RESULT_INDEX = 0
-    __RATIO = 90
-    __PID = 0
+    __RATE_LIMIT = 9
 
     def __init__(self, http_helper: HTTPRetry, url_helper: URLBuilder) -> None:
-        """Retrieves Scopus articles preview pages via HTTP requests"""
+        """Retrieves Scopus abstracts via the Scopus Abstract Retrieval API"""
         self.__http_helper = http_helper
         self.__url_helper = url_helper
         self.__entry: list[ScopusResult] = None
@@ -70,14 +60,8 @@ class AbstractRetrievalAPI(AbstractAPI):
         abstract = self.__get_abstract_response(url)
         self.__abstracts.append(abstract.model_dump(by_alias=True))
 
-    def __get_abstract_response(self, url: str) -> ScopusArticle:
+    def __get_abstract_response(self, url: str) -> ScopusAbstract:
         response = self.__http_helper.request(url)
-
-        if response.status_code == 429:
-            headers = ScopusHeaders.model_validate(response.headers)
-            if headers.quota_exceeded >= self.__RATIO:
-                LOG.error(QUOTA_WARNING.format(headers.reset_datetime))
-                LOG.info(FURTHER_INFO_LINK)
 
         if response.status_code != 200:
             raise ScopusAPIError(response, ABSTRACT_API_ERROR)
@@ -86,7 +70,7 @@ class AbstractRetrievalAPI(AbstractAPI):
             raise BadGateway(ABSTRACT_API_ERROR)
 
         try:
-            return ScopusArticle.model_validate(response.json())
+            return ScopusAbstract.model_validate(response.json())
 
         except JSONDecodeError as error:
             raise InternalError(DECODING_ERROR) from error
@@ -95,8 +79,7 @@ class AbstractRetrievalAPI(AbstractAPI):
             raise InternalError(VALIDATE_ERROR) from error
 
     def __get_multiple_abstracts(self) -> None:
-        cpu_count = len(sched_getaffinity(self.__PID))
-        max_workers = min(self.__total, cpu_count)
+        max_workers = min(self.__total, self.__RATE_LIMIT)
 
         LOG.debug({"max_workers": max_workers})
         LOG.info("Getting multiple article abstracts")

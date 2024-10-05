@@ -1,4 +1,6 @@
-from app.adapters.gateway.abstract_retrieval_api import AbstractRetrievalAPI
+from app.adapters.gateway.scopus_abstract_retrieval_api import (
+    ScopusAbstractRetrievalAPI,
+)
 from app.adapters.gateway.scopus_search_api import ScopusSearchAPI
 from app.adapters.helpers.http_retry_helper import HTTPRetryHelper
 from app.adapters.helpers.url_builder_helper import URLBuilderHelper
@@ -15,7 +17,9 @@ def make_usecase() -> ScopusArticlesAggregator:
     articles_http_helper = HTTPRetryHelper(for_search=False)
 
     search_api = ScopusSearchAPI(scopus_http_helper, url_builder)
-    abstract_api = AbstractRetrievalAPI(articles_http_helper, url_builder)
+    abstract_api = ScopusAbstractRetrievalAPI(
+        articles_http_helper, url_builder
+    )
 
     similarity_filter = ArticlesSimilarityFilter()
 
