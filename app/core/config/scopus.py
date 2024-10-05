@@ -4,15 +4,17 @@ DATE_RANGE = f"{datetime.now().year - 3}-{datetime.now().year}"
 BOOLEAN_OPERATOR = " AND "
 NULL = "null"
 
-RESET_HEADER = "X-RateLimit-Reset"
-STATUS_HEADER = "X-ELS-Status"
 QUOTA_EXCEEDED = "QUOTA_EXCEEDED - Quota Exceeded"
+RATE_LIMIT_EXCEEDED = "RATE_LIMIT_EXCEEDED"
 
 AUTHORS_COLUMN = "Authors"
 TITLE_COLUMN = "Title"
 
 QUOTA_WARNING = (
-    "Your APIKey has exceeded the request quota. Please try again on {}"
+    "Your API Key has exceeded the request quota. Please try again on {}"
+)
+RATE_LIMIT_WARNING = (
+    "The throttling request rate exceeds per second the specified limits"
 )
 FURTHER_INFO_LINK = (
     "For further information visit "
@@ -26,6 +28,10 @@ SEARCH_API_URL = (
 )
 PAGINATION_URL = "{search_url}&start={page}"
 ABSTRACT_API_URL = "{abstract_url}?field={fields}"
+ARTICLE_PAGE_URL = (
+    "https://www.scopus.com/inward/record.uri"
+    "?partnerID=HzOxMe3b&scp={scopus_id}&origin=inward"
+)
 
 FIELDS = (
     "dc:identifier,eid,dc:title,dc:description,prism:publicationName,citedby"
@@ -38,7 +44,7 @@ API_ERRORS = {
     403: "User cannot be authenticated or entitlements cannot be validated",
     429: (
         "The requester has exceeded the quota "
-        "limits associated with their APIKey"
+        "limits associated with their API Key"
     ),
     500: "Scopus API internal processing error",
 }
