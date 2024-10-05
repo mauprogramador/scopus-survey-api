@@ -22,6 +22,8 @@ from app.framework.exceptions.http_exceptions import HTTPException
 class ExceptionHandler:
     """Handles exceptions and returns their JSON representation"""
 
+    __LIVERELOAD_ROUTE = "/livereload"
+
     @property
     def handlers(self) -> dict:
         return {
@@ -38,7 +40,8 @@ class ExceptionHandler:
     async def starlette_http_exception(
         self, request: Request, exc: StarletteHTTPException
     ) -> ExceptionJSON:
-        LOG.error(exc.detail)
+        if not request.url.path.count(self.__LIVERELOAD_ROUTE):
+            LOG.error(exc.detail)
         return ExceptionJSON(request, exc.status_code, exc.detail)
 
     async def fastapi_http_exception(

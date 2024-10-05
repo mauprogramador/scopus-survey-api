@@ -32,6 +32,7 @@ class AppLogger:
     __FMT = "%(asctime)s %(message)s"
     __POINT = "\033[35m\u2022\033[m"
     __DATEFMT = "%d-%m-%Y %H:%M:%S"
+    __NAME = "scopussearcherapi"
     __TABLE = str.maketrans(
         {
             "{": "\033[33m{\033[m",
@@ -45,20 +46,27 @@ class AppLogger:
     __FOLDER = ".logs"
 
     class CleanFormatter(Formatter):
-        ANSI_ESCAPE_PATTERN = regex_compile(r"\x1b\[[3|9][0-7]m|\x1b\[m")
+        __ANSI_ESCAPE_PATTERN = regex_compile(r"\x1b\[[3|9][0-7]m|\x1b\[m")
 
         def format(self, record) -> str:
             message = super().format(record)
-            return self.ANSI_ESCAPE_PATTERN.sub("", message)
+            return self.__ANSI_ESCAPE_PATTERN.sub("", message)
 
     class EndpointFilter(Filter):
         def filter(self, record: LogRecord) -> bool:
             return record.getMessage().find("/") == -1
 
+    class LiveReloadFilter(Filter):
+        __LIVERELOAD_ROUTE = "/livereload"
+
+        def filter(self, record: LogRecord) -> bool:
+            return record.getMessage().find(self.__LIVERELOAD_ROUTE) == -1
+
     def __init__(self, debug: bool, logging_file: bool) -> None:
         """Configure and customize application logging"""
+        self.__logger = getLogger(self.__NAME)
+        self.__logger.addFilter(self.LiveReloadFilter())
         self.__debug = debug
-        self.__logger = getLogger(__name__)
 
         getLogger(self.__UVICORN_LOGGER).addFilter(self.EndpointFilter())
         formater = {"fmt": self.__UVICORN_FMT, "datefmt": self.__DATEFMT}
