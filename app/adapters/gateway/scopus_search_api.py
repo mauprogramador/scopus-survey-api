@@ -1,6 +1,5 @@
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from json.decoder import JSONDecodeError
-from os import sched_getaffinity
 
 from tqdm.contrib.logging import logging_redirect_tqdm
 
@@ -11,13 +10,9 @@ from app.core.common.messages import (
     VALIDATE_ERROR,
 )
 from app.core.config.config import HANDLER, LOG
-from app.core.config.scopus import (
-    FURTHER_INFO_LINK,
-    QUOTA_WARNING,
-    get_scopus_headers,
-)
+from app.core.config.scopus import get_scopus_headers
 from app.core.data.dtos import SearchParams
-from app.core.data.serializers import ScopusHeaders, ScopusResult, ScopusSearch
+from app.core.data.serializers import ScopusResult, ScopusSearch
 from app.core.domain.exceptions import InterruptError, ScopusAPIError
 from app.core.domain.metaclasses import HTTPRetry, SearchAPI, URLBuilder
 from app.framework.exceptions import BadGateway, InternalError, NotFound
@@ -28,9 +23,8 @@ class ScopusSearchAPI(SearchAPI):
     """Search and retrieve articles via the Scopus Search API"""
 
     __PAGE_TWO_INDEX = 1
-    __RATIO = 90
+    __RATE_LIMIT = 9
     __START = 1
-    __PID = 0
 
     def __init__(
         self, http_helper: HTTPRetry, url_builder: URLBuilder
@@ -70,12 +64,6 @@ class ScopusSearchAPI(SearchAPI):
     def __get_search_response(self, url: str) -> ScopusSearch:
         response = self.__http_helper.request(url)
 
-        if response.status_code == 429:
-            headers = ScopusHeaders.model_validate(response.headers)
-            if headers.quota_exceeded >= self.__RATIO:
-                LOG.error(QUOTA_WARNING.format(headers.reset_datetime))
-                LOG.info(FURTHER_INFO_LINK)
-
         if response.status_code != 200:
             raise ScopusAPIError(response, SEARCH_API_ERROR)
 
@@ -103,9 +91,7 @@ class ScopusSearchAPI(SearchAPI):
 
     def __get_multiple_articles_by_pagination(self) -> None:
         pages_count = self.__scopus_response.pages_count
-
-        cpu_count = len(sched_getaffinity(self.__PID))
-        max_workers = min(pages_count, cpu_count)
+        max_workers = min(pages_count, self.__RATE_LIMIT)
 
         LOG.debug({"max_workers": max_workers})
         LOG.info("Getting multiple articles by pagination")
