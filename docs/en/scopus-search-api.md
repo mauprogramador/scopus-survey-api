@@ -1,26 +1,28 @@
 # Scopus Search API
 
-To search the articles and retrieve the information we need from them, we are using the [Scopus Search API](https://dev.elsevier.com/documentation/SCOPUSSearchAPI.wadl){:target="\_blank"}, which is one of the APIs made available by [Elsevier](https://www.elsevier.com/){:target="\_blank"}. It is a search interface associated with the Scopus cluster, which contains Scopus abstracts.
+We will use the [Scopus Search API]({{links.scSearchApi}}){:target="\_blank"}, provided by [Elsevier]({{links.elsevier}}){:target="\_blank"}, to search for articles using the `Keywords` and obtain their **Scopus IDs**. It is a search interface associated with the **Scopus** cluster containing **Scopus abstracts**.
 
-To use the **API** we need to make a request to the **API** URL and pass some parameters. Below are some details:
+!!! info
 
-## Base URL
+    A [Cluster](https://en.wikipedia.org/wiki/Computer_cluster){:target="\_blank"} is a group of servers/computers that act like a single system.
 
-The Scopus Search API base URL
+## API Resource URL
 
-```text
+We need to request the below {{abbr.url}} and pass some parameters to search.
+
+```url
 https://api.elsevier.com/content/search/scopus
 ```
 
 ## Query
 
-As our search is based on keywords, we are using a query parameter with [Scopus Search Tip](https://dev.elsevier.com/sc_search_tips.html){:target="\_blank"} to specify our search method, which is `TITLE-ABS-KEY`, a combined field that will search for keywords in abstracts, keywords, and titles of articles.
+Since our search is based on `Keywords`, we are using a query parameter with [Scopus Search Tip](https://dev.elsevier.com/sc_search_tips.html){:target="\_blank"} to specify our search method, which is `TITLE-ABS-KEY`, a combined field that will search for `Keywords` in the abstracts, keywords, and titles of the articles.
 
 ```text
 query=TITLE-ABS-KEY(keyword1 AND keyword2 AND ...)
 ```
 
-Example with **Python** and **Machine Learning** as `Keywords`:
+:material-information: Example with **Python** and **Machine Learning** as `Keywords`:
 
 ```text
 query=TITLE-ABS-KEY(Python+AND+Machine+Learning)
@@ -28,27 +30,27 @@ query=TITLE-ABS-KEY(Python+AND+Machine+Learning)
 
 ## Fields
 
-To return only the information that interests us from the articles, we can specify some [Scopus Fields](https://dev.elsevier.com/sc_search_views.html){:target="\_blank"} to filter the response.
+By specifying the [Scopus Fields](https://dev.elsevier.com/sc_search_views.html){:target="\_blank"}, we can filter the response and get only the **Scopus IDs** of the articles.
 
 ```text
 field=field1,field2,field3,...
 ```
 
-Example with all **fields** used:
+:material-information: Example with the **field** used:
 
 ```text
-field=prism:coverDate,prism:url,prism:publicationName,citedby-count,prism:volume,dc:title,prism:doi,dc:identifier
+field=dc:identifier
 ```
 
-## Date
+## Date Range
 
-The date range of interest for published articles.
+The **date range** of interest for published articles.
 
 ```text
 date=year1-year2
 ```
 
-Example with **date range** used, is automatically set to the **last three years**:
+:material-information: Example with **date range** used, is automatically set to the **last three years**:
 
 ```text
 date=2021-2024
@@ -56,76 +58,62 @@ date=2021-2024
 
 ## Request Headers
 
-The basic headers that we must include in the request. Remember to enter your `Api Key`.
+The headers included in the request. One of them specifies your `API Key`.
 
 ```json
-"X-ELS-APIKey": "Your Api Key",
-"User-Agent": "Mozilla/5.0",
+"Accept-Language": "pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7",
+"Accept-Charset": "ISO-8859-1,utf-8;q=0.7,*;q=0.3",
+"Accept-Encoding": "gzip, deflate, br",
+"Referer": "https://www.scopus.com/",
+"Origin": "https://www.scopus.com",
+"Content-Type": "application/json",
 "Accept": "application/json",
-"Content-Type": "application/json"
+"User-Agent": "Mozilla/5.0",
+"Connection": "keep-alive",
+"X-ELS-APIKey": "Your API Key"
 ```
 
-## URL
+## Final URL
 
-This is an example of a complete URL with all the parameters we requested.
+This is an example of a complete {{abbr.url}} with all the parameters we requested.
 
-```text
-https://api.elsevier.com/content/search/scopus?query=TITLE-ABS-KEY(Python+AND+Machine+Learning)&field=prism:coverDate,prism:url,prism:publicationName,citedby-count,prism:volume,dc:title,prism:doi,dc:identifier&date=2021-2024&suppressNavLinks=true
+```url
+https://api.elsevier.com/content/search/scopus?query=TITLE-ABS-KEY(Python+AND+Machine+Learning)&field=dc:identifier&date=2021-2024&suppressNavLinks=true
 ```
 
-The parameter **suppressNavLinks** is used to suppress the inclusion of top-level navigation links in the response payload.
-
-## Response Headers
-
-After the search is complete, the **API** will return some information about the availability of using your `Api Key` in the response [Headers](https://dev.elsevier.com/api_key_settings.html){:target="\_blank"}, so be sure to check it carefully, especially if you use the **API** for free as a part of an educational institution.
-
-```json
-"X-RateLimit-Limit": "Shows API request quota limit",
-"X-RateLimit-Remaining": "Shows API remaining quota",
-"X-RateLimit-Reset": "Date/Time in Epoch seconds when API quota resets"
-```
+The parameter `suppressNavLinks` is used to suppress the inclusion of top-level navigation links in the response payload.
 
 ## Response Body
 
-The `search-results` field informs some parameters of the search results, such as the total results (`totalResults`) and the terms searched (`Query`). The `entry` field lists the results of the article fields.
+Example of a response body from the **Scopus Search API**.
 
 ```json
 {
-    "search-results": {
-        "opensearch:totalResults": "1",
-        "opensearch:startIndex": "0",
-        "opensearch:itemsPerPage": "1",
-        "opensearch:Query": {
-            "@role": "request",
-            "@searchTerms": "TITLE-ABS-KEY(Images, Machine Learning, Artificial Intelligence, Computer Vision)",
-            "@startPage": "0"
-        },
-        "entry": [
-            {
-                "@_fa": "true",
-                "prism:url": "https://api.elsevier.com/content/abstract/scopus_id/85137995729",
-                "dc:identifier": "SCOPUS_ID:85137995729",
-                "dc:title": "Real Time Facial Emotions Detection of Multiple Faces Using Deep Learning",
-                "prism:publicationName": "Lecture Notes in Networks and Systems",
-                "prism:volume": "475",
-                "prism:coverDate": "2023-01-01",
-                "prism:doi": "10.1007/978-981-19-2840-6_29",
-                "citedby-count": "0"
-            }
-        ]
-    }
+  "search-results": {
+    "opensearch:totalResults": "1",
+    "opensearch:startIndex": "0",
+    "opensearch:itemsPerPage": "1",
+    "opensearch:Query": {
+      "@role": "request",
+      "@searchTerms": "TITLE-ABS-KEY(Images, Machine Learning, Artificial Intelligence, Computer Vision)",
+      "@startPage": "0"
+    },
+    "entry": [
+      {
+        "@_fa": "true",
+        "prism:url": "https://api.elsevier.com/content/abstract/scopus_id/85137995729",
+        "dc:identifier": "SCOPUS_ID:85137995729"
+      }
+    ]
+  }
 }
 ```
 
-## Reducing the Count
-
-If you want, you can reduce the number of articles that will be returned by going to `app/gateway/api_config.py` and adding the **count** parameter in the **API_URL** attribute of the **ApiConfig** class, which is a numeric value representing the maximum number of results to be returned for the search.
-
-```py title="api_config.py" linenums="1" hl_lines="5"
-class ApiConfig:
-    API_URL = (
-        'https://api.elsevier.com/content/search/scopus'
-        '?query=TITLE-ABS-KEY({query})&field={fields}&date={date}'
-        '&suppressNavLinks=true&count=14'
-    )
-```
+| **Field**                 | **Description**                                                             |
+| ------------------------- | --------------------------------------------------------------------------- |
+| `search-results`          | Informs some metadata of the search operation and the articles found        |
+| `opensearch:totalResults` | Total number of articles found                                              |
+| `opensearch:startIndex`   | Index of the pagination from which we start to retrieve a group of articles |
+| `opensearch:itemsPerPage` | Number of articles divided into each page, when there are many results      |
+| `opensearch:Query`        | Some metadata about the submitted boolean search queries                    |
+| `entry`                   | Lists of articles with the fields specified in the search                   |

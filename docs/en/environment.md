@@ -1,50 +1,16 @@
 # Environment
 
-It is necessary to prepare an environment with the correct dependencies to work properly with each area of the application. To do this, you need to install [Python v3.11](https://www.python.org/downloads/release/python-3117/){:target="\_blank"} with [Venv](https://docs.python.org/3/library/venv.html){:target="\_blank"} and [Pip](https://pip.pypa.io/en/stable/installation/){:target="\_blank"}, or install [Docker](https://www.docker.com/){:target="\_blank"}.
+## Configuration
 
-## Development Environment
-
-Create the [Python Virtual Environment - Venv](https://docs.python.org/3/library/venv.html){:target="\_blank"}, and install **all** necessary dependencies.
-
-### Poetry
-
-```zsh
-# Create Venv
-make venv
-
-# Activate Venv
-source .venv/bin/activate
-
-# Install all dependencies
-(.venv) make install
-```
-
-### Pip
-
-```zsh
-# Create Venv
-make venv
-
-# Activate Venv
-source .venv/bin/activate
-
-# Install all dependencies
-(.venv) pip3 install -r requirements/requirements-all.txt
-```
-
-!!! note
-
-    **After installing the dependencies you can [Get Started](./getting-started.md).**
-
-### PyProject Configuration
+| **Parameter**  | **Description**                                                                                                | **Default** |
+| -------------- | -------------------------------------------------------------------------------------------------------------- | ----------- |
+| `debug`        | Enable the debug logs output                                                                                   | `false`     |
+| `logging_file` | Enable saving log records to file. This will create a `.logs` folder                                           | `false`     |
+| `host`         | Bind the socket to this host address.<br>Set `0.0.0.0` to make the application available on your local network | `127.0.0.1` |
+| `port`         | Bind to a socket and run the application with this port                                                        | `8000`      |
+| `reload`       | Enables automatic reloading of the application when files are modified                                         | `false`     |
 
 You can configure some parameters for the application in the `pyproject.toml` file, such as:
-
-- **Debug:** Enable the debug logs output. Default: `false`.
-- **Logging_file:** Enable saving log records to a file in the logs folder when running the application. Default: `false`.
-- **Host:** Bind the socket to this host address. Set `0.0.0.0` to make the application available on your local network. Default: `127.0.0.1`.
-- **Port:** Bind to a socket and run the application with this port. Default: `8000`.
-- **Reload:** Enables automatic reloading of the application when files are modified. Default: `false`.
 
 ```toml title="pyproject.toml" linenums="81"
 [application]
@@ -55,81 +21,189 @@ port = 8000
 reload = false
 ```
 
-### Formatting, Linting and Audit Vulnerability
+You can also set [environment variables](https://en.wikipedia.org/wiki/Environment_variable){:target="\_blank"} to **override the default configuration** when running the application **locally** or in a **Docker container**.
+
+```.env title=".env" linenums="1"
+DEBUG=false
+
+LOGGING_FILE=false
+
+HOST=127.0.0.1
+
+PORT=8000
+
+RELOAD=false
+```
+
+## Python Environment
+
+It is necessary to prepare an environment with the correct dependencies to work properly with each area of the application. To do this, you need to install [Python3 `v3.11`]({{links.python}}/downloads/release/python-3117/){:target="\_blank"} with [Venv]({{links.pythonDocs}}/venv.html){:target="\_blank"} and [Pip](https://pip.pypa.io/en/stable/installation/){:target="\_blank"}.
+
+!!! info
+
+    This project uses [Poetry](https://python-poetry.org/){:target="\_blank"} to package and manage Python dependencies.
+
+!!! tip
+
+    You can also use [Docker](https://www.docker.com/){:target="\_blank"} to run the application.
+
+### Setup the [Virtual Environment]({{links.pythonDocs}}/venv.html){:target="\_blank"}
 
 ```zsh
-# Run Formatting
+# Setup Venv
+make setup
+
+# Activate Venv
+source .venv/bin/activate
+```
+
+## Dependencies
+
+### Complete Environment
+
+:material-arrow-down-bold-box: Install **all** dependencies.
+
+=== "with Poetry"
+
+    ```zsh
+    (.venv) poetry install
+    ```
+
+=== "with Pip"
+
+    ```zsh
+    (.venv) pip3 install -r requirements/requirements-all.txt
+    ```
+
+### Application Environment
+
+:material-arrow-down-bold-box: Install only the **application** dependencies.
+
+=== "with Poetry"
+
+    ```zsh
+    (.venv) make install
+    ```
+
+=== "with Pip"
+
+    ```zsh
+    (.venv) pip3 install -r requirements/requirements.txt
+    ```
+
+<br>
+:material-play-circle: Run the application
+
+=== "Locally"
+
+    ```zsh
+    # Run the application Locally
+    (.venv) make run
+    ```
+
+=== "Docker"
+
+    ```zsh
+    # Run the application in Docker Container
+    make docker
+    ```
+
+### Development Environment
+
+:material-arrow-down-bold-box: Install only the **development** dependencies.
+
+=== "with Poetry"
+
+    ```zsh
+    (.venv) poetry install --only dev
+    ```
+
+=== "with Pip"
+
+    ```zsh
+    (.venv) pip3 install -r requirements/requirements-dev.txt
+    ```
+
+<br>
+:material-play-circle: Perform [Formatting](https://code.visualstudio.com/docs/python/formatting){:target="\_blank"}, [Linting](https://code.visualstudio.com/docs/python/linting){:target="\_blank"}, and [Vulnerability Auditing](https://en.wikipedia.org/wiki/Code_audit){:target="\_blank"}.
+
+```zsh
+# run Formatting
 (.venv) make format
 
-# Run Linting
+# run Linting
 (.venv) make lint
 
-# Run Linting in Tests
+# run Linting in Tests
 (.venv) make lint-tests
 
-# Run Audit Vulnerability
+# run Audit Vulnerability
 (.venv) make audit
 ```
 
-## Application Environment
+### Tests Environment
 
-Create the [Python Virtual Environment - Venv](https://docs.python.org/3/library/venv.html){:target="\_blank"}, and install only the **application** dependencies.
+:material-arrow-down-bold-box: Install only the **tests** dependencies.
+
+=== "with Poetry"
+
+    ```zsh
+    (.venv) poetry install --only test
+    ```
+
+=== "with Pip"
+
+    ```zsh
+    (.venv) pip3 install -r requirements/requirements-test.txt
+    ```
+
+<br>
+:material-play-circle: Run the tests and check the tests coverage
+
+=== "Locally"
+
+    ```zsh
+    # Run Pytest in Venv
+    (.venv) make test
+
+    # Run Coverage in Venv
+    (.venv) make coverage
+    ```
+
+=== "Docker"
+
+    ```zsh
+    # Run Pytest in Docker
+    make test-docker
+
+    # Run Coverage in Docker
+    make coverage-docker
+    ```
+
+### Documentation Environment
+
+:material-arrow-down-bold-box: Install only the **documentation** dependencies.
+
+=== "with Poetry"
+
+    ```zsh
+    (.venv) poetry install --only docs
+    ```
+
+=== "with Pip"
+
+    ```zsh
+    (.venv) pip3 install -r requirements/requirements-docs.txt
+    ```
+
+<br>
+:material-play-circle: Run [Mkdocs](https://www.mkdocs.org/){:target="\_blank"} documentation.
+
+Run Locally and access the web page at <http://127.0.0.1:8000>{:target="\_blank"}.
 
 ```zsh
-# Create Venv
-make venv
-
-# Activate Venv
-source .venv/bin/activate
-
-# Install application dependencies
-(.venv) pip3 install -r requirements/requirements.txt
-```
-
-## Tests Environment
-
-Create the [Python Virtual Environment - Venv](https://docs.python.org/3/library/venv.html){:target="\_blank"}, and install only the **tests** dependencies.
-
-```zsh
-# Create Venv
-make venv
-
-# Activate Venv
-source .venv/bin/activate
-
-# Install tests dependencies
-(.venv) pip3 install -r requirements/requirements-test.txt
-```
-
-## Documentation Environment
-
-Create the [Python Virtual Environment - Venv](https://docs.python.org/3/library/venv.html){:target="\_blank"}, and install only the **documentation** dependencies.
-
-```zsh
-# Create Venv
-make venv
-
-# Activate Venv
-source .venv/bin/activate
-
-# Install documentation dependencies
-(.venv) pip3 install -r requirements/requirements-docs.txt
-```
-
-### Run [Mkdocs](https://www.mkdocs.org/){:target="\_blank"} documentation
-
-Run locally and access the web page: <http://127.0.0.1:8000>{:target="\_blank"}
-
-```zsh
-# Serve MkDocs in Venv
+# Serve MkDocs
 (.venv) make docs
-```
-
-Run in Docker and access the web page: <http://127.0.0.1:8001>{:target="\_blank"}
-
-```zsh
-# Serve MkDocs in Docker
-make docker-docs
 ```
 
 ## Requirements Files

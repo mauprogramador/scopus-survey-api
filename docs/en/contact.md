@@ -1,19 +1,24 @@
 # Contact
 
-## Hi, I'm **Maurício** 🖐️
+## Hey! :hand_splayed_tone4: I'm **Maurício**
+
+<figure markdown="span">
+  <img id="github-avatar" src="{{links.profile}}.png" alt="GitHub Profile Picture" title="@mauprogramador" width="80"/>
+  <figcaption><a href="{{links.profile}}" target="_blank" rel="author">@mauprogramador</a></figcaption>
+</figure>
+
+I am the Brazilian creator and owner of the **ScopusSearcherAPI** repository.<br>
+A **Backend** developer, with **Python** and **Javascript**, and also a **Web** developer.
 
 ---
 
-Brazilian Backend Developer, working with **Python** and **Javascript**.
-
-If you enjoy this **API**, please take a look at my GitHub profile and contact me:
-
-[![github](https://img.shields.io/badge/GitHub-010409?style=for-the-badge&logo=github&logoColor=white)](https://github.com/mauprogramador){:target="\_blank"}
-[![linkedin](https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/mauricio-silva-batista-0ba90322b/){:target="\_blank"}
-[![gmail](https://img.shields.io/badge/Gmail-EA4335?style=for-the-badge&logo=gmail&logoColor=white)](mailto:sir.silvabmauricio@gmail.com)
-[![twitter](https://img.shields.io/badge/Twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://twitter.com/Maurcio77788085){:target="\_blank"}
-[![instagram](https://img.shields.io/badge/Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white)](https://www.instagram.com/mauricio_cap_tl/){:target="\_blank"}
+You can connect with [me (Maurício / @mauprogramador)]({{links.profile}}){:target="\_blank"}, the author.<br>
+If you enjoy this **Web** {{abbr.api}}, please take a look at my **GitHub** profile, contact and follow me.
 
 ---
 
-Developed by [MauProgramador](https://github.com/mauprogramador){:target="\_blank"}
+[![Gmail]({{links.shields.gmail}})](mailto:sir.silvabmauricio@gmail.com)
+[![GitHub]({{links.shields.github}})]({{links.profile}}){:target="\_blank"}
+[![LinkedIn]({{links.shields.linkedin}})](https://www.linkedin.com/in/mauricio-silva-batista-0ba90322b/){:target="\_blank"}
+[![Twitter]({{links.shields.twitter}})](https://twitter.com/Maurcio77788085){:target="\_blank"}
+[![Instagram]({{links.shields.instagram}})](https://www.instagram.com/mauricio_cap_tl/){:target="\_blank"}
