@@ -1,8 +1,8 @@
 article {
-  box-shadow: 0.3125rem 0.3125rem 0.4375rem var(--black);
   background-color: var(--white);
   margin-right: auto;
   margin-left: auto;
+  height: 100%;
 }
 
 header {
@@ -85,8 +85,8 @@ main {
 section h2 {
   margin-bottom: 0.3125rem;
   color: var(--orange);
-  margin-top: 1.875rem;
   font-size: 1.125rem;
+  margin-top: 2.5rem;
   font-weight: 400;
 }
 section p {
@@ -149,7 +149,7 @@ input:-webkit-autofill {
 }
 
 #apikey-and-buttons {
-  margin-bottom: 1.25rem;
+  margin-bottom: 3rem;
   display: flex;
   gap: 3.125rem;
 }

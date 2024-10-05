@@ -56,6 +56,9 @@ abbr {
 abbr:hover {
   background-color: var(--yellow);
 }
+table abbr:hover {
+  color: var(--gray-50);
+}
 @media (pointer: coarse), (hover: none) {
   abbr:hover:after {
     background-color: var(--gray-2);
