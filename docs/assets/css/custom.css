@@ -1,0 +1,53 @@
+#github-avatar {
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0px 0px 5px #222;
+  border-radius: 50%;
+  cursor: pointer;
+}
+#github-avatar:hover {
+  transform: scale(1.1);
+}
+
+table tr td:not(:last-child) code {
+  word-break: keep-all;
+}
+
+.badge-class {
+  font-weight: bold !important;
+  color: #79C0FF !important;
+  background-color: #79C0FF1A !important;
+}
+.badge-class::after {
+  content: "class";
+}
+
+.badge-method {
+  font-weight: bold !important;
+  color: #D2A8FF !important;
+  background-color: #D2A8FF1A !important;
+}
+.badge-method::after {
+  content: "method";
+}
+
+.badge-property {
+  font-weight: bold !important;
+  color: #FFA657 !important;
+  background-color: #FFA6571A !important;
+}
+.badge-property::after {
+  content: "property";
+}
+
+.code-class {
+  font-weight: 400;
+  color: #66BB97;
+}
+.code-method {
+  font-weight: 400;
+  color: #DFCC60;
+}
+.code-property {
+  font-weight: 400;
+  color: #73b7f3;
+}
