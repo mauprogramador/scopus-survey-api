@@ -1,30 +1,90 @@
 # Respostas e Erros
 
-| Código de Status | Resposta/Erro         | Mensagem                                                 | Descrição                                                           |
-| :--------------: | --------------------- | -------------------------------------------------------- | ------------------------------------------------------------------- |
-|       200        | Lista de dicionários  | -                                                        | Artigos encontrados na Scopus Search API                            |
-|       200        | HTML template         | -                                                        | Página de visualização do artigo na Scopus                          |
-|       200        | HTML template         | -                                                        | Applicação Web                                                      |
-|       200        | Arquivo CSV           | -                                                        | Resultados da busca                                                 |
-|       400        | Bad Request           | Validation error in request/response                     | Erro de validação do FastAPI                                        |
-|       401        | Unauthorized          | Invalid access token                                     | Token de acesso não corresponde ao esperado                         |
-|       401        | Unauthorized          | No access token provided                                 | Nenhum Token de acesso fornecido                                    |
-|       403        | Forbidden             | Missing ApiKey required query parameter                  | Nenhuma ApiKey fornecida                                            |
-|       404        | Not Found             | None articles has been found                             | O total de resultados da pesquisa é zero                            |
-|       422        | Unprocessable Content | Missing keywords required query parameter                | Nenhuma palavra-chave fornecida ou todas as fornecidas estão vazias |
-|       422        | Unprocessable Content | There must be at least two keywords                      | Comprimento das Palavras-chave é menor que os dois exigidos         |
-|       422        | Unprocessable Content | Invalid keyword                                          | A Palavra-chave não corresponde ao padrão                           |
-|       422        | Scopus Api Error      | Invalid Response from Scopus API                         | **400**: Informações inválidas enviadas                             |
-|       422        | Scopus Api Error      | Invalid Response from Scopus API                         | **401**: Erro de autenticação: credenciais ausentes ou inválidas    |
-|       422        | Scopus Api Error      | Invalid Response from Scopus API                         | **403**: Erro de autenticação: o usuário não pode ser validado      |
-|       422        | Scopus Api Error      | Invalid Response from Scopus API                         | **429**: Limite da cota de solicitação da API key excedido          |
-|       422        | Scopus Api Error      | Invalid Response from Scopus API                         | **500**: Erro interno na resposta da Scopus API                     |
-|       424        | Failed Dependency     | Request Connection Timeout                               | Obteve uma exceção de tempo limite na requisição                    |
-|       424        | Failed Dependency     | Connection Error in Request                              | Obteve uma exceção de erro na connexão da requisição                |
-|       424        | Failed Dependency     | Unexpected Error from Request: ...                       | Obteve uma exceção não mapeada                                      |
-|       424        | Failed Dependency     | Unexpected status error ...                              | Obteve um código de status de erro do cliente na resposta           |
-|       424        | Failed Dependency     | Invalid Response from Scopus API                         | O conteúdo da resposta está vazio                                   |
-|       424        | Failed Dependency     | Invalid Response from Article Page                       | Ocorreu um erro ou o conteúdo da resposta está vazio                |
-|       500        | Internal Error        | Error in decoding response from Scopus API               | Erro na decodificação do JSON                                       |
-|       500        | Internal Error        | Pydantic validation error: ... validation errors for ... | Erro de validação do Pydantic                                       |
-|       500        | Internal Error        | Unexpected Error ...                                     | Qualquer exceção não mapeada                                        |
+!!! tip
+
+    Leia a documentação da {{abbr.mdn}} sobre o código de status de resposta {{abbr.http}} no [MDN Web Docs]({{links.mdnStatus}}){:target="\_blank"}.
+
+## Bem-sucedida
+
+### [`200 Ok`]({{links.mdnStatus}}/200){:target="\_blank"}
+
+| **:material-routes: {{abbr.routePt}}** | **Resposta**                                         |
+| -------------------------------------- | ---------------------------------------------------- |
+| `/scopus-searcher/api`                 | Renderiza a página web da {{abbr.api}} da aplicação  |
+| `/scopus-searcher/api/search-articles` | Baixa o arquivo {{abbr.csv}} dos artigos encontrados |
+| `/scopus-searcher/api/table`           | Renderiza a página web da tabela de artigos          |
+
+## Redirecionamento
+
+### [`307 Temporary Redirect`]({{links.mdnStatus}}/307){:target="\_blank"}
+
+Qualquer {{abbr.url}} de solicitação que não esteja na rota :material-routes: `/scopus-searcher/api` será redirecionada para ela. Redireciona qualquer solicitação que esteja tentando acessar uma rota não encontrada/inexistente.
+
+## Erro do cliente
+
+### [`401 Unauthorized`]({{links.mdnStatus}}/401){:target="\_blank"}
+
+| **:material-code-json: Mensagem da {{abbr.exceptionPt}}** | **Descrição**                                                         |
+| --------------------------------------------------------- | --------------------------------------------------------------------- |
+| `Missing required API Key query parameter`                | *Query parameter* obrigatório `API Key` não encontrado na solicitação |
+| `Missing required Access Token header`                    | Cabeçalho obrigatório `Access Token` não encontrado na solicitação    |
+| `Invalid Access Token`                                    | Cabeçalho `Access Token` tem um padrão inválido ou está incorreto     |
+
+### [`404 Not Found`]({{links.mdnStatus}}/404){:target="\_blank"}
+
+| **:material-code-json: Mensagem da {{abbr.exceptionPt}}** | **Descrição**                                                                                                 |
+| --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `No articles found`                                       | Nenhum artigo foi encontrado correspondendo às `Palavras-chave`.<br> O total de resultados da pesquisa é zero |
+
+### [`422 Unprocessable Content`]({{links.mdnStatus}}/422){:target="\_blank"}
+
+| **:material-code-json: Mensagem da {{abbr.exceptionPt}}** | **Descrição**                                                                                                                      |
+| --------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `Validation error in request <{...}>`                     | [Exceção FastAPI do Pydantic]({{links.fastapiValidationError}}){:target="\_blank"}.<br> A solicitação contém dados inválidos/erros |
+| `Missing required Keywords query parameter`               | *Query parameter* obrigatório `Palavras-chave` não encontrado na solicitação                                                       |
+| `There must be at least two keywords`                     | O número de `Palavras-chave` está abaixo do mínimo necessário.<br> Submeta pelo menos duas `Palavras-chave` para realizar a busca  |
+| `Invalid Keyword`                                         | A `Palavra-chave` submetida tem um padrão inválido                                                                                 |
+
+## Erro do Servidor
+
+### [`500 Internal Error`]({{links.mdnStatus}}/500){:target="\_blank"}
+
+| **:material-code-json: Mensagem da {{abbr.exceptionPt}}**    | **Descrição**                                                                                                                         |
+| ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------- |
+| `Validation error in response <{...}>`                       | [Exceção FastAPI do Pydantic]({{links.fastapiValidationError}}){:target="\_blank"}.<br> A solicitação contém dados inválidos/erros    |
+| `Pydantic validation error: ... validation errors for ...`   | [Exceção do Pydantic]({{links.validationError}}){:target="\_blank"}.<br> Há um erro nos dados que estão sendo validados               |
+| `Error in decoding response from Scopus API`                 | Exceção {{abbr.json}}.<br> O corpo da resposta não contém {{abbr.json}} válido para decodificar                                       |
+| `Error in validate response from Scopus API`                 | Erro de [serialização]({{links.serialization}}){:target="\_blank"}.<br> A resposta {{abbr.json}} contém campos não mapeados/inválidos |
+| `Unexpected application interruption`                        | Exceção de interrupção do [sinal de saída]({{links.pythonDocs}}/signal.html){:target="\_blank"} de desligamento                       |
+| `Unexpected error <...>`                                     | Qualquer exceção não mapeada/comum                                                                                                    |
+
+### [`502 Bad Gateway`]({{links.mdnStatus}}/502){:target="\_blank"}
+
+| **:material-code-json: Mensagem da {{abbr.exceptionPt}}** | **Descrição**                                                                |
+| --------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| `Invalid response from Scopus Search API`                 | A resposta da **Scopus Search API** não tem conteúdo/dados                   |
+| `Invalid response from Scopus Abstract Retrieval API`     | A resposta da **Scopus Abstract Retrieval API** não tem conteúdo/dados       |
+| `Connection error in request`                             | Ocorreu um erro de conexão ao tentar enviar a solicitação                    |
+| `Unexpected error from request <...>`                     | Ocorreu um erro/exceção não mapeado ao tentar enviar a solicitação           |
+| `Invalid response from Scopus Search API`                 | Exceção de erro de status {{abbr.http}} da **Scopus Search API**             |
+| `Invalid response from Scopus Abstract Retrieval API`     | Exceção de erro de status {{abbr.http}} da **Scopus Abstract Retrieval API** |
+
+### [`504 Gateway Timeout`]({{links.mdnStatus}}/504){:target="\_blank"}
+
+| **:material-code-json: Mensagem da {{abbr.exceptionPt}}** | **Descrição**                |
+| --------------------------------------------------------- | ---------------------------- |
+| `Request connection timeout`                              | A conexão solicitada expirou |
+
+## Scopus APIs Status Error
+
+!!! tip
+
+    Leia a documentação sobre **respostas** para a [Scopus Search API]({{links.scSearchApi}}){:target="\_blank"} e a [Scopus Abstract Retrieval API]({{links.scAbstractRetrievalApi}}){:target="\_blank"}.
+
+| **Código de Status** | **Descrição**                                                              |
+| :------------------: | -------------------------------------------------------------------------- |
+|       **400**        | Solicitação inválida. Informações enviadas inválidas                       |
+|       **401**        | O usuário não pode ser autenticado devido a credenciais ausentes/inválidas |
+|       **403**        | O usuário não pode ser autenticado ou os direitos não podem ser validados  |
+|       **429**        | O solicitante excedeu os limites da cota associados ao sua `API Key`       |
+|       **500**        | Erro de processamento interno da {{abbr.api}} **Scopus**                   |

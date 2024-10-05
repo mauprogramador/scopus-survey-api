@@ -1,27 +1,123 @@
-# Teste
+# Testes
 
 ## Testes automatizados
 
-Você pode [configurar](./environment.md#ambiente-dos-testes) e usar o [Vs Code para testar](https://code.visualstudio.com/docs/python/testing){:target="\_blank"} todos os scripts com [Pytest](https://docs.pytest.org/en/8.0.x/){:target="\_blank"} e o [Coverage](https://coverage.readthedocs.io/en/7.4.3/){:target="\_blank"}:
+**:material-test-tube: Unitários:** testa os componentes individuais (cada unidade) isoladamente.<br>
 
-```zsh
-# Execute o Pytest no Venv
-(.venv) make test
+**:material-test-tube: Integração:** testa a entidade combinada de diferentes unidades, módulos ou componentes.<br>
 
-# Execute o Pytest no Docker
-make test-docker
+**:material-shield-check: Cobertura:** cobertura de teste de **99%**.
 
-# Execute o Coverage no Venv
-(.venv) make coverage
-
-# Execute o Coverage no Docker
-make coverage-docker
+```text
+.
+├── tests
+│   ├── helpers/
+│   ├── integration/
+│   |   ├── adapters/
+|   |   |   ├── gateway/
+|   |   |   └── helpers/
+│   |   ├── core/
+|   |   |   └── usecases/
+│   |   └── framework/
+|   |       ├── dependencies/
+|   |       ├── exceptions/
+|   |       ├── fastapi/
+|   |       └── middleware/
+│   ├── mocks/
+│   └── unitary/
+│       ├── adapters/
+|       |   ├── gateway/
+|       |   ├── helpers/
+|       |   └── presenters/
+│       ├── core/
+|       |   ├── data/
+|       |   ├── domain/
+|       |   └── usecases/
+│       └── framework/
+|           ├── dependencies/
+|           └── exceptions/
 ```
 
-![Pytest](../images/pytest.png)
+Você pode configurar e usar o [VsCode para testar](https://code.visualstudio.com/docs/python/testing){:target="\_blank"} todos os scripts com [Pytest](https://docs.pytest.org/en/8.0.x/){:target="\_blank"} e o [Coverage](https://coverage.readthedocs.io/en/7.4.3/){:target="\_blank"}:
 
-## Testes de Requisição
+```json title="launch.json" linenums="1"
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Python Debugger: FastAPI",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "app.framework.fastapi.main",
+      "pythonArgs": ["-Xfrozen_modules=off"],
+      "jinja": true,
+      "console": "integratedTerminal",
+    }
+  ]
+}
+```
 
-Você pode instalar a [extensão Rest Client do Vs Code](https://github.com/Huachao/vscode-restclient){:target="\_blank"} para configurar e enviar requisições para testar a [Scopus Search API](https://dev.elsevier.com/documentation/SCOPUSSearchAPI.wadl){:target="\_blank"}. Acesse o arquivo `testes/client.http`, insira sua `Api Key` e envie as requisições:
+=== "Localmente com Poetry"
 
-![Rest Client](../images/rest-client.png)
+    ```zsh
+    # Configurar o Venv
+    make setup
+
+    # Ativar o Venv
+    source .venv/bin/activate
+
+    # Instalar as dependências de teste com Poetry
+    (.venv) poetry install --only test
+
+    # Execute o Pytest no Venv
+    (.venv) make test
+
+    # Execute o Coverage no Venv
+    (.venv) make coverage
+    ```
+
+=== "Localmente com Pip"
+
+    ```zsh
+    # Configurar o Venv
+    make setup
+
+    # Ativar o Venv
+    source .venv/bin/activate
+
+    # Instalar as dependências de teste com Pip
+    (.venv) pip3 install -r requirements/requirements-test.txt
+
+    # Execute o Pytest no Venv
+    (.venv) make test
+
+    # Execute o Coverage no Venv
+    (.venv) make coverage
+    ```
+
+=== "Docker"
+
+    ```zsh
+    # Execute a aplicação no Contêiner Docker
+    make docker
+
+    # Execute o Pytest no Docker
+    make test-docker
+
+    # Execute o Coverage no Docker
+    make coverage-docker
+    ```
+
+![Pytest](../assets/img/pytest.png "Pytest")
+
+## Testes de Requisição das APIs da Scopus
+
+Instale a [Extensão REST Client do VsCode](https://github.com/Huachao/vscode-restclient){:target="\_blank"} para configurar e enviar requisições para testar as **APIs da Scopus**.
+
+![REST Client](../assets/img/rest-client.png "REST Client")
+
+**1.** Acesse o arquivo `client.http`.<br>
+**2.** Insira sua `Chave da API` em `@apikey =`.<br>
+**3.** Clique em `Send Request`.
+
+![Client File](../assets/img/client-http.png "Client File")
