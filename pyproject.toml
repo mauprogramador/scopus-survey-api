@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "ScopusSearcherAPI"
 version = "2.0.0"
-description = "API for Bibliographic Survey of Scopus Articles"
+description = "Web API for Bibliographic Survey of Scopus Articles"
 authors = ["mauprogramador <sir.silvabmauricio@gmail.com>"]
 readme = "README.md"
 license = "MIT"
@@ -39,7 +39,6 @@ classifiers = [
 python = "^3.11"
 fastapi = {extras = ["all"], version = "^0.109.2"}
 pandas = "^2.2.0"
-bs4 = "^0.0.2"
 requests = "^2.31.0"
 pyarrow = "^15.0.0"
 setuptools = ">=65.5.1"
@@ -61,9 +60,7 @@ radon = {extras = ["toml"], version = "^6.0.1"}
 poetry-plugin-export = "^1.6.0"
 mypy = "^1.8.0"
 types-requests = "^2.31.0.20240218"
-types-beautifulsoup4 = "^4.12.0.20240106"
 pandas-stubs = "^2.2.0.240218"
-fuzzywuzzy-stubs = "^0.0.1"
 dill = "^0.3.8"
 types-toml = "^0.10.8.20240310"
 black = "^24.4.2"

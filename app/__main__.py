@@ -1,4 +1,3 @@
-import bs4  # pylint: disable=w0611 # noqa: F401
 import cachecontrol  # pylint: disable=w0611 # noqa: F401
 import dotenv  # pylint: disable=w0611 # noqa: F401
 import fastapi  # pylint: disable=w0611 # noqa: F401
@@ -15,5 +14,5 @@ from app.utils.access_qrcode import ShowAccessQRCode
 
 if __name__ == "__main__":
     LOG.info("Scopus Searcher API was initialized 🚀")
-    ShowAccessQRCode(TOML_ENV.port)
+    ShowAccessQRCode(TOML_ENV.host, TOML_ENV.port)
     uvicorn.run(**TOML_ENV.uvicorn)
