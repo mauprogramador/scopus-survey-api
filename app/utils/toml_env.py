@@ -58,6 +58,11 @@ class TomlEnv:
         return self.__author[start + 1 : end]
 
     @property
+    def repository(self) -> str:
+        value = self.__poetry.get("repository")
+        return self.__assure(value, str, NULL)
+
+    @property
     def documentation(self) -> str:
         value = self.__poetry.get("documentation")
         return self.__assure(value, str, NULL)

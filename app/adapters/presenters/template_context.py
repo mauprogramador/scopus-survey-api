@@ -28,6 +28,7 @@ class TemplateContextBuilder(TemplateContext):
         self.__data = {
             "request": request,
             "version": TOML_ENV.version,
+            "repository": TOML_ENV.repository,
             "swagger_url": "/",
         }
 
