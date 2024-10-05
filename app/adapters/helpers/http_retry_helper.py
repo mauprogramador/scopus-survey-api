@@ -24,7 +24,7 @@ class HTTPRetryHelper(HTTPRetry):
     __PREFIX = "https://"
     __RETRIES = 3
     __TIMEOUT = 15
-    __SLEEP_FACTOR = 0.7
+    __SLEEP_FACTOR = 1.5
     __STATUS_LIST = {400, 401, 403, 404, 429, 500}
     __RETRY = Retry(
         total=__RETRIES,
