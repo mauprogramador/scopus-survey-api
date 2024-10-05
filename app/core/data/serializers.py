@@ -8,26 +8,26 @@ from pydantic import (
     field_validator,
     model_validator,
 )
-from thefuzz.fuzz import partial_ratio  # type: ignore
+from requests import Response
 
 from app.core.config.scopus import (
+    ARTICLE_PAGE_URL,
     NULL,
     QUOTA_EXCEEDED,
-    RESET_HEADER,
-    STATUS_HEADER,
+    RATE_LIMIT_EXCEEDED,
 )
 
 
 class ScopusResult(BaseModel):
-    """Serializer for entry field item in JSON schema response"""
+    """Serializer for entry field item in response JSON schema"""
 
-    link: str = Field(default=NULL, alias="@_fa", exclude=True)
+    link: str = Field(default=NULL, alias="@_fa")
     url: str = Field(default=NULL, alias="prism:url")
     scopus_id: str = Field(alias="dc:identifier")
 
 
 class ScopusSearch(BaseModel):
-    """Serializer for Scopus Search API JSON schema response"""
+    """Serializer for Scopus Search API response JSON schema"""
 
     total_results: int = Field(validation_alias="opensearch:totalResults")
     items_per_page: int = Field(validation_alias="opensearch:itemsPerPage")
@@ -43,11 +43,22 @@ class ScopusSearch(BaseModel):
         return ceil(self.total_results / self.items_per_page)
 
 
-class ScopusHeaders(BaseModel):
-    """Serializer for Scopus Search API headers response"""
+class ScopusQuotaRateLimit(BaseModel):
+    """Serializer for Scopus APIs responses"""
 
-    reset: float = Field(validation_alias=RESET_HEADER)
-    status: str = Field(validation_alias=STATUS_HEADER)
+    reset: float = Field(default=NULL, validation_alias="X-RateLimit-Reset")
+    status: str = Field(default=NULL, validation_alias="X-ELS-Status")
+    error_code: str = Field(default=NULL, validation_alias="error-code")
+
+    @model_validator(mode="before")
+    @classmethod
+    def flatten_json(cls, response: Response) -> dict:
+        model_data: dict = {}
+        content: dict = response.json()
+        model_data.update(response.headers)
+        if content.get("error-response"):
+            model_data.update(content["error-response"])
+        return model_data
 
     @property
     def reset_datetime(self) -> str:
@@ -55,22 +66,25 @@ class ScopusHeaders(BaseModel):
         return epoch.strftime("%d-%m-%Y at %H:%M:%S")
 
     @property
-    def quota_exceeded(self) -> int:
-        return partial_ratio(QUOTA_EXCEEDED, self.status)
+    def quota_exceeded(self) -> bool:
+        return self.status == QUOTA_EXCEEDED
+
+    @property
+    def rate_limit_exceeded(self) -> bool:
+        return self.error_code == RATE_LIMIT_EXCEEDED
 
 
-class ScopusArticle(BaseModel):
-    """Serializer for Abstract Retrieval API JSON schema response"""
+class ScopusAbstract(BaseModel):
+    """Serializer for Scopus Abstract Retrieval API response JSON schema"""
 
+    url: str = Field(
+        default=NULL,
+        serialization_alias="Article Preview Page URL",
+    )
     scopus_id: str = Field(
         validation_alias="dc:identifier", serialization_alias="Scopus ID"
     )
-    url: str = Field(
-        default=NULL,
-        validation_alias="link ref=scopus",
-        serialization_alias="Article preview page URL",
-    )
-    eid: str = Field(default=NULL, serialization_alias="Electronic ID")
+    authors: str = Field(default=NULL, serialization_alias="Authors")
     title: str = Field(
         validation_alias="dc:title", serialization_alias="Title"
     )
@@ -79,30 +93,30 @@ class ScopusArticle(BaseModel):
         validation_alias="prism:publicationName",
         serialization_alias="Publication Name",
     )
-    volume: str = Field(
+    abstract: str = Field(
         default=NULL,
-        validation_alias="prism:volume",
-        serialization_alias="Volume",
+        validation_alias="dc:description",
+        serialization_alias="Abstract",
     )
     date: str = Field(
         default=NULL,
         validation_alias="prism:coverDate",
         serialization_alias="Date",
     )
+    eid: str = Field(default=NULL, serialization_alias="Electronic ID")
     doi: str = Field(
         default=NULL, validation_alias="prism:doi", serialization_alias="DOI"
+    )
+    volume: str = Field(
+        default=NULL,
+        validation_alias="prism:volume",
+        serialization_alias="Volume",
     )
     citations: str = Field(
         default=NULL,
         validation_alias="citedby-count",
         serialization_alias="Citations",
     )
-    abstract: str = Field(
-        default=NULL,
-        validation_alias="dc:description",
-        serialization_alias="Abstract",
-    )
-    authors: str = Field(default=NULL, serialization_alias="Authors")
 
     @model_validator(mode="before")
     @classmethod
@@ -114,7 +128,11 @@ class ScopusArticle(BaseModel):
             }
         else:
             authors_data = {"authors": response["authors"]["author"]}
+        identifier: str = response["coredata"]["dc:identifier"]
+        scopus_id: str = identifier.split(":")[1]
+        url = {"url": ARTICLE_PAGE_URL.format(scopus_id=scopus_id)}
         response["coredata"].update(authors_data)
+        response["coredata"].update(url)
         return response["coredata"]
 
     @field_validator("authors", mode="before")
