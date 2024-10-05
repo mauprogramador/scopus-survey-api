@@ -1,98 +1,126 @@
 site_name: Scopus Searcher API
-site_url: http://127.0.0.1:8000/scopus-searcher-api
-site_description: API for bibliographic survey of Scopus articles
+site_url: http://127.0.0.1:8001/scopus-searcher-api
+site_description: Web API for bibliographic survey of Scopus articles
 site_author: MauProgramador
+repo_name: mauprogramador/scopus-searcher-api
 repo_url: https://github.com/mauprogramador/scopus-searcher-api
-
+edit_uri: '/docs'
 theme:
   name: material
+  custom_dir: docs/overrides
   language: en
-  favicon: images/favicon.png
+  logo: assets/img/favicon.png
+  favicon: assets/img/favicon.png
+  icon:
+    repo: fontawesome/brands/github
   features:
-    - navigation.path
+    - navigation.instant.progress
     - navigation.indexes
+    - navigation.footer
+    - navigation.path
     - navigation.top
-    - toc.follow
-    - search.suggest
     - search.highlight
-    - content.code.copy
+    - search.suggest
     - content.code.select
+    - content.code.copy
+    - content.tooltips
+    - toc.follow
   palette:
-    - scheme: slate
-      primary: orange
-      accent: pink
-      toggle:
-        icon: material/brightness-4
-        name: Switch to light mode
-    - scheme: default
-      primary: orange
-      accent: red
-      toggle:
-        icon: material/brightness-7
-        name: Switch to dark mode
-
+  - media: '(prefers-color-scheme: dark)'
+    scheme: slate
+    primary: orange
+    accent: pink
+    toggle:
+      icon: material/lightbulb-outline
+      name: Switch to dark mode
+  - media: '(prefers-color-scheme: light)'
+    scheme: default
+    primary: orange
+    accent: pink
+    toggle:
+      icon: material/lightbulb
+      name: Switch to light mode
 nav:
-- Home: index.md
-- English:
-  - Scopus Searcher API: en/index.md
-  - Requirements: en/requirements.md
-  - Getting Started: en/getting-started.md
-  - Environment: en/environment.md
-  - Scopus Search API: en/scopus-search-api.md
-  - Web Scraping: en/web-scraping.md
-  - Data Survey: en/data-survey.md
-  - Responses and Errors: en/responses-and-errors.md
-  - Testing: en/testing.md
-  - Hooks and Actions: en/hooks-actions.md
-  - Technologies: en/technologies.md
-  - Contact: en/contact.md
-- Português:
-  - Scopus Searcher API: pt/index.md
-  - Requisitos: pt/requirements.md
-  - Primeiros Passos: pt/getting-started.md
-  - Ambiente: pt/environment.md
-  - Scopus Search API: pt/scopus-search-api.md
-  - Web Scraping: pt/web-scraping.md
-  - Levantamento de Dados: pt/data-survey.md
-  - Respostas e Erros: pt/responses-and-errors.md
-  - Teste: pt/testing.md
-  - Hooks e Actions: pt/hooks-actions.md
-  - Tecnologias: pt/technologies.md
-  - Contato: pt/contact.md
-
-extra:
-  generator: false
-  alternate:
-    - name: English
-      link: /scopus-searcher-api/en/
-      lang: en
-    - name: Português
-      link: /scopus-searcher-api/pt/
-      lang: pt-BR
-  social:
-    - icon: fontawesome/brands/github
-      link: https://github.com/mauprogramador
-    - icon: fontawesome/brands/linkedin
-      link: https://www.linkedin.com/in/mauricio-silva-batista-0ba90322b/
-    - icon: fontawesome/brands/twitter
-      link: https://twitter.com/Maurcio77788085
-    - icon: fontawesome/brands/instagram
-      link: https://www.instagram.com/mauricio_cap_tl/
-
+- index.md
+- requirements.md
+- getting-started.md
+- environment.md
+- scopus-search-api.md
+- scopus-abstract-retrieval-api.md
+- api-limit-and-fields-and-filter.md
+- responses-and-errors.md
+- testing.md
+- hooks-actions.md
+- reference.md
+- release-notes.md
+- technologies.md
+- license.md
+- glossary.md
+- contact.md
+plugins:
+- search:
+    lang:
+    - en
+    - pt
+- i18n:
+    docs_structure: folder
+    languages:
+    - locale: en
+      name: English (en-us)
+      build: true
+      default: true
+    - locale: pt
+      name: Português (pt-br)
+      build: true
+- markdownextradata:
+    data: docs/assets/data
 markdown_extensions:
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+      options:
+        custom_icons:
+          - overrides/.icons
   - pymdownx.highlight:
+      pygments_lang_class: true
       anchor_linenums: true
+  - pymdownx.tabbed:
+      alternate_style: true
   - pymdownx.inlinehilite
+  - pymdownx.superfences
   - pymdownx.snippets
   - pymdownx.details
-  - pymdownx.superfences
   - pymdownx.mark
   - pymdownx.keys
-  - footnotes
-  - admonition
-  - attr_list
   - md_in_html
+  - admonition
+  - footnotes
+  - attr_list
+  - def_list
   - tables
-
-copyright:
-  Copyright © 2024 GPL v2.0.0. All rights reserved. Developed by <a href="https://github.com/mauprogramador" target="_blank" rel="noopener">MauProgramador</a>
+  - abbr
+extra:
+  social:
+  - icon: fontawesome/brands/github
+    link: https://github.com/mauprogramador/scopus-searcher-api
+    name: Source code GitHub repository
+  - icon: ifms
+    link: https://www.ifms.edu.br/campi/campus-tres-lagoas
+    name: IFMS - Campus Três Lagoas
+  - icon: fontawesome/solid/envelope
+    link: mailto:sir.silvabmauricio@gmail.com
+    name: Developer email contact
+  - icon: fontawesome/solid/user
+    link: https://github.com/mauprogramador
+    name: Developer GitHub profile
+  - icon: fontawesome/brands/linkedin
+    link: https://www.linkedin.com/in/mauricio-silva-batista-0ba90322b/
+    name: Developer LinkedIn
+  - icon: fontawesome/brands/x-twitter
+    link: https://twitter.com/Maurcio77788085
+    name: Developer X / Twitter
+  - icon: fontawesome/brands/instagram
+    link: https://www.instagram.com/mauricio_cap_tl/
+    name: Developer Instagram
+extra_css:
+  - assets/css/custom.css
