@@ -6,7 +6,7 @@ from app.core.common.types import Keywords
 
 
 class SearchParams(BaseModel):
-    """Type validator for APIKey and Keywords search params"""
+    """Type validator for API Key and Keywords search params"""
 
     api_key: str = Field(min_length=32, max_length=32, pattern=API_KEY_PATTERN)
     keywords: Keywords = Field(min_length=2, max_length=4)

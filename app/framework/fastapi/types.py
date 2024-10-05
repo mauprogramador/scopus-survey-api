@@ -11,7 +11,7 @@ from app.framework.fastapi.config import OPENAPI_EXAMPLE
 
 TokenHeader: str = Header(
     alias=TOKEN_HEADER,
-    description="The Validation Access Token",
+    description="The validation Access Token",
     min_length=32,
     max_length=32,
     pattern=TOKEN_PATTERN,
@@ -20,7 +20,7 @@ TokenHeader: str = Header(
 
 APIKeyQuery: str = Query(
     alias=API_KEY_HEADER,
-    description="Your Scopus APIKey",
+    description="Your Scopus API Key",
     min_length=32,
     max_length=32,
     pattern=API_KEY_PATTERN,
