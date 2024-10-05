@@ -1,36 +1,21 @@
 @media only screen and (min-width: 1351px) {
   col[data-column="index"] {
-    width: 2%;
+    width: 4%;
   }
   col[data-column="url"] {
     width: 4%;
   }
-  col[data-column="scopus-id"] {
-    width: 6%;
-  }
   col[data-column="authors"] {
     width: 10%;
   }
+  col[data-column="title"] {
+    width: 56%;
+  }
   col[data-column="publication-name"] {
-    width: 10%;
-  }
-  col[data-column="abstract"] {
-    width: 9%;
-  }
-  col[data-column="volume"] {
-    width: 5%;
+    width: 20%;
   }
   col[data-column="date"] {
     width: 6%;
-  }
-  col[data-column="citations"] {
-    width: 5%;
-  }
-  col[data-column="doi"] {
-    width: 3%;
-  }
-  col[data-column="title"] {
-    width: 40%;
   }
   #search-link a {
     width: 30%;
@@ -47,15 +32,8 @@
   col[data-column="date"] {
     width: 9%;
   }
-  col[data-column="citations"] {
-    width: 8%;
-  }
   [data-column="url"],
-  [data-column="scopus-id"],
-  [data-column="publication-name"],
-  [data-column="abstract"],
-  [data-column="volume"],
-  [data-column="doi"] {
+  [data-column="publication-name"] {
     display: none;
   }
   #search-link a {
@@ -72,9 +50,6 @@
   }
   col[data-column="date"] {
     width: 12%;
-  }
-  [data-column="citations"] {
-    display: none;
   }
   #search-link a {
     width: 50%;
