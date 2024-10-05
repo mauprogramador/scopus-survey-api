@@ -10,12 +10,16 @@ from app.core.config.config import LOG
 class ShowAccessQRCode:
     """Displays a QR code for mobile access"""
 
-    __HOST = "10.253.155.219"
-    __BASE_URL = "http://{ip}:{port}/scopus-searcher/api"
     __QR = QRCode(version=1, error_correction=ERROR_CORRECT_L)
+    __BASE_URL = "http://{ip}:{port}/scopus-searcher/api"
+    __HOST = "10.253.155.219"
+    __OPEN_HOST = "0.0.0.0"
 
-    def __init__(self, port: int) -> None:
+    def __init__(self, host: str, port: int) -> None:
         """Displays a QR code for mobile access"""
+        if host != self.__OPEN_HOST:
+            return None
+
         with socket(AF_INET, SOCK_DGRAM) as session:
             session.connect((self.__HOST, 58162))
             ip = str(session.getsockname()[0])
@@ -30,3 +34,5 @@ class ShowAccessQRCode:
 
         LOG.info("Scan the QR Code below to access via mobile:")
         print(output_string.read())
+
+        return None
