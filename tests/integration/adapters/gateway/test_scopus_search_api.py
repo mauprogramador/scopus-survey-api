@@ -9,7 +9,6 @@ from app.core.common.messages import (
 )
 from app.core.config.scopus import API_ERRORS
 from app.framework.exceptions.http_exceptions import BaseExceptionResponse
-from tests.helpers.models import HeadersResponse
 from tests.helpers.utils import app_request
 from tests.mocks import common as data
 from tests.mocks import integration as mock
@@ -42,23 +41,10 @@ async def test_more_pages(mocker: MockerFixture):
 
 
 @pytest.mark.asyncio
-async def test_quota_exceeded(mocker: MockerFixture):
-    mocker.patch(REQUEST, return_value=EXCEEDED_RESPONSE)
-    response = await app_request(data.URL)
-    exc_response = BaseExceptionResponse.model_validate(response.json())
-
-    assert response.status_code == 502
-    assert not exc_response.success
-    assert exc_response.code == 502
-    assert exc_response.message == SEARCH_API_ERROR
-    assert exc_response.errors is not None
-
-
-@pytest.mark.asyncio
 @pytest.mark.parametrize("code", API_ERRORS.keys())
 async def test_scopus_api_error(mocker: MockerFixture, code: int):
     if code == 429:
-        mocker.patch(REQUEST, return_value=HeadersResponse())
+        mocker.patch(REQUEST, return_value=EXCEEDED_RESPONSE)
     else:
         mocker.patch(REQUEST, return_value=data.ERROR_RESPONSES[code])
     response = await app_request(data.URL)

@@ -6,7 +6,9 @@ from pydantic_core import InitErrorDetails, ValidationError
 from requests.sessions import Session
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
-from app.adapters.gateway.abstract_retrieval_api import AbstractRetrievalAPI
+from app.adapters.gateway.scopus_abstract_retrieval_api import (
+    ScopusAbstractRetrievalAPI,
+)
 from app.adapters.gateway.scopus_search_api import ScopusSearchAPI
 from app.adapters.helpers.http_retry_helper import HTTPRetryHelper
 from app.adapters.helpers.url_builder_helper import URLBuilderHelper
@@ -35,7 +37,7 @@ IS_SET = path(Event.is_set)
 READ_CSV = f"{TemplateContextBuilder.__module__}.read_csv"
 
 SEARCH_ARTICLES = path(ScopusSearchAPI.search_articles)
-RETRIEVE_ABSTRACT = path(AbstractRetrievalAPI.retrieve_abstracts)
+RETRIEVE_ABSTRACT = path(ScopusAbstractRetrievalAPI.retrieve_abstracts)
 
 FILTER = path(ArticlesSimilarityFilter.filter)
 GET_ARTICLES = path(ScopusArticlesAggregator.get_articles)
@@ -52,7 +54,7 @@ HTTP_HELPER = HTTPRetryHelper()
 URL_BUILDER = URLBuilderHelper()
 
 SEARCH_API = ScopusSearchAPI(HTTP_HELPER, URL_BUILDER)
-ABSTRACT_API = AbstractRetrievalAPI(HTTP_HELPER, URL_BUILDER)
+ABSTRACT_API = ScopusAbstractRetrievalAPI(HTTP_HELPER, URL_BUILDER)
 
 ARTICLES_AGGREGATOR = ScopusArticlesAggregator(
     SEARCH_API, ABSTRACT_API, MockSimilarityFilter()

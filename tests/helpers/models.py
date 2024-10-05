@@ -9,6 +9,7 @@ from app.core.config.config import (
     KEYWORDS_HEADER,
     TOKEN_HEADER,
 )
+from app.core.config.scopus import QUOTA_EXCEEDED, RATE_LIMIT_EXCEEDED
 from app.core.domain.metaclasses import SimilarityFilter
 
 
@@ -59,21 +60,19 @@ class Response:
 
 
 class HeadersResponse:
-    """Fake Quota Exceeded Response"""
+    """Fake Quota and Rate Limit Exceeded Response"""
 
-    __STATUS = "QUOTA_EXCEEDED - Quota Exceeded"
-
-    def __init__(
-        self, code: int = None, status: str = None, reset: int = None
-    ) -> None:
-        """Fake Quota Exceeded Response"""
-        self.status_code = code if code else 429
-        self.headers = {
-            "X-ELS-Status": status if status else self.__STATUS,
-            "X-RateLimit-Reset": reset if reset else 1724320891,
-        }
+    def __init__(self, for_rate: bool = None) -> None:
+        """Fake Quota and Rate Limit Exceeded Response"""
+        self.status_code = 429
+        self.__for_rate = for_rate
+        self.headers = {"X-RateLimit-Reset": "1724320891"}
+        if not self.__for_rate:
+            self.headers.update({"X-ELS-Status": QUOTA_EXCEEDED})
 
     def json(self) -> dict:
+        if self.__for_rate:
+            return {"error-response": {"error-code": RATE_LIMIT_EXCEEDED}}
         return {"any": "any"}
 
 

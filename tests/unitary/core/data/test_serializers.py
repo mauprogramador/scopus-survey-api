@@ -1,16 +1,16 @@
 from math import ceil
 
-from app.core.config.scopus import NULL, QUOTA_EXCEEDED
+from app.core.config.scopus import NULL, QUOTA_EXCEEDED, RATE_LIMIT_EXCEEDED
 from app.core.data.serializers import (
-    ScopusArticle,
-    ScopusHeaders,
+    ScopusAbstract,
+    ScopusQuotaRateLimit,
     ScopusResult,
     ScopusSearch,
 )
 from tests.helpers.models import HeadersResponse
 from tests.helpers.utils import abstract
 from tests.mocks.common import SCOPUS_API_JSON
-from tests.mocks.unitary import SCOPUS_ARTICLE_JSON, SCOPUS_RESULT_JSON
+from tests.mocks.unitary import SCOPUS_ABSTRACT_JSON, SCOPUS_RESULT_JSON
 
 
 def test_validate_scopus_result():
@@ -30,27 +30,35 @@ def test_validate_scopus_search():
     assert len(scopus_json.entry) == 0
 
 
-def test_validate_scopus_headers():
-    scopus_headers = ScopusHeaders.model_validate(HeadersResponse().headers)
+def test_validate_scopus_quota_exceeded():
+    status = ScopusQuotaRateLimit.model_validate(HeadersResponse())
 
-    assert scopus_headers.reset == 1724320891
-    assert QUOTA_EXCEEDED in scopus_headers.status
-    assert scopus_headers.reset_datetime
-    assert scopus_headers.quota_exceeded
+    assert status.reset == 1724320891 and status.status == QUOTA_EXCEEDED
+    assert status.reset_datetime and status.error_code == NULL
+    assert status.quota_exceeded and not status.rate_limit_exceeded
+
+
+def test_validate_scopus_rate_limit_exceeded():
+    status = ScopusQuotaRateLimit.model_validate(HeadersResponse(True))
+
+    assert status.reset == 1724320891 and status.status == NULL
+    assert status.reset_datetime and status.error_code == RATE_LIMIT_EXCEEDED
+    assert status.rate_limit_exceeded and not status.quota_exceeded
 
 
 def test_validate_scopus_article():
-    model = ScopusArticle.model_validate(abstract())
+    model = ScopusAbstract.model_validate(abstract())
 
     assert model.scopus_id == "SCOPUS_ID:any"
-    assert model.url == NULL and model.abstract == NULL
+    assert model.abstract == NULL
     value = model.eid + model.title + model.publication_name + model.volume
     value = value + model.date + model.doi + model.citations + model.authors
-    assert value.count("any") == 8
+    value = value + model.url
+    assert value.count("any") == 9
 
 
 def test_validate_scopus_article_complete_response():
-    model = ScopusArticle.model_validate(SCOPUS_ARTICLE_JSON)
+    model = ScopusAbstract.model_validate(SCOPUS_ABSTRACT_JSON)
 
     assert model.abstract == "any"
     assert model.authors == "any1, any2"

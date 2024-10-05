@@ -8,11 +8,11 @@ from app.core.common.messages import (
 )
 from app.core.config.scopus import API_ERRORS
 from app.framework.exceptions.http_exceptions import BaseExceptionResponse
-from tests.helpers.models import HeadersResponse
 from tests.helpers.utils import app_request, content_response
 from tests.mocks import common as data
 from tests.mocks import integration as mock
 from tests.mocks.fixtures import REQUEST
+from tests.mocks.unitary import EXCEEDED_RESPONSE
 
 
 @pytest.mark.asyncio
@@ -46,7 +46,7 @@ async def test_more_abstracts(mocker: MockerFixture):
 @pytest.mark.parametrize("code", API_ERRORS.keys())
 async def test_scopus_api_error(mocker: MockerFixture, code: int):
     if code == 429:
-        responses = [*mock.uni.ONE_PAGE, HeadersResponse()]
+        responses = [*mock.uni.ONE_PAGE, EXCEEDED_RESPONSE]
         mocker.patch(REQUEST, side_effect=responses)
     else:
         responses = [*mock.uni.ONE_PAGE, data.ERROR_RESPONSES[code]]

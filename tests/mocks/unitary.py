@@ -1,7 +1,7 @@
 from pandas import DataFrame
 from pydantic_core import PydanticUndefined
 
-from app.core.data.serializers import ScopusArticle, ScopusResult
+from app.core.data.serializers import ScopusAbstract, ScopusResult
 from tests.helpers.models import HeadersResponse, Request, Response
 from tests.helpers.utils import abstract, entry_item, pagination
 
@@ -21,7 +21,7 @@ ONE_ENTRY = [ScopusResult(**ENTRIES[0])]
 TWO_ENTRIES = [ScopusResult(**art) for art in ENTRIES[:2]]
 MORE_ENTRIES = [ScopusResult(**art) for art in ENTRIES]
 ARTICLES = DataFrame(
-    [ScopusArticle(**abstract()).model_dump(by_alias=True)] * 7
+    [ScopusAbstract(**abstract()).model_dump(by_alias=True)] * 7
 )
 
 # adapters/helpers/http_retry_helper
@@ -50,12 +50,12 @@ NO_SIMILAR_TITLES = DataFrame({"Authors": ["a", "a"], "Title": ["abc", "def"]})
 # core/usecases/scopus_articles_aggregator
 
 EXACT_DUPLICATES = DataFrame(
-    [ScopusArticle(**abstract()).model_dump(by_alias=True)] * 2
+    [ScopusAbstract(**abstract()).model_dump(by_alias=True)] * 2
 )
 SAME_TITLE_AND_AUTHORS = DataFrame(
     [
-        ScopusArticle(**abstract(doi="1")).model_dump(by_alias=True),
-        ScopusArticle(**abstract(doi="2")).model_dump(by_alias=True),
+        ScopusAbstract(**abstract(doi="1")).model_dump(by_alias=True),
+        ScopusAbstract(**abstract(doi="2")).model_dump(by_alias=True),
     ]
 )
 
@@ -66,7 +66,7 @@ SCOPUS_RESULT_JSON = {
     "prism:url": "any",
     "dc:identifier": "SCOPUS_ID:any",
 }
-SCOPUS_ARTICLE_JSON = {
+SCOPUS_ABSTRACT_JSON = {
     "abstracts-retrieval-response": {
         "coredata": {
             "dc:identifier": "SCOPUS_ID:any",
