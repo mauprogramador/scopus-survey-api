@@ -9,8 +9,21 @@ from app.framework.exceptions.http_exceptions import BaseExceptionResponse
 from app.framework.fastapi.lifespan import lifespan
 
 SEARCH_ROUTE_DESCRIPTION = """
-**Keywords:** must be separated by a comma and each keyword can contain
-letters, numbers, underscores and spaces, from 2 to 50 characters <br/><br/>
+### API Key
+You must obtain one to access the <a
+href="https://dev.elsevier.com/sc_apis.html" target="_blank" rel="external
+help" title="Scopus APIs">Scopus APIs</a> to search and retrieve the articles'
+information. It **has no spaces** and is **made up of 32 characters**
+containing **only letters and numbers**. It can be obtained by accessing the
+<a href="https://dev.elsevier.com/" target="_blank" rel="external help"
+title="Elsevier Developer Portal">Elsevier Portal</a> and registering.
+### Keywords
+Based on the theme or subject of your research, you must select a **minimum
+of two**, and a **maximum of four keywords**, which will be used as
+parameters and filters when searching for articles. Each keyword must be
+**written in English**, containing **only letters, numbers, spaces and
+underscores**, with a **minimum of 2** and a **maximum of 50 characters**.
+
 **Ex.:** Python, Machine Learning, Data Science, Neural Networks
 """
 
@@ -62,7 +75,7 @@ STATIC = {
 }
 
 DESCRIPTION = (
-    f"The value of the {TOKEN_HEADER} header will be "
+    f"The value of the `{TOKEN_HEADER}` header will be "
     "set automatically, you **should not** change it"
 )
 OPENAPI_EXAMPLE = {
