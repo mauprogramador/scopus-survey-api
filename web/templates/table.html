@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!-- cspell:ignoreRegExp >(.*?)< -->
-<html lang="pt-br">
+<html lang="en-us">
 
   <head>
     <meta charset="UTF-8" />
@@ -32,17 +32,17 @@
     <header>
       <div>
         <h1 id="api-name" translate="no">
-          Scopus Searcher API <span id="api-version">v{{ version }}</span>
+          Scopus Searcher API <span id="api-version">v{{version}}</span>
         </h1>
         <p id="api-description">
-          <span lang="en-us">API for bibliographic survey of Scopus articles</span>
-          <span lang="pt-br">API para levantamento bibliográfico de artigos da Scopus</span>
+          <span lang="en-us">Web API for bibliographic survey of Scopus articles</span>
+          <span lang="pt-br">API Web para levantamento bibliográfico de artigos da Scopus</span>
         </p>
       </div>
       <div id="language">
         <select id="language-select" title="Language selector" required>
-          <option value="pt-br" selected>Português (pt-br)</option>
-          <option value="en-us">English (en-us)</option>
+          <option value="en-us" selected>English (en-us)</option>
+          <option value="pt-br">Português (pt-br)</option>
         </select>
         <div id="language-flag" title="Language flag">
           <span lang="en-us">
@@ -58,26 +58,22 @@
       {% if content %}
       <table title="Articles found">
         <caption>
-          <span lang="en-us">A total of {{ content|length }} articles were found</span>
-          <span lang="pt-br">Foram encontrados um total de {{ content|length }} artigos</span>
+          <span lang="en-us">A total of <strong>{{content|length}}</strong> articles were found</span>
+          <span lang="pt-br">Foram encontrados um total de <strong>{{content|length}}</strong> artigos</span>
         </caption>
         <colgroup>
           <col span="1" data-column="index">
           <col span="1" data-column="url">
-          <col span="1" data-column="scopus-id">
           <col span="1" data-column="authors">
           <col span="1" data-column="title">
           <col span="1" data-column="publication-name">
-          <col span="1" data-column="abstract">
-          <col span="1" data-column="volume">
           <col span="1" data-column="date">
-          <col span="1" data-column="doi">
-          <col span="1" data-column="citations">
         </colgroup>
         <thead>
           <tr>
-            <th data-column="index">#</th>
-            <th data-column="url">
+            <th abbr="Index" scope="col" title="Index" data-column="index">#</th>
+            <th abbr="Scopus article preview page URL" scope="col" title="Scopus article preview page URL"
+              data-column="url">
               <span lang="en-us">
                 <abbr title="Uniform Resource Locator">URL</abbr>
               </span>
@@ -85,71 +81,47 @@
                 <abbr title="Localizador Uniforme de Recursos">URL</abbr>
               </span>
             </th>
-            <th data-column="scopus-id">
-              <span lang="en-us">Scopus ID</span>
-              <span lang="pt-br">ID Scopus</span>
-            </th>
-            <th data-column="authors">
+            <th abbr="Authors" scope="col" title="Authors" data-column="authors">
               <span lang="en-us">Authors</span>
               <span lang="pt-br">Autores</span>
             </th>
-            <th data-column="title">
+            <th abbr="Title" scope="col" title="Title" data-column="title">
               <span lang="en-us">Title</span>
               <span lang="pt-br">Título</span>
             </th>
-            <th data-column="publication-name">
+            <th abbr="Publication Name" scope="col" title="Publication Name" data-column="publication-name">
               <span lang="en-us">Publication Name</span>
               <span lang="pt-br">Nome de Publicação</span>
             </th>
-            <th data-column="abstract">
-              <span lang="en-us">Abstract</span>
-              <span lang="pt-br">Resumo</span>
-            </th>
-            <th data-column="volume">Volume</th>
-            <th data-column="date">
+            <th abbr="Date" scope="col" title="Date" data-column="date">
               <span lang="en-us">Date</span>
               <span lang="pt-br">Data</span>
-            </th>
-            <th data-column="doi">
-              <span lang="en-us">
-                <abbr title="Digital Object Identifier">DOI</abbr>
-              </span>
-              <span lang="pt-br">
-                <abbr title="Identificador de Objeto Digital">DOI</abbr>
-              </span>
-            </th>
-            <th data-column="citations">
-              <span lang="en-us">Citations</span>
-              <span lang="pt-br">Citações</span>
             </th>
           </tr>
         </thead>
         <tbody>
           {% for row in content %}
           <tr>
-            <td data-column="index">{{ loop.index }}</td>
-            <td data-column="url">{{ row[0] }}</td>
-            <td data-column="scopus-id">{{ row[1] }}</td>
-            <td data-column="authors">{{ row[2] }}</td>
-            <td data-column="title">{{ row[3] }}</td>
-            <td data-column="publication-name">{{ row[4] }}</td>
-            <td data-column="abstract">{{ row[5] }}</td>
-            <td data-column="volume">{{ row[6] }}</td>
-            <td data-column="date">{{ row[7] }}</td>
-            <td data-column="doi">{{ row[8] }}</td>
-            <td data-column="citations">{{ row[9] }}</td>
+            <td title="Index" data-column="index">{{loop.index}}</td>
+            <td title="Scopus article preview page URL" data-column="url">
+              <a class="link" href="{{row[0]}}" target="_blank" rel="external">{{row[0]}}</a>
+            </td>
+            <td title="Authors" data-column="authors">{{row[2]}}</td>
+            <td title="Title" data-column="title">{{row[3]}}</td>
+            <td title="Publication Name" data-column="publication-name">{{row[4]}}</td>
+            <td title="Date" data-column="date">{{row[7]}}</td>
           </tr>
           {% endfor %}
         </tbody>
         <tfoot>
           <tr>
             <td id="total-colspan">Total</td>
-            <td id="total-lenght">{{ content|length }}</td>
+            <td id="total-lenght">{{content|length}}</td>
           </tr>
         </tfoot>
       </table>
       <div id="search-link">
-        <a href="{{ web_app_url }}" rel="alternate prev" title="">
+        <a href="{{web_app_url}}" rel="alternate prev" title="">
           <img src="/svgs/search.svg" alt="Search icon" crossorigin="anonymous" loading="lazy" />
           <span lang="en-us">Do Another Search</span>
           <span lang="pt-br">Faça Outra Busca</span>
@@ -157,9 +129,9 @@
       </div>
       {% else %}
       <div class="no-file-message">
-        <span lang="en-us">No CSV file found. Try <a href="{{ web_app_url }}" class="link">searching the articles</a>
+        <span lang="en-us">No CSV file found. Try <a href="{{web_app_url}}" class="link">searching the articles</a>
           first.</span>
-        <span lang="pt-br">Nenhum arquivo CSV encontrado. Tente <a href="{{ web_app_url }}" class="link">pesquisar os
+        <span lang="pt-br">Nenhum arquivo CSV encontrado. Tente <a href="{{web_app_url}}" class="link">pesquisar os
             artigos</a> primeiro.</span>
       </div>
       {% endif %}
@@ -167,9 +139,9 @@
     <footer>
       <p translate="no">
         <span class="footer-item">ScopusSearcherAPI
-          <small>v{{ version }} <time datetime="2024-08">Ago 2024</time></small></span>
+          <small>v{{version}} <time datetime="2024-08">Ago 2024</time></small></span>
         <span class="footer-item">
-          <a class="footer-item link" href="https://github.com/mauprogramador/scopus-searcher-api/blob/master/LICENSE"
+          <a class="footer-item link" href="{{repository}}/blob/master/LICENSE"
             target="_blank" rel="license" title="MIT License">MIT License</a>
         </span>
         <span class="footer-item">Developed by
@@ -185,11 +157,11 @@
           title="IFMS - Campus Três Lagoas">
           <img src="/images/ifms.jpg" alt="IFMS logo" crossorigin="anonymous" loading="lazy" />
         </a>
-        <a href="https://github.com/mauprogramador/scopus-searcher-api" target="_blank" rel="external"
+        <a href="{{repository}}" target="_blank" rel="external"
           title="Source code GitHub repository">
           <img src="/svgs/github.svg" alt="GitHub logo" crossorigin="anonymous" loading="lazy" />
         </a>
-        <a href="{{ swagger_url }}" target="_blank" rel="alternate prev" title="API Swagger UI">
+        <a href="{{swagger_url}}" target="_blank" rel="alternate prev" title="API Swagger UI">
           <img src="/images/swagger.png" alt="Swagger logo" crossorigin="anonymous" loading="lazy" />
         </a>
       </nav>
