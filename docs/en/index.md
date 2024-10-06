@@ -32,7 +32,7 @@ Brazil - MS - Três Lagoas <br/>
 
 ## Overview
 
-This application was developed to facilitate the search for articles for research and the development of theoretical references. It will use both the [Scopus Search API]({{links.scSearchApi}}){:target="\_blank"} and the [Scopus Abstract Retrieval API]({{links.scAbstractRetrievalApi}}){:target="\_blank"}, maintained by the [Elsevier]({{links.elsevier}}){:target="\_blank"} company, to query the [Scopus](https://www.scopus.com/home.uri){:target="\_blank"} cluster, which is the largest database of abstracts and citations of quality research literature and sources on the web.
+This **Web** {{abbr.api}} was developed to facilitate the search for articles for research and the development of theoretical references. It will use both the [Scopus Search API]({{links.scSearchApi}}){:target="\_blank"} and the [Scopus Abstract Retrieval API]({{links.scAbstractRetrievalApi}}){:target="\_blank"}, maintained by the [Elsevier]({{links.elsevier}}){:target="\_blank"} company, to query the [Scopus](https://www.scopus.com/home.uri){:target="\_blank"} cluster, which is the largest database of abstracts and citations of quality research literature and sources on the web.
 
 To perform the search, you will need to have [Python3]({{links.python}}){:target="\_blank"} or [Docker](https://www.docker.com/){:target="\_blank"} installed to run the application, you will also need to generate an `API Key` and **select a maximum of four** `Keywords` based on the topic of your search. Start the application, go to the web page, submit your `API Key` and your `Keywords`, and if any articles are found, a {{abbr.csv}} file with the article information will be returned.
 

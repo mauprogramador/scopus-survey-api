@@ -32,7 +32,7 @@ Brasil - MS - Três Lagoas <br/>
 
 ## Visão geral
 
-Esta aplicação foi desenvolvida para facilitar a busca de artigos para pesquisa e desenvolvimento de referenciais teóricos. Ela usará ambos a [Scopus Search API]({{links.scSearchApi}}){:target="\_blank"} e a [Scopus Abstract Retrieval API]({{links.scAbstractRetrievalApi}}){:target="\_blank"}, mantidas pela empresa [Elsevier]({{links.elsevier}}){:target="\_blank"}, para consultar o cluster da [Scopus](https://www.scopus.com/home.uri){:target="\_blank"}, que é o maior banco de dados de resumos e citações de literatura e fontes de pesquisa de qualidade na web.
+Esta **Web** {{abbr.api}} foi desenvolvida para facilitar a busca de artigos para pesquisa e desenvolvimento de referenciais teóricos. Ela usará ambos a [Scopus Search API]({{links.scSearchApi}}){:target="\_blank"} e a [Scopus Abstract Retrieval API]({{links.scAbstractRetrievalApi}}){:target="\_blank"}, mantidas pela empresa [Elsevier]({{links.elsevier}}){:target="\_blank"}, para consultar o cluster da [Scopus](https://www.scopus.com/home.uri){:target="\_blank"}, que é o maior banco de dados de resumos e citações de literatura e fontes de pesquisa de qualidade na web.
 
 Para realizar a busca, você precisará ter o [Python3](https://www.python.org/){:target="\_blank"} ou [Docker](https://www.docker.com/){:target="\_blank"} instalado para executar a aplicação, você também precisará gerar uma `Chave da API` e **selecionar no máximo quatro** `Palavras-chave` com base no tema da sua pesquisa. Inicie a aplicação, vá para a página web, submeta sua `Chave da API` e suas `Palavras-chave`, e, caso algum artigo for encontrado, um arquivo {{abbr.csv}} contendo todas as informações dos artigos será retornado.
 
