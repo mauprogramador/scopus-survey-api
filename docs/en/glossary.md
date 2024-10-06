@@ -141,6 +141,10 @@ Documentation repository and learning resources on web standards and developer g
 
 : Data structure that stores metadata, files, and records of changes made to those files.
 
+**[`REST` :octicons-link-external-16:](https://en.wikipedia.org/wiki/REST){:target="\_blank"}**
+
+: Refers to software architecture design constraints that bring about efficient, reliable, and scalable distributed systems.
+
 **[`Retry` :octicons-link-external-16:](https://medium.com/@API4AI/best-practice-implementing-retry-logic-in-http-api-clients-0b5469c08ced){:target="\_blank"}**
 
 : Mechanism that automatically retries failed operations to recover from unexpected failures and continue functioning correctly.

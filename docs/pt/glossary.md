@@ -149,6 +149,10 @@ Repositório de documentação e recursos de aprendizado em padrões da web e gu
 
 : Estrutura de dados que armazena metadados, arquivos e registros de alterações feitas nesses arquivos.
 
+**[`REST` :octicons-link-external-16:](https://en.wikipedia.org/wiki/REST){:target="\_blank"}**
+
+: Refere-se às restrições de design de arquitetura de software que geram sistemas distribuídos eficientes, confiáveis e escaláveis.
+
 **[`Retry` :octicons-link-external-16:](https://medium.com/@API4AI/best-practice-implementing-retry-logic-in-http-api-clients-0b5469c08ced){:target="\_blank"}**
 
 : Mecanismo que automaticamente tenta novamente as operações com falha para se recuperar de falhas inesperadas e continuar funcionando corretamente.
