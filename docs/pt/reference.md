@@ -623,7 +623,7 @@ Sobre os **valores do Contexto**:
 | **Campo**     | **Descrição**                                                                                      |
 | ------------- | -------------------------------------------------------------------------------------------------- |
 | `request`     | O objeto [FastAPI `Request`]({{links.fastapiAdvanced}}/using-request-directly/){:target="\_blank"} |
-| `version`     | Versão da aplicação. **Exemplo:** `2.0.0`                                                          |
+| `version`     | Versão da aplicação. **Exemplo:** `3.0.0`                                                          |
 | `repository`  | {{abbr.url}} do repositório **GitHub** da aplicação                                                |
 | `swagger_url` | {{abbr.url}} da página do **Swagger**. **Default:** `/`                                            |
 | `token`       | **Token** da aplicação                                                                             |
@@ -645,7 +645,7 @@ Sobre os **valores do Contexto**:
 | **Campo**     | **Descrição**                                                                                      |
 | ------------- | -------------------------------------------------------------------------------------------------- |
 | `request`     | O objeto [FastAPI `Request`]({{links.fastapiAdvanced}}/using-request-directly/){:target="\_blank"} |
-| `version`     | Versão da aplicação. **Exemplo:** `2.0.0`                                                          |
+| `version`     | Versão da aplicação. **Exemplo:** `3.0.0`                                                          |
 | `repository`  | {{abbr.url}} do repositório **GitHub** da aplicação                                                |
 | `swagger_url` | {{abbr.url}} da página do **Swagger**. **Default:** `/`                                            |
 | `content`     | Conteúdo da tabela. Lista dos artigos encontrados ou `None` se não houver artigos                  |

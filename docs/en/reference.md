@@ -623,7 +623,7 @@ About the **Context values**:
 | **Field**     | **Description**                                                                                      |
 | ------------- | ---------------------------------------------------------------------------------------------------- |
 | `request`     | The [FastAPI `Request`]({{links.fastapiAdvanced}}/using-request-directly/){:target="\_blank"} object |
-| `version`     | Application version. **Example:** `2.0.0`                                                            |
+| `version`     | Application version. **Example:** `3.0.0`                                                            |
 | `repository`  | {{abbr.url}} of the application's **GitHub** repository                                              |
 | `swagger_url` | Swagger page {{abbr.url}}. **Default:** `/`                                                          |
 | `token`       | Application **Token**                                                                                |
@@ -645,7 +645,7 @@ About the **Context values**:
 | **Field**     | **Description**                                                                                      |
 | ------------- | ---------------------------------------------------------------------------------------------------- |
 | `request`     | The [FastAPI `Request`]({{links.fastapiAdvanced}}/using-request-directly/){:target="\_blank"} object |
-| `version`     | Application version. **Example:** `2.0.0`                                                            |
+| `version`     | Application version. **Example:** `3.0.0`                                                            |
 | `repository`  | {{abbr.url}} of the application's **GitHub** repository                                              |
 | `swagger_url` | Swagger page {{abbr.url}}. **Default:** `/`                                                          |
 | `content`     | Table content. List of the articles found or `None` if there are no articles                         |
