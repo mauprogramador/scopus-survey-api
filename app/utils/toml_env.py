@@ -16,7 +16,7 @@ class TomlEnv:
     __AUTHORS = ["null <null@null>"]
     __HOST = "127.0.0.1"
     __ENCODING = "utf-8"
-    __VERSION = "2.0.0"
+    __VERSION = "3.0.0"
     __PORT = 8000
 
     def __init__(self) -> None:

@@ -3,10 +3,10 @@
 """
 Scopus Searcher API
 
-API for Bibliographic Survey of Scopus Articles
+Web API for Bibliographic Survey of Scopus Articles
 """
 
-__version__ = "2.0.0"
+__version__ = "3.0.0"
 __license__ = "MIT"
 
 __author__ = "mauprogramador"
