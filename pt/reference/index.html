@@ -1,0 +1,2796 @@
+
+<!doctype html>
+<html lang="pt" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Web API for bibliographic survey of Scopus articles">
+      
+      
+        <meta name="author" content="mauprogramador">
+      
+      
+        <link rel="canonical" href="http://127.0.0.1:8001/scopus-survey-api/pt/reference/">
+      
+      
+        <link rel="prev" href="../hooks-actions/">
+      
+      
+        <link rel="next" href="../release-notes/">
+      
+      
+      <link rel="icon" href="../../assets/img/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.39">
+    
+    
+      
+        <title>Referência - ScopusSurveyAPI</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.8c3ca2c6.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/css/custom.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="orange" data-md-color-accent="pink">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#referencia" class="md-skip">
+          Ir para o conteúdo
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabeçalho">
+    <a href="../" title="ScopusSurveyAPI" class="md-header__button md-logo" aria-label="ScopusSurveyAPI" data-md-component="logo">
+      
+  <img src="../../assets/img/favicon.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            ScopusSurveyAPI
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Referência
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="orange" data-md-color-accent="pink"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 1 7 7c0 2.38-1.19 4.47-3 5.74V17a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 0 1 7-7M9 21v-1h6v1a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1m3-17a5 5 0 0 0-5 5c0 2.05 1.23 3.81 3 4.58V16h4v-2.42c1.77-.77 3-2.53 3-4.58a5 5 0 0 0-5-5"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="orange" data-md-color-accent="pink"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7M9 21a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-1H9z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+      <div class="md-header__option">
+  <div class="md-select">
+    
+    <button class="md-header__button md-icon" aria-label="Selecione o idioma">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"/></svg>
+    </button>
+    <div class="md-select__inner">
+      <ul class="md-select__list">
+        
+          <li class="md-select__item">
+            <a href="../../reference/" hreflang="en" class="md-select__link">
+              English (en-us)
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="./" hreflang="pt" class="md-select__link">
+              Português (pt-br)
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Buscar" placeholder="Buscar" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Pesquisar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpar" aria-label="Limpar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando a pesquisa
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/mauprogramador/scopus-survey-api" title="Ir ao repositório" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    mauprogramador/scopus-survey-api
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navegação" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../" title="ScopusSurveyAPI" class="md-nav__button md-logo" aria-label="ScopusSurveyAPI" data-md-component="logo">
+      
+  <img src="../../assets/img/favicon.png" alt="logo">
+
+    </a>
+    ScopusSurveyAPI
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/mauprogramador/scopus-survey-api" title="Ir ao repositório" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    mauprogramador/scopus-survey-api
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Scopus Survey API
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../requirements/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Requisitos
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Primeiros Passos
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../environment/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Ambiente
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../scopus-search-api/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Scopus Search API
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../scopus-abstract-retrieval-api/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Scopus Abstract Retrieval API
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api-limit-and-fields-and-filter/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Limite das APIs & Campos & Filtragem
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../responses-and-errors/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Respostas e Erros
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../testing/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Testes
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks-actions/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Hooks e Actions
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Referência
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Referência
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#searchparams" class="md-nav__link">
+    <span class="md-ellipsis">
+      SearchParams
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scopusresult" class="md-nav__link">
+    <span class="md-ellipsis">
+      ScopusResult
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scopussearch" class="md-nav__link">
+    <span class="md-ellipsis">
+      ScopusSearch
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ScopusSearch">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pages_count" class="md-nav__link">
+    <span class="md-ellipsis">
+      pages_count
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scopusquotaratelimit" class="md-nav__link">
+    <span class="md-ellipsis">
+      ScopusQuotaRateLimit
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ScopusQuotaRateLimit">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#reset_datetime" class="md-nav__link">
+    <span class="md-ellipsis">
+      reset_datetime
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#quota_exceeded" class="md-nav__link">
+    <span class="md-ellipsis">
+      quota_exceeded
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rate_limit_exceeded" class="md-nav__link">
+    <span class="md-ellipsis">
+      rate_limit_exceeded
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scopusabstract" class="md-nav__link">
+    <span class="md-ellipsis">
+      ScopusAbstract
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#accesstoken" class="md-nav__link">
+    <span class="md-ellipsis">
+      AccessToken
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#queryparams" class="md-nav__link">
+    <span class="md-ellipsis">
+      QueryParams
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="QueryParams">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#equals" class="md-nav__link">
+    <span class="md-ellipsis">
+      equals
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#to_dict" class="md-nav__link">
+    <span class="md-ellipsis">
+      to_dict
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#httpretryhelper" class="md-nav__link">
+    <span class="md-ellipsis">
+      HTTPRetryHelper
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="HTTPRetryHelper">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#mount_session" class="md-nav__link">
+    <span class="md-ellipsis">
+      mount_session
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#close" class="md-nav__link">
+    <span class="md-ellipsis">
+      close
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#request" class="md-nav__link">
+    <span class="md-ellipsis">
+      request
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#urlbuilderhelper" class="md-nav__link">
+    <span class="md-ellipsis">
+      URLBuilderHelper
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="URLBuilderHelper">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#get_search_url" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_search_url
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_pagination_url" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_pagination_url
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_article_page_url" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_article_page_url
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scopussearchapi" class="md-nav__link">
+    <span class="md-ellipsis">
+      ScopusSearchAPI
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ScopusSearchAPI">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#search_articles" class="md-nav__link">
+    <span class="md-ellipsis">
+      search_articles
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scopusabstractretrievalapi" class="md-nav__link">
+    <span class="md-ellipsis">
+      ScopusAbstractRetrievalAPI
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ScopusAbstractRetrievalAPI">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#retrieve_abstracts" class="md-nav__link">
+    <span class="md-ellipsis">
+      retrieve_abstracts
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#articlessimilarityfilter" class="md-nav__link">
+    <span class="md-ellipsis">
+      ArticlesSimilarityFilter
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ArticlesSimilarityFilter">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#filter" class="md-nav__link">
+    <span class="md-ellipsis">
+      filter
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scopusarticlesaggregator" class="md-nav__link">
+    <span class="md-ellipsis">
+      ScopusArticlesAggregator
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ScopusArticlesAggregator">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#get_articles" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_articles
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#templatecontextbuilder" class="md-nav__link">
+    <span class="md-ellipsis">
+      TemplateContextBuilder
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="TemplateContextBuilder">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#get_web_app_context" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_web_app_context
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_table_context" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_table_context
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exceptionjson" class="md-nav__link">
+    <span class="md-ellipsis">
+      ExceptionJSON
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#excecoes-e-erros" class="md-nav__link">
+    <span class="md-ellipsis">
+      Exceções e Erros
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#middlewares" class="md-nav__link">
+    <span class="md-ellipsis">
+      Middlewares
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#signalhandler" class="md-nav__link">
+    <span class="md-ellipsis">
+      SignalHandler
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../release-notes/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Release Notes
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../technologies/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Tecnologias
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../license/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Licença
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../glossary/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Glossário
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contact/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Contato
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#searchparams" class="md-nav__link">
+    <span class="md-ellipsis">
+      SearchParams
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scopusresult" class="md-nav__link">
+    <span class="md-ellipsis">
+      ScopusResult
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scopussearch" class="md-nav__link">
+    <span class="md-ellipsis">
+      ScopusSearch
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ScopusSearch">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pages_count" class="md-nav__link">
+    <span class="md-ellipsis">
+      pages_count
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scopusquotaratelimit" class="md-nav__link">
+    <span class="md-ellipsis">
+      ScopusQuotaRateLimit
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ScopusQuotaRateLimit">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#reset_datetime" class="md-nav__link">
+    <span class="md-ellipsis">
+      reset_datetime
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#quota_exceeded" class="md-nav__link">
+    <span class="md-ellipsis">
+      quota_exceeded
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rate_limit_exceeded" class="md-nav__link">
+    <span class="md-ellipsis">
+      rate_limit_exceeded
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scopusabstract" class="md-nav__link">
+    <span class="md-ellipsis">
+      ScopusAbstract
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#accesstoken" class="md-nav__link">
+    <span class="md-ellipsis">
+      AccessToken
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#queryparams" class="md-nav__link">
+    <span class="md-ellipsis">
+      QueryParams
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="QueryParams">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#equals" class="md-nav__link">
+    <span class="md-ellipsis">
+      equals
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#to_dict" class="md-nav__link">
+    <span class="md-ellipsis">
+      to_dict
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#httpretryhelper" class="md-nav__link">
+    <span class="md-ellipsis">
+      HTTPRetryHelper
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="HTTPRetryHelper">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#mount_session" class="md-nav__link">
+    <span class="md-ellipsis">
+      mount_session
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#close" class="md-nav__link">
+    <span class="md-ellipsis">
+      close
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#request" class="md-nav__link">
+    <span class="md-ellipsis">
+      request
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#urlbuilderhelper" class="md-nav__link">
+    <span class="md-ellipsis">
+      URLBuilderHelper
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="URLBuilderHelper">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#get_search_url" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_search_url
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_pagination_url" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_pagination_url
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_article_page_url" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_article_page_url
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scopussearchapi" class="md-nav__link">
+    <span class="md-ellipsis">
+      ScopusSearchAPI
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ScopusSearchAPI">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#search_articles" class="md-nav__link">
+    <span class="md-ellipsis">
+      search_articles
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scopusabstractretrievalapi" class="md-nav__link">
+    <span class="md-ellipsis">
+      ScopusAbstractRetrievalAPI
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ScopusAbstractRetrievalAPI">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#retrieve_abstracts" class="md-nav__link">
+    <span class="md-ellipsis">
+      retrieve_abstracts
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#articlessimilarityfilter" class="md-nav__link">
+    <span class="md-ellipsis">
+      ArticlesSimilarityFilter
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ArticlesSimilarityFilter">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#filter" class="md-nav__link">
+    <span class="md-ellipsis">
+      filter
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scopusarticlesaggregator" class="md-nav__link">
+    <span class="md-ellipsis">
+      ScopusArticlesAggregator
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ScopusArticlesAggregator">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#get_articles" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_articles
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#templatecontextbuilder" class="md-nav__link">
+    <span class="md-ellipsis">
+      TemplateContextBuilder
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="TemplateContextBuilder">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#get_web_app_context" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_web_app_context
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_table_context" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_table_context
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exceptionjson" class="md-nav__link">
+    <span class="md-ellipsis">
+      ExceptionJSON
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#excecoes-e-erros" class="md-nav__link">
+    <span class="md-ellipsis">
+      Exceções e Erros
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#middlewares" class="md-nav__link">
+    <span class="md-ellipsis">
+      Middlewares
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#signalhandler" class="md-nav__link">
+    <span class="md-ellipsis">
+      SignalHandler
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="referencia">Referência</h1>
+<p>Aqui está o código ou referência da <abbr title="Application Program Interface"><strong>API</strong></abbr> Web, fornecendo detalhes sobre as classes, métodos, parâmetros, atributos e cada parte deste aplicação.</p>
+<div class="language-text highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>.
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>├── app
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>│   ├── adapters/
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>│   |   ├── factories/
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>│   |   ├── gateway/
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>│   |   ├── helpers/
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>|   |   └── presenters/
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>│   ├── core/
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>│   |   ├── common/
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>│   |   ├── config/
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>│   |   ├── data/
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>│   |   ├── domain/
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>|   |   └── usecases/
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>│   ├── framework/
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>│   |   ├── dependencies/
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>│   |   ├── exceptions/
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>│   |   ├── fastapi/
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>│   |   └── middleware/
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>│   └── utils/
+</code></pre></div>
+<p><br></p>
+<!-- SearchParams -->
+
+<h2 id="searchparams"><code class="badge-class"></code> <span class="code-class">SearchParams</span></h2>
+<p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14 17H7v-2h7m3-2H7v-2h10m0-2H7V7h10m2-4H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2"/></svg></span> Validador de tipo para parâmetros de busca <strong>Chave da API</strong> e <strong>Palavras-chave</strong><br>
+<span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33s1.71.11 2.5.33c1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2"/></svg></span> <a href="https://github.com/mauprogramador/scopus-survey-api/tree/master/app/core/common/types.py" target="_blank"><code>código fonte</code></a>
+<span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 16.5c0 .38-.21.71-.53.88l-7.9 4.44c-.16.12-.36.18-.57.18s-.41-.06-.57-.18l-7.9-4.44A.99.99 0 0 1 3 16.5v-9c0-.38.21-.71.53-.88l7.9-4.44c.16-.12.36-.18.57-.18s.41.06.57.18l7.9 4.44c.32.17.53.5.53.88zM12 4.15l-1.89 1.07L16 8.61l1.96-1.11zM6.04 7.5 12 10.85l1.96-1.1-5.88-3.4zM5 15.91l6 3.38v-6.71L5 9.21zm14 0v-6.7l-6 3.37v6.71z"/></svg></span> <code>core.common</code><br>
+<span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 9h5.5L13 3.5zM6 2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4c0-1.11.89-2 2-2m.12 13.5 3.74 3.74 1.42-1.41-2.33-2.33 2.33-2.33-1.42-1.41zm11.16 0-3.74-3.74-1.42 1.41 2.33 2.33-2.33 2.33 1.42 1.41z"/></svg></span> <code>app/core/common/types.py</code><br></p>
+<div class="language-py highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">class</span> <span class="nc">SearchParams</span><span class="p">(</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>    <span class="n">api_key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(),</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>    <span class="n">keywords</span><span class="p">:</span> <span class="n">Keywords</span> <span class="o">=</span> <span class="n">Field</span><span class="p">()</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="p">)</span>
+</code></pre></div>
+<p>Um <strong>validador</strong> de modelo criado usando o <a href="https://docs.pydantic.dev/latest/api/base_model" target="_blank">Pydantic <code>BaseModel</code></a> para os parâmetros <strong>Chave da API</strong> e <strong>Palavras-chave</strong> usados na busca da <strong>Scopus Search API</strong>, validando sua tipagem e valores usando a função <a href="https://docs.pydantic.dev/latest/concepts/fields" target="_blank">Pydantic <code>Field()</code></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Leia mais sobre as regras e especificações da <strong>Chave da API</strong> e <strong>Palavras-chave</strong> na <a href="../requirements/">seção de requisitos</a>.</p>
+</div>
+<table>
+<thead>
+<tr>
+<th><strong>Parâmetro</strong></th>
+<th><strong>Tipo</strong></th>
+<th><strong>Descrição</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>api_key</code></td>
+<td><code>str</code></td>
+<td>Parâmetro de busca <strong>Chave da API</strong></td>
+</tr>
+<tr>
+<td><code>keywords</code></td>
+<td><code>Keywords</code></td>
+<td>Parâmetro de busca <strong>Palavras-chave</strong></td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<!-- ScopusResult -->
+
+<h2 id="scopusresult"><code class="badge-class"></code> <span class="code-class">ScopusResult</span></h2>
+<p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14 17H7v-2h7m3-2H7v-2h10m0-2H7V7h10m2-4H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2"/></svg></span> Serializador para o item do campo <em>entry</em> no esquema <abbr title="JavaScript Object Notation"><strong>JSON</strong></abbr> da resposta<br>
+<span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33s1.71.11 2.5.33c1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2"/></svg></span> <a href="https://github.com/mauprogramador/scopus-survey-api/tree/master/app/core/data/serializers.py" target="_blank"><code>código fonte</code></a>
+<span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 16.5c0 .38-.21.71-.53.88l-7.9 4.44c-.16.12-.36.18-.57.18s-.41-.06-.57-.18l-7.9-4.44A.99.99 0 0 1 3 16.5v-9c0-.38.21-.71.53-.88l7.9-4.44c.16-.12.36-.18.57-.18s.41.06.57.18l7.9 4.44c.32.17.53.5.53.88zM12 4.15l-1.89 1.07L16 8.61l1.96-1.11zM6.04 7.5 12 10.85l1.96-1.1-5.88-3.4zM5 15.91l6 3.38v-6.71L5 9.21zm14 0v-6.7l-6 3.37v6.71z"/></svg></span> <code>core.data</code><br>
+<span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 9h5.5L13 3.5zM6 2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4c0-1.11.89-2 2-2m.12 13.5 3.74 3.74 1.42-1.41-2.33-2.33 2.33-2.33-1.42-1.41zm11.16 0-3.74-3.74-1.42 1.41 2.33 2.33-2.33 2.33 1.42 1.41z"/></svg></span> <code>app/core/data/serializers.py</code><br></p>
+<div class="language-py highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">class</span> <span class="nc">ScopusResult</span><span class="p">(</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>    <span class="n">link</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(),</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>    <span class="n">url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">()</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>    <span class="n">scopus_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">()</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="p">)</span>
+</code></pre></div>
+<p>Um <strong>serializador</strong> de modelo criado usando o <a href="https://docs.pydantic.dev/latest/api/base_model" target="_blank">Pydantic <code>BaseModel</code></a> para os itens da entrada na resposta da busca da <strong>Scopus Search API</strong>, convertendo-os para o código usando a função <a href="https://docs.pydantic.dev/latest/concepts/fields" target="_blank">Pydantic <code>Field()</code></a>.</p>
+<table>
+<thead>
+<tr>
+<th><strong>Parâmetro</strong></th>
+<th><strong>Tipo</strong></th>
+<th><strong>Campo</strong> <abbr title="JavaScript Object Notation"><strong>JSON</strong></abbr></th>
+<th><strong>Descrição</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>link</code></td>
+<td><code>str</code></td>
+<td><code>@_fa</code></td>
+<td>Links de navegação no nível superior</td>
+</tr>
+<tr>
+<td><code>url</code></td>
+<td><code>str</code></td>
+<td><code>prism:url</code></td>
+<td><abbr title="Uniform Resource Identifier"><strong>URI</strong></abbr> da <strong>Content Abstract Retrieval API</strong></td>
+</tr>
+<tr>
+<td><code>scopus_id</code></td>
+<td><code>str</code></td>
+<td><code>dc:identifier</code></td>
+<td><strong>ID Scopus</strong> do artigo</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<!-- ScopusSearch -->
+
+<h2 id="scopussearch"><code class="badge-class"></code> <span class="code-class">ScopusSearch</span></h2>
+<p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14 17H7v-2h7m3-2H7v-2h10m0-2H7V7h10m2-4H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2"/></svg></span> Serializador para o esquema <abbr title="JavaScript Object Notation"><strong>JSON</strong></abbr> da resposta da <strong>Scopus Search API</strong><br>
+<span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33s1.71.11 2.5.33c1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2"/></svg></span> <a href="https://github.com/mauprogramador/scopus-survey-api/tree/master/app/core/data/serializers.py" target="_blank"><code>código fonte</code></a>
+<span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 16.5c0 .38-.21.71-.53.88l-7.9 4.44c-.16.12-.36.18-.57.18s-.41-.06-.57-.18l-7.9-4.44A.99.99 0 0 1 3 16.5v-9c0-.38.21-.71.53-.88l7.9-4.44c.16-.12.36-.18.57-.18s.41.06.57.18l7.9 4.44c.32.17.53.5.53.88zM12 4.15l-1.89 1.07L16 8.61l1.96-1.11zM6.04 7.5 12 10.85l1.96-1.1-5.88-3.4zM5 15.91l6 3.38v-6.71L5 9.21zm14 0v-6.7l-6 3.37v6.71z"/></svg></span> <code>core.data</code><br>
+<span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 9h5.5L13 3.5zM6 2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4c0-1.11.89-2 2-2m.12 13.5 3.74 3.74 1.42-1.41-2.33-2.33 2.33-2.33-1.42-1.41zm11.16 0-3.74-3.74-1.42 1.41 2.33 2.33-2.33 2.33 1.42 1.41z"/></svg></span> <code>app/core/data/serializers.py</code><br></p>
+<div class="language-py highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">class</span> <span class="nc">ScopusSearch</span><span class="p">(</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>    <span class="n">total_results</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(),</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>    <span class="n">items_per_page</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(),</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>    <span class="n">entry</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">ScopusResult</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">()</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="p">)</span>
+</code></pre></div>
+<p>Um <strong>serializador</strong> de modelo construído usando o <a href="https://docs.pydantic.dev/latest/api/base_model" target="_blank">Pydantic <code>BaseModel</code></a> para a resposta <abbr title="JavaScript Object Notation"><strong>JSON</strong></abbr> da <strong>Scopus Search API</strong>, convertendo-a para o código usando a função <a href="https://docs.pydantic.dev/latest/concepts/fields" target="_blank">Pydantic <code>Field()</code></a>.</p>
+<p>Antes da <strong>validação</strong>, ele acessará o campo <abbr title="JavaScript Object Notation"><strong>JSON</strong></abbr> <code>search-results</code> para achatar a hierarquia e obter os dados reais.</p>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>Achatamento (<em>Flattening</em>) é o processo de transformar uma estrutura de dados <abbr title="JavaScript Object Notation"><strong>JSON</strong></abbr> aninhada em um único nível de pares chave-valor.</p>
+</div>
+<table>
+<thead>
+<tr>
+<th><strong>Parâmetro</strong></th>
+<th><strong>Tipo</strong></th>
+<th><strong>Campo</strong> <abbr title="JavaScript Object Notation"><strong>JSON</strong></abbr></th>
+<th><strong>Descrição</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>total_results</code></td>
+<td><code>int</code></td>
+<td><code>opensearch:totalResults</code></td>
+<td>Número total de artigos encontrados</td>
+</tr>
+<tr>
+<td><code>items_per_page</code></td>
+<td><code>int</code></td>
+<td><code>opensearch:itemsPerPage</code></td>
+<td>Número de artigos divididos em cada página</td>
+</tr>
+<tr>
+<td><code>entry</code></td>
+<td><code>list[ScopusResult]</code></td>
+<td><code>entry</code></td>
+<td>Listas de dados dos artigos com os campos especificados na busca</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Leia mais sobre o <a href="../scopus-search-api/#response-body">corpo <abbr title="JavaScript Object Notation"><strong>JSON</strong></abbr> retornado e seus campos</a>.</p>
+</div>
+<h3 id="pages_count"><code class="badge-property"></code> <span class="code-property">pages_count</span></h3>
+<div class="language-py highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="k">def</span> <span class="nf">pages_count</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span>
+</code></pre></div>
+<p>Calcula o <strong>número de páginas</strong> dividindo o <strong>total de resultados</strong> pelo número de <strong>itens por página</strong>, retornando o <strong>menor <code>int</code></strong> usando a função <a href="https://docs.python.org/3/library/math.html#math.ceil" target="_blank">math <code>ceil()</code></a>.</p>
+<p><br></p>
+<!-- ScopusQuotaRateLimit -->
+
+<h2 id="scopusquotaratelimit"><code class="badge-class"></code> <span class="code-class">ScopusQuotaRateLimit</span></h2>
+<p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14 17H7v-2h7m3-2H7v-2h10m0-2H7V7h10m2-4H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2"/></svg></span> Serializador para as respostas das <strong>APIs da Scopus</strong><br>
+<span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33s1.71.11 2.5.33c1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2"/></svg></span> <a href="https://github.com/mauprogramador/scopus-survey-api/tree/master/app/core/data/serializers.py" target="_blank"><code>código fonte</code></a>
+<span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 16.5c0 .38-.21.71-.53.88l-7.9 4.44c-.16.12-.36.18-.57.18s-.41-.06-.57-.18l-7.9-4.44A.99.99 0 0 1 3 16.5v-9c0-.38.21-.71.53-.88l7.9-4.44c.16-.12.36-.18.57-.18s.41.06.57.18l7.9 4.44c.32.17.53.5.53.88zM12 4.15l-1.89 1.07L16 8.61l1.96-1.11zM6.04 7.5 12 10.85l1.96-1.1-5.88-3.4zM5 15.91l6 3.38v-6.71L5 9.21zm14 0v-6.7l-6 3.37v6.71z"/></svg></span> <code>core.data</code><br>
+<span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 9h5.5L13 3.5zM6 2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4c0-1.11.89-2 2-2m.12 13.5 3.74 3.74 1.42-1.41-2.33-2.33 2.33-2.33-1.42-1.41zm11.16 0-3.74-3.74-1.42 1.41 2.33 2.33-2.33 2.33 1.42 1.41z"/></svg></span> <code>app/core/data/serializers.py</code><br></p>
+<div class="language-py highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="k">class</span> <span class="nc">ScopusQuotaRateLimit</span><span class="p">(</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>    <span class="n">reset</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(),</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>    <span class="n">status</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(),</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>    <span class="n">error_code</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">()</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="p">)</span>
+</code></pre></div>
+<p>Um <strong>serializador</strong> de modelo construído usando <a href="https://docs.pydantic.dev/latest/api/base_model" target="_blank">Pydantic <code>BaseModel</code></a> para as respostas das <strong>APIs da Scopus</strong>, convertendo-as em código usando a função <a href="https://docs.pydantic.dev/latest/concepts/fields" target="_blank">Pydantic <code>Field()</code></a>.</p>
+<p>Antes da <strong>validação</strong>, ele recuperará os cabeçalhos da resposta e obterá o campo <abbr title="JavaScript Object Notation"><strong>JSON</strong></abbr> <code>error-response</code>, se presente.</p>
+<table>
+<thead>
+<tr>
+<th><strong>Parâmetro</strong></th>
+<th><strong>Tipo</strong></th>
+<th><strong>Campo da Resposta</strong></th>
+<th><strong>Descrição</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>reset</code></td>
+<td><code>float</code></td>
+<td><code>X-RateLimit-Reset</code></td>
+<td>Data/hora em <strong>Epoch</strong> segundos quando a cota da <abbr title="Application Program Interface"><strong>API</strong></abbr> será redefinida</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>str</code></td>
+<td><code>X-ELS-Status</code></td>
+<td>Status da <strong>Scopus</strong> <abbr title="Application Program Interface"><strong>API</strong></abbr>/servidor Elsevier</td>
+</tr>
+<tr>
+<td><code>error_code</code></td>
+<td><code>str</code></td>
+<td><code>error-code</code></td>
+<td>Código de erro da <strong>Scopus</strong> <abbr title="Application Program Interface"><strong>API</strong></abbr>/servidor Elsevier</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p><a href="https://en.wikipedia.org/wiki/Epoch_(computing)" target="_blank">Epoch</a> é o número de segundos que se passaram desde 1º de janeiro de 1970, também conhecido como <a href="https://en.wikipedia.org/wiki/Unix_time" target="_blank">tempo Unix</a>.</p>
+</div>
+<h3 id="reset_datetime"><code class="badge-property"></code> <span class="code-property">reset_datetime</span></h3>
+<div class="language-py highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="k">def</span> <span class="nf">reset_datetime</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div>
+<p>Converte a <strong>data e hora da epoch</strong> do <strong>cabeçalho de redefinição de cota</strong> para <code>datetime</code>, formate-o e retorne-o como uma <code>str</code> mais compreensível da data e hora, informando quando a <strong>cota de solicitação da</strong> <abbr title="Application Program Interface"><strong>API</strong></abbr> será redefinida.</p>
+<h3 id="quota_exceeded"><code class="badge-property"></code> <span class="code-property">quota_exceeded</span></h3>
+<div class="language-py highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="k">def</span> <span class="nf">quota_exceeded</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span>
+</code></pre></div>
+<p>Verifique o valor do <strong>cabeçalho de status</strong> da resposta, retornando <code>True</code> se for igual a <code>QUOTA_EXCEEDED - Quota Exceeded</code> ou <code>False</code> caso contrário.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Saiba mais sobre o <a href="https://dev.elsevier.com/api_key_settings.html" target="_blank">limite de cota de solicitações de <abbr title="Application Program Interface"><strong>API</strong></abbr></a>.</p>
+</div>
+<h3 id="rate_limit_exceeded"><code class="badge-property"></code> <span class="code-property">rate_limit_exceeded</span></h3>
+<div class="language-py highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="k">def</span> <span class="nf">rate_limit_exceeded</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
+</code></pre></div>
+<p>Verifique o valor do <strong>campo de código de erro</strong> da resposta, retornando <code>True</code> se for igual a <code>RATE_LIMIT_EXCEEDED</code> ou <code>False</code> caso contrário.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Saiba mais sobre o <a href="https://dev.elsevier.com/api_key_settings.html" target="_blank">limite da taxa de limitação de solicitação da <abbr title="Application Program Interface"><strong>API</strong></abbr></a>.</p>
+</div>
+<p><br></p>
+<!-- ScopusAbstract -->
+
+<h2 id="scopusabstract"><code class="badge-class"></code> <span class="code-class">ScopusAbstract</span></h2>
+<p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14 17H7v-2h7m3-2H7v-2h10m0-2H7V7h10m2-4H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2"/></svg></span> Serializador para o esquema <abbr title="JavaScript Object Notation"><strong>JSON</strong></abbr> da resposta da <strong>Scopus Abstract Retrieval API</strong><br>
+<span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33s1.71.11 2.5.33c1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2"/></svg></span> <a href="https://github.com/mauprogramador/scopus-survey-api/tree/master/app/core/data/serializers.py" target="_blank"><code>código fonte</code></a>
+<span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 16.5c0 .38-.21.71-.53.88l-7.9 4.44c-.16.12-.36.18-.57.18s-.41-.06-.57-.18l-7.9-4.44A.99.99 0 0 1 3 16.5v-9c0-.38.21-.71.53-.88l7.9-4.44c.16-.12.36-.18.57-.18s.41.06.57.18l7.9 4.44c.32.17.53.5.53.88zM12 4.15l-1.89 1.07L16 8.61l1.96-1.11zM6.04 7.5 12 10.85l1.96-1.1-5.88-3.4zM5 15.91l6 3.38v-6.71L5 9.21zm14 0v-6.7l-6 3.37v6.71z"/></svg></span> <code>core.data</code><br>
+<span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 9h5.5L13 3.5zM6 2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4c0-1.11.89-2 2-2m.12 13.5 3.74 3.74 1.42-1.41-2.33-2.33 2.33-2.33-1.42-1.41zm11.16 0-3.74-3.74-1.42 1.41 2.33 2.33-2.33 2.33 1.42 1.41z"/></svg></span> <code>app/core/data/serializers.py</code><br></p>
+<div class="language-py highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="k">class</span> <span class="nc">ScopusAbstract</span><span class="p">(</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>    <span class="n">url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(),</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>    <span class="n">scopus_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(),</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>    <span class="n">authors</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(),</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(),</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>    <span class="n">publication_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(),</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>    <span class="n">abstract</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(),</span>
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>    <span class="n">date</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(),</span>
+<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>    <span class="n">eid</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(),</span>
+<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a>    <span class="n">doi</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(),</span>
+<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a>    <span class="n">volume</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(),</span>
+<a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a>    <span class="n">citations</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">()</span>
+<a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a><span class="p">)</span>
+</code></pre></div>
+<p>Um <strong>serializador</strong> de modelo construído usando o <a href="https://docs.pydantic.dev/latest/api/base_model" target="_blank">Pydantic <code>BaseModel</code></a> para os <strong>resumos Scopus</strong> dos artigos na resposta <abbr title="JavaScript Object Notation"><strong>JSON</strong></abbr>, convertendo-os em código usando a função <a href="https://docs.pydantic.dev/latest/concepts/fields" target="_blank">Pydantic <code>Field()</code></a> e definindo <code>null</code> para todos os campos que não forem retornados.</p>
+<p>Antes da <strong>validação</strong>, a hierarquia será achatada para obter os dados reais. Primeiro, o campo <abbr title="JavaScript Object Notation"><strong>JSON</strong></abbr> <code>abstracts-retrieval-response</code> será acessado, então o campo <code>authors</code> será definido a partir do campo <abbr title="JavaScript Object Notation"><strong>JSON</strong></abbr> <code>author</code>, obtido do campo <abbr title="JavaScript Object Notation"><strong>JSON</strong></abbr> <code>authors</code> se retornado ou do campo <abbr title="JavaScript Object Notation"><strong>JSON</strong></abbr> <code>dc:creator</code> caso contrário.</p>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>Achatamento (<em>Flattening</em>) é o processo de transformar uma estrutura de dados <abbr title="JavaScript Object Notation"><strong>JSON</strong></abbr> aninhada em um único nível de pares chave-valor.</p>
+</div>
+<p>Além disso, os <strong>nomes dos autores</strong> serão selecionados do campo <abbr title="JavaScript Object Notation"><strong>JSON</strong></abbr> <code>ce:indexed-name</code> dos dados do autor, para serem concatenados e retornados. Finalmente, o campo <abbr title="JavaScript Object Notation"><strong>JSON</strong></abbr> <code>coredata</code> será acessado e atualizado com os dados do autor antes de retorná-los.</p>
+<p>Quando desserializado em <code>dict</code>, o campo <code>date</code>, quando não <code>null</code>, será formatado como <code>DD-MM-AAAA</code>.</p>
+<table>
+<thead>
+<tr>
+<th><strong>Parâmetro</strong></th>
+<th><strong>Tipo</strong></th>
+<th><strong>Campo</strong> <abbr title="JavaScript Object Notation"><strong>JSON</strong></abbr></th>
+<th><strong>Descrição</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>url</code></td>
+<td><code>str</code></td>
+<td><code>link ref=scopus</code></td>
+<td>URL da página de visualização do artigo do Scopus</td>
+</tr>
+<tr>
+<td><code>scopus_id</code></td>
+<td><code>str</code></td>
+<td><code>dc:identifier</code></td>
+<td>ID Scopus do artigo</td>
+</tr>
+<tr>
+<td><code>authors</code></td>
+<td><code>str</code></td>
+<td><code>authors</code> or <code>dc:creator</code></td>
+<td>Lista completa de autores ou apenas o primeiro autor</td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td><code>str</code></td>
+<td><code>dc:title</code></td>
+<td>Título do artigo</td>
+</tr>
+<tr>
+<td><code>publication_name</code></td>
+<td><code>str</code></td>
+<td><code>prism:publicationName</code></td>
+<td>Título da fonte</td>
+</tr>
+<tr>
+<td><code>abstract</code></td>
+<td><code>str</code></td>
+<td><code>dc:description</code></td>
+<td>Resumo completo do artigo</td>
+</tr>
+<tr>
+<td><code>date</code></td>
+<td><code>str</code></td>
+<td><code>prism:coverDate</code></td>
+<td>Data de publicação</td>
+</tr>
+<tr>
+<td><code>eid</code></td>
+<td><code>str</code></td>
+<td><code>eid</code></td>
+<td>ID Eletrônico do artigo</td>
+</tr>
+<tr>
+<td><code>doi</code></td>
+<td><code>str</code></td>
+<td><code>prism:doi</code></td>
+<td>Identificador de Objeto do Documento</td>
+</tr>
+<tr>
+<td><code>volume</code></td>
+<td><code>str</code></td>
+<td><code>prism:volume</code></td>
+<td>Identificador para uma publicação em série</td>
+</tr>
+<tr>
+<td><code>citations</code></td>
+<td><code>str</code></td>
+<td><code>citedby-count</code></td>
+<td>Contagem de citações</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Leia mais sobre os campos retornados na <a href="https://dev.elsevier.com/sc_search_views.html" target="_blank">documentação do Scopus Search Views</a>.</p>
+</div>
+<p><br></p>
+<!-- AccessToken -->
+
+<h2 id="accesstoken"><code class="badge-class"></code> <span class="code-class">AccessToken</span></h2>
+<p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14 17H7v-2h7m3-2H7v-2h10m0-2H7V7h10m2-4H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2"/></svg></span> Obtém e valida o <abbr title="Identification code that authenticates/authorizes access to a resource"><strong>Token</strong></abbr> <strong>de Acesso</strong><br>
+<span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33s1.71.11 2.5.33c1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2"/></svg></span> <a href="https://github.com/mauprogramador/scopus-survey-api/tree/master/app/framework/dependencies/access_token.py" target="_blank"><code>código fonte</code></a>
+<span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 16.5c0 .38-.21.71-.53.88l-7.9 4.44c-.16.12-.36.18-.57.18s-.41-.06-.57-.18l-7.9-4.44A.99.99 0 0 1 3 16.5v-9c0-.38.21-.71.53-.88l7.9-4.44c.16-.12.36-.18.57-.18s.41.06.57.18l7.9 4.44c.32.17.53.5.53.88zM12 4.15l-1.89 1.07L16 8.61l1.96-1.11zM6.04 7.5 12 10.85l1.96-1.1-5.88-3.4zM5 15.91l6 3.38v-6.71L5 9.21zm14 0v-6.7l-6 3.37v6.71z"/></svg></span> <code>framework.dependencies</code><br>
+<span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 9h5.5L13 3.5zM6 2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4c0-1.11.89-2 2-2m.12 13.5 3.74 3.74 1.42-1.41-2.33-2.33 2.33-2.33-1.42-1.41zm11.16 0-3.74-3.74-1.42 1.41 2.33 2.33-2.33 2.33 1.42 1.41z"/></svg></span> <code>app/framework/dependencies/access_token.py</code><br></p>
+<div class="language-py highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="k">class</span> <span class="nc">AccessToken</span><span class="p">()(</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>    <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">,</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>    <span class="n">access_token</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="n">TokenHeader</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="p">)</span>
+</code></pre></div>
+<p>Uma <a href="https://fastapi.tiangolo.com/tutorial/dependencies/" target="_blank">dependência</a> de rota que implementa o método <code>__call__</code> para criar uma <a href="https://realpython.com/python-callable-instances/" target="_blank">instância chamável</a> que obterá e validará o cabeçalho <abbr title="Identification code that authenticates/authorizes access to a resource"><strong>Token</strong></abbr> <strong>de Acesso</strong> por meio da função <a href="https://fastapi.tiangolo.com/tutorial/header-params/" target="_blank">FastAPI <code>Header()</code></a> ou da solicitação.</p>
+<p>Para fornecer um pouco mais de segurança, o aplicaçaõ <strong>gerará automaticamente</strong> um <abbr title="Identification code that authenticates/authorizes access to a resource"><strong>Token</strong></abbr> que será passado para a página web da <abbr title="Application Program Interface"><strong>API</strong></abbr> da aplicação, que por sua vez o enviará no <strong>cabeçalho da solicitação</strong> para <strong>validação</strong>.</p>
+<table>
+<thead>
+<tr>
+<th><strong>Parâmetro</strong></th>
+<th><strong>Tipo</strong></th>
+<th><strong>Descrição</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>request</code></td>
+<td><code>Request</code></td>
+<td>O objeto <a href="https://fastapi.tiangolo.com/advanced/using-request-directly/" target="_blank">FastAPI <code>Request</code></a></td>
+</tr>
+<tr>
+<td><code>access_token</code></td>
+<td><code>str</code> or <code>None</code></td>
+<td>Descritor e validador do cabeçalho <abbr title="Identification code that authenticates/authorizes access to a resource"><strong>Token</strong></abbr> da solicitação. <strong>Default:</strong> <code>None</code></td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<!-- QueryParams -->
+
+<h2 id="queryparams"><code class="badge-class"></code> <span class="code-class">QueryParams</span></h2>
+<p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14 17H7v-2h7m3-2H7v-2h10m0-2H7V7h10m2-4H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2"/></svg></span> Obtém e valida os <abbr title="URL key-value pair parameter"><strong>Query Param</strong></abbr><strong>s</strong><br>
+<span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33s1.71.11 2.5.33c1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2"/></svg></span> <a href="https://github.com/mauprogramador/scopus-survey-api/tree/master/app/framework/dependencies/query_params.py" target="_blank"><code>código fonte</code></a>
+<span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 16.5c0 .38-.21.71-.53.88l-7.9 4.44c-.16.12-.36.18-.57.18s-.41-.06-.57-.18l-7.9-4.44A.99.99 0 0 1 3 16.5v-9c0-.38.21-.71.53-.88l7.9-4.44c.16-.12.36-.18.57-.18s.41.06.57.18l7.9 4.44c.32.17.53.5.53.88zM12 4.15l-1.89 1.07L16 8.61l1.96-1.11zM6.04 7.5 12 10.85l1.96-1.1-5.88-3.4zM5 15.91l6 3.38v-6.71L5 9.21zm14 0v-6.7l-6 3.37v6.71z"/></svg></span> <code>framework.dependencies</code><br>
+<span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 9h5.5L13 3.5zM6 2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4c0-1.11.89-2 2-2m.12 13.5 3.74 3.74 1.42-1.41-2.33-2.33 2.33-2.33-1.42-1.41zm11.16 0-3.74-3.74-1.42 1.41 2.33 2.33-2.33 2.33 1.42 1.41z"/></svg></span> <code>app/framework/dependencies/query_params.py</code><br></p>
+<div class="language-py highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="k">class</span> <span class="nc">QueryParams</span><span class="p">()(</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>    <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">,</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>    <span class="n">api_key</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="n">APIKeyQuery</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>    <span class="n">keywords</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">Keywords</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="n">KeywordsQuery</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="p">)</span>
+</code></pre></div>
+<p>Uma <a href="https://fastapi.tiangolo.com/tutorial/dependencies/" target="_blank">dependência</a> de rota que implementa o método <code>__call__</code> para criar uma <a href="https://realpython.com/python-callable-instances/" target="_blank">instância chamável</a> que obterá e validará os parâmetros de consulta <strong>Chave da API</strong> e <strong>Palavras-chave</strong> por meio da função <a href="https://fastapi.tiangolo.com/tutorial/query-params-str-validations/" target="_blank">FastAPI <code>Query()</code></a> ou da solicitação.</p>
+<table>
+<thead>
+<tr>
+<th><strong>Parâmetro</strong></th>
+<th><strong>Tipo</strong></th>
+<th><strong>Descrição</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>request</code></td>
+<td><code>Request</code></td>
+<td>O objeto <a href="https://fastapi.tiangolo.com/advanced/using-request-directly/" target="_blank">FastAPI <code>Request</code></a></td>
+</tr>
+<tr>
+<td><code>api_key</code></td>
+<td><code>str</code> or <code>None</code></td>
+<td>Descritor e validador do <abbr title="URL key-value pair parameter"><strong>Query Param</strong></abbr> da solicitação <strong>Chave da API</strong>. <strong>Default:</strong> <code>None</code></td>
+</tr>
+<tr>
+<td><code>keywords</code></td>
+<td><code>Keywords</code> or <code>None</code></td>
+<td>Descritor e validador do <abbr title="URL key-value pair parameter"><strong>Query Param</strong></abbr> da solicitação <strong>Palavras-chave</strong>. <strong>Default:</strong> <code>None</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="equals"><code class="badge-method"></code> <span class="code-method">equals</span></h3>
+<div class="language-py highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="k">def</span> <span class="nf">equals</span><span class="p">(</span><span class="n">api_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">keywords</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
+</code></pre></div>
+<p>Compara a <strong>Chave da API</strong> e as <strong>Palavras-chave</strong> da instância com outra <strong>Chave de API</strong> e <strong>Palavras-chave</strong>, retorna <code>True</code> se forem iguais ou <code>False</code> caso contrário.</p>
+<table>
+<thead>
+<tr>
+<th><strong>Parâmetro</strong></th>
+<th><strong>Tipo</strong></th>
+<th><strong>Descrição</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>api_key</code></td>
+<td><code>str</code></td>
+<td><strong>Chave da API</strong> para comparação</td>
+</tr>
+<tr>
+<td><code>keywords</code></td>
+<td><code>list[str]</code></td>
+<td><strong>Keywords</strong> para comparação</td>
+</tr>
+</tbody>
+</table>
+<h3 id="to_dict"><code class="badge-method"></code> <span class="code-method">to_dict</span></h3>
+<div class="language-py highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="k">def</span> <span class="nf">to_dict</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Keywords</span><span class="p">]</span>
+</code></pre></div>
+<p>Serializa os atributos de instância <strong>Chave da API</strong> e <strong>Palavras-chave</strong> como um <code>dict</code>.</p>
+<p><br></p>
+<!-- HTTPRetryHelper -->
+
+<h2 id="httpretryhelper"><code class="badge-class"></code> <span class="code-class">HTTPRetryHelper</span></h2>
+<p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14 17H7v-2h7m3-2H7v-2h10m0-2H7V7h10m2-4H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2"/></svg></span> Faça solicitações <abbr title="Hypertext Transfer Protocol"><strong>HTTP</strong></abbr> com mecanismos de <abbr title="A way to control the rate of data flow into a service"><strong>throttling</strong></abbr> e <abbr title="A way to automatically retry failed operations"><strong>retry</strong></abbr><br>
+<span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33s1.71.11 2.5.33c1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2"/></svg></span> <a href="https://github.com/mauprogramador/scopus-survey-api/tree/master/app/adapters/helpers/http_retry_helper.py" target="_blank"><code>código fonte</code></a>
+<span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 16.5c0 .38-.21.71-.53.88l-7.9 4.44c-.16.12-.36.18-.57.18s-.41-.06-.57-.18l-7.9-4.44A.99.99 0 0 1 3 16.5v-9c0-.38.21-.71.53-.88l7.9-4.44c.16-.12.36-.18.57-.18s.41.06.57.18l7.9 4.44c.32.17.53.5.53.88zM12 4.15l-1.89 1.07L16 8.61l1.96-1.11zM6.04 7.5 12 10.85l1.96-1.1-5.88-3.4zM5 15.91l6 3.38v-6.71L5 9.21zm14 0v-6.7l-6 3.37v6.71z"/></svg></span> <code>adapters.helpers</code><br>
+<span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 9h5.5L13 3.5zM6 2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4c0-1.11.89-2 2-2m.12 13.5 3.74 3.74 1.42-1.41-2.33-2.33 2.33-2.33-1.42-1.41zm11.16 0-3.74-3.74-1.42 1.41 2.33 2.33-2.33 2.33 1.42 1.41z"/></svg></span> <code>app/adapters/helpers/http_retry_helper.py</code><br></p>
+<div class="language-py highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="k">class</span> <span class="nc">HTTPRetryHelper</span><span class="p">(</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>    <span class="n">for_search</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">None</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="p">)</span>
+</code></pre></div>
+<p>Um <a href="https://en.wikipedia.org/wiki/Client_(computing)" target="_blank">cliente</a> <abbr title="Hypertext Transfer Protocol"><strong>HTTP</strong></abbr> para fazer solicitações com os seguintes mecanismos:</p>
+<ul>
+<li><a href="https://www.tibco.com/glossary/what-is-api-throttling" target="_blank">Throttling</a>: controla a taxa de fluxo de dados em um serviço limitando o número de solicitações da <abbr title="Application Program Interface"><strong>API</strong></abbr> que um usuário pode fazer em um determinado período.</li>
+<li><a href="https://medium.com/@API4AI/best-practice-implementing-retry-logic-in-http-api-clients-0b5469c08ced" target="_blank">Retry</a>: tenta novamente operações com falha automaticamente para se recuperar de falhas inesperadas e continuar funcionando corretamente.</li>
+<li><a href="https://www.enjoyalgorithms.com/blog/throttling-and-rate-limiting" target="_blank">Rate Limiting</a>: limita o tráfego da rede controlando o número de solicitações que podem ser feitas em um determinado período de tempo.</li>
+<li><a href="https://requests.readthedocs.io/en/latest/user/advanced/#session-objects" target="_blank">Session</a>: persiste certos parâmetros e reutiliza a mesma conexão em todas as solicitações.</li>
+<li><a href="https://en.wikipedia.org/wiki/Cache_(computing)" target="_blank">Cache</a>: armazena dados temporariamente para que futuras solicitações desses dados possam ser atendidas mais rapidamente.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th><strong>Parâmetro</strong></th>
+<th><strong>Tipo</strong></th>
+<th><strong>Descrição</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>for_search</code></td>
+<td><code>bool</code></td>
+<td>Indica na mensagem do log se a solicitação será direcionada para a <strong>Scopus Search API</strong> ou não. <strong>Default:</strong> <code>None</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="mount_session"><code class="badge-method"></code> <span class="code-method">mount_session</span></h3>
+<div class="language-py highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="k">def</span> <span class="nf">mount_session</span><span class="p">(</span><span class="n">headers</span><span class="p">:</span> <span class="n">Headers</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<p>Inicializa a <a href="https://requests.readthedocs.io/en/latest/user/advanced/#session-objects" target="_blank">sessão</a> e a monta registrando o adaptador de conexão de <a href="https://pypi.org/project/CacheControl/" target="_blank">controle de cache</a> com a configuração de <a href="https://urllib3.readthedocs.io/en/stable/reference/urllib3.util.html#urllib3.util.Retry" target="_blank">retry</a>.</p>
+<table>
+<thead>
+<tr>
+<th><strong>Parâmetro</strong></th>
+<th><strong>Tipo</strong></th>
+<th><strong>Descrição</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>headers</code></td>
+<td><code>Headers</code></td>
+<td>Os cabeçalhos <abbr title="Hypertext Transfer Protocol"><strong>HTTP</strong></abbr> para enviar na solicitação</td>
+</tr>
+</tbody>
+</table>
+<h3 id="close"><code class="badge-method"></code> <span class="code-method">close</span></h3>
+<div class="language-py highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="k">def</span> <span class="nf">close</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<p>Fecha o adaptador de conexão de <a href="https://pypi.org/project/CacheControl/" target="_blank">controle de cache</a> e a <a href="https://requests.readthedocs.io/en/latest/user/advanced/#session-objects" target="_blank">sessão</a>.</p>
+<h3 id="request"><code class="badge-method"></code> <span class="code-method">request</span></h3>
+<div class="language-py highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="k">def</span> <span class="nf">request</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Response</span>
+</code></pre></div>
+<p>Inicializa, <a href="https://requests.readthedocs.io/en/latest/user/advanced/#prepared-requests" target="_blank">prepara com sessão</a>, envia a solicitação, e então retorna a resposta como um objeto <a href="https://requests.readthedocs.io/en/latest/api/#requests.Response" target="_blank">Requests <code>Response</code></a>.</p>
+<table>
+<thead>
+<tr>
+<th><strong>Parâmetro</strong></th>
+<th><strong>Tipo</strong></th>
+<th><strong>Descrição</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>url</code></td>
+<td><code>str</code></td>
+<td>A <abbr title="Uniform Resource Locator"><strong>URL</strong></abbr> para enviar a solicitação</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<!-- URLBuilderHelper -->
+
+<h2 id="urlbuilderhelper"><code class="badge-class"></code> <span class="code-class">URLBuilderHelper</span></h2>
+<p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14 17H7v-2h7m3-2H7v-2h10m0-2H7V7h10m2-4H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2"/></svg></span> Gera e formata <abbr title="Uniform Resource Locator"><strong>URL</strong></abbr>s para as solicitações <abbr title="Hypertext Transfer Protocol"><strong>HTTP</strong></abbr><br>
+<span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33s1.71.11 2.5.33c1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2"/></svg></span> <a href="https://github.com/mauprogramador/scopus-survey-api/tree/master/app/adapters/helpers/url_builder_helper.py" target="_blank"><code>código fonte</code></a>
+<span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 16.5c0 .38-.21.71-.53.88l-7.9 4.44c-.16.12-.36.18-.57.18s-.41-.06-.57-.18l-7.9-4.44A.99.99 0 0 1 3 16.5v-9c0-.38.21-.71.53-.88l7.9-4.44c.16-.12.36-.18.57-.18s.41.06.57.18l7.9 4.44c.32.17.53.5.53.88zM12 4.15l-1.89 1.07L16 8.61l1.96-1.11zM6.04 7.5 12 10.85l1.96-1.1-5.88-3.4zM5 15.91l6 3.38v-6.71L5 9.21zm14 0v-6.7l-6 3.37v6.71z"/></svg></span> <code>adapters.helpers</code><br>
+<span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 9h5.5L13 3.5zM6 2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4c0-1.11.89-2 2-2m.12 13.5 3.74 3.74 1.42-1.41-2.33-2.33 2.33-2.33-1.42-1.41zm11.16 0-3.74-3.74-1.42 1.41 2.33 2.33-2.33 2.33 1.42 1.41z"/></svg></span> <code>app/adapters/helpers/url_builder_helper.py</code><br></p>
+<div class="language-py highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="k">class</span> <span class="nc">URLBuilderHelper</span><span class="p">()</span>
+</code></pre></div>
+<p>Um construtor para gerar as <abbr title="Uniform Resource Locator"><strong>URL</strong></abbr>s de recursos das <strong>APIs da Scopus</strong> e a <abbr title="Uniform Resource Locator"><strong>URL</strong></abbr> de <a href="https://en.wikipedia.org/wiki/Pagination" target="_blank">paginação</a>.</p>
+<h3 id="get_search_url"><code class="badge-method"></code> <span class="code-method">get_search_url</span></h3>
+<div class="language-py highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="k">def</span> <span class="nf">get_search_url</span><span class="p">(</span><span class="n">keywords</span><span class="p">:</span> <span class="n">Keywords</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div>
+<p>Gera a <abbr title="Uniform Resource Locator"><strong>URL</strong></abbr> do recurso da <strong>Scopus Search API</strong> e a retorna como <code>str</code>.</p>
+<table>
+<thead>
+<tr>
+<th><strong>Parâmetro</strong></th>
+<th><strong>Tipo</strong></th>
+<th><strong>Descrição</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>keywords</code></td>
+<td><code>Keywords</code></td>
+<td>As <strong>Palavras-chave</strong> que serão utilizadas na busca</td>
+</tr>
+</tbody>
+</table>
+<h3 id="get_pagination_url"><code class="badge-method"></code> <span class="code-method">get_pagination_url</span></h3>
+<div class="language-py highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="k">def</span> <span class="nf">get_pagination_url</span><span class="p">(</span><span class="n">page</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div>
+<p>Gera a <abbr title="Uniform Resource Locator"><strong>URL</strong></abbr> de paginação da <strong>Scopus Search API</strong> e a retorna como <code>str</code>.</p>
+<table>
+<thead>
+<tr>
+<th><strong>Parâmetro</strong></th>
+<th><strong>Tipo</strong></th>
+<th><strong>Descrição</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>page</code></td>
+<td><code>int</code></td>
+<td>O índice de página para o início da paginação</td>
+</tr>
+</tbody>
+</table>
+<h3 id="get_article_page_url"><code class="badge-method"></code> <span class="code-method">get_article_page_url</span></h3>
+<div class="language-py highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="k">def</span> <span class="nf">get_abstract_url</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div>
+<p>Gera a <abbr title="Uniform Resource Locator"><strong>URL</strong></abbr> do recurso da <strong>Scopus Abstract Retrieval API</strong> e a retorna como <code>str</code>.</p>
+<table>
+<thead>
+<tr>
+<th><strong>Parâmetro</strong></th>
+<th><strong>Tipo</strong></th>
+<th><strong>Descrição</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>url</code></td>
+<td><code>str</code></td>
+<td>A <abbr title="Uniform Resource Locator"><strong>URL</strong></abbr> do recurso base da <strong>Scopus Abstract Retrieval API</strong></td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<!-- ScopusSearchAPI -->
+
+<h2 id="scopussearchapi"><code class="badge-class"></code> <span class="code-class">ScopusSearchAPI</span></h2>
+<p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14 17H7v-2h7m3-2H7v-2h10m0-2H7V7h10m2-4H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2"/></svg></span> Busca e recupera artigos por meio da <strong>Scopus Search API</strong><br>
+<span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33s1.71.11 2.5.33c1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2"/></svg></span> <a href="https://github.com/mauprogramador/scopus-survey-api/tree/master/app/adapters/gateway/scopus_search_api.py" target="_blank"><code>código fonte</code></a>
+<span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 16.5c0 .38-.21.71-.53.88l-7.9 4.44c-.16.12-.36.18-.57.18s-.41-.06-.57-.18l-7.9-4.44A.99.99 0 0 1 3 16.5v-9c0-.38.21-.71.53-.88l7.9-4.44c.16-.12.36-.18.57-.18s.41.06.57.18l7.9 4.44c.32.17.53.5.53.88zM12 4.15l-1.89 1.07L16 8.61l1.96-1.11zM6.04 7.5 12 10.85l1.96-1.1-5.88-3.4zM5 15.91l6 3.38v-6.71L5 9.21zm14 0v-6.7l-6 3.37v6.71z"/></svg></span> <code>adapters.gateway</code><br>
+<span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 9h5.5L13 3.5zM6 2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4c0-1.11.89-2 2-2m.12 13.5 3.74 3.74 1.42-1.41-2.33-2.33 2.33-2.33-1.42-1.41zm11.16 0-3.74-3.74-1.42 1.41 2.33 2.33-2.33 2.33 1.42 1.41z"/></svg></span> <code>app/adapters/gateway/scopus_search_api.py</code><br></p>
+<div class="language-py highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="k">class</span> <span class="nc">ScopusSearchAPI</span><span class="p">(</span>
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a>    <span class="n">http_helper</span><span class="p">:</span> <span class="n">HttpRetry</span><span class="p">,</span>
+<a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a>    <span class="n">url_builder</span><span class="p">:</span> <span class="n">UrlBuilder</span>
+<a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a><span class="p">)</span>
+</code></pre></div>
+<p>Primeiro, os cabeçalhos da solicitação para a <strong>API da Scopus</strong> serão construídos com a <code>Chave da API</code>, a <a href="../scopus-search-api/#api-resource-url"><abbr title="Uniform Resource Locator"><strong>URL</strong></abbr> do recurso</a> é construída com a <code>Chave da API</code> e <code>Palavras-chave</code> como parâmetros de pesquisa, e então os artigos serão buscados por meio da <strong>Scopus Search API</strong>. Em seguida, a resposta é validada, recuperando os artigos se bem-sucedida ou lidando com erros caso contrário.</p>
+<p>Um <strong>erro</strong> será retornado quando: <a href="../responses-and-errors/#404-not-found">nenhum artigo for encontrado</a>, a <a href="../api-limit-and-fields-and-filter/#quota-exceeded">cota da <code>Chave da API</code> for excedida</a>, a <strong>Scopus Search API</strong> retornar um <a href="../responses-and-errors/#scopus-apis-status-error">erro de status <abbr title="Hypertext Transfer Protocol"><strong>HTTP</strong></abbr></a>, e quando a <a href="../scopus-search-api/#response-body">resposta <abbr title="JavaScript Object Notation"><strong>JSON</strong></abbr></a> não puder ser validada.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Saiba mais sobre a <a href="https://dev.elsevier.com/api_key_settings.html" target="_blank">cota de quantos dados uma <strong>Chave da API</strong> pode recuperar</a>.</p>
+</div>
+<p>Os dados dos artigos serão validados, assumindo como padrão <code>null</code> para os campos que não forem retornados. Ele pode usar <a href="https://realpython.com/intro-to-python-threading/#what-is-a-thread" target="_blank">threads</a> com o <a href="https://docs.python.org/3/library/concurrent.futures.html#concurrent.futures.ThreadPoolExecutor" target="_blank">ThreadPoolExecutor</a> e construir a <abbr title="Uniform Resource Locator"><strong>URL</strong></abbr> com o <strong>índice da página</strong> quando houver vários artigos para buscar com <a href="https://en.wikipedia.org/wiki/Pagination" target="_blank">paginação</a>.</p>
+<table>
+<thead>
+<tr>
+<th><strong>Parâmetro</strong></th>
+<th><strong>Tipo</strong></th>
+<th><strong>Descrição</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>http_helper</code></td>
+<td><code>HttpRetry</code></td>
+<td>Injeta o <a href="#httpretryhelper"><code>HttpRetryHelper</code></a> para fazer as solicitações</td>
+</tr>
+<tr>
+<td><code>url_builder</code></td>
+<td><code>UrlBuilder</code></td>
+<td>Injeta o <a href="#urlbuilderhelper"><code>UrlBuilderHelper</code></a> para construir as <abbr title="Uniform Resource Locator"><strong>URL</strong></abbr>s</td>
+</tr>
+</tbody>
+</table>
+<h3 id="search_articles"><code class="badge-method"></code> <span class="code-method">search_articles</span></h3>
+<div class="language-py highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="k">def</span> <span class="nf">search_articles</span><span class="p">(</span><span class="n">search_params</span><span class="p">:</span> <span class="n">SearchParams</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">ScopusResult</span><span class="p">]</span>
+</code></pre></div>
+<p>Busca artigos por meio da <strong>Scopus Search API</strong>, compila e retorna todos os dados recuperados em uma <code>list</code> de <a href="#scopusresult" target="_blank"><code>ScopusResult</code></a>.</p>
+<table>
+<thead>
+<tr>
+<th><strong>Parâmetro</strong></th>
+<th><strong>Tipo</strong></th>
+<th><strong>Descrição</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>search_params</code></td>
+<td><code>SearchParams</code></td>
+<td>Parâmetros de pesquisa <code>Chave de API</code> e <code>Palavras-chave</code> validados</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<!-- ScopusAbstractRetrievalAPI -->
+
+<h2 id="scopusabstractretrievalapi"><code class="badge-class"></code> <span class="code-class">ScopusAbstractRetrievalAPI</span></h2>
+<p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14 17H7v-2h7m3-2H7v-2h10m0-2H7V7h10m2-4H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2"/></svg></span> Recupera <strong>resumos Scopus</strong> por meio da <strong>Scopus Abstract Retrieval API</strong><br>
+<span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33s1.71.11 2.5.33c1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2"/></svg></span> <a href="https://github.com/mauprogramador/scopus-survey-api/tree/master/app/adapters/gateway/scopus_abstract_retrieval_api.py" target="_blank"><code>código fonte</code></a>
+<span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 16.5c0 .38-.21.71-.53.88l-7.9 4.44c-.16.12-.36.18-.57.18s-.41-.06-.57-.18l-7.9-4.44A.99.99 0 0 1 3 16.5v-9c0-.38.21-.71.53-.88l7.9-4.44c.16-.12.36-.18.57-.18s.41.06.57.18l7.9 4.44c.32.17.53.5.53.88zM12 4.15l-1.89 1.07L16 8.61l1.96-1.11zM6.04 7.5 12 10.85l1.96-1.1-5.88-3.4zM5 15.91l6 3.38v-6.71L5 9.21zm14 0v-6.7l-6 3.37v6.71z"/></svg></span> <code>adapters.gateway</code><br>
+<span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 9h5.5L13 3.5zM6 2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4c0-1.11.89-2 2-2m.12 13.5 3.74 3.74 1.42-1.41-2.33-2.33 2.33-2.33-1.42-1.41zm11.16 0-3.74-3.74-1.42 1.41 2.33 2.33-2.33 2.33 1.42 1.41z"/></svg></span> <code>app/adapters/gateway/scopus_abstract_retrieval_api.py</code><br></p>
+<div class="language-py highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="k">class</span> <span class="nc">ScopusAbstractRetrievalAPI</span><span class="p">(</span>
+<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a>    <span class="n">http_helper</span><span class="p">:</span> <span class="n">HttpRetry</span><span class="p">,</span>
+<a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a>    <span class="n">url_builder</span><span class="p">:</span> <span class="n">UrlBuilder</span>
+<a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a><span class="p">)</span>
+</code></pre></div>
+<p>Primeiro, os cabeçalhos da solicitação para a <strong>API da Scopus</strong> serão criados com a <code>Chave da API</code>, a <a href="../scopus-abstract-retrieval-api/#final-url"><abbr title="Uniform Resource Locator"><strong>URL</strong></abbr> do recurso</a> é criada a partir da <a href="../scopus-abstract-retrieval-api/#final-url"><abbr title="Uniform Resource Locator"><strong>URL</strong></abbr> do recurso</a> base e, em seguida, os <strong>resumos Scopus</strong> serão recuperados por meio da <strong>Scopus Abstracts Retrieval API</strong>. A resposta é então validada, recuperando os resumos se bem-sucedida ou manipulando erros caso contrário.</p>
+<p>Um <strong>erro</strong> será retornado quando: a <a href="../api-limit-and-fields-and-filter/#quota-exceeded">cota da <code>Chave da API</code> for excedida</a>, a <strong>Scopus Abstract Retrieval API</strong> retornar um <a href="../responses-and-errors/#scopus-apis-status-error">erro de status <abbr title="Hypertext Transfer Protocol"><strong>HTTP</strong></abbr></a>, e quando a <a href="../scopus-abstract-retrieval-api/#response-body">resposta <abbr title="JavaScript Object Notation"><strong>JSON</strong></abbr></a> não puder ser validada.</p>
+<p>Os dados dos resumos serão validados, assumindo como padrão <code>null</code> para os campos que não forem retornados. Ele pode usar <a href="https://realpython.com/intro-to-python-threading/#what-is-a-thread" target="_blank">threads</a> com o <a href="https://docs.python.org/3/library/concurrent.futures.html#concurrent.futures.ThreadPoolExecutor" target="_blank">ThreadPoolExecutor</a> quando houver vários resumos para recuperar.</p>
+<table>
+<thead>
+<tr>
+<th><strong>Parâmetro</strong></th>
+<th><strong>Tipo</strong></th>
+<th><strong>Descrição</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>http_helper</code></td>
+<td><code>HttpRetry</code></td>
+<td>Injeta o <a href="#httpretryhelper"><code>HttpRetryHelper</code></a> para fazer as solicitações</td>
+</tr>
+<tr>
+<td><code>url_builder</code></td>
+<td><code>UrlBuilder</code></td>
+<td>Injeta o <a href="#urlbuilderhelper"><code>UrlBuilderHelper</code></a> para construir as <abbr title="Uniform Resource Locator"><strong>URL</strong></abbr>s</td>
+</tr>
+</tbody>
+</table>
+<h3 id="retrieve_abstracts"><code class="badge-method"></code> <span class="code-method">retrieve_abstracts</span></h3>
+<div class="language-py highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="k">def</span> <span class="nf">retrieve_abstracts</span><span class="p">(</span><span class="n">api_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">entry</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">ScopusResult</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">DataFrame</span>
+</code></pre></div>
+<p>Recupera <strong>resumos Scopus</strong> por meio da <strong>Scopus Abstract Retrieval API</strong>, compila e retorna todos os dados buscados em um <a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html" target="_blank">Pandas <code>DataFrame</code></a>.</p>
+<table>
+<thead>
+<tr>
+<th><strong>Parâmetro</strong></th>
+<th><strong>Tipo</strong></th>
+<th><strong>Descrição</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>api_key</code></td>
+<td><code>str</code></td>
+<td>Parâmetro de pesquisa <code>Chave de API</code> validado</td>
+</tr>
+<tr>
+<td><code>entry</code></td>
+<td><code>list[ScopusResult]</code></td>
+<td>Lista dos dados dos artigos</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<!-- ArticlesSimilarityFilter -->
+
+<h2 id="articlessimilarityfilter"><code class="badge-class"></code> <span class="code-class">ArticlesSimilarityFilter</span></h2>
+<p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14 17H7v-2h7m3-2H7v-2h10m0-2H7V7h10m2-4H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2"/></svg></span> Filtrar artigos de <strong>autores idênticos</strong> com <strong>títulos semelhantes</strong><br>
+<span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33s1.71.11 2.5.33c1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2"/></svg></span> <a href="https://github.com/mauprogramador/scopus-survey-api/tree/master/app/core/usecases/articles_similarity_filter.py" target="_blank"><code>código fonte</code></a>
+<span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 16.5c0 .38-.21.71-.53.88l-7.9 4.44c-.16.12-.36.18-.57.18s-.41-.06-.57-.18l-7.9-4.44A.99.99 0 0 1 3 16.5v-9c0-.38.21-.71.53-.88l7.9-4.44c.16-.12.36-.18.57-.18s.41.06.57.18l7.9 4.44c.32.17.53.5.53.88zM12 4.15l-1.89 1.07L16 8.61l1.96-1.11zM6.04 7.5 12 10.85l1.96-1.1-5.88-3.4zM5 15.91l6 3.38v-6.71L5 9.21zm14 0v-6.7l-6 3.37v6.71z"/></svg></span> <code>core.usecases</code><br>
+<span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 9h5.5L13 3.5zM6 2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4c0-1.11.89-2 2-2m.12 13.5 3.74 3.74 1.42-1.41-2.33-2.33 2.33-2.33-1.42-1.41zm11.16 0-3.74-3.74-1.42 1.41 2.33 2.33-2.33 2.33 1.42 1.41z"/></svg></span> <code>app/core/usecases/articles_similarity_filter.py</code><br></p>
+<div class="language-py highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="k">class</span> <span class="nc">ArticlesSimilarityFilter</span><span class="p">()</span>
+</code></pre></div>
+<p>Do <code>DataFrame</code> contendo todas as informações dos artigos já coletadas, os <a href="https://pandas.pydata.org/docs/reference/api/pandas.Series.value_counts.html" target="_blank">autores são contados</a>, e aqueles que foram <strong>repetidos pelo menos duas vezes</strong> são selecionados. Então, dos artigos desses autores, seus respectivos títulos são selecionados e comparados usando a função <a href="https://github.com/seatgeek/thefuzz?tab=readme-ov-file#simple-ratio" target="_blank">TheFuzz <code>ratio()</code></a>, e aqueles cuja <strong>taxa de similaridade</strong> é de pelo menos <code>80%</code> são coletados e descartados.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Após consideração e testes, definimos a <strong>taxa de similaridade</strong> para a seleção de artigos em <code>80%</code>.</p>
+</div>
+<p>Para todos os <strong>artigos semelhantes</strong> reunidos, o <strong>primeiro</strong> é <strong>mantido</strong> e o <strong>restante</strong> é <strong>descartado</strong>. Se <strong>todos os autores forem únicos</strong>, ou seja, <strong>nenhum é repetido</strong>, ou <strong>nenhum título semelhante foi encontrado</strong>, ele retornará o mesmo <code>DataFrame</code>.</p>
+<h3 id="filter"><code class="badge-method"></code> <span class="code-method">filter</span></h3>
+<div class="language-py highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a><span class="k">def</span> <span class="nf">filter</span><span class="p">(</span><span class="n">dataframe</span><span class="p">:</span> <span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DataFrame</span>
+</code></pre></div>
+<p>Filtra artigos do <code>DataFrame</code> se eles forem de <strong>autores idênticos</strong> com <strong>títulos semelhantes</strong>, e então todos os dados filtrados serão retornados em um <a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html" target="_blank">Pandas <code>DataFrame</code></a>.</p>
+<table>
+<thead>
+<tr>
+<th><strong>Parâmetro</strong></th>
+<th><strong>Tipo</strong></th>
+<th><strong>Descrição</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>dataframe</code></td>
+<td><code>DataFrame</code></td>
+<td>O <code>DataFrame</code> contendo todas as informações do artigo coletadas a serem filtradas</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<!-- ScopusArticlesAggregator -->
+
+<h2 id="scopusarticlesaggregator"><code class="badge-class"></code> <span class="code-class">ScopusArticlesAggregator</span></h2>
+<p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14 17H7v-2h7m3-2H7v-2h10m0-2H7V7h10m2-4H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2"/></svg></span> Reúne, filtra e compila dados de artigos <strong>Scopus</strong><br>
+<span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33s1.71.11 2.5.33c1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2"/></svg></span> <a href="https://github.com/mauprogramador/scopus-survey-api/tree/master/app/core/usecases/scopus_articles_aggregator.py" target="_blank"><code>código fonte</code></a>
+<span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 16.5c0 .38-.21.71-.53.88l-7.9 4.44c-.16.12-.36.18-.57.18s-.41-.06-.57-.18l-7.9-4.44A.99.99 0 0 1 3 16.5v-9c0-.38.21-.71.53-.88l7.9-4.44c.16-.12.36-.18.57-.18s.41.06.57.18l7.9 4.44c.32.17.53.5.53.88zM12 4.15l-1.89 1.07L16 8.61l1.96-1.11zM6.04 7.5 12 10.85l1.96-1.1-5.88-3.4zM5 15.91l6 3.38v-6.71L5 9.21zm14 0v-6.7l-6 3.37v6.71z"/></svg></span> <code>core.usecases</code><br>
+<span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 9h5.5L13 3.5zM6 2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4c0-1.11.89-2 2-2m.12 13.5 3.74 3.74 1.42-1.41-2.33-2.33 2.33-2.33-1.42-1.41zm11.16 0-3.74-3.74-1.42 1.41 2.33 2.33-2.33 2.33 1.42 1.41z"/></svg></span> <code>app/core/usecases/scopus_articles_aggregator.py</code><br></p>
+<div class="language-py highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="k">class</span> <span class="nc">ScopusArticlesAggregator</span><span class="p">(</span>
+<a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a>    <span class="n">search_api</span><span class="p">:</span> <span class="n">SearchAPI</span><span class="p">,</span>
+<a id="__codelineno-28-3" name="__codelineno-28-3" href="#__codelineno-28-3"></a>    <span class="n">abstract_api</span><span class="p">:</span> <span class="n">AbstractAPI</span><span class="p">,</span>
+<a id="__codelineno-28-4" name="__codelineno-28-4" href="#__codelineno-28-4"></a>    <span class="n">similarity_filter</span><span class="p">:</span> <span class="n">SimilarityFilter</span>
+<a id="__codelineno-28-5" name="__codelineno-28-5" href="#__codelineno-28-5"></a><span class="p">)</span>
+</code></pre></div>
+<p>Primeiro, os artigos são pesquisados por meio da <strong>Scopus Search API</strong> usando os <strong>parâmetros de busca</strong> fornecidos, e seus <strong>resumos Scopus</strong> são recuperados por meio da <strong>Scopus Abstract Retrieval API</strong>.</p>
+<p>Em seguida, os artigos que são <strong>duplicatas exatas</strong> são removidos, aqueles com os <strong>mesmos autores e títulos</strong> também são descartados, e <strong>artigos semelhantes</strong> são filtrados usando <a href="#articlessimilarityfilter"><code>ArticlesSimilarityFilter</code></a>.</p>
+<p>Um <strong>erro</strong> é retornado quando <a href="../responses-and-errors/#404-not-found">nenhum artigo é encontrado</a>.</p>
+<table>
+<thead>
+<tr>
+<th><strong>Parâmetro</strong></th>
+<th><strong>Tipo</strong></th>
+<th><strong>Descrição</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>search_api</code></td>
+<td><code>SearchAPI</code></td>
+<td>Injeta o <a href="#scopussearchapi"><code>ScopusSearchAPI</code></a> para pesquisar e obter os artigos por meio da <strong>Scopus Search API</strong></td>
+</tr>
+<tr>
+<td><code>articles_scraper</code></td>
+<td><code>abstract_api</code></td>
+<td>Injeta o <a href="#scopusabstractretrievalapi"><code>ScopusAbstractRetrievalAPI</code></a> para recuperar os <strong>resumos Scopus</strong> por meio da <strong>ScopusAbstractRetrievalAPI</strong></td>
+</tr>
+<tr>
+<td><code>similarity_filter</code></td>
+<td><code>SimilarityFilter</code></td>
+<td>Injeta o <a href="#articlessimilarityfilter"><code>ArticlesSimilarityFilter</code></a> para filtrar os artigos de <strong>autores idênticos</strong> com <strong>títulos semelhantes</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="get_articles"><code class="badge-method"></code> <span class="code-method">get_articles</span></h3>
+<div class="language-py highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a><span class="k">def</span> <span class="nf">get_articles</span><span class="p">(</span><span class="n">params</span><span class="p">:</span> <span class="n">SearchParams</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FileResponse</span>
+</code></pre></div>
+<p>Reúne e filtra dados de <strong>artigos Scopus</strong>, grava e salva todos os artigos restantes em um arquivo <abbr title="Comma-Separated Values"><strong>CSV</strong></abbr> e os retorna como um objeto <a href="https://fastapi.tiangolo.com/advanced/custom-response/?h=custom#fileresponse" target="_blank">FastAPI <code>FileResponse</code></a>.</p>
+<table>
+<thead>
+<tr>
+<th><strong>Parâmetro</strong></th>
+<th><strong>Tipo</strong></th>
+<th><strong>Descrição</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>params</code></td>
+<td><code>SearchParams</code></td>
+<td>Parâmetros de busca <strong>Chave da API</strong> e <strong>Palavras-chave</strong> validados</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<!-- TemplateContextBuilder -->
+
+<h2 id="templatecontextbuilder"><code class="badge-class"></code> <span class="code-class">TemplateContextBuilder</span></h2>
+<p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14 17H7v-2h7m3-2H7v-2h10m0-2H7V7h10m2-4H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2"/></svg></span> Gera valores de contexto para respostas de <em>template</em><br>
+<span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33s1.71.11 2.5.33c1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2"/></svg></span> <a href="https://github.com/mauprogramador/scopus-survey-api/tree/master/app/adapters/presenters/template_context.py" target="_blank"><code>código fonte</code></a>
+<span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 16.5c0 .38-.21.71-.53.88l-7.9 4.44c-.16.12-.36.18-.57.18s-.41-.06-.57-.18l-7.9-4.44A.99.99 0 0 1 3 16.5v-9c0-.38.21-.71.53-.88l7.9-4.44c.16-.12.36-.18.57-.18s.41.06.57.18l7.9 4.44c.32.17.53.5.53.88zM12 4.15l-1.89 1.07L16 8.61l1.96-1.11zM6.04 7.5 12 10.85l1.96-1.1-5.88-3.4zM5 15.91l6 3.38v-6.71L5 9.21zm14 0v-6.7l-6 3.37v6.71z"/></svg></span> <code>adapters.presenters</code><br>
+<span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 9h5.5L13 3.5zM6 2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4c0-1.11.89-2 2-2m.12 13.5 3.74 3.74 1.42-1.41-2.33-2.33 2.33-2.33-1.42-1.41zm11.16 0-3.74-3.74-1.42 1.41 2.33 2.33-2.33 2.33 1.42 1.41z"/></svg></span> <code>app/adapters/presenters/template_context.py</code><br></p>
+<div class="language-py highlight"><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a><span class="k">class</span> <span class="nc">TemplateContextBuilder</span><span class="p">(</span>
+<a id="__codelineno-30-2" name="__codelineno-30-2" href="#__codelineno-30-2"></a>    <span class="n">request</span><span class="p">:</span> <span class="n">Request</span>
+<a id="__codelineno-30-3" name="__codelineno-30-3" href="#__codelineno-30-3"></a><span class="p">)</span>
+</code></pre></div>
+<p>Compila e cria dados, como valores de <a href="https://jinja.palletsprojects.com/en/3.1.x/api/#the-context" target="_blank">contexto</a>, para os <em>templates</em> que o <a href="https://jinja.palletsprojects.com/en/3.1.x/" target="_blank">Jinja</a> renderiza, passando-os e carregando-os em <em>templates</em> <abbr title="Hypertext Markup Language"><strong>HTML</strong></abbr> que são retornados como um objeto <a href="https://fastapi.tiangolo.com/advanced/templates/" target="_blank">Jinja2Templates <code>TemplateResponse</code></a>.</p>
+<table>
+<thead>
+<tr>
+<th><strong>Parâmetro</strong></th>
+<th><strong>Tipo</strong></th>
+<th><strong>Descrição</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>request</code></td>
+<td><code>Request</code></td>
+<td>O objeto <a href="https://fastapi.tiangolo.com/advanced/using-request-directly/" target="_blank">FastAPI <code>Request</code></a></td>
+</tr>
+</tbody>
+</table>
+<h3 id="get_web_app_context"><code class="badge-method"></code> <span class="code-method">get_web_app_context</span></h3>
+<div class="language-py highlight"><pre><span></span><code><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a><span class="k">def</span> <span class="nf">get_web_app_context</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Context</span>
+</code></pre></div>
+<p>Retorna dados para construir o <em>template</em> da resposta da <strong>página web da</strong> <abbr title="Application Program Interface"><strong>API</strong></abbr>, retornando o <strong>objeto da solicitação</strong>, o <strong>nome do <em>template</em></strong>, e os <strong>valores de contexto</strong>.</p>
+<p>Sobre os <strong>valores do Contexto</strong>:</p>
+<table>
+<thead>
+<tr>
+<th><strong>Campo</strong></th>
+<th><strong>Descrição</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>request</code></td>
+<td>O objeto <a href="https://fastapi.tiangolo.com/advanced/using-request-directly/" target="_blank">FastAPI <code>Request</code></a></td>
+</tr>
+<tr>
+<td><code>version</code></td>
+<td>Versão da aplicação. <strong>Exemplo:</strong> <code>3.0.0</code></td>
+</tr>
+<tr>
+<td><code>repository</code></td>
+<td><abbr title="Uniform Resource Locator"><strong>URL</strong></abbr> do repositório <strong>GitHub</strong> da aplicação</td>
+</tr>
+<tr>
+<td><code>swagger_url</code></td>
+<td><abbr title="Uniform Resource Locator"><strong>URL</strong></abbr> da página do <strong>Swagger</strong>. <strong>Default:</strong> <code>/</code></td>
+</tr>
+<tr>
+<td><code>token</code></td>
+<td><strong>Token</strong> da aplicação</td>
+</tr>
+<tr>
+<td><code>filename</code></td>
+<td>Nome do arquivo <abbr title="Comma-Separated Values"><strong>CSV</strong></abbr>. <strong>Default:</strong> <code>articles.csv</code></td>
+</tr>
+<tr>
+<td><code>table_url</code></td>
+<td><abbr title="Uniform Resource Locator"><strong>URL</strong></abbr> da página web da tabela. <strong>Default:</strong> <code>/scopus-survey/api/table</code></td>
+</tr>
+<tr>
+<td><code>search_url</code></td>
+<td><abbr title="Uniform Resource Locator"><strong>URL</strong></abbr> da <abbr title="Application Program Interface"><strong>API</strong></abbr>. <strong>Default:</strong> <code>/scopus-survey/api/search-articles</code></td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td>Descrição da aplicação</td>
+</tr>
+</tbody>
+</table>
+<h3 id="get_table_context"><code class="badge-method"></code> <span class="code-method">get_table_context</span></h3>
+<div class="language-py highlight"><pre><span></span><code><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a><span class="k">def</span> <span class="nf">get_table_context</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Context</span>
+</code></pre></div>
+<p>Retorna dados para construir o <em>template</em> da resposta da <strong>página web da Tabela</strong>, retornando o <strong>objeto da solicitação</strong>, o <strong>nome do <em>template</em></strong>, e os <strong>valores de contexto</strong>.</p>
+<p>Sobre os <strong>valores do Contexto</strong>:</p>
+<table>
+<thead>
+<tr>
+<th><strong>Campo</strong></th>
+<th><strong>Descrição</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>request</code></td>
+<td>O objeto <a href="https://fastapi.tiangolo.com/advanced/using-request-directly/" target="_blank">FastAPI <code>Request</code></a></td>
+</tr>
+<tr>
+<td><code>version</code></td>
+<td>Versão da aplicação. <strong>Exemplo:</strong> <code>3.0.0</code></td>
+</tr>
+<tr>
+<td><code>repository</code></td>
+<td><abbr title="Uniform Resource Locator"><strong>URL</strong></abbr> do repositório <strong>GitHub</strong> da aplicação</td>
+</tr>
+<tr>
+<td><code>swagger_url</code></td>
+<td><abbr title="Uniform Resource Locator"><strong>URL</strong></abbr> da página do <strong>Swagger</strong>. <strong>Default:</strong> <code>/</code></td>
+</tr>
+<tr>
+<td><code>content</code></td>
+<td>Conteúdo da tabela. Lista dos artigos encontrados ou <code>None</code> se não houver artigos</td>
+</tr>
+<tr>
+<td><code>web_app_url</code></td>
+<td><abbr title="Uniform Resource Locator"><strong>URL</strong></abbr> da página web da aplicação. <strong>Default:</strong> <code>/scopus-survey/api</code></td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<!-- ExceptionJSON -->
+
+<h2 id="exceptionjson"><code class="badge-class"></code> <span class="code-class">ExceptionJSON</span></h2>
+<p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14 17H7v-2h7m3-2H7v-2h10m0-2H7V7h10m2-4H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2"/></svg></span> Gera respostas de representação <abbr title="JavaScript Object Notation"><strong>JSON</strong></abbr> para exceções<br>
+<span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33s1.71.11 2.5.33c1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2"/></svg></span> <a href="https://github.com/mauprogramador/scopus-survey-api/tree/master/app/adapters/presenters/exception_json.py" target="_blank"><code>código fonte</code></a>
+<span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 16.5c0 .38-.21.71-.53.88l-7.9 4.44c-.16.12-.36.18-.57.18s-.41-.06-.57-.18l-7.9-4.44A.99.99 0 0 1 3 16.5v-9c0-.38.21-.71.53-.88l7.9-4.44c.16-.12.36-.18.57-.18s.41.06.57.18l7.9 4.44c.32.17.53.5.53.88zM12 4.15l-1.89 1.07L16 8.61l1.96-1.11zM6.04 7.5 12 10.85l1.96-1.1-5.88-3.4zM5 15.91l6 3.38v-6.71L5 9.21zm14 0v-6.7l-6 3.37v6.71z"/></svg></span> <code>adapters.presenters</code><br>
+<span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 9h5.5L13 3.5zM6 2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4c0-1.11.89-2 2-2m.12 13.5 3.74 3.74 1.42-1.41-2.33-2.33 2.33-2.33-1.42-1.41zm11.16 0-3.74-3.74-1.42 1.41 2.33 2.33-2.33 2.33 1.42 1.41z"/></svg></span> <code>app/adapters/presenters/exception_json.py</code><br></p>
+<div class="language-py highlight"><pre><span></span><code><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a><span class="k">class</span> <span class="nc">ExceptionJSON</span><span class="p">(</span>
+<a id="__codelineno-33-2" name="__codelineno-33-2" href="#__codelineno-33-2"></a>    <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">,</span>
+<a id="__codelineno-33-3" name="__codelineno-33-3" href="#__codelineno-33-3"></a>    <span class="n">code</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+<a id="__codelineno-33-4" name="__codelineno-33-4" href="#__codelineno-33-4"></a>    <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<a id="__codelineno-33-5" name="__codelineno-33-5" href="#__codelineno-33-5"></a>    <span class="n">errors</span><span class="p">:</span> <span class="n">Errors</span> <span class="o">=</span> <span class="kc">None</span>
+<a id="__codelineno-33-6" name="__codelineno-33-6" href="#__codelineno-33-6"></a><span class="p">)</span>
+</code></pre></div>
+<p>Um <strong><em>presenter</em></strong> criado usando <a href="https://fastapi.tiangolo.com/advanced/custom-response/#jsonresponse" target="_blank">FastAPI <code>JSONResponse</code></a> que gera respostas de representação <abbr title="JavaScript Object Notation"><strong>JSON</strong></abbr> para exceções. Os detalhes do erro são filtrados para remover o erro <code>PydanticUndefined</code> de <a href="https://docs.pydantic.dev/latest/errors/errors/" target="_blank">Pydantic <code>ValidationError</code></a> e os dados do objeto <a href="https://fastapi.tiangolo.com/advanced/using-request-directly/" target="_blank"><code>Request</code></a> são recuperados.</p>
+<p>O <em>timestamp</em> <a href="https://docs.python.org/3/library/datetime.html" target="_blank">datetime</a> é definido como uma <code>str</code> no <a href="https://en.wikipedia.org/wiki/ISO_8601" target="_blank">formato <abbr title="International Organization for Standardization"><strong>ISO</strong></abbr></a> e, finalmente, todos os dados são convertidos e codificados usando a função <a href="https://fastapi.tiangolo.com/tutorial/encoder/" target="_blank">FastAPI <code>jsonable_encoder()</code></a>.</p>
+<table>
+<thead>
+<tr>
+<th><strong>Parâmetro</strong></th>
+<th><strong>Tipo</strong></th>
+<th><strong>Descrição</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>request</code></td>
+<td><code>Request</code></td>
+<td>O objeto <a href="https://fastapi.tiangolo.com/advanced/using-request-directly/" target="_blank">FastAPI <code>Request</code></a></td>
+</tr>
+<tr>
+<td><code>code</code></td>
+<td><code>int</code></td>
+<td>Código de erro de status <abbr title="Hypertext Transfer Protocol"><strong>HTTP</strong></abbr></td>
+</tr>
+<tr>
+<td><code>message</code></td>
+<td><code>str</code></td>
+<td>Descrição da exceção</td>
+</tr>
+<tr>
+<td><code>errors</code></td>
+<td><code>Errors</code></td>
+<td>Metadados e detalhes do erro</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<!-- Exceções e Erros -->
+
+<h2 id="excecoes-e-erros">Exceções e Erros</h2>
+<p><strong>Exceções</strong> <abbr title="Hypertext Transfer Protocol"><strong>HTTP</strong></abbr> são modelos criados a partir do <a href="https://fastapi.tiangolo.com/tutorial/handling-errors/#use-httpexception" target="_blank">FastAPI <code>HTTPException</code></a> que representam códigos de status de <strong>erro</strong> <abbr title="Hypertext Transfer Protocol"><strong>HTTP</strong></abbr> enviados na resposta para notificar o cliente usando sua aplicação de um erro. Os implementados são <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401" target="_blank"><code>401 Unauthorized</code></a>, <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404" target="_blank"><code>404 NotFound</code></a>, <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/422" target="_blank"><code>422 UnprocessableContent</code></a>, <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/500" target="_blank"><code>500 InternalError</code></a>, <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/502" target="_blank"><code>502 BadGateway</code></a> e <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/504" target="_blank"><code>504 GatewayTimeout</code></a>.</p>
+<p><strong>Erros da aplicação</strong> são modelos criados a partir da <a href="https://docs.python.org/3/library/exceptions.html#Exception" target="_blank">classe base <code>Exception</code></a> que indica que ocorreu um <strong>erro</strong> na parte central da operação/processamento da aplicação. Os implementados são <a href="https://github.com/mauprogramador/scopus-survey-api/tree/master/app/core/domain/exceptions.py" target="_blank"><code>InterruptError</code></a> para o <strong>sinal de interrupção de desligamento/saída</strong> e <a href="https://github.com/mauprogramador/scopus-survey-api/tree/master/app/core/domain/exceptions.py" target="_blank"><code>ScopusAPIError</code></a> para o erro de status <abbr title="Hypertext Transfer Protocol"><strong>HTTP</strong></abbr> da <strong>Scopus Search API</strong>.</p>
+<p><strong>Manipuladores de exceção</strong> são rotinas projetadas para processar e responder rapidamente à ocorrência de <strong>exceções/erros</strong> ou situações especiais específicas durante a execução de um programa, retornando sua representação <abbr title="JavaScript Object Notation"><strong>JSON</strong></abbr>. Os manipuladores implementados são para <a href="https://www.starlette.io/exceptions/#httpexception" target="_blank">Starlette <code>HTTPException</code></a>, <a href="https://fastapi.tiangolo.com/tutorial/handling-errors/#use-httpexception" target="_blank">FastAPI <code>HTTPException</code></a>, <a href="https://fastapi.tiangolo.com/tutorial/handling-errors/#requestvalidationerror-vs-validationerror" target="_blank"><code>RequestValidationError</code></a>, <a href="https://fastapi.tiangolo.com/tutorial/handling-errors/#requestvalidationerror-vs-validationerror" target="_blank"><code>ResponseValidationError</code></a>, <a href="https://docs.pydantic.dev/latest/errors/validation_errors/" target="_blank"><code>ValidationError</code></a>, <a href="https://github.com/mauprogramador/scopus-survey-api/tree/master/app/framework/exceptions/http_exceptions.py" target="_blank"><code>HTTPException</code></a>, <a href="https://github.com/mauprogramador/scopus-survey-api/tree/master/app/core/domain/exceptions.py" target="_blank"><code>ApplicationError</code></a> e <a href="https://docs.python.org/3/library/exceptions.html#Exception" target="_blank"><code>Exception</code></a>.</p>
+<p>Sobre a <strong>Resposta</strong> <abbr title="JavaScript Object Notation"><strong>JSON</strong></abbr> <strong>de Exceção</strong>:</p>
+<table>
+<thead>
+<tr>
+<th><strong>Campo</strong></th>
+<th><strong>Tipo</strong></th>
+<th><strong>Descrição</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>success</code></td>
+<td><code>bool</code></td>
+<td>Resultado da operação, que é um fracasso já que é uma exceção. <strong>Deafult:</strong> <code>False</code></td>
+</tr>
+<tr>
+<td><code>code</code></td>
+<td><code>int</code></td>
+<td>Código de status de erro <abbr title="Hypertext Transfer Protocol"><strong>HTTP</strong></abbr></td>
+</tr>
+<tr>
+<td><code>message</code></td>
+<td><code>str</code></td>
+<td>Descrição da exceção/erro</td>
+</tr>
+<tr>
+<td><code>request</code></td>
+<td><code>dict[str,Any]</code></td>
+<td>Contém alguns dados de solicitação em um <code>dict</code></td>
+</tr>
+<tr>
+<td><code>errors</code></td>
+<td><code>Errors</code></td>
+<td>Contém alguns detalhes da exceção/erro em um <code>dict</code>. <strong>Deafult:</strong> <code>None</code></td>
+</tr>
+<tr>
+<td><code>timestamp</code></td>
+<td><code>str</code></td>
+<td>O <em>timestamp</em> de data e hora como uma <code>str</code> no formato <abbr title="International Organization for Standardization"><strong>ISO</strong></abbr></td>
+</tr>
+</tbody>
+</table>
+<p>Sobre o <strong>campo <code>request</code></strong>:</p>
+<table>
+<thead>
+<tr>
+<th><strong>Campo</strong></th>
+<th><strong>Descrição</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>host</code></td>
+<td>O host do cliente da solicitação. <strong>Default:</strong> <code>127.0.0.1</code></td>
+</tr>
+<tr>
+<td><code>port</code></td>
+<td>A porta do cliente da solicitação. <strong>Default:</strong> <code>8000</code></td>
+</tr>
+<tr>
+<td><code>method</code></td>
+<td>O method da solicitação</td>
+</tr>
+<tr>
+<td><code>url</code></td>
+<td>O caminho da <abbr title="Uniform Resource Locator"><strong>URL</strong></abbr> da solicitação</td>
+</tr>
+<tr>
+<td><code>headers</code></td>
+<td>Os cabeçalhos da solicitação</td>
+</tr>
+</tbody>
+</table>
+<p>Sobre e os <strong>detalhes do erro <code>ScopusAPIError</code></strong>:</p>
+<table>
+<thead>
+<tr>
+<th><strong>Campo</strong></th>
+<th><strong>Descrição</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>status</code></td>
+<td>Código de erro de status <abbr title="Hypertext Transfer Protocol"><strong>HTTP</strong></abbr> das <strong>APIs da Scopus</strong></td>
+</tr>
+<tr>
+<td><code>api_error</code></td>
+<td>Descrição do erro de status da resposta das <strong>APIs da Scopus</strong>. <strong>Deafult:</strong> <code>null</code></td>
+</tr>
+<tr>
+<td><code>content</code></td>
+<td>O próprio conteúdo da resposta <abbr title="JavaScript Object Notation"><strong>JSON</strong></abbr> das <strong>APIs da Scopus</strong></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Veja a descrição do erro de status das respostas na <a href="https://dev.elsevier.com/documentation/SCOPUSSearchAPI.wadl" target="_blank">documentação</a>.</p>
+</div>
+<p><br></p>
+<!-- Middlewares -->
+
+<h2 id="middlewares">Middlewares</h2>
+<p><strong>Middlewares</strong> são mecanismos criados a partir do <a href="https://www.starlette.io/middleware/#basehttpmiddleware" target="_blank">Starlette <code>BaseHTTPMiddleware</code></a> que funcionam no <strong>ciclo de solicitação-resposta</strong> da aplicação, interceptando chamadas e processando-as. Eles podem acessar e manipular cada <strong>objeto de solicitação</strong> antes que ele seja processado por qualquer manipulador de rota, e também cada <strong>objeto de resposta</strong> antes de retorná-lo. Há três implementados.</p>
+<p>O <em>middleware</em> <a href="https://github.com/mauprogramador/scopus-survey-api/tree/master/app/framework/middleware/tracing_exception.py" target="_blank"><code>TraceExceptionControl</code></a> <strong>rastreia</strong> a solicitação, relatando o cliente, a <abbr title="Uniform Resource Locator"><strong>URL</strong></abbr> acessada, o código de status da resposta e o tempo de processamento. Ele também <strong>lida</strong> com quaisquer exceções inesperadas e erros de interrupção de sinal.</p>
+<p>O <em>middleware</em> <a href="https://github.com/mauprogramador/scopus-survey-api/tree/master/app/framework/middleware/redirect_route.py" target="_blank"><code>RedirectNotFoundRoutes</code></a> <strong>redireciona</strong> qualquer solicitação de rota não encontrada que receba um erro <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404" target="_blank"><code>404 Not Found</code></a> e não seja uma rota permitida mapeada. Ele também <strong>lida</strong> com erros de interrupção de sinal.</p>
+<p>O <em>middleware</em> <a href="https://fastapi.tiangolo.com/tutorial/cors/#use-corsmiddleware" target="_blank">FastAPI <code>CORSMiddleware</code></a> implementa e configura o <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS" target="_blank">mecanismo <abbr title="Cross-Origin Resource Sharing"><strong>CORS</strong></abbr></a>, permitindo qualquer origem, quaisquer credenciais, qualquer cabeçalho e apenas o <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/GET" target="_blank">método <code>GET</code></a>.</p>
+<p><br></p>
+<!-- SignalHandler -->
+
+<h2 id="signalhandler"><code class="badge-class"></code> <span class="code-class">SignalHandler</span></h2>
+<p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14 17H7v-2h7m3-2H7v-2h10m0-2H7V7h10m2-4H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2"/></svg></span> Defina os manipuladores de sinal para definir o sinalizador do <strong>evento de desligamento</strong><br>
+<span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33s1.71.11 2.5.33c1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2"/></svg></span> <a href="https://github.com/mauprogramador/scopus-survey-api/tree/master/app/utils/signal_handler.py" target="_blank"><code>código fonte</code></a>
+<span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 16.5c0 .38-.21.71-.53.88l-7.9 4.44c-.16.12-.36.18-.57.18s-.41-.06-.57-.18l-7.9-4.44A.99.99 0 0 1 3 16.5v-9c0-.38.21-.71.53-.88l7.9-4.44c.16-.12.36-.18.57-.18s.41.06.57.18l7.9 4.44c.32.17.53.5.53.88zM12 4.15l-1.89 1.07L16 8.61l1.96-1.11zM6.04 7.5 12 10.85l1.96-1.1-5.88-3.4zM5 15.91l6 3.38v-6.71L5 9.21zm14 0v-6.7l-6 3.37v6.71z"/></svg></span> <code>utils</code><br>
+<span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 9h5.5L13 3.5zM6 2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4c0-1.11.89-2 2-2m.12 13.5 3.74 3.74 1.42-1.41-2.33-2.33 2.33-2.33-1.42-1.41zm11.16 0-3.74-3.74-1.42 1.41 2.33 2.33-2.33 2.33 1.42 1.41z"/></svg></span> <code>app/utils/signal_handler.py</code><br></p>
+<div class="language-py highlight"><pre><span></span><code><a id="__codelineno-34-1" name="__codelineno-34-1" href="#__codelineno-34-1"></a><span class="k">class</span> <span class="nc">SignalHandler</span><span class="p">(</span>
+<a id="__codelineno-34-2" name="__codelineno-34-2" href="#__codelineno-34-2"></a>    <span class="n">for_async</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">None</span>
+<a id="__codelineno-34-3" name="__codelineno-34-3" href="#__codelineno-34-3"></a><span class="p">)</span>
+</code></pre></div>
+<p>Crie um objeto de <strong>evento</strong>, seja um <a href="https://docs.python.org/3/library/threading.html#event-objects" target="_blank">threading <code>Event</code></a> ou <a href="https://docs.python.org/3/library/asyncio-sync.html#asyncio.Event" target="_blank">asyncio <code>Event</code></a> com base no valor do <strong>parâmetro</strong>, e registre seus manipuladores para os sinais <a href="https://docs.python.org/3/library/signal.html#signal.SIGINT" target="_blank"><code>SIGINT</code></a> e <a href="https://docs.python.org/3/library/signal.html#signal.SIGTERM" target="_blank"><code>SIGTERM</code></a> usando a função <a href="https://docs.python.org/3/library/signal.html#signal.signal" target="_blank"><code>signal()</code></a>. Os manipuladores capturarão <strong>sinais de desligamento</strong> e definirão o <strong>sinalizador de evento</strong>. Então, operações baseadas em <strong>processos</strong> ou <strong><em>threads</em></strong> podem ser encerradas <strong>graciosamente</strong>.</p>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>Um <strong>desligamento gracioso</strong> (<em>graceful shutdown</em>) é um processo controlado e ordenado para executar um <strong>desligamento seguro</strong> e liberar recursos quando a aplicação é interrompido repentinamente ou recebe um sinal de desligamento/encerramento.</p>
+</div>
+<table>
+<thead>
+<tr>
+<th><strong>Parâmetro</strong></th>
+<th><strong>Tipo</strong></th>
+<th><strong>Descrição</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>for_async</code></td>
+<td><code>bool</code></td>
+<td>Indica se o <strong>evento</strong> será assíncrono ou não. <strong>Default:</strong> <code>None</code></td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Voltar ao topo
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Rodapé" >
+        
+          
+          <a href="../hooks-actions/" class="md-footer__link md-footer__link--prev" aria-label="Anterior: Hooks e Actions">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Anterior
+              </span>
+              <div class="md-ellipsis">
+                Hooks e Actions
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../release-notes/" class="md-footer__link md-footer__link--next" aria-label="Próximo: Release Notes">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Próximo
+              </span>
+              <div class="md-ellipsis">
+                Release Notes
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+    <div class="md-copyright__highlight">
+        The ScopusSurveyAPI is owned by <a href="https://github.com/mauprogramador" target="_blank" rel="author"
+            title="Developer GitHub profile">@mauprogramador</a> under the <a class="link"
+            href="https://github.com/mauprogramador/scopus-survey-api/blob/master/LICENSE" target="_blank" rel="license"
+            title="MIT License">MIT
+            License</a>
+    </div>
+    
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+        Material for MkDocs
+    </a>.
+    
+    Hosted by <a href="https://pages.github.com/" target="_blank" rel="external">Github.io</a>
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+    <a href="https://github.com/mauprogramador/scopus-survey-api" target="_blank" rel="noopener" title="Source code GitHub repository" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://www.ifms.edu.br/campi/campus-tres-lagoas" target="_blank" rel="noopener" title="IFMS - Campus Três Lagoas" class="md-social__link">
+      <?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+
+<svg version="1.1" viewBox="0 0 2044 2048" width="1280" height="1280" xmlns="http://www.w3.org/2000/svg">
+  <path transform="translate(0)" d="m0 0h2044v2048h-2044z" fill="transparent" />
+  <path transform="translate(346,1581)"
+    d="m0 0h349l12 3 10 6 8 8 8 16 1 5v350l-5 15-6 9-9 8-10 5-7 2h-352l-13-4-10-7-7-7-6-12-2-12v-342l2-14 5-10 8-9 9-6 8-3z"
+    fill="#379F47" />
+  <path transform="translate(1369,44)"
+    d="m0 0h351l13 4 11 7 7 9 5 10 2 9v351l-5 14-8 11-9 7-10 4-5 1h-350l-13-3-11-7-7-7-5-8-3-10v-358l4-11 7-9 8-7 10-5z"
+    fill="#379F47" />
+  <path transform="translate(856,44)"
+    d="m0 0h352l13 4 8 5 8 8 7 14 1 3 1 268v86l-2 9-6 12-7 8-10 6-7 3-6 1h-347l-12-2-10-5-10-9-7-11-2-7v-360l5-12 8-10 11-7 7-3z"
+    fill="#379F47" />
+  <path transform="translate(858,1581)"
+    d="m0 0h349l12 3 10 6 8 8 5 9 3 7 1 275v78l-2 11-6 12-6 7-11 7-12 4h-352l-10-3-12-7-7-7-5-8-3-9v-360l4-10 8-11 10-7 9-4z"
+    fill="#379F47" />
+  <path transform="translate(343,1069)"
+    d="m0 0h354l13 4 9 6 7 8 5 10 2 6 1 10v342l-3 12-6 12-8 8-14 7-3 1h-358l-13-5-9-7-7-8-4-9-2-12v-344l2-12 5-10 9-10 12-7z"
+    fill="#379F47" />
+  <path transform="translate(342,557)"
+    d="m0 0h356l13 4 9 7 6 7 5 10 2 6 1 11v341l-4 14-5 9-6 7-10 6-10 4h-356l-14-5-10-8-8-11-3-9-1-7v-345l2-12 4-9 6-8 8-6 8-4z"
+    fill="#379F47" />
+  <path transform="translate(1368,1069)"
+    d="m0 0h352l11 3 8 4 10 9 7 13 2 10v351l-4 11-6 10-7 7-8 5-10 3h-356l-10-3-10-6-8-9-6-12-1-4v-358l4-11 6-9 8-7 13-6z"
+    fill="#379F47" />
+  <path transform="translate(854,557)"
+    d="m0 0h357l11 4 9 6 8 9 5 10 1 4 1 263v92l-2 9-6 11-8 9-12 7-6 2h-357l-11-4-11-7-8-10-4-9-1-5v-359l5-12 9-10 9-6z"
+    fill="#379F47" />
+  <path transform="translate(855,1069)"
+    d="m0 0h354l13 4 9 6 7 8 6 12 1 4 1 262v91l-3 12-6 11-8 8-8 5-10 3h-357l-11-4-9-6-8-9-5-11-1-3v-360l4-11 7-9 10-8z"
+    fill="#379F47" />
+  <path transform="translate(503,23)"
+    d="m0 0h38l27 4 26 7 21 8 20 10 19 12 13 10 13 11 18 18 11 14 7 10 11 18 11 23 7 19 6 26 3 18 1 13v25l-2 20-4 23-6 21-6 16-11 23-12 19-12 16-11 12-17 17-14 11-15 10-22 12-21 9-18 6-22 5-21 3-24 1-25-2-22-4-23-6-21-8-22-11-17-11-16-12-12-11-16-16-11-14-14-21-9-16-10-24-7-24-5-27-1-11v-38l4-26 5-20 8-23 10-21 10-17 10-14 7-9 12-13 13-13 11-9 15-11 15-9 16-8 25-10 26-7 19-3z"
+    fill="#C71B1F" />
+</svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="mailto:sir.silvabmauricio@gmail.com" target="_blank" rel="noopener" title="Developer email contact" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M48 64C21.5 64 0 85.5 0 112c0 15.1 7.1 29.3 19.2 38.4l217.6 163.2c11.4 8.5 27 8.5 38.4 0l217.6-163.2c12.1-9.1 19.2-23.3 19.2-38.4 0-26.5-21.5-48-48-48zM0 176v208c0 35.3 28.7 64 64 64h384c35.3 0 64-28.7 64-64V176L294.4 339.2a63.9 63.9 0 0 1-76.8 0z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://github.com/mauprogramador" target="_blank" rel="noopener" title="Developer GitHub profile" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M224 256a128 128 0 1 0 0-256 128 128 0 1 0 0 256m-45.7 48C79.8 304 0 383.8 0 482.3 0 498.7 13.3 512 29.7 512h388.6c16.4 0 29.7-13.3 29.7-29.7 0-98.5-79.8-178.3-178.3-178.3z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://www.linkedin.com/in/mauricio-silva-batista-0ba90322b/" target="_blank" rel="noopener" title="Developer LinkedIn" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3M135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5m282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://twitter.com/Maurcio77788085" target="_blank" rel="noopener" title="Developer X / Twitter" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8l164.9-188.5L26.8 48h145.6l100.5 132.9zm-24.8 373.8h39.1L151.1 88h-42z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://www.instagram.com/mauricio_cap_tl/" target="_blank" rel="noopener" title="Developer Instagram" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141m0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7m146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8m76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8M398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant.progress", "navigation.indexes", "navigation.footer", "navigation.path", "navigation.top", "search.highlight", "search.suggest", "content.code.select", "content.code.copy", "content.tooltips", "toc.follow"], "search": "../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copiado para \u00e1rea de transfer\u00eancia", "clipboard.copy": "Copiar para \u00e1rea de transfer\u00eancia", "search.result.more.one": "Mais 1 nesta p\u00e1gina", "search.result.more.other": "Mais # nesta p\u00e1gina", "search.result.none": "Nenhum resultado encontrado", "search.result.one": "1 resultado encontrado", "search.result.other": "# resultados encontrados", "search.result.placeholder": "Digite para iniciar a busca", "search.result.term.missing": "Ausente", "select.version": "Selecione a vers\u00e3o"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.525ec568.min.js"></script>
+      
+    
+  </body>
+</html>

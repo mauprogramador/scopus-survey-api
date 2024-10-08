@@ -1,0 +1,42 @@
+fastapiValidationError: https://fastapi.tiangolo.com/tutorial/handling-errors/#requestvalidationerror-vs-validationerror
+serialization: https://medium.com/@ellysam/serialization-and-deserialization-in-python-a26780187359
+validationError: https://docs.pydantic.dev/latest/api/pydantic_core/#pydantic_core.ValidationError
+dataframe: https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html
+mdnStatus: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+baseModel: https://docs.pydantic.dev/latest/api/base_model
+field: https://docs.pydantic.dev/latest/concepts/fields
+requestsDocs: https://requests.readthedocs.io/en/latest
+fastapiTutorial: https://fastapi.tiangolo.com/tutorial
+fastapiAdvanced: https://fastapi.tiangolo.com/advanced
+pythonDocs: https://docs.python.org/3/library
+pypi: https://pypi.org/project
+python: https://www.python.org
+
+scAbstractRetrievalApi: https://dev.elsevier.com/documentation/AbstractRetrievalAPI.wadl
+scSearchApi: https://dev.elsevier.com/documentation/SCOPUSSearchAPI.wadl
+scApiKey: https://dev.elsevier.com/api_key_settings.html
+scApis: https://dev.elsevier.com/sc_apis.html
+elsevier: https://www.elsevier.com
+
+dependencies: https://github.com/mauprogramador/scopus-survey-api/tree/master/app/framework/dependencies
+middleware: https://github.com/mauprogramador/scopus-survey-api/tree/master/app/framework/middleware
+exceptions: https://github.com/mauprogramador/scopus-survey-api/tree/master/app/framework/exceptions
+presenters: https://github.com/mauprogramador/scopus-survey-api/tree/master/app/adapters/presenters
+gateway: https://github.com/mauprogramador/scopus-survey-api/tree/master/app/adapters/gateway
+helpers: https://github.com/mauprogramador/scopus-survey-api/tree/master/app/adapters/helpers
+usecases: https://github.com/mauprogramador/scopus-survey-api/tree/master/app/core/usecases
+domain: https://github.com/mauprogramador/scopus-survey-api/tree/master/app/core/domain
+common: https://github.com/mauprogramador/scopus-survey-api/tree/master/app/core/common
+data: https://github.com/mauprogramador/scopus-survey-api/tree/master/app/core/data
+utils: https://github.com/mauprogramador/scopus-survey-api/tree/master/app/utils
+workflows: https://github.com/mauprogramador/scopus-survey-api/actions/workflows
+releases: https://github.com/mauprogramador/scopus-survey-api/releases/tag
+repository: https://github.com/mauprogramador/scopus-survey-api
+profile: https://github.com/mauprogramador
+
+shields:
+  instagram: https://img.shields.io/badge/Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white
+  linkedin: https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white
+  github: https://img.shields.io/badge/GitHub-010409?style=for-the-badge&logo=github&logoColor=white
+  twitter: https://img.shields.io/badge/XTwitter-1DA1F2?style=for-the-badge&logo=x&logoColor=white
+  gmail: https://img.shields.io/badge/Gmail-EA4335?style=for-the-badge&logo=gmail&logoColor=white

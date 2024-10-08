@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+    <url>
+        <loc>http://127.0.0.1:8001/scopus-survey-api/</loc>
+        <lastmod>2024-10-08</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="http://127.0.0.1:8001/scopus-survey-api/"/>
+        <xhtml:link rel="alternate" hreflang="pt" href="http://127.0.0.1:8001/scopus-survey-api/pt/"/>
+    </url>
+    <url>
+        <loc>http://127.0.0.1:8001/scopus-survey-api/api-limit-and-fields-and-filter/</loc>
+        <lastmod>2024-10-08</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="http://127.0.0.1:8001/scopus-survey-api/api-limit-and-fields-and-filter/"/>
+        <xhtml:link rel="alternate" hreflang="pt" href="http://127.0.0.1:8001/scopus-survey-api/pt/api-limit-and-fields-and-filter/"/>
+    </url>
+    <url>
+        <loc>http://127.0.0.1:8001/scopus-survey-api/contact/</loc>
+        <lastmod>2024-10-08</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="http://127.0.0.1:8001/scopus-survey-api/contact/"/>
+        <xhtml:link rel="alternate" hreflang="pt" href="http://127.0.0.1:8001/scopus-survey-api/pt/contact/"/>
+    </url>
+    <url>
+        <loc>http://127.0.0.1:8001/scopus-survey-api/environment/</loc>
+        <lastmod>2024-10-08</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="http://127.0.0.1:8001/scopus-survey-api/environment/"/>
+        <xhtml:link rel="alternate" hreflang="pt" href="http://127.0.0.1:8001/scopus-survey-api/pt/environment/"/>
+    </url>
+    <url>
+        <loc>http://127.0.0.1:8001/scopus-survey-api/getting-started/</loc>
+        <lastmod>2024-10-08</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="http://127.0.0.1:8001/scopus-survey-api/getting-started/"/>
+        <xhtml:link rel="alternate" hreflang="pt" href="http://127.0.0.1:8001/scopus-survey-api/pt/getting-started/"/>
+    </url>
+    <url>
+        <loc>http://127.0.0.1:8001/scopus-survey-api/glossary/</loc>
+        <lastmod>2024-10-08</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="http://127.0.0.1:8001/scopus-survey-api/glossary/"/>
+        <xhtml:link rel="alternate" hreflang="pt" href="http://127.0.0.1:8001/scopus-survey-api/pt/glossary/"/>
+    </url>
+    <url>
+        <loc>http://127.0.0.1:8001/scopus-survey-api/hooks-actions/</loc>
+        <lastmod>2024-10-08</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="http://127.0.0.1:8001/scopus-survey-api/hooks-actions/"/>
+        <xhtml:link rel="alternate" hreflang="pt" href="http://127.0.0.1:8001/scopus-survey-api/pt/hooks-actions/"/>
+    </url>
+    <url>
+        <loc>http://127.0.0.1:8001/scopus-survey-api/license/</loc>
+        <lastmod>2024-10-08</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="http://127.0.0.1:8001/scopus-survey-api/license/"/>
+        <xhtml:link rel="alternate" hreflang="pt" href="http://127.0.0.1:8001/scopus-survey-api/pt/license/"/>
+    </url>
+    <url>
+        <loc>http://127.0.0.1:8001/scopus-survey-api/reference/</loc>
+        <lastmod>2024-10-08</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="http://127.0.0.1:8001/scopus-survey-api/reference/"/>
+        <xhtml:link rel="alternate" hreflang="pt" href="http://127.0.0.1:8001/scopus-survey-api/pt/reference/"/>
+    </url>
+    <url>
+        <loc>http://127.0.0.1:8001/scopus-survey-api/release-notes/</loc>
+        <lastmod>2024-10-08</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="http://127.0.0.1:8001/scopus-survey-api/release-notes/"/>
+        <xhtml:link rel="alternate" hreflang="pt" href="http://127.0.0.1:8001/scopus-survey-api/pt/release-notes/"/>
+    </url>
+    <url>
+        <loc>http://127.0.0.1:8001/scopus-survey-api/requirements/</loc>
+        <lastmod>2024-10-08</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="http://127.0.0.1:8001/scopus-survey-api/requirements/"/>
+        <xhtml:link rel="alternate" hreflang="pt" href="http://127.0.0.1:8001/scopus-survey-api/pt/requirements/"/>
+    </url>
+    <url>
+        <loc>http://127.0.0.1:8001/scopus-survey-api/responses-and-errors/</loc>
+        <lastmod>2024-10-08</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="http://127.0.0.1:8001/scopus-survey-api/responses-and-errors/"/>
+        <xhtml:link rel="alternate" hreflang="pt" href="http://127.0.0.1:8001/scopus-survey-api/pt/responses-and-errors/"/>
+    </url>
+    <url>
+        <loc>http://127.0.0.1:8001/scopus-survey-api/scopus-abstract-retrieval-api/</loc>
+        <lastmod>2024-10-08</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="http://127.0.0.1:8001/scopus-survey-api/scopus-abstract-retrieval-api/"/>
+        <xhtml:link rel="alternate" hreflang="pt" href="http://127.0.0.1:8001/scopus-survey-api/pt/scopus-abstract-retrieval-api/"/>
+    </url>
+    <url>
+        <loc>http://127.0.0.1:8001/scopus-survey-api/scopus-search-api/</loc>
+        <lastmod>2024-10-08</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="http://127.0.0.1:8001/scopus-survey-api/scopus-search-api/"/>
+        <xhtml:link rel="alternate" hreflang="pt" href="http://127.0.0.1:8001/scopus-survey-api/pt/scopus-search-api/"/>
+    </url>
+    <url>
+        <loc>http://127.0.0.1:8001/scopus-survey-api/technologies/</loc>
+        <lastmod>2024-10-08</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="http://127.0.0.1:8001/scopus-survey-api/technologies/"/>
+        <xhtml:link rel="alternate" hreflang="pt" href="http://127.0.0.1:8001/scopus-survey-api/pt/technologies/"/>
+    </url>
+    <url>
+        <loc>http://127.0.0.1:8001/scopus-survey-api/testing/</loc>
+        <lastmod>2024-10-08</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="http://127.0.0.1:8001/scopus-survey-api/testing/"/>
+        <xhtml:link rel="alternate" hreflang="pt" href="http://127.0.0.1:8001/scopus-survey-api/pt/testing/"/>
+    </url>
+    <url>
+        <loc>http://127.0.0.1:8001/scopus-survey-api/pt/</loc>
+        <lastmod>2024-10-08</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="pt" href="http://127.0.0.1:8001/scopus-survey-api/pt/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="http://127.0.0.1:8001/scopus-survey-api/"/>
+    </url>
+    <url>
+        <loc>http://127.0.0.1:8001/scopus-survey-api/pt/api-limit-and-fields-and-filter/</loc>
+        <lastmod>2024-10-08</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="pt" href="http://127.0.0.1:8001/scopus-survey-api/pt/api-limit-and-fields-and-filter/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="http://127.0.0.1:8001/scopus-survey-api/api-limit-and-fields-and-filter/"/>
+    </url>
+    <url>
+        <loc>http://127.0.0.1:8001/scopus-survey-api/pt/contact/</loc>
+        <lastmod>2024-10-08</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="pt" href="http://127.0.0.1:8001/scopus-survey-api/pt/contact/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="http://127.0.0.1:8001/scopus-survey-api/contact/"/>
+    </url>
+    <url>
+        <loc>http://127.0.0.1:8001/scopus-survey-api/pt/environment/</loc>
+        <lastmod>2024-10-08</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="pt" href="http://127.0.0.1:8001/scopus-survey-api/pt/environment/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="http://127.0.0.1:8001/scopus-survey-api/environment/"/>
+    </url>
+    <url>
+        <loc>http://127.0.0.1:8001/scopus-survey-api/pt/getting-started/</loc>
+        <lastmod>2024-10-08</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="pt" href="http://127.0.0.1:8001/scopus-survey-api/pt/getting-started/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="http://127.0.0.1:8001/scopus-survey-api/getting-started/"/>
+    </url>
+    <url>
+        <loc>http://127.0.0.1:8001/scopus-survey-api/pt/glossary/</loc>
+        <lastmod>2024-10-08</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="pt" href="http://127.0.0.1:8001/scopus-survey-api/pt/glossary/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="http://127.0.0.1:8001/scopus-survey-api/glossary/"/>
+    </url>
+    <url>
+        <loc>http://127.0.0.1:8001/scopus-survey-api/pt/hooks-actions/</loc>
+        <lastmod>2024-10-08</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="pt" href="http://127.0.0.1:8001/scopus-survey-api/pt/hooks-actions/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="http://127.0.0.1:8001/scopus-survey-api/hooks-actions/"/>
+    </url>
+    <url>
+        <loc>http://127.0.0.1:8001/scopus-survey-api/pt/license/</loc>
+        <lastmod>2024-10-08</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="pt" href="http://127.0.0.1:8001/scopus-survey-api/pt/license/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="http://127.0.0.1:8001/scopus-survey-api/license/"/>
+    </url>
+    <url>
+        <loc>http://127.0.0.1:8001/scopus-survey-api/pt/reference/</loc>
+        <lastmod>2024-10-08</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="pt" href="http://127.0.0.1:8001/scopus-survey-api/pt/reference/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="http://127.0.0.1:8001/scopus-survey-api/reference/"/>
+    </url>
+    <url>
+        <loc>http://127.0.0.1:8001/scopus-survey-api/pt/release-notes/</loc>
+        <lastmod>2024-10-08</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="pt" href="http://127.0.0.1:8001/scopus-survey-api/pt/release-notes/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="http://127.0.0.1:8001/scopus-survey-api/release-notes/"/>
+    </url>
+    <url>
+        <loc>http://127.0.0.1:8001/scopus-survey-api/pt/requirements/</loc>
+        <lastmod>2024-10-08</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="pt" href="http://127.0.0.1:8001/scopus-survey-api/pt/requirements/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="http://127.0.0.1:8001/scopus-survey-api/requirements/"/>
+    </url>
+    <url>
+        <loc>http://127.0.0.1:8001/scopus-survey-api/pt/responses-and-errors/</loc>
+        <lastmod>2024-10-08</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="pt" href="http://127.0.0.1:8001/scopus-survey-api/pt/responses-and-errors/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="http://127.0.0.1:8001/scopus-survey-api/responses-and-errors/"/>
+    </url>
+    <url>
+        <loc>http://127.0.0.1:8001/scopus-survey-api/pt/scopus-abstract-retrieval-api/</loc>
+        <lastmod>2024-10-08</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="pt" href="http://127.0.0.1:8001/scopus-survey-api/pt/scopus-abstract-retrieval-api/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="http://127.0.0.1:8001/scopus-survey-api/scopus-abstract-retrieval-api/"/>
+    </url>
+    <url>
+        <loc>http://127.0.0.1:8001/scopus-survey-api/pt/scopus-search-api/</loc>
+        <lastmod>2024-10-08</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="pt" href="http://127.0.0.1:8001/scopus-survey-api/pt/scopus-search-api/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="http://127.0.0.1:8001/scopus-survey-api/scopus-search-api/"/>
+    </url>
+    <url>
+        <loc>http://127.0.0.1:8001/scopus-survey-api/pt/technologies/</loc>
+        <lastmod>2024-10-08</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="pt" href="http://127.0.0.1:8001/scopus-survey-api/pt/technologies/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="http://127.0.0.1:8001/scopus-survey-api/technologies/"/>
+    </url>
+    <url>
+        <loc>http://127.0.0.1:8001/scopus-survey-api/pt/testing/</loc>
+        <lastmod>2024-10-08</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="pt" href="http://127.0.0.1:8001/scopus-survey-api/pt/testing/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="http://127.0.0.1:8001/scopus-survey-api/testing/"/>
+    </url>
+</urlset>
