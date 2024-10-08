@@ -7,7 +7,7 @@
   <figcaption><a href="{{links.profile}}" target="_blank" rel="author">@mauprogramador</a></figcaption>
 </figure>
 
-I am the Brazilian creator and owner of the **ScopusSearcherAPI** repository.<br>
+I am the Brazilian creator and owner of the **ScopusSurveyAPI** repository.<br>
 A **Backend** developer, with **Python** and **Javascript**, and also a **Web** developer.
 
 ---

@@ -57,7 +57,7 @@ Um **validador** de modelo criado usando o [Pydantic `BaseModel`]({{links.baseMo
 
 ## <code class="badge-class"></code> <span class="code-class">ScopusResult</span>
 
-:material-text-box: Serializador para o item do campo *entry* no esquema {{abbr.json}} da resposta<br>
+:material-text-box: Serializador para o item do campo _entry_ no esquema {{abbr.json}} da resposta<br>
 :material-github: [`código fonte`]({{links.data}}/serializers.py){:target="\_blank"}
 :material-package-variant-closed: `core.data`<br>
 :material-file-code: `app/core/data/serializers.py`<br>
@@ -593,7 +593,7 @@ Reúne e filtra dados de **artigos Scopus**, grava e salva todos os artigos rest
 
 ## <code class="badge-class"></code> <span class="code-class">TemplateContextBuilder</span>
 
-:material-text-box: Gera valores de contexto para respostas de *template*<br>
+:material-text-box: Gera valores de contexto para respostas de _template_<br>
 :material-github: [`código fonte`]({{links.presenters}}/template_context.py){:target="\_blank"}
 :material-package-variant-closed: `adapters.presenters`<br>
 :material-file-code: `app/adapters/presenters/template_context.py`<br>
@@ -628,8 +628,8 @@ Sobre os **valores do Contexto**:
 | `swagger_url` | {{abbr.url}} da página do **Swagger**. **Default:** `/`                                            |
 | `token`       | **Token** da aplicação                                                                             |
 | `filename`    | Nome do arquivo {{abbr.csv}}. **Default:** `articles.csv`                                          |
-| `table_url`   | {{abbr.url}} da página web da tabela. **Default:** `/scopus-searcher/api/table`                    |
-| `search_url`  | {{abbr.url}} da {{abbr.api}}. **Default:** `/scopus-searcher/api/search-articles`                  |
+| `table_url`   | {{abbr.url}} da página web da tabela. **Default:** `/scopus-survey/api/table`                      |
+| `search_url`  | {{abbr.url}} da {{abbr.api}}. **Default:** `/scopus-survey/api/search-articles`                    |
 | `description` | Descrição da aplicação                                                                             |
 
 ### <code class="badge-method"></code> <span class="code-method">get_table_context</span>
@@ -649,7 +649,7 @@ Sobre os **valores do Contexto**:
 | `repository`  | {{abbr.url}} do repositório **GitHub** da aplicação                                                |
 | `swagger_url` | {{abbr.url}} da página do **Swagger**. **Default:** `/`                                            |
 | `content`     | Conteúdo da tabela. Lista dos artigos encontrados ou `None` se não houver artigos                  |
-| `web_app_url` | {{abbr.url}} da página web da aplicação. **Default:** `/scopus-searcher/api`                       |
+| `web_app_url` | {{abbr.url}} da página web da aplicação. **Default:** `/scopus-survey/api`                         |
 
 <br>
 <!-- ExceptionJSON -->
@@ -732,11 +732,11 @@ Sobre e os **detalhes do erro `ScopusAPIError`**:
 
 **Middlewares** são mecanismos criados a partir do [Starlette `BaseHTTPMiddleware`](https://www.starlette.io/middleware/#basehttpmiddleware){:target="\_blank"} que funcionam no **ciclo de solicitação-resposta** da aplicação, interceptando chamadas e processando-as. Eles podem acessar e manipular cada **objeto de solicitação** antes que ele seja processado por qualquer manipulador de rota, e também cada **objeto de resposta** antes de retorná-lo. Há três implementados.
 
-O *middleware* [`TraceExceptionControl`]({{links.middleware}}/tracing_exception.py){:target="\_blank"} **rastreia** a solicitação, relatando o cliente, a {{abbr.url}} acessada, o código de status da resposta e o tempo de processamento. Ele também **lida** com quaisquer exceções inesperadas e erros de interrupção de sinal.
+O _middleware_ [`TraceExceptionControl`]({{links.middleware}}/tracing_exception.py){:target="\_blank"} **rastreia** a solicitação, relatando o cliente, a {{abbr.url}} acessada, o código de status da resposta e o tempo de processamento. Ele também **lida** com quaisquer exceções inesperadas e erros de interrupção de sinal.
 
-O *middleware* [`RedirectNotFoundRoutes`]({{links.middleware}}/redirect_route.py){:target="\_blank"} **redireciona** qualquer solicitação de rota não encontrada que receba um erro [`404 Not Found`]({{links.mdnStatus}}/404){:target="\_blank"} e não seja uma rota permitida mapeada. Ele também **lida** com erros de interrupção de sinal.
+O _middleware_ [`RedirectNotFoundRoutes`]({{links.middleware}}/redirect_route.py){:target="\_blank"} **redireciona** qualquer solicitação de rota não encontrada que receba um erro [`404 Not Found`]({{links.mdnStatus}}/404){:target="\_blank"} e não seja uma rota permitida mapeada. Ele também **lida** com erros de interrupção de sinal.
 
-O *middleware* [FastAPI `CORSMiddleware`]({{links.fastapiTutorial}}/cors/#use-corsmiddleware){:target="\_blank"} implementa e configura o [mecanismo {{abbr.cors}}](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS){:target="\_blank"}, permitindo qualquer origem, quaisquer credenciais, qualquer cabeçalho e apenas o [método `GET`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/GET){:target="\_blank"}.
+O _middleware_ [FastAPI `CORSMiddleware`]({{links.fastapiTutorial}}/cors/#use-corsmiddleware){:target="\_blank"} implementa e configura o [mecanismo {{abbr.cors}}](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS){:target="\_blank"}, permitindo qualquer origem, quaisquer credenciais, qualquer cabeçalho e apenas o [método `GET`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/GET){:target="\_blank"}.
 
 <br>
 <!-- SignalHandler -->

@@ -15,7 +15,7 @@ from app.utils.signal_handler import SignalHandler
 class RedirectNotFoundRoutes(BaseHTTPMiddleware):
     """Middleware to redirect any request for routes not found"""
 
-    __MAIN_ROUTE = "/scopus-searcher/api"
+    __MAIN_ROUTE = "/scopus-survey/api"
     __RELOAD_ROUTE = "/livereload"
 
     def __init__(self, app: FastAPI):

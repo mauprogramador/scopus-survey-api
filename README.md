@@ -1,21 +1,21 @@
-# Scopus Searcher API
+# Scopus Survey API
 
 <p align="center">
   <img src="./docs/assets/img/favicon.png" width="300" alt="Logo">
 </p>
 <p align="center">
-  <em>Web API for Bibliographic Survey of Scopus Articles</em>
+  <em>Web API for bibliographic survey of Scopus articles</em>
 </p>
 <p align="center">
-  <a href="https://github.com/mauprogramador/scopus-searcher-api/actions/workflows/verification.yml" target="_blank" rel="external" title="Linting and Testing Action">
-    <img src="https://img.shields.io/github/actions/workflow/status/mauprogramador/scopus-searcher-api/verification.yml?branch=master&event=push&logo=github&label=Lint | Test&color=FF5722" alt="Linting and Testing Action">
+  <a href="https://github.com/mauprogramador/scopus-survey-api/actions/workflows/verification.yml" target="_blank" rel="external" title="Linting and Testing Action">
+    <img src="https://img.shields.io/github/actions/workflow/status/mauprogramador/scopus-survey-api/verification.yml?branch=master&event=push&logo=github&label=Lint | Test&color=FF5722" alt="Linting and Testing Action">
   </a>
-  <a href="https://github.com/mauprogramador/scopus-searcher-api/actions/workflows/documentation.yml" target="_blank" rel="external" title="Documentation Action">
-    <img src="https://img.shields.io/github/actions/workflow/status/mauprogramador/scopus-searcher-api/documentation.yml?branch=master&event=push&logo=github&label=Docs&color=2196F3" alt="Documentation Action">
+  <a href="https://github.com/mauprogramador/scopus-survey-api/actions/workflows/documentation.yml" target="_blank" rel="external" title="Documentation Action">
+    <img src="https://img.shields.io/github/actions/workflow/status/mauprogramador/scopus-survey-api/documentation.yml?branch=master&event=push&logo=github&label=Docs&color=2196F3" alt="Documentation Action">
   </a>
   <img src="https://img.shields.io/badge/Coverage-99%25-4CAF50" alt="Coverage" title="Coverage">
-  <a href="https://github.com/mauprogramador/scopus-searcher-api/releases/tag/v3.0.0" target="_blank" rel="external" title="Web API Version">
-    <img src="https://img.shields.io/github/v/tag/mauprogramador/scopus-searcher-api?logo=github&label=Web API Version&color=E9711C" alt="Web API Version">
+  <a href="https://github.com/mauprogramador/scopus-survey-api/releases/tag/v3.0.0" target="_blank" rel="external" title="Web API Version">
+    <img src="https://img.shields.io/github/v/tag/mauprogramador/scopus-survey-api?logo=github&label=Web API Version&color=E9711C" alt="Web API Version">
   </a>
   <a href="https://www.python.org/" target="_blank" rel="external" title="Python3 Version">
     <img src="https://img.shields.io/badge/Python-v3.11-3776AB?logo=python&logoColor=FFF" alt="Python3 Version">
@@ -27,11 +27,11 @@
 Federal Institute of Mato Grosso do Sul - <a href="https://www.ifms.edu.br/campi/campus-tres-lagoas" target="_blank" rel="external" title="IFMS - Campus Três Lagoas">IFMS - Campus Três Lagoas</a><br/>
 Technology in Systems Analysis and Development - <a href="https://www.ifms.edu.br/campi/campus-tres-lagoas/cursos/graduacao/analise-e-desenvolvimento-de-sistemas" target="_blank" rel="external" title="TADS">TADS</a><br/>
 
-**Documentation**: <a href="https://mauprogramador.github.io/scopus-searcher-api/" target="_blank" rel="external" title="Documentation">https://mauprogramador.github.io/scopus-searcher-api/</a>
+**Documentation**: <a href="https://mauprogramador.github.io/scopus-survey-api/" target="_blank" rel="external" title="Documentation">https://mauprogramador.github.io/scopus-survey-api/</a>
 
 **Swagger UI**: <a href="http://127.0.0.1:8000" target="_blank" rel="external" title="Swagger UI">http://127.0.0.1:8000</a>
 
-**Web API**: <a href="http://127.0.0.1:8000/scopus-searcher/api" target="_blank" rel="external" title="Web API">http://127.0.0.1:8000/scopus-searcher/api</a>
+**Web API**: <a href="http://127.0.0.1:8000/scopus-survey/api" target="_blank" rel="external" title="Web API">http://127.0.0.1:8000/scopus-survey/api</a>
 
 ---
 

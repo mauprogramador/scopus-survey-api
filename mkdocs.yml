@@ -1,9 +1,9 @@
-site_name: Scopus Searcher API
-site_url: http://127.0.0.1:8001/scopus-searcher-api
+site_name: ScopusSurveyAPI
+site_url: http://127.0.0.1:8001/scopus-survey-api
 site_description: Web API for bibliographic survey of Scopus articles
-site_author: MauProgramador
-repo_name: mauprogramador/scopus-searcher-api
-repo_url: https://github.com/mauprogramador/scopus-searcher-api
+site_author: mauprogramador
+repo_name: mauprogramador/scopus-survey-api
+repo_url: https://github.com/mauprogramador/scopus-survey-api
 edit_uri: '/docs'
 theme:
   name: material
@@ -102,7 +102,7 @@ markdown_extensions:
 extra:
   social:
   - icon: fontawesome/brands/github
-    link: https://github.com/mauprogramador/scopus-searcher-api
+    link: https://github.com/mauprogramador/scopus-survey-api
     name: Source code GitHub repository
   - icon: ifms
     link: https://www.ifms.edu.br/campi/campus-tres-lagoas

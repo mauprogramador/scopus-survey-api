@@ -28,7 +28,7 @@ underscores**, with a **minimum of 2** and a **maximum of 50 characters**.
 """
 
 DESCRIPTION = f"""
-[**Web Application**](/scopus-searcher/api)
+[**Web Application**](/scopus-survey/api)
 &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
 [**Documentation**]({TOML_ENV.documentation})
 """
@@ -43,7 +43,7 @@ LICENSE = {
     "identifier": "MIT",
     "url": (
         "https://github.com/mauprogramador/"
-        "scopus-searcher-api/blob/master/LICENSE"
+        "scopus-survey-api/blob/master/LICENSE"
     ),
 }
 RESPONSES = {

@@ -20,7 +20,7 @@ EMPTY_RESPONSE = Response("")
 ANY_RESPONSE = Response("any")
 
 __PARAMS = f"?apikey={API_KEY}&keywords={','.join(KEYWORDS)}"
-BASE_URL = f"{TOML_ENV.url}/scopus-searcher/api"
+BASE_URL = f"{TOML_ENV.url}/scopus-survey/api"
 
 URL = f"{BASE_URL}/search-articles{__PARAMS}"
 TABLE_URL = f"{BASE_URL}/table"

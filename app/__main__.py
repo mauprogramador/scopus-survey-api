@@ -13,6 +13,6 @@ from app.core.config.config import LOG, TOML_ENV
 from app.utils.access_qrcode import ShowAccessQRCode
 
 if __name__ == "__main__":
-    LOG.info("Scopus Searcher API was initialized 🚀")
+    LOG.info("Scopus Survey API was initialized 🚀")
     ShowAccessQRCode(TOML_ENV.host, TOML_ENV.port)
     uvicorn.run(**TOML_ENV.uvicorn)

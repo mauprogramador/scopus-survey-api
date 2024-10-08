@@ -10,7 +10,7 @@ from app.core.data.dtos import SearchParams
 from app.framework.dependencies import AccessToken, QueryParams
 from app.framework.fastapi.config import SEARCH_ROUTE_DESCRIPTION, TEMPLATES
 
-router = APIRouter(prefix="/scopus-searcher/api")
+router = APIRouter(prefix="/scopus-survey/api")
 
 
 @router.get(

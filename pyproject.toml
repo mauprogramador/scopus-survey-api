@@ -1,12 +1,12 @@
 [tool.poetry]
-name = "ScopusSearcherAPI"
+name = "ScopusSurveyAPI"
 version = "3.0.0"
-description = "Web API for Bibliographic Survey of Scopus Articles"
+description = "Web API for bibliographic survey of Scopus articles"
 authors = ["mauprogramador <sir.silvabmauricio@gmail.com>"]
 readme = "README.md"
 license = "MIT"
-repository = "https://github.com/mauprogramador/scopus-searcher-api"
-documentation = "https://mauprogramador.github.io/scopus-searcher-api/"
+repository = "https://github.com/mauprogramador/scopus-survey-api"
+documentation = "https://mauprogramador.github.io/scopus-survey-api/"
 keywords = ["scopus search api", "theoretical reference", "python", "clean architecture"]
 classifiers = [
     "Development Status :: 5 - Production/Stable",

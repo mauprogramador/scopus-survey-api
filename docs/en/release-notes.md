@@ -2,7 +2,7 @@
 
 ## [:material-github: `v3.0.0`]({{links.releases}}/v3.0.0){:target="\_blank"} <small>:material-calendar-month: 2024-09-30</small>
 
-See the [⟲ CHANGELOG](https://github.com/mauprogramador/scopus-searcher-api/tree/master/CHANGELOG.md) to see all the commits.
+See the [⟲ CHANGELOG](https://github.com/mauprogramador/scopus-survey-api/tree/master/CHANGELOG.md) to see all the commits.
 
 ### 🔨 Builds
 
@@ -125,7 +125,7 @@ See the [⟲ CHANGELOG](https://github.com/mauprogramador/scopus-searcher-api/tr
 
 ## [:material-github: `v2.0.0`]({{links.releases}}/v2.0.0){:target="\_blank"} <small>:material-calendar-month: 2024-03-11</small>
 
-See the [⟲ CHANGELOG](https://github.com/mauprogramador/scopus-searcher-api/tree/master/CHANGELOG.md) to see all the commits.
+See the [⟲ CHANGELOG](https://github.com/mauprogramador/scopus-survey-api/tree/master/CHANGELOG.md) to see all the commits.
 
 ### ✨ Features
 
@@ -150,7 +150,7 @@ See the [⟲ CHANGELOG](https://github.com/mauprogramador/scopus-searcher-api/tr
 
 ## [:material-github: `v1.0.0`]({{links.releases}}/v1.0.0){:target="\_blank"} <small>:material-calendar-month: 2024-02-27</small>
 
-See the [⟲ CHANGELOG](https://github.com/mauprogramador/scopus-searcher-api/tree/master/CHANGELOG.md) to see all the commits.
+See the [⟲ CHANGELOG](https://github.com/mauprogramador/scopus-survey-api/tree/master/CHANGELOG.md) to see all the commits.
 
 ## ✨ Features
 

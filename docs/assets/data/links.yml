@@ -18,20 +18,20 @@ scApiKey: https://dev.elsevier.com/api_key_settings.html
 scApis: https://dev.elsevier.com/sc_apis.html
 elsevier: https://www.elsevier.com
 
-dependencies: https://github.com/mauprogramador/scopus-searcher-api/tree/master/app/framework/dependencies
-middleware: https://github.com/mauprogramador/scopus-searcher-api/tree/master/app/framework/middleware
-exceptions: https://github.com/mauprogramador/scopus-searcher-api/tree/master/app/framework/exceptions
-presenters: https://github.com/mauprogramador/scopus-searcher-api/tree/master/app/adapters/presenters
-gateway: https://github.com/mauprogramador/scopus-searcher-api/tree/master/app/adapters/gateway
-helpers: https://github.com/mauprogramador/scopus-searcher-api/tree/master/app/adapters/helpers
-usecases: https://github.com/mauprogramador/scopus-searcher-api/tree/master/app/core/usecases
-domain: https://github.com/mauprogramador/scopus-searcher-api/tree/master/app/core/domain
-common: https://github.com/mauprogramador/scopus-searcher-api/tree/master/app/core/common
-data: https://github.com/mauprogramador/scopus-searcher-api/tree/master/app/core/data
-utils: https://github.com/mauprogramador/scopus-searcher-api/tree/master/app/utils
-workflows: https://github.com/mauprogramador/scopus-searcher-api/actions/workflows
-releases: https://github.com/mauprogramador/scopus-searcher-api/releases/tag
-repository: https://github.com/mauprogramador/scopus-searcher-api
+dependencies: https://github.com/mauprogramador/scopus-survey-api/tree/master/app/framework/dependencies
+middleware: https://github.com/mauprogramador/scopus-survey-api/tree/master/app/framework/middleware
+exceptions: https://github.com/mauprogramador/scopus-survey-api/tree/master/app/framework/exceptions
+presenters: https://github.com/mauprogramador/scopus-survey-api/tree/master/app/adapters/presenters
+gateway: https://github.com/mauprogramador/scopus-survey-api/tree/master/app/adapters/gateway
+helpers: https://github.com/mauprogramador/scopus-survey-api/tree/master/app/adapters/helpers
+usecases: https://github.com/mauprogramador/scopus-survey-api/tree/master/app/core/usecases
+domain: https://github.com/mauprogramador/scopus-survey-api/tree/master/app/core/domain
+common: https://github.com/mauprogramador/scopus-survey-api/tree/master/app/core/common
+data: https://github.com/mauprogramador/scopus-survey-api/tree/master/app/core/data
+utils: https://github.com/mauprogramador/scopus-survey-api/tree/master/app/utils
+workflows: https://github.com/mauprogramador/scopus-survey-api/actions/workflows
+releases: https://github.com/mauprogramador/scopus-survey-api/releases/tag
+repository: https://github.com/mauprogramador/scopus-survey-api
 profile: https://github.com/mauprogramador
 
 shields:

@@ -9,7 +9,7 @@ from app.core.domain.metaclasses import TemplateContext
 class TemplateContextBuilder(TemplateContext):
     """Generates context values for template responses"""
 
-    __WEB_APP_URL = "/scopus-searcher/api"
+    __WEB_APP_URL = "/scopus-survey/api"
     __INDEX_HTML = "index.html"
     __TABLE_HTML = "table.html"
     __ENCODING = "utf-8"
@@ -17,8 +17,8 @@ class TemplateContextBuilder(TemplateContext):
     __WEB_APP_DATA = {
         "token": TOKEN,
         "filename": FILENAME,
-        "table_url": "/scopus-searcher/api/table",
-        "search_url": "/scopus-searcher/api/search-articles",
+        "table_url": "/scopus-survey/api/table",
+        "search_url": "/scopus-survey/api/search-articles",
         "description": TOML_ENV.description,
     }
 

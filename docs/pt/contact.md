@@ -7,7 +7,7 @@
   <figcaption><a href="{{links.profile}}" target="_blank" rel="author">@mauprogramador</a></figcaption>
 </figure>
 
-Sou o brasileiro criador e dono do repositório **ScopusSearcherAPI**.<br>
+Sou o brasileiro criador e dono do repositório **ScopusSurveyAPI**.<br>
 Um desenvolvedor **Backend**, com **Python** e **Javascript**, e também um desenvolvedor **Web**.
 
 ---

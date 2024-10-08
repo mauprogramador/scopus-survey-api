@@ -1,6 +1,6 @@
 FROM python:3.11.1-buster
 
-ENV WORKDIR=/usr/src/scopussearcherapi
+ENV WORKDIR=/usr/src/scopussurveyapi
 WORKDIR $WORKDIR
 
 RUN pip install --upgrade pip && pip3 install wheel && pip3 install poetry

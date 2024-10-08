@@ -19,9 +19,9 @@ No [VsCode](https://code.visualstudio.com/){:target="\_blank"} usando a [Extens�
 - Selecione o comando `Git: Clone` e clique nele.
 - Cole a {{abbr.url}} do repositório:
 
-    ```url
-    {{links.repository}}.git
-    ```
+  ```url
+  {{links.repository}}.git
+  ```
 
 - Pressione `Enter` ou clique em `Clone from URL` e selecione um diretório.
 
@@ -75,7 +75,7 @@ No [VsCode](https://code.visualstudio.com/){:target="\_blank"} usando a [Extens�
 ## Aplicação Web
 
 Depois de iniciar a aplicação, você pode acessar a [Página Web da Aplicação](https://en.wikipedia.org/wiki/Web_application){:target="\_blank"} em: <br>
-:octicons-browser-16: <http://127.0.0.1:8000/scopus-searcher/api>{:target="\_blank"}
+:octicons-browser-16: <http://127.0.0.1:8000/scopus-survey/api>{:target="\_blank"}
 
 ![Web App](../assets/img/web-app-pt.png "Web App")
 

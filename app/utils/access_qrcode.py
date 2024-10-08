@@ -11,7 +11,7 @@ class ShowAccessQRCode:
     """Displays a QR code for mobile access"""
 
     __QR = QRCode(version=1, error_correction=ERROR_CORRECT_L)
-    __BASE_URL = "http://{ip}:{port}/scopus-searcher/api"
+    __BASE_URL = "http://{ip}:{port}/scopus-survey/api"
     __HOST = "10.253.155.219"
     __OPEN_HOST = "0.0.0.0"
 

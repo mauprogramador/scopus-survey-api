@@ -628,8 +628,8 @@ About the **Context values**:
 | `swagger_url` | Swagger page {{abbr.url}}. **Default:** `/`                                                          |
 | `token`       | Application **Token**                                                                                |
 | `filename`    | {{abbr.csv}} filename. **Default:** `articles.csv`                                                   |
-| `table_url`   | Table web page {{abbr.url}}. **Default:** `/scopus-searcher/api/table`                               |
-| `search_url`  | {{abbr.api}} {{abbr.url}}. **Default:** `/scopus-searcher/api/search-articles`                       |
+| `table_url`   | Table web page {{abbr.url}}. **Default:** `/scopus-survey/api/table`                                 |
+| `search_url`  | {{abbr.api}} {{abbr.url}}. **Default:** `/scopus-survey/api/search-articles`                         |
 | `description` | Application description                                                                              |
 
 ### <code class="badge-method"></code> <span class="code-method">get_table_context</span>
@@ -649,7 +649,7 @@ About the **Context values**:
 | `repository`  | {{abbr.url}} of the application's **GitHub** repository                                              |
 | `swagger_url` | Swagger page {{abbr.url}}. **Default:** `/`                                                          |
 | `content`     | Table content. List of the articles found or `None` if there are no articles                         |
-| `web_app_url` | Application web page {{abbr.url}}. **Default:** `/scopus-searcher/api`                               |
+| `web_app_url` | Application web page {{abbr.url}}. **Default:** `/scopus-survey/api`                                 |
 
 <br>
 <!-- ExceptionJSON -->

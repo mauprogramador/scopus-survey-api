@@ -19,8 +19,8 @@ run:
 	@poetry run python3 -m app
 
 docker:
-	@docker build -q -t scopus-searcher-api .
-	@docker run -d --env HOST=0.0.0.0 --env-file .env --name scopus-searcher -p ${PORT}:${PORT} scopus-searcher-api
+	@docker build -q -t scopus-survey-api .
+	@docker run -d --env HOST=0.0.0.0 --env-file .env --name scopus-survey -p ${PORT}:${PORT} scopus-survey-api
 
 
 # Documentation
@@ -35,7 +35,7 @@ test:
 	@poetry run pytest -v --color=yes
 
 test-docker:
-	@docker exec -it scopus-searcher poetry run pytest -v --color=yes
+	@docker exec -it scopus-survey poetry run pytest -v --color=yes
 
 coverage:
 	@poetry run coverage erase
@@ -43,7 +43,7 @@ coverage:
 	@poetry run coverage report
 
 coverage-docker:
-	@docker exec -it scopus-searcher poetry run coverage erase && coverage run -m pytest -q && coverage report
+	@docker exec -it scopus-survey poetry run coverage erase && coverage run -m pytest -q && coverage report
 
 
 # Formatting and Linting

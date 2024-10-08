@@ -8,17 +8,17 @@
 
 ### [`200 Ok`]({{links.mdnStatus}}/200){:target="\_blank"}
 
-| **:material-routes: {{abbr.route}}**   | **Response**                                      |
-| -------------------------------------- | ------------------------------------------------- |
-| `/scopus-searcher/api`                 | Renders the application {{abbr.api}} web page     |
-| `/scopus-searcher/api/search-articles` | Downloads the {{abbr.csv}} file of found articles |
-| `/scopus-searcher/api/table`           | Renders the articles table web page               |
+| **:material-routes: {{abbr.route}}** | **Response**                                      |
+| ------------------------------------ | ------------------------------------------------- |
+| `/scopus-survey/api`                 | Renders the application {{abbr.api}} web page     |
+| `/scopus-survey/api/search-articles` | Downloads the {{abbr.csv}} file of found articles |
+| `/scopus-survey/api/table`           | Renders the articles table web page               |
 
 ## Redirection
 
 ### [`307 Temporary Redirect`]({{links.mdnStatus}}/307){:target="\_blank"}
 
-Any request {{abbr.url}} that is not in the :material-routes: `/scopus-searcher/api` route will be redirected to it. Redirects any request that is trying to access a not found/non-existent route.
+Any request {{abbr.url}} that is not in the :material-routes: `/scopus-survey/api` route will be redirected to it. Redirects any request that is trying to access a not found/non-existent route.
 
 ## Client Error
 

@@ -32,7 +32,7 @@ class AppLogger:
     __FMT = "%(asctime)s %(message)s"
     __POINT = "\033[35m\u2022\033[m"
     __DATEFMT = "%d-%m-%Y %H:%M:%S"
-    __NAME = "scopussearcherapi"
+    __NAME = "scopussurveyapi"
     __TABLE = str.maketrans(
         {
             "{": "\033[33m{\033[m",

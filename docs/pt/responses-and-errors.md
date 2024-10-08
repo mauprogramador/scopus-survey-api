@@ -10,15 +10,15 @@
 
 | **:material-routes: {{abbr.routePt}}** | **Resposta**                                         |
 | -------------------------------------- | ---------------------------------------------------- |
-| `/scopus-searcher/api`                 | Renderiza a página web da {{abbr.api}} da aplicação  |
-| `/scopus-searcher/api/search-articles` | Baixa o arquivo {{abbr.csv}} dos artigos encontrados |
-| `/scopus-searcher/api/table`           | Renderiza a página web da tabela de artigos          |
+| `/scopus-survey/api`                   | Renderiza a página web da {{abbr.api}} da aplicação  |
+| `/scopus-survey/api/search-articles`   | Baixa o arquivo {{abbr.csv}} dos artigos encontrados |
+| `/scopus-survey/api/table`             | Renderiza a página web da tabela de artigos          |
 
 ## Redirecionamento
 
 ### [`307 Temporary Redirect`]({{links.mdnStatus}}/307){:target="\_blank"}
 
-Qualquer {{abbr.url}} de solicitação que não esteja na rota :material-routes: `/scopus-searcher/api` será redirecionada para ela. Redireciona qualquer solicitação que esteja tentando acessar uma rota não encontrada/inexistente.
+Qualquer {{abbr.url}} de solicitação que não esteja na rota :material-routes: `/scopus-survey/api` será redirecionada para ela. Redireciona qualquer solicitação que esteja tentando acessar uma rota não encontrada/inexistente.
 
 ## Erro do cliente
 
@@ -26,7 +26,7 @@ Qualquer {{abbr.url}} de solicitação que não esteja na rota :material-routes:
 
 | **:material-code-json: Mensagem da {{abbr.exceptionPt}}** | **Descrição**                                                         |
 | --------------------------------------------------------- | --------------------------------------------------------------------- |
-| `Missing required API Key query parameter`                | *Query parameter* obrigatório `API Key` não encontrado na solicitação |
+| `Missing required API Key query parameter`                | _Query parameter_ obrigatório `API Key` não encontrado na solicitação |
 | `Missing required Access Token header`                    | Cabeçalho obrigatório `Access Token` não encontrado na solicitação    |
 | `Invalid Access Token`                                    | Cabeçalho `Access Token` tem um padrão inválido ou está incorreto     |
 
@@ -41,7 +41,7 @@ Qualquer {{abbr.url}} de solicitação que não esteja na rota :material-routes:
 | **:material-code-json: Mensagem da {{abbr.exceptionPt}}** | **Descrição**                                                                                                                      |
 | --------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
 | `Validation error in request <{...}>`                     | [Exceção FastAPI do Pydantic]({{links.fastapiValidationError}}){:target="\_blank"}.<br> A solicitação contém dados inválidos/erros |
-| `Missing required Keywords query parameter`               | *Query parameter* obrigatório `Palavras-chave` não encontrado na solicitação                                                       |
+| `Missing required Keywords query parameter`               | _Query parameter_ obrigatório `Palavras-chave` não encontrado na solicitação                                                       |
 | `There must be at least two keywords`                     | O número de `Palavras-chave` está abaixo do mínimo necessário.<br> Submeta pelo menos duas `Palavras-chave` para realizar a busca  |
 | `Invalid Keyword`                                         | A `Palavra-chave` submetida tem um padrão inválido                                                                                 |
 
@@ -49,14 +49,14 @@ Qualquer {{abbr.url}} de solicitação que não esteja na rota :material-routes:
 
 ### [`500 Internal Error`]({{links.mdnStatus}}/500){:target="\_blank"}
 
-| **:material-code-json: Mensagem da {{abbr.exceptionPt}}**    | **Descrição**                                                                                                                         |
-| ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------- |
-| `Validation error in response <{...}>`                       | [Exceção FastAPI do Pydantic]({{links.fastapiValidationError}}){:target="\_blank"}.<br> A solicitação contém dados inválidos/erros    |
-| `Pydantic validation error: ... validation errors for ...`   | [Exceção do Pydantic]({{links.validationError}}){:target="\_blank"}.<br> Há um erro nos dados que estão sendo validados               |
-| `Error in decoding response from Scopus API`                 | Exceção {{abbr.json}}.<br> O corpo da resposta não contém {{abbr.json}} válido para decodificar                                       |
-| `Error in validate response from Scopus API`                 | Erro de [serialização]({{links.serialization}}){:target="\_blank"}.<br> A resposta {{abbr.json}} contém campos não mapeados/inválidos |
-| `Unexpected application interruption`                        | Exceção de interrupção do [sinal de saída]({{links.pythonDocs}}/signal.html){:target="\_blank"} de desligamento                       |
-| `Unexpected error <...>`                                     | Qualquer exceção não mapeada/comum                                                                                                    |
+| **:material-code-json: Mensagem da {{abbr.exceptionPt}}**  | **Descrição**                                                                                                                         |
+| ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| `Validation error in response <{...}>`                     | [Exceção FastAPI do Pydantic]({{links.fastapiValidationError}}){:target="\_blank"}.<br> A solicitação contém dados inválidos/erros    |
+| `Pydantic validation error: ... validation errors for ...` | [Exceção do Pydantic]({{links.validationError}}){:target="\_blank"}.<br> Há um erro nos dados que estão sendo validados               |
+| `Error in decoding response from Scopus API`               | Exceção {{abbr.json}}.<br> O corpo da resposta não contém {{abbr.json}} válido para decodificar                                       |
+| `Error in validate response from Scopus API`               | Erro de [serialização]({{links.serialization}}){:target="\_blank"}.<br> A resposta {{abbr.json}} contém campos não mapeados/inválidos |
+| `Unexpected application interruption`                      | Exceção de interrupção do [sinal de saída]({{links.pythonDocs}}/signal.html){:target="\_blank"} de desligamento                       |
+| `Unexpected error <...>`                                   | Qualquer exceção não mapeada/comum                                                                                                    |
 
 ### [`502 Bad Gateway`]({{links.mdnStatus}}/502){:target="\_blank"}
 

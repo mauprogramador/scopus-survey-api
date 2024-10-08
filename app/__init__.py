@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 
 """
-Scopus Searcher API
+Scopus Survey API
 
-Web API for Bibliographic Survey of Scopus Articles
+Web API for bibliographic survey of Scopus articles
 """
 
 __version__ = "3.0.0"
