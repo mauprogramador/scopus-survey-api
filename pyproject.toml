@@ -7,7 +7,7 @@ readme = "README.md"
 license = "MIT"
 repository = "https://github.com/mauprogramador/scopus-survey-api"
 documentation = "https://mauprogramador.github.io/scopus-survey-api/"
-keywords = ["scopus search api", "theoretical reference", "python", "clean architecture"]
+keywords = ["scopus", "theoretical reference", "python", "clean architecture"]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Environment :: Web Environment :: Mozilla",
@@ -49,6 +49,7 @@ tqdm = "^4.66.5"
 toml = "^0.10.2"
 thefuzz = "^0.22.1"
 python-dotenv = "^1.0.1"
+asgi-ratelimit = "^0.10.0"
 
 [tool.poetry.group.dev.dependencies]
 isort = "^5.13.2"
@@ -89,7 +90,8 @@ debug = false
 logging_file = false
 host = "127.0.0.1"
 port = 8000
-reload = false
+reload = true
+workers = 1
 
 [tool.pylint]
 disable = ["C0114", "C0115", "C0116", "C0123", "R0903", "E1136", "E0611", "E1131", "R0801"]
