@@ -1,14 +1,21 @@
 from datetime import datetime
 
-DATE_RANGE = f"{datetime.now().year - 3}-{datetime.now().year}"
+CURRENT_YEAR = datetime.now().year
+LAST_THREE_YEARS = CURRENT_YEAR - 3
+LAST_DECADE = CURRENT_YEAR - 10
+
+DATE_RANGE = f"{LAST_THREE_YEARS}-{CURRENT_YEAR}"
+
 BOOLEAN_OPERATOR = " AND "
 NULL = "null"
 
 QUOTA_EXCEEDED = "QUOTA_EXCEEDED - Quota Exceeded"
 RATE_LIMIT_EXCEEDED = "RATE_LIMIT_EXCEEDED"
 
+URL_COLUMN = "Article Preview Page URL"
 AUTHORS_COLUMN = "Authors"
 TITLE_COLUMN = "Title"
+DATE_COLUMN = "Date"
 
 QUOTA_WARNING = (
     "Your API Key has exceeded the request quota. Please try again on {}"
@@ -24,7 +31,7 @@ FURTHER_INFO_LINK = (
 SEARCH_API_URL = (
     "https://api.elsevier.com/content/search/scopus"
     "?query=TITLE-ABS-KEY({query})&field=dc:identifier&date={date}"
-    "&suppressNavLinks=true"
+    "&sort=+coverDate,+relevancy&suppressNavLinks=true"
 )
 PAGINATION_URL = "{search_url}&start={page}"
 ABSTRACT_API_URL = "{abstract_url}?field={fields}"

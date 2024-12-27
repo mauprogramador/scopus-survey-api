@@ -4,16 +4,14 @@ from typing import Any, Type
 from dotenv import load_dotenv
 from toml import load
 
-from app.core.common.types import Poetry, PyprojectTool, TomlSettings
-from app.core.config.scopus import NULL
+from app.core.common.types import TomlSettings
 
 
-class TomlEnv:
+class TomlEnvConfig:
     """Loads and retrieves Pyproject.toml and ENV configuration data"""
 
     __APP = "app.framework.fastapi.app:app"
     __FILENAME = "pyproject.toml"
-    __AUTHORS = ["null <null@null>"]
     __HOST = "127.0.0.1"
     __ENCODING = "utf-8"
     __VERSION = "3.0.0"
@@ -25,18 +23,19 @@ class TomlEnv:
             pyproject = load(file)
 
         load_dotenv()
-        tools: PyprojectTool = pyproject.get("tool", {})
         self.__application: TomlSettings = pyproject.get("application", {})
-        self.__poetry: Poetry = tools.get("poetry", {})
+        tools: dict[str, Any] = pyproject.get("tool", {})
+        self.__poetry: dict[str, Any] = tools.get("poetry", {})
 
-        value = self.__poetry.get("authors")
-        authors: list = self.__assure(value, list, self.__AUTHORS)
-        self.__author: str = self.__assure(authors[0], str, self.__AUTHORS[0])
+        self.__reload: bool = self.__getenv("reload", bool, False)
+        self.__host: str = self.__getenv("host", str, self.__HOST)
+        self.__port: int = self.__getenv("port", int, self.__PORT)
+        self.__logging_file: bool = self.__getenv("logging_file", bool, False)
+        self.__workers: int = self.__getenv("workers", int, 1)
 
     @property
-    def title(self) -> str:
-        value = self.__poetry.get("name")
-        return self.__assure(value, str, NULL)
+    def url(self) -> str:
+        return f"http://{self.__host}:{self.__port}"
 
     @property
     def version(self) -> str:
@@ -44,71 +43,37 @@ class TomlEnv:
         return self.__assure(value, str, self.__VERSION)
 
     @property
-    def description(self) -> str:
-        value = self.__poetry.get("description")
-        return self.__assure(value, str, NULL)
-
-    @property
-    def name(self) -> str:
-        return self.__author[: self.__author.rindex(" ")]
-
-    @property
-    def email(self) -> str:
-        start, end = self.__author.index("<"), self.__author.rindex(">")
-        return self.__author[start + 1 : end]
-
-    @property
-    def repository(self) -> str:
-        value = self.__poetry.get("repository")
-        return self.__assure(value, str, NULL)
-
-    @property
-    def documentation(self) -> str:
-        value = self.__poetry.get("documentation")
-        return self.__assure(value, str, NULL)
-
-    @property
-    def reload(self) -> bool:
-        return self.__getenv("reload", bool, False)
-
-    @property
     def debug(self) -> bool:
         return self.__getenv("debug", bool, False)
-
-    @property
-    def logging_file(self) -> bool:
-        return self.__getenv("logging_file", bool, False)
-
-    @property
-    def host(self) -> str:
-        return self.__getenv("host", str, self.__HOST)
-
-    @property
-    def port(self) -> int:
-        return self.__getenv("port", int, self.__PORT)
 
     @property
     def uvicorn(self) -> TomlSettings:
         return {
             "app": self.__APP,
-            "host": self.host,
-            "port": self.port,
-            "reload": self.reload,
+            "host": self.__host,
+            "port": self.__port,
+            "reload": self.__reload,
+            "workers": self.__workers
         }
 
     @property
-    def url(self) -> str:
-        return f"http://{self.host}:{self.port}"
+    def logger_config(self) -> TomlSettings:
+        return {
+            "debug": self.debug,
+            "logging_file": self.__logging_file,
+            "host": self.__host,
+            "port": self.__port,
+        }
 
     @property
     def pyproject(self) -> TomlSettings:
         return {
             "version": self.version,
             "debug": self.debug,
-            "logging_file": self.logging_file,
-            "host": self.host,
-            "port": self.port,
-            "reload": self.reload,
+            "logging_file": self.__logging_file,
+            "host": self.__host,
+            "port": self.__port,
+            "reload": self.__reload,
         }
 
     def __assure(self, value: Any, spected_type: Type, default: Any) -> Any:

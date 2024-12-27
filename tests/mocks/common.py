@@ -1,7 +1,7 @@
 from pandas import DataFrame
 
 from app.core.config.config import TOML_ENV
-from app.core.data.dtos import SearchParams
+from app.core.data.validators import SearchParams
 from tests.helpers.models import Response
 from tests.helpers.utils import scopus_json
 

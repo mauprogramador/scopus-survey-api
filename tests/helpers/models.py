@@ -1,3 +1,4 @@
+from http import HTTPStatus
 from json import dumps, loads
 
 from fastapi.datastructures import URL
@@ -5,8 +6,8 @@ from pandas import DataFrame
 from starlette.datastructures import QueryParams
 
 from app.core.config.config import (
-    API_KEY_HEADER,
-    KEYWORDS_HEADER,
+    API_KEY_QUERY,
+    KEYWORDS_QUERY,
     TOKEN_HEADER,
 )
 from app.core.config.scopus import QUOTA_EXCEEDED, RATE_LIMIT_EXCEEDED
@@ -28,9 +29,9 @@ class Request:
         self.query: dict[str, str] = {}
         self.client = None
         if api_key:
-            self.query.update({API_KEY_HEADER: api_key})
+            self.query.update({API_KEY_QUERY: api_key})
         if keywords:
-            self.query.update({KEYWORDS_HEADER: keywords})
+            self.query.update({KEYWORDS_QUERY: keywords})
 
     @property
     def query_params(self):
@@ -52,7 +53,7 @@ class Response:
         """Fake Response"""
         if content or isinstance(content, str) and len(content) == 0:
             self.text = content if isinstance(content, str) else dumps(content)
-        self.status_code = code or 200
+        self.status_code = code or HTTPStatus.OK
         self.body = "any".encode()
 
     def json(self) -> dict:
@@ -64,7 +65,7 @@ class HeadersResponse:
 
     def __init__(self, for_rate: bool = None) -> None:
         """Fake Quota and Rate Limit Exceeded Response"""
-        self.status_code = 429
+        self.status_code = HTTPStatus.TOO_MANY_REQUESTS
         self.__for_rate = for_rate
         self.headers = {"X-RateLimit-Reset": "1724320891"}
         if not self.__for_rate:
