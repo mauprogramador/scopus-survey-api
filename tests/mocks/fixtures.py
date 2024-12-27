@@ -10,9 +10,9 @@ from app.adapters.gateway.scopus_abstract_retrieval_api import (
     ScopusAbstractRetrievalAPI,
 )
 from app.adapters.gateway.scopus_search_api import ScopusSearchAPI
-from app.adapters.helpers.http_retry_helper import HTTPRetryHelper
-from app.adapters.helpers.url_builder_helper import URLBuilderHelper
-from app.adapters.presenters.template_context import TemplateContextBuilder
+from app.adapters.helpers.http_retry import HTTPRetryHelper
+from app.adapters.helpers.url_builder import URLBuilderHelper
+from app.adapters.helpers.template_builder import TemplateContextBuilder
 from app.core.common.messages import ABSTRACT_API_ERROR as ABSTRACT_ERROR_MSG
 from app.core.common.messages import SEARCH_API_ERROR as SEARCH_ERROR_MSG
 from app.core.domain.exceptions import ApplicationError, ScopusAPIError
@@ -20,8 +20,8 @@ from app.core.usecases import (
     ArticlesSimilarityFilter,
     ScopusArticlesAggregator,
 )
-from app.framework.dependencies.access_token import AccessToken
-from app.framework.dependencies.query_params import QueryParams
+from app.framework.dependencies.access_token_header import AccessToken
+from app.framework.dependencies.search_query_params import SearchQueryParams
 from app.framework.exceptions import HTTPException
 from app.framework.exceptions.exception_handler import ExceptionHandler
 from tests.helpers.models import MockSimilarityFilter
@@ -48,7 +48,7 @@ GET_ARTICLES = path(ScopusArticlesAggregator.get_articles)
 HANDLER = ExceptionHandler()
 
 ACCESS_TOKEN = AccessToken()
-QUERY_PARAMS = QueryParams()
+QUERY_PARAMS = SearchQueryParams()
 
 HTTP_HELPER = HTTPRetryHelper()
 URL_BUILDER = URLBuilderHelper()

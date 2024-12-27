@@ -15,7 +15,7 @@ from tests.mocks.fixtures import QUERY_PARAMS
 async def test_request_params():
     request = Request(api_key="any", keywords="any,any")
     response = await QUERY_PARAMS(request)
-    assert response.equals("any", ["any", "any"])
+    assert response.values == ("any", ["any", "any"])
 
 
 @pytest.mark.asyncio
@@ -30,7 +30,7 @@ async def test_missing_request_api_key():
 async def test_header_api_key_and_request_keywords():
     request = Request(keywords="any,any")
     response = await QUERY_PARAMS(request, "any")
-    assert response.equals("any", ["any", "any"])
+    assert response.values == ("any", ["any", "any"])
 
 
 @pytest.mark.asyncio
@@ -68,4 +68,4 @@ async def test_invalid_keywords_pattern():
 @pytest.mark.asyncio
 async def test_header_params():
     response = await QUERY_PARAMS(Request(), "any", ["any", "any"])
-    assert response.equals("any", ["any", "any"])
+    assert response.values == ("any", ["any", "any"])
