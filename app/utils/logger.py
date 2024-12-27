@@ -16,21 +16,21 @@ from logging import (
 from os import mkdir
 from os.path import exists
 from re import compile as regex_compile
-from time import time as current_time
 
-from fastapi import Request
+from fastapi import Request as FRequest
+from requests import Request as RRequest
 from uvicorn.config import LOGGING_CONFIG
 
 from app.core.common.messages import UNEXPECTED_ERROR
 
 
-class AppLogger:
+class ApplicationLogger:
     """Configure and customize application logging"""
 
+    __COLOR = {2: "\033[32m", 3: "\033[33m", 4: "\033[31m", 5: "\033[31m"}
     __UVICORN_FMT = "%(asctime)s %(levelprefix)s %(message)s"
     __UVICORN_LOGGER = "uvicorn.access"
     __FMT = "%(asctime)s %(message)s"
-    __POINT = "\033[35m\u2022\033[m"
     __DATEFMT = "%d-%m-%Y %H:%M:%S"
     __NAME = "scopussurveyapi"
     __TABLE = str.maketrans(
@@ -62,11 +62,13 @@ class AppLogger:
         def filter(self, record: LogRecord) -> bool:
             return record.getMessage().find(self.__LIVERELOAD_ROUTE) == -1
 
-    def __init__(self, debug: bool, logging_file: bool) -> None:
+    def __init__(
+        self, debug: bool, logging_file: bool, host: str, port: int
+    ) -> None:
         """Configure and customize application logging"""
         self.__logger = getLogger(self.__NAME)
         self.__logger.addFilter(self.LiveReloadFilter())
-        self.__debug = debug
+        self.__debug, self.__host, self.__port = debug, host, port
 
         getLogger(self.__UVICORN_LOGGER).addFilter(self.EndpointFilter())
         formater = {"fmt": self.__UVICORN_FMT, "datefmt": self.__DATEFMT}
@@ -123,32 +125,40 @@ class AppLogger:
         self.__logger.setLevel(ERROR)
         self.__logger.exception(message, exc_info=exc_info)
 
-    def trace(self, request: Request, code: int, time: float) -> None:
-        host = request.client.host if request.client else "127.0.0.1"
-        port = request.client.port if request.client else 8000
-
-        time = (current_time() - time) * 1000
-        text = f"{host}:{port} {self.__POINT} {request.url}"
-        message = self.__format(code, time, request.method, text)
+    def trace(self, request: FRequest, code: int, time: float) -> None:
+        message = self.__format(request, code, time)
 
         self.__logger.setLevel(INFO)
         self.__logger.info(self.__message("94mTRACE", message))
 
-    def request(self, scopus: bool, url: str, code: int, time: float) -> None:
+    def request(
+        self, scopus: bool, request: RRequest, code: int, time: float
+    ) -> None:
         prefix = "SEARCH" if scopus else "ABSTRACT"
-        message = self.__format(code, time, "GET", url)
+        message = self.__format(request, code, time)
 
         self.__logger.setLevel(INFO)
         self.__logger.info(self.__message(f"96m{prefix}", message))
 
+    def __format(
+        self, request: FRequest | RRequest, code: int, time: float
+    ) -> str:
+        if not hasattr(request, "client"):
+            setattr(request, "client", None)
+
+        host = request.client.host if request.client else self.__host
+        port = request.client.port if request.client else self.__port
+
+        client = f"[\033[36m{host}\033[m:\033[36m{port}\033[m]"
+        color = self.__COLOR[(code // 100)]
+
+        method = f"{color}{request.method}\033[m"
+        url = f"\033[37;1m{request.url}\033[m"
+
+        status = f"{color}{code} {HTTPStatus(code).phrase}"
+        process_time = f"\033[m{time:.2f}s"
+
+        return f"\033[m{client} {method} {url} {status} {process_time}"
+
     def __message(self, prefix: str, message: str) -> str:
         return f"\033[{prefix}\033[m:".ljust(17) + f" \033[33m{message}\033[m"
-
-    def __format(self, code: int, time: float, method: str, text: str) -> str:
-        status_phrase = HTTPStatus(code).phrase
-        color = "\033[32m" if code == 200 else "\033[31m"
-
-        method = f"{color}{method}\033[m".ljust(6)
-        status = f"{color}{code} {status_phrase} \033[33m{time:.2f}ms\033[m"
-
-        return f"{method} {self.__POINT} {text} {self.__POINT} {status}"
