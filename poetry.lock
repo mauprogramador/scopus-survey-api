@@ -32,6 +32,22 @@ test = ["anyio[trio]", "coverage[toml] (>=7)", "exceptiongroup (>=1.2.0)", "hypo
 trio = ["trio (>=0.23)"]
 
 [[package]]
+name = "asgi-ratelimit"
+version = "0.10.0"
+description = ""
+optional = false
+python-versions = ">=3.6,<4.0"
+files = [
+    {file = "asgi_ratelimit-0.10.0-py3-none-any.whl", hash = "sha256:7618356839242270e3c826c2b20f5a4c3184851b6a0ec61de0eff76eedcb0839"},
+    {file = "asgi_ratelimit-0.10.0.tar.gz", hash = "sha256:f45197f93db7713c8c0ec7bd6a5d0ffc36ed9beb90f54a389b683abdfcce8d5d"},
+]
+
+[package.extras]
+full = ["pyjwt (>=1.7.1,<2.0.0)", "redis (>=4.2.0rc2)"]
+jwt = ["pyjwt (>=1.7.1,<2.0.0)"]
+redis = ["redis (>=4.2.0rc2)"]
+
+[[package]]
 name = "astroid"
 version = "3.0.3"
 description = "An abstract syntax tree for Python with inference support."
@@ -3622,4 +3638,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "054fdff83a212bd2e7909d7051a31e1e887493b08e716805c1e0498606d2d42e"
+content-hash = "9262d3e2f1d572f2ef4813c4badc5ce64534274b816d4839fe4ab9d076b3db61"
