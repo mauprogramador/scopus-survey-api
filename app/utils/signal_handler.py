@@ -3,7 +3,7 @@ from signal import SIGINT, SIGTERM, signal
 from threading import Event as ThreadEvent
 
 
-class SignalHandler:
+class ShutdownSignalHandler:
     """Set signal handlers to set the shutdown event flag"""
 
     def __init__(self, for_async: bool = None):
