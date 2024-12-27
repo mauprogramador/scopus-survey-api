@@ -78,8 +78,4 @@ echo -e "-\033[92m Wheel and Poetry packages installed ✔\033[m"
 
 deactivate
 
-if [ ! -f ".env" ]; then
-    touch .env
-fi
-
 echo -e "\033[35;1m>\033[m Completed. Please run\033[37;1m make install\033[m\n"
