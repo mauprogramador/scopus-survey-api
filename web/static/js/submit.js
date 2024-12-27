@@ -1,20 +1,48 @@
-import { submit as data } from './index.js';
-import { headers, interuptSearching } from './search.js';
+import { lang, token } from './index.js';
+import { ShowAlert } from './alerts.js';
+import { searchButton } from './validation.js';
 
+const loader = document.getElementById('loader-dialog');
+const form = document.getElementById('search-params-form');
 
-data.form.addEventListener('submit', (event) => {
+const downloadLink = document.getElementById('download-link');
+const downloadButton = document.getElementById('download-button');
+
+const linkTable = document.getElementsByClassName('link-table');
+const tableUrl = `/scopus-survey/api/${lang}/articles-table`;
+
+// Download CSV
+
+downloadButton.addEventListener('click', () => downloadLink.click());
+
+// Headers
+
+const headers = {
+  Accept: 'text/csv',
+  'Content-Type': 'text/csv; charset=utf-8',
+  'Access-Control-Allow-Origin': '*',
+  'X-Access-Token': token,
+};
+
+// Submit search
+
+form.addEventListener('submit', (event) => {
   event.preventDefault();
   const controller = new AbortController();
 
-  data.loader.classList.add('visible');
-  data.tableButton.toggleAttribute('disabled', true);
-  data.searchButton.toggleAttribute('disabled', true);
+  requestAnimationFrame(() => loader.showModal());
 
-  const searchURL = new URL(data.form.action);
-  const formData = new FormData(data.form);
+  searchButton.toggleAttribute('disabled', true);
+  downloadButton.toggleAttribute('disabled', true);
+
+  searchButton.ariaDisabled = 'true';
+  downloadButton.ariaDisabled = 'true';
+
+  const searchURL = new URL(form.action);
+  const formData = new FormData(form);
   const keywords = formData
     .getAll('keywords')
-    .filter(keyword => keyword.trim() !== "");
+    .filter((keyword) => keyword.trim() !== '');
 
   searchURL.searchParams.set('apikey', formData.get('apikey'));
   searchURL.searchParams.set('keywords', keywords.join(','));
@@ -25,54 +53,57 @@ data.form.addEventListener('submit', (event) => {
     signal: controller.signal,
   });
 
-  if (document.querySelector('dialog[open]')) {
-    document.querySelector('dialog[open]').close();
-  }
-  window.addEventListener('beforeunload', interuptSearching);
+  window.addEventListener('beforeunload', ShowAlert.info);
 
-  fetch(request).then((response) => {
-    window.removeEventListener('beforeunload', interuptSearching);
+  fetch(request)
+    .then((response) => {
+      window.removeEventListener('beforeunload', ShowAlert.info);
+      requestAnimationFrame(() => loader.close());
 
-    data.searchButton.toggleAttribute('disabled', false);
-    data.loader.classList.remove('visible');
+      searchButton.toggleAttribute('disabled', false);
+      downloadButton.toggleAttribute('disabled', false);
 
-    if (response.ok) {
+      searchButton.ariaDisabled = 'false';
+      downloadButton.ariaDisabled = 'false';
 
-      response.blob().then((blob) => {
-        window.csvBlob = blob;
-        data.downloadLink.href = window.URL.createObjectURL(blob);
-        data.downloadLink.click();
-      });
+      if (response.ok) {
+        let csvFilename = response.headers.get('X-CSV-Filename');
+        let userAPIKey = response.headers.get('X-User-API-Key');
 
-      requestAnimationFrame(() => {
-        data.successAlert.show();
-        setTimeout(() => {
-          data.successAlert.close();
-        }, 5000);
-      });
+        response.blob().then((blob) => {
+          window.csvBlob = blob;
+          downloadLink.download = csvFilename;
 
-      data.tableButton.toggleAttribute('disabled', false);
+          downloadLink.href = window.URL.createObjectURL(blob);
+          downloadLink.click();
 
-    } else {
-      response.json().then(json => {
-        console.error(json);
-
-        requestAnimationFrame(() => {
-          data.errorDescription.innerText = json[ 'message' ];
-          data.errorAlert.show();
+          downloadLink.href = `/scopus-survey/api/csv?apikey=${userAPIKey}`;
         });
-      })
-    }
 
-  }).catch((error) => {
-    data.searchButton.toggleAttribute('disabled', false);
-    data.loader.classList.remove('visible');
+        let url = `${tableUrl}?apikey=${userAPIKey}`;
 
-    console.error(error);
+        for (let element of linkTable) {
+          element.href = url;
+        }
 
-    requestAnimationFrame(() => {
-      data.errorDescription.innerText = error;
-      data.errorAlert.show();
+        ShowAlert.success();
+      } else {
+        response.json().then((json) => {
+          console.error(json);
+          ShowAlert.error(json['message']);
+        });
+      }
+    })
+    .catch((error) => {
+      searchButton.toggleAttribute('disabled', false);
+      downloadButton.toggleAttribute('disabled', false);
+
+      searchButton.ariaDisabled = 'false';
+      downloadButton.ariaDisabled = 'false';
+
+      requestAnimationFrame(() => loader.close());
+
+      console.error(error);
+      ShowAlert.error(error);
     });
-  })
 });
