@@ -31,7 +31,7 @@ class InterruptError(ApplicationError):
 
     def __init__(self) -> None:
         """Shutdown/exit interruption signal exception"""
-        super().__init__(500, INTERRUPT_ERROR)
+        super().__init__(HTTPStatus.INTERNAL_SERVER_ERROR, INTERRUPT_ERROR)
 
 
 class ScopusAPIError(ApplicationError):
@@ -42,7 +42,7 @@ class ScopusAPIError(ApplicationError):
         code = response.status_code
         api_error = API_ERRORS.get(code, NULL)
 
-        if code == 429:
+        if code == HTTPStatus.TOO_MANY_REQUESTS:
             status = ScopusQuotaRateLimit.model_validate(response)
 
             if status.quota_exceeded:
@@ -62,4 +62,4 @@ class ScopusAPIError(ApplicationError):
             }
         ]
 
-        super().__init__(502, message, errors)
+        super().__init__(HTTPStatus.BAD_GATEWAY, message, errors)

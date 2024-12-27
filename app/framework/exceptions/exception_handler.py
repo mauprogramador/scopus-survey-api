@@ -1,3 +1,4 @@
+from http import HTTPStatus
 from json import dumps
 
 from fastapi import Request
@@ -59,7 +60,12 @@ class ExceptionHandler:
         message = REQUEST_ERROR.format(first_error.get("msg", NULL))
 
         LOG.error(message)
-        return ExceptionJSON(request, 422, message, exc.errors())
+        return ExceptionJSON(
+            request,
+            HTTPStatus.UNPROCESSABLE_ENTITY,
+            message,
+            exc.errors(),
+        )
 
     async def response_validation_error(
         self, request: Request, exc: ResponseValidationError
@@ -68,14 +74,24 @@ class ExceptionHandler:
         message = RESPONSE_ERROR.format(first_error.get("msg", NULL))
 
         LOG.error(message)
-        return ExceptionJSON(request, 500, message, exc.errors())
+        return ExceptionJSON(
+            request,
+            HTTPStatus.INTERNAL_SERVER_ERROR,
+            message,
+            exc.errors(),
+        )
 
     async def pydantic_validation_error(
         self, request: Request, exc: ValidationError
     ) -> ExceptionJSON:
         message = PYDANTIC_ERROR.format(exc.error_count(), exc.title)
         LOG.error(message)
-        return ExceptionJSON(request, 500, message, exc.errors())
+        return ExceptionJSON(
+            request,
+            HTTPStatus.INTERNAL_SERVER_ERROR,
+            message,
+            exc.errors(),
+        )
 
     async def http_exception(
         self, request: Request, exc: HTTPException
@@ -93,4 +109,8 @@ class ExceptionHandler:
         self, request: Request, exc: Exception
     ) -> ExceptionJSON:
         LOG.error(repr(exc), prefix=True)
-        return ExceptionJSON(request, 500, UNEXPECTED_ERROR.format(repr(exc)))
+        return ExceptionJSON(
+            request,
+            HTTPStatus.INTERNAL_SERVER_ERROR,
+            UNEXPECTED_ERROR.format(repr(exc)),
+        )

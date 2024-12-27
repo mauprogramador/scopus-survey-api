@@ -1,3 +1,4 @@
+from http import HTTPStatus
 from typing import Any
 
 from fastapi import HTTPException as FastAPIHTTPException
@@ -11,6 +12,7 @@ class BaseExceptionResponse(BaseModel):
 
     success: bool = False
     code: int
+    status: str
     message: str
     request: dict[str, Any]
     errors: Errors = None
@@ -32,7 +34,7 @@ class Unauthorized(HTTPException):
 
     def __init__(self, message: str) -> None:
         """HTTP error status code 401"""
-        super().__init__(401, message)
+        super().__init__(HTTPStatus.UNAUTHORIZED, message)
 
 
 class NotFound(HTTPException):
@@ -40,7 +42,7 @@ class NotFound(HTTPException):
 
     def __init__(self, message: str) -> None:
         """HTTP error status code 404"""
-        super().__init__(404, message)
+        super().__init__(HTTPStatus.NOT_FOUND, message)
 
 
 class UnprocessableContent(HTTPException):
@@ -48,7 +50,7 @@ class UnprocessableContent(HTTPException):
 
     def __init__(self, message: str) -> None:
         """HTTP error status code 422"""
-        super().__init__(422, message)
+        super().__init__(HTTPStatus.UNPROCESSABLE_ENTITY, message)
 
 
 class InternalError(HTTPException):
@@ -56,7 +58,7 @@ class InternalError(HTTPException):
 
     def __init__(self, message: str) -> None:
         """HTTP error status code 500"""
-        super().__init__(500, message)
+        super().__init__(HTTPStatus.INTERNAL_SERVER_ERROR, message)
 
 
 class BadGateway(HTTPException):
@@ -64,7 +66,7 @@ class BadGateway(HTTPException):
 
     def __init__(self, message: str) -> None:
         """HTTP error status code 502"""
-        super().__init__(502, message)
+        super().__init__(HTTPStatus.BAD_GATEWAY, message)
 
 
 class GatewayTimeout(HTTPException):
@@ -72,4 +74,4 @@ class GatewayTimeout(HTTPException):
 
     def __init__(self, message: str) -> None:
         """HTTP error status code 504"""
-        super().__init__(504, message)
+        super().__init__(HTTPStatus.GATEWAY_TIMEOUT, message)

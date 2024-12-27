@@ -1,4 +1,5 @@
 from datetime import datetime
+from http import HTTPStatus
 from typing import Any
 
 from fastapi import Request
@@ -22,6 +23,7 @@ class ExceptionJSON(JSONResponse):
         data = {
             "success": False,
             "code": code,
+            "status": HTTPStatus(code).phrase,
             "message": message,
             "request": self.__request_data(request),
             "errors": errors,
