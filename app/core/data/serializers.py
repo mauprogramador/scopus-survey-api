@@ -10,12 +10,8 @@ from pydantic import (
 )
 from requests import Response
 
-from app.core.config.scopus import (
-    ARTICLE_PAGE_URL,
-    NULL,
-    QUOTA_EXCEEDED,
-    RATE_LIMIT_EXCEEDED,
-)
+from app.core.config.config import CSV_HEADER, USER_API_KEY_HEADER
+from app.core.config.scopus import ARTICLE_PAGE_URL, NULL
 
 
 class ScopusResult(BaseModel):
@@ -67,11 +63,11 @@ class ScopusQuotaRateLimit(BaseModel):
 
     @property
     def quota_exceeded(self) -> bool:
-        return self.status == QUOTA_EXCEEDED
+        return self.status == "QUOTA_EXCEEDED - Quota Exceeded"
 
     @property
     def rate_limit_exceeded(self) -> bool:
-        return self.error_code == RATE_LIMIT_EXCEEDED
+        return self.error_code == "RATE_LIMIT_EXCEEDED"
 
 
 class ScopusAbstract(BaseModel):
@@ -147,3 +143,26 @@ class ScopusAbstract(BaseModel):
             return datetime.strptime(date, "%y-%m-%d").strftime("%d-%m-%y")
         except ValueError:
             return date
+
+
+class CSVFileHeaders(BaseModel):
+    """Serializer for file response headers"""
+
+    content_disposition: str = Field(serialization_alias="Content-Disposition")
+    content_type: str = Field(
+        default="text/csv; charset=utf-8", serialization_alias="Content-Type"
+    )
+    x_csv_filename: str = Field(serialization_alias=CSV_HEADER)
+    x_user_api_key: str = Field(serialization_alias=USER_API_KEY_HEADER)
+
+    @staticmethod
+    def build(filename: str, api_key: str) -> dict[str, str]:
+        disposition = f"attachment; filename={filename}"
+
+        headers = CSVFileHeaders(
+            content_disposition=disposition,
+            x_csv_filename=filename,
+            x_user_api_key=api_key,
+        )
+
+        return headers.model_dump(by_alias=True)
