@@ -1,4 +1,4 @@
-from .access_token import AccessToken
-from .query_params import QueryParams
+from .access_token_header import AccessToken
+from .search_query_params import SearchQueryParams
 
-__all__ = ["AccessToken", "QueryParams"]
+__all__ = ["AccessToken", "SearchQueryParams"]
