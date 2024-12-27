@@ -1,11 +1,18 @@
-#alerts-container {
-  position: fixed;
-  z-index: 100;
-  width: 100vw;
-  top: 0;
-}
 dialog {
-  border: 0.125rem solid;
+  max-width: 1350px;
+}
+dialog:not([open]) {
+  display: none;
+  opacity: 0;
+}
+
+.alert {
+  box-shadow: 0 2px 2px 2px var(--gray-50);
+  animation-timing-function: ease-in-out;
+  animation-fill-mode: forwards;
+  animation-iteration-count: 1;
+  animation-direction: normal;
+  animation-duration: 0.5s;
   align-items: center;
   color: var(--white);
   margin-right: auto;
@@ -13,74 +20,84 @@ dialog {
   margin-bottom: 0;
   font-weight: 700;
   display: flex;
-  width: 100%;
-}
-dialog:focus-visible {
   outline: none;
+  width: 100%;
+  z-index: 6;
+  border: 0;
 }
 
+.alert svg {
+  fill: var(--white);
+}
 .alert-icon {
   height: 1.875rem;
   width: 1.875rem;
 }
+
 .alert-message {
   justify-content: space-evenly;
   text-overflow: ellipsis;
   flex-direction: column;
-  white-space: nowrap;
   padding: 0 1.875rem;
   overflow: hidden;
   display: flex;
+  height: auto;
   flex: 1;
 }
 
 .alert-close {
-  background-color: var(--black-02);
+  background-color: rgba(0, 0, 0, 0.2);
   border-radius: 0.25rem;
   height: 1.5625rem;
   width: 1.5625rem;
-  transition: 0.3s;
   cursor: pointer;
+  padding: 0;
+  border: 0;
 }
 .alert-close:hover {
-  background-color: var(--black-07);
+  background-color: rgba(0, 0, 0, 0.7);
 }
 
 #info-alert {
-  border-color: var(--light-aqua);
   background-color: var(--aqua);
 }
 #success-alert {
-  border-color: var(--light-green);
   background-color: var(--green);
 }
 #error-alert {
-  border-color: var(--light-red);
   background-color: var(--red);
 }
 
-dialog:not([open]) {
-  transform: translateY(-100%);
-  display: none;
+.alert:not([open]) {
+  transform: translateY(-50px);
 }
-dialog[open] {
-  box-shadow: 0 0.125rem 0.125rem 0.125rem var(--gray-5);
-  animation-timing-function: ease-in-out;
-  animation-fill-mode: forwards;
-  animation-iteration-count: 1;
-  animation-direction: normal;
+.alert[open] {
   animation-name: alert-in;
-  animation-duration: 0.6s;
 }
 
 @keyframes alert-in {
   0% {
-    transform: translateY(-100%);
-  }
-  50% {
-    transform: translateY(10%);
+    transform: translateY(-50px);
+    opacity: 0;
   }
   100% {
-    transform: translateY(0);
+    transform: translateY(0px);
+    opacity: 1;
+  }
+}
+
+@media only screen and (min-width: 992px) {
+  dialog {
+    border-radius: 0.625rem;
+    margin-top: 0.5rem;
+  }
+}
+
+@media only screen and (max-width: 639px) {
+  dialog {
+    padding: 1rem !important;
+  }
+  .alert-message {
+    padding: 0 0.7rem !important;
   }
 }

@@ -1,0 +1,134 @@
+header,
+main,
+footer {
+  max-width: 1400px;
+}
+main {
+  background-color: var(--white);
+  padding: 0.9375rem 1.875rem;
+  margin: 0 auto;
+}
+
+#ifms-tads {
+  background-color: var(--white-F5);
+  border-radius: 5px;
+  padding: 0.5rem 0;
+}
+#ifms-tads p {
+  font-size: 0.875rem;
+  line-height: 1.3rem;
+}
+#ifms-tads p:not(#acronyms) {
+  justify-content: center;
+  display: flex;
+  gap: 5px;
+}
+#acronyms {
+  display: none;
+}
+#acronyms .separator {
+  padding: 0 0.3rem;
+}
+
+section h2 {
+  margin-bottom: 0.3125rem;
+  color: var(--orange);
+  font-size: 1.25rem;
+  margin-top: 2.5rem;
+  font-weight: 400;
+}
+section p {
+  line-height: 1.5625rem;
+  text-align: justify;
+}
+
+#keywords-fields {
+  grid-template-columns: repeat(2, 1fr);
+  grid-column-gap: 2rem;
+  margin-top: 1rem;
+  display: grid;
+}
+
+dl {
+  padding-top: 1rem;
+}
+dt {
+  font-weight: bold;
+}
+dt::before {
+  padding-right: 0.3rem;
+  content: '⧉';
+}
+dd {
+  padding-bottom: 1rem;
+  padding-left: 1.2rem;
+}
+dt,
+dd {
+  line-height: 1.5625rem;
+  color: var(--gray-50);
+  text-align: justify;
+}
+
+#filter-fields {
+  grid-template-columns: repeat(3, 1fr);
+  grid-column-gap: 2rem;
+  display: grid;
+}
+#filter-fields .form-field {
+  width: 100%;
+}
+
+#button__section {
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 2rem;
+  margin-top: 5rem;
+  display: flex;
+  gap: 3rem;
+}
+#button__section .input-group {
+  width: auto;
+}
+
+@media only screen and (max-width: 785px) {
+  #ifms-tads p:not(#acronyms) .separator,
+  #ifms-tads p:not(#acronyms) .link {
+    display: none;
+  }
+  #acronyms {
+    display: flex !important;
+    justify-content: center;
+  }
+  #apikey-and-button {
+    flex-direction: column;
+  }
+  #button__section {
+    align-items: center;
+    margin-top: 0;
+    gap: 1.5rem;
+  }
+}
+
+@media only screen and (max-width: 639px) {
+  .ifms-slice {
+    display: none;
+  }
+}
+
+@media only screen and (max-width: 619px) {
+  #keywords-fields {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media only screen and (max-width: 389px) {
+  #ifms-tads {
+    padding: 0 !important;
+    border: 0 !important;
+  }
+  #institution,
+  #course {
+    display: none !important;
+  }
+}
