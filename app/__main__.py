@@ -1,3 +1,6 @@
+from os.path import exists
+from os import mkdir
+
 import cachecontrol  # pylint: disable=w0611 # noqa: F401
 import dotenv  # pylint: disable=w0611 # noqa: F401
 import fastapi  # pylint: disable=w0611 # noqa: F401
@@ -9,10 +12,12 @@ import toml  # pylint: disable=w0611 # noqa: F401
 import tqdm  # pylint: disable=w0611 # noqa: F401
 import uvicorn
 
-from app.core.config.config import LOG, TOML_ENV
-from app.utils.access_qrcode import ShowAccessQRCode
+from app.core.config.config import DIRECTORY, LOG, TOML_ENV
+
 
 if __name__ == "__main__":
+    if not exists(DIRECTORY):
+        mkdir(DIRECTORY)
+
     LOG.info("Scopus Survey API was initialized 🚀")
-    ShowAccessQRCode(TOML_ENV.host, TOML_ENV.port)
     uvicorn.run(**TOML_ENV.uvicorn)
