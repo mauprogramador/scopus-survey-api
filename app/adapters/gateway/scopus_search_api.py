@@ -1,4 +1,5 @@
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from http import HTTPStatus
 from json.decoder import JSONDecodeError
 
 from tqdm.contrib.logging import logging_redirect_tqdm
@@ -11,10 +12,10 @@ from app.core.common.messages import (
 )
 from app.core.config.config import HANDLER, LOG
 from app.core.config.scopus import get_scopus_headers
-from app.core.data.dtos import SearchParams
+from app.core.data.validators import SearchParams
 from app.core.data.serializers import ScopusResult, ScopusSearch
 from app.core.domain.exceptions import InterruptError, ScopusAPIError
-from app.core.domain.metaclasses import HTTPRetry, SearchAPI, URLBuilder
+from app.core.domain.metaclasses import HTTPHelper, SearchAPI, URLHelper
 from app.framework.exceptions import BadGateway, InternalError, NotFound
 from app.utils.progress_bar import ProgressBar
 
@@ -27,10 +28,10 @@ class ScopusSearchAPI(SearchAPI):
     __START = 1
 
     def __init__(
-        self, http_helper: HTTPRetry, url_builder: URLBuilder
+        self, http_retry: HTTPHelper, url_builder: URLHelper
     ) -> None:
         """Search and retrieve articles via the Scopus Search API"""
-        self.__http_helper = http_helper
+        self.__http_retry = http_retry
         self.__url_builder = url_builder
         self.__scopus_response: ScopusSearch = None
 
@@ -39,7 +40,7 @@ class ScopusSearchAPI(SearchAPI):
     ) -> list[ScopusResult]:
         headers = get_scopus_headers(search_params.api_key)
         url = self.__url_builder.get_search_url(search_params.keywords)
-        self.__http_helper.mount_session(headers)
+        self.__http_retry.mount_session(headers)
 
         try:
             scopus_response = self.__get_search_response(url)
@@ -57,14 +58,14 @@ class ScopusSearchAPI(SearchAPI):
             LOG.info(f"Total Articles Found: {scopus_response.total_results}")
 
         finally:
-            self.__http_helper.close()
+            self.__http_retry.close()
 
         return self.__scopus_response.entry
 
     def __get_search_response(self, url: str) -> ScopusSearch:
-        response = self.__http_helper.request(url)
+        response = self.__http_retry.request(url)
 
-        if response.status_code != 200:
+        if response.status_code != HTTPStatus.OK:
             raise ScopusAPIError(response, SEARCH_API_ERROR)
 
         if not response.text:

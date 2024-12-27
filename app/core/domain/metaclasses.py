@@ -1,17 +1,19 @@
 from abc import ABCMeta, abstractmethod
 
-from fastapi.responses import FileResponse
+from fastapi import Request
+from fastapi.responses import FileResponse, HTMLResponse
 from pandas import DataFrame
-from requests import Response
+from requests import Response as RResponse
+from starlette.responses import Response as SResponse
 
-from app.core.common.types import Context, Headers, Keywords
-from app.core.data.dtos import SearchParams
+from app.core.data.enums import Language
+from app.core.data.validators import SearchParams
 from app.core.data.serializers import ScopusResult
 
 
-class HTTPRetry(metaclass=ABCMeta):
+class HTTPHelper(metaclass=ABCMeta):
     @abstractmethod
-    def mount_session(self, headers: Headers) -> None:
+    def mount_session(self, headers: dict[str, str]) -> None:
         pass
 
     @abstractmethod
@@ -19,13 +21,13 @@ class HTTPRetry(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def request(self, url: str) -> Response:
+    def request(self, url: str) -> RResponse:
         pass
 
 
-class URLBuilder(metaclass=ABCMeta):
+class URLHelper(metaclass=ABCMeta):
     @abstractmethod
-    def get_search_url(self, keywords: Keywords) -> str:
+    def get_search_url(self, keywords: list[str]) -> str:
         pass
 
     @abstractmethod
@@ -65,11 +67,32 @@ class SimilarityFilter(metaclass=ABCMeta):
         pass
 
 
-class TemplateContext(metaclass=ABCMeta):
+class TemplateHelper(metaclass=ABCMeta):
+    @classmethod
     @abstractmethod
-    def get_web_app_context(self) -> Context:
+    def search_template(cls, request: Request, lang: Language) -> HTMLResponse:
         pass
 
+    @classmethod
     @abstractmethod
-    def get_table_context(self) -> Context:
+    def table_template(
+        cls, request: Request, lang: Language, api_key: str
+    ) -> HTMLResponse:
+        pass
+
+    @classmethod
+    @abstractmethod
+    def not_found_template(
+        cls,
+        request: Request,
+        response: SResponse,
+        message: str,
+    ) -> HTMLResponse:
+        pass
+
+
+class CSVResponseABC(metaclass=ABCMeta):
+    @classmethod
+    @abstractmethod
+    def build(cls, api_key: str, dataframe: DataFrame = None) -> FileResponse:
         pass
