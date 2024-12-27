@@ -1,9 +1,13 @@
+from http import HTTPStatus
+from os.path import join
+
 from fastapi.responses import FileResponse
 from pandas import DataFrame
 
-from app.core.config.config import FILE_PATH, FILENAME, HEADERS, LOG
+from app.core.config.config import DIRECTORY, FILE, LOG
 from app.core.config.scopus import AUTHORS_COLUMN, TITLE_COLUMN
-from app.core.data.dtos import SearchParams
+from app.core.data.serializers import CSVFileHeaders
+from app.core.data.validators import SearchParams
 from app.core.domain.metaclasses import (
     AbstractAPI,
     ArticlesAggregator,
@@ -17,6 +21,8 @@ class ScopusArticlesAggregator(ArticlesAggregator):
 
     __DROP_COLUMNS = [TITLE_COLUMN, AUTHORS_COLUMN]
     __MEDIA_TYPE = "text/csv"
+    __ROWS_INDEX = 0
+    __PERCENT = 100
     __SEP = ";"
 
     def __init__(
@@ -37,7 +43,7 @@ class ScopusArticlesAggregator(ArticlesAggregator):
             params.api_key, entry_items
         )
 
-        rows_before = self.__dataframe.shape[0]
+        rows_before = self.__dataframe.shape[self.__ROWS_INDEX]
         self.__dataframe = self.__dataframe.drop_duplicates()
         self.__dataframe = self.__dataframe.reset_index(drop=True)
 
@@ -46,16 +52,21 @@ class ScopusArticlesAggregator(ArticlesAggregator):
         self.__dataframe = self.__dataframe.reset_index(drop=True)
 
         self.__dataframe = self.__similarity_filter.filter(self.__dataframe)
-        result = rows_before - self.__dataframe.shape[0]
-        total_loss = (result / rows_before) * 100
+        result = rows_before - self.__dataframe.shape[self.__ROWS_INDEX]
+        total_loss = (result / rows_before) * self.__PERCENT
 
         LOG.info(f"Total articles loss: {total_loss:.2f}%")
-        self.__dataframe.to_csv(FILE_PATH, sep=self.__SEP, index=False)
+
+        filename = f"{params.api_key}_{FILE}"
+        file_path = join(DIRECTORY, filename)
+
+        self.__dataframe.to_csv(file_path, sep=self.__SEP, index=False)
+        headers = CSVFileHeaders.build(filename, params.api_key)
 
         return FileResponse(
-            path=FILE_PATH,
-            status_code=200,
-            headers=HEADERS,
+            path=file_path,
+            status_code=HTTPStatus.OK,
+            headers=headers,
             media_type=self.__MEDIA_TYPE,
-            filename=FILENAME,
+            filename=filename,
         )
