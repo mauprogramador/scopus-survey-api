@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<!-- cspell:ignoreRegExp >(.*?)< -->
+<html lang="en-US">
+
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="ScopusSurveyAPI, Web API for bibliographic survey of Scopus articles" />
+    <meta name="author" content="mauprogramador" />
+    <meta name="generator"
+      content="mkdocs-1.5.3, mkdocs-material-9.5.9, mkdocs-static-i18n-1.2.3, mkdocs-markdownextradata-plugin-0.2.5" />
+    <meta property="og:site_name" content="ScopusSurveyAPI" />
+    <meta property="og:title" content="ScopusSurveyAPI" />
+    <meta property="og:description" content="ScopusSurveyAPI, Web API for bibliographic survey of Scopus articles">
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="/images/logo.png" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="720" />
+    <meta property="og:image:height" content="300" />
+    <meta property="og:image:alt" content="ScopusSurveyAPI logo" />
+    <meta property="og:url" content="/scopus-survey/api" />
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:title" content="ScopusSurveyAPI" />
+    <meta property="twitter:description"
+      content="ScopusSurveyAPI, Web API for bibliographic survey of Scopus articles" />
+    <meta property="twitter:image" content="/images/logo.png" />
+    <link rel="canonical" href="/scopus-survey/api" />
+    <link rel="shortcut icon" href="/images/favicon.png" type="image/x-icon" />
+    {% block head %}{% endblock %}
+  </head>
+
+  <body>
+    <dialog id="loader-dialog" aria-busy="true" role="alertdialog" aria-modal="true" aria-label="Search in progress">
+      <div id="spinner" title="Searching articles..."></div>
+      <div id="progress" title="Searching articles...">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </dialog>
+
+    <dialog id="info-alert" class="alert" role="alertdialog" aria-modal="true" aria-label="Important information">
+      <div class="alert-icon" aria-label="Info">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+          <path
+            d="M440-280h80v-240h-80v240Zm40-320q17 0 28.5-11.5T520-640q0-17-11.5-28.5T480-680q-17 0-28.5 11.5T440-640q0 17 11.5 28.5T480-600Zm0 520q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
+        </svg>
+      </div>
+      <div class="alert-message" lang="en-US">Search for articles in progress...</div>
+      <button class="alert-close" type="button" aria-label="Close">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <path
+            d="m13.41 12 4.3-4.29a1 1 0 1 0-1.42-1.42L12 10.59l-4.29-4.3a1 1 0 0 0-1.42 1.42l4.3 4.29-4.3 4.29a1 1 0 0 0 0 1.42 1 1 0 0 0 1.42 0l4.29-4.3 4.29 4.3a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.42z" />
+        </svg>
+      </button>
+    </dialog>
+
+    <dialog id="success-alert" class="alert" role="alertdialog" aria-modal="true"
+      aria-label="Articles found successfully">
+      <div class="alert-icon" aria-label="Success">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <path
+            d="M9.71 11.29a1 1 0 0 0-1.42 1.42l3 3A1 1 0 0 0 12 16a1 1 0 0 0 .72-.34l7-8a1 1 0 0 0-1.5-1.32L12 13.54z" />
+          <path
+            d="M21 11a1 1 0 0 0-1 1 8 8 0 0 1-8 8A8 8 0 0 1 6.33 6.36 7.93 7.93 0 0 1 12 4a8.79 8.79 0 0 1 1.9.22 1 1 0 1 0 .47-1.94A10.54 10.54 0 0 0 12 2a10 10 0 0 0-7 17.09A9.93 9.93 0 0 0 12 22a10 10 0 0 0 10-10 1 1 0 0 0-1-1z" />
+        </svg>
+      </div>
+      <div class="alert-message" lang="en-US">Articles found successfully!</div>
+      <button class="alert-close" type="button" aria-label="Close">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <path
+            d="m13.41 12 4.3-4.29a1 1 0 1 0-1.42-1.42L12 10.59l-4.29-4.3a1 1 0 0 0-1.42 1.42l4.3 4.29-4.3 4.29a1 1 0 0 0 0 1.42 1 1 0 0 0 1.42 0l4.29-4.3 4.29 4.3a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.42z" />
+        </svg>
+      </button>
+    </dialog>
+
+    <dialog id="error-alert" class="alert" role="alertdialog" aria-modal="true" aria-label="Unexpected error occurred">
+      <div class="alert-icon" aria-label="Error">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z" />
+          <circle cx="12" cy="16" r="1" />
+          <path d="M12 7a1 1 0 0 0-1 1v5a1 1 0 0 0 2 0V8a1 1 0 0 0-1-1z" />
+        </svg>
+      </div>
+      <div class="alert-message" lang="en-US" aria-errormessage="alert-error-description">
+        Unexpected error occurred!
+        <span id="alert-error-description" aria-live="assertive" aria-busy="true" role="log" lang="en-US"></span>
+      </div>
+      <button class="alert-close" type="button" aria-label="Close">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <path
+            d="m13.41 12 4.3-4.29a1 1 0 1 0-1.42-1.42L12 10.59l-4.29-4.3a1 1 0 0 0-1.42 1.42l4.3 4.29-4.3 4.29a1 1 0 0 0 0 1.42 1 1 0 0 0 1.42 0l4.29-4.3 4.29 4.3a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.42z" />
+        </svg>
+      </button>
+    </dialog>
+
+    <header>
+      <section class="header__details" aria-label="API details">
+        <div class="api__info">
+          <h1 class="api__name">
+            <a href="/scopus-survey/api/en-US/search-articles" rel="canonical" title="ScopusSurveyAPI" lang="en-US"
+              translate="no" tabindex="-1">ScopusSurveyAPI</a>
+          </h1>
+          <span class="api__version">
+            <a class="link link-icon" href="https://github.com/mauprogramador/scopus-survey-api/releases/latest"
+              target="_blank" rel="external" translate="no" title="Latest version release" aria-label="Tag">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                <path
+                  d="M856-390 570-104q-12 12-27 18t-30 6q-15 0-30-6t-27-18L103-457q-11-11-17-25.5T80-513v-287q0-33 23.5-56.5T160-880h287q16 0 31 6.5t26 17.5l352 353q12 12 17.5 27t5.5 30q0 15-5.5 29.5T856-390ZM513-160l286-286-353-354H160v286l353 354ZM260-640q25 0 42.5-17.5T320-700q0-25-17.5-42.5T260-760q-25 0-42.5 17.5T200-700q0 25 17.5 42.5T260-640Zm220 160Z" />
+              </svg>
+              <span class="link-text">v{{version}}</span>
+            </a>
+          </span>
+        </div>
+        <p class="api__description" lang="en-US">Web API for bibliographic survey of Scopus articles</p>
+      </section>
+      <section class="header__navbar" aria-label="Navegation and Language select">
+        <nav class="navbar__inner" aria-label="Navegation and Language select">
+          <span class="api__version">
+            <a class="link link-icon" href="https://github.com/mauprogramador/scopus-survey-api/releases/latest"
+              target="_blank" rel="external" translate="no" title="Latest version release" aria-label="Tag">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                <path
+                  d="M856-390 570-104q-12 12-27 18t-30 6q-15 0-30-6t-27-18L103-457q-11-11-17-25.5T80-513v-287q0-33 23.5-56.5T160-880h287q16 0 31 6.5t26 17.5l352 353q12 12 17.5 27t5.5 30q0 15-5.5 29.5T856-390ZM513-160l286-286-353-354H160v286l353 354ZM260-640q25 0 42.5-17.5T320-700q0-25-17.5-42.5T260-760q-25 0-42.5 17.5T200-700q0 25 17.5 42.5T260-640Zm220 160Z" />
+              </svg>
+              <span class="link-text">v{{version}}</span>
+            </a>
+          </span>
+          {% block link %}{% endblock %}
+          <div class="language__container">
+            <button id="language__button" class="icon-button" type="button" aria-pressed="false" aria-haspopup="menu"
+              aria-owns="language__dropdown" aria-controls="language__dropdown" aria-label="Language select"
+              aria-expanded="false" title="Language select">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                <path
+                  d="m476-80 182-480h84L924-80h-84l-43-122H603L560-80h-84ZM160-200l-56-56 202-202q-35-35-63.5-80T190-640h84q20 39 40 68t48 58q33-33 68.5-92.5T484-720H40v-80h280v-80h80v80h280v80H564q-21 72-63 148t-83 116l96 98-30 82-122-125-202 201Zm468-72h144l-72-204-72 204Z" />
+              </svg>
+            </button>
+            <menu id="language__dropdown" aria-label="Language menu" aria-orientation="vertical"
+              aria-expanded="false">
+              <li title="Portuguese" aria-label="Portuguese">
+                <a class="link" href="/scopus-survey/api/pt-BR/search-articles" rel="alternate" lang="pt-br"
+                  translate="no">Português (pt-BR)</a>
+              </li>
+              <li title="English" aria-label="English">
+                <a class="link" href="/scopus-survey/api/en-US/search-articles" rel="alternate" lang="en-US"
+                  translate="no">English (en-US)</a>
+              </li>
+            </menu>
+          </div>
+        </nav>
+      </section>
+    </header>
+
+    <main>
+      {% block main %}{% endblock %}
+    </main>
+
+    <footer>
+      <div class="footer__details">
+        <span translate="no" lang="en-US" aria-label="API name">ScopusSurveyAPI © <time
+            datetime="2024">2024</time></span>
+        <span aria-label="License">
+          <a class="link" href="https://github.com/mauprogramador/scopus-survey-api/blob/master/LICENSE" target="_blank"
+            rel="license" lang="en-US" title="MIT License">MIT License</a>
+        </span>
+        <span lang="en-US" aria-label="Author">Developed by
+          <a class="link" href="https://github.com/mauprogramador" target="_blank" rel="author" translate="no"
+            title="GitHub @mauprogramador">@mauprogramador</a>
+        </span>
+      </div>
+      <nav aria-label="Social">
+        <a href="https://github.com/mauprogramador/scopus-survey-api/tree/master" target="_blank" rel="external"
+          title="GitHub" aria-label="GitHub">
+          <span class="icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
+              <path fill-rule="evenodd" clip-rule="evenodd"
+                d="M16 0C7.16 0 0 7.16 0 16C0 23.08 4.58 29.06 10.94 31.18C11.74 31.32 12.04 30.84 12.04 30.42C12.04 30.04 12.02 28.78 12.02 27.44C8 28.18 6.96 26.46 6.64 25.56C6.46 25.1 5.68 23.68 5 23.3C4.44 23 3.64 22.26 4.98 22.24C6.24 22.22 7.14 23.4 7.44 23.88C8.88 26.3 11.18 25.62 12.1 25.2C12.24 24.16 12.66 23.46 13.12 23.06C9.56 22.66 5.84 21.28 5.84 15.16C5.84 13.42 6.46 11.98 7.48 10.86C7.32 10.46 6.76 8.82 7.64 6.62C7.64 6.62 8.98 6.2 12.04 8.26C13.32 7.9 14.68 7.72 16.04 7.72C17.4 7.72 18.76 7.9 20.04 8.26C23.1 6.18 24.44 6.62 24.44 6.62C25.32 8.82 24.76 10.46 24.6 10.86C25.62 11.98 26.24 13.4 26.24 15.16C26.24 21.3 22.5 22.66 18.94 23.06C19.52 23.56 20.02 24.52 20.02 26.02C20.02 28.16 20 29.88 20 30.42C20 30.84 20.3 31.34 21.1 31.18C27.42 29.06 32 23.06 32 16C32 7.16 24.84 0 16 0V0Z"
+                fill="#191717" />
+            </svg>
+          </span>
+        </a>
+        <a href="https://www.ifms.edu.br/campi/campus-tres-lagoas" target="_blank" rel="external"
+          title="IFMS - Campus Três Lagoas" aria-label="IFMS">
+          <img src="/images/ifms.ico" alt="IFMS logo" loading="lazy" />
+        </a>
+        <a href="https://www.scopus.com/home.uri" target="_blank" rel="external" title="Scopus"
+          aria-label="Scopus">
+          <img src="/images/scopus.ico" alt="Scopus logo" loading="lazy" />
+        </a>
+        <a href="https://www.linkedin.com/in/mauricio-silva-batista-0ba90322b/" target="_blank" rel="author"
+          title="LinkedIn">
+          <span class="icon" aria-label="LinkedIn">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+              <g fill="none">
+                <path
+                  d="M0 18.338C0 8.216 8.474 0 18.92 0h218.16C247.53 0 256 8.216 256 18.338v219.327C256 247.79 247.53 256 237.08 256H18.92C8.475 256 0 247.791 0 237.668V18.335z"
+                  fill="#006699" />
+                <path
+                  d="M77.796 214.238V98.986H39.488v115.252H77.8zM58.65 83.253c13.356 0 21.671-8.85 21.671-19.91-.25-11.312-8.315-19.915-21.417-19.915-13.111 0-21.674 8.603-21.674 19.914 0 11.06 8.312 19.91 21.169 19.91h.248zM99 214.238h38.305v-64.355c0-3.44.25-6.889 1.262-9.346 2.768-6.885 9.071-14.012 19.656-14.012 13.858 0 19.405 10.568 19.405 26.063v61.65h38.304v-66.082c0-35.399-18.896-51.872-44.099-51.872-20.663 0-29.738 11.549-34.78 19.415h.255V98.99H99.002c.5 10.812-.003 115.252-.003 115.252z"
+                  fill="#FFFFFF" />
+              </g>
+            </svg>
+          </span>
+        </a>
+        <a href="https://dev.to/mauprogramador" target="_blank" rel="author" title="DEV" aria-label="DEV">
+          <img src="/images/dev.png" alt="DEV logo" loading="lazy" />
+        </a>
+      </nav>
+    </footer>
+
+    <div id="context-data" data-lang="{{lang}}" data-token="{{token}}" hidden aria-hidden="true" aria-readonly="true">
+    </div>
+
+    {% block extra %}{% endblock %}
+
+    <script src="/scripts/index.js" type="module"></script>
+    <script src="/scripts/alerts.js" type="module"></script>
+    {% block scripts %}{% endblock %}
+  </body>
+
+</html>

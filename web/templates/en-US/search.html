@@ -1,0 +1,365 @@
+{% extends "en-US/index.html" %}
+{% block head %}
+<link rel="alternate" hreflang="en-US" href="/scopus-survey/api/en-US/search-articles">
+<link rel="alternate" hreflang="pt-BR" href="/scopus-survey/api/pt-BR/search-articles">
+<link rel="next" href="/scopus-survey/api/en-US/articles-table" />
+<link rel="stylesheet" href="/styles/styles.css" type="text/css" />
+<link rel="stylesheet" href="/styles/index.css" type="text/css" />
+<link rel="stylesheet" href="/styles/search.css" type="text/css" />
+<link rel="stylesheet" href="/styles/form.css" type="text/css" />
+<link rel="stylesheet" href="/styles/language.css" type="text/css" />
+<link rel="stylesheet" href="/styles/loader.css" type="text/css" />
+<link rel="stylesheet" href="/styles/alerts.css" type="text/css" />
+<title lang="en-US">Search Articles - ScopusSurveyAPI</title>
+{% endblock %}
+{% block link %}
+<a class="link link-icon link-table" href="/scopus-survey/api/en-US/articles-table" rel="next" lang="en-US"
+  title="Articles Table" aria-label="Articles Table">
+  <span class="link-text">Articles Table</span>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+    <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />
+  </svg>
+</a>
+{% endblock %}
+{% block main %}
+<section id="ifms-tads" aria-label="Institution and Course">
+  <p id="institution" aria-label="Institution">
+    <span lang="en-US">Federal Institute of</span>
+    <span class="ifms-slice" lang="en-US">Education, Science and Technology of</span>
+    <span lang="pt-BR">Mato Grosso do Sul</span>
+    <span class="separator" aria-label="Separator" aria-hidden="true">&#9900;</span>
+    <a class="link" href="https://www.ifms.edu.br/campi/campus-tres-lagoas" target="_blank" rel="external"
+      translate="no" lang="pt-BR" title="IFMS - Campus Três Lagoas">
+      IFMS Três Lagoas
+    </a>
+  </p>
+  <p id="course" aria-label="Course">
+    <span lang="en-US">Technology in Systems Analysis and Development</span>
+    <span class="separator" aria-label="Separator" aria-hidden="true">&#9900;</span>
+    <a class="link"
+      href="https://www.ifms.edu.br/campi/campus-tres-lagoas/cursos/graduacao/analise-e-desenvolvimento-de-sistemas"
+      target="_blank" rel="external" translate="no" lang="pt-BR" title="TADS - IFMS Três Lagoas">
+      TADS
+    </a>
+  </p>
+  <p id="acronyms" aria-label="Institution and Course Links">
+    <a class="link" href="https://www.ifms.edu.br/campi/campus-tres-lagoas" target="_blank" rel="external"
+      translate="no" lang="pt-BR" title="IFMS - Campus Três Lagoas">
+      IFMS Três Lagoas
+    </a>
+    <span class="separator" aria-label="Separator" aria-hidden="true">&#9900;</span>
+    <a class="link"
+      href="https://www.ifms.edu.br/campi/campus-tres-lagoas/cursos/graduacao/analise-e-desenvolvimento-de-sistemas"
+      target="_blank" rel="external" translate="no" lang="pt-BR" title="TADS - IFMS Três Lagoas">
+      TADS
+    </a>
+  </p>
+</section>
+
+<section aria-label="API Overview">
+  <h2 lang="en-US">Overview</h2>
+  <p lang="en-US">
+    This application was developed to facilitate the search for articles for research and bibliographic survey of Scopus
+    articles, focused especially on free use by students, improving accessibility. It will use the
+    <a class="link" href="https://dev.elsevier.com/documentation/SCOPUSSearchAPI.wadl" target="_blank"
+      rel="external help" translate="no" lang="en-US" title="Scopus Search API Docs">Scopus Search API</a>
+    and the
+    <a class="link" href="https://dev.elsevier.com/documentation/AbstractRetrievalAPI.wadl" target="_blank"
+      rel="external help" translate="no" lang="en-US" title="Scopus Abstract Retrieval API Docs">Scopus Abstract
+      Retrieval API</a>
+    to query the
+    <a class="link" href="https://www.scopus.com/home.uri" target="_blank" rel="external help" translate="no"
+      lang="en-US" title="Scopus homepage">Scopus</a>
+    cluster, and search and retrieve article information
+    if any are found, then return a
+    <abbr title="Comma-separated Values, a file format" lang="en-US">CSV</abbr>
+    file. See the
+    <a class="link" href="https://mauprogramador.github.io/scopus-survey-api/" target="_blank" rel="external help"
+      lang="en-US" title="Scopus Survey API Docs">Documentation</a>.
+  </p>
+</section>
+
+<section>
+  <h2 lang="en-US">
+    Institutional Network
+    <span class="required-field" title="This is required" aria-label="This is required">*</span>
+  </h2>
+  <p lang="en-US">
+    Please be aware that the <strong>API Key</strong> will only be properly authenticated and fully released if you use
+    your
+    <strong>educational institution's network</strong>, which needs to be registered with <a class="link"
+      href="https://www.elsevier.com/" target="_blank" rel="external" translate="no" lang="en-US"
+      title="Elsevier homepage">Elsevier</a>. This does not include <abbr title="Virtual Private Network">VPN</abbr>
+    or <abbr title="Intermediary server application between the client and the server">proxy</abbr> access. Therefore,
+    if you
+    are <strong>fully remote</strong> and <strong>off-campus</strong>, the <strong>abstract</strong> and <strong>all
+      authors</strong> of the articles will
+    <strong>not be returned</strong>.
+  </p>
+</section>
+
+<form id="search-params-form" action="/scopus-survey/api/survey">
+
+  <section id="keywords" aria-label="Keywords fields">
+    <h2 lang="en-US">
+      Keywords
+      <span class="required-field" title="This field is required" aria-label="This field is required">*</span>
+    </h2>
+    <p lang="en-US">
+      Based on the theme or subject of your research, you must select a <strong>minimum of two</strong>, and a
+      <strong>maximum of four keywords</strong>, which will be used as parameters and filters when searching
+      for articles. Each keyword must be <strong>written in English</strong>, containing <strong>only letters,
+        numbers, spaces, hyphens and underscores</strong>, with a <strong>minimum of 2</strong> and a <strong>maximum
+        of 50 characters</strong>.
+    </p>
+    <div id="keywords-fields">
+      <div class="form-field">
+        <div class="input-group">
+          <span class="input-icon" aria-label="Hashtag" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+              <path
+                d="m240-160 40-160H120l20-80h160l40-160H180l20-80h160l40-160h80l-40 160h160l40-160h80l-40 160h160l-20 80H660l-40 160h160l-20 80H600l-40 160h-80l40-160H360l-40 160h-80Zm140-240h160l40-160H420l-40 160Z" />
+            </svg>
+          </span>
+          <input id="keyword1" class="keywords" name="keywords" type="text" minlength="2" maxlength="50" size="50"
+            pattern="^[a-zA-Z0-9\-_ ]{2,50}$" required data-checked="false" spellcheck="true" autocomplete="on"
+            placeholder="1th Keyword" title="1th Keyword field" aria-invalid="false"
+            aria-errormessage="keyword1-input-feedback" aria-required="true" aria-label="1th Keyword field"
+            aria-describedby="keyword1-input-help" />
+        </div>
+        <div id="keyword1-input-feedback" class="input-feedback" role="alert log" aria-live="assertive"
+          aria-busy="true">
+        </div>
+        <div id="keyword1-input-help" class="input-help" role="note" lang="en-US">e.g. Python</div>
+      </div>
+      <div class="form-field">
+        <div class="input-group">
+          <span class="input-icon" aria-label="Hashtag" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+              <path
+                d="m240-160 40-160H120l20-80h160l40-160H180l20-80h160l40-160h80l-40 160h160l40-160h80l-40 160h160l-20 80H660l-40 160h160l-20 80H600l-40 160h-80l40-160H360l-40 160h-80Zm140-240h160l40-160H420l-40 160Z" />
+            </svg>
+          </span>
+          <input id="keyword2" class="keywords" name="keywords" type="text" minlength="2" maxlength="50" size="50"
+            pattern="^[a-zA-Z0-9\-_ ]{2,50}$" required data-checked="false" spellcheck="true" autocomplete="on"
+            placeholder="2th Keyword" title="2th Keyword field" aria-invalid="false"
+            aria-errormessage="keyword2-input-feedback" aria-required="true" aria-label="2th Keyword field"
+            aria-describedby="keyword2-input-help" />
+        </div>
+        <div id="keyword2-input-feedback" class="input-feedback" role="alert log" aria-live="assertive"
+          aria-busy="true">
+        </div>
+        <div id="keyword2-input-help" class="input-help" role="note" lang="en-US">e.g. Machine Learning</div>
+      </div>
+      <div class="form-field">
+        <div class="input-group">
+          <span class="input-icon" aria-label="Hashtag" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+              <path
+                d="m240-160 40-160H120l20-80h160l40-160H180l20-80h160l40-160h80l-40 160h160l40-160h80l-40 160h160l-20 80H660l-40 160h160l-20 80H600l-40 160h-80l40-160H360l-40 160h-80Zm140-240h160l40-160H420l-40 160Z" />
+            </svg>
+          </span>
+          <input id="keyword3" class="keywords" name="keywords" type="text" minlength="2" maxlength="50" size="50"
+            pattern="^[a-zA-Z0-9\-_ ]{2,50}$" data-checked="false" spellcheck="true" autocomplete="on"
+            placeholder="3th Keyword" title="3th Keyword field" aria-invalid="false"
+            aria-errormessage="keyword3-input-feedback" aria-required="false" aria-label="3th Keyword field"
+            aria-describedby="keyword3-input-help" />
+        </div>
+        <div id="keyword3-input-feedback" class="input-feedback" role="alert log" aria-live="assertive"
+          aria-busy="true">
+        </div>
+        <div id="keyword3-input-help" class="input-help" role="note" lang="en-US">e.g. Data Science</div>
+      </div>
+      <div class="form-field">
+        <div class="input-group">
+          <span class="input-icon" aria-label="Hashtag" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+              <path
+                d="m240-160 40-160H120l20-80h160l40-160H180l20-80h160l40-160h80l-40 160h160l40-160h80l-40 160h160l-20 80H660l-40 160h160l-20 80H600l-40 160h-80l40-160H360l-40 160h-80Zm140-240h160l40-160H420l-40 160Z" />
+            </svg>
+          </span>
+          <input id="keyword4" class="keywords" name="keywords" type="text" minlength="2" maxlength="50" size="50"
+            pattern="^[a-zA-Z0-9\-_ ]{2,50}$" data-checked="false" spellcheck="true" autocomplete="on"
+            placeholder="4th Keyword" title="4th Keyword field" aria-invalid="false"
+            aria-errormessage="keyword4-input-feedback" aria-required="false" aria-label="4th Keyword field"
+            aria-describedby="keyword4-input-help" />
+        </div>
+        <div id="keyword4-input-feedback" class="input-feedback" role="alert log" aria-live="assertive"
+          aria-busy="true">
+        </div>
+        <div id="keyword4-input-help" class="input-help" role="note" lang="en-US">e.g. Artificial Intelligence</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="apikey__section" aria-label="API Key field">
+    <h2 lang="en-US">
+      API Key
+      <span class="required-field" title="This field is required" aria-label="This field is required">*</span>
+    </h2>
+    <p lang="en-US">
+      You must obtain one to access the <a class="link" href="https://dev.elsevier.com/sc_apis.html" target="_blank"
+        rel="external help" lang="en-US" title="Elsevier Scopus APIs">Scopus <abbr
+          title="Application Programming Interface" lang="en-US">APIs</abbr></a>
+      to search and retrieve the articles'
+      information. It <strong>has no spaces</strong> and is <strong>made up of 32 characters</strong>
+      containing <strong>only letters and numbers</strong>. It can be obtained by accessing the <a class="link"
+        href="https://dev.elsevier.com/" target="_blank" rel="external help" lang="en-US"
+        title="Elsevier Developer Portal">Elsevier Portal</a> and registering. If you are part of an educational
+      institution, you can try <a class="link"
+        href="https://id.elsevier.com/as/tsIhCP03OF/resume/as/authorization.ping?client_id=ELSAPI-PROD&" target="_blank"
+        rel="external" lang="en-US" title="Find your organization on Elsevier">signing in through your organization or
+        academic email</a>.
+    </p>
+    <div class="form-field">
+      <div class="input-group">
+        <span class="input-icon" aria-label="Key" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+            <path
+              d="M280-400q-33 0-56.5-23.5T200-480q0-33 23.5-56.5T280-560q33 0 56.5 23.5T360-480q0 33-23.5 56.5T280-400Zm0 160q-100 0-170-70T40-480q0-100 70-170t170-70q67 0 121.5 33t86.5 87h352l120 120-180 180-80-60-80 60-85-60h-47q-32 54-86.5 87T280-240Zm0-80q56 0 98.5-34t56.5-86h125l58 41 82-61 71 55 75-75-40-40H435q-14-52-56.5-86T280-640q-66 0-113 47t-47 113q0 66 47 113t113 47Z" />
+          </svg>
+        </span>
+        <input id="apikey" name="apikey" type="text" minlength="32" maxlength="32" size="32" pattern="^[a-zA-Z0-9]{32}$"
+          required data-checked="false" spellcheck="false" autocomplete="on" placeholder="API Key" title="API Key field"
+          aria-invalid="false" aria-errormessage="apikey-input-feedback" aria-required="true" aria-label="API Key field"
+          aria-describedby="apikey-input-help" />
+      </div>
+      <div id="apikey-input-feedback" class="input-feedback" role="alert log" aria-live="assertive" aria-busy="true">
+      </div>
+      <div id="apikey-input-help" class="input-help" role="note" lang="en-US">e.g. 439f55d263c...</div>
+    </div>
+  </section>
+
+  <section>
+    <h2 lang="en-US">Filtering Options</h2>
+    <p lang="en-US"><strong>Optional</strong> parameters that can be used to filter search results.</p>
+    <dl>
+      <dt lang="en-US">Count</dt>
+      <dd lang="en-US">A numeric value, with a <strong>minimum of 1</strong> and a <strong>maximum of 200</strong>, that
+        limits the
+        number of articles to be returned from the search. The <strong>default is 50</strong>.</dd>
+      <dt lang="en-US">Similarity Threshold</dt>
+      <dd lang="en-US">A numeric value, with a <strong>minimum of 0</strong> and a <strong>maximum of 100</strong>, used
+        as a
+        threshold to filter and remove similar articles. The <strong>default is 80</strong>.</dd>
+      <dt lang="en-US">Date</dt>
+      <dd lang="en-US">Range of years, from the <strong>last ten years</strong> to the <strong>current year</strong>, as
+        the target
+        of interest of published articles. The <strong>default is the last three years</strong>.</dd>
+    </dl>
+    <div id="filter-fields">
+
+      <div class="form-field">
+        <div class="input-group">
+          <span class="input-icon" aria-label="Funnel" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+              <path
+                d="M440-160q-17 0-28.5-11.5T400-200v-240L168-736q-15-20-4.5-42t36.5-22h560q26 0 36.5 22t-4.5 42L560-440v240q0 17-11.5 28.5T520-160h-80Zm40-308 198-252H282l198 252Zm0 0Z" />
+            </svg>
+          </span>
+          <input id="count" name="count" type="text" minlength="1" maxlength="3" size="3" min="1" max="200"
+            pattern="^[0-9]{1,3}$" data-checked="false" inputmode="numeric" spellcheck="false" autocomplete="on"
+            placeholder="Count" title="Count field" aria-invalid="false" aria-errormessage="count-input-feedback"
+            aria-required="false" aria-label="Count field" aria-describedby="count-input-help" />
+        </div>
+        <div id="count-input-feedback" class="input-feedback" role="alert log" aria-live="assertive" aria-busy="true">
+        </div>
+        <div id="count-input-help" class="input-help" role="note" lang="en-US">e.g. 50</div>
+      </div>
+
+      <div class="form-field">
+        <div class="input-group">
+          <span class="input-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+              <path
+                d="M440-160q-17 0-28.5-11.5T400-200v-240L168-736q-15-20-4.5-42t36.5-22h560q26 0 36.5 22t-4.5 42L560-440v240q0 17-11.5 28.5T520-160h-80Zm40-308 198-252H282l198 252Zm0 0Z" />
+            </svg>
+          </span>
+          <input id="threshold" name="threshold" type="text" minlength="1" maxlength="2" size="2" pattern="^[0-9]{1,2}$"
+            data-checked="false" inputmode="numeric" spellcheck="false" autocomplete="on" placeholder="Threshold"
+            title="Threshold field" aria-invalid="false" aria-errormessage="threshold-input-feedback"
+            aria-required="false" aria-label="Threshold field" aria-describedby="threshold-input-help" />
+        </div>
+        <div id="threshold-input-feedback" class="input-feedback" role="alert log" aria-live="assertive"
+          aria-busy="true">
+        </div>
+        <div id="threshold-input-help" class="input-help" role="note" lang="en-US">e.g. 80</div>
+      </div>
+
+      <div class="form-field">
+        <div class="input-group">
+          <span class="input-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+              <path
+                d="M320-400q-17 0-28.5-11.5T280-440q0-17 11.5-28.5T320-480q17 0 28.5 11.5T360-440q0 17-11.5 28.5T320-400Zm160 0q-17 0-28.5-11.5T440-440q0-17 11.5-28.5T480-480q17 0 28.5 11.5T520-440q0 17-11.5 28.5T480-400Zm160 0q-17 0-28.5-11.5T600-440q0-17 11.5-28.5T640-480q17 0 28.5 11.5T680-440q0 17-11.5 28.5T640-400ZM200-80q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h40v-80h80v80h320v-80h80v80h40q33 0 56.5 23.5T840-720v560q0 33-23.5 56.5T760-80H200Zm0-80h560v-400H200v400Zm0-480h560v-80H200v80Zm0 0v-80 80Z" />
+            </svg>
+          </span>
+          <input id="start-year" name="start-year" type="number" min="2015" max="2025" step="1" minlength="4"
+            maxlength="4" size="4" pattern="^[0-9]{4}$" data-checked="false" inputmode="numeric" spellcheck="false"
+            autocomplete="on" placeholder="Start Year" title="Start Year field" aria-invalid="false"
+            aria-errormessage="year-input-feedback" aria-required="false" aria-label="Start Year field"
+            aria-describedby="year-input-help" />
+          <span class="input-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+              <path
+                d="M320-400q-17 0-28.5-11.5T280-440q0-17 11.5-28.5T320-480q17 0 28.5 11.5T360-440q0 17-11.5 28.5T320-400Zm160 0q-17 0-28.5-11.5T440-440q0-17 11.5-28.5T480-480q17 0 28.5 11.5T520-440q0 17-11.5 28.5T480-400Zm160 0q-17 0-28.5-11.5T600-440q0-17 11.5-28.5T640-480q17 0 28.5 11.5T680-440q0 17-11.5 28.5T640-400ZM200-80q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h40v-80h80v80h320v-80h80v80h40q33 0 56.5 23.5T840-720v560q0 33-23.5 56.5T760-80H200Zm0-80h560v-400H200v400Zm0-480h560v-80H200v80Zm0 0v-80 80Z" />
+            </svg>
+          </span>
+          <input id="end-year" name="end-year" type="number" min="2015" max="2025" step="1" minlength="4" maxlength="4"
+            size="4" pattern="^[0-9]{4}$" data-checked="false" inputmode="numeric" spellcheck="false" autocomplete="on"
+            placeholder="End Year" title="End Year field" aria-invalid="false" aria-errormessage="year-input-feedback"
+            aria-required="false" aria-label="End Year field" aria-describedby="year-input-help" />
+        </div>
+        <div id="year-input-feedback" class="input-feedback" role="alert log" aria-live="assertive" aria-busy="true">
+        </div>
+        <div id="year-input-help" class="input-help" role="note" lang="en-US">e.g. 2014 - 2024</div>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="button__section" aria-label="Search Button">
+    <div class="input-group">
+      <button id="search-button" class="form-button" type="submit" title="Search Articles" lang="en-US" disabled
+        aria-disabled="true">
+        <span class="input-icon" aria-label="Search">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
+              d="M15.7955 15.8111L21 21M18 10.5C18 14.6421 14.6421 18 10.5 18C6.35786 18 3 14.6421 3 10.5C3 6.35786 6.35786 3 10.5 3C14.6421 3 18 6.35786 18 10.5Z" />
+          </svg>
+        </span>
+        Search Articles
+      </button>
+    </div>
+    <div class="input-group">
+      <button id="download-button" class="form-button" type="button" title="Download CSV" lang="en-US" disabled
+        aria-disabled="true">
+        <span class="input-icon" aria-label="Download">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+            <path
+              d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z" />
+          </svg>
+        </span>
+        Download CSV
+      </button>
+    </div>
+    <a href="/scopus-survey/api/en-US/articles-table" class="link link-icon link-table" rel="next" lang="en-US"
+      title="Articles Table" aria-label="Articles Table">
+      <span class="link-text" aria-label="Arrow">Articles Table</span>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+        <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />
+      </svg>
+    </a>
+  </section>
+
+</form>
+{% endblock %}
+{% block extra %}
+<a id="download-link" rel="external" download="articles.csv" type="text/csv" hidden aria-hidden="true" tabindex="-1"
+  aria-readonly="true">&#8203;</a>
+{% endblock %}
+{% block scripts %}
+<script src="/scripts/validation.js" type="module"></script>
+<script src="/scripts/submit.js" type="module"></script>
+<script src="/scripts/data.js" type="module"></script>
+{% endblock %}
