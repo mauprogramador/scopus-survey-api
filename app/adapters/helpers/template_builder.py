@@ -5,6 +5,7 @@ from os.path import join
 from pandas import read_csv
 from fastapi import Request
 from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
 from starlette.responses import Response
 
 from app.core.config.scopus import (
@@ -14,17 +15,12 @@ from app.core.config.scopus import (
     URL_COLUMN,
 )
 from app.core.data.enums import Language, Templates
-from app.core.config.config import (
-    FILE,
-    TOKEN,
-    DIRECTORY,
-    TOML_ENV,
-)
-from app.core.domain.metaclasses import TemplateHelper
-from app.framework.fastapi.config import TEMPLATES
+from app.core.config.config import FILE, TOKEN, DIRECTORY
+from app.core.domain.interfaces import TemplateBuilderABC
+from app import __version__
 
 
-class TemplateBuilder(TemplateHelper):
+class TemplateBuilder(TemplateBuilderABC):
     """Generates context values for template responses"""
 
     __COLUMNS = [URL_COLUMN, AUTHORS_COLUMN, TITLE_COLUMN, DATE_COLUMN]
@@ -33,6 +29,7 @@ class TemplateBuilder(TemplateHelper):
         "Location": __SEARCH_ROUTE,
         "Refresh": f"5; {__SEARCH_ROUTE}",
     }
+    __TEMPLATES = Jinja2Templates(directory="web/templates")
     __ENCODING = "utf-8"
     __SEP = ";"
 
@@ -42,12 +39,12 @@ class TemplateBuilder(TemplateHelper):
         request.session.setdefault("csrf_token", TOKEN)
         headers = {"Content-Language": lang.value}
         context = {
-            "version": TOML_ENV.version,
+            "version": __version__,
             "token": str(TOKEN),
             "lang": lang.value,
         }
 
-        return TEMPLATES.TemplateResponse(
+        return cls.__TEMPLATES.TemplateResponse(
             request, template_name, context, HTTPStatus.OK, headers
         )
 
@@ -65,23 +62,24 @@ class TemplateBuilder(TemplateHelper):
             dataframe = read_csv(
                 filepath_or_buffer=file_path,
                 sep=cls.__SEP,
+                usecols=cls.__COLUMNS,
                 encoding=cls.__ENCODING,
             )
 
-            subset = dataframe[cls.__COLUMNS]
-            csv_data = subset.to_numpy().tolist()
+            # subset = dataframe[cls.__COLUMNS]
+            csv_data = dataframe.to_numpy().tolist()
 
         except FileNotFoundError:
             csv_data = None
 
         context = {
-            "version": TOML_ENV.version,
+            "version": __version__,
             "csv_filename": filename,
             "csv_data": csv_data,
             "lang": lang.value,
         }
 
-        return TEMPLATES.TemplateResponse(
+        return cls.__TEMPLATES.TemplateResponse(
             request, template_name, context, HTTPStatus.OK, headers
         )
 
@@ -96,7 +94,7 @@ class TemplateBuilder(TemplateHelper):
             "status": f"{code} - {HTTPStatus(code).phrase}",
             "timestamp": datetime.now().isoformat(),
         }
-        return TEMPLATES.TemplateResponse(
+        return cls.__TEMPLATES.TemplateResponse(
             request,
             template_name,
             context,

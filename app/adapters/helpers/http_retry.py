@@ -13,11 +13,12 @@ from app.core.common.messages import (
     CONNECTION_TIMEOUT,
 )
 from app.core.config.config import LOG
-from app.core.domain.metaclasses import HTTPHelper
-from app.framework.exceptions import BadGateway, GatewayTimeout
+from app.utils.logging import Prefix
+from app.core.domain.interfaces import HTTPRetryABC
+from app.core.domain.http_exceptions import BadGateway, GatewayTimeout
 
 
-class HTTPRetry(HTTPHelper):
+class HTTPRetry(HTTPRetryABC):
     """Make HTTP requests with throttling and retry mechanisms"""
 
     __METHOD = "GET"
@@ -31,7 +32,7 @@ class HTTPRetry(HTTPHelper):
         HTTPStatus.FORBIDDEN,
         HTTPStatus.NOT_FOUND,
         HTTPStatus.TOO_MANY_REQUESTS,
-        HTTPStatus.INTERNAL_SERVER_ERROR
+        HTTPStatus.INTERNAL_SERVER_ERROR,
     }
     __RETRY = Retry(
         total=__RETRIES,
@@ -45,10 +46,10 @@ class HTTPRetry(HTTPHelper):
         raise_on_status=False,
     )
 
-    def __init__(self, for_search: bool = None) -> None:
+    def __init__(self, for_search: bool) -> None:
         """Make HTTP requests with throttling and retry mechanisms"""
         self.__adapter = CacheControlAdapter(max_retries=self.__RETRY)
-        self.__for_search = True if for_search is None else for_search
+        self.__log_prefix = Prefix.SEARCH if for_search else Prefix.ABSTRACT
         self.__headers: dict[str, str] = None
         self.__session: Session = None
 
@@ -72,8 +73,8 @@ class HTTPRetry(HTTPHelper):
             )
             process_time = perf_counter() - start_time
 
-            LOG.request(
-                self.__for_search,
+            LOG.trace(
+                self.__log_prefix,
                 request,
                 response.status_code,
                 process_time,
