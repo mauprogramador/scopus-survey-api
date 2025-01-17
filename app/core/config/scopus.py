@@ -4,37 +4,24 @@ CURRENT_YEAR = datetime.now().year
 LAST_THREE_YEARS = CURRENT_YEAR - 3
 LAST_DECADE = CURRENT_YEAR - 10
 
-DATE_RANGE = f"{LAST_THREE_YEARS}-{CURRENT_YEAR}"
-
 BOOLEAN_OPERATOR = " AND "
 NULL = "null"
 
-QUOTA_EXCEEDED = "QUOTA_EXCEEDED - Quota Exceeded"
-RATE_LIMIT_EXCEEDED = "RATE_LIMIT_EXCEEDED"
+QUOTA_EXCEEDED_CODE = "QUOTA_EXCEEDED"
+RATE_LIMIT_EXCEEDED_CODE = "RATE_LIMIT_EXCEEDED"
 
 URL_COLUMN = "Article Preview Page URL"
 AUTHORS_COLUMN = "Authors"
 TITLE_COLUMN = "Title"
 DATE_COLUMN = "Date"
 
-QUOTA_WARNING = (
-    "Your API Key has exceeded the request quota. Please try again on {}"
-)
-RATE_LIMIT_WARNING = (
-    "The throttling request rate exceeds per second the specified limits"
-)
-FURTHER_INFO_LINK = (
-    "For further information visit "
-    "https://dev.elsevier.com/api_key_settings.html"
-)
-
 SEARCH_API_URL = (
-    "https://api.elsevier.com/content/search/scopus"
-    "?query=TITLE-ABS-KEY({query})&field=dc:identifier&date={date}"
-    "&sort=+coverDate,+relevancy&suppressNavLinks=true"
+    "https://api.elsevier.com/content/search/scopus?apiKey={apikey}&query="
+    "TITLE-ABS-KEY({query})&field=dc:identifier&suppressNavLinks=true&date"
+    "={date}&count={count}&sort=+pubyear,+coverDate,+relevancy"
 )
 PAGINATION_URL = "{search_url}&start={page}"
-ABSTRACT_API_URL = "{abstract_url}?field={fields}"
+ABSTRACT_API_URL = "{abstract_url}?apiKey={apikey}&field={fields}"
 ARTICLE_PAGE_URL = (
     "https://www.scopus.com/inward/record.uri"
     "?partnerID=HzOxMe3b&scp={scopus_id}&origin=inward"
@@ -45,28 +32,31 @@ FIELDS = (
     "-count,prism:volume,prism:coverDate,prism:doi,dc:creator,authors"
 )
 
-API_ERRORS = {
-    400: "Invalid request. Invalid information submitted",
-    401: "User cannot be authenticated due to missing/invalid credentials",
-    403: "User cannot be authenticated or entitlements cannot be validated",
-    429: (
-        "The requester has exceeded the quota "
-        "limits associated with their API Key"
+HTTP_CODE_ERRORS = {
+    400: "Invalid Request: invalid information submitted",
+    401: (
+        "Authentication Error: user cannot be authenticated"
+        " due to missing/invalid credentials"
     ),
-    500: "Scopus API internal processing error",
+    403: (
+        "Authorization/Entitlements Error: User cannot be "
+        "authenticated or entitlements cannot be validated"
+    ),
+    429: (
+        "Quota Exceeded: the requester has exceeded the "
+        "quota limits associated with their API Key"
+    ),
+    500: "Generic Error: Scopus API back-end processing errors",
 }
 
-
-def get_scopus_headers(api_key: str) -> dict[str, str]:
-    return {
-        "Accept-Language": "pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7",
-        "Accept-Charset": "ISO-8859-1,utf-8;q=0.7,*;q=0.3",
-        "Accept-Encoding": "gzip, deflate, br",
-        "Referer": "https://www.scopus.com/",
-        "Origin": "https://www.scopus.com",
-        "Content-Type": "application/json",
-        "Accept": "application/json",
-        "User-Agent": "Mozilla/5.0",
-        "Connection": "keep-alive",
-        "X-ELS-APIKey": api_key,
-    }
+SCOPUS_HEADERS = {
+    "Accept-Language": "pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7",
+    "Accept-Charset": "ISO-8859-1,utf-8;q=0.7,*;q=0.3",
+    "Accept-Encoding": "gzip, deflate, br",
+    "Referer": "https://www.scopus.com/",
+    "Origin": "https://www.scopus.com",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "User-Agent": "Mozilla/5.0",
+    "Connection": "keep-alive",
+}
