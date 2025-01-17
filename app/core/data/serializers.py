@@ -4,11 +4,10 @@ from math import ceil
 from pydantic import (
     BaseModel,
     Field,
-    field_serializer,
+    AliasChoices,
     field_validator,
     model_validator,
 )
-from requests import Response
 
 from app.core.config.config import CSV_HEADER, USER_API_KEY_HEADER
 from app.core.config.scopus import ARTICLE_PAGE_URL, NULL
@@ -40,34 +39,37 @@ class ScopusSearch(BaseModel):
 
 
 class ScopusQuotaRateLimit(BaseModel):
-    """Serializer for Scopus APIs responses"""
+    """Serializer for Scopus APIs response headers"""
 
-    reset: float = Field(default=NULL, validation_alias="X-RateLimit-Reset")
+    limit: int = Field(default=NULL, validation_alias="X-RateLimit-Limit")
+    remaining: int = Field(
+        default=NULL, validation_alias="X-RateLimit-Remaining"
+    )
+    reset: int = Field(default=NULL, validation_alias="X-RateLimit-Reset")
     status: str = Field(default=NULL, validation_alias="X-ELS-Status")
-    error_code: str = Field(default=NULL, validation_alias="error-code")
-
-    @model_validator(mode="before")
-    @classmethod
-    def flatten_json(cls, response: Response) -> dict:
-        model_data: dict = {}
-        content: dict = response.json()
-        model_data.update(response.headers)
-        if content.get("error-response"):
-            model_data.update(content["error-response"])
-        return model_data
 
     @property
     def reset_datetime(self) -> str:
         epoch = datetime.fromtimestamp(self.reset)
-        return epoch.strftime("%d-%m-%Y at %H:%M:%S")
+        return epoch.strftime("%Y-%m-%d %H:%M:%S")
 
-    @property
-    def quota_exceeded(self) -> bool:
-        return self.status == "QUOTA_EXCEEDED - Quota Exceeded"
 
-    @property
-    def rate_limit_exceeded(self) -> bool:
-        return self.error_code == "RATE_LIMIT_EXCEEDED"
+class ScopusErrorResponse(BaseModel):
+    """Serializer for Scopus APIs error responses"""
+
+    code: str = Field(
+        default=NULL,
+        validation_alias=AliasChoices("error-code", "statusCode"),
+    )
+
+    @model_validator(mode="before")
+    @classmethod
+    def flatten_json(cls, json: dict) -> dict:
+        if json.get("error-response") is not None:
+            return json["error-response"]
+        if json.get("service-error") is not None:
+            return json["service-error"]["status"]
+        return json
 
 
 class ScopusAbstract(BaseModel):
@@ -133,20 +135,13 @@ class ScopusAbstract(BaseModel):
 
     @field_validator("authors", mode="before")
     @classmethod
-    def get_author_names(cls, data: list[dict]) -> str:
+    def join_author_names(cls, data: list[dict]) -> str:
         author_names = [author["ce:indexed-name"] for author in data]
         return ", ".join(author_names)
 
-    @field_serializer("date")
-    def serialize_date(self, date: str):
-        try:
-            return datetime.strptime(date, "%y-%m-%d").strftime("%d-%m-%y")
-        except ValueError:
-            return date
-
 
 class CSVFileHeaders(BaseModel):
-    """Serializer for file response headers"""
+    """Serializer for csv file response headers"""
 
     content_disposition: str = Field(serialization_alias="Content-Disposition")
     content_type: str = Field(
