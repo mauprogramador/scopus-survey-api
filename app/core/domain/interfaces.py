@@ -3,15 +3,16 @@ from abc import ABCMeta, abstractmethod
 from fastapi import Request
 from fastapi.responses import FileResponse, HTMLResponse
 from pandas import DataFrame
+from pydantic import BaseModel
 from requests import Response as RResponse
 from starlette.responses import Response as SResponse
 
 from app.core.data.enums import Language
-from app.core.data.validators import SearchParams
+from app.core.data.query import SearchParams
 from app.core.data.serializers import ScopusResult
 
 
-class HTTPHelper(metaclass=ABCMeta):
+class HTTPRetryABC(metaclass=ABCMeta):
     @abstractmethod
     def mount_session(self, headers: dict[str, str]) -> None:
         pass
@@ -25,29 +26,31 @@ class HTTPHelper(metaclass=ABCMeta):
         pass
 
 
-class URLHelper(metaclass=ABCMeta):
+class URLBuilderABC(metaclass=ABCMeta):
     @abstractmethod
-    def get_search_url(self, keywords: list[str]) -> str:
+    def search_url(self, params: SearchParams) -> str:
         pass
 
     @abstractmethod
-    def get_pagination_url(self, page: int) -> str:
+    def pagination_url(self, page: int) -> str:
         pass
 
     @abstractmethod
-    def get_abstract_url(self, url: str) -> str:
+    def set_abstract_api_key(self, api_key: str) -> None:
         pass
 
-
-class SearchAPI(metaclass=ABCMeta):
     @abstractmethod
-    def search_articles(
-        self, search_params: SearchParams
-    ) -> list[ScopusResult]:
+    def abstract_url(self, url: str) -> str:
         pass
 
 
-class AbstractAPI(metaclass=ABCMeta):
+class SearchAPIABC(metaclass=ABCMeta):
+    @abstractmethod
+    def search_articles(self, params: SearchParams) -> list[ScopusResult]:
+        pass
+
+
+class AbstractAPIABC(metaclass=ABCMeta):
     @abstractmethod
     def retrieve_abstracts(
         self, api_key: str, entry: list[ScopusResult]
@@ -55,19 +58,25 @@ class AbstractAPI(metaclass=ABCMeta):
         pass
 
 
-class ArticlesAggregator(metaclass=ABCMeta):
+class ScopusResponseABC(metaclass=ABCMeta):
     @abstractmethod
-    def get_articles(self, params: SearchParams) -> FileResponse:
+    def handle(self, response: RResponse) -> BaseModel:
         pass
 
 
-class SimilarityFilter(metaclass=ABCMeta):
+class ArticlesAggregatorABC(metaclass=ABCMeta):
     @abstractmethod
-    def filter(self, dataframe: DataFrame) -> DataFrame:
+    def retrieve_articles(self, params: SearchParams) -> FileResponse:
         pass
 
 
-class TemplateHelper(metaclass=ABCMeta):
+class SimilarityFilterABC(metaclass=ABCMeta):
+    @abstractmethod
+    def filter(self, dataframe: DataFrame, similarity_ratio: int) -> DataFrame:
+        pass
+
+
+class TemplateBuilderABC(metaclass=ABCMeta):
     @classmethod
     @abstractmethod
     def search_template(cls, request: Request, lang: Language) -> HTMLResponse:
