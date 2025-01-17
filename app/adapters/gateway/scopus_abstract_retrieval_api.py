@@ -1,35 +1,37 @@
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from http import HTTPStatus
-from json.decoder import JSONDecodeError
 
 from pandas import DataFrame
 from tqdm.contrib.logging import logging_redirect_tqdm
 
-from app.core.common.messages import (
-    ABSTRACT_API_ERROR,
-    DECODING_ERROR,
-    VALIDATE_ERROR,
-)
-from app.core.config.config import HANDLER, LOG
-from app.core.config.scopus import get_scopus_headers
+from app.core.config.config import SHUTDOWN, LOG
+from app.core.config.scopus import SCOPUS_HEADERS
 from app.core.data.serializers import ScopusAbstract, ScopusResult
-from app.core.domain.exceptions import InterruptError, ScopusAPIError
-from app.core.domain.metaclasses import AbstractAPI, HTTPHelper, URLHelper
-from app.framework.exceptions import BadGateway
-from app.framework.exceptions.http_exceptions import InternalError
+from app.core.domain.exceptions import InterruptError
+from app.core.domain.interfaces import (
+    AbstractAPIABC,
+    HTTPRetryABC,
+    ScopusResponseABC,
+    URLBuilderABC,
+)
 from app.utils.progress_bar import ProgressBar
 
 
-class ScopusAbstractRetrievalAPI(AbstractAPI):
+class ScopusAbstractRetrievalAPI(AbstractAPIABC):
     """Retrieves Scopus abstracts via the Scopus Abstract Retrieval API"""
 
     __ONE_RESULT_INDEX = 0
     __RATE_LIMIT = 9
 
-    def __init__(self, http_retry: HTTPHelper, url_helper: URLHelper) -> None:
+    def __init__(
+        self,
+        http_retry: HTTPRetryABC,
+        url_builder: URLBuilderABC,
+        scopus_response: ScopusResponseABC,
+    ) -> None:
         """Retrieves Scopus abstracts via the Scopus Abstract Retrieval API"""
         self.__http_retry = http_retry
-        self.__url_helper = url_helper
+        self.__url_builder = url_builder
+        self.__scopus_response = scopus_response
         self.__entry: list[ScopusResult] = None
         self.__abstracts: list[dict] = None
         self.__total = 0
@@ -40,8 +42,8 @@ class ScopusAbstractRetrievalAPI(AbstractAPI):
         self.__entry, self.__total = entry, len(entry)
         self.__abstracts = []
 
-        headers = get_scopus_headers(api_key)
-        self.__http_retry.mount_session(headers)
+        self.__url_builder.set_abstract_api_key(api_key)
+        self.__http_retry.mount_session(SCOPUS_HEADERS)
 
         try:
             if self.__total == 1:
@@ -54,36 +56,23 @@ class ScopusAbstractRetrievalAPI(AbstractAPI):
         return DataFrame(self.__abstracts)
 
     def __get_abstract(self, index: int) -> None:
-        if HANDLER.event.is_set():
+        if SHUTDOWN.event.is_set():
             raise InterruptError()
 
-        url = self.__url_helper.get_abstract_url(self.__entry[index].url)
+        url = self.__url_builder.abstract_url(self.__entry[index].url)
         abstract = self.__get_abstract_response(url)
         self.__abstracts.append(abstract.model_dump(by_alias=True))
 
     def __get_abstract_response(self, url: str) -> ScopusAbstract:
         response = self.__http_retry.request(url)
+        abstract: ScopusAbstract = self.__scopus_response.handle(response)
 
-        if response.status_code != HTTPStatus.OK:
-            raise ScopusAPIError(response, ABSTRACT_API_ERROR)
-
-        if not response.text:
-            raise BadGateway(ABSTRACT_API_ERROR)
-
-        try:
-            return ScopusAbstract.model_validate(response.json())
-
-        except JSONDecodeError as error:
-            raise InternalError(DECODING_ERROR) from error
-
-        except KeyError as error:
-            raise InternalError(VALIDATE_ERROR) from error
+        return abstract
 
     def __get_multiple_abstracts(self) -> None:
         max_workers = min(self.__total, self.__RATE_LIMIT)
 
         LOG.debug({"max_workers": max_workers})
-        LOG.info("Getting multiple article abstracts")
         progress_bar = ProgressBar(self.__total)
 
         with (

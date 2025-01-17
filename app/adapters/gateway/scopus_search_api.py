@@ -1,26 +1,24 @@
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from http import HTTPStatus
-from json.decoder import JSONDecodeError
 
 from tqdm.contrib.logging import logging_redirect_tqdm
 
-from app.core.common.messages import (
-    DECODING_ERROR,
-    NOT_FOUND_ERROR,
-    SEARCH_API_ERROR,
-    VALIDATE_ERROR,
-)
-from app.core.config.config import HANDLER, LOG
-from app.core.config.scopus import get_scopus_headers
-from app.core.data.validators import SearchParams
+from app.core.common.messages import NOT_FOUND_ERROR
+from app.core.config.config import SHUTDOWN, LOG
+from app.core.config.scopus import SCOPUS_HEADERS
+from app.core.data.query import SearchParams
 from app.core.data.serializers import ScopusResult, ScopusSearch
-from app.core.domain.exceptions import InterruptError, ScopusAPIError
-from app.core.domain.metaclasses import HTTPHelper, SearchAPI, URLHelper
-from app.framework.exceptions import BadGateway, InternalError, NotFound
+from app.core.domain.exceptions import InterruptError
+from app.core.domain.http_exceptions import NotFound
+from app.core.domain.interfaces import (
+    HTTPRetryABC,
+    ScopusResponseABC,
+    SearchAPIABC,
+    URLBuilderABC,
+)
 from app.utils.progress_bar import ProgressBar
 
 
-class ScopusSearchAPI(SearchAPI):
+class ScopusSearchAPI(SearchAPIABC):
     """Search and retrieve articles via the Scopus Search API"""
 
     __PAGE_TWO_INDEX = 1
@@ -28,77 +26,67 @@ class ScopusSearchAPI(SearchAPI):
     __START = 1
 
     def __init__(
-        self, http_retry: HTTPHelper, url_builder: URLHelper
+        self,
+        http_retry: HTTPRetryABC,
+        url_builder: URLBuilderABC,
+        scopus_response: ScopusResponseABC,
     ) -> None:
         """Search and retrieve articles via the Scopus Search API"""
         self.__http_retry = http_retry
         self.__url_builder = url_builder
-        self.__scopus_response: ScopusSearch = None
+        self.__scopus_response = scopus_response
+        self.__search_response: ScopusSearch = None
 
-    def search_articles(
-        self, search_params: SearchParams
-    ) -> list[ScopusResult]:
-        headers = get_scopus_headers(search_params.api_key)
-        url = self.__url_builder.get_search_url(search_params.keywords)
-        self.__http_retry.mount_session(headers)
+    def search_articles(self, params: SearchParams) -> list[ScopusResult]:
+        url = self.__url_builder.search_url(params)
+        self.__http_retry.mount_session(SCOPUS_HEADERS)
 
         try:
-            scopus_response = self.__get_search_response(url)
-            self.__scopus_response = scopus_response
+            self.__search_response = self.__get_search_response(url)
 
-            if scopus_response.total_results == 0:
+            if self.__search_response.total_results == 0:
                 raise NotFound(NOT_FOUND_ERROR)
 
-            if scopus_response.pages_count == 2:
+            if self.__search_response.pages_count == 2:
                 self.__get_articles_by_pagination(self.__PAGE_TWO_INDEX)
 
-            elif scopus_response.pages_count > 2:
+            elif self.__search_response.pages_count > 2:
                 self.__get_multiple_articles_by_pagination()
 
-            LOG.info(f"Total Articles Found: {scopus_response.total_results}")
+            LOG.info(
+                "Total Articles Found: "
+                f"\033[33;1m{self.__search_response.total_results}"
+            )
 
         finally:
             self.__http_retry.close()
 
-        return self.__scopus_response.entry
+        return self.__search_response.entry
 
     def __get_search_response(self, url: str) -> ScopusSearch:
         response = self.__http_retry.request(url)
+        search: ScopusSearch = self.__scopus_response.handle(response)
 
-        if response.status_code != HTTPStatus.OK:
-            raise ScopusAPIError(response, SEARCH_API_ERROR)
-
-        if not response.text:
-            raise BadGateway(SEARCH_API_ERROR)
-
-        try:
-            return ScopusSearch.model_validate(response.json())
-
-        except JSONDecodeError as error:
-            raise InternalError(DECODING_ERROR) from error
-
-        except KeyError as error:
-            raise InternalError(VALIDATE_ERROR) from error
+        return search
 
     def __get_articles_by_pagination(self, index: int) -> None:
-        if HANDLER.event.is_set():
+        if SHUTDOWN.event.is_set():
             raise InterruptError()
 
-        page = index * self.__scopus_response.items_per_page
-        url = self.__url_builder.get_pagination_url(page)
+        page = index * self.__search_response.items_per_page
+        url = self.__url_builder.pagination_url(page)
 
-        scopus_response = self.__get_search_response(url)
-        self.__scopus_response.entry.extend(scopus_response.entry)
+        search_response = self.__get_search_response(url)
+        self.__search_response.entry.extend(search_response.entry)
 
     def __get_multiple_articles_by_pagination(self) -> None:
-        pages_count = self.__scopus_response.pages_count
+        pages_count = self.__search_response.pages_count
         max_workers = min(pages_count, self.__RATE_LIMIT)
 
         LOG.debug({"max_workers": max_workers})
-        LOG.info("Getting multiple articles by pagination")
         progress_bar = ProgressBar(
-            self.__scopus_response.total_results,
-            self.__scopus_response.items_per_page,
+            self.__search_response.total_results,
+            self.__search_response.items_per_page,
             self.__START,
         )
 
