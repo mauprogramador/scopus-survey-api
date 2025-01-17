@@ -5,7 +5,7 @@ from fastapi.responses import FileResponse
 from pandas import DataFrame
 
 from app.core.config.config import DIRECTORY, FILE
-from app.core.domain.metaclasses import CSVResponseABC
+from app.core.domain.interfaces import CSVResponseABC
 from app.core.data.serializers import CSVFileHeaders
 
 
