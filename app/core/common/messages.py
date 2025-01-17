@@ -20,3 +20,10 @@ INVALID_KEYWORDS_LENGTH = "There must be at least two keywords"
 MISSING_ACCESS_TOKEN = "Missing required Access Token header"
 MISSING_API_KEY = "Missing required API Key query parameter"
 MISSING_KEYWORDS = "Missing required Keywords query parameter"
+
+QUOTA_EXCEEDED = (
+    "Your API Key has exceeded the request quota. Please try again on {}"
+)
+RATE_LIMIT_EXCEEDED = (
+    "The throttling request rate exceeds the specified limits per second"
+)
