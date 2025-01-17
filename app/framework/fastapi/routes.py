@@ -5,17 +5,15 @@ from fastapi import Depends, Request
 from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.routing import APIRouter
 
-from app.adapters.factories.usecase_factory import make_usecase
+from app.core.config.config import CSV_RESPONSE, HTML_RESPONSE, LOG
+from app.core.data.query import APIKeyParam, CSVParams, SearchParams
+from app.core.domain.factory import make_usecase
 from app.adapters.helpers.template_builder import TemplateBuilder
 from app.adapters.presenters.csv_response import CSVResponse
 from app.core.data.enums import Language
-from app.core.data.validators import SearchParams
-from app.framework.dependencies import AccessToken, SearchQueryParams
-from app.framework.dependencies.api_key_query_param import APIKeyQueryParam
-from app.framework.fastapi.config import SEARCH_ROUTE_DESCRIPTION
 
 
-router = APIRouter(prefix="/scopus-survey/api")
+router = APIRouter(prefix="/v2/scopus-survey/api")
 
 
 @router.get(
@@ -23,16 +21,14 @@ router = APIRouter(prefix="/scopus-survey/api")
     status_code=HTTPStatus.OK,
     tags=["API"],
     summary="Survey for articles and download the found ones in a CSV file",
-    response_description="CSV file of found articles downloaded",
-    description=SEARCH_ROUTE_DESCRIPTION,
+    responses=CSV_RESPONSE,
     response_class=FileResponse,
-    dependencies=[Depends(AccessToken())],
 )
 async def survey_articles(
-    query_params: Annotated[SearchQueryParams, Depends(SearchQueryParams())]
-):
-    search_params = SearchParams.model_validate(query_params.items)
-    return make_usecase().get_articles(search_params)
+    params: Annotated[SearchParams, Depends()]
+) -> FileResponse:
+    LOG.debug(vars(params))
+    return make_usecase().retrieve_articles(params)
 
 
 @router.get(
@@ -40,14 +36,14 @@ async def survey_articles(
     status_code=HTTPStatus.OK,
     tags=["API"],
     summary="Download the pre-existing CSV file of the found articles",
-    response_description="CSV file of found articles downloaded",
+    responses=CSV_RESPONSE,
     response_class=FileResponse,
-    dependencies=[Depends(AccessToken())],
 )
 async def download_csv(
-    api_key: Annotated[str, Depends(APIKeyQueryParam())],
-):
-    return CSVResponse.build(api_key)
+    params: Annotated[CSVParams, Depends()]
+) -> FileResponse:
+    LOG.debug(vars(params))
+    return CSVResponse.build(params.api_key)
 
 
 @router.get(
@@ -55,13 +51,13 @@ async def download_csv(
     status_code=HTTPStatus.OK,
     tags=["Web"],
     summary="Renders the search articles web page",
-    response_description="search articles web page loaded",
+    responses=HTML_RESPONSE,
     response_class=HTMLResponse,
 )
-async def render_search_articles_web_page(
-    request: Request,
-    lang: Language,
-):
+async def render_search_articles_page(
+    request: Request, lang: Language
+) -> HTMLResponse:
+    LOG.debug({"search_page_lang": lang})
     return TemplateBuilder.search_template(request, lang)
 
 
@@ -70,12 +66,13 @@ async def render_search_articles_web_page(
     status_code=HTTPStatus.OK,
     tags=["Web"],
     summary="Renders the articles table web page",
-    response_description="articles table web page loaded",
+    responses=HTML_RESPONSE,
     response_class=HTMLResponse,
 )
-async def render_articles_table_web_page(
+async def render_articles_table_page(
     request: Request,
     lang: Language,
-    api_key: Annotated[str, Depends(APIKeyQueryParam())],
-):
-    return TemplateBuilder.table_template(request, lang, api_key)
+    params: Annotated[APIKeyParam, Depends()],
+) -> HTMLResponse:
+    LOG.debug({"table_page_lang": lang, "api_key": params.api_key})
+    return TemplateBuilder.table_template(request, lang, params.api_key)
