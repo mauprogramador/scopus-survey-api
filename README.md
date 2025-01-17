@@ -7,18 +7,41 @@
   <em>Web API for bibliographic survey of Scopus articles</em>
 </p>
 <p align="center">
-  <a href="https://github.com/mauprogramador/scopus-survey-api/actions/workflows/verification.yml" target="_blank" rel="external" title="Linting and Testing Action">
-    <img src="https://img.shields.io/github/actions/workflow/status/mauprogramador/scopus-survey-api/verification.yml?branch=master&event=push&logo=github&label=Lint | Test&color=FF5722" alt="Linting and Testing Action">
+  <a href="https://github.com/mauprogramador/scopus-survey-api/actions/workflows/verification.yml" target="_blank" rel="external" title="Lint & Test">
+    <img src="https://img.shields.io/github/actions/workflow/status/mauprogramador/scopus-survey-api/verification.yml?branch=master&event=push&logo=github&label=Lint %26 Test&color=C5362B" alt="Lint & Test">
   </a>
-  <a href="https://github.com/mauprogramador/scopus-survey-api/actions/workflows/documentation.yml" target="_blank" rel="external" title="Documentation Action">
-    <img src="https://img.shields.io/github/actions/workflow/status/mauprogramador/scopus-survey-api/documentation.yml?branch=master&event=push&logo=github&label=Docs&color=2196F3" alt="Documentation Action">
+  <a href="https://github.com/mauprogramador/scopus-survey-api/actions/workflows/documentation.yml" target="_blank" rel="external" title="Documentation">
+    <img src="https://img.shields.io/github/actions/workflow/status/mauprogramador/scopus-survey-api/documentation.yml?branch=master&event=push&logo=github&label=Docs&color=2196F3" alt="Documentation">
   </a>
   <img src="https://img.shields.io/badge/Coverage-99%25-4CAF50" alt="Coverage" title="Coverage">
-  <a href="https://github.com/mauprogramador/scopus-survey-api/releases/tag/v3.0.0" target="_blank" rel="external" title="Web API Version">
-    <img src="https://img.shields.io/github/v/tag/mauprogramador/scopus-survey-api?logo=github&label=Web API Version&color=E9711C" alt="Web API Version">
+  <a href="https://github.com/mauprogramador/scopus-survey-api/releases/latest" target="_blank" rel="external" title="Latest Release">
+    <img src="https://img.shields.io/github/v/tag/mauprogramador/scopus-survey-api?logo=github&label=Release&color=E9711C" alt="Latest Release">
   </a>
   <a href="https://www.python.org/" target="_blank" rel="external" title="Python3 Version">
-    <img src="https://img.shields.io/badge/Python-v3.11-3776AB?logo=python&logoColor=FFF" alt="Python3 Version">
+    <img src="https://img.shields.io/badge/Python-v3.11-FBDA4E?logo=python&logoColor=FFF&labelColor=3776AB" alt="Python3 Version">
+  </a>
+</p>
+<p align="center">
+  <a href="https://fastapi.tiangolo.com/" target="_blank" rel="external" title="FastAPI">
+    <img src="https://img.shields.io/badge/FastAPI-009688?logo=fastapi&logoColor=FFF" alt="FastAPI">
+  </a>
+  <a href="https://pandas.pydata.org/docs/" target="_blank" rel="external" title="Pandas">
+    <img src="https://img.shields.io/badge/Pandas-150458?logo=pandas&logoColor=FFF" alt="Pandas">
+  </a>
+  <a href="https://requests.readthedocs.io/en/latest/" target="_blank" rel="external" title="Requests">
+    <img src="https://img.shields.io/badge/Requests-333?logo=readthedocs&logoColor=FFF" alt="Requests">
+  </a>
+  <a href="https://black.readthedocs.io/en/stable/" target="_blank" rel="external" title="Black">
+    <img src="https://img.shields.io/badge/Black-000?logo=readthedocs&logoColor=FFF" alt="Black">
+  </a>
+  <a href="https://bandit.readthedocs.io/en/latest/" target="_blank" rel="external" title="Bandit">
+    <img src="https://img.shields.io/badge/Bandit-yellow?logo=readthedocs&logoColor=FFF" alt="Bandit">
+  </a>
+  <a href="https://docs.pytest.org/en/stable/" target="_blank" rel="external" title="Pytest">
+    <img src="https://img.shields.io/badge/Pytest-0A9EDC?logo=pytest&logoColor=FFF" alt="Pytest">
+  </a>
+  <a href="https://www.mkdocs.org/" target="_blank" rel="external" title="MkDocs">
+    <img src="https://img.shields.io/badge/MkDocs-526CFE?logo=materialformkdocs&logoColor=FFF" alt="MkDocs">
   </a>
 </p>
 
@@ -31,7 +54,7 @@ Technology in Systems Analysis and Development - <a href="https://www.ifms.edu.b
 
 **Swagger UI**: <a href="http://127.0.0.1:8000" target="_blank" rel="external" title="Swagger UI">http://127.0.0.1:8000</a>
 
-**Web API**: <a href="http://127.0.0.1:8000/scopus-survey/api" target="_blank" rel="external" title="Web API">http://127.0.0.1:8000/scopus-survey/api</a>
+**Web API**: <a href="http://127.0.0.1:8000/v2/scopus-survey/en-US/search-articles" target="_blank" rel="external" title="Web API">http://127.0.0.1:8000/v2/scopus-survey/en-US/search-articles</a>
 
 ---
 
@@ -43,7 +66,30 @@ To perform the search, you will need <a href="https://www.python.org/downloads/r
 
 ---
 
+## Configuration
+
+You can create an `.env` file to configure the following options:
+
+| **Parameter**  | **Description**                                          | **Default** |
+| -------------- | -------------------------------------------------------- | ----------- |
+| `host`         | Sets the host address to listen on                       | `127.0.0.1` |
+| `port`         | Sets the server port on which the application will run   | `8000`      |
+| `reload`       | Enable auto-reload on file changes for local development | `false`     |
+| `workers`      | Sets multiple worker processes                           | `1`         |
+| `logging_file` | Enable saving logs to files                              | `false`     |
+| `debug`        | Enable the debug mode and debug logs                     | `false`     |
+
+- The `reload` and `workers` options are **mutually exclusive**.
+
+- Setting the `host` to `0.0.0.0` makes the application externally available.
+
+Take a look at the [`.env.example`](./.env.example) file.
+
+---
+
 ## Run locally with Poetry
+
+You will need <a href="https://www.python.org/downloads/release/python-3117/" target="_blank" rel="external" title="Python3.11">Python3 `v3.11`</a> with <a href="https://pip.pypa.io/en/stable/installation/" target="_blank" rel="external" title="Pip">Pip</a> and <a href="https://docs.python.org/3/library/venv.html" target="_blank" rel="external" title="Pip">Venv</a> installed.
 
 ```bash
 # Setup Venv
@@ -61,6 +107,8 @@ source .venv/bin/activate
 
 ## Run locally with Pip
 
+You will need <a href="https://www.python.org/downloads/release/python-3117/" target="_blank" rel="external" title="Python3.11">Python3 `v3.11`</a> with <a href="https://pip.pypa.io/en/stable/installation/" target="_blank" rel="external" title="Pip">Pip</a> and <a href="https://docs.python.org/3/library/venv.html" target="_blank" rel="external" title="Pip">Venv</a> installed.
+
 ```bash
 # Setup Venv
 make setup
@@ -76,6 +124,8 @@ source .venv/bin/activate
 ```
 
 ## Run in Docker
+
+You will need <a href="https://www.docker.com/" target="_blank" rel="external" title="Docker">Docker</a> installed.
 
 ```bash
 # Run the App in Docker Container
@@ -97,6 +147,10 @@ Based on the theme or subject of your research, you must select a **minimum of t
 ### Institutional Network
 
 Please be aware that the `API Key` will only authenticate correctly if you submit it while inside your **university/institution's network**, and this does not include <abbr title="Virtual Private Network">**VPN**</abbr> or <abbr title="Intermediary server application between the client and the server">**proxy**</abbr> access. Therefore, if you are **fully remote** and **off-campus**, the **abstract** and **all authors** of the articles will **not be returned**.
+
+### Quota and Rate Limits
+
+There is a limit to how many requests for data you can make to <a href="https://dev.elsevier.com/sc_apis.html" target="_blank" rel="external" title="Elsevier Scopus APIs">Scopus APIs</a> using your `API Key`. This **request quota resets every seven days**, and you can check its availability in the response headers. If **requests exceed the quota or throttling rate**, an **error will be returned**. See the <a href="https://dev.elsevier.com/api_key_settings.html" target="_blank" rel="external" title="API Key Settings">documentation about weekly quota and requests per second</a>.
 
 ---
 
