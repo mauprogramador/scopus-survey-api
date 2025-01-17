@@ -1,12 +1,13 @@
 import { inputs, handleSearchButton } from './validation.js';
 
-const message = 'Input fields have been populated with stored values';
+const messages = {
+  save: 'entered data has been saved to local storage',
+  askPopulate: 'Would you like to populate input fields with stored values?',
+}
 
-// Save all entered data to local storage
+// Save entered data to local storage
 
-window.addEventListener('beforeunload', (event) => {
-  event.preventDefault();
-
+function storeData() {
   let hasFieldsChanged = Array.from(inputs).filter(
     (input) => input.value !== input.defaultValue
   );
@@ -15,44 +16,58 @@ window.addEventListener('beforeunload', (event) => {
     hasFieldsChanged.forEach((input) => {
       localStorage.setItem(input.id, input.value);
     });
+
+    console.log(messages.save);
   }
+}
+
+// Save data before reload
+
+window.addEventListener('beforeunload', (event) => {
+  event.preventDefault();
+  storeData();
 });
 
 // Retrieve data from local storage
 
-let populated = confirm('Populate input fields with stored values?');
-let wasFilled = false;
+window.addEventListener(
+  'load',
+  () => {
+    window.setTimeout(() => {
 
-Array.from(inputs).forEach((input) => {
-  let storedValue = localStorage.getItem(input.id);
+      let populated = confirm(messages.askPopulate);
 
-  if (!storedValue) {
-    return void 0;
-  }
+      Array.from(inputs).forEach((input) => {
+        let storedValue = localStorage.getItem(input.id);
 
-  if (populated) {
-    wasFilled = true;
-    input.value = storedValue;
+        if (!storedValue) {
+          return void 0;
+        }
 
-    input.dataset.checked = 'true';
-    input.reportValidity();
-    handleSearchButton();
-  }
+        if (populated) {
+          input.value = storedValue;
 
-  let listId = `${input.name}-list`;
-  let datalist = document.createElement('datalist');
-  datalist.id = listId;
+          input.dataset.checked = 'true';
+          input.reportValidity();
 
-  let option = document.createElement('option');
-  option.value = storedValue;
-  datalist.appendChild(option);
+          handleSearchButton();
+        }
 
-  let formField = input.closest('.form-field');
-  formField.appendChild(datalist);
-  input.setAttribute('list', listId);
-});
+        let listId = `${input.id}-list`;
+        let datalist = document.createElement('datalist');
+        datalist.id = listId;
 
-if (wasFilled) {
-  console.log(message);
-  setTimeout(() => alert(message), 100);
-}
+        let option = document.createElement('option');
+        option.value = storedValue;
+        datalist.appendChild(option);
+
+        let formField = input.closest('.form-field');
+        formField.appendChild(datalist);
+        input.setAttribute('list', listId);
+      });
+    }, 500);
+  },
+  { once: true }
+);
+
+export { storeData };

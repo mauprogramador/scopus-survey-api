@@ -22,7 +22,7 @@
 </a>
 {% endblock %}
 {% block main %}
-<section id="ifms-tads" aria-label="Institution and Course">
+<section id="ifms-tads">
   <p id="institution" aria-label="Institution">
     <span lang="en-US">Federal Institute of</span>
     <span class="ifms-slice" lang="en-US">Education, Science and Technology of</span>
@@ -56,7 +56,7 @@
   </p>
 </section>
 
-<section aria-label="API Overview">
+<section>
   <h2 lang="en-US">Overview</h2>
   <p lang="en-US">
     This application was developed to facilitate the search for articles for research and bibliographic survey of Scopus
@@ -80,6 +80,21 @@
 </section>
 
 <section>
+  <h2 lang="en-US">Quota and Rate Limits</h2>
+  <p lang="en-US">
+    There is a limit to how many requests for data you can make to <a class="link"
+      href="https://dev.elsevier.com/sc_apis.html" target="_blank" rel="external help" lang="en-US"
+      title="Elsevier Scopus APIs">Scopus <abbr title="Application Programming Interface" lang="en-US">APIs</abbr></a>
+    using your <strong>API Key</strong>. This <strong>request quota resets every seven days</strong>, and you can check
+    its availability in the response
+    headers. If <strong>requests exceed the quota or throttling rate</strong>, an <strong>error will be
+      returned</strong>. See the <a class="link" href="https://dev.elsevier.com/api_key_settings.html" target="_blank"
+      rel="external help" lang="en-US" title="API Key Settings">documentation about
+      weekly quota and requests per second</a>.
+  </p>
+</section>
+
+<section>
   <h2 lang="en-US">
     Institutional Network
     <span class="required-field" title="This is required" aria-label="This is required">*</span>
@@ -98,9 +113,9 @@
   </p>
 </section>
 
-<form id="search-params-form" action="/scopus-survey/api/survey">
+<form id="search-params-form" action="/v2/scopus-survey/api/survey">
 
-  <section id="keywords" aria-label="Keywords fields">
+  <section id="keywords">
     <h2 lang="en-US">
       Keywords
       <span class="required-field" title="This field is required" aria-label="This field is required">*</span>
@@ -192,7 +207,7 @@
     </div>
   </section>
 
-  <section id="apikey__section" aria-label="API Key field">
+  <section id="apikey__section">
     <h2 lang="en-US">
       API Key
       <span class="required-field" title="This field is required" aria-label="This field is required">*</span>

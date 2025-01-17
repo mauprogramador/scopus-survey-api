@@ -57,7 +57,7 @@ dt {
 }
 dt::before {
   padding-right: 0.3rem;
-  content: '⧉';
+  content: '❑';
 }
 dd {
   padding-bottom: 1rem;

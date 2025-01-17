@@ -1,6 +1,7 @@
 import { lang, token } from './index.js';
 import { ShowAlert } from './alerts.js';
 import { searchButton } from './validation.js';
+import { storeData } from './data.js';
 
 const loader = document.getElementById('loader-dialog');
 const form = document.getElementById('search-params-form');
@@ -9,7 +10,7 @@ const downloadLink = document.getElementById('download-link');
 const downloadButton = document.getElementById('download-button');
 
 const linkTable = document.getElementsByClassName('link-table');
-const tableUrl = `/scopus-survey/api/${lang}/articles-table`;
+const tableUrl = `/v2/scopus-survey/api/${lang}/articles-table`;
 
 // Download CSV
 
@@ -51,6 +52,7 @@ form.addEventListener('submit', (event) => {
     method: 'GET',
     headers: headers,
     signal: controller.signal,
+    cache: 'no-store'
   });
 
   window.addEventListener('beforeunload', ShowAlert.info);
@@ -61,12 +63,12 @@ form.addEventListener('submit', (event) => {
       requestAnimationFrame(() => loader.close());
 
       searchButton.toggleAttribute('disabled', false);
-      downloadButton.toggleAttribute('disabled', false);
-
       searchButton.ariaDisabled = 'false';
-      downloadButton.ariaDisabled = 'false';
 
       if (response.ok) {
+        downloadButton.toggleAttribute('disabled', false);
+        downloadButton.ariaDisabled = 'false';
+
         let csvFilename = response.headers.get('X-CSV-Filename');
         let userAPIKey = response.headers.get('X-User-API-Key');
 
@@ -77,7 +79,7 @@ form.addEventListener('submit', (event) => {
           downloadLink.href = window.URL.createObjectURL(blob);
           downloadLink.click();
 
-          downloadLink.href = `/scopus-survey/api/csv?apikey=${userAPIKey}`;
+          downloadLink.href = `/v2/scopus-survey/api/csv?apikey=${userAPIKey}`;
         });
 
         let url = `${tableUrl}?apikey=${userAPIKey}`;
@@ -87,6 +89,7 @@ form.addEventListener('submit', (event) => {
         }
 
         ShowAlert.success();
+        storeData();
       } else {
         response.json().then((json) => {
           console.error(json);
