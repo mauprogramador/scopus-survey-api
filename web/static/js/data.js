@@ -71,3 +71,12 @@ window.addEventListener(
 );
 
 export { storeData };
+
+
+// // Example for saving an object
+// const settings = { theme: 'dark', notifications: true };
+// localStorage.setItem('userSettings', JSON.stringify(settings));
+
+// // Example for loading an object
+// const loadedSettings = JSON.parse(localStorage.getItem('userSettings'));
+// console.log(loadedSettings.theme);

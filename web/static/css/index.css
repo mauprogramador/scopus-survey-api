@@ -1,9 +1,11 @@
+/* Header */
 header {
-  border-bottom: 2px solid var(--orange);
+  border-top: 2px solid var(--orange);
   justify-content: space-between;
   background-color: var(--white);
   padding: 0.9375rem 1.875rem;
-  margin: 10px auto 5px auto;
+  border-radius: 5px;
+  margin: 10px auto;
   display: flex;
 }
 
@@ -55,31 +57,69 @@ header {
   display: none;
 }
 
-#search-button svg {
-  fill: none;
+/* Link Icon */
+.link-icon {
+  align-items: end;
+  display: flex;
 }
-#search-button path {
-  transition: all 0.3s ease-in-out;
-  stroke: var(--white);
+.link-icon:is(:hover, :focus-visible) svg {
+  fill: var(--orange) !important;
 }
-#search-button:is(:hover, :focus-visible) path {
-  stroke: var(--black-2E);
+.link-text {
+  transition: none;
+}
+.link-icon:is(:hover, :focus-visible) .link-text + svg {
+  transform: translateX(0.1em);
+}
+.link-icon:is(:hover, :focus-visible) svg:has(+ .link-text) {
+  transform: translateX(-0.1em);
 }
 
-#download-button svg {
-  fill: var(--white);
+/* Abbreviation */
+abbr {
+  text-decoration: underline var(--orange) dashed 2px;
+  text-underline-offset: 3px;
+  display: inline-block;
+  position: relative;
+  font-weight: bold;
+  transition: none;
+  cursor: help;
+  z-index: 0;
 }
-#download-button:is(:hover, :focus-visible) svg {
-  fill: var(--black-2E);
+abbr:hover {
+  background-color: #FFFF00;
+  outline: 3px solid #FFFF00;
+}
+.link abbr:hover {
+  color: var(--gray-50);
+}
+@media (pointer: coarse), (hover: none) {
+  abbr:hover:after {
+    background-color: #222222;
+    border-radius: 0.2rem;
+    content: attr(title);
+    color: #CCCCCC;
+    position: absolute;
+    text-align: center;
+    width: fit-content;
+    min-width: 250%;
+    padding: 0.5rem;
+    border: none;
+    z-index: 1;
+    top: 110%;
+    left: 0;
+  }
 }
 
+/* Footer */
 footer {
   border-top: 2px solid var(--orange);
   justify-content: space-between;
   background-color: var(--white);
   padding: 0.625rem 1.875rem;
-  margin: 5px auto 10px auto;
+  margin: 10px auto 30px auto;
   align-items: center;
+  border-radius: 5px;
   display: flex;
 }
 .footer__details {
@@ -118,6 +158,7 @@ footer nav a .icon svg {
   width: 1.5625rem;
 }
 
+/* Media Query */
 @media only screen and (max-width: 785px) {
   html {
     font-size: 15px;

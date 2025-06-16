@@ -24,11 +24,13 @@
 
 #language__dropdown {
   box-shadow: 1px 2px 3px var(--gray-50);
+  border: 1px solid #BBBBBB;
   border-top: 2px solid var(--orange);
-  background-color: var(--white-F5);
-  transform: translate(0px, 35px);
+  background-color: var(--white);
+  transform: translate(0px, 32px);
   inset: 0 0 auto auto;
   position: absolute;
+  border-radius: 5px;
   padding: 0.7rem 0;
   list-style: none;
   z-index: 3;
@@ -66,16 +68,12 @@
   clear: both;
   border: 0;
 }
-#language__dropdown a:is(:hover, :focus-visible) {
-  background-color: var(--white);
-  color: var(--ocean) !important;
-}
 
 #language__dropdown::after {
-  border-bottom: 0.3rem solid #0000;
+  border-bottom: 0.2rem solid #0000;
   border-bottom-color: var(--orange);
-  border-right: 0.2rem solid #0000;
-  border-left: 0.2rem solid #0000;
+  border-right: 0.3rem solid #0000;
+  border-left: 0.3rem solid #0000;
   position: absolute;
   margin-top: -0.4rem;
   right: 0.6rem;

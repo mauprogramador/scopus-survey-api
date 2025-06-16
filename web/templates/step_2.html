@@ -1,0 +1,172 @@
+<article>
+  <div class="badge-area">
+    <div class="step-badge">
+      <div>STEP 2 -</div>
+      <div>Keywords combination</div>
+    </div>
+  </div>
+
+  <section id="keywords" class="text-group">
+    <h2 lang="en-US">
+      Keywords
+      <span class="required-field" title="This field is required" aria-label="This field is required">*</span>
+    </h2>
+    <p lang="en-US">
+      Based on the topic or subject of your research, you must select a <strong>minimum of two</strong> and a
+      <strong>maximum of four keywords</strong> to be used in the search. Each keyword must be <strong>written in
+        English</strong>, containing <strong>only letters, numbers, spaces, hyphens and underscores</strong>, with a
+      <strong>minimum of 2</strong> and a <strong>maximum of 50 characters</strong>.
+    </p>
+    <p lang="en-US">
+      You can use <strong>boolean operators</strong>: <strong>OR</strong> to find any of the terms and <strong>AND
+        NOT</strong> to exclude specific terms; and you can also use <strong>phrases</strong> (enclosed in <strong>curly
+        braces</strong> or <strong>double quotes</strong>) and <strong>wildcards</strong> (using a <strong>question
+        mark</strong> or <strong>asterisk</strong>) in your search to find documents more specifically. See the <a
+        class="link" href="https://dev.elsevier.com/sc_search_tips.html" target="_blank" rel="external help"
+        lang="en-US" title="Scopus Search Tips Docs">Search Tips documentation</a>
+      for more detailed information.
+    </p>
+    <div id="keywords-fields" class="grid-container">
+      <div class="form-field">
+        <div class="input-group">
+          <span class="input-icon" aria-label="Hashtag" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+              <path
+                d="m240-160 40-160H120l20-80h160l40-160H180l20-80h160l40-160h80l-40 160h160l40-160h80l-40 160h160l-20 80H660l-40 160h160l-20 80H600l-40 160h-80l40-160H360l-40 160h-80Zm140-240h160l40-160H420l-40 160Z" />
+            </svg>
+          </span>
+          <input id="keyword1" class="keywords" name="keywords" form="survey-form" type="text" required minlength="2"
+            maxlength="50" size="50" pattern="^[a-zA-Z0-9\{\}?&quot;*_ \-]{2,50}$" data-checked="false"
+            spellcheck="true" autocomplete="on" placeholder="1th Keyword" title="1th Keyword field" inputmode="text"
+            aria-invalid="false" aria-errormessage="keyword1-feedback" aria-required="true"
+            aria-label="1th Keyword field" aria-describedby="keyword1-help" />
+        </div>
+        <div id="keyword1-feedback" class="input-feedback" role="alert log" aria-live="assertive" aria-busy="true">
+        </div>
+        <div id="keyword1-help" class="input-help" role="note" lang="en-US">
+          e.g. Python, Standard OR Pattern
+        </div>
+      </div>
+      <div class="form-field">
+        <div class="input-group">
+          <span class="input-icon" aria-label="Hashtag" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+              <path
+                d="m240-160 40-160H120l20-80h160l40-160H180l20-80h160l40-160h80l-40 160h160l40-160h80l-40 160h160l-20 80H660l-40 160h160l-20 80H600l-40 160h-80l40-160H360l-40 160h-80Zm140-240h160l40-160H420l-40 160Z" />
+            </svg>
+          </span>
+          <input id="keyword2" class="keywords" name="keywords" form="survey-form" type="text" required minlength="2"
+            maxlength="50" size="50" pattern="^[a-zA-Z0-9\{\}?&quot;*_ \-]{2,50}$" data-checked="false"
+            spellcheck="true" autocomplete="on" placeholder="2th Keyword" title="2th Keyword field" inputmode="text"
+            aria-invalid="false" aria-errormessage="keyword2-feedback" aria-required="true"
+            aria-label="2th Keyword field" aria-describedby="keyword2-help" />
+        </div>
+        <div id="keyword2-feedback" class="input-feedback" role="alert log" aria-live="assertive" aria-busy="true">
+        </div>
+        <div id="keyword2-help" class="input-help" role="note" lang="en-US">
+          e.g. Machine Learning, Template AND NOT Model
+        </div>
+      </div>
+      <div class="form-field">
+        <div class="input-group">
+          <span class="input-icon" aria-label="Hashtag" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+              <path
+                d="m240-160 40-160H120l20-80h160l40-160H180l20-80h160l40-160h80l-40 160h160l40-160h80l-40 160h160l-20 80H660l-40 160h160l-20 80H600l-40 160h-80l40-160H360l-40 160h-80Zm140-240h160l40-160H420l-40 160Z" />
+            </svg>
+          </span>
+          <input id="keyword3" class="keywords" name="keywords" form="survey-form" type="text" minlength="2"
+            maxlength="50" size="50" pattern="^[a-zA-Z0-9\{\}?&quot;*_ \-]{2,50}$" data-checked="false"
+            spellcheck="true" autocomplete="on" placeholder="3th Keyword" title="3th Keyword field" inputmode="text"
+            aria-invalid="false" aria-errormessage="keyword3-feedback" aria-required="false"
+            aria-label="3th Keyword field" aria-describedby="keyword3-help" />
+        </div>
+        <div id="keyword3-feedback" class="input-feedback" role="alert log" aria-live="assertive" aria-busy="true">
+        </div>
+        <div id="keyword3-help" class="input-help" role="note" lang="en-US">
+          e.g. {Deep Learning}, "Data Science"
+        </div>
+      </div>
+      <div class="form-field">
+        <div class="input-group">
+          <span class="input-icon" aria-label="Hashtag" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+              <path
+                d="m240-160 40-160H120l20-80h160l40-160H180l20-80h160l40-160h80l-40 160h160l40-160h80l-40 160h160l-20 80H660l-40 160h160l-20 80H600l-40 160h-80l40-160H360l-40 160h-80Zm140-240h160l40-160H420l-40 160Z" />
+            </svg>
+          </span>
+          <input id="keyword4" class="keywords" name="keywords" form="survey-form" type="text" minlength="2"
+            maxlength="50" size="50" pattern="^[a-zA-Z0-9\{\}?&quot;*_ \-]{2,50}$" data-checked="false"
+            spellcheck="true" autocomplete="on" placeholder="4th Keyword" title="4th Keyword field" inputmode="text"
+            aria-invalid="false" aria-errormessage="keyword4-feedback" aria-required="false"
+            aria-label="4th Keyword field" aria-describedby="keyword4-help" />
+        </div>
+        <div id="keyword4-feedback" class="input-feedback" role="alert log" aria-live="assertive" aria-busy="true">
+        </div>
+        <div id="keyword4-help" class="input-help" role="note" lang="en-US">
+          e.g. Artificial Intelligence, behav*
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="button__section input-group">
+    <button id="survey-button" class="form-button" type="button" name="button" value="combination" form="survey-form"
+      formaction="{{prefix}}/api/combination" title="Search Articles" lang="en-US" disabled aria-disabled="true">
+      <span class="input-icon" aria-label="Search" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+          <path
+            d="M824-80 716-188q-22 13-46 20.5t-50 7.5q-75 0-127.5-52.5T440-340q0-75 52.5-127.5T620-520q75 0 127.5 52.5T800-340q0 26-7.5 50T772-244l108 108-56 56ZM620-240q42 0 71-29t29-71q0-42-29-71t-71-29q-42 0-71 29t-29 71q0 42 29 71t71 29Zm220-320h-80v-200h-80v120H280v-120h-80v560h200v80H200q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h167q11-35 43-57.5t70-22.5q40 0 71.5 22.5T594-840h166q33 0 56.5 23.5T840-760v200ZM480-760q17 0 28.5-11.5T520-800q0-17-11.5-28.5T480-840q-17 0-28.5 11.5T440-800q0 17 11.5 28.5T480-760Z" />
+        </svg>
+      </span>
+      Survey Combinations
+    </button>
+  </div>
+
+  <section class="text-group survey-step2">
+    <h2 lang="en-US">
+      Combination
+      <span class="required-field" title="This field is required" aria-label="This field is required">*</span>
+    </h2>
+    <p id="table-desc" lang="en-US">
+      Based on the <strong>total number</strong> of documents found in the survey listing for <strong>all possible
+        combinations</strong> of the keywords you provided, you <strong>must select</strong> the keyword combination
+      that best suits you from the options below to help refine the search scope.
+    </p>
+    <div class="form-field">
+      <table aria-describedby="table-desc">
+        <colgroup>
+          <col span="1">
+          <col span="1">
+          <col span="1">
+        </colgroup>
+        <thead>
+          <tr>
+            <th abbr="Index" scope="col" title="Index">#</th>
+            <th abbr="Combination" scope="col" title="Combination" lang="{{lang}}">Combination</th>
+            <th abbr="Total" scope="col" title="Total" lang="{{lang}}">Total</th>
+          </tr>
+        </thead>
+        <tbody id="combination-tbody"></tbody>
+      </table>
+      <template id="combination-row">
+        <tr>
+          <td title="Index"></td>
+          <td title="" lang="{{lang}}">
+            <div class="input-group">
+              <input id="" class="combination" name="combination" form="survey-form" type="radio" value="" required
+                data-checked="false" autocomplete="on" title="" aria-invalid="false"
+                aria-errormessage="combination-feedback" aria-required="true" aria-checked="false" aria-label=""
+                tabindex="0">
+              <label for="combination-choice1"></label>
+            </div>
+          </td>
+          <td title="Total"></td>
+        </tr>
+      </template>
+      <div id="combination-feedback" class="input-feedback" role="alert log" aria-live="assertive" aria-busy="true">
+      </div>
+    </div>
+  </section>
+
+</article>

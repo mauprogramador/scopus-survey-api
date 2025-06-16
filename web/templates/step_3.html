@@ -1,0 +1,92 @@
+<article class="survey-step2">
+  <div class="badge-area">
+    <div class="step-badge">
+      <div>STEP 3 -</div>
+      <div>Survey</div>
+    </div>
+  </div>
+
+  <div class="grid-container">
+
+    <section class="text-group">
+      <h2 lang="en-US">Max Count</h2>
+      <p lang="en-US">
+        A numeric value, a <strong>multiple of 25</strong>, with a <strong>minimum of 25</strong> and a <strong>maximum
+          of 250</strong>, that limits the total number of results to be returned. The <strong>default is 125</strong>.
+      </p>
+      <div class="form-field">
+        <div class="input-group">
+          <span class="input-icon" aria-label="Funnel" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+              <path
+                d="M440-160q-17 0-28.5-11.5T400-200v-240L168-736q-15-20-4.5-42t36.5-22h560q26 0 36.5 22t-4.5 42L560-440v240q0 17-11.5 28.5T520-160h-80Zm40-308 198-252H282l198 252Zm0 0Z" />
+            </svg>
+          </span>
+          <input id="max-count" name="maxCount" form="survey-form" type="number" min="25" max="250" step="25" size="3"
+            pattern="^[0-9]{1,3}$" data-checked="false" spellcheck="true" autocomplete="on" placeholder="Count"
+            title="Max Count field" inputmode="numeric" aria-invalid="false" aria-errormessage="max-count-feedback"
+            aria-required="false" aria-label="Max Count field" aria-describedby="max-count-help" />
+        </div>
+        <div id="max-count-feedback" class="input-feedback" role="alert log" aria-live="assertive" aria-busy="true">
+        </div>
+        <div id="max-count-help" class="input-help" role="note" lang="en-US">e.g. 50</div>
+      </div>
+    </section>
+
+    <section class="text-group">
+      <h2 lang="en-US">Similarity Threshold</h2>
+      <p lang="en-US">
+        A numeric value, with a <strong>minimum of 0</strong> and a <strong>maximum of 100</strong>, used
+        as a threshold to filter and remove articles with similar titles by the same authors. The <strong>default is
+          80</strong>.
+      </p>
+      <div class="form-field">
+        <div class="input-group">
+          <span class="input-icon" aria-label="Funnel" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+              <path
+                d="M440-160q-17 0-28.5-11.5T400-200v-240L168-736q-15-20-4.5-42t36.5-22h560q26 0 36.5 22t-4.5 42L560-440v240q0 17-11.5 28.5T520-160h-80Zm40-308 198-252H282l198 252Zm0 0Z" />
+            </svg>
+          </span>
+          <input id="threshold" name="threshold" form="survey-form" type="number" min="0" max="100" step="1" size="2"
+            pattern="^[0-9]{1,2}$" data-checked="false" spellcheck="true" autocomplete="on" placeholder="Threshold"
+            title="Similarity Threshold field" inputmode="numeric" aria-invalid="false"
+            aria-errormessage="threshold-feedback" aria-required="false" aria-label="Similarity Threshold field"
+            aria-describedby="threshold-help" />
+        </div>
+        <div id="threshold-feedback" class="input-feedback" role="alert log" aria-live="assertive" aria-busy="true">
+        </div>
+        <div id="threshold-help" class="input-help" role="note" lang="en-US">e.g. 80</div>
+      </div>
+    </section>
+
+  </div>
+
+  <section aria-label="Search Button" class="button__section text-group">
+    <div class="input-group">
+      <button id="search-button" class="form-button" type="button" name="button" value="search" form="survey-form"
+        formaction="{{prefix}}/api/csv" title="Search Articles" lang="en-US" disabled aria-disabled="true">
+        <span class="input-icon" aria-label="Search">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
+              d="M15.7955 15.8111L21 21M18 10.5C18 14.6421 14.6421 18 10.5 18C6.35786 18 3 14.6421 3 10.5C3 6.35786 6.35786 3 10.5 3C14.6421 3 18 6.35786 18 10.5Z" />
+          </svg>
+        </span>
+        Search Articles
+      </button>
+    </div>
+    <div class="input-group">
+      <button id="download-button" class="download-button form-button" type="button" name="button" value="download"
+        form="survey-form" formaction="{{prefix}}/api/survey" title="Download CSV" lang="en-US" disabled
+        aria-disabled="true">
+        <span class="input-icon" aria-label="Download">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+            <path
+              d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z" />
+          </svg>
+        </span>
+        Download CSV
+      </button>
+    </div>
+  </section>
+</article>

@@ -1,16 +1,22 @@
-const redirectTime = document.getElementById('redirect-time');
+const copyButton = document.getElementById('copy-button');
+const errorJson = document.getElementById('error-json');
+const innerJson = errorJson.innerHTML;
 
-let intervalId = null;
-let remaining_seconds = 4;
+try {
+  const data = JSON.parse(innerJson);
+  console.log(data);
 
-function redirectCountDown() {
-  redirectTime.innerHTML = `${remaining_seconds}s`;
+  const json = JSON.stringify(data, null, 2);
+  errorJson.innerHTML = json;
 
-  if (remaining_seconds == 0) {
-    clearInterval(intervalId);
-  }
-
-  remaining_seconds--;
+} catch (err) {
+  errorJson.innerHTML = innerJson;
+  console.error(err);
 }
 
-intervalId = setInterval(redirectCountDown, 1000);
+copyButton.addEventListener('click', () => {
+  navigator.clipboard
+    .writeText(errorJson.textContent)
+    .then(() => console.log('Copied to clipboard'))
+    .catch((err) => console.error('Failed to copy text: ', err));
+});

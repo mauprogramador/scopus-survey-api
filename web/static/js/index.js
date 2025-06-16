@@ -1,7 +1,8 @@
 // Get context data
+const downloadLink = document.getElementById('download-link');
 const contextData = document.getElementById('context-data');
 const lang = contextData.dataset.lang;
-const token = contextData.dataset.token;
+const csrfToken = contextData.dataset.csrfToken;
 contextData.remove();
 
 // Handle dropdown language menu
@@ -23,4 +24,4 @@ document.addEventListener('click', (event) => {
   }
 });
 
-export { lang, token };
+export { lang, csrfToken, downloadLink };
