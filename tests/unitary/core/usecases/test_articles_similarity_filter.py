@@ -1,7 +1,6 @@
 from pandas import DataFrame
 from pytest_mock import MockerFixture
 
-from app.core.config.scopus import AUTHORS_COLUMN
 from tests.mocks import unitary as mock
 from tests.mocks.fixtures import SIMILARITY_FILTER
 

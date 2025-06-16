@@ -1,7 +1,7 @@
 from pandas import DataFrame
 from pydantic_core import PydanticUndefined
 
-from app.core.data.serializers import ScopusAbstract, ScopusResult
+from src.core.data.serializers import ScopusAbstract, ScopusEntry
 from tests.helpers.models import HeadersResponse, Request, Response
 from tests.helpers.utils import abstract, entry_item, pagination
 
@@ -11,27 +11,19 @@ ENTRIES = [entry_item(index) for index in range(7)]
 ONE_PAGE = pagination(ENTRIES[:1])
 TWO_PAGES = pagination(ENTRIES[:2])
 MORE_PAGES = pagination(ENTRIES)
-RESULTS = [ScopusResult(**art) for art in ENTRIES]
+RESULTS = [ScopusEntry(**art) for art in ENTRIES]
 EXCEEDED_RESPONSE = HeadersResponse()
 
 # adapters/gateway/abstract_retrieval_api
 
 ONE_ABSTRACT = Response(abstract())
-ONE_ENTRY = [ScopusResult(**ENTRIES[0])]
-TWO_ENTRIES = [ScopusResult(**art) for art in ENTRIES[:2]]
-MORE_ENTRIES = [ScopusResult(**art) for art in ENTRIES]
+ONE_ENTRY = [ScopusEntry(**ENTRIES[0])]
+TWO_ENTRIES = [ScopusEntry(**art) for art in ENTRIES[:2]]
+MORE_ENTRIES = [ScopusEntry(**art) for art in ENTRIES]
 ARTICLES = DataFrame(
     [ScopusAbstract(**abstract()).model_dump(by_alias=True)] * 7
 )
 
-# adapters/helpers/http_retry_helper
-
-JSONPLACEHOLDER = "https://jsonplaceholder.typicode.com/users/1"
-HEADERS = {"Content-Type": "application/json"}
-
-# adapters/presenters/template_context
-
-EMPTY_REQUEST = Request()
 
 # core/usecases/articles_similarity_filter
 
@@ -58,35 +50,6 @@ SAME_TITLE_AND_AUTHORS = DataFrame(
         ScopusAbstract(**abstract(doi="2")).model_dump(by_alias=True),
     ]
 )
-
-# core/data/serializers
-
-SCOPUS_RESULT_JSON = {
-    "@_fa": "true",
-    "prism:url": "any",
-    "dc:identifier": "SCOPUS_ID:any",
-}
-SCOPUS_ABSTRACT_JSON = {
-    "abstracts-retrieval-response": {
-        "coredata": {
-            "dc:identifier": "SCOPUS_ID:any",
-            "eid": "any",
-            "dc:title": "any",
-            "prism:publicationName": "any",
-            "prism:volume": "any",
-            "prism:coverDate": "any",
-            "prism:doi": "any",
-            "citedby-count": "any",
-            "dc:description": "any",
-        },
-        "authors": {
-            "author": [
-                {"ce:indexed-name": "any1"},
-                {"ce:indexed-name": "any2"},
-            ]
-        },
-    }
-}
 
 # adapters/presenters/exception_json
 

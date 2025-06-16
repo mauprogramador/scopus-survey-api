@@ -1,14 +1,7 @@
 import pytest
 from pytest_mock import MockerFixture
 
-from app.core.common.messages import (
-    INVALID_KEYWORD,
-    INVALID_KEYWORDS_LENGTH,
-    MISSING_API_KEY,
-    MISSING_KEYWORDS,
-    REQUEST_ERROR,
-)
-from app.framework.exceptions.http_exceptions import BaseExceptionResponse
+from src.adapters.presenters.error_response import ErrorResponse
 from tests.helpers.utils import app_request
 from tests.mocks import common as data
 from tests.mocks import fixtures as fix
@@ -26,7 +19,7 @@ async def test_success_params(mocker: MockerFixture):
 async def test_missing_api_key(mocker: MockerFixture):
     mocker.patch(fix.REQUEST, side_effect=mock.ONE_PAGE)
     response = await app_request(mock.NO_PARAMS_URL)
-    exc_response = BaseExceptionResponse.model_validate(response.json())
+    exc_response = ErrorResponse.model_validate(response.json())
 
     assert response.status_code == 401
     assert not exc_response.success
@@ -39,7 +32,7 @@ async def test_missing_api_key(mocker: MockerFixture):
 async def test_short_invalid_api_key(mocker: MockerFixture):
     mocker.patch(fix.REQUEST, side_effect=mock.ONE_PAGE)
     response = await app_request(f"{mock.API_KEY_URL}any")
-    exc_response = BaseExceptionResponse.model_validate(response.json())
+    exc_response = ErrorResponse.model_validate(response.json())
     message = REQUEST_ERROR.format(fix.INVALID_SHORT_VALUE)
 
     assert response.status_code == 422
@@ -55,7 +48,7 @@ async def test_long_invalid_api_key(mocker: MockerFixture):
     mocker.patch(fix.REQUEST, side_effect=mock.ONE_PAGE)
     url = f"{mock.API_KEY_URL}{data.INVALID_LONG_VALUE}"
     response = await app_request(url)
-    exc_response = BaseExceptionResponse.model_validate(response.json())
+    exc_response = ErrorResponse.model_validate(response.json())
     message = REQUEST_ERROR.format(fix.INVALID_LONG_VALUE)
 
     assert response.status_code == 422
@@ -71,7 +64,7 @@ async def test_invalid_pattern_api_key(mocker: MockerFixture):
     mocker.patch(fix.REQUEST, side_effect=mock.ONE_PAGE)
     url = f"{mock.API_KEY_URL}{data.INVALID_PATTERN_VALUE}"
     response = await app_request(url)
-    exc_response = BaseExceptionResponse.model_validate(response.json())
+    exc_response = ErrorResponse.model_validate(response.json())
     message = REQUEST_ERROR.format(fix.INVALID_PATTERN)
 
     assert response.status_code == 422
@@ -86,12 +79,12 @@ async def test_invalid_pattern_api_key(mocker: MockerFixture):
 async def test_missing_keywords(mocker: MockerFixture):
     mocker.patch(fix.REQUEST, side_effect=mock.ONE_PAGE)
     response = await app_request(mock.NO_KEYWORDS_URL)
-    exc_response = BaseExceptionResponse.model_validate(response.json())
+    exc_response = ErrorResponse.model_validate(response.json())
 
     assert response.status_code == 422
     assert not exc_response.success
     assert exc_response.code == 422
-    assert exc_response.message == MISSING_KEYWORDS
+    assert exc_response.message == KEYWORDS_MISSING
     assert exc_response.errors is None
 
 
@@ -99,12 +92,12 @@ async def test_missing_keywords(mocker: MockerFixture):
 async def test_invalid_keywords_length(mocker: MockerFixture):
     mocker.patch(fix.REQUEST, side_effect=mock.ONE_PAGE)
     response = await app_request(f"{mock.KEYWORDS_URL}any")
-    exc_response = BaseExceptionResponse.model_validate(response.json())
+    exc_response = ErrorResponse.model_validate(response.json())
 
     assert response.status_code == 422
     assert not exc_response.success
     assert exc_response.code == 422
-    assert exc_response.message == INVALID_KEYWORDS_LENGTH
+    assert exc_response.message == KEYWORDS_TOO_SHORT
     assert exc_response.errors is None
 
 
@@ -112,7 +105,7 @@ async def test_invalid_keywords_length(mocker: MockerFixture):
 async def test_short_invalid_keywords(mocker: MockerFixture):
     mocker.patch(fix.REQUEST, side_effect=mock.ONE_PAGE)
     response = await app_request(f"{mock.KEYWORDS_URL}a,b")
-    exc_response = BaseExceptionResponse.model_validate(response.json())
+    exc_response = ErrorResponse.model_validate(response.json())
 
     assert response.status_code == 422
     assert not exc_response.success
@@ -125,7 +118,7 @@ async def test_short_invalid_keywords(mocker: MockerFixture):
 async def test_long_invalid_keywords(mocker: MockerFixture):
     mocker.patch(fix.REQUEST, side_effect=mock.ONE_PAGE)
     response = await app_request(f"{mock.KEYWORDS_URL}key1,{'a' * 125}")
-    exc_response = BaseExceptionResponse.model_validate(response.json())
+    exc_response = ErrorResponse.model_validate(response.json())
 
     assert response.status_code == 422
     assert not exc_response.success
@@ -138,7 +131,7 @@ async def test_long_invalid_keywords(mocker: MockerFixture):
 async def test_blank_space_keywords(mocker: MockerFixture):
     mocker.patch(fix.REQUEST, side_effect=mock.ONE_PAGE)
     response = await app_request(f"{mock.KEYWORDS_URL}, ,     ")
-    exc_response = BaseExceptionResponse.model_validate(response.json())
+    exc_response = ErrorResponse.model_validate(response.json())
 
     assert response.status_code == 422
     assert not exc_response.success
@@ -151,7 +144,7 @@ async def test_blank_space_keywords(mocker: MockerFixture):
 async def test_invalid_keywords_pattern(mocker: MockerFixture):
     mocker.patch(fix.REQUEST, side_effect=mock.ONE_PAGE)
     response = await app_request(f"{mock.KEYWORDS_URL}f@3f!sH%3P,f@3f!sH%3P")
-    exc_response = BaseExceptionResponse.model_validate(response.json())
+    exc_response = ErrorResponse.model_validate(response.json())
 
     assert response.status_code == 422
     assert not exc_response.success

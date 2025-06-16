@@ -1,14 +1,9 @@
 import pytest
 from pytest_mock import MockerFixture
 
-from app.core.common.messages import (
-    DECODING_ERROR,
-    NOT_FOUND_ERROR,
-    SEARCH_API_ERROR,
-    VALIDATE_ERROR,
-)
-from app.core.config.scopus import API_ERRORS
-from app.framework.exceptions.http_exceptions import BaseExceptionResponse
+from src.adapters.presenters.error_response import ErrorResponse
+from src.core.common.messages import SEARCH_API_ERROR, VALIDATE_ERROR
+from src.core.config.scopus import HTTP_CODE_ERRORS
 from tests.helpers.utils import app_request
 from tests.mocks import common as data
 from tests.mocks import integration as mock
@@ -41,14 +36,14 @@ async def test_more_pages(mocker: MockerFixture):
 
 
 @pytest.mark.asyncio
-@pytest.mark.parametrize("code", API_ERRORS.keys())
+@pytest.mark.parametrize("code", HTTP_CODE_ERRORS.keys())
 async def test_scopus_api_error(mocker: MockerFixture, code: int):
     if code == 429:
         mocker.patch(REQUEST, return_value=EXCEEDED_RESPONSE)
     else:
         mocker.patch(REQUEST, return_value=data.ERROR_RESPONSES[code])
     response = await app_request(data.URL)
-    exc_response = BaseExceptionResponse.model_validate(response.json())
+    exc_response = ErrorResponse.model_validate(response.json())
 
     assert response.status_code == 502
     assert not exc_response.success
@@ -61,7 +56,7 @@ async def test_scopus_api_error(mocker: MockerFixture, code: int):
 async def test_empty_content(mocker: MockerFixture):
     mocker.patch(REQUEST, return_value=data.EMPTY_RESPONSE)
     response = await app_request(data.URL)
-    exc_response = BaseExceptionResponse.model_validate(response.json())
+    exc_response = ErrorResponse.model_validate(response.json())
 
     assert response.status_code == 502
     assert not exc_response.success
@@ -74,7 +69,7 @@ async def test_empty_content(mocker: MockerFixture):
 async def test_decoding_error(mocker: MockerFixture):
     mocker.patch(REQUEST, return_value=data.ANY_RESPONSE)
     response = await app_request(data.URL)
-    exc_response = BaseExceptionResponse.model_validate(response.json())
+    exc_response = ErrorResponse.model_validate(response.json())
 
     assert response.status_code == 500
     assert not exc_response.success
@@ -87,7 +82,7 @@ async def test_decoding_error(mocker: MockerFixture):
 async def test_validate_error(mocker: MockerFixture):
     mocker.patch(REQUEST, return_value=data.VALIDATE_ERROR_RESPONSE)
     response = await app_request(data.URL)
-    exc_response = BaseExceptionResponse.model_validate(response.json())
+    exc_response = ErrorResponse.model_validate(response.json())
 
     assert response.status_code == 500
     assert not exc_response.success
@@ -100,7 +95,7 @@ async def test_validate_error(mocker: MockerFixture):
 async def test_not_found(mocker: MockerFixture):
     mocker.patch(REQUEST, return_value=data.NOT_FOUND)
     response = await app_request(data.URL)
-    exc_response = BaseExceptionResponse.model_validate(response.json())
+    exc_response = ErrorResponse.model_validate(response.json())
 
     assert response.status_code == 404
     assert not exc_response.success

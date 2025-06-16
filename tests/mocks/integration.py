@@ -1,4 +1,3 @@
-from app.core.config.config import TOML_ENV
 from tests.helpers.models import Response
 from tests.helpers.utils import abstract, entry_item, scopus_json
 from tests.mocks import unitary as uni
@@ -22,7 +21,7 @@ VALIDATE_ERROR_RESPONSE = [*uni.ONE_PAGE, Response({"any": "any"})]
 
 # framework/dependencies/query_params
 
-NO_PARAMS_URL = f"{TOML_ENV.url}/scopus-survey/api/search-articles"
+NO_PARAMS_URL = "v2/scopus-survey/api/search-articles"
 API_KEY_URL = f"{NO_PARAMS_URL}?apikey="
 NO_KEYWORDS_URL = f"{API_KEY_URL}{API_KEY}"
 KEYWORDS_URL = f"{NO_KEYWORDS_URL}&keywords="

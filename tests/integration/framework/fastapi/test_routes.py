@@ -1,8 +1,9 @@
 import pytest
 from fastapi.templating import Jinja2Templates
+from pandas import DataFrame
 from pytest_mock import MockerFixture
 
-from app.core.config.config import TOKEN
+from src.core.config.config import TOKEN
 from tests.helpers.utils import app_request
 from tests.mocks import common as data
 from tests.mocks.fixtures import READ_CSV, REQUEST
@@ -31,14 +32,15 @@ async def test_render_web_application(mocker: MockerFixture):
 
 @pytest.mark.asyncio
 async def test_render_web_table_with_content(mocker: MockerFixture):
-    mocker.patch(READ_CSV, return_value=data.CSV_DATA)
+    csv_data = DataFrame({"any": ["any", "any"]})
+    mocker.patch(READ_CSV, return_value=csv_data)
     template_spy = mocker.spy(Jinja2Templates, "TemplateResponse")
     response = await app_request(data.TABLE_URL)
     context: dict = template_spy.call_args_list[0].args[3]
 
     assert response.status_code == 200 and response.text
     assert data.HTML_CONTENT_TYPE in response.headers.items()
-    assert context["content"] == data.CSV_DATA.to_numpy().tolist()
+    assert context["content"] == csv_data.to_numpy().tolist()
 
 
 @pytest.mark.asyncio

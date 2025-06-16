@@ -1,17 +1,13 @@
 from http import HTTPStatus
 from json import dumps, loads
+from typing import Any
 
-from fastapi.datastructures import URL
+from fastapi.datastructures import URL, Headers
 from pandas import DataFrame
 from starlette.datastructures import QueryParams
 
-from app.core.config.config import (
-    API_KEY_QUERY,
-    KEYWORDS_QUERY,
-    TOKEN_HEADER,
-)
-from app.core.config.scopus import QUOTA_EXCEEDED, RATE_LIMIT_EXCEEDED
-from app.core.domain.metaclasses import SimilarityFilter
+from src.core.common.messages import QUOTA_EXCEEDED, RATE_LIMIT_EXCEEDED
+from src.core.domain.interfaces import SimilarityFilterABC
 
 
 class Request:
@@ -25,13 +21,16 @@ class Request:
         keywords: str | None = None,
     ) -> None:
         """Fake Request"""
-        self.headers = headers if headers else {TOKEN_HEADER: token}
+        if headers:
+            self.headers = Headers(headers)
+        else:
+            self.headers = Headers({"X-CSRF-Token": f"{token}"})
         self.query: dict[str, str] = {}
         self.client = None
         if api_key:
-            self.query.update({API_KEY_QUERY: api_key})
+            self.query.update({"api_key": api_key})
         if keywords:
-            self.query.update({KEYWORDS_QUERY: keywords})
+            self.query.update({"keywords": keywords})
 
     @property
     def query_params(self):
@@ -43,7 +42,15 @@ class Request:
 
     @property
     def url(self):
-        return URL("http://any.com")
+        return URL("http://any.com/other")
+
+    @property
+    def session(self) -> dict[str, Any]:
+        return {}
+
+    @property
+    def cookies(self) -> dict[str, str]:
+        return {}
 
 
 class Response:
@@ -58,6 +65,43 @@ class Response:
 
     def json(self) -> dict:
         return loads(self.text)
+
+
+class ScopusResponse:
+
+    def __init__(
+        self,
+        json: dict | None = None,
+        headers: dict | None = None,
+        code: int | None = None,
+    ) -> None:
+        if json:
+            self.__json = json
+        else:
+            self.__json = {
+                "search-results": {
+                    "opensearch:totalResults": 156,
+                    "opensearch:itemsPerPage": 25,
+                    "entry": [],
+                }
+            }
+        if headers:
+            self.headers = headers
+        else:
+            self.headers = {
+                "X-RateLimit-Limit": "20000",
+                "X-RateLimit-Remaining": "20000",
+                "X-RateLimit-Reset": "1746087344",
+                "X-ELS-Status": "OK",
+            }
+        self.status_code = code if code else HTTPStatus.OK
+
+    @property
+    def text(self) -> str | None:
+        return "any"
+
+    def json(self) -> dict:
+        return self.__json
 
 
 class HeadersResponse:
@@ -77,7 +121,7 @@ class HeadersResponse:
         return {"any": "any"}
 
 
-class MockSimilarityFilter(SimilarityFilter):
+class MockSimilarityFilter(SimilarityFilterABC):
 
-    def filter(self, dataframe: DataFrame) -> DataFrame:
+    def filter(self, dataframe: DataFrame, similarity_ratio: int) -> DataFrame:
         return dataframe

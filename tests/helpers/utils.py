@@ -8,11 +8,11 @@ from httpx import AsyncClient
 from httpx import Response as HttpxResponse
 from pandas import DataFrame, read_csv
 
-from app.core.common.types import Articles
-from app.core.config.config import TOKEN, TOKEN_HEADER
-from app.framework.exceptions.http_exceptions import BaseExceptionResponse
-from app.framework.fastapi.app import app
-from tests.helpers.models import Response
+from src.adapters.presenters.error_response import ErrorResponse
+from src.core.common.types import Articles, Json
+from src.core.config.config import TOKEN
+from src.framework.fastapi.main import app
+from tests.helpers.models import Request, Response
 
 
 async def app_request(url: str, headers: dict | None = None) -> HttpxResponse:
@@ -26,8 +26,11 @@ def path(target: MethodType):
     return f"{target.__module__}.{target.__qualname__}"
 
 
-def exception_response(response: JSONResponse) -> BaseExceptionResponse:
-    return BaseExceptionResponse.model_validate(loads(response.body.decode()))
+def exception_response(response: JSONResponse) -> ErrorResponse:
+    data: Json = loads(response.body.decode())  # type: ignore
+    if data.get("request"):
+        data["request"] = Request()
+    return ErrorResponse.model_validate(data)
 
 
 def content_response(response: HttpxResponse) -> DataFrame:
