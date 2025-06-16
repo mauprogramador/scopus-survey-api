@@ -63,6 +63,7 @@ dmypy.json
 
 # Custom
 TODO
-logs/
+.logs/
 diagrams/
 csv/
+*.log

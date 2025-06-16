@@ -1,47 +1,91 @@
-[tool.poetry]
-name = "ScopusSurveyAPI"
-version = "3.0.0"
-description = "Web API for bibliographic survey of Scopus articles"
-authors = ["mauprogramador <sir.silvabmauricio@gmail.com>"]
-readme = "README.md"
-license = "MIT"
-repository = "https://github.com/mauprogramador/scopus-survey-api"
-documentation = "https://mauprogramador.github.io/scopus-survey-api/"
-keywords = ["scopus", "theoretical reference", "python", "clean architecture"]
-classifiers = [
-    "Development Status :: 5 - Production/Stable",
-    "Environment :: Web Environment :: Mozilla",
-    "Framework :: FastAPI",
-    "Framework :: Pytest",
-    "Framework :: MkDocs",
-    "Framework :: Flake8",
-    "Intended Audience :: Developers",
-    "Intended Audience :: Education",
-    "Intended Audience :: End Users/Desktop",
-    "Intended Audience :: Information Technology",
-    "Intended Audience :: Science/Research",
-    "License :: Free For Educational Use",
-    "License :: Freeware",
-    "License :: OSI Approved :: MIT License",
-    "Natural Language :: English",
-    "Operating System :: POSIX :: Linux",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: JavaScript",
-    "Topic :: Documentation",
-    "Topic :: Education",
-    "Topic :: Internet :: WWW/HTTP :: Indexing/Search",
-    "Topic :: Internet :: WWW/HTTP :: WSGI :: Application",
-    "Topic :: Software Development",
-    "Topic :: Software Development :: Libraries :: Application Frameworks"
+[project]
+authors = [
+  {name = "mauprogramador", email = "sir.silvabmauricio@gmail.com"},
 ]
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Environment :: Web Environment",
+  "Framework :: FastAPI",
+  "Framework :: MkDocs",
+  "Framework :: Pydantic",
+  "Framework :: Pytest",
+  "Framework :: aiohttp",
+  "Intended Audience :: Education",
+  "Intended Audience :: End Users/Desktop",
+  "Intended Audience :: Information Technology",
+  "Intended Audience :: Science/Research",
+  "License :: Free For Educational Use",
+  "License :: OSI Approved :: MIT License",
+  "Natural Language :: English",
+  "Natural Language :: Portuguese (Brazilian)",
+  "Operating System :: POSIX :: Linux",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: JavaScript",
+  "Topic :: Education",
+  "Topic :: Internet :: WWW/HTTP :: Indexing/Search",
+]
+dependencies = [
+  "fastapi[standard] (>=0.115.12,<0.116.0)",
+  "pydantic-settings (>=2.9.1,<3.0.0)",
+  "pandas (>=2.3.0,<3.0.0)",
+  "thefuzz (>=0.22.1,<0.23.0)",
+  "tqdm (>=4.67.1,<5.0.0)",
+  "python-levenshtein (>=0.27.1,<0.28.0)",
+  "itsdangerous (>=2.2.0,<3.0.0)",
+  "slowapi (>=0.1.9,<0.2.0)",
+  "aiohttp (>=3.12.12,<4.0.0)",
+  "aiohttp-retry (>=2.9.1,<3.0.0)",
+  "aiolimiter (>=1.2.1,<2.0.0)",
+  "uvloop (>=0.21.0,<0.22.0)",
+]
+description = "Web API for bibliographic survey of Scopus articles"
+keywords = ["scopus", "theoretical reference", "python", "clean architecture"]
+license = {text = "MIT"}
+license-files = ["LICENSE"]
+name = "ScopusSurveyAPI"
+readme = "README.md"
+requires-external = "make"
+requires-python = ">=3.12"
+version = "3.0.0"
+
+[project.urls]
+documentation = "https://mauprogramador.github.io/scopus-survey-api/"
+homepage = "http://127.0.0.1:8000/v2/scopus-survey/web/en-US/search-articles"
+repository = "https://github.com/mauprogramador/scopus-survey-api"
+
+[tool.poetry]
+package-mode = false
+requires-poetry = ">=2.1.3"
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = ">=3.12,<4.0"
+
+[tool.poetry.group.dev.dependencies]
+bandit = {extras = ["toml"], version = "^1.8.3"}
+black = "^25.1.0"
+isort = "^6.0.1"
+mypy = "^1.16.0"
+pandas-stubs = "^2.2.3.250527"
+pylint = "^3.3.7"
+radon = {extras = ["toml"], version = "^6.0.1"}
+types-tqdm = "^4.67.0.20250516"
+pip-audit = "^2.9.0"
+
+[tool.poetry.group.test.dependencies]
+coverage = "^7.8.2"
+pytest = "^8.4.0"
+pytest-asyncio = "^1.0.0"
+pytest-mock = "^3.14.1"
+
+[tool.poetry.group.docs.dependencies]
+mkdocs = "^1.6.1"
+mkdocs-markdownextradata-plugin = "^0.2.6"
+mkdocs-material = "^9.6.14"
+mkdocs-static-i18n = "^1.3.0"
 
 [build-system]
-requires = ["poetry-core"]
-requires-python = "^3.11"
 build-backend = "poetry.core.masonry.api"
+requires = ["poetry-core>=2.0.0,<3.0.0"]
 
 [tool.pylint]
 disable = ["C0114", "C0115", "C0116", "C0123", "R0903", "E1136", "E0611", "E1131", "R0801"]
@@ -51,25 +95,23 @@ exclude_dirs = [".venv"]
 skips = ["B105", "B101"]
 
 [tool.isort]
-multi_line_output = 3
 include_trailing_comma = true
+multi_line_output = 3
 
 [tool.pytest.ini_options]
+asyncio_default_fixture_loop_scope = "function"
+filterwarnings = ["ignore::DeprecationWarning"]
+log_date_format = "%Y-%m-%d %H:%M:%S"
+log_format = "%(asctime)s %(levelname)s %(message)s"
 testpaths = ["tests/"]
-filterwarnings = [
-    "ignore::DeprecationWarning",
-]
 
 [tool.coverage.run]
-omit = [
-    "app/framework/fastapi/lifespan.py",
-    "app/utils/*"
-]
+omit = ["app/utils/*"]
 
 [tool.mypy]
-python_version = "3.11"
 disable_error_code = ["assignment", "no-redef", "arg-type", "import-untyped"]
+python_version = "3.12"
 
 [tool.black]
-target-version = ["py311"]
 line-length = 79
+target-version = ["py312"]

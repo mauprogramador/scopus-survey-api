@@ -6,8 +6,8 @@ PORT ?= 8000
 
 # Environment setup
 
-setup:
-	@bash setup.sh
+venv:
+	@bash venv.sh
 
 install:
 	@poetry install --no-root
@@ -16,11 +16,11 @@ install:
 # Run application
 
 run:
-	@poetry run python3 -m app
+	@poetry run python3 -m src
 
 docker:
 	@docker build -q -t scopus-survey-api .
-	@docker run -d --env HOST=0.0.0.0 --env-file .env --name scopus-survey -p ${PORT}:${PORT} scopus-survey-api
+	@docker run -d --env HOST=0.0.0.0 --env-file .env --name scopus-survey-api -p ${PORT}:${PORT} scopus-survey-api
 
 
 # Documentation
@@ -53,11 +53,11 @@ format:
 	@poetry run black .
 
 lint:
-	@poetry run isort app/ --check
-	@poetry run black app/ --check
-	@poetry run pylint app/
-	@poetry run mypy app/
-	@poetry run radon cc app/ -a -nc
+	@poetry run isort src/ --check
+	@poetry run black src/ --check
+	@poetry run pylint src/
+	@poetry run mypy src/
+	@poetry run radon cc src/ -a -nc
 
 lint-tests:
 	@poetry run isort tests/ --check
@@ -71,7 +71,7 @@ lint-tests:
 
 audit:
 	@poetry run pip-audit
-	@poetry run bandit -r app/ -c "pyproject.toml"
+	@poetry run bandit -r src/ -c "pyproject.toml"
 	@poetry run bandit -r tests/ -c "pyproject.toml"
 
 
