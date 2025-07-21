@@ -11,6 +11,7 @@ from src.framework.fastapi.swagger import (
     DESCRIPTION,
     LICENSE,
     RESPONSES,
+    TERMS_OF_SERVICE,
 )
 from src.framework.middleware import (
     ExceptionHandler,
@@ -26,9 +27,11 @@ app = FastAPI(
     version=f"v{__version__}",
     docs_url="/",
     exception_handlers=ExceptionHandler().handlers,
+    terms_of_service=TERMS_OF_SERVICE,
     contact=CONTACT,
     license_info=LICENSE,
     responses=RESPONSES,
+    swagger_ui_parameters={"supportedSubmitMethods": []},
 )
 app.state.limiter = LIMITER
 
