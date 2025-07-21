@@ -6,7 +6,18 @@ DESCRIPTION = """
 🌐 [**Web Application**](/v2/scopus-survey/web/en-US/search-articles)
 &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
 📄 [**Documentation**](https://mauprogramador.github.io/scopus-survey-api/)
+
+**Scopus Documentation:**
+<br>🔑 [**API Key Settings**](https://dev.elsevier.com/api_key_settings.html)
+<br>🔍 [**Scopus Search API**](https://dev.elsevier.com/documentation/\
+ScopusSearchAPI.wadl)
+<br>📄 [**Abstract Retrieval API**](https://dev.elsevier.com/documentation/\
+AbstractRetrievalAPI.wadl)
 """
+TERMS_OF_SERVICE = (
+    "https://github.com/mauprogramador/"
+    "scopus-survey-api/blob/master/TERMS_OF_SERVICE.md"
+)
 CONTACT = {
     "name": "@mauprogramador",
     "url": "https://github.com/mauprogramador",
