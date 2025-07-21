@@ -1,17 +1,30 @@
 #!/bin/bash
 
+REGEX="^[0-9]{1,2}$"
+trap "echo -e '\033[35;1m!\033[m \033[91mGot an interruption ✘\033[m' ; exit 1" SIGINT
 echo -e "\033[35;1m>\033[m Checking Prerequisites..."
 
 # Checking if Python3 (and which of it) is installed
 if command -v python3 &>/dev/null; then
 
-    if command -v python3.11 &>/dev/null; then
-        echo -e "-\033[92m $(python3.11 -V) installed ✔\033[m"
+    version="11"
+    echo "Args: $1"
+    if [[ -n "$1" ]]; then
+        if ! [[ "$1" =~ $REGEX ]]; then
+            echo -e "-\033[91m Invalid Python3 version ✘\033[m"
+            echo -e "\033[35;1m!\033[m Please inform a valid Python3 version (e.g. inform \033[37;1m11\033[m for Python3.11)"
+            exit 1
+        fi
+        version="$1"
+    fi
+
+    if command -v python3."$version" &>/dev/null; then
+        echo -e "-\033[92m $(python3."$version" -V) installed ✔\033[m"
         version="11"
     else
         version=$(ls -1 /usr/bin/python3* | grep -Eo 'python3\.[0-9]*$' | sort -V | uniq | tail -n 1 | grep -oP '\d+\.\K\d+')
 
-        echo -e "-\033[91m Python 3.11 not installed ✘\033[m"
+        echo -e "-\033[91m Python 3."$version" not installed ✘\033[m"
         echo -e "\033[93mWARNING:\033[m This application was built on \033[37;1mPython3.11.0rc1\033[m, so some unexpected errors may occur when using a different version."
 
         echo -ne "\033[35;1m?\033[m Would you like to continue with \033[37;1m$(python3."$version" -V)\033[m? [\033[32my\033[m/\033[31mn\033[m]: "
