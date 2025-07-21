@@ -1,7 +1,7 @@
 from http import HTTPStatus
 from typing import Annotated
 
-from fastapi import Query, Request
+from fastapi import Depends, Query, Request
 from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
 from fastapi.routing import APIRouter
 
@@ -14,7 +14,7 @@ from src.core.data.query_params import (
     CSVParams,
     SearchParams,
 )
-from src.core.domain.factory import make_usecase
+from src.core.domain.factory import make_aggregator, make_combinator
 from src.framework.fastapi.csrf_token import CSRFToken
 from src.framework.fastapi.swagger import (
     CSV_RESPONSE,
@@ -33,10 +33,11 @@ router = APIRouter(prefix=PREFIX)
     responses=HTML_RESPONSE,
     response_class=HTMLResponse,
 )
-async def render_search_articles_page(
+async def search_articles_page(
     request: Request,
     lang: Lang,
 ) -> HTMLResponse:
+
     csrf_token, signed_token = CSRFToken.generate_csrf_tokens()
     LOG.debug(
         {
@@ -45,8 +46,10 @@ async def render_search_articles_page(
             "signed_token": signed_token,
         }
     )
+
     response = TemplateBuilder.search_template(request, csrf_token, lang)
     response.set_cookie("csrf-token", signed_token, MAX_AGE, httponly=True)
+
     return response
 
 
@@ -54,45 +57,43 @@ async def render_search_articles_page(
     "/api/combination",
     status_code=HTTPStatus.OK,
     tags=["API"],
+    dependencies=[Depends(CSRFToken.verify_csrf_token)],
     summary="",
     responses=JSON_RESPONSE,
     response_class=JSONResponse,
 )
 @LIMITER.limit(LIMIT)
-async def survey_keywords_combination(
-    request: Request,
+async def survey_combinations(
+    request: Request,  # pylint: disable=W0613
     params: Annotated[CombinationParams, Query()],
 ) -> JSONResponse:
     LOG.debug(params.model_dump())
-    CSRFToken.verify_csrf_token(request, params.csrf_token)
 
-    return JSONResponse(
-        {
-            "combinations": [
-                {"keyword": "Python", "total": 110000},
-                {"keyword": "AI", "total": 500000},
-                {"keyword": "Python AND AI", "total": 50000},
-            ]
-        }
-    )
+    use_case = make_combinator()
+    response = await use_case.survey_combinations(params)
+
+    return response
 
 
 @router.get(
     "/api/survey",
     status_code=HTTPStatus.OK,
     tags=["API"],
+    dependencies=[Depends(CSRFToken.verify_csrf_token)],
     summary="Survey for articles and download the found ones in a CSV file",
     responses=CSV_RESPONSE,
     response_class=FileResponse,
 )
 @LIMITER.limit(LIMIT)
 async def survey_articles(
-    request: Request,
+    request: Request,  # pylint: disable=W0613
     params: Annotated[SearchParams, Query()],
 ) -> FileResponse:
     LOG.debug(params.model_dump())
-    CSRFToken.verify_csrf_token(request, params.csrf_token)
-    response = make_usecase().retrieve_articles(params)
+
+    use_case = make_aggregator()
+    response = await use_case.retrieve_articles(params)
+
     return response
 
 
@@ -100,16 +101,18 @@ async def survey_articles(
     "/api/csv",
     status_code=HTTPStatus.OK,
     tags=["API"],
+    dependencies=[Depends(CSRFToken.verify_csrf_token)],
     summary="Download the pre-existing CSV file of the found articles",
     responses=CSV_RESPONSE,
     response_class=FileResponse,
 )
 @LIMITER.limit(LIMIT)
 async def download_csv(
-    request: Request,
+    request: Request,  # pylint: disable=W0613
     params: Annotated[CSVParams, Query()],
 ) -> FileResponse:
     LOG.debug(params.model_dump())
-    CSRFToken.verify_csrf_token(request, params.csrf_token)
+
     response = CSVResponse.build(params.api_key)
+
     return response
