@@ -1,23 +1,22 @@
-from asyncio import CancelledError
 from asyncio import TimeoutError as AsyncTimeoutError
 from http import HTTPStatus
-from pathlib import Path
 from sys import exc_info
-from traceback import extract_tb
+from traceback import FrameSummary, extract_tb
 
-from aiohttp import ClientError
 from fastapi import HTTPException
 from itsdangerous import BadData
 from pydantic import ValidationError
 
 from src.core.common.messages import SCOPUS_API_ERROR
-from src.core.common.types import Errors, ErrorTypes
-from src.core.config.scopus import HTTP_CODE_ERRORS
-from src.utils.formatters import get_error_message
+from src.core.common.types import ErrorTypes, Json
+from src.core.config.config import LOG
+from src.core.config.scopus import SCOPUS_DOCS, SCOPUS_ERRORS
 
 
 class HTTPError(HTTPException):
     """Detailed HTTP errors"""
+
+    __FRAME = FrameSummary(__file__, 1, "<http_exceptions>")
 
     def __init__(
         self, status: HTTPStatus, message: str, error: ErrorTypes = None
@@ -34,36 +33,31 @@ class HTTPError(HTTPException):
         super().__init__(status, message)
 
     @classmethod
-    def get_error_details(cls, error: ErrorTypes) -> Errors:
-        class_path = f"{type(error).__module__}.{type(error).__qualname__}"
-        errors = [{"type": class_path}]
+    def get_error_details(cls, error: ErrorTypes) -> list[Json]:
         traceback = exc_info()[2]
+        frame = extract_tb(traceback)[-1] if traceback else cls.__FRAME
 
-        if traceback is not None:
-            file_path, line, _, _ = extract_tb(traceback)[-1]
-            errors[0].setdefault("file", str(Path(file_path)))
-            errors[0].setdefault("line", line)
+        base_error = {
+            "type": f"{type(error).__module__}.{type(error).__qualname__}",
+            "detail": LOG.error_message(error),
+            "file": frame.filename,
+            "line": frame.lineno,
+        }
+        errors = [base_error]
 
         if isinstance(error, HTTPException):
-            errors[0].setdefault("detail", error.detail)
-            errors[0].setdefault("status_code", error.status_code)
+            errors[0]["detail"] = error.detail
+            errors[0]["status_code"] = error.status_code
 
         elif isinstance(error, ValidationError):
             errors.extend(error.errors(include_url=False))
 
-        elif isinstance(error, (AsyncTimeoutError, CancelledError)):
-            errors[0].setdefault("detail", get_error_message(error))
-            errors[0].setdefault("strerror", error.strerror)
-            errors[0].setdefault("errno", error.errno)
-
-        elif isinstance(error, ClientError):
-            errors[0].setdefault("detail", get_error_message(error))
+        elif isinstance(error, AsyncTimeoutError):
+            errors[0]["strerror"] = error.strerror
+            errors[0]["errno"] = error.errno
 
         elif isinstance(error, BadData):
-            errors[0].setdefault("detail", error.message)
-
-        else:
-            errors[0].setdefault("detail", get_error_message(error))
+            errors[0]["detail"] = error.message
 
         return errors
 
@@ -119,13 +113,16 @@ class GatewayTimeout(HTTPError):
 class ScopusAPIError(HTTPError):
     """Scopus API HTTP status error exception"""
 
-    def __init__(self, code: int, json: dict, els_status: str) -> None:
+    def __init__(self, code: int, json: Json, els_status: str) -> None:
         """Scopus API HTTP status error exception"""
         super().__init__(HTTPStatus.BAD_GATEWAY, SCOPUS_API_ERROR)
+
+        code_error = SCOPUS_ERRORS.get(HTTPStatus(code), SCOPUS_API_ERROR)
         self.errors = [
             {
                 "els_status": els_status,
-                "code_error": HTTP_CODE_ERRORS.get(code, SCOPUS_API_ERROR),
+                "code_error": code_error,
+                "docs": SCOPUS_DOCS,
             },
             json,
         ]
