@@ -1,6 +1,8 @@
 from hashlib import sha1
+from typing import Annotated
 
-from fastapi import Request
+from fastapi import Cookie, Header, Query, Request
+from fastapi.openapi.models import Example
 from itsdangerous import (
     BadData,
     BadSignature,
@@ -25,6 +27,31 @@ from src.core.domain.http_exceptions import Unauthorized
 
 class CSRFToken:
     __SERIALIZER = URLSafeTimedSerializer(SECRET_KEY, SALT)
+    __OPENAPI_EXAMPLE = {
+        "CSRF Token": Example(
+            summary="CSRF Token",
+            description="Automatically managed by the client-side",
+            value="c1d0cf66f682...",
+        )
+    }
+    __Query = Query(
+        alias="csrfToken",
+        validation_alias="query_token",
+        description="Query params CSRF Token",
+        openapi_examples=__OPENAPI_EXAMPLE
+    )
+    __Cookie = Cookie(
+        alias="csrf-token",
+        validation_alias="signed_token",
+        description="Cookies CSRF Token",
+        openapi_examples=__OPENAPI_EXAMPLE
+    )
+    __Header = Header(
+        alias="X-CSRF-Token",
+        validation_alias="header_token",
+        description="Header CSRF Token",
+        openapi_examples=__OPENAPI_EXAMPLE
+    )
 
     @classmethod
     def generate_csrf_tokens(cls) -> tuple[str, str]:
@@ -34,35 +61,37 @@ class CSRFToken:
 
     @classmethod
     def verify_csrf_token(
-        cls, request: Request, csrf_token: str | None
+        cls,
+        request: Request,
+        query_token: Annotated[str | None, __Query] = None,
+        signed_token: Annotated[str | None, __Cookie] = None,
+        header_token: Annotated[str | None, __Header] = None,
     ) -> None:
-        print(csrf_token)
+        print(query_token)
 
-        if not csrf_token:
+        if not query_token:
             raise Unauthorized(MISSING_TOKEN)
 
         try:
-            Token.validate_strings(csrf_token, strict=True)
+            Token.validate_strings(query_token, strict=True)
         except ValidationError as exc:
             raise Unauthorized(INVALID_TOKEN, exc) from exc
 
-        signed_token = request.cookies.get("csrf-token")
         if signed_token is None:
             raise Unauthorized(TOKEN_COOKIE_ERROR)
         print(signed_token)
 
-        csrf_token_header = request.headers.get("X-CSRF-Token")
-        if csrf_token_header is None or csrf_token_header != csrf_token:
+        if header_token is None or header_token != query_token:
             raise Unauthorized(TOKEN_HEADER_ERROR)
-        print(csrf_token_header)
+        print(header_token)
 
-        csrf_token_session = request.session.get("csrf-token")
-        if csrf_token_session is None or csrf_token_session != csrf_token:
+        token_session = request.session.get("csrf-token")
+        if token_session is None or token_session != query_token:
             raise Unauthorized(TOKEN_SESSION_ERROR)
-        print(csrf_token_session)
+        print(token_session)
 
         try:
-            csrf_cookie: str = cls.__SERIALIZER.loads(signed_token, MAX_AGE)
+            token_cookie: str = cls.__SERIALIZER.loads(signed_token, MAX_AGE)
 
         except SignatureExpired as exc:
             raise Unauthorized(EXPIRED_TOKEN, exc) from exc
@@ -70,5 +99,5 @@ class CSRFToken:
         except (BadSignature, BadData) as exc:
             raise Unauthorized(TOKEN_SIGNATURE_ERROR, exc) from exc
 
-        if csrf_token != csrf_cookie:
+        if query_token != token_cookie:
             raise Unauthorized(INVALID_TOKEN)
