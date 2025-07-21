@@ -11,8 +11,6 @@ from starlette.responses import Response
 from src.adapters.presenters.error_response import ErrorJSON
 from src.core.config.config import LOG
 from src.core.domain.http_exceptions import HTTPError
-from src.utils.formatters import get_error_message
-from src.utils.logging import Prefix
 
 
 class TracingTimeUncaughtErrorsMiddleware(BaseHTTPMiddleware):
@@ -33,7 +31,7 @@ class TracingTimeUncaughtErrorsMiddleware(BaseHTTPMiddleware):
             response = await call_next(request)
 
         except Exception as exc:  # pylint: disable=W0718
-            message = get_error_message(exc)
+            message = LOG.error_message(exc)
 
             LOG.error(message)
             LOG.exception(exc)
@@ -48,6 +46,6 @@ class TracingTimeUncaughtErrorsMiddleware(BaseHTTPMiddleware):
         process_time = perf_counter() - start_time
         response.headers[self.__PROCESS_TIME] = f"{process_time:.2f}s"
 
-        LOG.trace(Prefix.TRACE, request, response.status_code, process_time)
+        LOG.trace(request, response.status_code, process_time)
 
         return response

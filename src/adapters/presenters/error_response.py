@@ -10,7 +10,6 @@ from pydantic import BaseModel, field_validator
 from src.core.common.messages import SERIALIZE_ERROR
 from src.core.common.types import Errors, Json
 from src.core.config.config import ENV, LOG
-from src.utils.formatters import get_error_message
 
 
 class ErrorResponse(BaseModel):
@@ -52,7 +51,7 @@ class ErrorJSON(JSONResponse):
             try:
                 dumps(errors)
             except Exception as exc:  # pylint: disable=W0718
-                LOG.error(get_error_message(exc, message))
+                LOG.error(message, exc)
                 LOG.exception(exc)
 
                 message = SERIALIZE_ERROR

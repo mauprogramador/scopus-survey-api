@@ -13,13 +13,15 @@ from logging import (
 from logging.handlers import RotatingFileHandler
 from pathlib import Path
 from re import sub
-from sys import stdout
+from sys import exc_info, stdout
+from traceback import FrameSummary, extract_tb
 
 from fastapi import Request
 from uvicorn.config import LOGGING_CONFIG
 
-from src.core.common.patterns import ANSI_ESCAPE_PATTERN
-from src.core.common.types import LogParams, Quota
+from src.core.common.patterns import ANSI_ESCAPE_PATTERN, API_KEY_LOG_PATTERN
+from src.core.common.types import Json, LogParams, Quota
+from src.core.config.scopus import NO_RESULTS, SEARCH_API_URL
 
 
 class Prefix(StrEnum):
@@ -63,12 +65,25 @@ class Logging:
         "{method} \033[37;1m{url}\033[m \033[{status_color}m{code} "
         "{status_phrase} \033[m{time:.2f}s"
     )
+    __COMBINATIONS = (
+        "Keywords: \033[33m{keywords}\033[m. Combinations: \033[33m"
+        "{combinations}\033[m. Total-Sum: \033[33m{total:,}\033[m. "
+        "Average-Found: \033[33m~{average:,}"
+    )
+    __LOSS = (
+        "Initial: \033[33m{initial}\033[m. Final: \033[33m{final}\033[m"
+        ". Loss: \033[33m{loss:.2f}%"
+    )
+    __EXCEPTION = "{module}.{qualname}: {filepath}, line {line}, col {col}"
     __UVICORN_FMT = "%(asctime)s %(levelprefix)s %(message)s"
+    __FRAME = FrameSummary(__file__, 1, "<logging>", colno=0)
     __STATUS_COLOR = {2: "32", 3: "33", 4: "31", 5: "31"}
     __LOGGER_NAME = "scopus.survey.api"
     __FMT = "%(asctime)s %(message)s"
     __DATEFMT = "%Y-%m-%d %H:%M:%S"
+    __HIDE_API_KEY = "apiKey=..."
     __DIR = Path(".logs")
+    __PERCENT = 100
 
     def __init__(self, params: LogParams) -> None:
         """Configure and customize application logging"""
@@ -113,14 +128,45 @@ class Logging:
         return [self.__logger]
 
     @staticmethod
-    def build_request_obj(url: str) -> LogRequest:
-        return LogRequest(url)
+    def error_message(exc: Exception, message: str = None) -> str:
+        if exc.args and exc.args[0] and isinstance(exc.args[0], str):
+            return exc.args[0]
+        if message is not None:
+            return message
+        return repr(exc)
 
     def info(self, message: str) -> None:
         self.__logger.setLevel(INFO)
         self.__logger.info("%s %s\033[m", Prefix.INFO, message)
 
+    def loss(self, initial: int, final: int) -> None:
+        message = self.__LOSS.format(
+            initial=initial,
+            final=final,
+            loss=(initial / final) * self.__PERCENT,
+        )
+        self.info(message)
+
+    def combinations(self, keywords: int, bundles: list[Json]) -> None:
+        totals: list[int] = [data["total"] for data in bundles]
+        average = 0.0
+
+        if sum(totals) > 0:
+            square_totals_sum = sum(total * total for total in totals)
+            average = square_totals_sum / (keywords * sum(totals))
+
+        message = self.__COMBINATIONS.format(
+            keywords=keywords,
+            combinations=len(bundles),
+            total=sum(totals),
+            average=int(average),
+        )
+        self.info(message)
+
     def quota(self, quota: Quota, code: int) -> None:
+        if quota.status.startswith(NO_RESULTS):
+            code = HTTPStatus.NOT_FOUND.value
+
         message = self.__QUOTA.format(
             limit=quota.limit,
             remaining=quota.remaining,
@@ -131,7 +177,10 @@ class Logging:
         self.__logger.setLevel(INFO)
         self.__logger.info("%s %s\033[m", Prefix.QUOTA, message)
 
-    def error(self, message: str) -> None:
+    def error(self, message: str, exc: Exception = None) -> None:
+        if exc is not None:
+            message = self.error_message(exc, message)
+
         self.__logger.setLevel(ERROR)
         self.__logger.error("%s \033[31m%s\033[m", Prefix.ERROR, message)
 
@@ -143,18 +192,29 @@ class Logging:
             )
 
     def exception(self, exception: Exception) -> None:
+        traceback = exc_info()[2]
+        frame = extract_tb(traceback)[-1] if traceback else self.__FRAME
+
+        message = self.__EXCEPTION.format(
+            module=type(exception).__module__,
+            qualname=type(exception).__qualname__,
+            filepath=frame.filename,
+            line=frame.lineno,
+            col=frame.colno,
+        )
+
         self.__logger.setLevel(ERROR)
         self.__logger.exception(
             "%s \033[31m%s\033[m",
             Prefix.EXCEPTION,
-            repr(exception),
+            message,
             exc_info=True,
         )
 
-    def trace(
+    def __trace(
         self,
         log_prefix: Prefix,
-        request: Request,
+        request: Request | LogRequest,
         code: int,
         time: float,
     ) -> None:
@@ -177,3 +237,14 @@ class Logging:
 
         self.__logger.setLevel(INFO)
         self.__logger.info("%s %s\033[m", log_prefix, message)
+
+    def trace(self, request: Request, code: int, time: float) -> None:
+        self.__trace(Prefix.TRACE, request, code, time)
+
+    def api_call(self, url: str, code: int, time: float) -> None:
+        if url.startswith(SEARCH_API_URL):
+            log_prefix = Prefix.SEARCH
+        else:
+            log_prefix = Prefix.ABSTRACT
+        url = sub(API_KEY_LOG_PATTERN, self.__HIDE_API_KEY, url)
+        self.__trace(log_prefix, LogRequest(url), code, time)
