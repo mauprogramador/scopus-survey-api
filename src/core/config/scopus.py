@@ -1,4 +1,5 @@
 from datetime import datetime
+from http import HTTPStatus
 
 CURRENT_YEAR = datetime.now().year
 LAST_THREE_YEARS = CURRENT_YEAR - 3
@@ -7,39 +8,59 @@ LAST_DECADE = CURRENT_YEAR - 10
 BOOLEAN_OPERATOR = " AND "
 NULL = "null"
 
-SEARCH_API_URL = (
-    "https://api.elsevier.com/content/search/scopus?apiKey={apikey}"
-    "&query=TITLE-ABS-KEY({keywords})&field=dc:identifier"
-    "&suppressNavLinks=true&date={date}&sort=+pubyear,+coverDate,+relevancy"
-)
-PAGINATION_URL = "{search_url}&start={page}"
-ABSTRACT_API_URL = "{abstract_url}?apiKey={apikey}&field={fields}"
+NO_RESULTS = "NO_SEARCH_RESULTS"
+EMPTY_RESULT = "Result set was empty"
 
-ARTICLE_PAGE_URL = (
-    "https://www.scopus.com/inward/record.uri"
-    "?partnerID=HzOxMe3b&scp={scopus_id}&origin=inward"
+QUERY_FIELDS = {
+    "doctype",
+    "pubstage",
+    "language",
+    "open_access",
+    "source_type",
+    "subject_area",
+    "pages",
+}
+
+SEARCH_API_URL = "https://api.elsevier.com/content/search/scopus"
+ARTICLE_PAGE_URL = "https://www.scopus.com/inward/record.uri"
+SCOPUS_DOCS = "https://dev.elsevier.com/documentation"
+
+SEARCH_FIELDS = (
+    "dc:identifier",
+    "eid",
+    "dc:title",
+    "dc:description",
+    "prism:publicationName",
+    "cited",
+    "by-count",
+    "prism:volume",
+    "prism:coverDate",
+    "prism:doi",
+    "dc:creator",
+    "authors",
 )
 
-FIELDS = (
-    "dc:identifier,eid,dc:title,dc:description,prism:publicationName,cited"
-    "by-count,prism:volume,prism:coverDate,prism:doi,dc:creator,authors"
-)
-
-HTTP_CODE_ERRORS = {
-    400: "Invalid Request: invalid information submitted",
-    401: (
-        "Authentication Error: user cannot be authenticated"
-        " due to missing/invalid credentials"
+SCOPUS_ERRORS = {
+    HTTPStatus.BAD_REQUEST: "Invalid Request: invalid information submitted",
+    HTTPStatus.UNAUTHORIZED: (
+        "Authentication Error: user cannot be authenticated due to missing"
+        "/invalid credentials"
     ),
-    403: (
-        "Authorization/Entitlements Error: User cannot be "
-        "authenticated or entitlements cannot be validated"
+    HTTPStatus.FORBIDDEN: (
+        "Authorization/Entitlements Error: User cannot be authenticated or "
+        "entitlements cannot be validated"
     ),
-    429: (
-        "Quota Exceeded: the requester has exceeded the "
-        "quota limits associated with their API Key"
+    HTTPStatus.NOT_FOUND: (
+        "Resource Not Found Error: This is an error that occurs when the "
+        "requested resource cannot be found"
     ),
-    500: "Generic Error: Scopus API back-end processing errors",
+    HTTPStatus.TOO_MANY_REQUESTS: (
+        "Quota Exceeded: the requester has exceeded the quota limits "
+        "associated with their API Key"
+    ),
+    HTTPStatus.INTERNAL_SERVER_ERROR: (
+        "Generic Error: Scopus API back-end processing errors"
+    ),
 }
 
 SCOPUS_HEADERS = {
