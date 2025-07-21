@@ -1,3 +1,5 @@
+from csv import writer
+from datetime import datetime
 from fastapi.responses import FileResponse
 from pandas import DataFrame
 
@@ -5,28 +7,31 @@ from src.adapters.presenters.csv_response import CSVResponse
 from src.core.common.types import SearchParams
 from src.core.config.config import DIRECTORY, FILE, LOG
 from src.core.data.enums import Column
-from src.core.data.survey_detail import SurveyDetail
-from src.core.domain.interfaces import (
-    AbstractAPIABC,
-    ArticlesAggregatorABC,
-    SearchAPIABC,
-    SimilarityFilterABC,
+from src.core.domain.protocols import (
+    AbstractAPI,
+    SearchAPI,
+    SimilarityFilter,
+    SurveyDetail,
 )
 
 
-class ScopusArticlesAggregator(ArticlesAggregatorABC):
+class ScopusArticlesAggregator:
     """Gathers, filters and compiles data from Scopus articles"""
 
+    __FOOTNOTE = (
+        "\n# The data was retrieved from Scopus API on {date} via "
+        "http://api.elsevier.com and http://www.scopus.com.\n"
+    )
+    __DATEFMT = "%B %d, %Y"
     __ROWS_INDEX = 0
     __NON_RATIO = 0
-    __PERCENT = 100
     __SEP = ";"
 
     def __init__(
         self,
-        search_api: SearchAPIABC,
-        abstract_api: AbstractAPIABC,
-        similarity_filter: SimilarityFilterABC,
+        search_api: SearchAPI,
+        abstract_api: AbstractAPI,
+        similarity_filter: SimilarityFilter,
         survey_detail: SurveyDetail,
     ) -> None:
         """Gathers, filters and compiles data from Scopus articles"""
@@ -36,11 +41,11 @@ class ScopusArticlesAggregator(ArticlesAggregatorABC):
         self.__survey_detail = survey_detail
         self.__dataframe: DataFrame = None
 
-    def retrieve_articles(self, params: SearchParams) -> FileResponse:
-        entry_items = self.__search_api.search_articles(params)
-        self.__survey_detail.max_count = params.max_count
+    async def retrieve_articles(self, params: SearchParams) -> FileResponse:
+        entry_items = await self.__search_api.search_articles(params)
+        self.__survey_detail.set_max_count(params.max_count)
 
-        self.__dataframe = self.__abstract_api.retrieve_abstracts(
+        self.__dataframe = await self.__abstract_api.retrieve_abstracts(
             params.api_key, entry_items
         )
 
@@ -57,12 +62,25 @@ class ScopusArticlesAggregator(ArticlesAggregatorABC):
             )
 
         result = rows_before - self.__dataframe.shape[self.__ROWS_INDEX]
-        total_loss = (result / rows_before) * self.__PERCENT
 
-        LOG.info(f"Total articles loss: \033[33;1m{total_loss:.2f}%")
+        LOG.loss(rows_before, result)
         LOG.quota(*self.__survey_detail.log_data)
 
         file_path = DIRECTORY / f"{params.api_key}_{FILE}"
-        self.__dataframe.to_csv(file_path, sep=self.__SEP, index=False)
+        self.__dataframe.to_csv(
+            file_path,
+            sep=self.__SEP,
+            header=True,
+            index=False,
+            mode="w",
+            encoding="utf-8",
+        )
+
+        with open(file_path, mode="a", encoding="utf-8", newline="") as file:
+            current_dt = datetime.now()
+            date = current_dt.strftime(self.__DATEFMT)
+
+            csv = writer(file, delimiter=self.__SEP)
+            csv.writerow(self.__FOOTNOTE.format(date=date))
 
         return CSVResponse.build(params.api_key, self.__survey_detail.headers)
