@@ -23,7 +23,7 @@ LOG = Logging(ENV.log_params)
 LIMITER = Limiter(key_func=get_remote_address)
 LIMIT = "60/2seconds"
 
-MAX_AGE = 3600
+MAX_AGE = 3600  # 1 hour
 SHUTDOWN_TIMEOUT = 5
 
 HEADERS = [
