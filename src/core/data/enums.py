@@ -100,3 +100,9 @@ class SubjArea(StrEnum):
     SOCI = "SOCI"  # Social Sciences
     VETE = "VETE"  # Veterinary
     MULT = "MULT"  # Multidisciplinary
+
+
+@unique
+class PageRange(StrEnum):
+    SHORT = "0-4"  # Short paper
+    LONG = "5-"  # Long paper
