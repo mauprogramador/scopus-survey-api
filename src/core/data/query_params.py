@@ -1,14 +1,15 @@
 from typing import Any, Literal
 
-from fastapi.openapi.models import Example
 from pydantic import (
     BaseModel,
     ConfigDict,
     Field,
+    ValidationError,
+    ValidationInfo,
     computed_field,
     field_validator,
 )
-from pydantic_core import PydanticUseDefault
+from pydantic_core import InitErrorDetails, PydanticUseDefault
 
 from src.core.common.patterns import (
     API_KEY_PATTERN,
@@ -16,28 +17,25 @@ from src.core.common.patterns import (
     LANGUAGE_PATTERN,
 )
 from src.core.common.types import Keyword
-from src.core.config.config import TOKEN
-from src.core.config.scopus import (
-    CURRENT_YEAR,
-    LAST_DECADE,
-    LAST_THREE_YEARS,
-    NULL,
+from src.core.config.scopus import CURRENT_YEAR, LAST_DECADE, LAST_THREE_YEARS
+from src.core.data.enums import (
+    Button,
+    DocType,
+    PageRange,
+    PubStage,
+    SrcType,
+    SubjArea,
 )
-from src.core.data.enums import Button, DocType, PubStage, SrcType, SubjArea
-
-DESCRIPTION = (
-    "The value of the `{TOKEN_HEADER}` header will be"
-    " set automatically, you **should not** change it"
-)
-OPENAPI_EXAMPLE = {
-    "Token": Example(
-        summary="Access Token", description=DESCRIPTION, value=TOKEN
-    )
-}
 
 
 class CSVParams(BaseModel):
-    model_config = ConfigDict(extra="forbid")
+    """Validate query params for downloading CSV"""
+
+    model_config = ConfigDict(
+        extra="forbid",
+        str_strip_whitespace=True,
+        frozen=True,
+    )
 
     api_key: str = Field(
         alias="apiKey",
@@ -48,29 +46,27 @@ class CSVParams(BaseModel):
         min_length=32,
         max_length=32,
     )
-    csrf_token: str | None = Field(
-        default=None,
-        alias="csrfToken",
-        validation_alias="csrf_token",
-        description="The validation CSRF Token",
-        examples=["c1d0cf66f682..."],
-        exclude=True,
-    )
     button: Literal[Button.PREVIOUS, Button.DOWNLOAD] = Field(
-        description="Button HTML element",
+        description="The HTML button value",
         examples=[Button.PREVIOUS],
         exclude=True,
     )
 
 
 class CombinationParams(CSVParams):
-    model_config = ConfigDict(extra="forbid")
+    """Validate query params for survey combinations"""
+
+    model_config = ConfigDict(
+        extra="forbid",
+        str_strip_whitespace=True,
+        frozen=True,
+    )
 
     start_year: int = Field(
         default=LAST_THREE_YEARS,
         alias="startYear",
         validation_alias="start_year",
-        description="Start of search date range",
+        description="Date range start year",
         examples=[LAST_THREE_YEARS],
         exclude=True,
         ge=LAST_DECADE,
@@ -80,82 +76,109 @@ class CombinationParams(CSVParams):
         default=CURRENT_YEAR,
         alias="endYear",
         validation_alias="end_year",
-        description="End of search date range",
+        description="Date range end year",
         examples=[CURRENT_YEAR],
         exclude=True,
         ge=(LAST_DECADE + 1),
         le=CURRENT_YEAR,
     )
     doctype: DocType = Field(
-        default=NULL,
+        default=None,
         alias="docType",
         validation_alias="doctype",
         serialization_alias="DOCTYPE",
-        description="Document type",
+        description="The Document Type in which the document is classified",
         examples=[DocType.AR],
     )
     pubstage: PubStage = Field(
-        default=NULL,
+        default=None,
         alias="pubStage",
         validation_alias="pubstage",
         serialization_alias="PUBSTAGE",
-        description="Publication stage",
+        description="The Publication Stage of the document",
         examples=[PubStage.FINAL],
     )
     language: str = Field(
-        default=NULL,
+        default=None,
         serialization_alias="LANGUAGE",
-        description="Language",
+        description="The Language in which the document was written",
         examples=["english"],
         pattern=LANGUAGE_PATTERN,
+        min_length=3,
+        max_length=30,
     )
     open_access: int = Field(
-        default=NULL,
+        default=None,
         alias="openAccess",
         validation_alias="open_access",
         serialization_alias="OPENACCESS",
-        description="Open access",
+        description="Whether the indexed content is Open Access or not",
+        examples=[0],
+        ge=0,
+        le=1,
     )
     source_type: SrcType = Field(
-        default=NULL,
+        default=None,
         alias="srcType",
         validation_alias="source_type",
         serialization_alias="SRCTYPE",
-        description="Source type",
+        description="The Source Type the document comes from",
+        examples=[SrcType.J],
     )
     subject_area: SubjArea = Field(
-        default=NULL,
+        default=None,
         alias="subjArea",
         validation_alias="subject_area",
         serialization_alias="SUBJAREA",
-        description="Subject area",
+        description="The Subject Area in which the document is classified",
+        examples=[SubjArea.COMP],
     )
-    pages: int = Field(
-        default=NULL, serialization_alias="PAGES", description=""
+    pages: PageRange = Field(
+        default=None,
+        serialization_alias="PAGES",
+        description="The page number range to filter documents",
+        examples=[PageRange.SHORT.name],
     )
     keywords: list[Keyword] = Field(
-        description="Keywords to search for in the articles",
-        examples=["Python"],
+        description="The Keywords to search for in the documents fields",
+        examples=["Python,Machine Learning"],
         exclude=True,
         min_length=1,
         max_length=4,
     )
     button: Literal[Button.COMBINATION] = Field(
-        description="Button HTML element",
+        description="The HTML button value",
         examples=[Button.COMBINATION],
         exclude=True,
     )
 
-    @property
-    @computed_field
-    def date(self) -> str:
-        return f"{self.start_year}-{self.end_year}"
-
     @field_validator("*", mode="before")
     @classmethod
-    def empty_str_to_default(cls, value: Any) -> Any:
-        if isinstance(value, str) and value.strip() == "":
-            raise PydanticUseDefault()
+    def empty_str_to_default(cls, value: Any, info: ValidationInfo) -> Any:
+        field = cls.model_fields.get(info.field_name)
+        if field:
+            invalid_value = isinstance(value, str) and value.strip() == ""
+            if not field.is_required() and invalid_value:
+                raise PydanticUseDefault()
+        return value
+
+    @field_validator("pages", mode="before")
+    @classmethod
+    def parse_pages_enum(cls, value: Any) -> Any | PageRange:
+        if isinstance(value, str):
+            try:
+                return PageRange[value]
+            except KeyError as exc:
+                raise ValidationError.from_exception_data(
+                    "Invalid page value",
+                    [
+                        InitErrorDetails(
+                            type="enum",
+                            input=value,
+                            ctx={"expected": "'SHORT' or 'LONG'"},
+                        )
+                    ],
+                ) from exc
         return value
 
     @field_validator("keywords", mode="before")
@@ -165,21 +188,35 @@ class CombinationParams(CSVParams):
             return value[0].split(",")
         return value
 
+    @computed_field(  # type: ignore[prop-decorator]
+        description="Date range by years",
+        examples=[f"{LAST_THREE_YEARS}-{CURRENT_YEAR}"],
+    )
+    @property
+    def date(self) -> str:
+        return f"{self.start_year}-{self.end_year}"
 
-class SearchParams(CSVParams):
-    model_config = ConfigDict(extra="forbid")
+
+class SearchParams(CombinationParams):
+    """Validate query params for survey articles"""
+
+    model_config = ConfigDict(
+        extra="forbid",
+        str_strip_whitespace=True,
+        frozen=True,
+    )
 
     combination: str = Field(
-        description="A keywords combination",
+        description="The chosen keywords combination",
         examples=["Python AND Machine Learning"],
         exclude=True,
         pattern=COMBINATION_PATTERN,
-        min_length=2,
-        max_length=150,
+        min_length=9,
+        max_length=215,
     )
     max_count: int = Field(
         default=125,
-        description="Limits the number of returned articles",
+        description="Limits the number of returned documents",
         examples=[25],
         exclude=True,
         ge=25,
@@ -188,14 +225,14 @@ class SearchParams(CSVParams):
     )
     ratio: int = Field(
         default=80,
-        description="Filters and removes similar articles",
+        description="Filter ratio to remove similar documents",
         examples=[80],
         exclude=True,
         ge=0,
         le=100,
     )
     button: Literal[Button.SEARCH] = Field(
-        description="Button HTML element",
+        description="The HTML button value",
         examples=[Button.SEARCH],
         exclude=True,
     )
