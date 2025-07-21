@@ -1,13 +1,16 @@
-import cachecontrol  # pylint: disable=w0611 # noqa: F401
+import aiohttp  # pylint: disable=w0611 # noqa: F401
+import aiohttp_retry  # pylint: disable=w0611 # noqa: F401
+import aiolimiter  # pylint: disable=w0611 # noqa: F401
 import fastapi  # pylint: disable=w0611 # noqa: F401
+import itsdangerous  # pylint: disable=w0611 # noqa: F401
 import pandas  # pylint: disable=w0611 # noqa: F401
 import pydantic  # pylint: disable=w0611 # noqa: F401
 import pydantic_settings  # pylint: disable=w0611 # noqa: F401
-import requests  # pylint: disable=w0611 # noqa: F401
 import slowapi  # pylint: disable=w0611 # noqa: F401
 import thefuzz  # pylint: disable=w0611 # noqa: F401
 import tqdm  # pylint: disable=w0611 # noqa: F401
 import uvicorn
+import uvloop
 
 from src.adapters.presenters.html_response import TemplateBuilder
 from src.core.config.config import (
@@ -22,6 +25,8 @@ from src.core.config.config import (
 if __name__ == "__main__":
     DIRECTORY.mkdir(parents=True, exist_ok=True)
     TemplateBuilder.load_translations()
+
+    uvloop.install()
 
     LOG.info("\033[33mScopus Survey API was initialized 🚀")
     LOG.debug(ENV.model_dump())
