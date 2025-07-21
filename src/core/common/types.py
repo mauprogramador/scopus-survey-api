@@ -1,11 +1,14 @@
-from typing import Annotated, Any, NamedTuple, Protocol, TypeAlias
+from asyncio import CancelledError
+from asyncio import TimeoutError as AsyncTimeoutError
+from typing import Annotated, Any, NamedTuple, Protocol, TypeAlias, TypeVar
 
+from aiohttp import ClientError
 from fastapi import HTTPException
 from itsdangerous import BadData
-from pydantic import Field, TypeAdapter, ValidationError
-from requests import RequestException
+from pydantic import BaseModel, Field, TypeAdapter, ValidationError
 
 from src.core.common.patterns import KEYWORD_PATTERN, TOKEN_PATTERN
+from src.core.data.enums import DocType, PageRange, PubStage, SrcType, SubjArea
 
 Keyword: TypeAlias = Annotated[
     str, Field(pattern=KEYWORD_PATTERN, min_length=2, max_length=50)
@@ -17,10 +20,18 @@ Translation: TypeAlias = dict[str, dict[str, str]]
 
 Articles: TypeAlias = list[dict[str, str]]
 
+ScopusModel = TypeVar("ScopusModel", bound=BaseModel)
+
 Errors: TypeAlias = list[Json] | Json | None
 
 ErrorTypes: TypeAlias = (
-    Exception | HTTPException | ValidationError | RequestException | BadData
+    Exception
+    | HTTPException
+    | ValidationError
+    | AsyncTimeoutError
+    | CancelledError
+    | ClientError
+    | BadData
 )
 
 Token: TypeAdapter[str | None] = TypeAdapter(
@@ -35,19 +46,6 @@ Token: TypeAdapter[str | None] = TypeAdapter(
 )
 
 
-class SearchParams(Protocol):
-    api_key: str
-    keywords: list[str]
-    max_count: int
-    ratio: int
-    start_year: int
-    end_year: int
-
-    @property
-    def year_range(self) -> str:
-        pass
-
-
 class LogParams(NamedTuple):
     host: str
     port: int
@@ -60,3 +58,43 @@ class Quota(Protocol):
     remaining: int
     reset_datetime: str
     status: str
+
+
+class CombinationParams(Protocol):
+    api_key: str
+    start_year: int
+    end_year: int
+    doctype: DocType
+    pubstage: PubStage
+    language: str
+    open_access: int
+    source_type: SrcType
+    subject_area: SubjArea
+    pages: PageRange
+    keywords: list[Keyword]
+
+    def model_dump(self, **kwargs) -> dict[str, Any]:
+        pass
+
+    @property
+    def date(self) -> str:
+        pass
+
+
+class SearchParams(CombinationParams):
+    combination: str
+    max_count: int
+    ratio: int
+
+
+class ResponseBundle(NamedTuple):
+    code: int
+    headers: dict[str, str]
+    data: Json
+
+
+class CombinationBundle(BaseModel):
+    index: int = Field(default=None)
+    combination: str = Field()
+    url: str = Field(exclude=True)
+    total: int = Field(default=None)
