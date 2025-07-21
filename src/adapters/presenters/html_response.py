@@ -10,12 +10,11 @@ from src import __version__
 from src.adapters.presenters.error_response import ErrorJSON
 from src.core.common.messages import UNEXPECTED_ERROR
 from src.core.common.types import Translation
-from src.core.config.config import LOG, PREFIX
+from src.core.config.config import LOG, MAX_AGE, PREFIX
 from src.core.data.enums import Lang, Templates
-from src.core.domain.interfaces import TemplateBuilderABC
 
 
-class TemplateBuilder(TemplateBuilderABC):
+class TemplateBuilder:
     """Generates context values for template responses"""
 
     __TRANSLATIONS: Translation = {}
@@ -47,8 +46,13 @@ class TemplateBuilder(TemplateBuilderABC):
         cls, request: Request, csrf_token: str, lang: Lang
     ) -> HTMLResponse:
 
-        request.session.setdefault("csrf-token", csrf_token)
-        headers = {"Content-Language": lang.value, "X-CSRF-Token": csrf_token}
+        request.session["csrf-token"] = csrf_token
+        headers = {
+            "Content-Language": lang.value,
+            "X-CSRF-Token": csrf_token,
+            "Cache-Control": f"public, max-age={MAX_AGE}, must-revalidate",
+            "Content-Type": "text/html; charset=utf-8",
+        }
 
         context = {
             "version": __version__,
