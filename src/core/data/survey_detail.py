@@ -1,36 +1,43 @@
-from requests import Response
-
+from src.core.common.types import ResponseBundle
 from src.core.data.serializers import ScopusQuotaRateLimit, ScopusSearch
 
 
 class SurveyDetail:
+    """Gather Scopus API search and quota details"""
 
     def __init__(self) -> None:
-        self.__scopus_search: ScopusSearch = None
-        self.quota: ScopusQuotaRateLimit = None
-        self.code: int = None
-        self.max_count: int = None
+        """Gather Scopus API search and quota details"""
+        self.__headers: dict[str, str] = {}
+        self.__log_data: tuple[ScopusQuotaRateLimit, int] = None
 
-    def set_scopus_search(self, scopus_search: ScopusSearch) -> None:
-        self.__scopus_search = scopus_search
+    def set_max_count(self, max_count: int) -> None:
+        self.__headers.update({"X-Max-Count": str(max_count)})
 
-    def set_response(self, response: Response) -> None:
-        self.quota = ScopusQuotaRateLimit.model_validate(response.headers)
-        self.code = response.status_code
+    def set_search_data(self, scopus_search: ScopusSearch) -> None:
+        self.__headers.update(
+            {
+                "X-Total": str(scopus_search.total_results),
+                "X-Items-Per-Page": str(scopus_search.items_per_page),
+                "X-Pages-Count": str(scopus_search.pages_count),
+            }
+        )
+
+    def set_quota_data(self, response: ResponseBundle) -> None:
+        quota = ScopusQuotaRateLimit.model_validate(response.headers)
+        self.__log_data = (quota, response.code)
+        self.__headers.update(
+            {
+                "X-Limit": str(quota.limit),
+                "X-Remaining": str(quota.remaining),
+                "X-Reset": str(quota.reset),
+                "X-ELS-Status": quota.status,
+            }
+        )
 
     @property
     def log_data(self) -> tuple[ScopusQuotaRateLimit, int]:
-        return self.quota, self.code
+        return self.__log_data
 
     @property
     def headers(self) -> dict[str, str]:
-        return {
-            "X-Limit": str(self.quota.limit),
-            "X-Remaining": str(self.quota.remaining),
-            "X-Reset": str(self.quota.reset),
-            "X-ELS-Status": str(self.quota.status),
-            "X-Total": str(self.__scopus_search.total_results),
-            "X-Items-Per-Page": str(self.__scopus_search.items_per_page),
-            "X-Pages-Count": str(self.__scopus_search.pages_count),
-            "X-Max-Count": str(self.max_count),
-        }
+        return self.__headers
