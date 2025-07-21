@@ -2,34 +2,43 @@ from src.adapters.gateway.scopus_abstract_retrieval_api import (
     ScopusAbstractRetrievalAPI,
 )
 from src.adapters.gateway.scopus_search_api import ScopusSearchAPI
-from src.adapters.helpers.http_retry import HTTPRetry
-from src.adapters.helpers.scopus_response import ScopusResponse
+from src.adapters.helpers.http_client import HTTPClient
 from src.adapters.helpers.url_builder import URLBuilder
-from src.core.common.messages import ABSTRACT_API_ERROR, SEARCH_API_ERROR
-from src.core.data.serializers import ScopusAbstract, ScopusSearch
 from src.core.data.survey_detail import SurveyDetail
 from src.core.use_cases import (
     ArticlesSimilarityFilter,
     ScopusArticlesAggregator,
 )
+from src.core.use_cases.keyword_combination_finder import (
+    KeywordCombinationFinder,
+)
 
 
-def make_usecase() -> ScopusArticlesAggregator:
-    url_builder = URLBuilder()
+def make_combinator() -> KeywordCombinationFinder:
     survey_detail = SurveyDetail()
 
-    search_http = HTTPRetry(for_search=True)
-    search_response = ScopusResponse(ScopusSearch, SEARCH_API_ERROR)
+    url_builder = URLBuilder()
+    http_client = HTTPClient()
 
-    abstract_http = HTTPRetry(for_search=False)
-    abstract_response = ScopusResponse(ScopusAbstract, ABSTRACT_API_ERROR)
+    search_api = ScopusSearchAPI(http_client, url_builder, survey_detail)
 
-    search_api = ScopusSearchAPI(
-        search_http, url_builder, search_response, survey_detail
+    combinator_finder = KeywordCombinationFinder(
+        url_builder, search_api, survey_detail
     )
 
+    return combinator_finder
+
+
+def make_aggregator() -> ScopusArticlesAggregator:
+    survey_detail = SurveyDetail()
+
+    url_builder = URLBuilder()
+    http_client = HTTPClient()
+
+    search_api = ScopusSearchAPI(http_client, url_builder, survey_detail)
+
     abstract_api = ScopusAbstractRetrievalAPI(
-        abstract_http, url_builder, abstract_response, survey_detail
+        http_client, url_builder, survey_detail
     )
 
     similarity_filter = ArticlesSimilarityFilter()
