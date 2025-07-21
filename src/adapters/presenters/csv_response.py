@@ -5,10 +5,9 @@ from fastapi.responses import FileResponse
 from src.core.common.messages import CSV_NOT_FOUND
 from src.core.config.config import DIRECTORY, FILE
 from src.core.domain.http_exceptions import NotFound
-from src.core.domain.interfaces import CSVResponseABC
 
 
-class CSVResponse(CSVResponseABC):
+class CSVResponse:
     """Generates CSV file responses"""
 
     __MEDIA_TYPE = "text/csv"
