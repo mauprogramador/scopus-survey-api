@@ -1,33 +1,69 @@
 from datetime import datetime
 from math import ceil
+from typing import Literal
 
-from pydantic import AliasChoices, BaseModel, Field, model_validator
+from pydantic import (
+    AliasChoices,
+    BaseModel,
+    ConfigDict,
+    Field,
+    field_validator,
+    model_validator,
+)
 
+from src.adapters.helpers.url_builder import URLBuilder
+from src.core.common.patterns import ABSTRACT_URL_PATTERN, SCOPUS_ID_PATTERN
 from src.core.common.types import Json
-from src.core.config.scopus import ARTICLE_PAGE_URL, NULL
+from src.core.config.scopus import EMPTY_RESULT, NULL
 
 
 class ScopusEntry(BaseModel):
-    """Serializer for entry field item in response JSON schema"""
+    """Serialize the entry field in the JSON response"""
 
-    link: str = Field(default=NULL, alias="@_fa", exclude=True)
-    url: str = Field(default=NULL, alias="prism:url")
-    scopus_id: str = Field(validation_alias="dc:identifier")
+    model_config = ConfigDict(str_strip_whitespace=True, frozen=True)
+
+    force_array: Literal["true"] = Field(validation_alias="@_fa", exclude=True)
+    url: str = Field(
+        default=NULL,
+        validation_alias="prism:url",
+        pattern=ABSTRACT_URL_PATTERN,
+        min_length=61,
+        max_length=70,
+    )
+    scopus_id: str = Field(
+        validation_alias="dc:identifier",
+        pattern=SCOPUS_ID_PATTERN,
+        min_length=20,
+        max_length=29,
+    )
 
 
 class ScopusSearch(BaseModel):
-    """Serializer for Scopus Search API response JSON schema"""
+    """Serialize the Scopus Search API JSON response"""
 
-    total_results: int = Field(validation_alias="opensearch:totalResults")
-    items_per_page: int = Field(validation_alias="opensearch:itemsPerPage")
-    entry: list[ScopusEntry] = Field()
+    model_config = ConfigDict(str_strip_whitespace=True, frozen=True)
+
+    total_results: int = Field(
+        validation_alias="opensearch:totalResults", ge=0
+    )
+    items_per_page: int = Field(
+        validation_alias="opensearch:itemsPerPage", ge=0, le=25
+    )
+    entry: list[ScopusEntry] = Field(min_length=1, max_length=25)
 
     @model_validator(mode="before")
     @classmethod
     def flatten_json(cls, data: Json) -> Json:
         return data["search-results"]
 
-    def count_limit(self, count: int) -> None:
+    @field_validator("entry", mode="before")
+    @classmethod
+    def validate_entry(cls, data: list[Json]) -> list[Json]:
+        if len(data) == 1 and data[0].get("error") == EMPTY_RESULT:
+            data[0].update({"dc:identifier": "SCOPUS_ID:0123456789"})
+        return data
+
+    def set_count_limit(self, count: int) -> None:
         self.total_results = min(self.total_results, count)
 
     @property
@@ -36,22 +72,29 @@ class ScopusSearch(BaseModel):
 
 
 class ScopusAbstract(BaseModel):
-    """Serializer for Scopus Abstract Retrieval API response JSON schema"""
+    """Serialize the Scopus Abstract Retrieval API JSON response"""
+
+    model_config = ConfigDict(str_strip_whitespace=True, frozen=True)
 
     url: str = Field(
         default=NULL,
         validation_alias="prism:url",
         serialization_alias="Article Preview Page URL",
+        min_length=77,
     )
     scopus_id: str = Field(
-        validation_alias="dc:identifier", serialization_alias="Scopus ID"
+        validation_alias="dc:identifier",
+        serialization_alias="Scopus ID",
+        pattern=SCOPUS_ID_PATTERN,
+        min_length=20,
+        max_length=29,
     )
     authors: str = Field(
         default=NULL,
         serialization_alias="Authors",
     )
     title: str = Field(
-        validation_alias="dc:title", serialization_alias="Title"
+        validation_alias="dc:title", serialization_alias="Title", min_length=1
     )
     publication_name: str = Field(
         default=NULL,
@@ -97,7 +140,7 @@ class ScopusAbstract(BaseModel):
         identifier: str = data["coredata"]["dc:identifier"]
 
         scopus_id: str = identifier.split(":")[1]
-        url = ARTICLE_PAGE_URL.format(scopus_id=scopus_id)
+        url = URLBuilder.article_page_url(scopus_id)
 
         data["coredata"].setdefault("authors", ", ".join(authors_names))
         data["coredata"].setdefault("prism:url", url)
@@ -106,29 +149,34 @@ class ScopusAbstract(BaseModel):
 
 
 class ScopusQuotaRateLimit(BaseModel):
-    """Serializer for Scopus APIs response headers"""
+    """Serialize the Scopus APIs response headers"""
 
-    limit: int = Field(default=NULL, validation_alias="X-RateLimit-Limit")
-    remaining: int = Field(
-        default=NULL, validation_alias="X-RateLimit-Remaining"
+    model_config = ConfigDict(str_strip_whitespace=True, frozen=True)
+
+    limit: int = Field(
+        default=NULL, validation_alias="X-RateLimit-Limit", ge=0
     )
-    reset: int = Field(default=NULL, validation_alias="X-RateLimit-Reset")
-    status: str = Field(default=NULL, validation_alias="X-ELS-Status")
+    remaining: int = Field(
+        default=NULL, validation_alias="X-RateLimit-Remaining", ge=0
+    )
+    reset: int = Field(validation_alias="X-RateLimit-Reset", ge=0)
+    status: str = Field(validation_alias="X-ELS-Status", min_length=1)
 
     @property
     def reset_datetime(self) -> str:
-        if self.reset == NULL:
-            return NULL
         epoch = datetime.fromtimestamp(self.reset)
         return epoch.strftime("%Y-%m-%d %H:%M:%S")
 
 
 class ScopusErrorResponse(BaseModel):
-    """Serializer for Scopus APIs error responses"""
+    """Serialize the Scopus APIs error responses"""
+
+    model_config = ConfigDict(str_strip_whitespace=True, frozen=True)
 
     code: str = Field(
         default=NULL,
         validation_alias=AliasChoices("error-code", "statusCode"),
+        min_length=1,
     )
 
     @model_validator(mode="before")
@@ -136,6 +184,8 @@ class ScopusErrorResponse(BaseModel):
     def flatten_json(cls, json: Json) -> dict[str, str]:
         if json.get("error-response") is not None:
             return json["error-response"]
+
         if json.get("service-error") is not None:
             return json["service-error"]["status"]
+
         return json
