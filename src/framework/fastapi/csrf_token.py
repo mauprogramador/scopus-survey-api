@@ -38,19 +38,19 @@ class CSRFToken:
         alias="csrfToken",
         validation_alias="query_token",
         description="Query params CSRF Token",
-        openapi_examples=__OPENAPI_EXAMPLE
+        openapi_examples=__OPENAPI_EXAMPLE,
     )
     __Cookie = Cookie(
         alias="csrf-token",
         validation_alias="signed_token",
         description="Cookies CSRF Token",
-        openapi_examples=__OPENAPI_EXAMPLE
+        openapi_examples=__OPENAPI_EXAMPLE,
     )
     __Header = Header(
         alias="X-CSRF-Token",
         validation_alias="header_token",
         description="Header CSRF Token",
-        openapi_examples=__OPENAPI_EXAMPLE
+        openapi_examples=__OPENAPI_EXAMPLE,
     )
 
     @classmethod
