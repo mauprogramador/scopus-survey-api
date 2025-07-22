@@ -15,8 +15,7 @@ from src.framework.fastapi.swagger import (
 )
 from src.framework.middleware import (
     ExceptionHandler,
-    RedirectNotFoundMiddleware,
-    TracingTimeUncaughtErrorsMiddleware,
+    FlowGuardingMonitorMiddleware,
 )
 
 app = FastAPI(
@@ -35,8 +34,7 @@ app = FastAPI(
 )
 app.state.limiter = LIMITER
 
-app.add_middleware(TracingTimeUncaughtErrorsMiddleware)
-app.add_middleware(RedirectNotFoundMiddleware)
+app.add_middleware(FlowGuardingMonitorMiddleware)
 
 app.add_middleware(
     SessionMiddleware,

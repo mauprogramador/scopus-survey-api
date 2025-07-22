@@ -5,6 +5,7 @@ from json import load
 from fastapi import Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
+from starlette.responses import Response
 
 from src import __version__
 from src.adapters.presenters.error_response import ErrorJSON
@@ -72,7 +73,7 @@ class TemplateBuilder:
 
     @classmethod
     def not_found_template(
-        cls, request: Request, response: ErrorJSON
+        cls, request: Request, response: Response | ErrorJSON
     ) -> HTMLResponse:
 
         context = {

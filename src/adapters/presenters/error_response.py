@@ -60,7 +60,6 @@ class ErrorJSON(JSONResponse):
                 if not isinstance(errors, dict):
                     errors = {"serialize_error": errors}
 
-        print(errors)
         content = ErrorResponse(
             success=False,
             status_code=status_code,
