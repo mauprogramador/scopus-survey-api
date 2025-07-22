@@ -83,7 +83,6 @@ class Logging:
     __DATEFMT = "%Y-%m-%d %H:%M:%S"
     __HIDE_API_KEY = "apiKey=..."
     __DIR = Path(".logs")
-    __PERCENT = 100
 
     def __init__(self, params: LogParams) -> None:
         """Configure and customize application logging"""
@@ -139,11 +138,11 @@ class Logging:
         self.__logger.setLevel(INFO)
         self.__logger.info("%s %s\033[m", Prefix.INFO, message)
 
-    def loss(self, initial: int, final: int) -> None:
+    def loss(self, initial: int, final: int, loss: float) -> None:
         message = self.__LOSS.format(
             initial=initial,
             final=final,
-            loss=(initial / final) * self.__PERCENT,
+            loss=loss,
         )
         self.info(message)
 

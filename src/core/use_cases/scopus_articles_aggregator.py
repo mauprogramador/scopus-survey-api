@@ -25,6 +25,7 @@ class ScopusArticlesAggregator:
     )
     __DATEFMT = "%B %d, %Y"
     __ROWS_INDEX = 0
+    __PERCENT = 100
     __NON_RATIO = 0
     __SEP = ";"
 
@@ -63,8 +64,10 @@ class ScopusArticlesAggregator:
             )
 
         result = rows_before - self.__dataframe.shape[self.__ROWS_INDEX]
+        loss = (rows_before / result) * self.__PERCENT
+        self.__survey_detail.set_loss(loss)
 
-        LOG.loss(rows_before, result)
+        LOG.loss(rows_before, result, loss)
         LOG.quota(*self.__survey_detail.log_data)
 
         file_path = DIRECTORY / f"{params.api_key}_{FILE}"

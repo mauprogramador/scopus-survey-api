@@ -23,6 +23,9 @@ class SurveyDetail(Protocol):
     def set_quota_data(self, response: ResponseBundle) -> None:
         pass
 
+    def set_loss(self, loss: float) -> None:
+        pass
+
     @property
     def log_data(self) -> tuple[Json, int]:
         pass

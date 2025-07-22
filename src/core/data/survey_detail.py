@@ -34,6 +34,9 @@ class SurveyDetail:
             }
         )
 
+    def set_loss(self, loss: float) -> None:
+        self.__headers.update({"X-Loss": f"{loss:.2f}%"})
+
     @property
     def log_data(self) -> tuple[ScopusQuotaRateLimit, int]:
         return self.__log_data
