@@ -11,7 +11,7 @@ from itsdangerous import (
 )
 from pydantic import ValidationError
 
-from src.core.common.messages import (
+from src.core.common.error_messages import (
     EXPIRED_TOKEN,
     INVALID_TOKEN,
     MISSING_TOKEN,

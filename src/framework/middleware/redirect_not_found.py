@@ -11,7 +11,7 @@ from starlette.responses import Response
 
 from src.adapters.presenters.error_response import ErrorJSON
 from src.adapters.presenters.html_response import TemplateBuilder
-from src.core.common.messages import UNEXPECTED_ERROR
+from src.core.common.error_messages import UNEXPECTED_ERROR
 from src.core.common.patterns import API_ROUTES_PATTERN
 from src.core.config.config import LOG
 

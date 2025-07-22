@@ -7,7 +7,7 @@ from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, field_validator
 
-from src.core.common.messages import SERIALIZE_ERROR
+from src.core.common.error_messages import SERIALIZE_ERROR
 from src.core.common.types import Errors, Json
 from src.core.config.config import ENV, LOG
 
@@ -60,6 +60,7 @@ class ErrorJSON(JSONResponse):
                 if not isinstance(errors, dict):
                     errors = {"serialize_error": errors}
 
+        print(errors)
         content = ErrorResponse(
             success=False,
             status_code=status_code,

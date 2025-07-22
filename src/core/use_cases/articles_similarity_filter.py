@@ -9,7 +9,7 @@ from os import cpu_count, sched_getaffinity
 from pandas import DataFrame, to_datetime
 from thefuzz.fuzz import ratio  # type: ignore
 
-from src.core.common.messages import CANCELLED_ERROR
+from src.core.common.error_messages import CANCELLED_ERROR
 from src.core.config.config import LOG
 from src.core.data.enums import Column
 

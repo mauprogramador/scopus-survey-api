@@ -2,7 +2,7 @@ from http import HTTPStatus
 
 from fastapi.responses import FileResponse
 
-from src.core.common.messages import CSV_NOT_FOUND
+from src.core.common.error_messages import CSV_NOT_FOUND
 from src.core.config.config import DIRECTORY, FILE
 from src.core.domain.http_exceptions import NotFound
 

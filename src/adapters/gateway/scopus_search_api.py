@@ -9,7 +9,7 @@ from concurrent.futures import ThreadPoolExecutor
 from os import cpu_count, sched_getaffinity
 
 from src.adapters.helpers.scopus_response import ScopusResponse
-from src.core.common.messages import ARTICLES_NOT_FOUND, CANCELLED_ERROR
+from src.core.common.error_messages import ARTICLES_NOT_FOUND, CANCELLED_ERROR
 from src.core.common.types import (
     CombinationBundle,
     Json,

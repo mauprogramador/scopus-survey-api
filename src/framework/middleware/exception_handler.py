@@ -8,7 +8,7 @@ from slowapi.errors import RateLimitExceeded
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from src.adapters.presenters.error_response import ErrorJSON
-from src.core.common.messages import INTERNAL_ERROR
+from src.core.common.error_messages import INTERNAL_ERROR
 from src.core.common.types import Json
 from src.core.config.config import LOG
 from src.core.domain.http_exceptions import HTTPError, ScopusAPIError

@@ -4,7 +4,7 @@ from typing import Type
 
 from pydantic import ValidationError
 
-from src.core.common.messages import (
+from src.core.common.error_messages import (
     QUOTA_EXCEEDED,
     RATE_LIMIT_EXCEEDED,
     VALIDATE_ERROR,

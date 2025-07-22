@@ -7,7 +7,7 @@ from fastapi import HTTPException
 from itsdangerous import BadData
 from pydantic import ValidationError
 
-from src.core.common.messages import SCOPUS_API_ERROR
+from src.core.common.error_messages import SCOPUS_API_ERROR
 from src.core.common.types import ErrorTypes, Json
 from src.core.config.config import LOG
 from src.core.config.scopus import SCOPUS_DOCS, SCOPUS_ERRORS

@@ -16,7 +16,7 @@ from aiohttp import (
 from aiohttp_retry import JitterRetry, RetryClient
 from aiolimiter import AsyncLimiter
 
-from src.core.common.messages import (
+from src.core.common.error_messages import (
     CONNECTION_ERROR,
     CONNECTION_TIMEOUT,
     INVALID_JSON_ERROR,

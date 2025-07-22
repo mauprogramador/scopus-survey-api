@@ -11,7 +11,7 @@ from os import cpu_count, sched_getaffinity
 from pandas import DataFrame
 
 from src.adapters.helpers.scopus_response import ScopusResponse
-from src.core.common.messages import CANCELLED_ERROR
+from src.core.common.error_messages import CANCELLED_ERROR
 from src.core.common.types import Json, ResponseBundle
 from src.core.config.config import LOG
 from src.core.data.serializers import ScopusEntry
