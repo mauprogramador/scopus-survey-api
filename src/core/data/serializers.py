@@ -1,6 +1,6 @@
 from datetime import datetime
 from math import ceil
-from typing import Literal
+from typing import Literal, Self
 
 from pydantic import (
     AliasChoices,
@@ -41,15 +41,15 @@ class ScopusEntry(BaseModel):
 class ScopusSearch(BaseModel):
     """Serialize the Scopus Search API JSON response"""
 
-    model_config = ConfigDict(str_strip_whitespace=True, frozen=True)
+    model_config = ConfigDict(str_strip_whitespace=True)
 
     total_results: int = Field(
         validation_alias="opensearch:totalResults", ge=0
     )
     items_per_page: int = Field(
-        validation_alias="opensearch:itemsPerPage", ge=0, le=25
+        validation_alias="opensearch:itemsPerPage", frozen=True, ge=0, le=25
     )
-    entry: list[ScopusEntry] = Field(min_length=1, max_length=25)
+    entry: list[ScopusEntry] = Field(frozen=True, min_length=1, max_length=25)
 
     @model_validator(mode="before")
     @classmethod
@@ -74,61 +74,72 @@ class ScopusSearch(BaseModel):
 class ScopusAbstract(BaseModel):
     """Serialize the Scopus Abstract Retrieval API JSON response"""
 
-    model_config = ConfigDict(str_strip_whitespace=True, frozen=True)
+    model_config = ConfigDict(str_strip_whitespace=True)
 
     url: str = Field(
         default=NULL,
-        validation_alias="prism:url",
         serialization_alias="Article Preview Page URL",
-        min_length=77,
     )
     scopus_id: str = Field(
         validation_alias="dc:identifier",
         serialization_alias="Scopus ID",
+        frozen=True,
         pattern=SCOPUS_ID_PATTERN,
         min_length=20,
         max_length=29,
     )
     authors: str = Field(
-        default=NULL,
-        serialization_alias="Authors",
+        serialization_alias="Authors", frozen=True, min_length=2
     )
     title: str = Field(
-        validation_alias="dc:title", serialization_alias="Title", min_length=1
+        validation_alias="dc:title",
+        serialization_alias="Title",
+        frozen=True,
+        min_length=2,
     )
     publication_name: str = Field(
         default=NULL,
         validation_alias="prism:publicationName",
         serialization_alias="Publication Name",
+        frozen=True,
     )
     abstract: str = Field(
         default=NULL,
         validation_alias="dc:description",
         serialization_alias="Abstract",
+        frozen=True,
     )
     date: str = Field(
         default=NULL,
         validation_alias="prism:coverDate",
         serialization_alias="Date",
+        frozen=True,
     )
-    eid: str = Field(default=NULL, serialization_alias="Electronic ID")
+    eid: str = Field(
+        default=NULL, serialization_alias="Electronic ID", frozen=True
+    )
     doi: str = Field(
-        default=NULL, validation_alias="prism:doi", serialization_alias="DOI"
+        default=NULL,
+        validation_alias="prism:doi",
+        serialization_alias="DOI",
+        frozen=True,
     )
     volume: str = Field(
         default=NULL,
         validation_alias="prism:volume",
         serialization_alias="Volume",
+        frozen=True,
     )
     citations: str = Field(
         default=NULL,
         validation_alias="citedby-count",
         serialization_alias="Citations",
+        frozen=True,
     )
 
     @model_validator(mode="before")
     @classmethod
-    def flatten_json(cls, response: Json) -> Json:
+    def flatten_json_and_set_authors(cls, response: Json) -> Json:
         data: dict[str, Json] = response["abstracts-retrieval-response"]
 
         if data.get("authors") is None:
@@ -137,15 +148,15 @@ class ScopusAbstract(BaseModel):
             authors: list[Json] = data["authors"]["author"]
 
         authors_names = [author["ce:indexed-name"] for author in authors]
-        identifier: str = data["coredata"]["dc:identifier"]
-
-        scopus_id: str = identifier.split(":")[1]
-        url = URLBuilder.article_page_url(scopus_id)
-
         data["coredata"].setdefault("authors", ", ".join(authors_names))
-        data["coredata"].setdefault("prism:url", url)
 
         return data["coredata"]
+
+    @model_validator(mode="after")
+    def set_article_page_url(self) -> Self:
+        scopus_id: str = self.scopus_id.split(":")[1]  # pylint: disable=E1101
+        self.url = URLBuilder.article_page_url(scopus_id)
+        return self
 
 
 class ScopusQuotaRateLimit(BaseModel):

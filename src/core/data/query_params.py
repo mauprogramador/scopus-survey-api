@@ -107,15 +107,13 @@ class CombinationParams(CSVParams):
         min_length=3,
         max_length=30,
     )
-    open_access: int = Field(
+    open_access: Literal["0", "1"] = Field(
         default=None,
         alias="openAccess",
         validation_alias="open_access",
         serialization_alias="OPENACCESS",
         description="Whether the indexed content is Open Access or not",
         examples=[0],
-        ge=0,
-        le=1,
     )
     source_type: SrcType = Field(
         default=None,
@@ -167,7 +165,7 @@ class CombinationParams(CSVParams):
     def parse_pages_enum(cls, value: Any) -> Any | PageRange:
         if isinstance(value, str):
             try:
-                return PageRange[value]
+                return PageRange[value.upper()]
             except KeyError as exc:
                 raise ValidationError.from_exception_data(
                     "Invalid page value",
@@ -185,7 +183,23 @@ class CombinationParams(CSVParams):
     @classmethod
     def keywords_length(cls, value: list[str]) -> list[str]:
         if len(value) == 1:
-            return value[0].split(",")
+            keywords = value[0].split(",")
+            if len(keywords) < 2:
+                raise ValidationError.from_exception_data(
+                    "Keywords length too short",
+                    [
+                        InitErrorDetails(
+                            type="too_short",
+                            input=value,
+                            ctx={
+                                "field_type": "List",
+                                "min_length": 2,
+                                "actual_length": len(keywords),
+                            },
+                        )
+                    ],
+                )
+            return keywords
         return value
 
     @computed_field(  # type: ignore[prop-decorator]
@@ -211,7 +225,7 @@ class SearchParams(CombinationParams):
         examples=["Python AND Machine Learning"],
         exclude=True,
         pattern=COMBINATION_PATTERN,
-        min_length=9,
+        min_length=2,
         max_length=215,
     )
     max_count: int = Field(
