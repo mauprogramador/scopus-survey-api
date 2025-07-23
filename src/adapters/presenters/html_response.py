@@ -19,7 +19,7 @@ class TemplateBuilder:
     """Generates context values for template responses"""
 
     __TRANSLATIONS: Translation = {}
-    __REDIRECT_HEADER = {
+    __ERROR_PAGE_HEADERS = {
         "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0",
         "Pragma": "no-cache",
         "Expires": "0",
@@ -90,5 +90,5 @@ class TemplateBuilder:
             Templates.ERROR.value,
             context,
             response.status_code,
-            cls.__REDIRECT_HEADER,
+            cls.__ERROR_PAGE_HEADERS,
         )

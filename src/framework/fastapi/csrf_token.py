@@ -67,7 +67,6 @@ class CSRFToken:
         signed_token: Annotated[str | None, __Cookie] = None,
         header_token: Annotated[str | None, __Header] = None,
     ) -> None:
-        print(query_token)
 
         if not query_token:
             raise Unauthorized(MISSING_TOKEN)
@@ -79,16 +78,13 @@ class CSRFToken:
 
         if signed_token is None:
             raise Unauthorized(TOKEN_COOKIE_ERROR)
-        print(signed_token)
 
         if header_token is None or header_token != query_token:
             raise Unauthorized(TOKEN_HEADER_ERROR)
-        print(header_token)
 
         token_session = request.session.get("csrf-token")
         if token_session is None or token_session != query_token:
             raise Unauthorized(TOKEN_SESSION_ERROR)
-        print(token_session)
 
         try:
             token_cookie: str = cls.__SERIALIZER.loads(signed_token, MAX_AGE)

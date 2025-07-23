@@ -18,7 +18,7 @@ from src.core.config.scopus import (
 class URLBuilder:
     """Generate and format URLs for HTTP requests"""
 
-    __SEPARATOR = ","
+    __FIELDS = ",".join(SEARCH_FIELDS)
     __BASE_SEARCH_QUERY = {
         "apiKey": None,
         "query": None,
@@ -96,8 +96,7 @@ class URLBuilder:
         return urljoin(SEARCH_API_URL, f"?{urlencode(self.__query)}")
 
     def set_abstract_query(self, api_key: str) -> None:
-        search_fields = self.__SEPARATOR.join(SEARCH_FIELDS)
-        self.__query = {"apiKey": api_key, "field": search_fields}
+        self.__query = {"apiKey": api_key, "field": self.__FIELDS}
 
     def abstract_url(self, abstract_url: str) -> str:
         return urljoin(abstract_url, f"?{urlencode(self.__query)}")
