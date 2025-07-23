@@ -1,5 +1,4 @@
 from http import HTTPStatus
-from json import JSONDecodeError
 from typing import Type
 
 from pydantic import ValidationError
@@ -54,7 +53,7 @@ class ScopusResponse:
 
             return model.model_validate(response.data)
 
-        except (ValidationError, JSONDecodeError, KeyError) as exc:
+        except (ValidationError, KeyError, Exception) as exc:
             raise InternalError(VALIDATE_ERROR, exc) from exc
 
     @classmethod
