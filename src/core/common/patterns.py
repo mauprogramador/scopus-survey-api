@@ -32,4 +32,4 @@ API_ROUTES_PATTERN = r"^\/v2\/scopus-survey\/api\/(combination|survey|csv)"
 LANGUAGE_PATTERN = r"^[a-z\-\' ]{3,30}$"
 
 # e.g. Python AND Multi-task
-COMBINATION_PATTERN = r"^[a-zA-Z0-9\{\}\?\"\*\-\_ ]{9,215}$"
+COMBINATION_PATTERN = r"^[a-zA-Z0-9\{\}\?\"\*\-\_ ]{2,215}$"
