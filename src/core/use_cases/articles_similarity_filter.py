@@ -22,8 +22,6 @@ class ArticlesSimilarityFilter:
 
     def __init__(self) -> None:
         """Filter articles from identical authors with similar titles"""
-        self.__ratio: int = None
-
         try:
             self.__workers = min(len(sched_getaffinity(0)) - 1, 4)
         except AttributeError:
@@ -33,28 +31,29 @@ class ArticlesSimilarityFilter:
     def __drop_singles(self, group: DataFrame) -> bool:
         return group.shape[0] > 1
 
-    def __process_group(self, group: DataFrame):
+    @staticmethod
+    def _process_group(group: DataFrame, similarity_ratio: int):
         title = group[Column.TITLE]
 
         if title.shape[0] == 2:
-            if ratio(title.iloc[0], title.iloc[1]) > self.__ratio:
+            if ratio(title.iloc[0], title.iloc[1]) > similarity_ratio:
                 return int(group[Column.DATE].idxmax())
 
             return None
 
         rows_indexes: set[int] = set()
+        size = ArticlesSimilarityFilter.__SIZE
 
-        for indexes in combinations(range(group.shape[0]), self.__SIZE):
+        for indexes in combinations(range(group.shape[0]), size):
             titles = title.iloc[indexes[0]], title.iloc[indexes[1]]
 
-            if ratio(titles[0], titles[1]) > self.__ratio:
+            if ratio(titles[0], titles[1]) > similarity_ratio:
                 rows_indexes.add(group.index[indexes[0]])
                 rows_indexes.add(group.index[indexes[1]])
 
         return rows_indexes
 
     def filter(self, dataframe: DataFrame, similarity_ratio: int) -> DataFrame:
-        self.__ratio = similarity_ratio
         grouped_df = dataframe[Column.FILTER].groupby(Column.AUTHORS)
 
         LOG.debug({"same_authors_count": grouped_df.ngroups})
@@ -74,7 +73,11 @@ class ArticlesSimilarityFilter:
 
         with ProcessPoolExecutor(max_workers) as executor:
             all_tasks = {
-                executor.submit(self.__process_group, group)
+                executor.submit(
+                    ArticlesSimilarityFilter._process_group,
+                    group,
+                    similarity_ratio,
+                )
                 for _, group in grouped_df
             }
             remaining_tasks = all_tasks.copy()
