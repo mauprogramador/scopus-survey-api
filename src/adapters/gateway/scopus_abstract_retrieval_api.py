@@ -35,7 +35,7 @@ class ScopusAbstractRetrievalAPI:
         self.__url_builder = url_builder
         self.__survey_detail = survey_detail
         self.__entry: list[ScopusEntry] = None
-        self.__abstracts: list[Json] = []
+        self.__abstracts: list[Json] = None
         self.__total = 0
 
         try:
@@ -98,6 +98,7 @@ class ScopusAbstractRetrievalAPI:
     async def retrieve_abstracts(
         self, api_key: str, entry: list[ScopusEntry]
     ) -> DataFrame:
+        self.__abstracts = []
         self.__entry, self.__total = entry, len(entry)
         self.__url_builder.set_abstract_query(api_key)
 
