@@ -3,6 +3,7 @@ from http import HTTPStatus
 from sys import exc_info
 from traceback import FrameSummary, extract_tb
 
+from aiohttp import ClientResponseError
 from fastapi import HTTPException
 from itsdangerous import BadData
 from pydantic import ValidationError
@@ -56,7 +57,7 @@ class HTTPError(HTTPException):
             errors[0]["strerror"] = error.strerror
             errors[0]["errno"] = error.errno
 
-        elif isinstance(error, BadData):
+        elif isinstance(error, (BadData, ClientResponseError)):
             errors[0]["detail"] = error.message
 
         return errors
