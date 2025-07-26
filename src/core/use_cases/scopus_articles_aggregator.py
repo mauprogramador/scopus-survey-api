@@ -1,4 +1,3 @@
-from csv import writer
 from datetime import datetime
 
 from fastapi.responses import FileResponse
@@ -7,6 +6,7 @@ from pandas import DataFrame
 from src.adapters.presenters.csv_response import CSVResponse
 from src.core.common.types import SearchParams
 from src.core.config.config import DIRECTORY, FILE, LOG
+from src.core.config.scopus import FOOTNOTE
 from src.core.data.enums import Column
 from src.core.domain.protocols import (
     AbstractAPI,
@@ -19,10 +19,6 @@ from src.core.domain.protocols import (
 class ScopusArticlesAggregator:
     """Gathers, filters and compiles data from Scopus articles"""
 
-    __FOOTNOTE = (
-        "\n# The data was retrieved from Scopus API on {date} via "
-        "http://api.elsevier.com and http://www.scopus.com.\n"
-    )
     __DATEFMT = "%B %d, %Y"
     __ROWS_INDEX = 0
     __PERCENT = 100
@@ -80,11 +76,8 @@ class ScopusArticlesAggregator:
             encoding="utf-8",
         )
 
-        with open(file_path, mode="a", encoding="utf-8", newline="") as file:
-            current_dt = datetime.now()
-            date = current_dt.strftime(self.__DATEFMT)
-
-            csv = writer(file, delimiter=self.__SEP)
-            csv.writerow(self.__FOOTNOTE.format(date=date))
+        with file_path.open(mode="a", encoding="utf-8") as file:
+            date = datetime.now().strftime(self.__DATEFMT)
+            file.write(FOOTNOTE.format(date=date))
 
         return CSVResponse.build(params.api_key, self.__survey_detail.headers)
