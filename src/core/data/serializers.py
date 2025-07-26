@@ -59,7 +59,7 @@ class ScopusSearch(BaseModel):
     @classmethod
     def validate_entry(cls, data: list[Json]) -> list[Json]:
         if len(data) == 1 and data[0].get("error") == EMPTY_RESULT:
-            data[0].update({"dc:identifier": "SCOPUS_ID:0123456789"})
+            return []
         return data
 
     def set_count_limit(self, count: int) -> None:
