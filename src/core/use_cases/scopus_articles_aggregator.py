@@ -64,7 +64,7 @@ class ScopusArticlesAggregator:
             )
 
         result = rows_before - self.__dataframe.shape[self.__ROWS_INDEX]
-        loss = (rows_before / result) * self.__PERCENT
+        loss = 0.0 if result == 0 else (result / rows_before) * self.__PERCENT
         self.__survey_detail.set_loss(loss)
 
         LOG.loss(rows_before, result, loss)
