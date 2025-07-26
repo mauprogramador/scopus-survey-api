@@ -1,5 +1,5 @@
 from src.core.common.types import ResponseBundle
-from src.core.data.serializers import ScopusQuotaRateLimit, ScopusSearch
+from src.core.data.serializers import ScopusHeaders, ScopusSearch
 
 
 class SurveyDetail:
@@ -8,7 +8,7 @@ class SurveyDetail:
     def __init__(self) -> None:
         """Gather Scopus API search and quota details"""
         self.__headers: dict[str, str] = {}
-        self.__log_data: tuple[ScopusQuotaRateLimit, int] = None
+        self.__log_data: tuple[ScopusHeaders, int] = None
 
     def set_max_count(self, max_count: int) -> None:
         self.__headers.update({"X-Max-Count": str(max_count)})
@@ -23,7 +23,7 @@ class SurveyDetail:
         )
 
     def set_quota_data(self, response: ResponseBundle) -> None:
-        quota = ScopusQuotaRateLimit.model_validate(response.headers)
+        quota = ScopusHeaders.model_validate(response.headers)
         self.__log_data = (quota, response.code)
         self.__headers.update(
             {
@@ -38,7 +38,7 @@ class SurveyDetail:
         self.__headers.update({"X-Loss": f"{loss:.2f}%"})
 
     @property
-    def log_data(self) -> tuple[ScopusQuotaRateLimit, int]:
+    def log_data(self) -> tuple[ScopusHeaders, int]:
         return self.__log_data
 
     @property

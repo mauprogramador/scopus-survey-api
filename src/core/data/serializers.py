@@ -27,7 +27,6 @@ class ScopusEntry(BaseModel):
         exclude=True,
     )
     url: str = Field(
-        default=NULL,
         validation_alias="prism:url",
         pattern=ABSTRACT_URL_PATTERN,
         min_length=61,
@@ -82,7 +81,6 @@ class ScopusAbstract(BaseModel):
     scopus_id: str = Field(
         validation_alias="dc:identifier",
         serialization_alias="Scopus ID",
-        frozen=True,
         pattern=SCOPUS_ID_PATTERN,
         min_length=20,
         max_length=29,
@@ -91,45 +89,37 @@ class ScopusAbstract(BaseModel):
     title: str = Field(
         validation_alias="dc:title",
         serialization_alias="Title",
-        frozen=True,
-        min_length=2,
     )
     publication_name: str = Field(
         default=NULL,
         validation_alias="prism:publicationName",
         serialization_alias="Publication Name",
-        frozen=True,
     )
     abstract: str = Field(
         default=NULL,
         validation_alias="dc:description",
         serialization_alias="Abstract",
-        frozen=True,
     )
     date: str = Field(
         default=NULL,
         validation_alias="prism:coverDate",
         serialization_alias="Date",
-        frozen=True,
     )
     eid: str = Field(default=NULL, serialization_alias="Electronic ID")
     doi: str = Field(
         default=NULL,
         validation_alias="prism:doi",
         serialization_alias="DOI",
-        frozen=True,
     )
     volume: str = Field(
         default=NULL,
         validation_alias="prism:volume",
         serialization_alias="Volume",
-        frozen=True,
     )
     citations: str = Field(
         default=NULL,
         validation_alias="citedby-count",
         serialization_alias="Citations",
-        frozen=True,
     )
 
     @model_validator(mode="before")
@@ -154,7 +144,7 @@ class ScopusAbstract(BaseModel):
         return self
 
 
-class ScopusQuotaRateLimit(BaseModel):
+class ScopusHeaders(BaseModel):
     """Serialize the Scopus APIs response headers"""
 
     model_config = ConfigDict(str_strip_whitespace=True)
@@ -172,7 +162,7 @@ class ScopusQuotaRateLimit(BaseModel):
         return epoch.strftime("%Y-%m-%d %H:%M:%S")
 
 
-class ScopusErrorResponse(BaseModel):
+class ScopusError(BaseModel):
     """Serialize the Scopus APIs error responses"""
 
     model_config = ConfigDict(str_strip_whitespace=True)
@@ -180,7 +170,6 @@ class ScopusErrorResponse(BaseModel):
     code: str = Field(
         default=NULL,
         validation_alias=AliasChoices("error-code", "statusCode"),
-        min_length=1,
     )
 
     @model_validator(mode="before")

@@ -13,8 +13,8 @@ from src.core.config.config import LOG
 from src.core.data.enums import ScopusCode
 from src.core.data.serializers import (
     ScopusAbstract,
-    ScopusErrorResponse,
-    ScopusQuotaRateLimit,
+    ScopusError,
+    ScopusHeaders,
     ScopusSearch,
 )
 from src.core.domain.http_exceptions import InternalError, ScopusAPIError
@@ -29,13 +29,11 @@ class ScopusResponse:
     ) -> ScopusModel:
         try:
             if response.code >= HTTPStatus.BAD_REQUEST:
-                quota = ScopusQuotaRateLimit.model_validate(response.headers)
+                quota = ScopusHeaders.model_validate(response.headers)
                 LOG.quota(quota, response.code)
 
                 if response.code == HTTPStatus.TOO_MANY_REQUESTS:
-                    error_response = ScopusErrorResponse.model_validate(
-                        response.data
-                    )
+                    error_response = ScopusError.model_validate(response.data)
 
                     if error_response.code == ScopusCode.QUOTA:
                         LOG.error(QUOTA_EXCEEDED)
@@ -53,7 +51,7 @@ class ScopusResponse:
 
             return model.model_validate(response.data)
 
-        except (ValidationError, KeyError, Exception) as exc:
+        except (ValidationError, KeyError) as exc:
             raise InternalError(VALIDATE_ERROR, exc) from exc
 
     @classmethod
