@@ -31,11 +31,7 @@ from src.core.data.enums import (
 class CSVParams(BaseModel):
     """Validate query params for downloading CSV"""
 
-    model_config = ConfigDict(
-        extra="forbid",
-        str_strip_whitespace=True,
-        frozen=True,
-    )
+    model_config = ConfigDict(extra="forbid", str_strip_whitespace=True)
 
     api_key: str = Field(
         alias="apiKey",
@@ -56,11 +52,7 @@ class CSVParams(BaseModel):
 class CombinationParams(CSVParams):
     """Validate query params for survey combinations"""
 
-    model_config = ConfigDict(
-        extra="forbid",
-        str_strip_whitespace=True,
-        frozen=True,
-    )
+    model_config = ConfigDict(extra="forbid", str_strip_whitespace=True)
 
     start_year: int = Field(
         default=LAST_THREE_YEARS,
@@ -214,11 +206,7 @@ class CombinationParams(CSVParams):
 class SearchParams(CombinationParams):
     """Validate query params for survey articles"""
 
-    model_config = ConfigDict(
-        extra="forbid",
-        str_strip_whitespace=True,
-        frozen=True,
-    )
+    model_config = ConfigDict(extra="forbid", str_strip_whitespace=True)
 
     combination: str = Field(
         description="The chosen keywords combination",

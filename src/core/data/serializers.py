@@ -20,9 +20,12 @@ from src.core.config.scopus import EMPTY_RESULT, NULL
 class ScopusEntry(BaseModel):
     """Serialize the entry field in the JSON response"""
 
-    model_config = ConfigDict(str_strip_whitespace=True, frozen=True)
+    model_config = ConfigDict(str_strip_whitespace=True)
 
-    force_array: Literal["true"] = Field(validation_alias="@_fa", exclude=True)
+    force_array: Literal["true"] = Field(
+        validation_alias="@_fa",
+        exclude=True,
+    )
     url: str = Field(
         default=NULL,
         validation_alias="prism:url",
@@ -43,13 +46,9 @@ class ScopusSearch(BaseModel):
 
     model_config = ConfigDict(str_strip_whitespace=True)
 
-    total_results: int = Field(
-        validation_alias="opensearch:totalResults", ge=0
-    )
-    items_per_page: int = Field(
-        validation_alias="opensearch:itemsPerPage", frozen=True, ge=0, le=25
-    )
-    entry: list[ScopusEntry] = Field(frozen=True, min_length=1, max_length=25)
+    total_results: int = Field(validation_alias="opensearch:totalResults")
+    items_per_page: int = Field(validation_alias="opensearch:itemsPerPage")
+    entry: list[ScopusEntry] = Field()
 
     @model_validator(mode="before")
     @classmethod
@@ -88,9 +87,7 @@ class ScopusAbstract(BaseModel):
         min_length=20,
         max_length=29,
     )
-    authors: str = Field(
-        serialization_alias="Authors", frozen=True, min_length=2
-    )
+    authors: str = Field(serialization_alias="Authors")
     title: str = Field(
         validation_alias="dc:title",
         serialization_alias="Title",
@@ -115,9 +112,7 @@ class ScopusAbstract(BaseModel):
         serialization_alias="Date",
         frozen=True,
     )
-    eid: str = Field(
-        default=NULL, serialization_alias="Electronic ID", frozen=True
-    )
+    eid: str = Field(default=NULL, serialization_alias="Electronic ID")
     doi: str = Field(
         default=NULL,
         validation_alias="prism:doi",
@@ -162,16 +157,14 @@ class ScopusAbstract(BaseModel):
 class ScopusQuotaRateLimit(BaseModel):
     """Serialize the Scopus APIs response headers"""
 
-    model_config = ConfigDict(str_strip_whitespace=True, frozen=True)
+    model_config = ConfigDict(str_strip_whitespace=True)
 
-    limit: int = Field(
-        default=NULL, validation_alias="X-RateLimit-Limit", ge=0
-    )
+    limit: int = Field(default=NULL, validation_alias="X-RateLimit-Limit")
     remaining: int = Field(
-        default=NULL, validation_alias="X-RateLimit-Remaining", ge=0
+        default=NULL, validation_alias="X-RateLimit-Remaining"
     )
-    reset: int = Field(validation_alias="X-RateLimit-Reset", ge=0)
-    status: str = Field(validation_alias="X-ELS-Status", min_length=1)
+    reset: int = Field(validation_alias="X-RateLimit-Reset")
+    status: str = Field(validation_alias="X-ELS-Status")
 
     @property
     def reset_datetime(self) -> str:
@@ -182,7 +175,7 @@ class ScopusQuotaRateLimit(BaseModel):
 class ScopusErrorResponse(BaseModel):
     """Serialize the Scopus APIs error responses"""
 
-    model_config = ConfigDict(str_strip_whitespace=True, frozen=True)
+    model_config = ConfigDict(str_strip_whitespace=True)
 
     code: str = Field(
         default=NULL,
