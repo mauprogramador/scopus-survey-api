@@ -24,7 +24,7 @@ from src.core.common.types import Json, LogParams, Quota
 from src.core.config.scopus import NO_RESULTS, SEARCH_API_URL
 
 
-class Prefix(StrEnum):
+class _Prefix(StrEnum):
     TRACE = "\033[34mTRACE\033[m:".ljust(17)
     DEBUG = "\033[35mDEBUG\033[m:".ljust(17)
     INFO = "\033[32mINFO\033[m:".ljust(17)
@@ -35,13 +35,13 @@ class Prefix(StrEnum):
     ABSTRACT = "\033[36mABSTRACT\033[m:".ljust(17)
 
 
-class ANSIFormatter(Formatter):
+class _ANSIFormatter(Formatter):
     def format(self, record) -> str:
         message = super().format(record)
         return sub(ANSI_ESCAPE_PATTERN, "", message)
 
 
-class LogRequest:
+class _LogRequest:
     """HTTP request details for logging"""
 
     __METHOD = "GET"
@@ -110,7 +110,7 @@ class Logging:
             )
 
             file_handler.namer = self.__namer
-            ansi_formatter = ANSIFormatter(self.__FMT, self.__DATEFMT)
+            ansi_formatter = _ANSIFormatter(self.__FMT, self.__DATEFMT)
             file_handler.setFormatter(ansi_formatter)
 
             getLogger("uvicorn").addHandler(file_handler)
@@ -136,7 +136,7 @@ class Logging:
 
     def info(self, message: str) -> None:
         self.__logger.setLevel(INFO)
-        self.__logger.info("%s %s\033[m", Prefix.INFO, message)
+        self.__logger.info("%s %s\033[m", _Prefix.INFO, message)
 
     def loss(self, initial: int, final: int, loss: float) -> None:
         message = self.__LOSS.format(
@@ -174,20 +174,20 @@ class Logging:
             status=quota.status,
         )
         self.__logger.setLevel(INFO)
-        self.__logger.info("%s %s\033[m", Prefix.QUOTA, message)
+        self.__logger.info("%s %s\033[m", _Prefix.QUOTA, message)
 
     def error(self, message: str, exc: Exception = None) -> None:
         if exc is not None:
             message = self.error_message(exc, message)
 
         self.__logger.setLevel(ERROR)
-        self.__logger.error("%s \033[31m%s\033[m", Prefix.ERROR, message)
+        self.__logger.error("%s \033[31m%s\033[m", _Prefix.ERROR, message)
 
     def debug(self, data: dict) -> None:
         if self.__params.debug:
             self.__logger.setLevel(DEBUG)
             self.__logger.debug(
-                "%s \033[33mJSON:\033[m %s", Prefix.DEBUG, dumps(data)
+                "%s \033[33mJSON:\033[m %s", _Prefix.DEBUG, dumps(data)
             )
 
     def exception(self, exception: Exception) -> None:
@@ -205,15 +205,15 @@ class Logging:
         self.__logger.setLevel(ERROR)
         self.__logger.exception(
             "%s \033[31m%s\033[m",
-            Prefix.EXCEPTION,
+            _Prefix.EXCEPTION,
             message,
             exc_info=True,
         )
 
     def __trace(
         self,
-        log_prefix: Prefix,
-        request: Request | LogRequest,
+        log_prefix: _Prefix,
+        request: Request | _LogRequest,
         code: int,
         time: float,
     ) -> None:
@@ -238,12 +238,12 @@ class Logging:
         self.__logger.info("%s %s\033[m", log_prefix, message)
 
     def trace(self, request: Request, code: int, time: float) -> None:
-        self.__trace(Prefix.TRACE, request, code, time)
+        self.__trace(_Prefix.TRACE, request, code, time)
 
     def api_call(self, url: str, code: int, time: float) -> None:
         if url.startswith(SEARCH_API_URL):
-            log_prefix = Prefix.SEARCH
+            log_prefix = _Prefix.SEARCH
         else:
-            log_prefix = Prefix.ABSTRACT
+            log_prefix = _Prefix.ABSTRACT
         url = sub(API_KEY_LOG_PATTERN, self.__HIDE_API_KEY, url)
-        self.__trace(log_prefix, LogRequest(url), code, time)
+        self.__trace(log_prefix, _LogRequest(url), code, time)
