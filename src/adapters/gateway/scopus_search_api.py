@@ -112,7 +112,7 @@ class ScopusSearchAPI:
 
     async def __get_multiple_articles_by_pagination(self) -> None:
         pages_count = self.__search.pages_count
-        max_workers = min(pages_count, self.__workers)
+        max_workers = min((pages_count - self.__START), self.__workers)
         LOG.debug({"max_workers": max_workers})
 
         all_tasks = {
@@ -164,13 +164,15 @@ class ScopusSearchAPI:
             self.__search = ScopusResponse.validate_search(response)
 
             self.__survey_detail.set_search_data(self.__search)
-            self.__search.set_count_limit(params.max_count)
+            # self.__search.set_count_limit(params.max_count)
 
             if self.__search.total_results == 0:
                 raise NotFound(ARTICLES_NOT_FOUND)
 
             if self.__search.pages_count == 2:
-                response = self.__get_by_pagination(self.__PAGE_TWO_INDEX)
+                response = await self.__get_by_pagination(
+                    self.__PAGE_TWO_INDEX
+                )
 
                 search = ScopusResponse.validate_search(response)
                 self.__search.entry.extend(search.entry)
