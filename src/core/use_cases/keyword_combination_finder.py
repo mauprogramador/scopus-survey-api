@@ -1,5 +1,5 @@
 from http import HTTPStatus
-from itertools import chain, combinations, count
+from itertools import chain, combinations
 
 from fastapi.responses import JSONResponse
 
@@ -35,25 +35,20 @@ class KeywordCombinationFinder:
 
         max_size = min(len(params.keywords) + self.__START, self.__MAX_SIZE)
         bundles_map: dict[int, CombinationBundle] = {}
-        id_generator = count(start=self.__START)
-
-        # for size in range(self.__START, max_size):
-        #     for arrangement in combinations(params.keywords, size):
 
         arrangements = (
             combinations(params.keywords, size)
             for size in range(self.__START, max_size)
         )
 
-        for arrangement in list(chain.from_iterable(arrangements)):
-            index = next(id_generator)
+        pairs = chain.from_iterable(arrangements)
+        for index, arrangement in enumerate(pairs, self.__START):
             bundle = self.__url_builder.combination_url(arrangement)
 
             bundle.index = index
             bundles_map.setdefault(index, bundle)
 
         survey_list = await self.__search_api.survey_combinations(bundles_map)
-
         LOG.combinations(len(params.keywords), survey_list)
         LOG.quota(*self.__survey_detail.log_data)
 
