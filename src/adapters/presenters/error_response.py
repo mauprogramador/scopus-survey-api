@@ -25,14 +25,16 @@ class ErrorResponse(BaseModel):
 
     @field_validator("request", mode="before")
     @classmethod
-    def get_request_data(cls, request: Request) -> Json:
-        return {
-            "url": request.url.path,
-            "host": request.client.host if request.client else ENV.host,
-            "port": request.client.port if request.client else ENV.port,
-            "method": request.method,
-            "headers": request.headers.items(),
-        }
+    def get_request_data(cls, data: Request | Json) -> Json:
+        if isinstance(data, Request):
+            return {
+                "url": data.url.path,
+                "host": data.client.host if data.client else ENV.host,
+                "port": data.client.port if data.client else ENV.port,
+                "method": data.method,
+                "headers": data.headers.items(),
+            }
+        return data
 
 
 class ErrorJSON(JSONResponse):
