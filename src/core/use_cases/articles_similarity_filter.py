@@ -58,22 +58,32 @@ class ArticlesSimilarityFilter:
 
         return rows_indexes
 
-    def filter(self, dataframe: DataFrame, similarity_ratio: int) -> DataFrame:
-        grouped_df = dataframe[Column.FILTER].groupby(Column.AUTHORS)
-
-        LOG.debug({"same_authors_count": grouped_df.ngroups})
-        if grouped_df.ngroups == dataframe.shape[0]:
-            return dataframe
-
-        filtered_df = grouped_df.filter(self.__drop_singles)
-        filtered_df[Column.DATE] = to_datetime(
-            filtered_df[Column.DATE], yearfirst=True, format=self.__DATEFMT
+    def _get_single_group_index(self, grouped_df: DataFrame) -> set[int]:
+        rows_indexes = self._get_similar_title_indexes(
+            grouped_df, self._ratio, self.__SIZE
         )
 
-        grouped_df = filtered_df.groupby(Column.AUTHORS)
+        if rows_indexes is None:
+            return set()
+
+        if isinstance(rows_indexes, int):
+            return {rows_indexes}
+
+        similar_titles_subset = self.__filtered_df.iloc[list(rows_indexes)]
+        latest_index = similar_titles_subset[Column.DATE].idxmax()
+        rows_indexes.discard(latest_index)
+
+        return rows_indexes
+
+    def _handle_groups_similarity(self) -> set[int]:
+        grouped_df = self.__filtered_df.groupby(Column.AUTHORS)
         similar_titles: set[int] = set()
 
-        max_workers = min(dataframe.shape[0], self.__workers)
+        if grouped_df.ngroups == 1:
+            single_group = next(iter(grouped_df))[1]
+            return self._get_single_group_index(single_group)
+
+        max_workers = min(self.__filtered_df.shape[0], self.__workers)
         LOG.debug({"max_workers": max_workers})
 
         with ProcessPoolExecutor(max_workers) as executor:
