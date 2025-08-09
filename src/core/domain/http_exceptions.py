@@ -112,14 +112,14 @@ class GatewayTimeout(HTTPError):
 
 
 class ScopusAPIError(HTTPError):
-    """Scopus API HTTP status error exception"""
+    """Scopus API HTTP status error 502 exception"""
 
     def __init__(self, code: int, json: Json, els_status: str) -> None:
-        """Scopus API HTTP status error exception"""
+        """Scopus API HTTP status error 502 exception"""
         super().__init__(HTTPStatus.BAD_GATEWAY, SCOPUS_API_ERROR)
 
         code_error = SCOPUS_ERRORS.get(HTTPStatus(code), SCOPUS_API_ERROR)
-        self.errors = [
+        self.errors: list[Json] = [
             {
                 "els_status": els_status,
                 "code_error": code_error,
