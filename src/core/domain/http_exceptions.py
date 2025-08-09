@@ -9,7 +9,7 @@ from itsdangerous import BadData
 from pydantic import ValidationError
 
 from src.core.common.error_messages import SCOPUS_API_ERROR
-from src.core.common.types import ErrorTypes, Json
+from src.core.common.types import Json
 from src.core.config.config import LOG
 from src.core.config.scopus import SCOPUS_DOCS, SCOPUS_ERRORS
 
@@ -20,7 +20,7 @@ class HTTPError(HTTPException):
     __FRAME = FrameSummary(__file__, 1, "<http_exceptions>")
 
     def __init__(
-        self, status: HTTPStatus, message: str, error: ErrorTypes = None
+        self, status: HTTPStatus, message: str, error: Exception = None
     ) -> None:
         """Detailed HTTP errors"""
         self.status = status
@@ -34,7 +34,7 @@ class HTTPError(HTTPException):
         super().__init__(status, message)
 
     @classmethod
-    def get_error_details(cls, error: ErrorTypes) -> list[Json]:
+    def get_error_details(cls, error: Exception) -> list[Json]:
         traceback = exc_info()[2]
         frame = extract_tb(traceback)[-1] if traceback else cls.__FRAME
 
