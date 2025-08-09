@@ -21,6 +21,7 @@ class ScopusArticlesAggregator:
 
     __DATEFMT = "%B %d, %Y"
     __ROWS_INDEX = 0
+    __SINGLE_ROW = 1
     __PERCENT = 100
     __NON_RATIO = 0
     __SEP = ";"
@@ -37,37 +38,43 @@ class ScopusArticlesAggregator:
         self.__abstract_api = abstract_api
         self.__similarity_filter = similarity_filter
         self.__survey_detail = survey_detail
-        self.__dataframe: DataFrame = None
+        self._docs: DataFrame = None
 
     async def retrieve_articles(self, params: SearchParams) -> FileResponse:
         entry_items = await self.__search_api.search_articles(params)
-        self.__survey_detail.set_max_count(params.max_count)
+        # self.__survey_detail.set_max_count(params.max_count)
 
-        self.__dataframe = await self.__abstract_api.retrieve_abstracts(
+        self._docs = await self.__abstract_api.retrieve_abstracts(
             params.api_key, entry_items
         )
 
-        rows_before = self.__dataframe.shape[self.__ROWS_INDEX]
-        self.__dataframe = self.__dataframe.drop_duplicates()
-        self.__dataframe = self.__dataframe.reset_index(drop=True)
+        rows_in = self._docs.shape[self.__ROWS_INDEX]
 
-        self.__dataframe = self.__dataframe.drop_duplicates(Column.DROP)
-        self.__dataframe = self.__dataframe.reset_index(drop=True)
+        if rows_in != self.__SINGLE_ROW:
+            self._docs = self._docs.drop_duplicates()
+            self._docs = self._docs.reset_index(drop=True)
 
-        if params.ratio != self.__NON_RATIO:
-            self.__dataframe = self.__similarity_filter.filter(
-                self.__dataframe, params.ratio
+            self._docs = self._docs.drop_duplicates(Column.DROP)
+            self._docs = self._docs.reset_index(drop=True)
+            rows_out = self._docs.shape[self.__ROWS_INDEX]
+
+        else:
+            rows_out = self._docs.shape[self.__ROWS_INDEX]
+
+        if rows_out != self.__SINGLE_ROW and params.ratio != self.__NON_RATIO:
+            self._docs = self.__similarity_filter.filter(
+                self._docs, params.ratio
             )
 
-        result = rows_before - self.__dataframe.shape[self.__ROWS_INDEX]
-        loss = 0.0 if result == 0 else (result / rows_before) * self.__PERCENT
+        result = rows_in - self._docs.shape[self.__ROWS_INDEX]
+        loss = 0.0 if result == 0 else (result / rows_in) * self.__PERCENT
         self.__survey_detail.set_loss(loss)
 
-        LOG.loss(rows_before, result, loss)
+        LOG.loss(rows_in, result, loss)
         LOG.quota(*self.__survey_detail.log_data)
 
         file_path = DIRECTORY / f"{params.api_key}_{FILE}"
-        self.__dataframe.to_csv(
+        self._docs.to_csv(
             file_path,
             sep=self.__SEP,
             header=True,
