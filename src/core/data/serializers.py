@@ -66,6 +66,8 @@ class ScopusSearch(BaseModel):
 
     @property
     def pages_count(self) -> int:
+        if self.total_results == self.items_per_page == 0:
+            return 1
         return ceil(self.total_results / self.items_per_page)
 
 
