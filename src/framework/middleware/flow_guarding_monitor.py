@@ -7,6 +7,7 @@ from fastapi.responses import HTMLResponse
 from starlette.middleware.base import (
     BaseHTTPMiddleware,
     RequestResponseEndpoint,
+    _StreamingResponse
 )
 from starlette.responses import Response
 
@@ -52,9 +53,13 @@ class FlowGuardingMonitorMiddleware(BaseHTTPMiddleware):
 
         LOG.trace(request, response.status_code, process_time)
 
-        if response.status_code >= HTTPStatus.BAD_REQUEST and not match(
-            API_ROUTES_PATTERN, request.url.path
-        ):
+        is_error = response.status_code >= HTTPStatus.BAD_REQUEST
+        if is_error and not match(API_ROUTES_PATTERN, request.url.path):
+
+            if isinstance(response, _StreamingResponse):
+                chunks = [chunk async for chunk in response.body_iterator]
+                setattr(response, "body", b"".join(chunks))
+
             return TemplateBuilder.not_found_template(request, response)
 
         return response
