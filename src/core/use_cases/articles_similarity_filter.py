@@ -124,7 +124,35 @@ class ArticlesSimilarityFilter:
                         if not task.done():
                             task.cancel()
 
-                    raise exc
+                    raise ServiceUnavailable(CANCELLED_ERROR, exc) from exc
+
+        return similar_titles
+
+    def filter(self, dataframe: DataFrame, similarity_ratio: int) -> DataFrame:
+        df_subset = dataframe.loc[:, Column.FILTER].copy()
+        self._ratio = similarity_ratio
+
+        df_subset[Column.DATE] = to_datetime(
+            df_subset[Column.DATE],
+            yearfirst=True,
+            format=self.__DATEFMT,
+            errors="coerce",
+        )
+
+        self.__filtered_df = df_subset.dropna(subset=[Column.DATE])
+        LOG.debug({"invalids_datetime": self.__filtered_df.shape[0]})
+
+        if self.__filtered_df.shape[0] <= self.__SINGLE_ROW:
+            return dataframe
+
+        grouped_df = self.__filtered_df.groupby(Column.AUTHORS)
+
+        LOG.debug({"same_authors_count": grouped_df.ngroups})
+        if grouped_df.ngroups == dataframe.shape[0]:
+            return dataframe
+
+        self.__filtered_df = grouped_df.filter(self.__drop_singles)
+        similar_titles = self._handle_groups_similarity()
 
         if not similar_titles:
             return dataframe
