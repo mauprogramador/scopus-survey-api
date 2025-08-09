@@ -12,25 +12,13 @@ import tqdm  # pylint: disable=w0611 # noqa: F401
 import uvicorn
 import uvloop
 
-from src.adapters.presenters.html_response import TemplateBuilder
-from src.core.config.config import (
-    APP,
-    DIRECTORY,
-    ENV,
-    HEADERS,
-    LOG,
-    SHUTDOWN_TIMEOUT,
-)
+from src.core.config.config import APP, ENV, HEADERS, LOG, SHUTDOWN_TIMEOUT
 
 if __name__ == "__main__":
-    DIRECTORY.mkdir(parents=True, exist_ok=True)
-    TemplateBuilder.load_translations()
-
-    uvloop.install()
-
     LOG.info("\033[33mScopus Survey API was initialized 🚀")
     LOG.debug(ENV.model_dump())
 
+    uvloop.install()
     uvicorn.run(
         app=APP,
         host=ENV.host,

@@ -1,10 +1,13 @@
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from starlette.middleware.sessions import SessionMiddleware
 
 from src import __version__
-from src.core.config.config import ENV, LIMITER, SECRET_KEY
+from src.adapters.presenters.html_response import TemplateBuilder
+from src.core.config.config import DIRECTORY, ENV, LIMITER, SECRET_KEY
 from src.framework.fastapi.routes import router
 from src.framework.fastapi.swagger import (
     CONTACT,
@@ -18,6 +21,14 @@ from src.framework.middleware import (
     FlowGuardingMonitorMiddleware,
 )
 
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):  # pylint: disable=W0621,W0613
+    DIRECTORY.mkdir(parents=True, exist_ok=True)
+    TemplateBuilder.load_translations()
+    yield
+
+
 app = FastAPI(
     debug=ENV.debug,
     title="Scopus Survey API",
@@ -26,6 +37,7 @@ app = FastAPI(
     version=f"v{__version__}",
     docs_url="/",
     exception_handlers=ExceptionHandler().handlers,
+    lifespan=lifespan,
     terms_of_service=TERMS_OF_SERVICE,
     contact=CONTACT,
     license_info=LICENSE,
