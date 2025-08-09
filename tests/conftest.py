@@ -34,6 +34,7 @@ def event_loop_policy():
 
 @fixture(scope="session", autouse=True)
 def lifespan():
+    TemplateBuilder.load_translations()
     csv_file_path = DIRECTORY / CSV_FILE_NAME
 
     DIRECTORY.mkdir(parents=True, exist_ok=True)
@@ -49,7 +50,6 @@ def lifespan():
 
 @async_fixture(scope="session", loop_scope="session", name="session_cookie")
 async def load_starlette_session_cookie():
-    TemplateBuilder.load_translations()
     async with AsyncClient(
         timeout=TIMEOUT, base_url=BASE_URL, transport=TRANSPORT
     ) as client:
