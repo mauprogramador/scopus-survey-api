@@ -12,16 +12,20 @@ from thefuzz.fuzz import ratio  # type: ignore
 from src.core.common.error_messages import CANCELLED_ERROR
 from src.core.config.config import LOG
 from src.core.data.enums import Column
+from src.core.domain.http_exceptions import ServiceUnavailable
 
 
 class ArticlesSimilarityFilter:
     """Filter articles from identical authors with similar titles"""
 
     __DATEFMT = "%Y-%m-%d"
+    __SINGLE_ROW = 1
     __SIZE = 2
 
     def __init__(self) -> None:
         """Filter articles from identical authors with similar titles"""
+        self.__filtered_df: DataFrame = None
+        self._ratio: int = None
         try:
             self.__workers = min(len(sched_getaffinity(0)) - 1, 4)
         except AttributeError:
@@ -96,7 +100,7 @@ class ArticlesSimilarityFilter:
                         similar_titles.add(rows_indexes)
                         continue
 
-                    similar_titles_subset = filtered_df.iloc[
+                    similar_titles_subset = self.__filtered_df.iloc[
                         list(rows_indexes)
                     ]
                     latest_index = similar_titles_subset[Column.DATE].idxmax()
@@ -105,7 +109,6 @@ class ArticlesSimilarityFilter:
                     similar_titles.update(rows_indexes)
 
                 except (CancelledError, Exception) as exc:
-                    LOG.error(CANCELLED_ERROR)
 
                     for task in remaining_tasks:
                         if not task.done():
