@@ -1,6 +1,8 @@
 from datetime import datetime
 from http import HTTPStatus
 
+from src.core.data.enums import PageRange
+
 CURRENT_YEAR = datetime.now().year
 LAST_THREE_YEARS = CURRENT_YEAR - 3
 LAST_DECADE = CURRENT_YEAR - 10
@@ -19,6 +21,11 @@ FOOTNOTE = (
     "# The data was retrieved from Scopus APIs on {date} via "
     "http://api.elsevier.com and http://www.scopus.com."
 )
+
+PAGE_RANGE = {
+    PageRange.SHORT: "0-4",  # Short paper
+    PageRange.LONG: "5-"  # Long paper
+}
 
 QUERY_FIELDS = {
     "doctype",

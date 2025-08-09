@@ -104,5 +104,5 @@ class SubjArea(StrEnum):
 
 @unique
 class PageRange(StrEnum):
-    SHORT = "0-4"  # Short paper
-    LONG = "5-"  # Long paper
+    SHORT = auto()  # Short paper
+    LONG = auto()  # Long paper

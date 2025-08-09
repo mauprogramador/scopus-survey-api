@@ -7,6 +7,7 @@ from pydantic import (
     ValidationError,
     ValidationInfo,
     computed_field,
+    field_serializer,
     field_validator,
 )
 from pydantic_core import InitErrorDetails, PydanticUseDefault
@@ -152,25 +153,6 @@ class CombinationParams(CSVParams):
                 raise PydanticUseDefault()
         return value
 
-    @field_validator("pages", mode="before")
-    @classmethod
-    def parse_pages_enum(cls, value: Any) -> Any | PageRange:
-        if isinstance(value, str):
-            try:
-                return PageRange[value.upper()]
-            except KeyError as exc:
-                raise ValidationError.from_exception_data(
-                    "Invalid page value",
-                    [
-                        InitErrorDetails(
-                            type="enum",
-                            input=value,
-                            ctx={"expected": "'SHORT' or 'LONG'"},
-                        )
-                    ],
-                ) from exc
-        return value
-
     @field_validator("keywords", mode="before")
     @classmethod
     def keywords_length(cls, value: list[str]) -> list[str]:
@@ -193,6 +175,10 @@ class CombinationParams(CSVParams):
                 )
             return keywords
         return value
+
+    @field_serializer("pages", return_type=str)
+    def serialize_page_range(self, value: PageRange | None) -> str | None:
+        return None if value is None else PAGE_RANGE[value]
 
     @computed_field(  # type: ignore[prop-decorator]
         description="Date range by years",
