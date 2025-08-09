@@ -91,7 +91,7 @@ class ExceptionHandler:
         errors = list(
             map(self.__undefined_filter, exc.errors(include_url=False))
         )
-        message = errors[0].get("msg", INTERNAL_ERROR)
+        message = errors[0].get("msg", exc.title)
 
         LOG.error(message)
         LOG.exception(exc)
