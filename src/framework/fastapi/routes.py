@@ -47,6 +47,7 @@ async def search_articles_page(
         }
     )
 
+    request.session["csrf-token"] = csrf_token
     response = TemplateBuilder.search_template(request, csrf_token, lang)
     response.set_cookie("csrf-token", signed_token, MAX_AGE, httponly=True)
 
@@ -63,7 +64,7 @@ async def search_articles_page(
     response_class=JSONResponse,
 )
 @LIMITER.limit(LIMIT)
-async def survey_combinations(
+async def survey_total_combinations(
     request: Request,  # pylint: disable=W0613
     params: Annotated[CombinationParams, Query()],
 ) -> JSONResponse:

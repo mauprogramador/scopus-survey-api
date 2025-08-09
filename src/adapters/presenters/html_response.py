@@ -47,7 +47,6 @@ class TemplateBuilder:
         cls, request: Request, csrf_token: str, lang: Lang
     ) -> HTMLResponse:
 
-        request.session["csrf-token"] = csrf_token
         headers = {
             "Content-Language": lang.value,
             "X-CSRF-Token": csrf_token,
