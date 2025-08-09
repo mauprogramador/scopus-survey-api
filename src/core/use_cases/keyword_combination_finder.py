@@ -48,7 +48,7 @@ class KeywordCombinationFinder:
             bundle.index = index
             bundles_map.setdefault(index, bundle)
 
-        survey_list = await self.__search_api.survey_combinations(bundles_map)
+        survey_list = await self.__search_api.survey_totals_found(bundles_map)
         LOG.combinations(len(params.keywords), survey_list)
         LOG.quota(*self.__survey_detail.log_data)
 

@@ -52,7 +52,7 @@ class ScopusSearchAPI:
         response = await self.__http_client.request(url)
         return index, response
 
-    async def survey_combinations(
+    async def survey_totals_found(
         self, bundles_map: dict[int, CombinationBundle]
     ) -> list[Json]:
         max_workers = min(len(bundles_map), self.__workers)
