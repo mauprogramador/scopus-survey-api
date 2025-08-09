@@ -34,7 +34,7 @@ class EnvConfig(BaseSettings):
     debug: bool = Field(default=False)
 
     @classmethod
-    def settings_customise_sources(
+    def settings_customise_sources(  # pylint: disable=R0913,R0917
         cls,
         settings_cls: Type[BaseSettings],
         init_settings: PydanticBaseSettingsSource,
