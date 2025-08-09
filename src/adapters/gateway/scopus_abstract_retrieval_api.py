@@ -15,6 +15,7 @@ from src.core.common.error_messages import CANCELLED_ERROR
 from src.core.common.types import Json, ResponseBundle
 from src.core.config.config import LOG
 from src.core.data.serializers import ScopusEntry
+from src.core.domain.http_exceptions import HTTPError, ServiceUnavailable
 from src.core.domain.protocols import HTTPClient, SurveyDetail, URLBuilder
 from src.utils.progress_bar import ProgressBar
 
@@ -53,10 +54,10 @@ class ScopusAbstractRetrievalAPI:
 
         all_tasks = {
             create_task(
-                self.__get_abstract(start),
-                name=f"pagination_start:{start}",
+                self.__get_abstract(index),
+                name=f"entry_index:{index}",
             )
-            for start in range(self.__total)
+            for index in range(self.__total)
         }
         remaining_tasks = all_tasks.copy()
         last_completed: ResponseBundle = None
@@ -81,17 +82,19 @@ class ScopusAbstractRetrievalAPI:
                     self.__abstracts.append(abstract_data)
                     progress_bar.step()
 
-                except (CancelledError, Exception) as exc:
-                    LOG.error(CANCELLED_ERROR)
+                except (CancelledError, HTTPError, Exception) as exc:
 
                     for task in remaining_tasks:
                         if not task.done():
                             task.cancel()
 
-                    raise exc
+                    if isinstance(exc, HTTPError):
+                        raise exc
 
-            if remaining_tasks:
-                await gather(*remaining_tasks, return_exceptions=True)
+                    raise ServiceUnavailable(CANCELLED_ERROR, exc) from exc
+
+        if remaining_tasks:
+            await gather(*remaining_tasks, return_exceptions=True)
 
         self.__survey_detail.set_quota_data(last_completed)
 

@@ -18,7 +18,11 @@ from src.core.common.types import (
 )
 from src.core.config.config import LOG
 from src.core.data.serializers import ScopusEntry, ScopusSearch
-from src.core.domain.http_exceptions import NotFound
+from src.core.domain.http_exceptions import (
+    HTTPError,
+    NotFound,
+    ServiceUnavailable,
+)
 from src.core.domain.protocols import HTTPClient, SurveyDetail, URLBuilder
 from src.utils.progress_bar import ProgressBar
 
@@ -87,20 +91,23 @@ class ScopusSearchAPI:
                     bundles_map[index].total = search.total_results
                     progress_bar.step()
 
-                except (CancelledError, Exception) as exc:
-                    LOG.error(CANCELLED_ERROR)
+                except (CancelledError, HTTPError, Exception) as exc:
 
                     for task in remaining_tasks:
                         if not task.done():
                             task.cancel()
 
-                    raise exc
+                    await self.__http_client.close()
 
-            if remaining_tasks:
-                await gather(*remaining_tasks, return_exceptions=True)
+                    if isinstance(exc, HTTPError):
+                        raise exc
 
-            await self.__http_client.close()
+                    raise ServiceUnavailable(CANCELLED_ERROR, exc) from exc
 
+        if remaining_tasks:
+            await gather(*remaining_tasks, return_exceptions=True)
+
+        await self.__http_client.close()
         self.__survey_detail.set_quota_data(last_completed)
 
         return [bundle.model_dump() for bundle in bundles_map.values()]
@@ -144,17 +151,19 @@ class ScopusSearchAPI:
                     self.__search.entry.extend(search.entry)
                     progress_bar.step()
 
-                except (CancelledError, Exception) as exc:
-                    LOG.error(CANCELLED_ERROR)
+                except (CancelledError, HTTPError, Exception) as exc:
 
                     for task in remaining_tasks:
                         if not task.done():
                             task.cancel()
 
-                    raise exc
+                    if isinstance(exc, HTTPError):
+                        raise exc
 
-            if remaining_tasks:
-                await gather(*remaining_tasks, return_exceptions=True)
+                    raise ServiceUnavailable(CANCELLED_ERROR, exc) from exc
+
+        if remaining_tasks:
+            await gather(*remaining_tasks, return_exceptions=True)
 
     async def search_articles(self, params: SearchParams) -> list[ScopusEntry]:
         url = self.__url_builder.search_url(params)
