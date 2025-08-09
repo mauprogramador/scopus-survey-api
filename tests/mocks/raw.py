@@ -8,8 +8,8 @@ from fastapi.datastructures import URL, Headers, QueryParams
 
 from src.core.config.config import FILE, MAX_AGE
 from src.core.config.scopus import EMPTY_RESULT
-from src.core.data.serializers import ScopusHeaders
 from src.core.data.enums import Button, Lang, ScopusCode
+from src.core.data.serializers import ScopusHeaders
 from src.framework.fastapi.csrf_token import CSRFToken
 
 # HTTP Status code

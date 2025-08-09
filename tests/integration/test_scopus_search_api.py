@@ -10,6 +10,7 @@ from pytest_mock import MockerFixture as Mocker
 from src.core.common.error_messages import ARTICLES_NOT_FOUND, CANCELLED_ERROR
 from src.utils.progress_bar import ProgressBar
 from tests.conftest import assert_error_json
+from tests.mocks.helpers import fqn, load_csv_file_response_dataframe
 from tests.mocks.integration import (
     SEARCH_CANCELLED_ERROR,
     SEARCH_MORE_PAGES_FULL_RESULTS,
@@ -34,7 +35,6 @@ from tests.mocks.raw import (
     URL_COMBINATION,
     URL_SEARCH,
 )
-from tests.mocks.helpers import fqn, load_csv_file_response_dataframe
 
 # SET_COUNT_LIMIT = fqn(ScopusSearch.set_count_limit)
 STEP = fqn(ProgressBar.step)

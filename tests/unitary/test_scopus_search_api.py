@@ -15,11 +15,7 @@ from src.core.domain.http_exceptions import NotFound, ServiceUnavailable
 from src.utils.progress_bar import ProgressBar
 from tests.conftest import assert_http_error
 from tests.mocks.helpers import fqn
-from tests.mocks.raw import (
-    HTTP_404,
-    HTTP_503,
-    RAW_SEARCH_NOT_FOUND,
-)
+from tests.mocks.raw import HTTP_404, HTTP_503, RAW_SEARCH_NOT_FOUND
 from tests.mocks.unitary import (
     FOUR_KEYWORDS,
     MORE_PAGES_FULL_RESULTS,

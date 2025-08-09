@@ -7,6 +7,7 @@ from pytest import mark
 from pytest_mock import MockerFixture as Mocker
 
 from src.core.data.enums import Lang
+from tests.mocks.helpers import fqn
 from tests.mocks.integration import COMBINATION_RESPONSES, SURVEY_RESPONSES
 from tests.mocks.raw import (
     COMBINATION_PARAMS,
@@ -22,7 +23,6 @@ from tests.mocks.raw import (
     URL_SEARCH,
     URL_WEB,
 )
-from tests.mocks.helpers import fqn
 
 GET = fqn(RetryClient.get)
 

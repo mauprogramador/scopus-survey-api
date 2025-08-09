@@ -13,6 +13,7 @@ from src.core.data.serializers import (
     ScopusHeaders,
     ScopusSearch,
 )
+from tests.mocks.helpers import search_raw
 from tests.mocks.raw import (
     ABSTRACT_URL,
     RAW_ABSTRACT_AUTHORS,
@@ -26,7 +27,6 @@ from tests.mocks.raw import (
     RESET,
     SCOPUS_ID,
 )
-from tests.mocks.helpers import search_raw
 
 
 def test_scopus_entry_valid_data():

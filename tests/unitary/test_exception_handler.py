@@ -4,15 +4,6 @@ from pytest import mark
 from src.core.config.scopus import SCOPUS_ERRORS
 from src.framework.middleware.exception_handler import ExceptionHandler
 from tests.conftest import assert_error_json
-from tests.mocks.helpers import fqn
-from tests.mocks.raw import (
-    HTTP_400,
-    HTTP_422,
-    HTTP_429,
-    HTTP_500,
-    HTTP_502,
-    REQUEST
-)
 from tests.mocks.errors import (
     FASTAPI_HTTP_EXCEPTION,
     HTTP_ERROR,
@@ -24,6 +15,15 @@ from tests.mocks.errors import (
     RESPONSE_VALIDATION_EXCEPTION_ERROR,
     SCOPUS_API_ERROR,
     STARLETTE_HTTP_EXCEPTION,
+)
+from tests.mocks.helpers import fqn
+from tests.mocks.raw import (
+    HTTP_400,
+    HTTP_422,
+    HTTP_429,
+    HTTP_500,
+    HTTP_502,
+    REQUEST,
 )
 
 HANDLER = ExceptionHandler()

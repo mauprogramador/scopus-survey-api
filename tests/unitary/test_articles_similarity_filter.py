@@ -13,8 +13,8 @@ from src.core.use_cases.articles_similarity_filter import (
     ArticlesSimilarityFilter,
 )
 from tests.conftest import assert_http_error
-from tests.mocks.raw import HTTP_503
 from tests.mocks.helpers import fqn
+from tests.mocks.raw import HTTP_503
 from tests.mocks.unitary import (
     MORE_GROUPS_MORE_SIMILAR,
     MORE_GROUPS_TWO_SIMILAR,

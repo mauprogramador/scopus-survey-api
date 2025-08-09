@@ -6,16 +6,6 @@ from pytest_mock import MockerFixture as Mocker
 from src.adapters.presenters.csv_response import CSVResponse
 from src.core.config.scopus import SCOPUS_ERRORS
 from tests.conftest import assert_error_json
-from tests.mocks.helpers import fqn
-from tests.mocks.raw import (
-    HTTP_400,
-    HTTP_422,
-    HTTP_429,
-    HTTP_500,
-    HTTP_502,
-    URL_CSV,
-    CSV_PARAMS,
-)
 from tests.mocks.errors import (
     FASTAPI_HTTP_EXCEPTION,
     HTTP_ERROR,
@@ -27,6 +17,16 @@ from tests.mocks.errors import (
     RESPONSE_VALIDATION_EXCEPTION_ERROR,
     SCOPUS_API_ERROR,
     STARLETTE_HTTP_EXCEPTION,
+)
+from tests.mocks.helpers import fqn
+from tests.mocks.raw import (
+    CSV_PARAMS,
+    HTTP_400,
+    HTTP_422,
+    HTTP_429,
+    HTTP_500,
+    HTTP_502,
+    URL_CSV,
 )
 
 BUILD = fqn(CSVResponse.build)

@@ -15,10 +15,10 @@ from tests.mocks.raw import (
     HTTP_429,
     HTTP_500,
     HTTP_502,
+    RAW_ERROR_RESPONSE_RATE_LIMIT,
     RAW_HEADERS_OK,
     RAW_SEARCH_OK,
     RAW_SERVICE_ERROR_QUOTA,
-    RAW_ERROR_RESPONSE_RATE_LIMIT
 )
 
 

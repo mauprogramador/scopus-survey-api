@@ -7,7 +7,7 @@ from fastapi.responses import HTMLResponse
 from starlette.middleware.base import (
     BaseHTTPMiddleware,
     RequestResponseEndpoint,
-    _StreamingResponse
+    _StreamingResponse,
 )
 from starlette.responses import Response
 

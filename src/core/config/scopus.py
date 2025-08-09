@@ -24,7 +24,7 @@ FOOTNOTE = (
 
 PAGE_RANGE = {
     PageRange.SHORT: "0-4",  # Short paper
-    PageRange.LONG: "5-"  # Long paper
+    PageRange.LONG: "5-",  # Long paper
 }
 
 QUERY_FIELDS = {

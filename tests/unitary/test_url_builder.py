@@ -2,13 +2,7 @@ from urllib.parse import unquote_plus
 
 from src.adapters.helpers.url_builder import URLBuilder
 from src.core.config.scopus import ARTICLE_PAGE_URL, PAGE_RANGE, SEARCH_FIELDS
-from src.core.data.enums import (
-    DocType,
-    PageRange,
-    PubStage,
-    SrcType,
-    SubjArea,
-)
+from src.core.data.enums import DocType, PageRange, PubStage, SrcType, SubjArea
 from src.core.data.query_params import CombinationParams, SearchParams
 from tests.mocks.raw import (
     ALIAS_COMBINATION_PARAMS,

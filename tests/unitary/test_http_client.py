@@ -24,12 +24,8 @@ from src.core.domain.http_exceptions import (
     ScopusAPIError,
 )
 from tests.conftest import assert_http_error
-from tests.mocks.raw import (
-    HTTP_200,
-    HTTP_502,
-    HTTP_504,
-)
 from tests.mocks.helpers import fqn
+from tests.mocks.raw import HTTP_200, HTTP_502, HTTP_504
 from tests.mocks.unitary import (
     GET_CONTENT_TYPE_ERROR,
     GET_EMPTY_RESPONSE,

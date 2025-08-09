@@ -6,14 +6,8 @@ from src.adapters.presenters.error_response import ErrorJSON
 from src.adapters.presenters.html_response import TemplateBuilder
 from src.core.common.error_messages import UNEXPECTED_ERROR
 from src.core.data.enums import Lang
-from tests.mocks.raw import (
-    CSRF_TOKEN,
-    HTML_MEDIA,
-    HTTP_200,
-    HTTP_404,
-    REQUEST,
-)
 from tests.mocks.helpers import fqn
+from tests.mocks.raw import CSRF_TOKEN, HTML_MEDIA, HTTP_200, HTTP_404, REQUEST
 
 
 def test_load_translations():

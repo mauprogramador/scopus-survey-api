@@ -1,16 +1,17 @@
 from time import time
+
 from src.core.data.enums import ScopusCode
 from tests.mocks.errors import CONTENT_TYPE_ERROR, JSON_DECODE_ERROR
 from tests.mocks.helpers import abstract_raw, response_mock, search_raw
 from tests.mocks.raw import (
     HTTP_429,
+    HTTP_500,
     RAW_ABSTRACT_AUTHORS,
     RAW_ABSTRACT_FULL,
     RAW_ABSTRACT_OK,
     RAW_ERROR_RESPONSE_RATE_LIMIT,
     RAW_SEARCH_NOT_FOUND,
     RAW_SEARCH_OK,
-    HTTP_500,
     RAW_SERVICE_ERROR_QUOTA,
 )
 

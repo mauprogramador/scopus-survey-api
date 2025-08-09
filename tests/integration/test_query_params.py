@@ -6,18 +6,23 @@ from pytest_mock import MockerFixture as Mocker
 
 from src.core.data.enums import Button
 from src.core.domain.factory import make_aggregator, make_combinator
+from src.core.use_cases.keyword_combination_finder import (
+    KeywordCombinationFinder,
+)
 from src.core.use_cases.scopus_articles_aggregator import (
     ScopusArticlesAggregator,
 )
 from src.framework.fastapi.routes import survey_articles
-from src.core.use_cases.keyword_combination_finder import (
-    KeywordCombinationFinder,
-)
 from tests.conftest import assert_error_json
+from tests.mocks.helpers import (
+    fqn,
+    mock_retrieve_articles,
+    mock_survey_combinations,
+)
 from tests.mocks.raw import (
+    API_KEY,
     COMBINATION_PARAMS,
     CSRF_TOKEN,
-    API_KEY,
     CSV_PARAMS,
     HTTP_200,
     HTTP_422,
@@ -26,11 +31,6 @@ from tests.mocks.raw import (
     URL_COMBINATION,
     URL_CSV,
     URL_SEARCH,
-)
-from tests.mocks.helpers import (
-    fqn,
-    mock_retrieve_articles,
-    mock_survey_combinations,
 )
 
 MAKE_COMBINATOR = fqn(survey_articles, make_combinator)

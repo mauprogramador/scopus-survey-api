@@ -12,13 +12,13 @@ from src.core.config.scopus import SCOPUS_ERRORS
 from src.core.data.enums import ScopusCode
 from src.core.domain.http_exceptions import HTTPError, ScopusAPIError
 from tests.conftest import assert_http_error
+from tests.mocks.helpers import fqn
 from tests.mocks.raw import (
     HTTP_400,
     HTTP_500,
     HTTP_502,
     RAW_ERROR_RESPONSE_RATE_LIMIT,
 )
-from tests.mocks.helpers import fqn
 
 
 def test_common_exception():

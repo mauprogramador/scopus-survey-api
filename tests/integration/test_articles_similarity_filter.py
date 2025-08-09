@@ -24,8 +24,8 @@ from tests.mocks.integration import (
     NO_REPEATED_AUTHORS,
     NO_SIMILAR_TITLES,
     ONE_DATETIME_LEFT,
-    ONE_GROUP_TWO_SIMILAR,
     ONE_GROUP_MORE_SIMILAR,
+    ONE_GROUP_TWO_SIMILAR,
 )
 from tests.mocks.raw import HTTP_200, HTTP_503, SEARCH_PARAMS, URL_SEARCH
 

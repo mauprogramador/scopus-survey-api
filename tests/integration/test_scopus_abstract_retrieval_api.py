@@ -20,12 +20,7 @@ from tests.mocks.integration import (
     RETRIEVE_ONE_PARTIAL_ABSTRACT,
     RETRIEVE_TWO_ABSTRACTS,
 )
-from tests.mocks.raw import (
-    HTTP_200,
-    HTTP_503,
-    SEARCH_PARAMS,
-    URL_SEARCH,
-)
+from tests.mocks.raw import HTTP_200, HTTP_503, SEARCH_PARAMS, URL_SEARCH
 
 STEP = fqn(ProgressBar.step)
 GET = fqn(RetryClient.get)
