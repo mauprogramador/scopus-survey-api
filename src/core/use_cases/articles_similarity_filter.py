@@ -39,7 +39,7 @@ class ArticlesSimilarityFilter:
 
         if title.shape[0] == 2:
             if ratio(title.iloc[0], title.iloc[1]) > similarity_ratio:
-                return int(group[Column.DATE].idxmax())
+                return int(group[Column.DATE].idxmin())
 
             return None
 
@@ -99,7 +99,7 @@ class ArticlesSimilarityFilter:
                     similar_titles_subset = filtered_df.iloc[
                         list(rows_indexes)
                     ]
-                    latest_index = similar_titles_subset[Column.DATE].idxmin()
+                    latest_index = similar_titles_subset[Column.DATE].idxmax()
 
                     rows_indexes.discard(latest_index)
                     similar_titles.update(rows_indexes)
