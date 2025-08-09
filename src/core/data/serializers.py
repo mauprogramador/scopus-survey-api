@@ -126,8 +126,8 @@ class ScopusAbstract(BaseModel):
 
     @model_validator(mode="before")
     @classmethod
-    def flatten_json_and_set_authors(cls, response: Json) -> Json:
-        data: dict[str, Json] = response["abstracts-retrieval-response"]
+    def flatten_json_and_set_authors(cls, data: Json) -> Json:
+        data: dict[str, Json] = data["abstracts-retrieval-response"]
 
         if data.get("authors") is None:
             authors: list[Json] = data["coredata"]["dc:creator"]["author"]
@@ -176,11 +176,11 @@ class ScopusError(BaseModel):
 
     @model_validator(mode="before")
     @classmethod
-    def flatten_json(cls, json: Json) -> dict[str, str]:
-        if json.get("error-response") is not None:
-            return json["error-response"]
+    def flatten_json(cls, data: Json) -> dict[str, str]:
+        if data.get("error-response") is not None:
+            return data["error-response"]
 
-        if json.get("service-error") is not None:
-            return json["service-error"]["status"]
+        if data.get("service-error") is not None:
+            return data["service-error"]["status"]
 
-        return json
+        return data
