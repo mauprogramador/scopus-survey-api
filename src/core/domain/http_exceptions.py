@@ -103,6 +103,14 @@ class BadGateway(HTTPError):
         super().__init__(HTTPStatus.BAD_GATEWAY, message, error)
 
 
+class ServiceUnavailable(HTTPError):
+    """HTTP error status code 503"""
+
+    def __init__(self, message: str, error: Exception = None) -> None:
+        """HTTP error status code 503"""
+        super().__init__(HTTPStatus.SERVICE_UNAVAILABLE, message, error)
+
+
 class GatewayTimeout(HTTPError):
     """HTTP error status code 504"""
 
