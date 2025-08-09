@@ -10,6 +10,7 @@ from pydantic import BaseModel, field_validator
 from src.core.common.error_messages import SERIALIZE_ERROR
 from src.core.common.types import Json
 from src.core.config.config import ENV, LOG
+from src.core.domain.http_exceptions import HTTPError
 
 
 class ErrorResponse(BaseModel):
@@ -50,19 +51,22 @@ class ErrorJSON(JSONResponse):
         """Error JSON representation response"""
 
         if errors is not None:
+            if isinstance(errors, dict):
+                errors = [errors]
+
             try:
                 dumps(errors)
-            except Exception as exc:  # pylint: disable=W0718
+            except (TypeError, ValueError) as exc:
                 LOG.error(message, exc)
                 LOG.exception(exc)
 
                 message = SERIALIZE_ERROR
-                errors = jsonable_encoder(errors)
+                errors: list[Json] = jsonable_encoder(errors)
 
-                if not isinstance(errors, dict):
-                    errors = {"serialize_error": errors}
+                error = HTTPError.get_error_details(exc)[0]
+                errors.append(error)
 
-        content = ErrorResponse(
+        error_response = ErrorResponse(
             success=False,
             status_code=status_code,
             status=HTTPStatus(status_code).phrase,
@@ -71,4 +75,4 @@ class ErrorJSON(JSONResponse):
             errors=errors,
         )
 
-        super().__init__(content.model_dump(), status_code)
+        super().__init__(error_response.model_dump(), status_code)
