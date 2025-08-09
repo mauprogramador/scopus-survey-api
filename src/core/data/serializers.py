@@ -155,8 +155,8 @@ class ScopusHeaders(BaseModel):
     remaining: int = Field(
         default=NULL, validation_alias="X-RateLimit-Remaining"
     )
-    reset: int = Field(validation_alias="X-RateLimit-Reset")
-    status: str = Field(validation_alias="X-ELS-Status")
+    reset: int = Field(default=NULL, validation_alias="X-RateLimit-Reset")
+    status: str = Field(default=NULL, validation_alias="X-ELS-Status")
 
     @property
     def reset_datetime(self) -> str:
