@@ -160,6 +160,8 @@ class ScopusHeaders(BaseModel):
 
     @property
     def reset_datetime(self) -> str:
+        if self.reset == NULL:
+            return NULL
         epoch = datetime.fromtimestamp(self.reset)
         return epoch.strftime("%Y-%m-%d %H:%M:%S")
 
