@@ -32,7 +32,9 @@ class ArticlesSimilarityFilter:
         return group.shape[0] > 1
 
     @staticmethod
-    def _process_group(group: DataFrame, similarity_ratio: int):
+    def _get_similar_title_indexes(
+        group: DataFrame, similarity_ratio: int, size: int
+    ) -> int | set[int] | None:
         title = group[Column.TITLE]
 
         if title.shape[0] == 2:
@@ -42,7 +44,6 @@ class ArticlesSimilarityFilter:
             return None
 
         rows_indexes: set[int] = set()
-        size = ArticlesSimilarityFilter.__SIZE
 
         for indexes in combinations(range(group.shape[0]), size):
             titles = title.iloc[indexes[0]], title.iloc[indexes[1]]
@@ -74,9 +75,10 @@ class ArticlesSimilarityFilter:
         with ProcessPoolExecutor(max_workers) as executor:
             all_tasks = {
                 executor.submit(
-                    ArticlesSimilarityFilter._process_group,
+                    ArticlesSimilarityFilter._get_similar_title_indexes,
                     group,
-                    similarity_ratio,
+                    self._ratio,
+                    self.__SIZE,
                 )
                 for _, group in grouped_df
             }
