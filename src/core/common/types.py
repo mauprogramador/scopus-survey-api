@@ -1,11 +1,6 @@
-from asyncio import CancelledError
-from asyncio import TimeoutError as AsyncTimeoutError
 from typing import Annotated, Any, NamedTuple, Protocol, TypeAlias, TypeVar
 
-from aiohttp import ClientError
-from fastapi import HTTPException
-from itsdangerous import BadData
-from pydantic import BaseModel, Field, TypeAdapter, ValidationError
+from pydantic import BaseModel, Field, TypeAdapter
 
 from src.core.common.patterns import KEYWORD_PATTERN, TOKEN_PATTERN
 from src.core.data.enums import DocType, PageRange, PubStage, SrcType, SubjArea
@@ -21,18 +16,6 @@ Translation: TypeAlias = dict[str, dict[str, str]]
 Articles: TypeAlias = list[dict[str, str]]
 
 ScopusModel = TypeVar("ScopusModel", bound=BaseModel)
-
-Errors: TypeAlias = list[Json] | Json | None
-
-ErrorTypes: TypeAlias = (
-    Exception
-    | HTTPException
-    | ValidationError
-    | AsyncTimeoutError
-    | CancelledError
-    | ClientError
-    | BadData
-)
 
 Token: TypeAdapter[str | None] = TypeAdapter(
     Annotated[

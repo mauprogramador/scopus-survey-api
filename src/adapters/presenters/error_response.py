@@ -8,7 +8,7 @@ from fastapi.responses import JSONResponse
 from pydantic import BaseModel, field_validator
 
 from src.core.common.error_messages import SERIALIZE_ERROR
-from src.core.common.types import Errors, Json
+from src.core.common.types import Json
 from src.core.config.config import ENV, LOG
 
 
@@ -21,7 +21,7 @@ class ErrorResponse(BaseModel):
     message: str
     timestamp: str = datetime.now().isoformat()
     request: Json
-    errors: Errors = None
+    errors: list[Json] | None = None
 
     @field_validator("request", mode="before")
     @classmethod
@@ -43,7 +43,7 @@ class ErrorJSON(JSONResponse):
         request: Request,
         status_code: int,
         message: str,
-        errors: Errors = None,
+        errors: list[Json] | Json | None = None,
     ) -> None:
         """Error JSON representation response"""
 
