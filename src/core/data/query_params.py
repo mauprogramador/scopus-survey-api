@@ -168,8 +168,12 @@ class CombinationParams(CSVParams):
 
     @field_validator("keywords", mode="before")
     @classmethod
-    def keywords_length(cls, value: list[str]) -> list[str]:
-        if len(value) == 1:
+    def keywords_length(cls, value: Any) -> Any | list[str]:
+        if (
+            isinstance(value, list)
+            and len(value) == 1
+            and isinstance(value[0], str)
+        ):
             keywords = value[0].split(",")
             if len(keywords) < 2:
                 raise ValidationError.from_exception_data(
