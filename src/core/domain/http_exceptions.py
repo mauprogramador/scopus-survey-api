@@ -51,7 +51,9 @@ class HTTPError(HTTPException):
             errors[0]["status_code"] = error.status_code
 
         elif isinstance(error, ValidationError):
-            errors.extend(error.errors(include_url=False))
+            pydantic_errors = error.errors(include_url=False)
+            errors[0]["detail"] = pydantic_errors[0].get("msg", error.title)
+            errors.extend(pydantic_errors)
 
         elif isinstance(error, AsyncTimeoutError):
             errors[0]["strerror"] = error.strerror
