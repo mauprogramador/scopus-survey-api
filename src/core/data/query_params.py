@@ -9,6 +9,7 @@ from pydantic import (
     computed_field,
     field_serializer,
     field_validator,
+    model_validator,
 )
 from pydantic_core import InitErrorDetails, PydanticUseDefault
 
@@ -17,8 +18,13 @@ from src.core.common.patterns import (
     COMBINATION_PATTERN,
     LANGUAGE_PATTERN,
 )
-from src.core.common.types import Keyword
-from src.core.config.scopus import CURRENT_YEAR, LAST_DECADE, LAST_THREE_YEARS
+from src.core.common.types import Json, Keyword
+from src.core.config.scopus import (
+    CURRENT_YEAR,
+    LAST_DECADE,
+    LAST_THREE_YEARS,
+    PAGE_RANGE,
+)
 from src.core.data.enums import (
     Button,
     DocType,
@@ -48,6 +54,13 @@ class CSVParams(BaseModel):
         examples=[Button.PREVIOUS],
         exclude=True,
     )
+
+    @model_validator(mode="before")
+    @classmethod
+    def auto_remove_token_from_query(cls, data: Json) -> Json:
+        data.pop("csrfToken", None)
+        data.pop("csrf_token", None)
+        return data
 
 
 class CombinationParams(CSVParams):
