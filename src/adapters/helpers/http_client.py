@@ -40,7 +40,7 @@ from src.core.domain.http_exceptions import (
 class HTTPClient:
     """Make HTTP requests with throttling and retry mechanisms"""
 
-    __RETRIES = 4
+    __ATTEMPTS = 3
     __RATE_PERIOD = 1.0
     __RATE_REQUESTS = 8.0
     __BACKOFF_FACTOR = 2
@@ -62,7 +62,7 @@ class HTTPClient:
         ClientPayloadError,
     )
     __RETRY_OPTIONS = JitterRetry(
-        attempts=__RETRIES,
+        attempts=__ATTEMPTS,
         start_timeout=__START_TIMEOUT,
         max_timeout=__MAX_TIMEOUT,
         factor=__BACKOFF_FACTOR,
