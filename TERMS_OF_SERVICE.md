@@ -9,6 +9,10 @@ Technology in Systems Analysis and Development - [TADS](https://www.ifms.edu.br/
 
 Data provided by **Scopus® (Elsevier)**.
 
+---
+
+This agreement (**"Terms of Service"**) defines the conditions under which you may access and use the Scopus Survey API (**"Service"**), provided by us (**"we"**, **"us"**, or **"our"**).
+
 <br>
 
 ## 1. Overview
