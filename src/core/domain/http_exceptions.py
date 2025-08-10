@@ -17,7 +17,7 @@ from src.core.config.scopus import SCOPUS_DOCS, SCOPUS_ERRORS
 class HTTPError(HTTPException):
     """Detailed HTTP errors"""
 
-    __FRAME = FrameSummary(__file__, 1, "<http_exceptions>")
+    _FRAME = FrameSummary(__file__, 1, "<http_exceptions>")
 
     def __init__(
         self, status: HTTPStatus, message: str, error: Exception = None
@@ -36,7 +36,7 @@ class HTTPError(HTTPException):
     @classmethod
     def get_error_details(cls, error: Exception) -> list[Json]:
         traceback = exc_info()[2]
-        frame = extract_tb(traceback)[-1] if traceback else cls.__FRAME
+        frame = extract_tb(traceback)[-1] if traceback else cls._FRAME
 
         base_error = {
             "type": f"{type(error).__module__}.{type(error).__qualname__}",

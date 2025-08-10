@@ -13,9 +13,9 @@ from src.core.domain.protocols import SearchAPI, URLBuilder
 class KeywordCombinationFinder:
     """Gathers, filters and compiles data from Scopus articles"""
 
-    __MEDIA_TYPE = "application/json"
-    __MAX_SIZE = 5
-    __START = 1
+    _MEDIA_TYPE = "application/json"
+    _MAX_SIZE = 5
+    _START = 1
 
     def __init__(
         self,
@@ -24,35 +24,35 @@ class KeywordCombinationFinder:
         survey_detail: SurveyDetail,
     ) -> None:
         """Gathers, filters and compiles data from Scopus articles"""
-        self.__url_builder = url_builder
-        self.__search_api = search_api
-        self.__survey_detail = survey_detail
+        self._url_builder = url_builder
+        self._search_api = search_api
+        self._survey_detail = survey_detail
 
     async def survey_combinations(
         self, params: CombinationParams
     ) -> JSONResponse:
-        self.__url_builder.set_combination_query(params)
+        self._url_builder.set_combination_query(params)
 
-        max_size = min(len(params.keywords) + self.__START, self.__MAX_SIZE)
+        max_size = min(len(params.keywords) + self._START, self._MAX_SIZE)
         bundles_map: dict[int, CombinationBundle] = {}
 
         arrangements = (
             combinations(params.keywords, size)
-            for size in range(self.__START, max_size)
+            for size in range(self._START, max_size)
         )
 
         pairs = chain.from_iterable(arrangements)
-        for index, arrangement in enumerate(pairs, self.__START):
-            bundle = self.__url_builder.combination_url(arrangement)
+        for index, arrangement in enumerate(pairs, self._START):
+            bundle = self._url_builder.combination_url(arrangement)
 
             bundle.index = index
             bundles_map.setdefault(index, bundle)
 
-        survey_list = await self.__search_api.survey_totals_found(bundles_map)
+        survey_list = await self._search_api.survey_totals_found(bundles_map)
         LOG.combinations(len(params.keywords), survey_list)
-        LOG.quota(*self.__survey_detail.log_data)
+        LOG.quota(*self._survey_detail.log_data)
 
-        headers = self.__survey_detail.headers
+        headers = self._survey_detail.headers
         headers.update({"X-API-Key": params.api_key})
         headers.update({"Content-Type": "application/json; charset=utf-8"})
 
@@ -60,5 +60,5 @@ class KeywordCombinationFinder:
             content={"combinations": survey_list},
             status_code=HTTPStatus.OK,
             headers=headers,
-            media_type=self.__MEDIA_TYPE,
+            media_type=self._MEDIA_TYPE,
         )

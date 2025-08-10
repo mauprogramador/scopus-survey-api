@@ -18,21 +18,21 @@ from src.core.domain.http_exceptions import ServiceUnavailable
 class ArticlesSimilarityFilter:
     """Filter articles from identical authors with similar titles"""
 
-    __DATEFMT = "%Y-%m-%d"
-    __SINGLE_ROW = 1
-    __SIZE = 2
+    _DATEFMT = "%Y-%m-%d"
+    _SINGLE_ROW = 1
+    _SIZE = 2
 
     def __init__(self) -> None:
         """Filter articles from identical authors with similar titles"""
-        self.__filtered_df: DataFrame = None
+        self._filtered_df: DataFrame = None
         self._ratio: int = None
         try:
-            self.__workers = min(len(sched_getaffinity(0)) - 1, 4)
+            self._workers = min(len(sched_getaffinity(0)) - 1, 4)
         except AttributeError:
             cpu_cores = cpu_count()
-            self.__workers = cpu_cores - 1 if cpu_cores else 4
+            self._workers = cpu_cores - 1 if cpu_cores else 4
 
-    def __drop_singles(self, group: DataFrame) -> bool:
+    def _drop_singles(self, group: DataFrame) -> bool:
         return group.shape[0] > 1
 
     @staticmethod
@@ -60,7 +60,7 @@ class ArticlesSimilarityFilter:
 
     def _get_single_group_index(self, grouped_df: DataFrame) -> set[int]:
         rows_indexes = self._get_similar_title_indexes(
-            grouped_df, self._ratio, self.__SIZE
+            grouped_df, self._ratio, self._SIZE
         )
 
         if rows_indexes is None:
@@ -69,21 +69,21 @@ class ArticlesSimilarityFilter:
         if isinstance(rows_indexes, int):
             return {rows_indexes}
 
-        similar_titles_subset = self.__filtered_df.iloc[list(rows_indexes)]
+        similar_titles_subset = self._filtered_df.iloc[list(rows_indexes)]
         latest_index = similar_titles_subset[Column.DATE].idxmax()
         rows_indexes.discard(latest_index)
 
         return rows_indexes
 
     def _handle_groups_similarity(self) -> set[int]:
-        grouped_df = self.__filtered_df.groupby(Column.AUTHORS)
+        grouped_df = self._filtered_df.groupby(Column.AUTHORS)
         similar_titles: set[int] = set()
 
         if grouped_df.ngroups == 1:
             single_group = next(iter(grouped_df))[1]
             return self._get_single_group_index(single_group)
 
-        max_workers = min(self.__filtered_df.shape[0], self.__workers)
+        max_workers = min(self._filtered_df.shape[0], self._workers)
         LOG.debug({"max_workers": max_workers})
 
         with ProcessPoolExecutor(max_workers) as executor:
@@ -92,7 +92,7 @@ class ArticlesSimilarityFilter:
                     ArticlesSimilarityFilter._get_similar_title_indexes,
                     group,
                     self._ratio,
-                    self.__SIZE,
+                    self._SIZE,
                 )
                 for _, group in grouped_df
             }
@@ -110,7 +110,7 @@ class ArticlesSimilarityFilter:
                         similar_titles.add(rows_indexes)
                         continue
 
-                    similar_titles_subset = self.__filtered_df.iloc[
+                    similar_titles_subset = self._filtered_df.iloc[
                         list(rows_indexes)
                     ]
                     latest_index = similar_titles_subset[Column.DATE].idxmax()
@@ -135,23 +135,23 @@ class ArticlesSimilarityFilter:
         df_subset[Column.DATE] = to_datetime(
             df_subset[Column.DATE],
             yearfirst=True,
-            format=self.__DATEFMT,
+            format=self._DATEFMT,
             errors="coerce",
         )
 
-        self.__filtered_df = df_subset.dropna(subset=[Column.DATE])
-        LOG.debug({"invalids_datetime": self.__filtered_df.shape[0]})
+        self._filtered_df = df_subset.dropna(subset=[Column.DATE])
+        LOG.debug({"invalids_datetime": self._filtered_df.shape[0]})
 
-        if self.__filtered_df.shape[0] <= self.__SINGLE_ROW:
+        if self._filtered_df.shape[0] <= self._SINGLE_ROW:
             return dataframe
 
-        grouped_df = self.__filtered_df.groupby(Column.AUTHORS)
+        grouped_df = self._filtered_df.groupby(Column.AUTHORS)
 
         LOG.debug({"same_authors_count": grouped_df.ngroups})
         if grouped_df.ngroups == dataframe.shape[0]:
             return dataframe
 
-        self.__filtered_df = grouped_df.filter(self.__drop_singles)
+        self._filtered_df = grouped_df.filter(self._drop_singles)
         similar_titles = self._handle_groups_similarity()
 
         if not similar_titles:

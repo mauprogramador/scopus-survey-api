@@ -26,46 +26,46 @@ from src.core.domain.http_exceptions import Unauthorized
 
 
 class CSRFToken:
-    __SERIALIZER = URLSafeTimedSerializer(SECRET_KEY, SALT)
-    __OPENAPI_EXAMPLE = {
+    _SERIALIZER = URLSafeTimedSerializer(SECRET_KEY, SALT)
+    _OPENAPI_EXAMPLE = {
         "CSRF Token": Example(
             summary="CSRF Token",
             description="Automatically managed by the client-side",
             value="c1d0cf66f682...",
         )
     }
-    __Query = Query(
+    _QUERY = Query(
         alias="csrfToken",
         validation_alias="query_token",
         description="Query params CSRF Token",
-        openapi_examples=__OPENAPI_EXAMPLE,
+        openapi_examples=_OPENAPI_EXAMPLE,
     )
-    __Cookie = Cookie(
+    _COOKIE = Cookie(
         alias="csrf-token",
         validation_alias="signed_token",
         description="Cookies CSRF Token",
-        openapi_examples=__OPENAPI_EXAMPLE,
+        openapi_examples=_OPENAPI_EXAMPLE,
     )
-    __Header = Header(
+    _HEADER = Header(
         alias="X-CSRF-Token",
         validation_alias="header_token",
         description="Header CSRF Token",
-        openapi_examples=__OPENAPI_EXAMPLE,
+        openapi_examples=_OPENAPI_EXAMPLE,
     )
 
     @classmethod
     def generate_csrf_tokens(cls) -> tuple[str, str]:
         token = sha1(TOKEN.encode(encoding="utf-8")).hexdigest()
-        signed = cls.__SERIALIZER.dumps(token)
+        signed = cls._SERIALIZER.dumps(token)
         return token, signed
 
     @classmethod
     def verify_csrf_token(
         cls,
         request: Request,
-        query_token: Annotated[str | None, __Query] = None,
-        signed_token: Annotated[str | None, __Cookie] = None,
-        header_token: Annotated[str | None, __Header] = None,
+        query_token: Annotated[str | None, _QUERY] = None,
+        signed_token: Annotated[str | None, _COOKIE] = None,
+        header_token: Annotated[str | None, _HEADER] = None,
     ) -> None:
 
         if not query_token:
@@ -87,7 +87,7 @@ class CSRFToken:
             raise Unauthorized(TOKEN_SESSION_ERROR)
 
         try:
-            token_cookie: str = cls.__SERIALIZER.loads(signed_token, MAX_AGE)
+            token_cookie: str = cls._SERIALIZER.loads(signed_token, MAX_AGE)
 
         except SignatureExpired as exc:
             raise Unauthorized(EXPIRED_TOKEN, exc) from exc

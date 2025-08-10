@@ -18,8 +18,8 @@ from src.core.config.scopus import (
 class URLBuilder:
     """Generate and format URLs for HTTP requests"""
 
-    __FIELDS = ",".join(SEARCH_FIELDS)
-    __BASE_SEARCH_QUERY = {
+    _FIELDS = ",".join(SEARCH_FIELDS)
+    _BASE_SEARCH_QUERY = {
         "apiKey": None,
         "query": None,
         "field": "dc:identifier",
@@ -32,8 +32,8 @@ class URLBuilder:
 
     def __init__(self) -> None:
         """Generate and format URLs for HTTP requests"""
-        self.__query: dict[str, str | None] = None
-        self.__search_terms: str = None
+        self._query: dict[str, str | None] = None
+        self._search_terms: str = None
 
     @staticmethod
     def article_page_url(scopus_id: str) -> str:
@@ -51,24 +51,24 @@ class URLBuilder:
         query_terms = {"TITLE-ABS-KEY": "{combination}"}
         query_terms.update(query_fields)
 
-        self.__search_terms = BOOLEAN_OPERATOR.join(
+        self._search_terms = BOOLEAN_OPERATOR.join(
             f"{field}({value})" for field, value in query_terms.items()
         )
 
-        self.__query = self.__BASE_SEARCH_QUERY.copy()
-        self.__query["apiKey"] = params.api_key
-        self.__query["date"] = params.date
-        del self.__query["start"]
+        self._query = self._BASE_SEARCH_QUERY.copy()
+        self._query["apiKey"] = params.api_key
+        self._query["date"] = params.date
+        del self._query["start"]
 
     def combination_url(
         self, arrangement: tuple[Keyword, ...]
     ) -> CombinationBundle:
         combination = BOOLEAN_OPERATOR.join(arrangement)
 
-        self.__query["query"] = self.__search_terms.format(
+        self._query["query"] = self._search_terms.format(
             combination=combination
         )
-        url = urljoin(SEARCH_API_URL, f"?{urlencode(self.__query)}")
+        url = urljoin(SEARCH_API_URL, f"?{urlencode(self._query)}")
 
         return CombinationBundle(combination=combination, url=url)
 
@@ -83,20 +83,20 @@ class URLBuilder:
             f"{field}({value})" for field, value in query_terms.items()
         )
 
-        self.__query = self.__BASE_SEARCH_QUERY.copy()
-        self.__query["apiKey"] = params.api_key
-        self.__query["query"] = search_terms
-        self.__query["date"] = params.date
-        del self.__query["count"]
+        self._query = self._BASE_SEARCH_QUERY.copy()
+        self._query["apiKey"] = params.api_key
+        self._query["query"] = search_terms
+        self._query["date"] = params.date
+        del self._query["count"]
 
-        return urljoin(SEARCH_API_URL, f"?{urlencode(self.__query)}")
+        return urljoin(SEARCH_API_URL, f"?{urlencode(self._query)}")
 
     def pagination_url(self, page: int) -> str:
-        self.__query["start"] = page
-        return urljoin(SEARCH_API_URL, f"?{urlencode(self.__query)}")
+        self._query["start"] = page
+        return urljoin(SEARCH_API_URL, f"?{urlencode(self._query)}")
 
     def set_abstract_query(self, api_key: str) -> None:
-        self.__query = {"apiKey": api_key, "field": self.__FIELDS}
+        self._query = {"apiKey": api_key, "field": self._FIELDS}
 
     def abstract_url(self, abstract_url: str) -> str:
-        return urljoin(abstract_url, f"?{urlencode(self.__query)}")
+        return urljoin(abstract_url, f"?{urlencode(self._query)}")

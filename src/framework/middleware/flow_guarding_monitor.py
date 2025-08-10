@@ -21,7 +21,7 @@ from src.core.domain.http_exceptions import HTTPError
 class FlowGuardingMonitorMiddleware(BaseHTTPMiddleware):
     """Middleware for tracing, process time and uncaught errors"""
 
-    __PROCESS_TIME = "X-Process-Time"
+    _PROCESS_TIME = "X-Process-Time"
 
     def __init__(self, app: FastAPI):
         """Middleware for tracing, process time and uncaught errors"""
@@ -49,7 +49,7 @@ class FlowGuardingMonitorMiddleware(BaseHTTPMiddleware):
             )
 
         process_time = perf_counter() - start_time
-        response.headers[self.__PROCESS_TIME] = f"{process_time:.2f}s"
+        response.headers[self._PROCESS_TIME] = f"{process_time:.2f}s"
 
         LOG.trace(request, response.status_code, process_time)
 

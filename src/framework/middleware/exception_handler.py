@@ -30,12 +30,12 @@ class ExceptionHandler:
             RateLimitExceeded: self.rate_limit_error,
         }
 
-    def __undefined_filter(self, item: Json) -> Json:
+    def _undefined_filter(self, item: Json) -> Json:
         if "input" in item and item["input"] is PydanticUndefined:
             item["input"] = "PydanticUndefined"
         return item
 
-    def __exception_filter(self, item: Json) -> Json:
+    def _exception_filter(self, item: Json) -> Json:
         if "ctx" in item and "error" in item["ctx"]:
             if isinstance(item["ctx"]["error"], Exception):
                 item["ctx"]["error"] = type(item["ctx"]["error"]).__name__
@@ -72,7 +72,7 @@ class ExceptionHandler:
         request: Request,
         exc: RequestValidationError | ResponseValidationError,
     ) -> ErrorJSON:
-        errors = list(map(self.__exception_filter, exc.errors()))
+        errors = list(map(self._exception_filter, exc.errors()))
         message = errors[0].get("msg", INTERNAL_ERROR)
 
         LOG.error(message)
@@ -89,7 +89,7 @@ class ExceptionHandler:
         self, request: Request, exc: ValidationError
     ) -> ErrorJSON:
         errors = list(
-            map(self.__undefined_filter, exc.errors(include_url=False))
+            map(self._undefined_filter, exc.errors(include_url=False))
         )
         message = errors[0].get("msg", exc.title)
 

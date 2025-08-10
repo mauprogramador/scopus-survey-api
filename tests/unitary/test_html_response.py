@@ -11,7 +11,7 @@ from tests.mocks.raw import CSRF_TOKEN, HTML_MEDIA, HTTP_200, HTTP_404, REQUEST
 
 
 def test_load_translations():
-    translations = "_TemplateBuilder__TRANSLATIONS"
+    translations = "_TRANSLATIONS"
     assert hasattr(TemplateBuilder, translations)
     assert getattr(TemplateBuilder, translations)[Lang.EN_US]
     assert getattr(TemplateBuilder, translations)[Lang.PT_BR]

@@ -30,8 +30,8 @@ from src.utils.progress_bar import ProgressBar
 class ScopusSearchAPI:
     """Search and retrieve articles via the Scopus Search API"""
 
-    __PAGE_TWO_INDEX = 1
-    __START = 1
+    _PAGE_TWO_INDEX = 1
+    _START = 1
 
     def __init__(
         self,
@@ -40,31 +40,31 @@ class ScopusSearchAPI:
         survey_detail: SurveyDetail,
     ) -> None:
         """Search and retrieve articles via the Scopus Search API"""
-        self.__http_client = http_client
-        self.__url_builder = url_builder
-        self.__survey_detail = survey_detail
-        self.__search: ScopusSearch = None
+        self._http_client = http_client
+        self._url_builder = url_builder
+        self._survey_detail = survey_detail
+        self._search: ScopusSearch = None
 
         try:
-            self.__workers = min(2 * len(sched_getaffinity(0)), 32)
+            self._workers = min(2 * len(sched_getaffinity(0)), 32)
         except AttributeError:
-            self.__workers = min(2 * (cpu_count() or 4), 32)
+            self._workers = min(2 * (cpu_count() or 4), 32)
 
-    async def __task_request(
+    async def _task_request(
         self, url: str, index: int
     ) -> tuple[int, ResponseBundle]:
-        response = await self.__http_client.request(url)
+        response = await self._http_client.request(url)
         return index, response
 
     async def survey_totals_found(
         self, bundles_map: dict[int, CombinationBundle]
     ) -> list[Json]:
-        max_workers = min(len(bundles_map), self.__workers)
+        max_workers = min(len(bundles_map), self._workers)
         LOG.debug({"max_workers": max_workers})
 
         all_tasks = {
             create_task(
-                self.__task_request(bundle.url, index),
+                self._task_request(bundle.url, index),
                 name=f"combination_index:{index}",
             )
             for index, bundle in bundles_map.items()
@@ -97,7 +97,7 @@ class ScopusSearchAPI:
                         if not task.done():
                             task.cancel()
 
-                    await self.__http_client.close()
+                    await self._http_client.close()
 
                     if isinstance(exc, HTTPError):
                         raise exc
@@ -107,36 +107,36 @@ class ScopusSearchAPI:
         if remaining_tasks:
             await gather(*remaining_tasks, return_exceptions=True)
 
-        await self.__http_client.close()
-        self.__survey_detail.set_quota_data(last_completed)
+        await self._http_client.close()
+        self._survey_detail.set_quota_data(last_completed)
 
         return [bundle.model_dump() for bundle in bundles_map.values()]
 
-    async def __get_by_pagination(self, index: int) -> ResponseBundle:
-        page = index * self.__search.items_per_page
-        url = self.__url_builder.pagination_url(page)
-        return await self.__http_client.request(url)
+    async def _get_by_pagination(self, index: int) -> ResponseBundle:
+        page = index * self._search.items_per_page
+        url = self._url_builder.pagination_url(page)
+        return await self._http_client.request(url)
 
-    async def __get_multiple_articles_by_pagination(self) -> None:
-        pages_count = self.__search.pages_count
-        max_workers = min((pages_count - self.__START), self.__workers)
+    async def _get_multiple_articles_by_pagination(self) -> None:
+        pages_count = self._search.pages_count
+        max_workers = min((pages_count - self._START), self._workers)
         LOG.debug({"max_workers": max_workers})
 
         all_tasks = {
             create_task(
-                self.__get_by_pagination(start),
+                self._get_by_pagination(start),
                 name=f"pagination_start:{start}",
             )
-            for start in range(self.__START, pages_count)
+            for start in range(self._START, pages_count)
         }
         remaining_tasks = all_tasks.copy()
 
-        total = self.__search.total_results
-        step = self.__search.items_per_page
+        total = self._search.total_results
+        step = self._search.items_per_page
 
         with (
             ThreadPoolExecutor(max_workers) as executor,
-            ProgressBar(total, step, self.__START) as progress_bar,
+            ProgressBar(total, step, self._START) as progress_bar,
         ):
             for future in as_completed(all_tasks):
                 remaining_tasks.discard(future)
@@ -148,7 +148,7 @@ class ScopusSearchAPI:
                         ScopusResponse.validate_search,
                         response,
                     )
-                    self.__search.entry.extend(search.entry)
+                    self._search.entry.extend(search.entry)
                     progress_bar.step()
 
                 except (CancelledError, HTTPError, Exception) as exc:
@@ -166,35 +166,33 @@ class ScopusSearchAPI:
             await gather(*remaining_tasks, return_exceptions=True)
 
     async def search_articles(self, params: SearchParams) -> list[ScopusEntry]:
-        url = self.__url_builder.search_url(params)
+        url = self._url_builder.search_url(params)
 
         try:
-            response = await self.__http_client.request(url)
-            self.__search = ScopusResponse.validate_search(response)
+            response = await self._http_client.request(url)
+            self._search = ScopusResponse.validate_search(response)
 
-            self.__survey_detail.set_search_data(self.__search)
-            # self.__search.set_count_limit(params.max_count)
+            self._survey_detail.set_search_data(self._search)
+            # self._search.set_count_limit(params.max_count)
 
-            if self.__search.total_results == 0:
+            if self._search.total_results == 0:
                 raise NotFound(ARTICLES_NOT_FOUND)
 
-            if self.__search.pages_count == 2:
-                response = await self.__get_by_pagination(
-                    self.__PAGE_TWO_INDEX
-                )
+            if self._search.pages_count == 2:
+                response = await self._get_by_pagination(self._PAGE_TWO_INDEX)
 
                 search = ScopusResponse.validate_search(response)
-                self.__search.entry.extend(search.entry)
+                self._search.entry.extend(search.entry)
 
-            elif self.__search.pages_count > 2:
-                await self.__get_multiple_articles_by_pagination()
+            elif self._search.pages_count > 2:
+                await self._get_multiple_articles_by_pagination()
 
             LOG.info(
                 "Total Articles Found: "
-                f"\033[33;1m{self.__search.total_results}"
+                f"\033[33;1m{self._search.total_results}"
             )
 
         finally:
-            await self.__http_client.close()
+            await self._http_client.close()
 
-        return self.__search.entry
+        return self._search.entry

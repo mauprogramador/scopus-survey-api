@@ -24,7 +24,7 @@ class ScopusResponse:
     """Handle errors and status from Scopus responses"""
 
     @classmethod
-    def __validate(
+    def _validate(
         cls, model: Type[ScopusModel], response: ResponseBundle
     ) -> ScopusModel:
         try:
@@ -56,8 +56,8 @@ class ScopusResponse:
 
     @classmethod
     def validate_search(cls, response: ResponseBundle) -> ScopusSearch:
-        return cls.__validate(ScopusSearch, response)
+        return cls._validate(ScopusSearch, response)
 
     @classmethod
     def validate_abstract(cls, response: ResponseBundle) -> ScopusAbstract:
-        return cls.__validate(ScopusAbstract, response)
+        return cls._validate(ScopusAbstract, response)
