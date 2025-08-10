@@ -31,10 +31,10 @@ We only set and use two **"first-party"** and **"essential"** Cookies:
 - **Session Cookies**: Temporary and expire when you close your browser.
 - **Persistent Cookies**: Remain on your device for a set period of time or until you delete them.
 
-| Cookie       | Type                       | Duration                                  |
-|--------------|----------------------------|-------------------------------------------|
-| `session`    | **Essential / Session**    | Temporary, as long as the browser session |
-| `csrf-token` | **Essential / Persistent** | Expires after **1h**                      |
+| Cookie       | Type                       | Duration        |
+|--------------|----------------------------|-----------------|
+| `session`    | **Essential / Session**    | Browser session |
+| `csrf-token` | **Essential / Persistent** | **1 hour**      |
 
 ## 4. How can I Control Cookies?
 
