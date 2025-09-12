@@ -108,7 +108,7 @@ class ScopusSearchAPI:
             await gather(*remaining_tasks, return_exceptions=True)
 
         await self._http_client.close()
-        self._survey_detail.set_quota_data(last_completed)
+        self._survey_detail.set_search_quota(last_completed)
 
         return [bundle.model_dump() for bundle in bundles_map.values()]
 
@@ -130,6 +130,7 @@ class ScopusSearchAPI:
             for start in range(self._START, pages_count)
         }
         remaining_tasks = all_tasks.copy()
+        last_completed: ResponseBundle = None
 
         total = self._search.total_results
         step = self._search.items_per_page
@@ -143,6 +144,8 @@ class ScopusSearchAPI:
 
                 try:
                     response = await future
+                    last_completed = response
+
                     search = await get_running_loop().run_in_executor(
                         executor,
                         ScopusResponse.validate_search,
@@ -165,6 +168,8 @@ class ScopusSearchAPI:
         if remaining_tasks:
             await gather(*remaining_tasks, return_exceptions=True)
 
+        self._survey_detail.set_search_quota(last_completed)
+
     async def search_articles(self, params: SearchParams) -> list[ScopusEntry]:
         url = self._url_builder.search_url(params)
 
@@ -174,10 +179,12 @@ class ScopusSearchAPI:
             self._survey_detail.set_search_data(self._search)
 
             if self._search.total_results == 0:
+                self._survey_detail.set_search_quota(response)
                 raise NotFound(ARTICLES_NOT_FOUND)
 
             if self._search.pages_count == 2:
                 response = await self._get_by_pagination(self._PAGE_TWO_INDEX)
+                self._survey_detail.set_search_quota(response)
 
                 search = ScopusResponse.validate_search(response)
                 self._search.entry.extend(search.entry)

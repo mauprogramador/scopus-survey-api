@@ -17,7 +17,10 @@ class SurveyDetail(Protocol):
     def set_search_data(self, scopus_search: ScopusSearch) -> None:
         pass
 
-    def set_quota_data(self, response: ResponseBundle) -> None:
+    def set_search_quota(self, response: ResponseBundle) -> None:
+        pass
+
+    def set_abstract_quota(self, response: ResponseBundle) -> None:
         pass
 
     def set_loss(self, loss_amount: int, loss_percent: float) -> None:
@@ -36,6 +39,9 @@ class SurveyDetail(Protocol):
 
 
 class HTTPClient(Protocol):
+    async def update_strategy(self, total_requests: int) -> None:
+        pass
+
     async def request(self, url: str) -> ResponseBundle:
         pass
 

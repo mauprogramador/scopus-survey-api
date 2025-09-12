@@ -96,7 +96,7 @@ class ScopusAbstractRetrievalAPI:
         if remaining_tasks:
             await gather(*remaining_tasks, return_exceptions=True)
 
-        self._survey_detail.set_quota_data(last_completed)
+        self._survey_detail.set_abstract_quota(last_completed)
 
     async def retrieve_abstracts(
         self, api_key: str, entry: list[ScopusEntry]
@@ -111,7 +111,7 @@ class ScopusAbstractRetrievalAPI:
                 url = self._url_builder.abstract_url(url)
 
                 response = await self._http_retry.request(url)
-                self._survey_detail.set_quota_data(response)
+                self._survey_detail.set_abstract_quota(response)
 
                 abstract = ScopusResponse.validate_abstract(response)
                 self._abstracts.append(abstract.model_dump(by_alias=True))

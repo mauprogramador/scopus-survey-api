@@ -19,15 +19,27 @@ class SurveyDetail:
             }
         )
 
-    def set_quota_data(self, response: ResponseBundle) -> None:
+    def set_search_quota(self, response: ResponseBundle) -> None:
         quota = ScopusHeaders.model_validate(response.headers)
         self._log_data = (quota, response.code)
         self._headers.update(
             {
-                "X-Limit": str(quota.limit),
-                "X-Remaining": str(quota.remaining),
-                "X-Reset": str(quota.reset_datetime),
-                "X-ELS-Status": quota.status,
+                "X-Search-Limit": str(quota.limit),
+                "X-Search-Remaining": str(quota.remaining),
+                "X-Search-Reset": str(quota.reset_datetime),
+                "X-Search-ELS-Status": quota.status,
+            }
+        )
+
+    def set_abstract_quota(self, response: ResponseBundle) -> None:
+        quota = ScopusHeaders.model_validate(response.headers)
+        self._log_data = (quota, response.code)
+        self._headers.update(
+            {
+                "X-Abstract-Limit": str(quota.limit),
+                "X-Abstract-Remaining": str(quota.remaining),
+                "X-Abstract-Reset": str(quota.reset_datetime),
+                "X-Abstract-ELS-Status": quota.status,
             }
         )
 
