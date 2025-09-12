@@ -10,9 +10,6 @@ class SurveyDetail:
         self._headers: dict[str, str] = {}
         self._log_data: tuple[ScopusHeaders, int] = None
 
-    def set_max_count(self, max_count: int) -> None:
-        self._headers.update({"X-Max-Count": str(max_count)})
-
     def set_search_data(self, scopus_search: ScopusSearch) -> None:
         self._headers.update(
             {

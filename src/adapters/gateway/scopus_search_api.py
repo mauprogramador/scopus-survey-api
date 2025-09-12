@@ -171,9 +171,7 @@ class ScopusSearchAPI:
         try:
             response = await self._http_client.request(url)
             self._search = ScopusResponse.validate_search(response)
-
             self._survey_detail.set_search_data(self._search)
-            # self._search.set_count_limit(params.max_count)
 
             if self._search.total_results == 0:
                 raise NotFound(ARTICLES_NOT_FOUND)

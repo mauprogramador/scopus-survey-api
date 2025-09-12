@@ -42,7 +42,6 @@ class ScopusArticlesAggregator:
 
     async def retrieve_articles(self, params: SearchParams) -> FileResponse:
         entry_items = await self._search_api.search_articles(params)
-        # self._survey_detail.set_max_count(params.max_count)
 
         self._docs = await self._abstract_api.retrieve_abstracts(
             params.api_key, entry_items

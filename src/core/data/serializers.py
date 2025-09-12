@@ -61,8 +61,9 @@ class ScopusSearch(BaseModel):
             return []
         return data
 
-    def set_count_limit(self, count: int) -> None:
-        self.total_results = min(self.total_results, count)
+    # TODO: Limit results based on header quota
+    # def set_count_limit(self, count: int) -> None:
+    #     self.total_results = min(self.total_results, count)
 
     @property
     def pages_count(self) -> int:

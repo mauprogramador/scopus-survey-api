@@ -219,17 +219,6 @@ class SearchParams(CombinationParams):
         min_length=2,
         max_length=215,
     )
-    max_count: int = Field(
-        default=125,
-        alias="maxCount",
-        validation_alias="max_count",
-        description="Limits the number of returned documents",
-        examples=[25],
-        exclude=True,
-        ge=25,
-        le=250,
-        multiple_of=25,
-    )
     ratio: int = Field(
         default=80,
         alias="threshold",

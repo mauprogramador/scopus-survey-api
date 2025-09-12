@@ -64,7 +64,6 @@ class CombinationParams(Protocol):
 
 class SearchParams(CombinationParams):
     combination: str
-    max_count: int
     ratio: int
 
 

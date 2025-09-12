@@ -14,9 +14,6 @@ from src.core.data.serializers import ScopusEntry, ScopusSearch
 
 
 class SurveyDetail(Protocol):
-    def set_max_count(self, max_count: int) -> None:
-        pass
-
     def set_search_data(self, scopus_search: ScopusSearch) -> None:
         pass
 
