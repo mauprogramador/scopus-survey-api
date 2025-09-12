@@ -45,6 +45,7 @@ class ExceptionHandler:
         self, request: Request, exc: HTTPError
     ) -> ErrorJSON:
         LOG.error(exc.detail)
+        LOG.exception(exc)
         return ErrorJSON(
             request,
             exc.status_code,
@@ -65,6 +66,7 @@ class ExceptionHandler:
         exc: StarletteHTTPException | FastAPIHTTPException,
     ) -> ErrorJSON:
         LOG.error(exc.detail)
+        LOG.exception(exc)
         return ErrorJSON(request, exc.status_code, exc.detail)
 
     async def fastapi_validation_error(
@@ -108,6 +110,7 @@ class ExceptionHandler:
     ) -> ErrorJSON:
         message = f"Request rate limit of {exc.detail} exceeded"
         LOG.error(message)
+        LOG.exception(exc)
         return ErrorJSON(
             request,
             HTTPStatus.TOO_MANY_REQUESTS,
