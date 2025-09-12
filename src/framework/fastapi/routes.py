@@ -1,4 +1,5 @@
 from http import HTTPStatus
+from pathlib import Path
 from typing import Annotated
 
 from fastapi import Depends, Query, Request
@@ -22,7 +23,27 @@ from src.framework.fastapi.swagger import (
     JSON_RESPONSE,
 )
 
+favicon_router = APIRouter()
 router = APIRouter(prefix=PREFIX)
+
+
+@favicon_router.get(
+    "/favicon.ico",
+    status_code=HTTPStatus.OK,
+    include_in_schema=False,
+    response_class=FileResponse,
+)
+async def favicon():
+    return FileResponse(
+        path=Path("web/static/img/favicon.ico"),
+        status_code=HTTPStatus.OK,
+        headers={
+            "Cache-Control": "public, max-age=86400",
+            "Content-Disposition": 'inline; filename="favicon.ico"',
+        },
+        media_type="image/x-icon",
+        filename="favicon.ico",
+    )
 
 
 @router.get(

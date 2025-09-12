@@ -8,7 +8,7 @@ from starlette.middleware.sessions import SessionMiddleware
 from src import __version__
 from src.core.config.config import DIRECTORY, ENV, LIMITER, SECRET_KEY
 from src.core.domain.translations import Translations
-from src.framework.fastapi.routes import router
+from src.framework.fastapi.routes import router, favicon_router
 from src.framework.fastapi.swagger import (
     CONTACT,
     DESCRIPTION,
@@ -63,9 +63,12 @@ app.add_middleware(
 )
 
 app.mount("/styles", StaticFiles(directory="web/static/css"))
-app.mount("/images", StaticFiles(directory="web/static/img"))
 app.mount("/scripts", StaticFiles(directory="web/static/js"))
+app.mount("/libs", StaticFiles(directory="web/static/lib"))
+app.mount("/fonts", StaticFiles(directory="web/static/font"))
+app.mount("/images", StaticFiles(directory="web/static/img"))
 app.mount("/svgs", StaticFiles(directory="web/static/svg"))
 app.mount("/files", StaticFiles(directory="csv"))
 
 app.include_router(router)
+app.include_router(favicon_router)
