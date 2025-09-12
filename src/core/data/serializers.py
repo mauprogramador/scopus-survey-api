@@ -130,7 +130,12 @@ class ScopusAbstract(BaseModel):
         data: dict[str, Json] = data["abstracts-retrieval-response"]
 
         if data.get("authors") is None:
-            authors: list[Json] = data["coredata"]["dc:creator"]["author"]
+            coredata = data["coredata"]
+
+            if coredata.get("dc:creator") is None:
+                authors = [{"ce:indexed-name": NULL}]
+            else:
+                authors: list[Json] = coredata["dc:creator"]["author"]
         else:
             authors: list[Json] = data["authors"]["author"]
 
