@@ -20,7 +20,7 @@ API_KEY_PATTERN = r"^[a-zA-Z0-9]{32}$"
 API_KEY_LOG_PATTERN = r"apiKey\=[a-zA-Z0-9]{32}"
 
 # e.g. Python, Multi-task
-KEYWORD_PATTERN = r"^[a-zA-Z0-9\{\}\?\"\*\-\_ ]{2,50}$"
+KEYWORD_PATTERN = r"^[a-zA-Z0-9\{\}\?\"\*\-\_ ]{2,70}$"
 
 # e.g. 989a5e2a50389ae6a5faf4c271d8bfb30cbbd88c  - Random Hash
 TOKEN_PATTERN = r"^[a-zA-Z0-9]{40}$"
