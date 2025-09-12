@@ -1,54 +1,117 @@
-<footer>
+<footer class="container mt-2 mb-4">
+  <div class="hstack w-100 justify-content-center justify-content-lg-between flex-wrap gap-3 gap-xl-0">
 
-  <div class="footer__details">
-    <span translate="no" lang="{{lang}}" aria-label="{{footer.T01}}">ScopusSurveyAPI © <time
-        datetime="2024">2024</time></span>
-    <span aria-label="{{footer.T02}}">
-      <a class="link" href="https://github.com/mauprogramador/scopus-survey-api/blob/master/LICENSE" target="_blank"
-        rel="license" lang="{{lang}}" title="{{footer.T03}}">{{footer.T03}}</a>
-    </span>
-    <span lang="{{lang}}" aria-label="{{footer.T04}}">{{footer.T05}}
-      <a class="link" href="https://github.com/mauprogramador" target="_blank" rel="author" translate="no"
-        title="GitHub @mauprogramador">@mauprogramador</a>
-    </span>
+    <div class="hstack flex-grow-1 flex-wrap justify-content-center justify-content-xl-start">
+      <span class="text-center text-sm-start">
+        <img id="footer-favicon" src="/images/favicon.ico" alt="Logo" loading="lazy" />
+
+        <small class="text-nowrap" translate="no">
+          © <time datetime="{{current_year}}">{{current_year}}</time> ScopusSurveyAPI.
+          <a class="link" href="https://github.com/mauprogramador/scopus-survey-api/releases/tag/v{{version}}"
+            target="_blank" rel="nofollow noopener noreferrer" translate="no"
+            aria-label="Latest version release">v{{version}}</a>.
+        </small>
+
+        <small class="text-nowrap">All rights reserved</small>
+      </span>
+
+      <span class="d-none d-lg-block px-2 opacity-50" role="separator" aria-hidden="true">&#8226;</span>
+
+      <span class="text-center text-sm-start">
+        <small class="text-nowrap">
+          Designed and built by
+          <a class="link" href="https://github.com/mauprogramador" target="_blank" rel="author noopener noreferrer"
+            translate="no" aria-label="Author's GitHub profile">
+            @mauprogramador
+          </a>
+        </small>
+
+        <small class="text-nowrap">
+          with the help of
+          <a class="link" href="https://getbootstrap.com/docs/5.3/getting-started/introduction/" target="_blank"
+            rel="nofollow noopener noreferrer" translate="no">
+            Bootstrap v5.3.7
+          </a>
+        </small>
+      </span>
+    </div>
+
+    <nav class="nav flex-grow-1 flex-nowrap align-items-center justify-content-center justify-content-xl-end"
+      aria-label="Project resources and social media">
+      <a class="nav-link" href="https://github.com/mauprogramador/scopus-survey-api/tree/master" target="_blank"
+        rel="nofollow noopener noreferrer" title="Project GitHub repository" aria-label="Project GitHub repository">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" role="img" fill="#191717">
+          <path
+            d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8" />
+        </svg>
+      </a>
+      <a class="nav-link" href="https://www.ifms.edu.br/campi/campus-tres-lagoas" target="_blank"
+        rel="nofollow noopener noreferrer" title="IFMS Campus Três Lagoas homepage"
+        aria-label="IFMS Campus Três Lagoas homepage">
+        <img src="/images/ifms.ico" alt="IFMS logo" loading="lazy" />
+      </a>
+      <a class="nav-link" href="https://www.scopus.com" target="_blank" rel="nofollow noopener noreferrer"
+        title="Scopus homepage" aria-label="Scopus homepage">
+        <img src="/images/scopus.ico" alt="Scopus logo" loading="lazy" />
+      </a>
+      <a class="nav-link" href="https://www.linkedin.com/in/mauricio-silva-batista-0ba90322b/" target="_blank"
+        rel="author noopener noreferrer" title="Author's LinkedIn profile" aria-label="Author's LinkedIn profile">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" role="img" fill="#006699">
+          <path
+            d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854zm4.943 12.248V6.169H2.542v7.225zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248S2.4 3.226 2.4 3.934c0 .694.521 1.248 1.327 1.248zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016l.016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225z" />
+        </svg>
+      </a>
+      <a class="nav-link" href="https://dev.to/mauprogramador" target="_blank" rel="author noopener noreferrer"
+        title="Author's DEV profile" aria-label="Author's DEV profile">
+        <img src="/images/dev.png" alt="DEV logo" loading="lazy" />
+      </a>
+    </nav>
+
   </div>
+  <hr class="w-100 my-xl-1" aria-hidden="true">
+  <div class="hstack w-100 justify-content-center justify-content-lg-between flex-wrap gap-2 gap-sm-0">
 
-  <nav aria-label="Social">
-    <a href="https://github.com/mauprogramador/scopus-survey-api/tree/master" target="_blank" rel="external"
-      title="GitHub" aria-label="GitHub">
-      <span class="icon">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
-          <path fill-rule="evenodd" clip-rule="evenodd"
-            d="M16 0C7.16 0 0 7.16 0 16C0 23.08 4.58 29.06 10.94 31.18C11.74 31.32 12.04 30.84 12.04 30.42C12.04 30.04 12.02 28.78 12.02 27.44C8 28.18 6.96 26.46 6.64 25.56C6.46 25.1 5.68 23.68 5 23.3C4.44 23 3.64 22.26 4.98 22.24C6.24 22.22 7.14 23.4 7.44 23.88C8.88 26.3 11.18 25.62 12.1 25.2C12.24 24.16 12.66 23.46 13.12 23.06C9.56 22.66 5.84 21.28 5.84 15.16C5.84 13.42 6.46 11.98 7.48 10.86C7.32 10.46 6.76 8.82 7.64 6.62C7.64 6.62 8.98 6.2 12.04 8.26C13.32 7.9 14.68 7.72 16.04 7.72C17.4 7.72 18.76 7.9 20.04 8.26C23.1 6.18 24.44 6.62 24.44 6.62C25.32 8.82 24.76 10.46 24.6 10.86C25.62 11.98 26.24 13.4 26.24 15.16C26.24 21.3 22.5 22.66 18.94 23.06C19.52 23.56 20.02 24.52 20.02 26.02C20.02 28.16 20 29.88 20 30.42C20 30.84 20.3 31.34 21.1 31.18C27.42 29.06 32 23.06 32 16C32 7.16 24.84 0 16 0V0Z"
-            fill="#191717" />
-        </svg>
+    <div class="hstack flex-grow-1 justify-content-center justify-content-xl-start flex-wrap">
+      <span class="text-center text-sm-start">
+        <small class="text-nowrap">We use necessary cookies for</small>
+        <small class="text-nowrap">security and functionality</small>
       </span>
-    </a>
-    <a href="https://www.ifms.edu.br/campi/campus-tres-lagoas" target="_blank" rel="external"
-      title="IFMS - Campus Três Lagoas" aria-label="IFMS">
-      <img src="/images/ifms.ico" alt="{{header.T06}}" loading="lazy" />
-    </a>
-    <a href="https://www.scopus.com/home.uri" target="_blank" rel="external" title="Scopus" aria-label="Scopus">
-      <img src="/images/scopus.ico" alt="{{header.T07}}" loading="lazy" />
-    </a>
-    <a href="https://www.linkedin.com/in/mauricio-silva-batista-0ba90322b/" target="_blank" rel="author"
-      title="LinkedIn">
-      <span class="icon" aria-label="LinkedIn">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
-          <g fill="none">
-            <path
-              d="M0 18.338C0 8.216 8.474 0 18.92 0h218.16C247.53 0 256 8.216 256 18.338v219.327C256 247.79 247.53 256 237.08 256H18.92C8.475 256 0 247.791 0 237.668V18.335z"
-              fill="#006699" />
-            <path
-              d="M77.796 214.238V98.986H39.488v115.252H77.8zM58.65 83.253c13.356 0 21.671-8.85 21.671-19.91-.25-11.312-8.315-19.915-21.417-19.915-13.111 0-21.674 8.603-21.674 19.914 0 11.06 8.312 19.91 21.169 19.91h.248zM99 214.238h38.305v-64.355c0-3.44.25-6.889 1.262-9.346 2.768-6.885 9.071-14.012 19.656-14.012 13.858 0 19.405 10.568 19.405 26.063v61.65h38.304v-66.082c0-35.399-18.896-51.872-44.099-51.872-20.663 0-29.738 11.549-34.78 19.415h.255V98.99H99.002c.5 10.812-.003 115.252-.003 115.252z"
-              fill="#FFFFFF" />
-          </g>
-        </svg>
-      </span>
-    </a>
-    <a href="https://dev.to/mauprogramador" target="_blank" rel="author" title="DEV" aria-label="DEV">
-      <img src="/images/dev.png" alt="{{header.T08}}" loading="lazy" />
-    </a>
-  </nav>
 
+      <span class="d-none d-sm-block px-2 opacity-50" role="separator" aria-hidden="true">&#8226;</span>
+      <div class="d-sm-none w-100" aria-hidden="true"></div>
+
+      <span class="text-center text-sm-start">
+        <small class="text-nowrap">
+          Data provided by
+          <a class="link" href="https://www.scopus.com" target="_blank" rel="external" translate="no">Scopus</a>®
+        </small>
+      </span>
+    </div>
+
+    <nav class="nav flex-grow-1 align-items-center justify-content-center justify-content-xl-end"
+      aria-label="Legal and policy documents">
+      <a class="nav-link link"
+        href="https://github.com/mauprogramador/scopus-survey-api/blob/master/TERMS_OF_SERVICE.md" target="_blank"
+        rel="terms-of-service noopener noreferrer">
+        <small class="text-nowrap">Terms of Service</small>
+      </a>
+      <a class="nav-link link" href="https://github.com/mauprogramador/scopus-survey-api/blob/master/PRIVACY_POLICY.md"
+        target="_blank" rel="privacy-policy noopener noreferrer">
+        <small class="text-nowrap">Privacy Policy</small>
+      </a>
+      <a class="nav-link link" href="https://github.com/mauprogramador/scopus-survey-api/blob/master/COOKIE_POLICY.md"
+        target="_blank" rel="privacy-policy noopener noreferrer">
+        <small class="text-nowrap">Cookie Policy</small>
+      </a>
+      <a class="nav-link link" href="https://github.com/mauprogramador/scopus-survey-api/blob/master/LICENSE"
+        target="_blank" rel="license noopener noreferrer">
+        <small class="text-nowrap">License</small>
+      </a>
+      <a class="nav-link link" href="https://github.com/mauprogramador/scopus-survey-api/blob/master/ATTRIBUTIONS.md"
+        target="_blank" rel="nofollow noopener noreferrer">
+        <small class="text-nowrap">Attributions</small>
+      </a>
+    </nav>
+
+  </div>
 </footer>

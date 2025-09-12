@@ -1,0 +1,172 @@
+<article class="container mt-4 pt-0" aria-labelledby="step-2-title" aria-describedby="step-2-desc">
+  <h3 id="step-2-title" class="step-badge">STEP 3 - Keywords combination</h3>
+  <p id="step-2-desc" class="mb-0 mt-4">
+    Based on the topic or subject of your research, you must select the keywords that will be used to <strong>search
+      in the abstracts, keywords, and titles</strong>, and find documents that <strong>contain them all</strong>.
+    Using the <a class="link" href="https://dev.elsevier.com/sc_search_tips.html" target="_blank"
+      rel="help nofollow noopener noreferrer">combined field <strong>TITLE-ABS-KEY</strong></a>, we survey data and the
+    <strong>total of documents found in Scopus</strong> for each combination of keywords <a class="link"
+      ref="https://dev.elsevier.com/sc_search_tips.html" target="_blank"
+      rel="help nofollow noopener noreferrer">concatenated by the Boolean operator AND</a>.
+  </p>
+  <hr class="w-50 mx-auto mt-2 mb-5 text-success opacity-50" aria-hidden="true">
+
+  <section id="keywords" class="text-group" role="region" aria-labelledby="keywords-title"
+    aria-describedby="keywords-desc">
+    <h4 id="keywords-title">
+      Keywords
+      <span class="badge text-bg-danger" aria-hidden="true">Required</span>
+    </h4>
+    <p id="keywords-desc">
+      The keywords, with a <strong>minimum of two</strong> (<strong>required</strong>) and a <strong>maximum of
+        four</strong>, that the documents you are searching
+      contain. They must be <strong>written in English</strong>, with a <strong>minimum of 2</strong> and a
+      <strong>maximum of 70 characters</strong>. They can contain <strong>letters</strong>, <strong>numbers</strong>,
+      <strong>spaces</strong>, <strong>hyphens</strong>, <strong>underscores</strong>, <a class="link"
+        href="https://dev.elsevier.com/sc_search_tips.html" target="_blank"
+        rel="help nofollow noopener noreferrer"><strong>phrases</strong>, <strong>wildcards</strong>, and the
+        <strong>Boolean operators OR and AND NOT</strong></a>. Because <strong>AND NOT</strong> can <a class="link"
+        href="https://dev.elsevier.com/sc_search_tips.html" target="_blank"
+        rel="help nofollow noopener noreferrer">generate unexpected results</a>, it should be used in the <strong>last
+        field</strong>.
+    </p>
+    <div class="row row-cols-1 row-cols-lg-2 align-items-end mt-3" role="group" aria-labelledby="keywords-title">
+      <div class="field-container pe-lg-5">
+        <div class="field-wrapper">
+          <span class="field-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" aria-hidden="true">
+              <path
+                d="m240-160 40-160H120l20-80h160l40-160H180l20-80h160l40-160h80l-40 160h160l40-160h80l-40 160h160l-20 80H660l-40 160h160l-20 80H600l-40 160h-80l40-160H360l-40 160h-80Zm140-240h160l40-160H420l-40 160Z" />
+            </svg>
+          </span>
+          <input id="keyword1" class="form-control keywords" name="keywords" form="survey-form" type="text" required
+            minlength="2" maxlength="70" size="70" pattern="^[a-zA-Z0-9\{\}?&quot;*_ \-]{2,70}$" data-checked="false"
+            spellcheck="true" autocomplete="on" placeholder="1st Keyword" inputmode="text" aria-invalid="false"
+            aria-required="true" aria-autocomplete="both" aria-labelledby="keywords-title"
+            aria-describedby="keywords-desc" aria-details="keyword1-help" aria-errormessage="keyword1-feedback" />
+        </div>
+        <div id="keyword1-feedback" class="field-feedback pe-lg-5" role="alert" aria-live="assertive" hidden>
+        </div>
+        <div id="keyword1-help" class="field-help">e.g. Python, Standard OR Pattern</div>
+      </div>
+      <div class="field-container ps-lg-5">
+        <div class="field-wrapper">
+          <span class="field-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" aria-hidden="true">
+              <path
+                d="m240-160 40-160H120l20-80h160l40-160H180l20-80h160l40-160h80l-40 160h160l40-160h80l-40 160h160l-20 80H660l-40 160h160l-20 80H600l-40 160h-80l40-160H360l-40 160h-80Zm140-240h160l40-160H420l-40 160Z" />
+            </svg>
+          </span>
+          <input id="keyword2" class="form-control keywords" name="keywords" form="survey-form" type="text" required
+            minlength="2" maxlength="70" size="70" pattern="^[a-zA-Z0-9\{\}?&quot;*_ \-]{2,70}$" data-checked="false"
+            spellcheck="true" autocomplete="on" placeholder="2nd Keyword" inputmode="text" aria-invalid="false"
+            aria-required="true" aria-autocomplete="both" aria-labelledby="keywords-title"
+            aria-describedby="keywords-desc" aria-details="keyword2-help" aria-errormessage="keyword2-feedback" />
+        </div>
+        <div id="keyword2-feedback" class="field-feedback ps-lg-5" role="alert" aria-live="assertive" hidden>
+        </div>
+        <div id="keyword2-help" class="field-help">e.g. Machine Learning, Template AND NOT Model</div>
+      </div>
+      <div class="field-container pe-lg-5">
+        <div class="field-wrapper">
+          <span class="field-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" aria-hidden="true">
+              <path
+                d="m240-160 40-160H120l20-80h160l40-160H180l20-80h160l40-160h80l-40 160h160l40-160h80l-40 160h160l-20 80H660l-40 160h160l-20 80H600l-40 160h-80l40-160H360l-40 160h-80Zm140-240h160l40-160H420l-40 160Z" />
+            </svg>
+          </span>
+          <input id="keyword3" class="form-control keywords" name="keywords" form="survey-form" type="text"
+            minlength="2" maxlength="70" size="70" pattern="^[a-zA-Z0-9\{\}?&quot;*_ \-]{2,70}$" data-checked="false"
+            spellcheck="true" autocomplete="on" placeholder="3rd Keyword" inputmode="text" aria-invalid="false"
+            aria-required="false" aria-autocomplete="both" aria-labelledby="keywords-title"
+            aria-describedby="keywords-desc" aria-details="keyword3-help" aria-errormessage="keyword3-feedback" />
+        </div>
+        <div id="keyword3-feedback" class="field-feedback pe-lg-5" role="alert" aria-live="assertive" hidden>
+        </div>
+        <div id="keyword3-help" class="field-help">e.g. {Deep Learning}, "Data Science"</div>
+      </div>
+      <div class="field-container ps-lg-5">
+        <div class="field-wrapper">
+          <span class="field-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" aria-hidden="true">
+              <path
+                d="m240-160 40-160H120l20-80h160l40-160H180l20-80h160l40-160h80l-40 160h160l40-160h80l-40 160h160l-20 80H660l-40 160h160l-20 80H600l-40 160h-80l40-160H360l-40 160h-80Zm140-240h160l40-160H420l-40 160Z" />
+            </svg>
+          </span>
+          <input id="keyword4" class="form-control keywords" name="keywords" form="survey-form" type="text"
+            minlength="2" maxlength="70" size="70" pattern="^[a-zA-Z0-9\{\}?&quot;*_ \-]{2,70}$" data-checked="false"
+            spellcheck="true" autocomplete="on" placeholder="4th Keyword" inputmode="text" aria-invalid="false"
+            aria-required="false" aria-autocomplete="both" aria-labelledby="keywords-title"
+            aria-describedby="keywords-desc" aria-details="keyword4-help" aria-errormessage="keyword4-feedback" />
+        </div>
+        <div id="keyword4-feedback" class="field-feedback ps-lg-5" role="alert" aria-live="assertive" hidden>
+        </div>
+        <div id="keyword4-help" class="field-help">e.g. Artificial Intelligence, behav*</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="field-wrapper btn-section justify-content-center mt-5 mb-3 flex-wrap gap-3">
+    <button id="survcomb-button" class="btn btn-scopus text-nowrap col-12 col-md-auto me-lg-4" type="button"
+      name="button" value="combination" form="survey-form" formaction="{{prefix}}/api/combination" disabled
+      aria-disabled="true" aria-live="polite" aria-busy="false">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" aria-hidden="true">
+        <path
+          d="M824-80 716-188q-22 13-46 20.5t-50 7.5q-75 0-127.5-52.5T440-340q0-75 52.5-127.5T620-520q75 0 127.5 52.5T800-340q0 26-7.5 50T772-244l108 108-56 56ZM620-240q42 0 71-29t29-71q0-42-29-71t-71-29q-42 0-71 29t-29 71q0 42 29 71t71 29Zm220-320h-80v-200h-80v120H280v-120h-80v560h200v80H200q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h167q11-35 43-57.5t70-22.5q40 0 71.5 22.5T594-840h166q33 0 56.5 23.5T840-760v200ZM480-760q17 0 28.5-11.5T520-800q0-17-11.5-28.5T480-840q-17 0-28.5 11.5T440-800q0 17 11.5 28.5T480-760Z" />
+      </svg>
+      Survey Combination Totals
+    </button>
+    <button id="survcombdetls-button" class="btn btn-scopus text-nowrap col-12 col-md-auto ms-lg-4" type="button"
+      data-bs-toggle="modal" data-bs-target="#details-modal" disabled aria-disabled="true" aria-controls="details-modal"
+      aria-haspopup="dialog" aria-expanded="false" aria-pressed="false">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" aria-hidden="true">
+        <path
+          d="M4 11a1 1 0 1 1 2 0v1a1 1 0 1 1-2 0zm6-4a1 1 0 1 1 2 0v5a1 1 0 1 1-2 0zM7 9a1 1 0 0 1 2 0v3a1 1 0 1 1-2 0z" />
+        <path
+          d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1z" />
+        <path
+          d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0z" />
+      </svg>
+      Show Result Details
+    </button>
+  </div>
+
+  <section id="combination-table-section" class="text-group mt-5" role="region" aria-labelledby="combination-title"
+    aria-describedby="combination-desc" hidden>
+    <h4 id="combination-title">
+      Combination
+      <span class="badge text-bg-danger" aria-hidden="true">Required</span>
+    </h4>
+    <p id="combination-desc">
+      The keyword combination option that best suits you to <strong>refine the survey scope</strong> based on the
+      <strong>total of documents found</strong> for <strong>all possible keyword combinations</strong>.
+    </p>
+    <div class="field-container table-responsive-lg">
+      <table id="combination-table" class="table table-striped table-hover" aria-describedby="combination-desc">
+        <caption hidden>Totals found from keyword combinations</caption>
+        <thead>
+          <tr>
+            <th scope="col" abbr="Index">#</th>
+            <th scope="col">Combination</th>
+            <th scope="col">Total</th>
+          </tr>
+        </thead>
+        <tbody id="combination-tbody" class="table-group-divider"></tbody>
+      </table>
+      <template id="combination-row-opt">
+        <div class="form-check field-wrapper">
+          <input id="" class="form-check-input combination-opt" name="combination" form="survey-form" type="radio"
+            value="" required data-checked="false" autocomplete="on" aria-invalid="false" aria-required="true"
+            aria-checked="false" aria-autocomplete="both" aria-labelledby="combination-title"
+            aria-describedby="combination-desc" aria-details="combination-help" aria-errormessage="combination-feedback"
+            tabindex="0">
+          <label class="form-check-label" for=""></label>
+        </div>
+      </template>
+      <div id="combination-feedback" class="field-feedback" role="alert" aria-live="assertive" hidden>
+      </div>
+      <div id="combination-help" class="field-help">e.g. Neural Network AND LLM</div>
+    </div>
+  </section>
+
+</article>

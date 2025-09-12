@@ -1,0 +1,78 @@
+<article class="container mt-4 pt-0" aria-labelledby="step-1-title" aria-describedby="step-1-desc">
+  <h3 id="step-1-title" class="step-badge">STEP 1 - API Key</h3>
+  <p id="step-1-desc" class="mb-0 mt-4">
+    In accordance with the <a class="link" href="https://dev.elsevier.com/policy/API-service-agreement.pdf"
+      target="_blank" rel="nofollow noopener noreferrer">API Service Agreement</a> and <a class="link"
+      href="https://dev.elsevier.com/policy.html" target="_blank" rel="nofollow noopener noreferrer">Use Policies</a>,
+    <a class="link" href="https://www.elsevier.com/" target="_blank" rel="nofollow noopener noreferrer">Elsevier</a>
+    will issue you an <strong>API Key</strong> that grants you a limited license to use the <a class="link"
+      href="https://dev.elsevier.com/sc_apis.html" target="_blank" rel="nofollow noopener noreferrer">Scopus APIs</a>
+    integrated with this <strong>Web API</strong>, so that you can properly authenticate to query the Scopus database.
+  </p>
+  <hr class="w-50 mx-auto mt-2 mb-5 text-success opacity-50" aria-hidden="true">
+  <div class="row row-cols-1 row-cols-lg-2 align-items-end">
+
+    <section class="col pe-lg-5 text-group mb-5" role="region" aria-labelledby="apikey-title"
+      aria-describedby="apikey-desc">
+      <h4 id="apikey-title">
+        API Key
+        <span class="badge text-bg-danger" aria-hidden="true">Required</span>
+      </h4>
+      <p id="apikey-desc">
+        The <strong>API Key</strong> issued by <a class="link" href="https://www.elsevier.com/" target="_blank"
+          rel="nofollow noopener noreferrer">Elsevier</a> and obtained by accessing the
+        <a class="link" href="https://dev.elsevier.com/" target="_blank" rel="help nofollow noopener noreferrer">
+          Elsevier Portal</a> and registering. If you are part of an educational institution, you can try
+        <a class="link" href="https://www.scopus.com/signin.uri" target="_blank" rel="nofollow noopener noreferrer">
+          signing in using your organization's or academic email</a>.
+      </p>
+      <div class="field-container">
+        <div class="field-wrapper">
+          <span class="field-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" aria-hidden="true">
+              <path
+                d="M280-400q-33 0-56.5-23.5T200-480q0-33 23.5-56.5T280-560q33 0 56.5 23.5T360-480q0 33-23.5 56.5T280-400Zm0 160q-100 0-170-70T40-480q0-100 70-170t170-70q67 0 121.5 33t86.5 87h352l120 120-180 180-80-60-80 60-85-60h-47q-32 54-86.5 87T280-240Zm0-80q56 0 98.5-34t56.5-86h125l58 41 82-61 71 55 75-75-40-40H435q-14-52-56.5-86T280-640q-66 0-113 47t-47 113q0 66 47 113t113 47Z" />
+            </svg>
+          </span>
+          <input id="apikey" class="form-control combfield" name="apiKey" form="survey-form" type="text" required
+            minlength="32" maxlength="32" size="32" pattern="^[a-zA-Z0-9]{32}$" data-checked="false" spellcheck="false"
+            autocomplete="on" placeholder="API Key" inputmode="text" aria-invalid="false" aria-required="true"
+            aria-autocomplete="both" aria-labelledby="apikey-title" aria-describedby="apikey-desc"
+            aria-details="apikey-help" aria-errormessage="apikey-feedback" />
+        </div>
+        <div id="apikey-feedback" class="field-feedback" role="alert" aria-live="assertive" hidden>
+        </div>
+        <div id="apikey-help" class="field-help">e.g. 439f55d263cj...</div>
+      </div>
+    </section>
+
+    <section class="col ps-lg-5 text-group mb-5" role="region" aria-labelledby="prevsurvey-title"
+      aria-describedby="prevsurvey-desc">
+      <h4 id="prevsurvey-title" aria-hidden="true">Previous Survey</h4>
+      <p id="prevsurvey-desc">
+        If you have already <strong>performed a survey before</strong> and want to get the <strong>previously generated
+          CSV</strong> file that may still be <strong>stored</strong>, you can, after entering your <strong>API
+          key</strong>, try to <strong>download it again</strong>.
+      </p>
+      <div class="field-container">
+        <div class="field-wrapper">
+          <button id="prevsurvey-button" class="btn btn-scopus text-nowrap col-12 col-md-auto" type="button"
+            name="button" value="previous" form="survey-form" formaction="{{prefix}}/api/csv" disabled
+            aria-disabled="true" aria-details="prevsurvey-help" aria-errormessage="prevsurvey-feedback"
+            aria-live="polite" aria-busy="false">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" aria-hidden="true">
+              <path
+                d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z" />
+            </svg>
+            Download Previous Survey CSV
+          </button>
+        </div>
+        <div id="prevsurvey-feedback" class="field-feedback" role="alert" aria-live="assertive" hidden>
+        </div>
+        <div id="prevsurvey-help" class="field-help">e.g. 439f55d263cj..._articles.csv
+        </div>
+      </div>
+    </section>
+
+  </div>
+</article>

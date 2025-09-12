@@ -1,0 +1,126 @@
+<article class="container mt-2" aria-labelledby="info-title">
+  <h2 id="info-title" hidden>Information</h2>
+
+  <div id="ifms-tads" class="py-2 mb-5" role="region" aria-label="Institution and course banner">
+    <p class="d-flex justify-content-center align-items-baseline gap-1 m-0" aria-label="Institution">
+      <small>Federal Institute of</small>
+      <small class="d-sm-block d-none">Education, Science and Technology of</small>
+      <small lang="pt-BR">Mato Grosso do Sul</small>
+      <span class="d-md-block d-none px-1 opacity-50" role="separator" aria-hidden="true">&#8226;</span>
+      <a class="link d-md-block d-none" href="https://www.ifms.edu.br/campi/campus-tres-lagoas" target="_blank"
+        rel="nofollow noopener noreferrer" translate="no">
+        <small lang="pt-BR">IFMS Campus Três Lagoas</small>
+      </a>
+    </p>
+    <p class="d-flex justify-content-center align-items-baseline gap-1 m-0" aria-label="Course">
+      <small class="d-sm-block d-none">Technology in</small>
+      <small>Systems Analysis and Development</small>
+      <span class="d-md-block d-none px-1 opacity-50" role="separator" aria-hidden="true">&#8226;</span>
+      <a class="link d-md-block d-none"
+        href="https://www.ifms.edu.br/campi/campus-tres-lagoas/cursos/graduacao/analise-e-desenvolvimento-de-sistemas"
+        target="_blank" rel="nofollow noopener noreferrer" translate="no">
+        <small lang="pt-BR">TADS</small>
+      </a>
+    </p>
+    <p class="d-md-none d-flex justify-content-center align-items-baseline gap-1 m-0 mt-1"
+      aria-label="Institution and course">
+      <a class="link" href="https://www.ifms.edu.br/campi/campus-tres-lagoas" target="_blank"
+        rel="nofollow noopener noreferrer" translate="no">
+        <small lang="pt-BR">IFMS Três Lagoas</small>
+      </a>
+      <span class="px-1 opacity-50" role="separator" aria-hidden="true">&#8226;</span>
+      <a class="link"
+        href="https://www.ifms.edu.br/campi/campus-tres-lagoas/cursos/graduacao/analise-e-desenvolvimento-de-sistemas"
+        target="_blank" rel="nofollow noopener noreferrer" translate="no">
+        <small lang="pt-BR">TADS</small>
+      </a>
+    </p>
+  </div>
+
+  <section class="text-group mb-5" role="region" aria-labelledby="info-title-1" aria-describedby="info-desc-1">
+    <h3 id="info-title-1">Overview</h3>
+    <p id="info-desc-1">
+      This web
+      <abbr title="Application Programming Interface">API</abbr>
+      is designed to facilitate the <strong>systematic survey of academic documents</strong>, which will be used as
+      <strong>bibliographic sources</strong> for research, bibliographic references, and
+      <a class="link" href="https://en.wikipedia.org/wiki/Systematic_review" target="_blank"
+        rel="nofollow noopener noreferrer">systematic reviews</a>.
+      It is primarily intended for
+      <a class="link" href="https://dev.elsevier.com/academic_research_scopus.html" target="_blank"
+        rel="nofollow noopener noreferrer" aria-label="Scopus Academic Research Use Case">free academic
+        use</a>
+      by <strong>students</strong>, thus <strong>improving accessibility</strong>. It will utilize
+      <a class="link" href="https://dev.elsevier.com/sc_apis.html" target="_blank"
+        rel="nofollow noopener noreferrer">Scopus APIs</a>
+      to query the vast
+      <a class="link" href="https://www.elsevier.com/products/scopus" target="_blank"
+        rel="nofollow noopener noreferrer">Scopus database</a>
+      and then collect, validate, filter, and retrieve information, leaving only the <strong>most relevant and recent
+        data</strong>, which will be organized and returned in a <strong>
+        <abbr title="Comma-separated Values">CSV</abbr>
+        file</strong>, which you may use as you wish, depending on your circumstances.
+    </p>
+  </section>
+
+  <section class="text-group mb-5" role="region" aria-labelledby="info-title-2" aria-describedby="info-desc-2">
+    <h3 id="info-title-2">Data Source</h3>
+    <p id="info-desc-2">
+      All data we handle is retrieved and obtained <strong>"AS IS"</strong> from
+      <a class="link" href="https://www.scopus.com" target="_blank" rel="nofollow noopener noreferrer"
+        translate="no">Scopus</a>®,
+      maintained by
+      <a class="link" href="https://www.elsevier.com/" target="_blank" rel="nofollow noopener noreferrer"
+        translate="no">Elsevier B.V.</a>,
+      a database known for its <strong>curated content of peer-reviewed literature</strong>. We declare that there is
+      <strong>no implied endorsement by the rights owners</strong> and also comply that all use is for
+      <a class="link" href="https://dev.elsevier.com/academic_research_scopus.html" target="_blank"
+        rel="nofollow noopener noreferrer" aria-label="Scopus Academic Research Use Case">non-commercial
+        academic research</a>
+      and is subject to
+      <a class="link" href="https://github.com/mauprogramador/scopus-survey-api/blob/master/TERMS_OF_SERVICE.md"
+        target="_blank" rel="terms-of-service noopener noreferrer">our
+        Terms</a>,
+      as well as the <a class="link" href="https://www.elsevier.com/legal/elsevier-website-terms-and-conditions"
+        target="_blank" rel="nofollow noopener noreferrer">Elsevier Terms</a>
+      and
+      <a class="link" href="https://dev.elsevier.com/academic_research_scopus.html" target="_blank"
+        rel="nofollow noopener noreferrer">Scopus Policy</a>.
+    </p>
+  </section>
+
+  <section class="text-group mb-5" role="region" aria-labelledby="info-title-3" aria-describedby="info-desc-3">
+    <h3 id="info-title-3">
+      Institutional Network
+      <span class="badge text-bg-danger" aria-hidden="true">Required</span>
+    </h3>
+    <p id="info-desc-3">
+      Please be aware that the <strong>API Key</strong> will only authenticate correctly if you submit it while using
+      your <strong>academic institution's network</strong>, which must be
+      <a class="link" href="https://www.scopus.com/signin.uri" target="_blank"
+        rel="nofollow noopener noreferrer">registered with Elsevier</a>.
+      This does not include
+      <abbr title="Virtual Private Network">VPN</abbr>
+      or proxy access. Therefore, if you are <strong>fully remote</strong> and <strong>off-campus</strong>, some data
+      may <strong>not be returned</strong>.
+    </p>
+  </section>
+
+  <section class="text-group" role="region" aria-labelledby="info-title-4" aria-describedby="info-desc-4">
+    <h3 id="info-title-4">
+      Quota and Rate Limits
+      <span class="badge text-bg-warning" aria-hidden="true">Important</span>
+    </h3>
+    <p id="info-desc-4">
+      There's a limit to the number of data requests we can make to
+      <a class="link" href="https://dev.elsevier.com/sc_apis.html" target="_blank"
+        rel="nofollow noopener noreferrer">Scopus APIs</a>
+      using your <strong>API Key</strong>. This <strong>request quota resets every seven days</strong>, and you can
+      <strong>check its availability</strong> in the table below <strong>after completing your survey</strong>. If
+      requests <strong>exceed the quota or throttling rate</strong>, an <strong>error will be returned</strong>. See the
+      <a class="link" href="https://dev.elsevier.com/api_key_settings.html" target="_blank"
+        rel="help nofollow noopener noreferrer">API Key Settings</a>.
+    </p>
+  </section>
+
+</article>

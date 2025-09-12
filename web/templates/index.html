@@ -1,17 +1,19 @@
 <!DOCTYPE html>
 <!-- cspell:ignoreRegExp >(.*?)< -->
-<html lang="{{lang}}">
+<html lang="{{lang}}" data-bs-theme="light">
 
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="ScopusSurveyAPI, {{api_description}}" />
+    <meta name="color-scheme" content="light">
+    <meta name="description" content="ScopusSurveyAPI, {{_t('api_description')}}" />
     <meta name="author" content="mauprogramador" />
     <meta name="generator"
       content="mkdocs-1.5.3, mkdocs-material-9.5.9, mkdocs-static-i18n-1.2.3, mkdocs-markdownextradata-plugin-0.2.5" />
+
     <meta property="og:site_name" content="ScopusSurveyAPI" />
     <meta property="og:title" content="ScopusSurveyAPI" />
-    <meta property="og:description" content="{{api_description}}">
+    <meta property="og:description" content="{{_t('api_description')}}">
     <meta property="og:type" content="website" />
     <meta property="og:image" content="/images/logo.png" />
     <meta property="og:image:type" content="image/png" />
@@ -21,54 +23,54 @@
     <meta property="og:url" content="{{prefix}}/api" />
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:title" content="ScopusSurveyAPI" />
-    <meta property="twitter:description" content="{{api_description}}" />
+    <meta property="twitter:description" content="{{_t('api_description')}}" />
     <meta property="twitter:image" content="/images/logo.png" />
+
     <link rel="canonical" href="{{prefix}}/api" />
-    <link rel="shortcut icon" href="/images/favicon.png" type="image/x-icon" />
+    <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon" />
     <link rel="alternate" hreflang="en-US" href="{{prefix}}/api/en-US/search-articles">
     <link rel="alternate" hreflang="pt-BR" href="{{prefix}}/api/pt-BR/search-articles">
+
+    <link rel="stylesheet" href="/libs/bootstrap/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="/styles/styles.css" type="text/css" />
     <link rel="stylesheet" href="/styles/index.css" type="text/css" />
-    <link rel="stylesheet" href="/styles/search.css" type="text/css" />
     <link rel="stylesheet" href="/styles/form.css" type="text/css" />
-    <link rel="stylesheet" href="/styles/language.css" type="text/css" />
-    <link rel="stylesheet" href="/styles/alerts.css" type="text/css" />
-    <link rel="stylesheet" href="/styles/loader.css" type="text/css" />
-    <title lang="{{lang}}">{{title}}</title>
+    <link rel="stylesheet" href="/styles/dialogs.css" type="text/css" />
+
+    <title>{{_t('title')}}</title>
   </head>
 
   <body>
-    {% include "dialogs.html" %}
+    {% include "dialogs_modal.html" %}
     {% include "header.html" %}
 
-    <form id="survey-form" accept-charset="UTF-8" autocomplete="on" method="get"></form>
+    <main id="main-content" class="container p-0">
+      {% include "information.html" %}
 
-    <main data-step2="hide">
-      {% include "step_0.html" %}
-      {% include "step_1.html" %}
-      {% include "step_2.html" %}
-      {% include "step_3.html" %}
+      <form id="survey-form" accept-charset="UTF-8" autocomplete="on" method="get" aria-labelledby="form-title">
+        <h2 id="form-title" hidden>Multi-Step Survey</h2>
+        {% include "api_key.html" %}
+        {% include "additional_params.html" %}
+        {% include "keywords_combination.html" %}
+        {% include "survey_documents.html" %}
+      </form>
     </main>
 
     {% include "footer.html" %}
 
-    <div id="context-data" data-lang="{{lang}}" data-csrf-token="{{csrf_token}}" hidden aria-hidden="true"
-      aria-readonly="true">
+    <div id="context-data" data-lang="{{lang}}" data-csrf-token="{{csrf_token}}" hidden>
     </div>
 
-    <a id="download-link" rel="external" download="articles.csv" type="text/csv" hidden aria-hidden="true" tabindex="-1"
-      aria-readonly="true">&#8203;</a>
+    <a id="download-link" rel="alternate" download="articles.csv" type="text/csv" hidden tabindex="-1">&#8203;</a>
 
+    <script src="/libs/bootstrap/bootstrap.bundle.min.js" type="text/javascript"></script>
     <script src="/scripts/index.js" type="module"></script>
-    <script src="/scripts/translations.js" type="module"></script>
     <script src="/scripts/validation.js" type="module"></script>
+    <script src="/scripts/translations.js" type="module"></script>
     <script src="/scripts/button.js" type="module"></script>
-    <script src="/scripts/request.js" type="module"></script>
-    <script src="/scripts/previous.js" type="module"></script>
-    <script src="/scripts/combination.js" type="module"></script>
-    <script src="/scripts/search.js" type="module"></script>
-    <script src="/scripts/alerts.js" type="module"></script>
-    <!-- <script src="/scripts/data.js" type="module"></script> -->
+    <script src="/scripts/requests.js" type="module"></script>
+    <script src="/scripts/dialogs.js" type="module"></script>
+    <script src="/libs/jsonview/jsonview.min.js" type="text/javascript"></script>
   </body>
 
 </html>
