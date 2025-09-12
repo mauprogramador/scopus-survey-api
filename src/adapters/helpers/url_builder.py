@@ -46,7 +46,10 @@ class URLBuilder:
 
     def set_combination_query(self, params: CombinationParams) -> None:
         query_fields = params.model_dump(
-            by_alias=True, exclude_unset=True, include=QUERY_FIELDS
+            by_alias=True,
+            exclude_unset=True,
+            exclude_none=True,
+            include=QUERY_FIELDS,
         )
         query_terms = {"TITLE-ABS-KEY": "{combination}"}
         query_terms.update(query_fields)
@@ -74,7 +77,10 @@ class URLBuilder:
 
     def search_url(self, params: SearchParams) -> str:
         query_fields = params.model_dump(
-            by_alias=True, exclude_unset=True, include=QUERY_FIELDS
+            by_alias=True,
+            exclude_unset=True,
+            exclude_none=True,
+            include=QUERY_FIELDS,
         )
         query_terms = {"TITLE-ABS-KEY": params.combination}
         query_terms.update(query_fields)
