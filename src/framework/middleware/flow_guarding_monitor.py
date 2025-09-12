@@ -14,13 +14,14 @@ from starlette.responses import Response
 from src.adapters.presenters.error_response import ErrorJSON
 from src.adapters.presenters.html_response import TemplateBuilder
 from src.core.common.patterns import API_ROUTES_PATTERN
-from src.core.config.config import LOG
+from src.core.config.config import LOG, RATELIMIT_POLICY
 from src.core.domain.http_exceptions import HTTPError
 
 
 class FlowGuardingMonitorMiddleware(BaseHTTPMiddleware):
     """Middleware for tracing, process time and uncaught errors"""
 
+    _RATELIMIT_POLICY = "X-RateLimit-Policy"
     _PROCESS_TIME = "X-Process-Time"
 
     def __init__(self, app: FastAPI):
@@ -50,6 +51,7 @@ class FlowGuardingMonitorMiddleware(BaseHTTPMiddleware):
 
         process_time = perf_counter() - start_time
         response.headers[self._PROCESS_TIME] = f"{process_time:.2f}s"
+        response.headers[self._RATELIMIT_POLICY] = RATELIMIT_POLICY
 
         LOG.trace(request, response.status_code, process_time)
 
