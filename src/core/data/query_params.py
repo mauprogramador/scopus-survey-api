@@ -221,6 +221,8 @@ class SearchParams(CombinationParams):
     )
     max_count: int = Field(
         default=125,
+        alias="maxCount",
+        validation_alias="max_count",
         description="Limits the number of returned documents",
         examples=[25],
         exclude=True,
@@ -230,6 +232,8 @@ class SearchParams(CombinationParams):
     )
     ratio: int = Field(
         default=80,
+        alias="threshold",
+        validation_alias="ratio",
         description="Filter ratio to remove similar documents",
         examples=[80],
         exclude=True,
