@@ -34,8 +34,12 @@ class SurveyDetail:
             }
         )
 
-    def set_loss(self, loss: float) -> None:
-        self._headers.update({"X-Loss": f"{loss:.2f}%"})
+    def set_loss(self, loss_amount: int, loss_percent: float) -> None:
+        loss = f"{loss_amount}doc / {loss_percent:.2f}%"
+        self._headers.update({"X-Loss": loss})
+
+    def set_average_found(self, average: int) -> None:
+        self._headers.update({"X-Average-Found": f"~{average:,}"})
 
     @property
     def log_data(self) -> tuple[ScopusHeaders, int]:

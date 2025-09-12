@@ -141,22 +141,18 @@ class Logging:
     def loss(self, initial: int, final: int, loss: float) -> None:
         message = self._LOSS.format(
             initial=initial,
-            final=final,
-            loss=loss,
+            final=(initial - final),
+            loss_amount=final,
+            loss_percent=loss,
         )
         self.info(message)
 
-    def combinations(self, keywords: int, bundles: list[Json]) -> None:
-        totals: list[int] = [data["total"] for data in bundles]
-        average = 0.0
-
-        if sum(totals) > 0:
-            square_totals_sum = sum(total * total for total in totals)
-            average = square_totals_sum / (keywords * sum(totals))
-
+    def combinations(
+        self, nkeywords: int, totals: list[int], average: int
+    ) -> None:
         message = self._COMBINATIONS.format(
-            keywords=keywords,
-            combinations=len(bundles),
+            keywords=nkeywords,
+            combinations=len(totals),
             total=sum(totals),
             average=int(average),
         )

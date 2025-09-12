@@ -23,7 +23,10 @@ class SurveyDetail(Protocol):
     def set_quota_data(self, response: ResponseBundle) -> None:
         pass
 
-    def set_loss(self, loss: float) -> None:
+    def set_loss(self, loss_amount: int, loss_percent: float) -> None:
+        pass
+
+    def set_average_found(self, average: int) -> None:
         pass
 
     @property

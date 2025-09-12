@@ -49,7 +49,17 @@ class KeywordCombinationFinder:
             bundles_map.setdefault(index, bundle)
 
         survey_list = await self._search_api.survey_totals_found(bundles_map)
-        LOG.combinations(len(params.keywords), survey_list)
+        totals: list[int] = [data["total"] for data in survey_list]
+        nkeywords, average = len(params.keywords), 0.0
+
+        if sum(totals) > 0:
+            square_totals_sum = sum(total * total for total in totals)
+            average = square_totals_sum / (nkeywords * sum(totals))
+
+        average = int(average)
+        self._survey_detail.set_average_found(average)
+
+        LOG.combinations(nkeywords, totals, average)
         LOG.quota(*self._survey_detail.log_data)
 
         headers = self._survey_detail.headers

@@ -48,9 +48,10 @@ class ScopusArticlesAggregator:
             params.api_key, entry_items
         )
 
-        rows_in = self._docs.shape[self._ROWS_INDEX]
+        initial = self._docs.shape[self._ROWS_INDEX]
+        rows_out = self._SINGLE_ROW
 
-        if rows_in != self._SINGLE_ROW:
+        if initial != self._SINGLE_ROW:
             self._docs = self._docs.drop_duplicates()
             self._docs = self._docs.reset_index(drop=True)
 
@@ -58,19 +59,16 @@ class ScopusArticlesAggregator:
             self._docs = self._docs.reset_index(drop=True)
             rows_out = self._docs.shape[self._ROWS_INDEX]
 
-        else:
-            rows_out = self._docs.shape[self._ROWS_INDEX]
-
         if rows_out != self._SINGLE_ROW and params.ratio != self._NON_RATIO:
             self._docs = self._similarity_filter.filter(
                 self._docs, params.ratio
             )
 
-        result = rows_in - self._docs.shape[self._ROWS_INDEX]
-        loss = 0.0 if result == 0 else (result / rows_in) * self._PERCENT
-        self._survey_detail.set_loss(loss)
+        final = initial - self._docs.shape[self._ROWS_INDEX]
+        loss = 0.0 if final == 0 else (final / initial) * self._PERCENT
+        self._survey_detail.set_loss(final, loss)
 
-        LOG.loss(rows_in, result, loss)
+        LOG.loss(initial, final, loss)
         LOG.quota(*self._survey_detail.log_data)
 
         file_path = DIRECTORY / f"{params.api_key}_{FILE}"
