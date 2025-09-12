@@ -8,7 +8,7 @@ from fastapi import HTTPException
 from itsdangerous import BadData
 from pydantic import ValidationError
 
-from src.core.common.error_messages import SCOPUS_API_ERROR
+from src.core.common.error_messages import SCOPUS_API_ERROR, UNEXPECTED_ERROR
 from src.core.common.types import Json
 from src.core.config.config import LOG
 from src.core.config.scopus import SCOPUS_DOCS, SCOPUS_ERRORS
@@ -38,10 +38,11 @@ class HTTPError(HTTPException):
         traceback = exc_info()[2]
         frame = extract_tb(traceback)[-1] if traceback else cls._FRAME
 
+        file = frame.filename
         base_error = {
             "type": f"{type(error).__module__}.{type(error).__qualname__}",
-            "detail": LOG.error_message(error),
-            "file": frame.filename,
+            "detail": LOG.error_message(error, UNEXPECTED_ERROR),
+            "file": file[file.index("/scopus-survey-api") :],
             "line": frame.lineno,
         }
         errors = [base_error]
