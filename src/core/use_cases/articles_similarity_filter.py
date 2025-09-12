@@ -56,6 +56,9 @@ class ArticlesSimilarityFilter:
                 rows_indexes.add(group.index[indexes[0]])
                 rows_indexes.add(group.index[indexes[1]])
 
+        if not rows_indexes:
+            return None
+
         return rows_indexes
 
     def _get_single_group_index(self, grouped_df: DataFrame) -> set[int]:
