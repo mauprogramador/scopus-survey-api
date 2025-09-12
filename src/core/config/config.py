@@ -26,19 +26,27 @@ LIMIT = "60/2seconds"
 MAX_AGE = 3600  # 1 hour
 SHUTDOWN_TIMEOUT = 5
 
+BASE_URL = f"http://{ENV.host}:{ENV.port}"
+CSP = (
+    f"default-src 'self' {BASE_URL}; "
+    f"script-src 'self' {BASE_URL}/scripts {BASE_URL}/libs "
+    "'sha256-jRsTyupz2e+ruvGYICFat6kc2Gm1ilk7iLSex8+pM+I=' "
+    "https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui-bundle.js; "
+    f"style-src 'self' 'unsafe-inline' {BASE_URL}/styles {BASE_URL}/libs "
+    "https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui.css; "
+    f"img-src 'self' data: {BASE_URL}/images {BASE_URL}/svgs "
+    "https://fastapi.tiangolo.com/img/favicon.png; "
+    f"font-src 'self' {BASE_URL}/fonts; "
+    f"connect-src 'self' {BASE_URL}; "
+    "frame-ancestors 'none'; "
+    "form-action 'self'; "
+    "object-src 'none'; "
+    "child-src 'none'; "
+    "frame-src 'none'; "
+    "base-uri 'none'"
+)
 HEADERS = [
-    (
-        "Content-Security-Policy",
-        (
-            "default-src 'self'; base-uri 'self'; connect-src 'self'; "
-            "child-src 'none'; frame-src 'none'; frame-ancestors 'none'; "
-            "form-action 'self'; img-src 'self' data: https://fastapi."
-            "tiangolo.com/img/favicon.png; style-src 'self' 'unsafe-inline' "
-            "https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui."
-            "css; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr"
-            ".net/npm/swagger-ui-dist@5/swagger-ui-bundle.js"
-        ),
-    ),
+    ("Content-Security-Policy", CSP),
     ("Cross-Origin-Opener-Policy", "same-origin"),
     ("Referrer-Policy", "strict-origin-when-cross-origin"),
     ("X-Content-Type-Options", "nosniff"),
