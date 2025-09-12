@@ -34,8 +34,8 @@ const errorFeedbacks = {
   },
   year: {
     noInterval: 'Interval must be at least one year',
-    'start-year': 'Start Year must be less than End Year',
-    'end-year': 'End Year must be greater than Start Year',
+    startyear: 'Start Year must be less than End Year',
+    endyear: 'End Year must be greater than Start Year',
   },
 };
 

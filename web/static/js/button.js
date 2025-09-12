@@ -1,20 +1,15 @@
 // Button manager
 class Button {
-  constructor(buttonId) {
-    this.button = document.getElementById(buttonId);
+  constructor(buttonName) {
+    this.button = document.querySelector(buttonName);
     this.formAction = this.button.formAction;
     this.name = this.button.name;
     this.value = this.button.value;
   }
 
-  toggle(validity) {
-    if (validity) {
-      this.button.toggleAttribute('disabled', false);
-      this.button.ariaDisabled = 'false';
-    } else {
-      this.button.toggleAttribute('disabled', true);
-      this.button.ariaDisabled = 'true';
-    }
+  disable() {
+    this.button.toggleAttribute('disabled', true);
+    this.button.ariaDisabled = 'true';
   }
 
   enable() {
@@ -22,9 +17,32 @@ class Button {
     this.button.ariaDisabled = 'false';
   }
 
-  disable() {
-    this.button.toggleAttribute('disabled', true);
-    this.button.ariaDisabled = 'true';
+  toggle(validity) {
+    if (validity) {
+      this.enable();
+    } else {
+      this.disable();
+    }
+  }
+
+  ariaActive() {
+    this.button.ariaPressed = 'true';
+    this.button.ariaExpanded = 'true';
+  }
+
+  ariaInactive() {
+    this.button.ariaPressed = 'false';
+    this.button.ariaExpanded = 'false';
+  }
+
+  busy() {
+    this.disable();
+    this.button.ariaBusy = 'true';
+  }
+
+  free() {
+    this.enable();
+    this.button.ariaBusy = 'false';
   }
 }
 
