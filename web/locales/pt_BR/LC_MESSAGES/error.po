@@ -1,0 +1,78 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: ScopusSurveyAPI v3.2.5\n"
+"POT-Creation-Date: 2025-08-11 01:42-0400\n"
+"PO-Revision-Date: 2025-08-11 02:37-0400\n"
+"Last-Translator: mauprogramador <sir.silvabmauricio@gmail.com>\n"
+"Language-Team: mauprogramador sir.silvabmauricio@gmail.com\n"
+"Language: pt_BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.6\n"
+"X-Poedit-Basepath: ../../..\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-SearchPath-0: .\n"
+
+msgid "connection_error"
+msgstr "Erro de conexão na solicitação"
+
+msgid "connection_timeout"
+msgstr "Tempo limite de conexão da solicitação"
+
+msgid "request_exception"
+msgstr "Erro inesperado da solicitação"
+
+msgid "missing_token"
+msgstr "Token CSRF ausente"
+
+msgid "invalid_token"
+msgstr "Token CSRF inválido"
+
+msgid "token_cookie_error"
+msgstr "Cookie do Token CSRF ausente"
+
+msgid "token_header_error"
+msgstr "Cabeçalho do Token CSRF ausente ou inválido"
+
+msgid "token_session_error"
+msgstr "Sessão do Token CSRF ausente ou inválida"
+
+msgid "token_signature_error"
+msgstr "As assinaturas do Token CSRF não correspondem"
+
+msgid "expired_token"
+msgstr "O Token CSRF expirou"
+
+msgid "quota_exceeded"
+msgstr "A chave da API excedeu a cota de solicitações"
+
+msgid "rate_limit_exceeded"
+msgstr "Limite de taxa de solicitação por segundo excedido"
+
+msgid "validate_error"
+msgstr "Erro na resposta de validação da API do Scopus"
+
+msgid "invalid_json_error"
+msgstr "Resposta JSON inválida da API do Scopus"
+
+msgid "scopus_api_error"
+msgstr "Erro da API do Scopus"
+
+msgid "cancelled_error"
+msgstr "Cancelamento inesperado das tarefas"
+
+msgid "internal_error"
+msgstr "Ocorreu um erro interno inesperado"
+
+msgid "serialize_error"
+msgstr "Erro ao serializar os detalhes do erro"
+
+msgid "articles_not_found"
+msgstr "Nenhum artigo encontrado"
+
+msgid "csv_not_found"
+msgstr "Nenhum arquivo CSV encontrado"
+
+msgid "unexpected_error"
+msgstr "Ocorreu um erro inesperado"

@@ -3,6 +3,7 @@
   "title": "Search Articles - ScopusSurveyAPI",
   "required": "This is required",
   "api_title": "Application Programming Interface",
+  "current_year": "2025",
 
   "dialogs": {
     "T01": "Close",
@@ -22,17 +23,6 @@
     "T05": "Portuguese",
     "T06": "English",
     "T07": "Latest version release"
-  },
-
-  "footer": {
-    "T01": "API details",
-    "T02": "License",
-    "T03": "MIT License",
-    "T04": "Author",
-    "T05": "Developed by",
-    "T06": "IFMS logo",
-    "T07": "Scopus logo",
-    "T08": "DEV logo"
   },
 
   "ifmsTads": {
@@ -60,13 +50,14 @@
     "T11": "Documentation"
   },
 
-  "quotaRate": {
-    "title": "Quota and Rate Limits",
-    "T01": "Elsevier Scopus APIs",
-    "T02": "API Key Settings",
-    "T03": "There is a limit to how many requests for data you can make to",
-    "T04": "using your <strong>API Key</strong>. This <strong>request quota resets every seven days</strong>, and you can check its availability in the response headers. If <strong>requests exceed the quota or throttling rate </strong>, an <strong>error will be returned</strong>. See the",
-    "T05": "documentation about weekly quota and requests per second"
+  "dataSource": {
+    "title": "Data Source",
+    "T01": "The data is retrieved <strong>\"AS IS\"</strong> from the <strong>Scopus Database</strong> using the <strong>Scopus APIs</strong> provided by Elsevier. However, this does not imply any endorsement or affiliation with Elsevier or Scopus. We do not warrant the accuracy, completeness, or timeliness of the information obtained. All use of Scopus data is for <strong>non-commercial academic research</strong> and is subject to",
+    "T02": "Elsevier Terms and Conditions",
+    "T03": "Elsevier's Terms and Conditions",
+    "T04": "as well as",
+    "T05": "Scopus Academic Reseach Policy",
+    "T06": "Scopus's Policy"
   },
 
   "network": {
@@ -77,5 +68,30 @@
     "T04": "This does not include",
     "T05": "or",
     "T06": "access. Therefore, if you are <strong>fully remote</strong> and <strong>off-campus</strong>, the <strong>abstract</strong> and <strong>all authors</strong> of the articles will <strong>not be returned</strong>."
+  },
+
+  "quotaRate": {
+    "title": "Quota and Rate Limits",
+    "T01": "Elsevier Scopus APIs",
+    "T02": "API Key Settings",
+    "T03": "There is a limit to how many requests for data you can make to",
+    "T04": "using your <strong>API Key</strong>. This <strong>request quota resets every seven days</strong>, and you can check its availability in the response headers. If <strong>requests exceed the quota or throttling rate </strong>, an <strong>error will be returned</strong>. See the",
+    "T05": "documentation about weekly quota and requests per second"
+  },
+
+  "footer": {
+    "T01": "API details",
+    "T02": "License",
+    "T03": "MIT License",
+    "T04": "Author",
+    "T05": "Developed by",
+    "T06": "IFMS logo",
+    "T07": "Scopus logo",
+    "T08": "DEV logo",
+    "T09": "Data source",
+    "T10": "Data provided by",
+    "T11": "Terms of Service",
+    "T12": "Privacy Policy",
+    "T13": "Cookie Policy"
   }
 }

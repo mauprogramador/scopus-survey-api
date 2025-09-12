@@ -1,0 +1,7 @@
+{
+  "api_description": "Web API for bibliographic survey of Scopus articles",
+  "title": "Search Articles - ScopusSurveyAPI",
+  "required": "This is required",
+  "api_title": "Application Programming Interface",
+  "current_year": "2025"
+}
