@@ -9,8 +9,8 @@ from starlette.responses import Response
 from src import __version__
 from src.adapters.presenters.error_response import ErrorJSON
 from src.core.common.error_messages import UNEXPECTED_ERROR
-from src.core.common.types import Translation
-from src.core.config.config import LOG, MAX_AGE, PREFIX
+from src.core.config.config import MAX_AGE, PREFIX
+from src.core.config.scopus import CURRENT_YEAR
 from src.core.data.enums import Lang, Templates
 from src.core.domain.translations import Translations
 
