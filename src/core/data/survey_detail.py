@@ -29,7 +29,7 @@ class SurveyDetail:
             {
                 "X-Limit": str(quota.limit),
                 "X-Remaining": str(quota.remaining),
-                "X-Reset": str(quota.reset),
+                "X-Reset": str(quota.reset_datetime),
                 "X-ELS-Status": quota.status,
             }
         )
