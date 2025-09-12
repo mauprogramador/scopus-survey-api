@@ -67,3 +67,6 @@ TODO
 diagrams/
 csv/
 *.log
+cspell.json
+ssh_server
+test.py
