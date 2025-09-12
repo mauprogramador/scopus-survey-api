@@ -11,8 +11,6 @@ Keyword: TypeAlias = Annotated[
 
 Json: TypeAlias = dict[str, Any]
 
-Translation: TypeAlias = dict[str, dict[str, str]]
-
 Articles: TypeAlias = list[dict[str, str]]
 
 ScopusModel = TypeVar("ScopusModel", bound=BaseModel)

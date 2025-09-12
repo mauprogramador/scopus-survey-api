@@ -6,8 +6,8 @@ from fastapi.staticfiles import StaticFiles
 from starlette.middleware.sessions import SessionMiddleware
 
 from src import __version__
-from src.adapters.presenters.html_response import TemplateBuilder
 from src.core.config.config import DIRECTORY, ENV, LIMITER, SECRET_KEY
+from src.core.domain.translations import Translations
 from src.framework.fastapi.routes import router
 from src.framework.fastapi.swagger import (
     CONTACT,
@@ -25,7 +25,7 @@ from src.framework.middleware import (
 @asynccontextmanager
 async def lifespan(app: FastAPI):  # pylint: disable=W0621,W0613
     DIRECTORY.mkdir(parents=True, exist_ok=True)
-    TemplateBuilder.load_translations()
+    Translations.load_all()
     yield
 
 

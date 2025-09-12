@@ -6,6 +6,10 @@ class Lang(StrEnum):
     EN_US = "en-US"
     PT_BR = "pt-BR"
 
+    @property
+    def locale(self) -> str:
+        return self.value.replace("-", "_")
+
 
 @unique
 class ScopusCode(StrEnum):

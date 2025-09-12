@@ -1,6 +1,5 @@
 from datetime import datetime
 from http import HTTPStatus
-from json import load
 
 from fastapi import Request
 from fastapi.responses import HTMLResponse
@@ -13,12 +12,12 @@ from src.core.common.error_messages import UNEXPECTED_ERROR
 from src.core.common.types import Translation
 from src.core.config.config import LOG, MAX_AGE, PREFIX
 from src.core.data.enums import Lang, Templates
+from src.core.domain.translations import Translations
 
 
 class TemplateBuilder:
     """Generates context values for template responses"""
 
-    _TRANSLATIONS: Translation = {}
     _ERROR_PAGE_HEADERS = {
         "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0",
         "Pragma": "no-cache",
@@ -26,21 +25,6 @@ class TemplateBuilder:
         "Content-Language": Lang.EN_US,
     }
     _TEMPLATES = Jinja2Templates(directory="web/templates")
-
-    @classmethod
-    def load_translations(cls) -> None:
-        try:
-            path = "web/static/lang/en_us.json"
-            with open(path, "r", encoding="utf-8") as file:
-                cls._TRANSLATIONS.setdefault(Lang.EN_US, load(file))
-
-            path = "web/static/lang/pt_br.json"
-            with open(path, "r", encoding="utf-8") as file:
-                cls._TRANSLATIONS.setdefault(Lang.PT_BR, load(file))
-
-        except Exception as exc:
-            LOG.error("Error loading translations")
-            raise exc
 
     @classmethod
     def search_template(
@@ -59,8 +43,10 @@ class TemplateBuilder:
             "prefix": PREFIX,
             "csrf_token": csrf_token,
             "lang": lang.value,
+            "current_year": CURRENT_YEAR,
+            "_t": Translations.WEB[lang].gettext,
+            "_e": Translations.ERROR[lang].gettext,
         }
-        context.update(cls._TRANSLATIONS[lang])
 
         return cls._TEMPLATES.TemplateResponse(
             request,
