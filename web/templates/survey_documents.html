@@ -16,27 +16,14 @@
         Max Count
         <span class="badge text-bg-secondary" aria-hidden="true">Optional</span>
       </h4>
-      <p id="maxcount-desc">
-        A numeric value, a <strong>multiple of 25</strong>, with a <strong>minimum of 25</strong> and a <strong>maximum
-          of 250</strong>, that limits the total number of results to be returned. The <strong>default is 125</strong>.
+      <p id="quotas-desc">
+        Quotas, which refer to the <strong>maximum number of requests executed</strong>, are <strong>unique to each
+          <abbr title="Application Programming Interface">API</abbr></strong>. According to the <a class="link"
+          href="https://dev.elsevier.com/api_key_settings.html" target="_blank"
+          rel="help nofollow noopener noreferrer">API Key Settings</a>, for the APIs we are using, <strong>Scopus
+          Search</strong> has a <strong>weekly quota of 20,000</strong>, and <strong>Abstract Retrieval</strong> has a
+        <strong>weekly quota of 10,000</strong>.
       </p>
-      <div class="field-container">
-        <div class="field-wrapper">
-          <span class="field-icon" aria-hidden="true">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" aria-hidden="true">
-              <path
-                d="M440-160q-17 0-28.5-11.5T400-200v-240L168-736q-15-20-4.5-42t36.5-22h560q26 0 36.5 22t-4.5 42L560-440v240q0 17-11.5 28.5T520-160h-80Zm40-308 198-252H282l198 252Zm0 0Z" />
-            </svg>
-          </span>
-          <input id="maxcount" class="form-control" name="maxCount" form="survey-form" type="number" min="25" max="250"
-            step="25" size="3" data-checked="false" autocomplete="on" placeholder="Count" inputmode="numeric"
-            aria-invalid="false" aria-required="false" aria-autocomplete="both" aria-labelledby="maxcount-title"
-            aria-describedby="maxcount-desc" aria-details="maxcount-help" aria-errormessage="maxcount-feedback" />
-        </div>
-        <div id="maxcount-feedback" class="field-feedback" role="alert" aria-live="assertive" hidden>
-        </div>
-        <div id="maxcount-help" class="field-help">e.g. 50</div>
-      </div>
     </section>
 
     <section class="col text-group" role="region" aria-labelledby="threshold-title" aria-describedby="threshold-desc">
