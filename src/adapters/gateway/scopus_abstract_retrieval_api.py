@@ -117,6 +117,7 @@ class ScopusAbstractRetrievalAPI:
                 self._abstracts.append(abstract.model_dump(by_alias=True))
 
             else:
+                await self._http_retry.update_strategy(self._total)
                 await self._get_multiple_abstracts()
         finally:
             await self._http_retry.close()

@@ -20,7 +20,7 @@ from fastapi import Request
 from uvicorn.config import LOGGING_CONFIG
 
 from src.core.common.patterns import ANSI_ESCAPE_PATTERN, API_KEY_LOG_PATTERN
-from src.core.common.types import Json, LogParams, Quota
+from src.core.common.types import LogParams, Quota, RateStrategy
 from src.core.config.scopus import NO_RESULTS, SEARCH_API_URL
 
 
@@ -71,8 +71,13 @@ class Logging:
         "Average-Found: \033[33m~{average:,}"
     )
     _LOSS = (
-        "Initial: \033[33m{initial}\033[m. Final: \033[33m{final}\033[m"
-        ". Loss: \033[33m{loss:.2f}%"
+        "Initial: \033[33m{initial}\033[m. Final: \033[33m{final}\033[m. "
+        "Loss: \033[33m{loss_amount}doc \033[m/ \033[33m{loss_percent:.2f}"
+    )
+    _STRATEGY = (
+        "RateLimit: \033[33m{rate:.1f}req\033[m/\033[33m{time:.1f}s\033[m. "
+        "Backoff: \033[33m{backoff:.1f}\033[m. Sleep: \033[33m{sleep:.1f}s"
+        "\033[m. Concurrent: \033[33m{concurrent}\033[m"
     )
     _EXCEPTION = "{module}.{qualname}: {filepath}, line {line}, col {col}"
     _UVICORN_FMT = "%(asctime)s %(levelprefix)s %(message)s"
@@ -154,7 +159,17 @@ class Logging:
             keywords=nkeywords,
             combinations=len(totals),
             total=sum(totals),
-            average=int(average),
+            average=average,
+        )
+        self.info(message)
+
+    def strategy(self, strategy: RateStrategy, time: float) -> None:
+        message = self._STRATEGY.format(
+            rate=strategy.rate,
+            time=time,
+            backoff=strategy.backoff,
+            sleep=strategy.sleep,
+            concurrent=strategy.concurrent,
         )
         self.info(message)
 

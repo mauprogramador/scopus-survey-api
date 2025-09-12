@@ -79,3 +79,10 @@ class CombinationBundle(BaseModel):
     combination: str = Field()
     url: str = Field(exclude=True)
     total: int = Field(default=None)
+
+
+class RateStrategy(NamedTuple):
+    rate: float
+    backoff: float
+    sleep: float
+    concurrent: int

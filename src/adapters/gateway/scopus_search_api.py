@@ -185,6 +185,9 @@ class ScopusSearchAPI:
                 self._search.entry.extend(search.entry)
 
             elif self._search.pages_count > 2:
+                await self._http_client.update_strategy(
+                    self._search.pages_count
+                )
                 await self._get_multiple_articles_by_pagination()
 
             LOG.info("Total Found: " f"\033[33m{self._search.total_results}")
