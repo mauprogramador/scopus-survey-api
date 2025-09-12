@@ -1,8 +1,8 @@
 # Terms of Service
 
-**Scopus Survey API** - *Web API for bibliographic survey of Scopus articles*
+**Scopus Survey API** - _Web API for bibliographic survey of Scopus articles_
 
-> *Last updated: August 10, 2025*
+> _Last updated: August 10, 2025_
 
 Federal Institute of Mato Grosso do Sul - [IFMS - Campus Três Lagoas](https://www.ifms.edu.br/campi/campus-tres-lagoas)<br/>
 Technology in Systems Analysis and Development - [TADS](https://www.ifms.edu.br/campi/campus-tres-lagoas/cursos/graduacao/analise-e-desenvolvimento-de-sistemas)<br/>
@@ -17,17 +17,17 @@ This agreement (**"Terms of Service"**) defines the conditions under which you m
 
 ## 1. Overview
 
-The **Scopus Survey API** is a web API designed to facilitate the survey of information from academic documents that will be used as high-quality literature sources on the web for research and development of theoretical references and systematic reviews.
+The **Scopus Survey API** is a web API designed to facilitate the survey of information from academic documents that will be used as high-quality literature sources on the web for research, bibliographic references, and systematic reviews. It is primarily intended for free, [non-commercial academic use](https://dev.elsevier.com/academic_research_scopus.html) by students, thus improving accessibility.
 
-Through a web form, the application aims to enable a personalized survey, by first using the **API key**, keywords, and other search parameters submitted by the user to query [Scopus](https://www.scopus.com/home.uri)'s vast database of high-quality abstract and citation sources, using the [Scopus Search API](https://dev.elsevier.com/documentation/SCOPUSSearchAPI.wadl) and the  [Scopus Abstract Retrieval API](https://dev.elsevier.com/documentation/AbstractRetrievalAPI.wadl), maintained by [Elsevier](https://www.elsevier.com).
+Through a web form, the application aims to enable a personalized survey, by first using the **API key**, keywords, and other search parameters submitted by the user to query [Scopus](https://www.scopus.com/home.uri)'s vast database of high-quality abstract and citation sources, using the [Scopus Search API](https://dev.elsevier.com/documentation/SCOPUSSearchAPI.wadl) and the [Scopus Abstract Retrieval API](https://dev.elsevier.com/documentation/AbstractRetrievalAPI.wadl), maintained by [Elsevier](https://www.elsevier.com).
 
-Finally, all document data will be systematically downloaded and gathered, then validated, processed, and refined based on content similarity, removing duplicates and filtering similar documents, leaving only the most relevant and recent data, which will be organized and returned in a CSV file, allowing you to decide which documents to use based on your circumstances.
+Finally, all document data will be systematically downloaded and gathered, then validated, processed, and refined based on content similarity, removing duplicates and filtering similar documents, leaving only the most relevant and recent data, which will be organized and returned in a CSV file, allowing you to use the documents as you wish, depending on your circumstances.
 
 <br>
 
 ## 2. Acceptance
 
-> *Effective date: August 10, 2025*
+> _Effective date: August 10, 2025_
 
 - By accessing or using the Service, you signify your unreserved agreement to be bound by these Terms of Service and our [Privacy Policy](./PRIVACY_POLICY.md).
 - These terms constitute a legally binding agreement, if you do not agree to these Terms, you **MUST NOT** access or use the Service.
@@ -99,7 +99,7 @@ We does not warrant that:
 - The Service is completely free of viruses or other harmful components.
 - The results of using the Service will meet your requirements.
 
-While we strive to provide accurate and useful information, the Service does not warrant and is not responsible regarding the accuracy, reliability, completeness, currency, or timeliness of any data obtained from the [Scopus APIs](https://dev.elsevier.com/sc_apis.html).
+While the Scopus database is known for its curated content of peer-reviewed literature, and we strive to provide accurate and useful information, the Service itself does not guarantee and is not responsible for the accuracy, reliability, completeness, currency, or timeliness of any data obtained from the [Scopus APIs](https://dev.elsevier.com/sc_apis.html).
 
 Our use of Scopus data does not imply endorsement by, or affiliation with, [Elsevier](https://www.elsevier.com) or [Scopus](https://www.scopus.com/home.uri). The data is provided **"AS IS"**, and we do not assume any responsibility or liability for any errors, omissions, or inaccuracies in such data, or for any actions taken in reliance thereon.
 
@@ -109,7 +109,7 @@ Our use of Scopus data does not imply endorsement by, or affiliation with, [Else
 
 ### 6.1. Your Scopus API Key
 
-You must obtain an **API Key** to access the [Scopus APIs](https://dev.elsevier.com/sc_apis.html) to search and retrieve the articles' information. It can be obtained by accessing the [Elsevier Developer Portal](https://dev.elsevier.com/), clicking on the **I want an API Key** button and registering.
+You must obtain an **API Key** to use the [Scopus APIs](https://dev.elsevier.com/sc_apis.html). It can be obtained by accessing the [Elsevier Developer Portal](https://dev.elsevier.com/), clicking on the **I want an API Key** button and registering.
 
 If you are part of an educational institution, you can try to confirm if your institution is registered with [Elsevier](https://www.elsevier.com) to sign in via your organization, or you can also try to register with your academic email.
 
@@ -128,7 +128,7 @@ In connection with our Service, by registering with Elsevier, you agree to:
 
 ### 6.3. Institutional Network
 
-Please be aware that the **API Key** will only authenticate correctly if you submit it while using your **university/institution's network**, and this does not include **VPN** or **proxy** access. Therefore, if you are **fully remote** and **off-campus**, the some document information **may not be returned**.
+Please be aware that the **API Key** will only authenticate correctly if you submit it while using your **academic institution's network**, which must be **registered with Elsevier**. This **does not include** VPN or proxy access. Therefore, if you are **fully remote** and **off-campus**, some data may **not be returned**.
 
 <br>
 
@@ -151,7 +151,7 @@ The Service acts only as an intermediary facilitator that, using user-provided p
 The data is subsequently validated, applying the following rules:
 
 - Fields that returned no value will be set to **"null"**.
-- Fields that returned a value will not have their information changed (**with two exceptions**).
+- Fields that returned a value will not have their information changed.
 - The document's author(s) will be set to:
   - The first author (**"dc:creator"**) if only that author is returned.
   - All names in the author list (**"authors"**), concatenated, if returned.
@@ -176,7 +176,7 @@ About of what we use in the [Scopus Search API](https://dev.elsevier.com/documen
 **Query:**
 
 ```txt
-  TITLE-ABS-KEY(), AND, DOCTYPE, PUBSTAGE, LANGUAGE, OPENACCESS, SRCTYPE, SUBJAREA, PAGES
+  TITLE-ABS-KEY(), AND, OR, AND NOT, DOCTYPE, PUBSTAGE, LANGUAGE, OPENACCESS, SRCTYPE, SUBJAREA, PAGES
 ```
 
 **Fields:**

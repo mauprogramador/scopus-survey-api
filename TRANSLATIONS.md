@@ -29,12 +29,14 @@ We then use [Python's gettext module](https://docs.python.org/3/library/gettext.
 
 | Prefix | Category        | Example `msgid` | Scope                                 |
 |--------|-----------------|-----------------|---------------------------------------|
-| `T`    | General text    | `T0709`         | Headings, Paragraphs, Divs            |
+| `T`    | General Text    | `T0709`         | Headings, Paragraphs, Divs            |
 | `E`    | Errors          | `E0709`         | Validation, API Errors, Exceptions    |
 | `F`    | Form items      | `F0709`         | Labels, Placeholders, Fields, Buttons |
 | `M`    | Messages        | `M0709`         | Alerts, Modals                        |
 | `H`    | Help text       | `H0709`         | Instructions, Labels, Feedbacks       |
 | `I`    | Icons / Images  | `I0709`         | Aria-labels, Descriptions             |
+| `A`    | Abbreviations   | `A0709`         | Abbr elements's title                 |
+| Custom | Custom          | `required`      | Custom specific translation code      |
 
 <br>
 
