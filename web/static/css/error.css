@@ -1,132 +1,20 @@
-main {
-  justify-content: center;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  margin: 70px auto;
-  display: flex;
+h1 {
+  font-size: 9.38rem;
 }
 
-#error__title {
-  color: var(--orange);
-  margin-bottom: 30px;
-}
-#error__title h1 {
-  margin-bottom: 5px;
-  font-size: 100px;
-}
-#error__title h2 {
-  font-size: 20px;
+.btn-light {
+  --bs-btn-hover-border-color: var(--primary-color);
+  --bs-btn-color: var(--text-emphasis-color);
+  --bs-btn-hover-bg: #f7f6f2;
 }
 
-#error__text {
-  margin-bottom: 20px;
-  color: var(--white);
-}
-#error__text h3 {
-  margin-bottom: 5px;
-  font-size: 16px;
-}
-#error__text time {
-  font-size: 12px;
-}
-
-#page-link {
-  justify-content: center;
-  margin-bottom: 15px;
-  display: flex;
+#json-response {
+  max-width: 500px;
   width: 100%;
 }
-#page-link a {
-  border: 2px solid var(--ocean);
-  background-color: var(--ocean);
-  padding: 0.5rem 1.5rem;
-  justify-content: center;
-  border-radius: 0.5rem;
-  color: var(--white);
-  align-items: center;
-  white-space: nowrap;
-  user-select: none;
-  font-weight: bold;
-  cursor: pointer;
-  font-size: 1rem;
-  display: flex;
-  gap: 0.625rem;
-  outline: none;
-}
-#page-link a:is(:hover, :focus-visible) {
-  box-shadow: 0 0 0 3px #e9711c55;
-  background-color: var(--white);
-  border-color: var(--orange);
-  color: var(--black-2E);
-  z-index: 2;
-}
-
-.icon {
-  align-items: center;
-  display: flex;
-}
-.icon svg {
-  height: 1.2rem;
-  width: 1.2rem;
-}
-
-#details {
-  justify-content: center;
-  flex-direction: column;
-  align-items: start;
-  display: flex;
-  gap: 2px;
-}
-
-#header {
-  background-color: var(--white-F5);
-  justify-content: space-between;
-  border-radius: 5px;
-  display: flex;
-  width: 100%;
-}
-#header label {
-  padding: 0.5rem 0.75rem;
+.json-value.json-string {
+  white-space: break-spaces;
+  word-break: break-all;
+  word-wrap: break-word;
   text-align: left;
-  width: 100%;
-}
-#header button {
-  background-color: var(--white-F5);
-  justify-content: center;
-  border-radius: 5px;
-  user-select: none;
-  cursor: pointer;
-  display: flex;
-  outline: none;
-  border: none;
-}
-#header button:is(:hover, :focus-visible) svg {
-  fill: var(--orange);
-}
-
-#details textarea {
-  background-color: var(--white-F5);
-  padding: 0.5rem 0.75rem;
-  border-radius: 5px;
-  line-height: 18px;
-  overflow: scroll;
-  font-weight: 400;
-  color: #000000;
-  font-size: 16px;
-  outline: none;
-  border: none;
-  width: 100%;
-}
-
-#footer {
-  justify-content: center;
-  color: var(--white);
-  margin-top: 20px;
-  display: flex;
-  gap: 5px;
-}
-#footer .link {
-  text-decoration: underline;
-  color: var(--white);
 }

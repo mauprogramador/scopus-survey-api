@@ -1,85 +1,174 @@
+@font-face {
+  font-family: 'Ubuntu';
+  src: url('/fonts/Ubuntu/Ubuntu-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Ubuntu';
+  src: url('/fonts/Ubuntu/Ubuntu-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Ubuntu';
+  src: url('/fonts/Ubuntu/Ubuntu-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Ubuntu';
+  src: url('/fonts/Ubuntu/Ubuntu-Italic.woff2') format('woff2');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
 :root {
-  --light-yellow: #fffbd7;
-  --light-green: #a3cfbb;
-  --dark-ocean: #265a88;
-  --light-gray: #dddddd;
-  --light-red: #f1aeb5;
-  --white-F5: #f5f5f5;
-  --black-2E: #2e2e2e;
-  --black-32: #323232;
-  --gray-50: #505050;
-  --gray-5x: #53565a;
-  --orange: #ff6c00;
+  /* --dark-ocean: #265a88; */
+  --primary-color: #ff6c00;
+  --emphasis-color: #007398;
+  --text-emphasis-color: #2e2e2e;
+  --nav-color: #53565a;
+  --valid-color: #3b8754;
+  --valid-color-shadow: #a3cfbb;
+  --invalid-color: #dd4145;
+  --invalid-color-shadow: #f1aeb5;
+  --focus-color: #0056d6;
+  --radio-border-color: #b9b9b9;
+  --badge-border-color: #017b16;
+  --badge-color: #00510f;
   --white: #ffffff;
-  --green: #3b8754;
-  --azure: #2196f3;
-  --ocean: #007398;
-  --aqua: #00a9be;
-  --red: #dd4145;
+  --black: #000000;
+
+  --bs-body-font-family: 'Ubuntu', var(--bs-font-sans-serif);
+  --bs-body-color: #505050;
+  --bs-body-font-size: 1rem;
+  --bs-body-bg: #333333;
+  --bs-primary-text-emphasis: var(--primary-color);
+  --bs-primary-rgb: 255, 108, 0;
+  --bs-primary: var(--primary-color);
+  --bs-link-hover-color-rgb: 255, 108, 0;
+  --bs-link-hover-color: var(--primary-color);
+  --bs-link-color-rgb: 0, 115, 152;
+  --bs-link-color: var(--emphasis-color);
+  --bs-border-color: var(--primary-color);
+  --bs-border-width: 2px;
+  --bs-highlight-color: var(--primary-color);
+  --bs-emphasis-color: var(--primary-color);
+  --bs-heading-color: var(--primary-color);
+  --bs-nav-link-font-size: 1rem;
 }
 
 * {
-  font-family: Arial, Helvetica, sans-serif;
-  transition: all 0.3s ease-in-out;
   box-sizing: border-box;
+  box-shadow: none;
   outline: none;
   margin: 0;
 }
-
-html {
-  font-size: 16px;
-}
 body {
-  background-color: #333333;
+  min-width: 320px !important;
   color-scheme: light;
-  min-width: 275px;
 }
 
-a {
-  text-decoration: none;
-  color: inherit;
+:is(a, button, input, select) {
+  transition: outline 0s, border-radius 0s, color 0.3s ease-in-out,
+    background-color 0.3s ease-in-out, border-color 0.3s ease-in-out,
+    text-decoration-color 0.3s ease-in-out, transform 0.3s ease-in-out,
+    fill 0.3s ease-in-out, stroke 0.3s ease-in-out, box-shadow 0.3s ease-in-out !important;
+  outline-offset: 3px;
 }
-p {
-  color: var(--gray-50);
+:is(a, button, input, select) > * {
+  transition: none !important;
+}
+:is(a, button, input, select):focus:not(:focus-visible) {
+  outline: none !important;
+}
+:is(a, button:not(:disabled)):focus-visible {
+  outline: 2px dashed var(--focus-color);
 }
 
-/* Link */
 .link {
   text-decoration: underline transparent solid 2px;
   text-underline-offset: 4px;
-  color: var(--ocean);
   outline: none;
 }
-.link:is(:hover, :focus-visible) {
-  text-decoration-color: var(--orange);
-  color: var(--orange) !important;
+.link:is(:hover, :focus-visible, :active) {
+  --bs-link-color-rgb: var(--bs-link-hover-color-rgb);
+  text-decoration-color: var(--primary-color);
+}
+.link:focus-visible {
+  box-shadow: none;
 }
 
-/* SVGs */
-svg {
-  fill: var(--ocean);
+.btn-scopus {
+  --bs-btn-hover-border-color: var(--primary-color);
+  --bs-btn-hover-color: var(--text-emphasis-color);
+  --bs-btn-hover-bg: var(--white);
+  --bs-btn-active-border-color: var(--primary-color);
+  --bs-btn-active-color: var(--text-emphasis-color);
+  --bs-btn-active-bg: var(--white);
+  --bs-btn-disabled-border-color: var(--emphasis-color);
+  --bs-btn-disabled-color: var(--white);
+  --bs-btn-disabled-bg: var(--emphasis-color);
+  --bs-btn-border-color: var(--emphasis-color);
+  --bs-btn-color: var(--white);
+  --bs-btn-font-weight: 400;
+  --bs-btn-bg: var(--emphasis-color);
+}
+
+svg,
+img {
+  vertical-align: text-top;
+  display: inline-block;
+  object-fit: contain;
+  fill: currentcolor;
+  height: 1em;
+  width: 1em;
 }
 svg path {
   transition: none;
 }
 
-.download-button svg,
-#survey-button svg,
-#page-link a svg {
-  fill: var(--white);
+/* xxl */
+@media (min-width: 2560px) {
+  html {
+    font-size: 18px;
+  }
 }
-.download-button:is(:hover, :focus-visible) svg,
-#survey-button:is(:hover, :focus-visible) svg,
-#page-link a:is(:hover, :focus-visible) svg {
-  fill: var(--black-2E);
+/* xl */
+@media (min-width: 1980px) and (max-width: 2559.98px) {
+  html {
+    font-size: 17px;
+  }
 }
-
-#search-button svg {
-  fill: none;
+/* lg */
+@media (min-width: 992px) and (max-width: 1979.98px) {
+  html {
+    font-size: 16px;
+  }
 }
-#search-button path {
-  stroke: var(--white);
+/* md */
+@media (min-width: 768px) and (max-width: 991.98px) {
+  html {
+    font-size: 15px;
+  }
 }
-#search-button:is(:hover, :focus-visible) path {
-  stroke: var(--black-2E);
+/* sm */
+@media (min-width: 576px) and (max-width: 767.98px) {
+  html {
+    font-size: 14px;
+  }
+}
+/* xs */
+@media (max-width: 575.98px) {
+  html {
+    font-size: 13px;
+  }
+  .pxy {
+    padding: 0.5rem 1rem !important;
+  }
 }

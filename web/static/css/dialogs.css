@@ -1,0 +1,212 @@
+/* Loader */
+#loader-dialog {
+  transition: opacity 0.5s ease-in-out;
+  min-height: calc(100% - 2.5rem * 2);
+  background-color: transparent;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  margin: 2.5rem auto;
+  overflow: hidden;
+  position: fixed;
+  outline: none;
+  z-index: 5;
+  padding: 0;
+  border: 0;
+  gap: 3rem;
+}
+#loader-dialog::backdrop {
+  transition: opacity 0.5s ease-in-out;
+  background: rgb(0 0 0 / 40%);
+  z-index: 4;
+  opacity: 0;
+}
+
+#loader-dialog[open] {
+  display: flex;
+  opacity: 1;
+}
+#loader-dialog[open]::backdrop {
+  opacity: 1;
+}
+
+/* Spinner */
+#spinner {
+  animation: spinner 1s infinite linear;
+  border-right: 1rem solid var(--primary-color);
+  border-bottom: 1rem solid #0000;
+  border-left: 1rem solid #0000;
+  border-top: 1rem solid #0000;
+  border-radius: 50%;
+  cursor: progress;
+  aspect-ratio: 1;
+  width: 9.375rem;
+  display: grid;
+}
+#spinner::before,
+#spinner::after {
+  animation: spinner 2s infinite;
+  border-radius: 50%;
+  grid-area: 1/1;
+  border: inherit;
+  margin: 2rem;
+  content: '';
+}
+#spinner::after {
+  animation-duration: 3s;
+  margin: 0.5rem;
+}
+@keyframes spinner {
+  100% {
+    transform: rotate(1turn);
+  }
+}
+
+/* Progress bar */
+#progress {
+  cursor: progress;
+  display: flex;
+  gap: 0.5rem;
+}
+#progress span {
+  animation: ellipsis-dot 1s infinite;
+  background-color: var(--white);
+  height: 0.625rem;
+  width: 0.625rem;
+  opacity: 0;
+}
+#progress span:nth-child(1) {
+  animation-delay: 0s;
+}
+#progress span:nth-child(2) {
+  animation-delay: 0.1s;
+}
+#progress span:nth-child(3) {
+  animation-delay: 0.2s;
+}
+#progress span:nth-child(4) {
+  animation-delay: 0.3s;
+}
+#progress span:nth-child(5) {
+  animation-delay: 0.4s;
+}
+@keyframes ellipsis-dot {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Alerts */
+.alert {
+  --bs-alert-margin-bottom: 0;
+  --bs-border-width: 1px;
+  box-shadow: 4px 4px 2px -1px #cccccc;
+  animation-timing-function: ease-in-out;
+  animation-fill-mode: forwards;
+  animation-iteration-count: 1;
+  animation-direction: normal;
+  animation-duration: 0.5s;
+  align-items: center;
+  position: absolute;
+  margin-top: 0.7rem;
+  max-width: 500px;
+  display: flex;
+  z-index: 6;
+}
+.alert-msg {
+  justify-content: space-evenly;
+  text-overflow: ellipsis;
+  flex-direction: column;
+  white-space: nowrap;
+  overflow: hidden;
+  display: flex;
+  margin: 0 7px;
+  height: auto;
+  flex: 1;
+}
+.btn-close {
+  --bs-btn-close-bg: url('/svgs/close.svg');
+}
+
+/* Alerts Color */
+#warning-alert {
+  --bs-alert-color: var(--black);
+  --bs-alert-bg: #ffcd39;
+}
+#success-alert {
+  --bs-alert-color: var(--white);
+  --bs-alert-bg: #479f76;
+}
+#error-alert {
+  --bs-alert-color: var(--white);
+  --bs-alert-bg: #e35d6a;
+}
+
+.alert:not([open]) {
+  transform: translateY(-50px);
+}
+.alert[open] {
+  animation-name: alert-in;
+}
+
+/* Keyframes */
+@keyframes alert-in {
+  0% {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+}
+
+/* Accordion */
+.accordion {
+  --bs-accordion-btn-active-icon: url('/svgs/expand.svg');
+  --bs-accordion-btn-icon: url('/svgs/expand.svg');
+  --bs-accordion-active-color: var(--white);
+  --bs-accordion-btn-focus-box-shadow: none;
+  --bs-accordion-btn-color: var(--white);
+  --bs-accordion-active-bg: transparent;
+  --bs-accordion-body-padding-x: 1rem;
+  --bs-accordion-body-padding-y: 1rem;
+  --bs-accordion-color: var(--white);
+  --bs-accordion-btn-padding-x: 2px;
+  --bs-accordion-btn-padding-y: 2px;
+  --bs-accordion-bg: transparent;
+  --bs-accordion-border-width: 0;
+  width: 100%;
+}
+.accordion-header {
+  border: var(--bs-alert-border);
+  align-items: center;
+  padding: 1rem;
+  display: flex;
+}
+.accordion-button {
+  opacity: 0.5;
+}
+.accordion-button:hover {
+  opacity: 0.75;
+}
+.accordion-collapse {
+  border-top: 2px solid #842029;
+}
+.accordion-body {
+  border-bottom-right-radius: var(--bs-accordion-border-radius);
+  border-bottom-left-radius: var(--bs-accordion-border-radius);
+  background-color: var(--white);
+}
+.json-value.json-string {
+  white-space: break-spaces;
+  word-break: break-all;
+  word-wrap: break-word;
+  text-align: left;
+}
