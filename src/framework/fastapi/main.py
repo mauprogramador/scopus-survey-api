@@ -68,7 +68,6 @@ app.mount("/libs", StaticFiles(directory="web/static/lib"))
 app.mount("/fonts", StaticFiles(directory="web/static/font"))
 app.mount("/images", StaticFiles(directory="web/static/img"))
 app.mount("/svgs", StaticFiles(directory="web/static/svg"))
-app.mount("/files", StaticFiles(directory="csv"))
 
 app.include_router(router)
 app.include_router(favicon_router)
