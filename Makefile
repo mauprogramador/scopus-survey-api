@@ -67,6 +67,16 @@ lint-tests:
 	@poetry run radon cc tests/ -a -nc
 
 
+# Compile Locales
+
+locales:
+	@msgfmt web/locales/en_US/LC_MESSAGES/web.po -o web/locales/en_US/LC_MESSAGES/web.mo
+	@msgfmt web/locales/en_US/LC_MESSAGES/error.po -o web/locales/en_US/LC_MESSAGES/error.mo
+
+	@msgfmt web/locales/pt_BR/LC_MESSAGES/web.po -o web/locales/pt_BR/LC_MESSAGES/web.mo
+	@msgfmt web/locales/pt_BR/LC_MESSAGES/error.po -o web/locales/pt_BR/LC_MESSAGES/error.mo
+
+
 # Vulnerability audit
 
 audit:
@@ -84,7 +94,7 @@ req-dev:
 	@poetry export -f requirements.txt -o requirements/dev_requirements.txt --without-hashes --without-urls --with dev
 
 req-docs:
-	@poetry export -f requirements.txt -o requirements/docs_requirements.txt --without-hashes --without-urls --with docs
+	@poetry export -f requirements.txt -o requirements/docs_requirements.txt --without-hashes --without-urls --only docs
 
 req-test:
 	@poetry export -f requirements.txt -o requirements/tests_requirements.txt --without-hashes --without-urls --with test
