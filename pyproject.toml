@@ -56,6 +56,9 @@ repository = "https://github.com/mauprogramador/scopus-survey-api"
 [tool.poetry]
 package-mode = false
 
+[tool.poetry.requires-plugins]
+poetry-plugin-export = ">=1.8"
+
 [tool.poetry.dependencies]
 python = ">=3.12,<4.0"
 
@@ -65,10 +68,10 @@ black = "^25.1.0"
 isort = "^6.0.1"
 mypy = "^1.16.0"
 pandas-stubs = "^2.2.3.250527"
+pip-audit = "^2.9.0"
 pylint = "^3.3.7"
 radon = {extras = ["toml"], version = "^6.0.1"}
 types-tqdm = "^4.67.0.20250516"
-pip-audit = "^2.9.0"
 
 [tool.poetry.group.test.dependencies]
 coverage = "^7.8.2"
@@ -98,9 +101,9 @@ include_trailing_comma = true
 multi_line_output = 3
 
 [tool.pytest.ini_options]
-asyncio_mode = "strict"
 asyncio_default_fixture_loop_scope = "function"
 asyncio_default_test_loop_scope = "function"
+asyncio_mode = "strict"
 filterwarnings = ["ignore::DeprecationWarning"]
 log_date_format = '%Y-%m-%d %H:%M:%S'
 log_format = '%(asctime)s %(levelname)s %(message)s'
