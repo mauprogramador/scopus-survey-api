@@ -35,7 +35,7 @@ test:
 	@poetry run pytest -v --color=yes
 
 test-docker:
-	@docker exec -it scopus-survey poetry run pytest -v --color=yes
+	@docker exec -it scopus-survey-api poetry run pytest -v --color=yes
 
 coverage:
 	@poetry run coverage erase
@@ -43,7 +43,7 @@ coverage:
 	@poetry run coverage report
 
 coverage-docker:
-	@docker exec -it scopus-survey poetry run coverage erase && coverage run -m pytest -q && coverage report
+	@docker exec -it scopus-survey-api poetry run coverage erase && coverage run -m pytest -q && coverage report
 
 
 # Formatting and Linting
