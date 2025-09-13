@@ -1,18 +1,21 @@
-runtime: python311
+runtime: python312
 
 handlers:
 
 - url: /styles
   static_dir: app/web/static/css
 
-- url: /icons
-  static_dir: app/web/static/icon
+- url: /scripts
+  static_dir: app/web/static/js
+
+- url: /libs
+  static_dir: app/web/static/lib
+
+- url: /fonts
+  static_dir: app/web/static/font
 
 - url: /images
   static_dir: app/web/static/img
-
-- url: /scripts
-  static_dir: app/web/static/js
 
 - url: /svgs
   static_dir: app/web/static/svg
