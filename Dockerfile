@@ -1,6 +1,6 @@
-FROM python:3.11.1-buster
+FROM python:3.12.11-slim-trixie
 
-ENV WORKDIR=/usr/src/scopus-survey-api
+ENV WORKDIR=/usr/scopus-survey-api
 WORKDIR $WORKDIR
 
 RUN pip install --upgrade pip && pip3 install wheel && pip3 install poetry
