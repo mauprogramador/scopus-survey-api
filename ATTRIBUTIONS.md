@@ -9,6 +9,12 @@ Technology in Systems Analysis and Development - [TADS](https://www.ifms.edu.br/
 
 <br>
 
+## Notice
+
+This project incorporates various resources, including fonts, images, icons, logos, and design elements. All external resources used in this project are properly licensed and used according to their respective terms of use.
+
+<br>
+
 ## Data Source
 
 All data we handle is retrieved and obtained **"AS IS"** from [Scopus](https://www.scopus.com)®, maintained by [Elsevier B.V.](https://www.elsevier.com/), using the [Scopus APIs](https://dev.elsevier.com/sc_apis.html).
@@ -17,11 +23,23 @@ We declare that there is no implied endorsement of Scopus and also comply that a
 
 <br>
 
-## Design
+## Code
 
-I deliberately chose to base the code and its structure on the [Clean Code](https://blog.cleancoder.com), [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html), and [PEP8](https://peps.python.org/pep-0008/) guidelines.
+This project adopts industry-standard software development practices to ensure maintainability, scalability, and collaboration. We implement:
 
-The web page design was designed and built by me, but I drew inspiration from the following websites:
+- [PEP8](https://peps.python.org/pep-0008/) Guidelines: following the official Python style guide for consistent and readable code, aligned with community standards.
+
+- [Clean Code](https://blog.cleancoder.com) Principles: writing self-documenting code that emphasizes clarity, simplicity, and intentionality in every implementation.
+
+- [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html): structuring our system with separation of concerns, independent frameworks, and testable business logic at its core.
+
+<br>
+
+## Web Design
+
+The web page design draws inspiration from various public domain sources and freely available resources. While certain design elements, color schemes, typographic choices, or layout concepts may resemble other works, all implementation code was developed independently and built by me.
+
+I took inspiration from the following websites:
 
 - [Scopus preview](https://www.scopus.com/standard/marketing.uri)
 - [Scopus Search API documentation](https://dev.elsevier.com/documentation/ScopusSearchAPI.wadl)
@@ -33,7 +51,9 @@ The web page design was designed and built by me, but I drew inspiration from th
 
 <br>
 
-## Icons and Images
+## Icons
+
+The icons we use are from freely available or openly licensed (with proper attribution) icon repositories.
 
 [**Material Symbols and Icons**](https://fonts.google.com/icons)
 
@@ -46,6 +66,7 @@ The web page design was designed and built by me, but I drew inspiration from th
 [**SVG Repo**](https://www.svgrepo.com/)
 
 - `Page Separator SVG Vector`
+
   - **Creator:** [Remix Design](https://www.svgrepo.com/author/Remix%20Design/)
   - **License:** Apache License
 
@@ -57,15 +78,17 @@ The web page design was designed and built by me, but I drew inspiration from th
 
 ## Logos
 
-Use does not imply endorsement or affiliation by the owners.
+The logos we use are from permitted brand guidelines or sourced from public domain websites. Their use does not imply endorsement or affiliation by the owners.
 
 - **Scopus (Shortcut Icon):**
+
   - **File:** `scopus.ico`
   - **Owner:** © Elsevier B.V.
   - **Source:** [Scopus preview](https://www.scopus.com/) (shortcut icon)
   - **Use:** footer reference to the data source website
 
 - **IFMS (Shortcut Icon)**
+
   - **File:** `ifms.ico`
   - **Owner:** © 2009-2022 Instituto Federal de Educação, Ciência e Tecnologia de Mato Grosso do Sul
   - **Source:** [Página Inicial - IFMS](https://www.ifms.edu.br/) (shortcut icon)
@@ -81,6 +104,8 @@ Use does not imply endorsement or affiliation by the owners.
 
 ## Fonts
 
+The font used in this project is properly licensed and free for commercial use.
+
 [**Ubuntu**](https://design.ubuntu.com/font)
 
 - **Styles:** `Regular 400`, `Medium 500`, `Bold 700`
@@ -94,57 +119,69 @@ Use does not imply endorsement or affiliation by the owners.
 
 Language
 
-- [Python `v3.11`]({{links.python}})
+- [Python `v3.12.11`](https://www.python.org/downloads/release/python-3120/)
 
 Development Environment Tools
 
-- [Visual Studio Code `v1.86.1`](https://code.visualstudio.com/)
-- [Makefile GNU Make `v4.2.1`](https://www.gnu.org/software/make/manual/make.html)
+- [Visual Studio Code `v1.104.0`](https://code.visualstudio.com/)
+- [Makefile GNU Make `v4.3.0`](https://www.gnu.org/software/make/manual/make.html)
 - [REST Client `v0.25.1` - VsCode Extension](https://github.com/Huachao/vscode-restclient)
 
 Docker
 
-- [Docker `v25.0.3`](https://www.docker.com/)
+- [Docker `v28.4.0`](https://www.docker.com/)
 
 Framework
 
-- [FastAPI `v0.109.2`](https://fastapi.tiangolo.com/)
+- [FastAPI `v0.115.14`](https://fastapi.tiangolo.com/)
 
 Dependency Management
 
-- [Poetry `v1.7.1`](https://python-poetry.org/)
+- [Poetry `v2.1.3`](https://python-poetry.org/)
 
 Application Dependencies
 
-- [Pandas `v2.2.0`](https://pandas.pydata.org/docs/index.html)
-- [Pydantic `v2.6.1`](https://docs.pydantic.dev/latest/)
-- [TheFuzz `v0.22.1`]({{links.pypi}}/fuzzywuzzy/)
-- [Python-Levenshtein `v0.25.0`]({{links.pypi}}/python-Levenshtein/)
-- [tqdm `v4.66.5`]({{links.pypi}}/tqdm/)
+- [Pandas `v2.3.1`](https://pandas.pydata.org/docs/index.html)
+- [Pydantic `v2.11.7`](https://docs.pydantic.dev/latest/)
+- [Pydantic-Settings `v2.11.7`](https://docs.pydantic.dev/latest/concepts/pydantic_settings/)
+- [Itsdangerous `v2.2.0`](https://itsdangerous.palletsprojects.com/en/stable/)
+- [SlowAPI `v0.1.9`](https://slowapi.readthedocs.io/en/latest/)
+- [AIOHTTP `v3.12.15`](https://docs.aiohttp.org/en/stable/)
+- [AIOHTTP-Retry `v2.9.1`](https://github.com/inyutin/aiohttp_retry)
+- [AIOLimiter `v1.2.1`](https://aiolimiter.readthedocs.io/en/stable/)
+- [Uvloop `v0.21.0`](https://uvloop.readthedocs.io/)
+- [TheFuzz `v0.22.1`](https://github.com/seatgeek/thefuzz)
+- [Python-Levenshtein `v0.27.1`](https://pypi.org/project/python-Levenshtein/)
+- [tqdm `v4.67.5`](https://pypi.org/project/tqdm)
+
+Web Libraries
+
+- [Bootstrap `v5.3.7`](https://getbootstrap.com/docs/5.3/getting-started/introduction/)
+- [JSON View `v1.0.0`](https://github.com/pgrabovets/json-view)
 
 Linting and Formating Dependencies
 
-- [Isort `v5.13.2`](https://pycqa.github.io/isort/)
-- [Flake8 `v3.8.3`](https://flake8.pycqa.org/en/latest/)
-- [Pylint `v3.0.3`](https://pylint.readthedocs.io/en/stable/)
-- [MyPy `v1.8.0`](https://mypy.readthedocs.io/en/stable/)
-- [Radon `v6.0.1`](https://radon.readthedocs.io/en/latest/)
+- [Isort `v6.0.1`](https://pycqa.github.io/isort/)
+- [Pylint `v3.3.7`](https://pylint.readthedocs.io/en/stable/)
+- [MyPy `v1.17.1`](https://mypy.readthedocs.io/en/stable/)
+- [Black `v25.1.0`](https://black.readthedocs.io/en/stable/)
+- [Radon `v6.0.1`](https://pypi.org/project/radon/)
 
-Vulnerability and Security Issues Dependencies
+Vulnerability and Security Dependencies
 
-- [Bandit `v1.7.7`](https://bandit.readthedocs.io/en/latest/)
-- [Pip-Audit `v2.7.0`]({{links.pypi}}/pip-audit/#description)
+- [Bandit `v1.8.6`](https://pypi.org/project/bandit/)
+- [Pip-Audit `v2.9.0`](https://pypi.org/project/pip-audit)
 
 Test Dependencies
 
-- [Pytest `v8.0.0`](https://docs.pytest.org/en/8.0.x/)
-- [Pytest-Mock `v3.12.0`](https://pytest-mock.readthedocs.io/en/latest/)
-- [Pytest-Asyncio `v0.23.5`](https://pytest-asyncio.readthedocs.io/en/latest/)
-- [Coverage `v7.4.3`](https://coverage.readthedocs.io/en/7.4.3/)
+- [Pytest `v8.4.1`](https://docs.pytest.org/en/8.0.x/)
+- [Pytest-Mock `v3.14.1`](https://pytest-mock.readthedocs.io/en/latest/)
+- [Pytest-Asyncio `v1.1.0`](https://pytest-asyncio.readthedocs.io/en/latest/)
+- [Coverage `v7.10.2`](https://coverage.readthedocs.io/en/7.4.3/)
 
 Documentation Dependencies
 
-- [MkDocs `v1.5.3`](https://www.mkdocs.org/)
-- [MkDocs-Material `v9.5.9`](https://squidfunk.github.io/mkdocs-material/)
-- [MkDocs static i18n plugin `v1.2.3`]({{links.pypi}}/mkdocs-static-i18n/)
-- [MKDocs markdown extra data plugin `v0.2.5`]({{links.pypi}}/mkdocs-markdownextradata-plugin/)
+- [MkDocs `v1.6.1`](https://www.mkdocs.org/)
+- [MkDocs-Material `v9.6.16`](https://squidfunk.github.io/mkdocs-material/)
+- [MkDocs static i18n plugin `v1.3.0`](https://pypi.org/project//mkdocs-static-i18n/)
+- [MKDocs markdown extra data plugin `v0.2.6`](https://pypi.org/project/mkdocs-markdownextradata-plugin/)
