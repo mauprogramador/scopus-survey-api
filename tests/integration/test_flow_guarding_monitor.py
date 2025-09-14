@@ -28,7 +28,7 @@ async def test_success_process_time(client: Client):
     client.headers.clear()
     res = await client.get(URL_WEB)
     assert res.status_code == HTTP_200
-    assert res.headers["X-Process-Time"]
+    assert res.headers["X-Process-Time"] and res.headers["X-RateLimit-Policy"]
 
 
 @mark.asyncio
