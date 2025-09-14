@@ -1,5 +1,5 @@
 # mypy: disable-error-code="index"
-from asyncio import CancelledError
+from asyncio import CancelledError, sleep
 from asyncio import TimeoutError as AsyncTimeoutError
 from collections import defaultdict
 from itertools import chain
@@ -12,6 +12,7 @@ from httpx import AsyncClient as Client
 from pytest import mark
 from pytest_mock import MockerFixture as Mocker
 
+from src.adapters.helpers.http_client import HTTPClient
 from src.core.common.error_messages import (
     CANCELLED_ERROR,
     CONNECTION_ERROR,
@@ -20,6 +21,8 @@ from src.core.common.error_messages import (
     REQUEST_EXCEPTION,
     SCOPUS_API_ERROR,
 )
+from src.core.common.types import RateStrategy
+from src.core.config.config import LOG
 from src.core.use_cases.keyword_combination_finder import (
     KeywordCombinationFinder,
 )
@@ -29,7 +32,9 @@ from tests.mocks.integration import (
     GET_CONTENT_TYPE_ERROR,
     GET_EMPTY_RESPONSE,
     GET_JSON_DECODE_ERROR,
+    GET_RATE_LIMIT,
     GET_RETRY,
+    GET_STRATEGY,
     GET_SUCCESS,
 )
 from tests.mocks.raw import (
@@ -38,11 +43,15 @@ from tests.mocks.raw import (
     HTTP_502,
     HTTP_503,
     HTTP_504,
+    SEARCH_PARAMS,
     URL_COMBINATION,
+    URL_SEARCH,
 )
 
 CHAIN = fqn(KeywordCombinationFinder, chain)
+LOG_STRATEGY = fqn(HTTPClient, "LOG.strategy")
 REQUEST = fqn(ClientSession.request)
+SLEEP = fqn(HTTPClient, sleep)
 GET = fqn(RetryClient.get)
 
 
@@ -149,3 +158,33 @@ async def test_request_retry(mocker: Mocker, client: Client):
         group_call[call.args[1]].append(attempt)
 
     assert len(group_call.keys()) == 1 and max(*group_call.values()) == 3
+
+
+@mark.asyncio
+async def test_retry_on_rate_limit(mocker: Mocker, client: Client):
+    spy = mocker.patch(SLEEP, wraps=sleep)
+    mock = mocker.patch(GET, new=AsyncMock(side_effect=GET_RATE_LIMIT))
+    res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
+    assert spy.call_args_list[0].args[0] == 2
+    assert spy.call_count == 2  # +1 close
+    assert res.status_code == HTTP_200 and mock.call_count == 4
+    assert len(res.json()["combinations"]) == 3
+    spy.assert_awaited()
+    mock.assert_awaited()
+
+
+@mark.asyncio
+async def test_update_strategy_and_additional_sleep(
+    mocker: Mocker, client: Client
+):
+    spy_sleep = mocker.patch(SLEEP, wraps=sleep)
+    spy_log = mocker.patch(LOG_STRATEGY, wraps=LOG.strategy)
+    mock = mocker.patch(GET, new=AsyncMock(side_effect=GET_STRATEGY))
+    res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
+    strategy: RateStrategy = spy_log.call_args_list[2].args[0]
+    assert res.status_code == HTTP_200 and mock.call_count == 116
+    assert strategy.rate == 7.5 and strategy.backoff == 2.2
+    assert spy_sleep.call_count == 3  # +1 close
+    spy_sleep.assert_awaited()
+    spy_log.assert_called()
+    mock.assert_awaited()

@@ -37,6 +37,18 @@ GET_RETRY = [
     response_mock(None, HTTP_500),
     response_mock(RAW_SEARCH_OK),
 ]
+GET_RATE_LIMIT = [
+    response_mock({"any": "any"}, HTTP_429, {"X-RateLimit-Remaining": "0"}),
+    *GET_SUCCESS,
+]
+GET_STRATEGY = [
+    response_mock(search_raw(111)),
+    response_mock(search_raw(111)),
+    response_mock(search_raw(111)),
+    response_mock(search_raw(111)),
+    response_mock(search_raw(111, 11)),
+    *[response_mock(RAW_ABSTRACT_OK)] * 111,
+]
 
 # ScopusSearchAPI.survey_totals_found
 
