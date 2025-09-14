@@ -10,7 +10,7 @@
 </p>
 <p align="center">
   <a href="https://github.com/mauprogramador/scopus-survey-api/actions/workflows/verification.yml">
-    <img src="https://img.shields.io/github/actions/workflow/status/mauprogramador/scopus-survey-api/verification.yml?branch=master&event=push&logo=github&label=Lint %26 Test&color=C5362B" alt="Lint & Test">
+    <img src="https://img.shields.io/github/actions/workflow/status/mauprogramador/scopus-survey-api/verification.yml?branch=master&event=push&logo=github&label=Lint%26Test&color=C5362B" alt="Lint & Test">
   </a>
   <a href="https://github.com/mauprogramador/scopus-survey-api/actions/workflows/documentation.yml">
     <img src="https://img.shields.io/github/actions/workflow/status/mauprogramador/scopus-survey-api/documentation.yml?branch=master&event=push&logo=github&label=Docs&color=2196F3" alt="Documentation">
@@ -158,7 +158,8 @@ make docker
 
 All data we handle is retrieved and obtained **"AS IS"** from [Scopus](https://www.scopus.com)®, maintained by [Elsevier B.V.](https://www.elsevier.com/), a database known for its **curated content of peer-reviewed literature**. We declare that there is **no implied endorsement by the rights owners** and also comply that all use is for [non-commercial academic research](https://dev.elsevier.com/academic_research_scopus.html) and is subject to [our Terms](./TERMS_OF_SERVICE.md), as well as the [Elsevier Terms](https://www.elsevier.com/legal/elsevier-website-terms-and-conditions) and [Scopus Policy](https://dev.elsevier.com/academic_research_scopus.html).
 
-> [!CAUTION] > **You are strictly prohibited from misuse or attempt to misuse data obtained from the Scopus APIs in violation of [Elsevier API Service Agreement](https://dev.elsevier.com/policy/API-service-agreement.pdf).**
+> [!CAUTION]
+> **You are strictly prohibited from misuse or attempt to misuse data obtained from the Scopus APIs in violation of [Elsevier API Service Agreement](https://dev.elsevier.com/policy/API-service-agreement.pdf).**
 
 ---
 
@@ -203,7 +204,8 @@ These quotas, are **unique to each** <abbr title="Application Programming Interf
 | -------- | ------------ | ------------ | ---- |
 |          |              |              |      |
 
-> [!TIP] > <a href="./docs/assets/data/example.csv" download="example.csv">Download a sample survey <abbr title="Comma-Separated Values">CSV</abbr> file</a> and take a look.
+> [!TIP]
+> <a href="./docs/assets/data/example.csv" download="example.csv">Download a sample survey <abbr title="Comma-Separated Values">CSV</abbr> file</a> and take a look.
 
 ---
 
