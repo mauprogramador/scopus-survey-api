@@ -117,7 +117,7 @@ async def test_non_ratio(mocker: Mocker, client: Client):
     )
     spy_filter = mocker.spy(ArticlesSimilarityFilter, "filter")
 
-    SEARCH_PARAMS.setdefault("ratio", 0)
+    SEARCH_PARAMS.setdefault("threshold", 0)
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     df = load_csv_file_response_dataframe(res)
 
