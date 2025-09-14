@@ -72,7 +72,7 @@ class Logging:
     )
     _LOSS = (
         "Initial: \033[33m{initial}\033[m. Final: \033[33m{final}\033[m. "
-        "Loss: \033[33m{loss_amount}doc \033[m/ \033[33m{loss_percent:.2f}"
+        "Loss: \033[33m{loss_amount}doc \033[m/ \033[33m{loss_percent:.2f}%"
     )
     _STRATEGY = (
         "RateLimit: \033[33m{rate:.1f}req\033[m/\033[33m{time:.1f}s\033[m. "
