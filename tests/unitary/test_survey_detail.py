@@ -6,11 +6,6 @@ from tests.mocks.raw import HTTP_200, RAW_HEADERS_OK, RAW_SEARCH_OK, RESET
 SURVEY_DETAIL = SurveyDetail()
 
 
-def test_max_count():
-    SURVEY_DETAIL.set_max_count(7)
-    assert SURVEY_DETAIL.headers["X-Max-Count"] == "7"
-
-
 def test_search_data():
     model = ScopusSearch(**RAW_SEARCH_OK)
     SURVEY_DETAIL.set_search_data(model)

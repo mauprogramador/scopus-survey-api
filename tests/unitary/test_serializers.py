@@ -46,10 +46,6 @@ def test_scopus_search_valid_data():
     assert model.total_results == 156 and model.items_per_page == 25
     assert model.pages_count == ceil(156 / 25) and len(model.entry) == 1
 
-    model.set_count_limit(100)
-    assert model.total_results == 100
-    assert model.pages_count == ceil(100 / 25)
-
 
 def test_scopus_search_raise_errors():
     with raises(ValidationError) as info:

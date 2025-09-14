@@ -106,7 +106,7 @@ def test_search_params_valid_data():
     assert model.api_key == API_KEY and model.keywords == KEYWORDS
     assert model.combination == "Python AND AI"
     assert model.button == Button.SEARCH
-    assert model.ratio == 80 and model.max_count == 125
+    assert model.ratio == 80
     assert model.date == f"{model.start_year}-{model.end_year}"
 
 
@@ -115,7 +115,7 @@ def test_search_params_overridden_default():
     assert model.api_key == API_KEY and model.keywords == KEYWORDS
     assert model.combination == "Python AND AI"
     assert model.button == Button.SEARCH
-    assert model.ratio == 25 and model.max_count == 50
+    assert model.ratio == 25
 
 
 def test_search_params_raise_errors():
