@@ -16,7 +16,7 @@ from tests.mocks.helpers import fqn
 from tests.mocks.integration import (
     COMBINATION_DETAILS,
     HEADERS,
-    RESET,
+    RESET_DATETIME,
     SEARCH_DETAILS_MORE_RESULTS,
     SEARCH_DETAILS_ONE_RESULT,
 )
@@ -36,7 +36,7 @@ GET = fqn(RetryClient.get)
 
 @mark.asyncio
 async def test_combination_details(mocker: Mocker, client: Client):
-    spy_quota = mocker.spy(SurveyDetail, "set_quota_data")
+    spy_quota = mocker.spy(SurveyDetail, "set_search_quota")
     spy_log = mocker.patch(LOG_QUOTA)
     mocker.patch(GET, new=AsyncMock(side_effect=COMBINATION_DETAILS))
 
@@ -51,71 +51,92 @@ async def test_combination_details(mocker: Mocker, client: Client):
     assert isinstance(spy_log.call_args_list[0].args[0], ScopusHeaders)
     assert bundle.headers == HEADERS
 
-    assert res.headers["X-Limit"] == "20000"
-    assert res.headers["X-Remaining"] == "12345"
-    assert res.headers["X-Reset"] == str(RESET)
-    assert res.headers["X-ELS-Status"] == "OK"
+    assert res.headers["X-Search-Limit"] == "20000"
+    assert res.headers["X-Search-Remaining"] == "12345"
+    assert res.headers["X-Search-Reset"] == RESET_DATETIME
+    assert res.headers["X-Search-ELS-Status"] == "OK"
+    assert res.headers["X-Average-Found"] == "~0"
 
 
 @mark.asyncio
 async def test_search_details_one_result(mocker: Mocker, client: Client):
     spy_search = mocker.spy(SurveyDetail, "set_search_data")
-    spy_quota = mocker.spy(SurveyDetail, "set_quota_data")
+    spy_search_quota = mocker.spy(SurveyDetail, "set_search_quota")
+    spy_abstract_quota = mocker.spy(SurveyDetail, "set_abstract_quota")
     spy_loss = mocker.spy(SurveyDetail, "set_loss")
     spy_log = mocker.patch(LOG_QUOTA)
     mocker.patch(GET, new=AsyncMock(side_effect=SEARCH_DETAILS_ONE_RESULT))
 
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
-    bundle: ResponseBundle = spy_quota.call_args_list[0].args[1]
+    search_bundle: ResponseBundle = spy_search_quota.call_args_list[0].args[1]
+    abstract_bundle: ResponseBundle = spy_abstract_quota.call_args_list[
+        0
+    ].args[1]
     loss: float = spy_loss.call_args_list[0].args[1]
 
     spy_search.assert_called_once()
-    spy_quota.assert_called_once()
+    spy_search_quota.assert_called_once()
+    spy_abstract_quota.assert_called_once()
     spy_loss.assert_called_once()
     spy_log.assert_called_once()
 
     assert res.status_code == spy_log.call_args_list[0].args[1] == HTTP_200
     assert isinstance(spy_log.call_args_list[0].args[0], ScopusHeaders)
     assert isinstance(spy_search.call_args_list[0].args[1], ScopusSearch)
-    assert bundle.headers == HEADERS and loss == 0.0
+    assert search_bundle.headers == abstract_bundle.headers == HEADERS
+    assert loss == 0.0
 
     assert res.headers["X-Total"] == "1"
     assert res.headers["X-Items-Per-Page"] == "1"
     assert res.headers["X-Pages-Count"] == "1"
-    assert res.headers["X-Limit"] == "20000"
-    assert res.headers["X-Remaining"] == "12345"
-    assert res.headers["X-Reset"] == str(RESET)
-    assert res.headers["X-ELS-Status"] == "OK"
-    assert res.headers["X-Loss"] == "0.00%"
+    assert res.headers["X-Search-Limit"] == "20000"
+    assert res.headers["X-Search-Remaining"] == "12345"
+    assert res.headers["X-Search-Reset"] == RESET_DATETIME
+    assert res.headers["X-Search-ELS-Status"] == "OK"
+    assert res.headers["X-Abstract-Limit"] == "20000"
+    assert res.headers["X-Abstract-Remaining"] == "12345"
+    assert res.headers["X-Abstract-Reset"] == RESET_DATETIME
+    assert res.headers["X-Abstract-ELS-Status"] == "OK"
+    assert res.headers["X-Loss"] == "0doc / 0.00%"
 
 
 @mark.asyncio
 async def test_search_details_more_results(mocker: Mocker, client: Client):
     spy_search = mocker.spy(SurveyDetail, "set_search_data")
-    spy_quota = mocker.spy(SurveyDetail, "set_quota_data")
+    spy_search_quota = mocker.spy(SurveyDetail, "set_search_quota")
+    spy_abstract_quota = mocker.spy(SurveyDetail, "set_abstract_quota")
     spy_loss = mocker.spy(SurveyDetail, "set_loss")
     spy_log = mocker.patch(LOG_QUOTA)
     mocker.patch(GET, new=AsyncMock(side_effect=SEARCH_DETAILS_MORE_RESULTS))
 
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
-    bundle: ResponseBundle = spy_quota.call_args_list[0].args[1]
+    search_bundle: ResponseBundle = spy_search_quota.call_args_list[0].args[1]
+    abstract_bundle: ResponseBundle = spy_abstract_quota.call_args_list[
+        0
+    ].args[1]
     loss: float = spy_loss.call_args_list[0].args[1]
 
     spy_search.assert_called_once()
-    spy_quota.assert_called_once()
+    spy_search_quota.assert_called_once()
+    spy_abstract_quota.assert_called_once()
     spy_loss.assert_called_once()
     spy_log.assert_called_once()
 
     assert res.status_code == spy_log.call_args_list[0].args[1] == HTTP_200
     assert isinstance(spy_log.call_args_list[0].args[0], ScopusHeaders)
     assert isinstance(spy_search.call_args_list[0].args[1], ScopusSearch)
-    assert bundle.headers == HEADERS and loss == 2 / 3 * 100  # 66.6666...
+    assert search_bundle.headers == abstract_bundle.headers == HEADERS
+    assert loss == 2
 
     assert res.headers["X-Total"] == "3"
     assert res.headers["X-Items-Per-Page"] == "3"
     assert res.headers["X-Pages-Count"] == "1"
-    assert res.headers["X-Limit"] == "20000"
-    assert res.headers["X-Remaining"] == "12345"
-    assert res.headers["X-Reset"] == str(RESET)
-    assert res.headers["X-ELS-Status"] == "OK"
-    assert res.headers["X-Loss"] == "66.67%"
+    assert res.headers["X-Search-Limit"] == "20000"
+    assert res.headers["X-Search-Remaining"] == "12345"
+    assert res.headers["X-Search-Reset"] == RESET_DATETIME
+    assert res.headers["X-Search-ELS-Status"] == "OK"
+    assert res.headers["X-Abstract-Limit"] == "20000"
+    assert res.headers["X-Abstract-Remaining"] == "12345"
+    assert res.headers["X-Abstract-Reset"] == RESET_DATETIME
+    assert res.headers["X-Abstract-ELS-Status"] == "OK"
+    assert res.headers["X-Loss"] == "2doc / 66.67%"

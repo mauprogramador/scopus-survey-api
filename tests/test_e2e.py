@@ -28,7 +28,7 @@ from tests.mocks.raw import (
     JSON_CONTENT_TYPE,
     RAW_ABSTRACT_OK,
     RAW_SEARCH_OK,
-    RESET,
+    RESET_DATETIME,
     URL_COMBINATION,
     URL_CSV,
     URL_SEARCH,
@@ -119,10 +119,11 @@ class TestE2EUserFlow:
         assert res.headers.get("Content-Type") == JSON_CONTENT_TYPE
         assert res.cookies.get("session") is not None
         assert res.headers.get("X-API-Key") == cls._api_key
-        assert res.headers.get("X-Limit") == "20000"
-        assert res.headers.get("X-Remaining") == "20000"
-        assert res.headers.get("X-Reset") == str(RESET)
-        assert res.headers.get("X-ELS-Status") == "OK"
+        assert res.headers.get("X-Search-Limit") == "20000"
+        assert res.headers.get("X-Search-Remaining") == "20000"
+        assert res.headers.get("X-Search-Reset") == RESET_DATETIME
+        assert res.headers.get("X-Search-ELS-Status") == "OK"
+        assert res.headers.get("X-Average-Found")
         assert len(res.json()["combinations"]) == 3
 
         cls._combination = res.json()["combinations"][0]["combination"]
@@ -155,11 +156,15 @@ class TestE2EUserFlow:
         assert res.headers.get("X-Total") == "1"
         assert res.headers.get("X-Items-Per-Page") == "1"
         assert res.headers.get("X-Pages-Count") == "1"
-        assert res.headers.get("X-Limit") == "20000"
-        assert res.headers.get("X-Remaining") == "20000"
-        assert res.headers.get("X-Reset") == str(RESET)
-        assert res.headers.get("X-ELS-Status") == "OK"
-        assert res.headers.get("X-Loss") == "0.00%"
+        assert res.headers.get("X-Search-Limit") == "20000"
+        assert res.headers.get("X-Search-Remaining") == "20000"
+        assert res.headers.get("X-Search-Reset") == RESET_DATETIME
+        assert res.headers.get("X-Search-ELS-Status") == "OK"
+        assert res.headers.get("X-Abstract-Limit") == "20000"
+        assert res.headers.get("X-Abstract-Remaining") == "20000"
+        assert res.headers.get("X-Abstract-Reset") == RESET_DATETIME
+        assert res.headers.get("X-Abstract-ELS-Status") == "OK"
+        assert res.headers.get("X-Loss") == "0doc / 0.00%"
 
         filename: str | None = res.headers.get("X-CSV-Filename")
         assert filename is not None

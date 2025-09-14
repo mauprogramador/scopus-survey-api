@@ -39,7 +39,7 @@ async def test_one_row(mocker: Mocker, client: Client):
     assert df.shape == (2, 11)  # +1 footnote
     spy_drop.assert_not_called()
     spy_filter.assert_not_called()
-    spy_loss.assert_called_once_with(ANY, 0.0)
+    spy_loss.assert_called_once_with(ANY, 0, 0.0)
 
 
 @mark.asyncio
@@ -58,7 +58,7 @@ async def test_more_rows(mocker: Mocker, client: Client):
     assert df.shape == (8, 11)  # +1 footnote
     spy_drop.assert_called()
     spy_filter.assert_called()
-    spy_loss.assert_called_once_with(ANY, 0.0)
+    spy_loss.assert_called_once_with(ANY, 0, 0.0)
 
 
 @mark.asyncio
@@ -82,7 +82,7 @@ async def test_drop_exact_duplicates(mocker: Mocker, client: Client):
     assert df.shape == (2, 11)  # +1 footnote
     spy_drop.assert_called()
     spy_filter.assert_not_called()
-    spy_loss.assert_called_once_with(ANY, 50.0)
+    spy_loss.assert_called_once_with(ANY, 1, 50.0)
 
 
 @mark.asyncio
@@ -106,7 +106,7 @@ async def test_drop_same_title_and_authors(mocker: Mocker, client: Client):
     assert df.shape == (2, 11)  # +1 footnote
     spy_drop.assert_called()
     spy_filter.assert_not_called()
-    spy_loss.assert_called_once_with(ANY, 50.0)
+    spy_loss.assert_called_once_with(ANY, 1, 50.0)
 
 
 @mark.asyncio

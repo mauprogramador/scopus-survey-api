@@ -1,3 +1,6 @@
+from datetime import datetime
+from itertools import batched  # type: ignore
+from string import ascii_lowercase
 from time import time
 
 from src.core.data.enums import ScopusCode
@@ -121,6 +124,7 @@ RESPONSE_KEY_ERROR = response_mock({"any": "any"})
 # SurveyDetail.set_
 
 RESET = int(time() + 60)
+RESET_DATETIME = datetime.fromtimestamp(RESET).strftime("%Y-%m-%d %H:%M:%S")
 HEADERS = {
     "X-RateLimit-Limit": "20000",
     "X-RateLimit-Remaining": "12345",
@@ -133,13 +137,13 @@ COMBINATION_DETAILS = [
     response_mock(RAW_SEARCH_OK, headers=HEADERS),
 ]
 SEARCH_DETAILS_ONE_RESULT = [
-    response_mock(RAW_SEARCH_OK),
+    response_mock(RAW_SEARCH_OK, headers=HEADERS),
     response_mock(RAW_ABSTRACT_OK, headers=HEADERS),
 ]
 SEARCH_DETAILS_MORE_RESULTS = [
-    response_mock(search_raw(3)),
-    response_mock(RAW_ABSTRACT_OK),
-    response_mock(RAW_ABSTRACT_OK),
+    response_mock(search_raw(3), headers=HEADERS),
+    response_mock(RAW_ABSTRACT_OK, headers=HEADERS),
+    response_mock(RAW_ABSTRACT_OK, headers=HEADERS),
     response_mock(RAW_ABSTRACT_OK, headers=HEADERS),
 ]
 

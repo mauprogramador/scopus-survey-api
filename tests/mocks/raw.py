@@ -1,3 +1,4 @@
+from datetime import datetime
 from http import HTTPMethod, HTTPStatus
 from secrets import token_hex
 from time import time
@@ -67,6 +68,7 @@ JSON_CONTENT_TYPE = "application/json; charset=utf-8"
 ABSTRACT_URL = "https://api.elsevier.com/content/abstract/scopus_id/0123456789"
 SCOPUS_ID = "SCOPUS_ID:0123456789"
 RESET = int(time()) + MAX_AGE
+RESET_DATETIME = datetime.fromtimestamp(RESET).strftime("%Y-%m-%d %H:%M:%S")
 RAW_HEADERS_OK = {
     "X-RateLimit-Limit": "20000",
     "X-RateLimit-Remaining": "20000",
@@ -180,7 +182,6 @@ ALIAS_SEARCH_PARAMS_FULL = {
     "pages": "short",
     "keywords": KEYWORDS,
     "combination": "Python AND AI",
-    "max_count": "50",
     "ratio": "25",
     "button": Button.SEARCH.value,
 }
