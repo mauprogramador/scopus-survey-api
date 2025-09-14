@@ -110,6 +110,21 @@ def test_scopus_abstract_key_error():
     assert info.value.args[0] == "coredata"
 
 
+def test_scopus_abstract_no_author():
+    raw = {
+        "abstracts-retrieval-response": {
+            "coredata": {
+                "dc:identifier": SCOPUS_ID,
+                "dc:title": "any_title",
+            }
+        }
+    }
+    model = ScopusAbstract(**raw)
+    assert model.url == URLBuilder.article_page_url("0123456789")
+    assert model.scopus_id == SCOPUS_ID
+    assert model.title == "any_title" and model.authors == NULL
+
+
 def test_scopus_abstract_authors():
     model = ScopusAbstract(**RAW_ABSTRACT_AUTHORS)
     assert model.url == URLBuilder.article_page_url("0123456789")
