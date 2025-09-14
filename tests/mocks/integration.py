@@ -157,6 +157,11 @@ ONE_GROUP_MORE_SIMILAR = [
         for index in range(1, 6)
     ],
 ]
+ONE_GROUP_NO_SIMILAR = [
+    response_mock(search_raw(2)),
+    response_mock(abstract_raw("abc", "a", "2025-06-01")),
+    response_mock(abstract_raw("def", "a", "2025-06-02")),
+]
 MORE_GROUPS_TWO_SIMILAR = [
     response_mock(search_raw(5)),
     response_mock(abstract_raw("any_a_1", "a", "2025-06-01")),
@@ -178,6 +183,19 @@ MORE_GROUPS_MORE_SIMILAR = [
     response_mock(abstract_raw("any_c_1", "c", "2025-06-01")),
     response_mock(abstract_raw("any_c_2", "c", "2025-06-02")),
 ]
+MORE_GROUPS_NO_SIMILAR = [
+    response_mock(search_raw(9)),
+    *[
+        response_mock(abstract_raw("".join(item), "a", "2025-06-01"))
+        for item in batched(ascii_lowercase[:12], 3)
+    ],
+    *[
+        response_mock(abstract_raw("".join(item), "b", "2025-06-01"))
+        for item in batched(ascii_lowercase[:9], 3)
+    ],
+    response_mock(abstract_raw("abc", "c", "2025-06-01")),
+    response_mock(abstract_raw("def", "c", "2025-06-02")),
+]
 NO_DATETIME_LEFT = [
     response_mock(search_raw(2)),
     response_mock(abstract_raw("any_a_1", "a", "NaN")),
@@ -192,11 +210,6 @@ NO_REPEATED_AUTHORS = [
     response_mock(search_raw(2)),
     response_mock(abstract_raw("any", "a", "2025-06-01")),
     response_mock(abstract_raw("any", "b", "2025-06-01")),
-]
-NO_SIMILAR_TITLES = [
-    response_mock(search_raw(2)),
-    response_mock(abstract_raw("abc", "a", "2025-06-01")),
-    response_mock(abstract_raw("def", "a", "2025-06-02")),
 ]
 
 # ScopusArticlesAggregator.retrieve_articles

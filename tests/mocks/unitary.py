@@ -88,6 +88,13 @@ ONE_GROUP_MORE_SIMILAR = DataFrame(
         Column.DATE: [f"2025-05-0{index}" for index in range(1, 6)],
     }
 )
+ONE_GROUP_NO_SIMILAR = DataFrame(
+    {
+        Column.AUTHORS: ["a", "a"],
+        Column.TITLE: ["abc", "def"],
+        Column.DATE: ["2025-06-01", "2025-06-02"],
+    }
+)
 MORE_GROUPS_TWO_SIMILAR = DataFrame(
     {
         Column.AUTHORS: ["a", "a", "b", "b", "c"],
@@ -118,6 +125,23 @@ MORE_GROUPS_MORE_SIMILAR = DataFrame(
         ],
     }
 )
+MORE_GROUPS_NO_SIMILAR = DataFrame(
+    {
+        Column.AUTHORS: [*["a"] * 4, *["b"] * 3, "c", "c"],
+        Column.TITLE: [
+            *map("".join, batched(ascii_lowercase[:12], 3)),
+            *map("".join, batched(ascii_lowercase[:9], 3)),
+            "abc",
+            "def",
+        ],
+        Column.DATE: [
+            *[f"2025-06-0{index}" for index in range(1, 5)],
+            *[f"2025-05-0{index}" for index in range(1, 4)],
+            "2025-04-01",
+            "2025-04-02",
+        ],
+    }
+)
 NO_DATETIME_LEFT = DataFrame(
     {
         Column.AUTHORS: ["a", "a"],
@@ -137,13 +161,6 @@ NO_REPEATED_AUTHORS = DataFrame(
         Column.AUTHORS: ["a", "b"],
         Column.TITLE: ["any", "any"],
         Column.DATE: ["2025-06-01", "2025-06-01"],
-    }
-)
-NO_SIMILAR_TITLES = DataFrame(
-    {
-        Column.AUTHORS: ["a", "a"],
-        Column.TITLE: ["abc", "def"],
-        Column.DATE: ["2025-06-01", "2025-06-02"],
     }
 )
 

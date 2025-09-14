@@ -19,12 +19,13 @@ from tests.conftest import assert_error_json
 from tests.mocks.helpers import fqn, load_csv_file_response_dataframe
 from tests.mocks.integration import (
     MORE_GROUPS_MORE_SIMILAR,
+    MORE_GROUPS_NO_SIMILAR,
     MORE_GROUPS_TWO_SIMILAR,
     NO_DATETIME_LEFT,
     NO_REPEATED_AUTHORS,
-    NO_SIMILAR_TITLES,
     ONE_DATETIME_LEFT,
     ONE_GROUP_MORE_SIMILAR,
+    ONE_GROUP_NO_SIMILAR,
     ONE_GROUP_TWO_SIMILAR,
 )
 from tests.mocks.raw import HTTP_200, HTTP_503, SEARCH_PARAMS, URL_SEARCH
@@ -70,6 +71,20 @@ async def test_one_group_more_similar_titles(mocker: Mocker, client: Client):
 
 
 @mark.asyncio
+async def test_one_group_no_similar_titles(mocker: Mocker, client: Client):
+    mock = mocker.patch(
+        GET,
+        new=AsyncMock(side_effect=ONE_GROUP_NO_SIMILAR),
+    )
+    spy = mocker.spy(ArticlesSimilarityFilter, "_get_single_group_index")
+    res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
+    spy.assert_called_once()
+    assert res.status_code == HTTP_200 and mock.call_count == 3
+    df = load_csv_file_response_dataframe(res)
+    assert df.shape[0] == 3  # +1 footnote
+
+
+@mark.asyncio
 async def test_more_groups_two_similar_titles(mocker: Mocker, client: Client):
     mock = mocker.patch(
         GET,
@@ -103,6 +118,21 @@ async def test_more_groups_more_similar_titles(mocker: Mocker, client: Client):
     assert df[Column.AUTHORS].tolist() == ["a", "b", "c", ""]
     recent_dates = ["2025-06-04", "2025-06-03", "2025-06-02", ""]
     assert df[Column.DATE].tolist() == recent_dates
+
+
+@mark.asyncio
+async def test_more_groups_no_similar_titles(mocker: Mocker, client: Client):
+    mock = mocker.patch(
+        GET,
+        new=AsyncMock(side_effect=MORE_GROUPS_NO_SIMILAR),
+    )
+    spy = mocker.spy(ArticlesSimilarityFilter, "_get_single_group_index")
+    res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
+    spy.assert_not_called()
+
+    assert res.status_code == HTTP_200 and mock.call_count == 10
+    df = load_csv_file_response_dataframe(res)
+    assert df.shape[0] == 10  # +1 footnote
 
 
 @mark.asyncio
@@ -233,20 +263,6 @@ async def test_cancelled_error(mocker: Mocker, client: Client):
     errors = assert_error_json(res, HTTP_503, CANCELLED_ERROR)
     assert errors[0]["type"] == fqn(CancelledError)
     assert errors[0]["detail"] == "any"
-
-
-@mark.asyncio
-async def test_no_similar_titles(mocker: Mocker, client: Client):
-    mock = mocker.patch(
-        GET,
-        new=AsyncMock(side_effect=NO_SIMILAR_TITLES),
-    )
-    spy = mocker.spy(ArticlesSimilarityFilter, "_get_single_group_index")
-    res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
-    spy.assert_called_once()
-    assert res.status_code == HTTP_200 and mock.call_count == 3
-    df = load_csv_file_response_dataframe(res)
-    assert df.shape[0] == 3  # +1 footnote
 
 
 @mark.asyncio

@@ -17,10 +17,11 @@ from tests.mocks.helpers import fqn
 from tests.mocks.raw import HTTP_503
 from tests.mocks.unitary import (
     MORE_GROUPS_MORE_SIMILAR,
+    MORE_GROUPS_NO_SIMILAR,
     MORE_GROUPS_TWO_SIMILAR,
     NO_DATETIME_LEFT,
     NO_REPEATED_AUTHORS,
-    NO_SIMILAR_TITLES,
+    ONE_GROUP_NO_SIMILAR,
     ONE_DATETIME_LEFT,
     ONE_GROUP_MORE_SIMILAR,
     ONE_GROUP_TWO_SIMILAR,
@@ -51,6 +52,13 @@ def test_one_group_more_similar_titles(mocker: Mocker):
     assert result[Column.DATE].iloc[0] == "2025-05-05"
 
 
+def test_one_group_no_similar_titles(mocker: Mocker):
+    spy = mocker.spy(ArticlesSimilarityFilter, "_get_single_group_index")
+    result = SIMILARITY_FILTER.filter(ONE_GROUP_NO_SIMILAR, RATIO)
+    spy.assert_called_once()
+    assert result.equals(ONE_GROUP_NO_SIMILAR)
+
+
 def test_more_groups_two_similar_titles(mocker: Mocker):
     spy = mocker.spy(ArticlesSimilarityFilter, "_get_single_group_index")
     result = SIMILARITY_FILTER.filter(MORE_GROUPS_TWO_SIMILAR, RATIO)
@@ -69,6 +77,13 @@ def test_more_groups_more_similar_titles(mocker: Mocker):
     assert result[Column.AUTHORS].tolist() == ["a", "b", "c"]
     recent_dates = ["2025-06-04", "2025-05-03", "2025-04-02"]
     assert result[Column.DATE].tolist() == recent_dates
+
+
+def test_more_groups_no_similar_titles(mocker: Mocker):
+    spy = mocker.spy(ArticlesSimilarityFilter, "_get_single_group_index")
+    result = SIMILARITY_FILTER.filter(MORE_GROUPS_NO_SIMILAR, RATIO)
+    spy.assert_not_called()
+    assert result.shape[0] == 9 and result.equals(MORE_GROUPS_NO_SIMILAR)
 
 
 def test_to_datetime_no_left(mocker: Mocker):
@@ -148,13 +163,6 @@ def test_cancelled_error(mocker: Mocker):
     assert_http_error(info, HTTP_503, CANCELLED_ERROR)
     assert info.value.errors[0]["type"] == fqn(CancelledError)
     assert info.value.errors[0]["detail"] == "any"
-
-
-def test_no_similar_titles(mocker: Mocker):
-    spy = mocker.spy(ArticlesSimilarityFilter, "_get_single_group_index")
-    result = SIMILARITY_FILTER.filter(NO_SIMILAR_TITLES, RATIO)
-    spy.assert_called_once()
-    assert result.equals(NO_SIMILAR_TITLES)
 
 
 def test_drop_similar(mocker: Mocker):
