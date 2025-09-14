@@ -177,9 +177,9 @@ class ScopusSearchAPI:
             response = await self._http_client.request(url)
             self._search = ScopusResponse.validate_search(response)
             self._survey_detail.set_search_data(self._search)
+            self._survey_detail.set_search_quota(response)
 
             if self._search.total_results == 0:
-                self._survey_detail.set_search_quota(response)
                 raise NotFound(ARTICLES_NOT_FOUND)
 
             if self._search.pages_count == 2:
@@ -195,7 +195,7 @@ class ScopusSearchAPI:
                 )
                 await self._get_multiple_articles_by_pagination()
 
-            LOG.info("Total Found: " f"\033[33m{self._search.total_results}")
+            LOG.info(f"Total Found: \033[33m{self._search.total_results}")
 
         finally:
             await self._http_client.close()
