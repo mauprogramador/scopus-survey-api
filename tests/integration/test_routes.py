@@ -28,6 +28,16 @@ GET = fqn(RetryClient.get)
 
 
 @mark.asyncio
+async def test_favicon(client: Client):
+    client.base_url = "http://127.0.0.1:123"
+    res = await client.get("/favicon.ico")
+    assert res.status_code == HTTP_200
+    assert res.headers["Cache-Control"]
+    assert res.headers["Content-Disposition"].count("favicon.ico")
+    assert res.headers["Content-Type"] == "image/x-icon"
+
+
+@mark.asyncio
 async def test_web_search_articles_en_us(client: Client):
     client.cookies.clear()
     client.headers.clear()
