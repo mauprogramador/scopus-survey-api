@@ -10,24 +10,8 @@ from tests.mocks.helpers import fqn
 from tests.mocks.raw import CSRF_TOKEN, HTML_MEDIA, HTTP_200, HTTP_404, REQUEST
 
 
-def test_load_translations():
-    translations = "_TRANSLATIONS"
-    assert hasattr(TemplateBuilder, translations)
-    assert getattr(TemplateBuilder, translations)[Lang.EN_US]
-    assert getattr(TemplateBuilder, translations)[Lang.PT_BR]
-
-
-def test_error_load_translations(mocker: Mocker):
-    target = fqn(TemplateBuilder.load_translations)
-    mocker.patch(target, side_effect=FileNotFoundError("any"))
-    with raises(FileNotFoundError) as info:
-        TemplateBuilder.load_translations()
-    assert info.value.args[0] == "any"
-
-
 def test_search_template(mocker: Mocker):
     spy_jinja = mocker.spy(Jinja2Templates, "TemplateResponse")
-    TemplateBuilder.load_translations()
     res = TemplateBuilder.search_template(REQUEST, CSRF_TOKEN, Lang.EN_US)
 
     assert res.status_code == HTTP_200
