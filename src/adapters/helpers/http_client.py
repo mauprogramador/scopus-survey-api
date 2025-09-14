@@ -118,8 +118,8 @@ class HTTPClient:
         key = self._KEYS[index] if index < len(self._KEYS) else self._KEYS[-1]
 
         if self._STRATEGIES[key] != self._strategy:
-            self._strategy = self._STRATEGIES[key]
             await self.close()
+            self._strategy = self._STRATEGIES[key]
             self._mount()
 
         return None
@@ -129,7 +129,6 @@ class HTTPClient:
         elapsed = current_time - self._last_request_time
 
         if elapsed < self._strategy.sleep:
-            print(self._strategy.sleep - elapsed)
             await sleep(self._strategy.sleep - elapsed)
         self._last_request_time = get_event_loop().time()
 
