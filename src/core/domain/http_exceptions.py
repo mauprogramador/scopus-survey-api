@@ -18,6 +18,7 @@ class HTTPError(HTTPException):
     """Detailed HTTP errors"""
 
     _FRAME = FrameSummary(__file__, 1, "<http_exceptions>")
+    _ROOT_PATH = "/scopus-survey-api"
 
     def __init__(
         self, status: HTTPStatus, message: str, error: Exception = None
@@ -39,10 +40,13 @@ class HTTPError(HTTPException):
         frame = extract_tb(traceback)[-1] if traceback else cls._FRAME
 
         file = frame.filename
+        if file.count(cls._ROOT_PATH):
+            file = file[file.index(cls._ROOT_PATH) :]
+
         base_error = {
             "type": f"{type(error).__module__}.{type(error).__qualname__}",
             "detail": LOG.error_message(error, UNEXPECTED_ERROR),
-            "file": file[file.index("/scopus-survey-api") :],
+            "file": file,
             "line": frame.lineno,
         }
         errors = [base_error]
