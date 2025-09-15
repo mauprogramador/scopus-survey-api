@@ -49,4 +49,4 @@ jobs:
         run: poetry run mkdocs build --strict
 
       - name: Build and deploy
-        run: mkdocs gh-deploy --force --verbose
+        run: poetry run mkdocs gh-deploy --force --verbose
