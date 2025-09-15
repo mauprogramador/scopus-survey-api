@@ -3,18 +3,17 @@ on:
   push:
     branches:
       - master
+    paths:
+      - "src/**"
+      - "tests/**"
+      - "pyproject.toml"
+      - "poetry.lock"
 jobs:
   verification:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: 3.12
-          cache: "poetry"
 
       - name: Set up Poetry
         uses: snok/install-poetry@v1
@@ -24,6 +23,12 @@ jobs:
           virtualenvs-in-project: true
           installer-parallel: true
           virtualenvs-path: .venv
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.12
+          cache: "poetry"
 
       - name: Load cached venv
         id: cached-poetry-dependencies
