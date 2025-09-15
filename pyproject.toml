@@ -90,7 +90,7 @@ build-backend = "poetry.core.masonry.api"
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 
 [tool.pylint]
-disable = ["C0114", "C0115", "C0116", "C0123", "R0903", "E1136", "E0611", "E1131", "R0801"]
+disable = ["C0114", "C0115", "C0116", "C0123", "R0903", "E1136", "E0611", "E1131", "R0801", "W0511"]
 
 [tool.bandit]
 exclude_dirs = [".venv"]
@@ -105,8 +105,8 @@ asyncio_default_fixture_loop_scope = "function"
 asyncio_default_test_loop_scope = "function"
 asyncio_mode = "strict"
 filterwarnings = ["ignore::DeprecationWarning"]
-log_date_format = '%Y-%m-%d %H:%M:%S'
-log_format = '%(asctime)s %(levelname)s %(message)s'
+log_date_format = "%%Y-%%m-%%d %%H:%%M:%%S"
+log_format = "%(asctime)s %(levelname)s %(message)s"
 testpaths = ["tests/"]
 
 [tool.coverage.run]
