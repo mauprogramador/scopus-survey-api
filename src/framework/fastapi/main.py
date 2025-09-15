@@ -8,7 +8,7 @@ from starlette.middleware.sessions import SessionMiddleware
 from src import __version__
 from src.core.config.config import DIRECTORY, ENV, LIMITER, SECRET_KEY
 from src.core.domain.translations import Translations
-from src.framework.fastapi.routes import router, favicon_router
+from src.framework.fastapi.routes import favicon_router, router
 from src.framework.fastapi.swagger import (
     CONTACT,
     DESCRIPTION,

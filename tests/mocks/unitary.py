@@ -1,7 +1,7 @@
+from itertools import batched  # type: ignore
 from random import randint
 from string import ascii_lowercase
 
-from itertools import batched  # type: ignore
 from pandas import DataFrame
 
 from src.core.common.types import CombinationBundle

@@ -1,4 +1,5 @@
 from gettext import translation
+
 from pytest import raises
 from pytest_mock import MockerFixture as Mocker
 

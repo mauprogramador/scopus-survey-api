@@ -1,6 +1,7 @@
 # mypy: disable-error-code="index"
-from asyncio import CancelledError, sleep
+from asyncio import CancelledError
 from asyncio import TimeoutError as AsyncTimeoutError
+from asyncio import sleep
 from collections import defaultdict
 from itertools import chain
 from json import JSONDecodeError

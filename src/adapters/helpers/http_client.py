@@ -1,6 +1,6 @@
-from asyncio import CancelledError, Semaphore, get_event_loop
+from asyncio import CancelledError, Semaphore
 from asyncio import TimeoutError as AsyncTimeoutError
-from asyncio import sleep
+from asyncio import get_event_loop, sleep
 from bisect import bisect_left
 from http import HTTPStatus
 from json import JSONDecodeError

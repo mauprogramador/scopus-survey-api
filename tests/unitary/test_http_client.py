@@ -1,5 +1,6 @@
-from asyncio import CancelledError, Semaphore, gather, sleep
+from asyncio import CancelledError, Semaphore
 from asyncio import TimeoutError as AsyncTimeoutError
+from asyncio import gather, sleep
 from json import JSONDecodeError
 from unittest.mock import AsyncMock
 
