@@ -193,7 +193,7 @@ survCombBtn.button.addEventListener('click', () => {
     if (response) {
       return response.json().then((json) => {
         showFinalStep();
-        populateTable(json['combinations']);
+        populateTable(json['data']['combinations']);
 
         showSuccess(successMessages[lang].T02);
       });
