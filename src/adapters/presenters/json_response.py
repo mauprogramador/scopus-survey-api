@@ -13,14 +13,19 @@ from src.core.config.config import ENV, LOG
 from src.core.domain.http_exceptions import HTTPError
 
 
-class ErrorResponse(BaseModel):
-    """JSON error response"""
+class BaseResponse(BaseModel):
+    """Base JSON response"""
 
-    success: bool = False
+    success: bool
     status_code: int
     status: str
     message: str
     timestamp: str = datetime.now().isoformat()
+
+
+class ErrorResponse(BaseResponse):
+    """Error JSON response"""
+
     request: Json
     errors: list[Json] | None = None
 
@@ -36,6 +41,12 @@ class ErrorResponse(BaseModel):
                 "headers": data.headers.items(),
             }
         return data
+
+
+class SuccessResponse(BaseResponse):
+    """Success JSON response"""
+
+    data: Json
 
 
 class ErrorJSON(JSONResponse):
@@ -76,3 +87,21 @@ class ErrorJSON(JSONResponse):
         )
 
         super().__init__(error_response.model_dump(), status_code)
+
+
+class SuccessJSON(JSONResponse):
+    """Success JSON representation response"""
+
+    def __init__(
+        self, data: Json, message: str, headers: dict[str, str]
+    ) -> None:
+        """Success JSON representation response"""
+
+        success_response = SuccessResponse(
+            success=True,
+            status_code=HTTPStatus.OK,
+            status=HTTPStatus.OK.phrase,
+            message=message,
+            data=data,
+        )
+        super().__init__(success_response.model_dump(), HTTPStatus.OK, headers)

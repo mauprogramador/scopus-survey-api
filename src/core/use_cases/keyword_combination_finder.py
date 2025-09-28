@@ -1,8 +1,8 @@
-from http import HTTPStatus
 from itertools import chain, combinations
 
 from fastapi.responses import JSONResponse
 
+from src.adapters.presenters.json_response import SuccessJSON
 from src.core.common.types import CombinationBundle
 from src.core.config.config import LOG
 from src.core.data.query_params import CombinationParams
@@ -13,7 +13,6 @@ from src.core.domain.protocols import SearchAPI, URLBuilder
 class KeywordCombinationFinder:
     """Gathers, filters and compiles data from Scopus articles"""
 
-    _MEDIA_TYPE = "application/json"
     _MAX_SIZE = 5
     _START = 1
 
@@ -66,9 +65,8 @@ class KeywordCombinationFinder:
         headers.update({"X-API-Key": params.api_key})
         headers.update({"Content-Type": "application/json; charset=utf-8"})
 
-        return JSONResponse(
-            content={"combinations": survey_list},
-            status_code=HTTPStatus.OK,
+        return SuccessJSON(
+            data={"combinations": survey_list},
+            message="Combination totals survey successfully",
             headers=headers,
-            media_type=self._MEDIA_TYPE,
         )

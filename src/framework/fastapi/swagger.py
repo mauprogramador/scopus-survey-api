@@ -1,6 +1,6 @@
 from http import HTTPStatus
 
-from src.adapters.presenters.error_response import ErrorResponse
+from src.adapters.presenters.json_response import ErrorResponse
 
 DESCRIPTION = """
 🌐 [**Web Application**](/v2/scopus-survey/web/en-US/search-articles)
@@ -61,7 +61,7 @@ JSON_RESPONSE = {
                     "success": True,
                     "status_code": 200,
                     "status": "OK",
-                    "message": "Combination survey successfully",
+                    "message": "Combination totals survey successfully",
                     "timestamp": "2025-01-01T00:00:00Z",
                     "data": [
                         {

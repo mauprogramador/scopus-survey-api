@@ -7,7 +7,7 @@ from fastapi.templating import Jinja2Templates
 from starlette.responses import Response
 
 from src import __version__
-from src.adapters.presenters.error_response import ErrorJSON
+from src.adapters.presenters.json_response import ErrorJSON
 from src.core.common.error_messages import UNEXPECTED_ERROR
 from src.core.config.config import MAX_AGE, PREFIX
 from src.core.config.scopus import CURRENT_YEAR

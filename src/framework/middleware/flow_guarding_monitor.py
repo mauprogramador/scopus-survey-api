@@ -11,7 +11,7 @@ from starlette.middleware.base import (
 )
 from starlette.responses import Response
 
-from src.adapters.presenters.error_response import ErrorJSON
+from src.adapters.presenters.json_response import ErrorJSON
 from src.adapters.presenters.template_response import TemplateResponse
 from src.core.common.patterns import API_ROUTES_PATTERN
 from src.core.config.config import LOG, RATELIMIT_POLICY
