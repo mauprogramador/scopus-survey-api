@@ -23,6 +23,7 @@ if __name__ == "__main__":
         app=APP,
         host=ENV.host,
         port=ENV.port,
+        loop="uvloop",
         reload=ENV.reload,
         workers=ENV.workers,
         access_log=False,
