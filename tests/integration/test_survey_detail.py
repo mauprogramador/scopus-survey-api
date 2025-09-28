@@ -8,7 +8,7 @@ from pytest_mock import MockerFixture as Mocker
 
 from src.core.common.types import ResponseBundle
 from src.core.data.serializers import ScopusHeaders, ScopusSearch
-from src.core.data.survey_detail import SurveyDetail
+from src.core.data.survey_detail import SurveyDetails
 from src.core.use_cases.keyword_combination_finder import (
     KeywordCombinationFinder,
 )
@@ -30,13 +30,13 @@ from tests.mocks.raw import (
 )
 
 LOG_QUOTA = fqn(KeywordCombinationFinder, "LOG.quota")
-SURVEY_DETAIL = SurveyDetail()
+SURVEY_DETAIL = SurveyDetails()
 GET = fqn(RetryClient.get)
 
 
 @mark.asyncio
 async def test_combination_details(mocker: Mocker, client: Client):
-    spy_quota = mocker.spy(SurveyDetail, "set_search_quota")
+    spy_quota = mocker.spy(SurveyDetails, "set_search_quota")
     spy_log = mocker.patch(LOG_QUOTA)
     mocker.patch(GET, new=AsyncMock(side_effect=COMBINATION_DETAILS))
 
@@ -60,10 +60,10 @@ async def test_combination_details(mocker: Mocker, client: Client):
 
 @mark.asyncio
 async def test_search_details_one_result(mocker: Mocker, client: Client):
-    spy_search = mocker.spy(SurveyDetail, "set_search_data")
-    spy_search_quota = mocker.spy(SurveyDetail, "set_search_quota")
-    spy_abstract_quota = mocker.spy(SurveyDetail, "set_abstract_quota")
-    spy_loss = mocker.spy(SurveyDetail, "set_loss")
+    spy_search = mocker.spy(SurveyDetails, "set_search_data")
+    spy_search_quota = mocker.spy(SurveyDetails, "set_search_quota")
+    spy_abstract_quota = mocker.spy(SurveyDetails, "set_abstract_quota")
+    spy_loss = mocker.spy(SurveyDetails, "set_loss")
     spy_log = mocker.patch(LOG_QUOTA)
     mocker.patch(GET, new=AsyncMock(side_effect=SEARCH_DETAILS_ONE_RESULT))
 
@@ -102,10 +102,10 @@ async def test_search_details_one_result(mocker: Mocker, client: Client):
 
 @mark.asyncio
 async def test_search_details_more_results(mocker: Mocker, client: Client):
-    spy_search = mocker.spy(SurveyDetail, "set_search_data")
-    spy_search_quota = mocker.spy(SurveyDetail, "set_search_quota")
-    spy_abstract_quota = mocker.spy(SurveyDetail, "set_abstract_quota")
-    spy_loss = mocker.spy(SurveyDetail, "set_loss")
+    spy_search = mocker.spy(SurveyDetails, "set_search_data")
+    spy_search_quota = mocker.spy(SurveyDetails, "set_search_quota")
+    spy_abstract_quota = mocker.spy(SurveyDetails, "set_abstract_quota")
+    spy_loss = mocker.spy(SurveyDetails, "set_loss")
     spy_log = mocker.patch(LOG_QUOTA)
     mocker.patch(GET, new=AsyncMock(side_effect=SEARCH_DETAILS_MORE_RESULTS))
 

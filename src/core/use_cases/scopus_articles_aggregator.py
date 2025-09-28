@@ -12,7 +12,7 @@ from src.core.domain.protocols import (
     AbstractAPI,
     SearchAPI,
     SimilarityFilter,
-    SurveyDetail,
+    SurveyDetails,
 )
 
 
@@ -31,7 +31,7 @@ class ScopusArticlesAggregator:
         search_api: SearchAPI,
         abstract_api: AbstractAPI,
         similarity_filter: SimilarityFilter,
-        survey_detail: SurveyDetail,
+        survey_detail: SurveyDetails,
     ) -> None:
         """Gathers, filters and compiles data from Scopus articles"""
         self._search_api = search_api

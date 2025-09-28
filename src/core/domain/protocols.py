@@ -13,7 +13,7 @@ from src.core.common.types import (
 from src.core.data.serializers import ScopusEntry, ScopusSearch
 
 
-class SurveyDetail(Protocol):
+class SurveyDetails(Protocol):
     def set_search_data(self, scopus_search: ScopusSearch) -> None:
         pass
 

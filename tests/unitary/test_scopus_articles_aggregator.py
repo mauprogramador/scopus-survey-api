@@ -11,7 +11,7 @@ from src.adapters.gateway.scopus_abstract_retrieval_api import (
 from src.adapters.gateway.scopus_search_api import ScopusSearchAPI
 from src.core.config.scopus import FOOTNOTE
 from src.core.data.query_params import SearchParams
-from src.core.data.survey_detail import SurveyDetail
+from src.core.data.survey_detail import SurveyDetails
 from src.core.use_cases.articles_similarity_filter import (
     ArticlesSimilarityFilter,
 )
@@ -36,7 +36,7 @@ ARTICLES_AGGREGATOR = ScopusArticlesAggregator(
         retrieve_abstracts=RETRIEVE_ABSTRACTS,
     ),
     MagicMock(spec=ArticlesSimilarityFilter, filter=FILTER),
-    MagicMock(spec=SurveyDetail, log_data=LOG_DATA, set_loss=SET_LOSS),
+    MagicMock(spec=SurveyDetails, log_data=LOG_DATA, set_loss=SET_LOSS),
 )
 PARAMS = SearchParams(**ALIAS_SEARCH_PARAMS)
 

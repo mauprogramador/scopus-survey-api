@@ -1,6 +1,6 @@
 from src.core.common.types import ResponseBundle
 from src.core.data.serializers import ScopusSearch
-from src.core.data.survey_detail import SurveyDetail
+from src.core.data.survey_detail import SurveyDetails
 from tests.mocks.raw import (
     HTTP_200,
     RAW_HEADERS_OK,
@@ -8,7 +8,7 @@ from tests.mocks.raw import (
     RESET_DATETIME,
 )
 
-SURVEY_DETAIL = SurveyDetail()
+SURVEY_DETAIL = SurveyDetails()
 
 
 def test_search_data():

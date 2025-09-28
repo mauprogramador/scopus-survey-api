@@ -23,7 +23,7 @@ from src.core.domain.http_exceptions import (
     NotFound,
     ServiceUnavailable,
 )
-from src.core.domain.protocols import HTTPClient, SurveyDetail, URLBuilder
+from src.core.domain.protocols import HTTPClient, SurveyDetails, URLBuilder
 from src.utils.progress_bar import ProgressBar
 
 
@@ -37,7 +37,7 @@ class ScopusSearchAPI:
         self,
         http_client: HTTPClient,
         url_builder: URLBuilder,
-        survey_detail: SurveyDetail,
+        survey_detail: SurveyDetails,
     ) -> None:
         """Search and retrieve articles via the Scopus Search API"""
         self._http_client = http_client

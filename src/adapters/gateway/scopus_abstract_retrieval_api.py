@@ -16,7 +16,7 @@ from src.core.common.types import Json, ResponseBundle
 from src.core.config.config import LOG
 from src.core.data.serializers import ScopusEntry
 from src.core.domain.http_exceptions import HTTPError, ServiceUnavailable
-from src.core.domain.protocols import HTTPClient, SurveyDetail, URLBuilder
+from src.core.domain.protocols import HTTPClient, SurveyDetails, URLBuilder
 from src.utils.progress_bar import ProgressBar
 
 
@@ -29,7 +29,7 @@ class ScopusAbstractRetrievalAPI:
         self,
         http_retry: HTTPClient,
         url_builder: URLBuilder,
-        survey_detail: SurveyDetail,
+        survey_detail: SurveyDetails,
     ) -> None:
         """Retrieves Scopus abstracts via the Scopus Abstract Retrieval API"""
         self._http_retry = http_retry

@@ -6,7 +6,7 @@ from fastapi.responses import JSONResponse
 from src.core.common.types import CombinationBundle
 from src.core.config.config import LOG
 from src.core.data.query_params import CombinationParams
-from src.core.data.survey_detail import SurveyDetail
+from src.core.data.survey_detail import SurveyDetails
 from src.core.domain.protocols import SearchAPI, URLBuilder
 
 
@@ -21,7 +21,7 @@ class KeywordCombinationFinder:
         self,
         url_builder: URLBuilder,
         search_api: SearchAPI,
-        survey_detail: SurveyDetail,
+        survey_detail: SurveyDetails,
     ) -> None:
         """Gathers, filters and compiles data from Scopus articles"""
         self._url_builder = url_builder

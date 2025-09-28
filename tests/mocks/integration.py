@@ -133,7 +133,7 @@ RESPONSE_RATE_LIMIT_EXCEEDED = response_mock(
 RESPONSE_JSON_ERROR = response_mock({"search-results": ""})
 RESPONSE_KEY_ERROR = response_mock({"any": "any"})
 
-# SurveyDetail.set_
+# SurveyDetails.set_
 
 RESET = int(time() + 60)
 RESET_DATETIME = datetime.fromtimestamp(RESET).strftime("%Y-%m-%d %H:%M:%S")

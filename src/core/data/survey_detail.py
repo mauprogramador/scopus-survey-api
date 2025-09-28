@@ -2,7 +2,7 @@ from src.core.common.types import ResponseBundle
 from src.core.data.serializers import ScopusHeaders, ScopusSearch
 
 
-class SurveyDetail:
+class SurveyDetails:
     """Gather Scopus API search and quota details"""
 
     def __init__(self) -> None:

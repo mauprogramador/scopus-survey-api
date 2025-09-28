@@ -9,7 +9,7 @@ from src.adapters.helpers.url_builder import URLBuilder
 from src.core.common.types import Json
 from src.core.data.enums import Button
 from src.core.data.query_params import CombinationParams
-from src.core.data.survey_detail import SurveyDetail
+from src.core.data.survey_detail import SurveyDetails
 from src.core.use_cases.keyword_combination_finder import (
     KeywordCombinationFinder,
 )
@@ -29,7 +29,7 @@ COMBINATION_FINDER = KeywordCombinationFinder(
         spec=ScopusSearchAPI,
         survey_totals_found=AsyncMock(side_effect=mock_survey_totals_found),
     ),
-    MagicMock(spec=SurveyDetail, log_data=LOG_DATA),
+    MagicMock(spec=SurveyDetails, log_data=LOG_DATA),
 )
 RANDINT = fqn(mock_survey_totals_found, "randint")
 

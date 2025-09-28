@@ -7,7 +7,7 @@ from pytest import mark
 from pytest_mock import MockerFixture as Mocker
 
 from src.core.config.scopus import FOOTNOTE
-from src.core.data.survey_detail import SurveyDetail
+from src.core.data.survey_detail import SurveyDetails
 from src.core.use_cases.articles_similarity_filter import (
     ArticlesSimilarityFilter,
 )
@@ -31,7 +31,7 @@ async def test_one_row(mocker: Mocker, client: Client):
     )
     spy_drop = mocker.spy(DataFrame, "drop_duplicates")
     spy_filter = mocker.spy(ArticlesSimilarityFilter, "filter")
-    spy_loss = mocker.spy(SurveyDetail, "set_loss")
+    spy_loss = mocker.spy(SurveyDetails, "set_loss")
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
 
     df = load_csv_file_response_dataframe(res)
@@ -50,7 +50,7 @@ async def test_more_rows(mocker: Mocker, client: Client):
     )
     spy_drop = mocker.spy(DataFrame, "drop_duplicates")
     spy_filter = mocker.spy(ArticlesSimilarityFilter, "filter")
-    spy_loss = mocker.spy(SurveyDetail, "set_loss")
+    spy_loss = mocker.spy(SurveyDetails, "set_loss")
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
 
     df = load_csv_file_response_dataframe(res)
@@ -70,7 +70,7 @@ async def test_drop_exact_duplicates(mocker: Mocker, client: Client):
     spy_drop = mocker.spy(DataFrame, "drop_duplicates")
     spy_reset = mocker.spy(DataFrame, "reset_index")
     spy_filter = mocker.spy(ArticlesSimilarityFilter, "filter")
-    spy_loss = mocker.spy(SurveyDetail, "set_loss")
+    spy_loss = mocker.spy(SurveyDetails, "set_loss")
 
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     df = load_csv_file_response_dataframe(res)
@@ -94,7 +94,7 @@ async def test_drop_same_title_and_authors(mocker: Mocker, client: Client):
     spy_drop = mocker.spy(DataFrame, "drop_duplicates")
     spy_reset = mocker.spy(DataFrame, "reset_index")
     spy_filter = mocker.spy(ArticlesSimilarityFilter, "filter")
-    spy_loss = mocker.spy(SurveyDetail, "set_loss")
+    spy_loss = mocker.spy(SurveyDetails, "set_loss")
 
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     df = load_csv_file_response_dataframe(res)
