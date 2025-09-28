@@ -7,7 +7,7 @@ from pytest import ExceptionInfo, fixture
 from pytest_asyncio import fixture as async_fixture
 from uvloop import EventLoopPolicy, install
 
-from src.adapters.presenters.error_response import ErrorJSON, ErrorResponse
+from src.adapters.presenters.json_response import ErrorJSON, ErrorResponse
 from src.core.common.types import Json
 from src.core.config.config import DIRECTORY, PREFIX
 from src.core.domain.http_exceptions import HTTPError

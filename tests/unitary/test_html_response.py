@@ -1,7 +1,7 @@
 from fastapi.templating import Jinja2Templates
 from pytest_mock import MockerFixture as Mocker
 
-from src.adapters.presenters.error_response import ErrorJSON
+from src.adapters.presenters.json_response import ErrorJSON
 from src.adapters.presenters.template_response import TemplateResponse
 from src.core.common.error_messages import UNEXPECTED_ERROR
 from src.core.config.scopus import CURRENT_YEAR

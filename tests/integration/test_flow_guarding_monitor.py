@@ -5,7 +5,7 @@ from pytest_mock import MockerFixture as Mocker
 from starlette.middleware.base import _StreamingResponse
 
 from src.adapters.presenters.csv_response import CSVResponse
-from src.adapters.presenters.error_response import ErrorJSON
+from src.adapters.presenters.json_response import ErrorJSON
 from src.adapters.presenters.template_response import TemplateResponse
 from tests.conftest import assert_error_json
 from tests.mocks.helpers import fqn

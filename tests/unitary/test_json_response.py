@@ -2,15 +2,21 @@ from json import loads
 
 from pydantic_core import PydanticUndefined
 
-from src.adapters.presenters.error_response import ErrorJSON, ErrorResponse
+from src.adapters.presenters.json_response import (
+    ErrorJSON,
+    ErrorResponse,
+    SuccessJSON,
+    SuccessResponse,
+)
 from src.core.common.error_messages import SERIALIZE_ERROR
 from src.core.common.types import Json
 from tests.mocks.helpers import fqn
-from tests.mocks.raw import HTTP_500, REQUEST
+from tests.mocks.raw import HTTP_200, HTTP_500, REQUEST
 
 
 def test_error_response():
     model = ErrorResponse(
+        success=False,
         status_code=HTTP_500,
         status="any",
         message="any",
@@ -74,3 +80,31 @@ def test_error_json_serialize_error():
     assert raw["errors"][0]["type"] is None
     assert raw["errors"][1]["type"] == fqn(TypeError)
     assert raw["errors"][1]["detail"].endswith("not JSON serializable")
+
+
+def test_success_response():
+    model = SuccessResponse(
+        success=True,
+        status_code=HTTP_200,
+        status="any",
+        message="any",
+        data={"any": "any"},
+    )
+    assert model.success and model.timestamp
+    assert model.status_code == HTTP_200
+    assert model.status == "any" and model.message == "any"
+    assert model.data is not None
+
+
+def test_success_json():
+    model = SuccessJSON(
+        {"any": "any"},
+        "any",
+        {"any": "any"},
+    )
+    raw: Json = loads(model.body.decode())  # type: ignore
+
+    assert raw["success"] and raw["timestamp"] is not None
+    assert raw["status"] == HTTP_200.phrase
+    assert raw["status_code"] == HTTP_200
+    assert raw["message"] == "any" and raw["data"] is not None

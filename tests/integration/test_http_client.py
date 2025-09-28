@@ -61,7 +61,7 @@ async def test_success(mocker: Mocker, client: Client):
     mock = mocker.patch(GET, new=AsyncMock(side_effect=GET_SUCCESS))
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
     assert res.status_code == HTTP_200 and mock.call_count == 3
-    assert len(res.json()["combinations"]) == 3
+    assert len(res.json()["data"]["combinations"]) == 3
 
 
 @mark.asyncio
@@ -169,7 +169,7 @@ async def test_retry_on_rate_limit(mocker: Mocker, client: Client):
     assert spy.call_args_list[0].args[0] == 2
     assert spy.call_count == 2  # +1 close
     assert res.status_code == HTTP_200 and mock.call_count == 4
-    assert len(res.json()["combinations"]) == 3
+    assert len(res.json()["data"]["combinations"]) == 3
     spy.assert_awaited()
     mock.assert_awaited()
 
