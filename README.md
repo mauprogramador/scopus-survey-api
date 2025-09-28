@@ -76,8 +76,8 @@ Technology in Systems Analysis and Development &nbsp;&#8226;&nbsp; [TADS](https:
 Data provided by [Scopus](https://www.scopus.com)® &nbsp;&#8226;&nbsp; [Elsevier](https://www.elsevier.com)
 
 - Documentation: <https://mauprogramador.github.io/scopus-survey-api/>
-- Swagger UI: <http://127.0.0.1:8000/>
 - Web API: <http://127.0.0.1:8000/v2/scopus-survey/en-US/search-articles>
+- Swagger UI: <http://127.0.0.1:8000/>
 
 ---
 
@@ -104,11 +104,11 @@ Create an `.env` file to configure the following options:
 | `LOGGING_FILE` | Enable saving logs to files                              | `false`     |
 | `DEBUG`        | Enable the debug mode and debug logs                     | `false`     |
 
-- The `reload` and `workers` options are **mutually exclusive**.
+- The `RELOAD` and `WORKERS` options are **mutually exclusive**.
 
-- Setting the `host` to `0.0.0.0` makes the application externally available.
+- Setting the `HOST` to `0.0.0.0` makes the application externally available.
 
-- Set `workers`, **maximum 4**, to start **multiple server processes**.
+- Set `WORKERS`, **maximum 4**, to start **multiple server processes**.
 
 > [!TIP]
 > Take a look at the [`.env.example`](./.env.example) file.
@@ -209,7 +209,7 @@ These quotas, are **unique to each** <abbr title="Application Programming Interf
 
 ---
 
-For questions or concerns about these Terms, please contact us at <sir.silvabmauricio@gmail.com>.
+For questions or concerns please contact me at <sir.silvabmauricio@gmail.com>.
 
 [Terms of Service](./TERMS_OF_SERVICE.md)
 &nbsp;&#8226;&nbsp;
