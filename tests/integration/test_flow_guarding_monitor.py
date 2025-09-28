@@ -6,7 +6,7 @@ from starlette.middleware.base import _StreamingResponse
 
 from src.adapters.presenters.csv_response import CSVResponse
 from src.adapters.presenters.error_response import ErrorJSON
-from src.adapters.presenters.html_response import TemplateBuilder
+from src.adapters.presenters.template_response import TemplateResponse
 from tests.conftest import assert_error_json
 from tests.mocks.helpers import fqn
 from tests.mocks.raw import (
@@ -44,7 +44,7 @@ async def test_uncaught_exception(mocker: Mocker, client: Client):
 async def test_not_found_status(mocker: Mocker, client: Client):
     client.cookies.clear()
     client.headers.clear()
-    spy = mocker.spy(TemplateBuilder, "not_found_template")
+    spy = mocker.spy(TemplateResponse, "not_found_template")
     res = await client.get("/api/any")
     assert res.status_code == HTTP_404 and res.text
     assert res.headers["Content-Type"] == HTML_CONTENT_TYPE
@@ -55,7 +55,7 @@ async def test_not_found_status(mocker: Mocker, client: Client):
 async def test_not_found_error(mocker: Mocker, client: Client):
     client.cookies.clear()
     client.headers.clear()
-    spy = mocker.spy(TemplateBuilder, "not_found_template")
+    spy = mocker.spy(TemplateResponse, "not_found_template")
     res = await client.get("/api/any")
     assert res.status_code == HTTP_404 and res.text
     assert res.headers["Content-Type"] == HTML_CONTENT_TYPE

@@ -7,7 +7,7 @@ from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
 from fastapi.routing import APIRouter
 
 from src.adapters.presenters.csv_response import CSVResponse
-from src.adapters.presenters.html_response import TemplateBuilder
+from src.adapters.presenters.template_response import TemplateResponse
 from src.core.config.config import LIMIT, LIMITER, LOG, MAX_AGE, PREFIX
 from src.core.data.enums import Lang
 from src.core.data.query_params import (
@@ -69,7 +69,7 @@ async def search_articles_page(
     )
 
     request.session["csrf-token"] = csrf_token
-    response = TemplateBuilder.search_template(request, csrf_token, lang)
+    response = TemplateResponse.search_template(request, csrf_token, lang)
     response.set_cookie("csrf-token", signed_token, MAX_AGE, httponly=True)
 
     return response

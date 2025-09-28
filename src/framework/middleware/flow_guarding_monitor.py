@@ -12,7 +12,7 @@ from starlette.middleware.base import (
 from starlette.responses import Response
 
 from src.adapters.presenters.error_response import ErrorJSON
-from src.adapters.presenters.html_response import TemplateBuilder
+from src.adapters.presenters.template_response import TemplateResponse
 from src.core.common.patterns import API_ROUTES_PATTERN
 from src.core.config.config import LOG, RATELIMIT_POLICY
 from src.core.domain.http_exceptions import HTTPError
@@ -62,6 +62,6 @@ class FlowGuardingMonitorMiddleware(BaseHTTPMiddleware):
                 chunks = [chunk async for chunk in response.body_iterator]
                 setattr(response, "body", b"".join(chunks))
 
-            return TemplateBuilder.not_found_template(request, response)
+            return TemplateResponse.not_found_template(request, response)
 
         return response

@@ -15,7 +15,7 @@ from src.core.data.enums import Lang, Templates
 from src.core.domain.translations import Translations
 
 
-class TemplateBuilder:
+class TemplateResponse:
     """Generates context values for template responses"""
 
     _ERROR_PAGE_HEADERS = {
