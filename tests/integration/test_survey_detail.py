@@ -7,6 +7,7 @@ from pytest import mark
 from pytest_mock import MockerFixture as Mocker
 
 from src.core.common.types import ResponseBundle
+from src.core.data.csv_builder import CSVBuilder
 from src.core.data.serializers import ScopusHeaders, ScopusSearch
 from src.core.data.survey_details import SurveyDetails
 from src.core.use_cases.keyword_combination_finder import (
@@ -30,7 +31,6 @@ from tests.mocks.raw import (
 )
 
 LOG_QUOTA = fqn(KeywordCombinationFinder, "LOG.quota")
-SURVEY_DETAIL = SurveyDetails()
 GET = fqn(RetryClient.get)
 
 
@@ -64,6 +64,7 @@ async def test_search_details_one_result(mocker: Mocker, client: Client):
     spy_search_quota = mocker.spy(SurveyDetails, "set_search_quota")
     spy_abstract_quota = mocker.spy(SurveyDetails, "set_abstract_quota")
     spy_loss = mocker.spy(SurveyDetails, "set_loss")
+    spy_write = mocker.spy(CSVBuilder, "write")
     spy_log = mocker.patch(LOG_QUOTA)
     mocker.patch(GET, new=AsyncMock(side_effect=SEARCH_DETAILS_ONE_RESULT))
 
@@ -73,6 +74,7 @@ async def test_search_details_one_result(mocker: Mocker, client: Client):
         0
     ].args[1]
     loss: float = spy_loss.call_args_list[0].args[1]
+    metadata: list[str] = spy_write.call_args_list[0].args[2]
 
     spy_search.assert_called_once()
     spy_search_quota.assert_called_once()
@@ -85,6 +87,10 @@ async def test_search_details_one_result(mocker: Mocker, client: Client):
     assert isinstance(spy_search.call_args_list[0].args[1], ScopusSearch)
     assert search_bundle.headers == abstract_bundle.headers == HEADERS
     assert loss == 0.0
+
+    assert metadata[0] == "total=1" and metadata[1] == "items_per_page=1"
+    assert metadata[2] == "pages_count=1"
+    assert metadata[3] == "loss=0doc / 0.00%"
 
     assert res.headers["X-Total"] == "1"
     assert res.headers["X-Items-Per-Page"] == "1"
@@ -106,6 +112,7 @@ async def test_search_details_more_results(mocker: Mocker, client: Client):
     spy_search_quota = mocker.spy(SurveyDetails, "set_search_quota")
     spy_abstract_quota = mocker.spy(SurveyDetails, "set_abstract_quota")
     spy_loss = mocker.spy(SurveyDetails, "set_loss")
+    spy_write = mocker.spy(CSVBuilder, "write")
     spy_log = mocker.patch(LOG_QUOTA)
     mocker.patch(GET, new=AsyncMock(side_effect=SEARCH_DETAILS_MORE_RESULTS))
 
@@ -115,6 +122,7 @@ async def test_search_details_more_results(mocker: Mocker, client: Client):
         0
     ].args[1]
     loss: float = spy_loss.call_args_list[0].args[1]
+    metadata: list[str] = spy_write.call_args_list[0].args[2]
 
     spy_search.assert_called_once()
     spy_search_quota.assert_called_once()
@@ -127,6 +135,10 @@ async def test_search_details_more_results(mocker: Mocker, client: Client):
     assert isinstance(spy_search.call_args_list[0].args[1], ScopusSearch)
     assert search_bundle.headers == abstract_bundle.headers == HEADERS
     assert loss == 2
+
+    assert metadata[0] == "total=3" and metadata[1] == "items_per_page=3"
+    assert metadata[2] == "pages_count=1"
+    assert metadata[3] == "loss=2doc / 66.67%"
 
     assert res.headers["X-Total"] == "3"
     assert res.headers["X-Items-Per-Page"] == "3"

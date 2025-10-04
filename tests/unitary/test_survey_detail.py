@@ -17,6 +17,9 @@ def test_search_data():
     assert SURVEY_DETAIL.headers["X-Total"] == "1"
     assert SURVEY_DETAIL.headers["X-Items-Per-Page"] == "1"
     assert SURVEY_DETAIL.headers["X-Pages-Count"] == "1"
+    assert SURVEY_DETAIL.metadata[0] == "total=1"
+    assert SURVEY_DETAIL.metadata[1] == "items_per_page=1"
+    assert SURVEY_DETAIL.metadata[2] == "pages_count=1"
 
 
 def test_search_quota():
@@ -40,6 +43,7 @@ def test_abstract_quota():
 def test_loss():
     SURVEY_DETAIL.set_loss(5, 13.5671)
     assert SURVEY_DETAIL.headers["X-Loss"] == "5doc / 13.57%"
+    assert SURVEY_DETAIL.metadata[3] == "loss=5doc / 13.57%"
 
 
 def test_average_found():
@@ -50,3 +54,4 @@ def test_average_found():
 def test_full_headers():
     assert len(SURVEY_DETAIL.log_data) == 2
     assert len(SURVEY_DETAIL.headers) == 13
+    assert len(SURVEY_DETAIL.metadata) == 4
