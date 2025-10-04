@@ -37,6 +37,10 @@ class SurveyDetails(Protocol):
     def headers(self) -> dict[str, str]:
         pass
 
+    @property
+    def metadata(self) -> list[str]:
+        pass
+
 
 class HTTPClient(Protocol):
     async def update_strategy(self, total_requests: int) -> None:

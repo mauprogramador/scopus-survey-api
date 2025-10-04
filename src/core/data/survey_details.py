@@ -9,6 +9,7 @@ class SurveyDetails:
     def __init__(self) -> None:
         """Gather Scopus API search and quota details"""
         self._headers: dict[str, str] = {}
+        self._metadata: list[str] = []
         self._log_data: tuple[ScopusHeaders, int] = None
 
     def set_search_data(self, scopus_search: ScopusSearch) -> None:
@@ -21,6 +22,14 @@ class SurveyDetails:
                 "X-Items-Per-Page": str(scopus_search.items_per_page),
                 "X-Pages-Count": str(scopus_search.pages_count),
             }
+        )
+
+        self._metadata.extend(
+            [
+                f"total={scopus_search.total_results}",
+                f"items_per_page={scopus_search.items_per_page}",
+                f"pages_count={scopus_search.pages_count}",
+            ]
         )
 
     def set_search_quota(self, response: ResponseBundle) -> None:
@@ -50,6 +59,7 @@ class SurveyDetails:
     def set_loss(self, loss_amount: int, loss_percent: float) -> None:
         loss = f"{loss_amount}doc / {loss_percent:.2f}%"
         self._headers.update({"X-Loss": loss})
+        self._metadata.append(f"loss={loss}")
 
     def set_average_found(self, average: int) -> None:
         self._headers.update({"X-Average-Found": f"~{average:,}"})
@@ -61,3 +71,7 @@ class SurveyDetails:
     @property
     def headers(self) -> dict[str, str]:
         return self._headers
+
+    @property
+    def metadata(self) -> list[str]:
+        return self._metadata
