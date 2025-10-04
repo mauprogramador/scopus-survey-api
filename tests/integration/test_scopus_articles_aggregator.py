@@ -123,18 +123,3 @@ async def test_non_ratio(mocker: Mocker, client: Client):
     assert res.status_code == HTTP_200 and mock.call_count == 8
     assert df.shape[0] == 7
     spy_filter.assert_not_called()
-
-
-@mark.asyncio
-async def test_footnote(mocker: Mocker, client: Client):
-    mock = mocker.patch(
-        GET,
-        new=AsyncMock(side_effect=EXACT_DUPLICATES),
-    )
-    res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
-    df = load_csv_file_response_dataframe(res)
-
-    assert res.status_code == HTTP_200 and mock.call_count == 3
-    assert df.shape == (2, 11)  # +1 footnote
-    assert df.iloc[-1].iloc[0].startswith(FOOTNOTE[:41])
-    assert df.iloc[-1].iloc[0].endswith(FOOTNOTE[-50:])

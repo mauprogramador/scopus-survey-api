@@ -7,11 +7,12 @@ from aiohttp_retry import RetryClient
 from httpx import AsyncClient as Client
 from pytest import mark
 from pytest_mock import MockerFixture as Mocker
+from thefuzz.fuzz import partial_ratio
 
 from src.adapters.helpers.url_builder import URLBuilder
 from src.core.common.error_messages import CSV_NOT_FOUND
-from src.core.config.config import DIRECTORY
-from src.core.config.scopus import FOOTNOTE
+from src.core.config.config import DIRECTORY, FILE
+from src.core.config.scopus import DATA_SOURCE_NOTE
 from src.core.data.enums import Column
 from tests.conftest import assert_error_json
 from tests.mocks.helpers import (
@@ -167,7 +168,7 @@ class TestE2EUserFlow:
         assert res.headers.get("X-Loss") == "0doc / 0.00%"
 
         filename: str | None = res.headers.get("X-CSV-Filename")
-        assert filename is not None
+        assert filename == f"{cls._api_key}_{cls._combination.lower()}_{FILE}"
 
         df = load_csv_file_response_dataframe(res)
         assert df.shape == (1, 11)
@@ -177,8 +178,22 @@ class TestE2EUserFlow:
         assert df[Column.AUTHORS].iloc[0] == "any_author"
         assert df[Column.TITLE].iloc[0] == "any_title"
 
-        cls._file_path = DIRECTORY / filename
+        cls._file_path = DIRECTORY / f"{cls._api_key}_{FILE}"
         assert cls._file_path.exists()
+
+        with cls._file_path.open(mode="r") as file:
+            lines = file.readlines()
+            assert len(lines) == 6
+
+            assert lines[0].startswith("# GeneratedBy")
+            assert lines[1].startswith("# Params")
+            assert lines[2].startswith("# Survey")
+            assert lines[3].startswith("# Source")
+
+            assert lines[1].count(cls._api_key) == 1
+            assert lines[1].count(cls._api_key) == 1
+            assert lines[2].count("total=1") == 1
+            assert partial_ratio(lines[3], DATA_SOURCE_NOTE) > 80
 
     @mark.asyncio
     @classmethod
