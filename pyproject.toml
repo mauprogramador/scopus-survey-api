@@ -39,7 +39,7 @@ dependencies = [
   "uvloop (>=0.21.0,<0.22.0)",
 ]
 description = "Web API for bibliographic survey of Scopus articles"
-keywords = ["scopus", "theoretical reference", "python", "clean architecture"]
+keywords = ["python", "web api", "scopus", "bibliographic survey"]
 license = {text = "MIT"}
 license-files = ["LICENSE"]
 name = "ScopusSurveyAPI"
