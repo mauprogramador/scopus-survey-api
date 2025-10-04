@@ -14,30 +14,45 @@ class CSVResponse:
 
     @classmethod
     def build(
-        cls,
-        api_key: str,
-        headers: dict[str, str] | None = None,
+        cls, filename: str, api_key: str, details_headers: dict[str, str]
     ) -> FileResponse:
+        file_path = DIRECTORY / f"{api_key}_{FILE}"
+
+        headers = {
+            "Content-Disposition": f"attachment; filename={filename}",
+            "Content-Type": "text/csv; charset=utf-8",
+            "X-CSV-Filename": filename,
+            "X-API-Key": api_key,
+        }
+        headers.update(details_headers)
+
+        return FileResponse(
+            path=file_path,
+            status_code=HTTPStatus.OK,
+            headers=headers,
+            media_type=cls._MEDIA_TYPE,
+            filename=filename,
+        )
+
+    @classmethod
+    def retrieve(cls, api_key: str) -> FileResponse:
         filename = f"{api_key}_{FILE}"
         file_path = DIRECTORY / filename
 
         if not file_path.exists():
             raise NotFound(CSV_NOT_FOUND)
 
-        base_headers = {
+        headers = {
             "Content-Disposition": f"attachment; filename={filename}",
             "Content-Type": "text/csv; charset=utf-8",
             "X-CSV-Filename": filename,
             "X-API-Key": api_key,
         }
 
-        if headers:
-            base_headers.update(headers)
-
         return FileResponse(
             path=file_path,
             status_code=HTTPStatus.OK,
-            headers=base_headers,
+            headers=headers,
             media_type=cls._MEDIA_TYPE,
             filename=filename,
         )

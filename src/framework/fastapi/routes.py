@@ -135,6 +135,6 @@ async def download_csv(
 ) -> FileResponse:
     LOG.debug(params.model_dump())
 
-    response = CSVResponse.build(params.api_key)
+    response = CSVResponse.retrieve(params.api_key)
 
     return response
