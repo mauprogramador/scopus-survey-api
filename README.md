@@ -103,12 +103,18 @@ Create an `.env` file to configure the following options:
 | `WORKERS`      | Sets multiple worker processes                           | `1`         |
 | `LOGGING_FILE` | Enable saving logs to files                              | `false`     |
 | `DEBUG`        | Enable the debug mode and debug logs                     | `false`     |
+| `PROGRESS_BAR` | Displays the progress bar of the request process         | `true`     |
 
 - The `RELOAD` and `WORKERS` options are **mutually exclusive**.
 
 - Setting the `HOST` to `0.0.0.0` makes the application externally available.
 
+> [!NOTE]
+> The address `0.0.0.0` is not a valid domain for the **Cross-Origin-Opener-Policy**, use `localhost` instead.
+
 - Set `WORKERS`, **maximum 4**, to start **multiple server processes**.
+
+- Disable progress bar when running in production.
 
 > [!TIP]
 > Take a look at the [`.env.example`](./.env.example) file.
