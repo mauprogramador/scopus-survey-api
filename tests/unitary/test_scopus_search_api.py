@@ -10,7 +10,7 @@ from src.adapters.helpers.scopus_response import ScopusResponse
 from src.adapters.helpers.url_builder import URLBuilder
 from src.core.common.error_messages import ARTICLES_NOT_FOUND, CANCELLED_ERROR
 from src.core.data.serializers import ScopusSearch
-from src.core.data.survey_detail import SurveyDetails
+from src.core.data.survey_details import SurveyDetails
 from src.core.domain.http_exceptions import NotFound, ServiceUnavailable
 from src.utils.progress_bar import ProgressBar
 from tests.conftest import assert_http_error

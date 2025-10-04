@@ -4,7 +4,7 @@ from src.adapters.gateway.scopus_abstract_retrieval_api import (
 from src.adapters.gateway.scopus_search_api import ScopusSearchAPI
 from src.adapters.helpers.http_client import HTTPClient
 from src.adapters.helpers.url_builder import URLBuilder
-from src.core.data.survey_detail import SurveyDetails
+from src.core.data.survey_details import SurveyDetails
 from src.core.use_cases import (
     ArticlesSimilarityFilter,
     ScopusArticlesAggregator,

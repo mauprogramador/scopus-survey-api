@@ -8,7 +8,7 @@ from pytest_mock import MockerFixture as Mocker
 
 from src.core.common.types import ResponseBundle
 from src.core.data.serializers import ScopusHeaders, ScopusSearch
-from src.core.data.survey_detail import SurveyDetails
+from src.core.data.survey_details import SurveyDetails
 from src.core.use_cases.keyword_combination_finder import (
     KeywordCombinationFinder,
 )

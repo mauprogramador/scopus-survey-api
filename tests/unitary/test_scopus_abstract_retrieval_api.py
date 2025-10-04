@@ -12,7 +12,7 @@ from src.adapters.helpers.scopus_response import ScopusResponse
 from src.adapters.helpers.url_builder import URLBuilder
 from src.core.common.error_messages import CANCELLED_ERROR
 from src.core.data.enums import Column
-from src.core.data.survey_detail import SurveyDetails
+from src.core.data.survey_details import SurveyDetails
 from src.core.domain.http_exceptions import ServiceUnavailable
 from src.utils.progress_bar import ProgressBar
 from tests.conftest import assert_http_error

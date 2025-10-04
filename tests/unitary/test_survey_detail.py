@@ -1,6 +1,6 @@
 from src.core.common.types import ResponseBundle
 from src.core.data.serializers import ScopusSearch
-from src.core.data.survey_detail import SurveyDetails
+from src.core.data.survey_details import SurveyDetails
 from tests.mocks.raw import (
     HTTP_200,
     RAW_HEADERS_OK,

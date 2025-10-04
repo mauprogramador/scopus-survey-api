@@ -9,7 +9,7 @@ from src.adapters.helpers.url_builder import URLBuilder
 from src.core.common.types import Json
 from src.core.data.enums import Button
 from src.core.data.query_params import CombinationParams
-from src.core.data.survey_detail import SurveyDetails
+from src.core.data.survey_details import SurveyDetails
 from src.core.use_cases.keyword_combination_finder import (
     KeywordCombinationFinder,
 )

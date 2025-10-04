@@ -7,7 +7,7 @@ from pytest import mark
 from pytest_mock import MockerFixture as Mocker
 
 from src.core.config.scopus import FOOTNOTE
-from src.core.data.survey_detail import SurveyDetails
+from src.core.data.survey_details import SurveyDetails
 from src.core.use_cases.articles_similarity_filter import (
     ArticlesSimilarityFilter,
 )
