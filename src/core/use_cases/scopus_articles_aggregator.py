@@ -1,12 +1,10 @@
-from datetime import datetime
-
 from fastapi.responses import FileResponse
 from pandas import DataFrame
 
 from src.adapters.presenters.csv_response import CSVResponse
 from src.core.common.types import SearchParams
-from src.core.config.config import DIRECTORY, FILE, LOG
-from src.core.config.scopus import FOOTNOTE
+from src.core.config.config import LOG
+from src.core.data.csv_builder import CSVBuilder
 from src.core.data.enums import Column
 from src.core.domain.protocols import (
     AbstractAPI,
@@ -19,12 +17,10 @@ from src.core.domain.protocols import (
 class ScopusArticlesAggregator:
     """Gathers, filters and compiles data from Scopus articles"""
 
-    _DATEFMT = "%B %d, %Y"
     _ROWS_INDEX = 0
     _SINGLE_ROW = 1
     _PERCENT = 100
     _NON_RATIO = 0
-    _SEP = ";"
 
     def __init__(
         self,
@@ -70,18 +66,10 @@ class ScopusArticlesAggregator:
         LOG.loss(initial, final, loss)
         LOG.quota(*self._survey_detail.log_data)
 
-        file_path = DIRECTORY / f"{params.api_key}_{FILE}"
-        self._docs.to_csv(
-            file_path,
-            sep=self._SEP,
-            header=True,
-            index=False,
-            mode="w",
-            encoding="utf-8",
+        filename = CSVBuilder.write(
+            self._docs, params, self._survey_detail.metadata
         )
 
-        with file_path.open(mode="a", encoding="utf-8") as file:
-            date = datetime.now().strftime(self._DATEFMT)
-            file.write(FOOTNOTE.format(date=date))
-
-        return CSVResponse.build(params.api_key, self._survey_detail.headers)
+        return CSVResponse.build(
+            filename, params.api_key, self._survey_detail.headers
+        )
