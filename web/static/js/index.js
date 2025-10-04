@@ -74,7 +74,7 @@ function populateTable(combinations) {
     tdFormCheck.appendChild(clone);
 
     let tdTotal = document.createElement('td');
-    tdTotal.innerText = item.total;
+    tdTotal.innerText = Number(item.total.trim()).toLocaleString();
 
     let tr = document.createElement('tr');
     tr.appendChild(thIndex);
