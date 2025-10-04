@@ -1,4 +1,5 @@
 from src.core.common.types import ResponseBundle
+from src.core.config.scopus import MAX_ITEMS_PER_PAGE
 from src.core.data.serializers import ScopusHeaders, ScopusSearch
 
 
@@ -11,6 +12,9 @@ class SurveyDetails:
         self._log_data: tuple[ScopusHeaders, int] = None
 
     def set_search_data(self, scopus_search: ScopusSearch) -> None:
+        if scopus_search.total_results > MAX_ITEMS_PER_PAGE:
+            scopus_search.items_per_page = MAX_ITEMS_PER_PAGE
+
         self._headers.update(
             {
                 "X-Total": str(scopus_search.total_results),
