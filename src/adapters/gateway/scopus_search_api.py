@@ -74,7 +74,7 @@ class ScopusSearchAPI:
 
         with (
             ThreadPoolExecutor(max_workers) as executor,
-            ProgressBar(len(bundles_map)) as progress_bar,
+            ProgressBar.start(len(bundles_map)) as progress_bar,
         ):
             for future in as_completed(all_tasks):
                 remaining_tasks.discard(future)
@@ -137,7 +137,7 @@ class ScopusSearchAPI:
 
         with (
             ThreadPoolExecutor(max_workers) as executor,
-            ProgressBar(total, step, self._START) as progress_bar,
+            ProgressBar.start(total, step, self._START) as progress_bar,
         ):
             for future in as_completed(all_tasks):
                 remaining_tasks.discard(future)

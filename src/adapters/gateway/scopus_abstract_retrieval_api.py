@@ -64,7 +64,7 @@ class ScopusAbstractRetrievalAPI:
 
         with (
             ThreadPoolExecutor(max_workers) as executor,
-            ProgressBar(self._total) as progress_bar,
+            ProgressBar.start(self._total) as progress_bar,
         ):
             for future in as_completed(all_tasks):
                 remaining_tasks.discard(future)

@@ -1,10 +1,15 @@
-from contextlib import ExitStack
+from contextlib import ExitStack, nullcontext
 from typing import Self
 
 from tqdm import tqdm
 from tqdm.contrib.logging import logging_redirect_tqdm
 
-from src.core.config.config import LOG
+from src.core.config.config import ENV, LOG
+
+
+class _DisabledProgressBar:
+    def step(self):
+        pass
 
 
 class ProgressBar:
@@ -16,6 +21,7 @@ class ProgressBar:
         "{percentage:.2f}% \x1b[35m\u25fe\x1b[93m[{elapsed_s:.3f}s, "
         "{rate_fmt}]"
     )
+    _DISABLED = _DisabledProgressBar()
     _COLOR = "green"
     _POSITION = 0
     _LENGTH = 100
@@ -40,14 +46,17 @@ class ProgressBar:
         if start is not None:
             self._progress_bar.update(start * step)
 
+    @staticmethod
+    def start(total: int, step: int = None, start: int = None):
+        if ENV.progress_bar:
+            return ProgressBar(total, step, start)
+        return nullcontext(ProgressBar._DISABLED)
+
     def step(self) -> None:
         progress = int(self._progress_bar.n)
         fits = (progress + self._step) < self._total
         step = self._step if fits else (self._total - progress)
         self._progress_bar.update(step)
-
-    def close(self) -> None:
-        self._progress_bar.close()
 
     def __enter__(self) -> Self:
         self._stack.enter_context(logging_redirect_tqdm(LOG.logger))
