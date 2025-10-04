@@ -11,7 +11,7 @@ APP = "src.framework.fastapi.main:app"
 PREFIX = "/v2/scopus-survey"
 
 DIRECTORY = Path("csv")
-FILE = "articles.csv"
+FILE = "docs.csv"
 
 TOKEN = token_hex(nbytes=20)
 SECRET_KEY = token_urlsafe(nbytes=20)
