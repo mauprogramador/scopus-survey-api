@@ -6,7 +6,6 @@ from pandas import DataFrame
 from pytest import mark
 from pytest_mock import MockerFixture as Mocker
 
-from src.core.config.scopus import FOOTNOTE
 from src.core.data.survey_details import SurveyDetails
 from src.core.use_cases.articles_similarity_filter import (
     ArticlesSimilarityFilter,
@@ -36,7 +35,7 @@ async def test_one_row(mocker: Mocker, client: Client):
 
     df = load_csv_file_response_dataframe(res)
     assert res.status_code == HTTP_200 and mock.call_count == 2
-    assert df.shape == (2, 11)  # +1 footnote
+    assert df.shape[0] == 1
     spy_drop.assert_not_called()
     spy_filter.assert_not_called()
     spy_loss.assert_called_once_with(ANY, 0, 0.0)
@@ -55,7 +54,7 @@ async def test_more_rows(mocker: Mocker, client: Client):
 
     df = load_csv_file_response_dataframe(res)
     assert res.status_code == HTTP_200 and mock.call_count == 8
-    assert df.shape == (8, 11)  # +1 footnote
+    assert df.shape[0] == 7
     spy_drop.assert_called()
     spy_filter.assert_called()
     spy_loss.assert_called_once_with(ANY, 0, 0.0)
@@ -79,7 +78,7 @@ async def test_drop_exact_duplicates(mocker: Mocker, client: Client):
 
     assert res.status_code == HTTP_200 and mock.call_count == 3
     assert df_in.shape[0] == 2 and df_out.shape[0] == 1
-    assert df.shape == (2, 11)  # +1 footnote
+    assert df.shape[0] == 1
     spy_drop.assert_called()
     spy_filter.assert_not_called()
     spy_loss.assert_called_once_with(ANY, 1, 50.0)
@@ -103,7 +102,7 @@ async def test_drop_same_title_and_authors(mocker: Mocker, client: Client):
 
     assert res.status_code == HTTP_200 and mock.call_count == 3
     assert df_in.shape[0] == 2 and df_out.shape[0] == 1
-    assert df.shape == (2, 11)  # +1 footnote
+    assert df.shape[0] == 1
     spy_drop.assert_called()
     spy_filter.assert_not_called()
     spy_loss.assert_called_once_with(ANY, 1, 50.0)
@@ -122,7 +121,7 @@ async def test_non_ratio(mocker: Mocker, client: Client):
     df = load_csv_file_response_dataframe(res)
 
     assert res.status_code == HTTP_200 and mock.call_count == 8
-    assert df.shape == (8, 11)  # +1 footnote
+    assert df.shape[0] == 7
     spy_filter.assert_not_called()
 
 

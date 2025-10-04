@@ -170,14 +170,12 @@ class TestE2EUserFlow:
         assert filename is not None
 
         df = load_csv_file_response_dataframe(res)
-        assert df.shape == (2, 11)  # +1 footnote
+        assert df.shape == (1, 11)
         assert df[Column.URL].iloc[0] == URLBuilder.article_page_url(
             "0123456789"
         )
         assert df[Column.AUTHORS].iloc[0] == "any_author"
         assert df[Column.TITLE].iloc[0] == "any_title"
-        assert df.iloc[-1].iloc[0].startswith(FOOTNOTE[:41])
-        assert df.iloc[-1].iloc[0].endswith(FOOTNOTE[-50:])
 
         cls._file_path = DIRECTORY / filename
         assert cls._file_path.exists()
@@ -205,13 +203,11 @@ class TestE2EUserFlow:
         assert res.headers.get("X-CSV-Filename") is not None
 
         df = load_csv_file_response_dataframe(res)
-        assert df.shape == (2, 11)  # +1 footnote
+        assert df.shape == (1, 11)
         assert df[Column.URL].iloc[0] == URLBuilder.article_page_url(
             "0123456789"
         )
         assert df[Column.AUTHORS].iloc[0] == "any_author"
         assert df[Column.TITLE].iloc[0] == "any_title"
-        assert df.iloc[-1].iloc[0].startswith(FOOTNOTE[:41])
-        assert df.iloc[-1].iloc[0].endswith(FOOTNOTE[-50:])
 
         cls._file_path.unlink()

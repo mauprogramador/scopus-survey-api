@@ -35,7 +35,7 @@ async def test_retrieve_one_partial_abstract(mocker: Mocker, client: Client):
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     assert res.status_code == HTTP_200 and mock.call_count == 2
     df = load_csv_file_response_dataframe(res)
-    assert df.shape[0] == 2  # +1 footnote
+    assert df.shape[0] == 1
     assert df[Column.AUTHORS].iloc[0] == "any_author"
 
 
@@ -48,7 +48,7 @@ async def test_retrieve_one_abstract_authors(mocker: Mocker, client: Client):
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     assert res.status_code == HTTP_200 and mock.call_count == 2
     df = load_csv_file_response_dataframe(res)
-    assert df.shape[0] == 2  # +1 footnote
+    assert df.shape[0] == 1
     assert df[Column.AUTHORS].iloc[0] == "any_author_1, any_author_2"
 
 
@@ -61,7 +61,7 @@ async def test_retrieve_one_abstract_full(mocker: Mocker, client: Client):
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     assert res.status_code == HTTP_200 and mock.call_count == 2
     df = load_csv_file_response_dataframe(res)
-    assert df.shape[0] == 2  # +1 footnote
+    assert df.shape[0] == 1
     assert df["Abstract"].iloc[0] == "any_abstract"
 
 
@@ -74,7 +74,7 @@ async def test_retrieve_two_abstracts(mocker: Mocker, client: Client):
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     assert res.status_code == HTTP_200 and mock.call_count == 3
     df = load_csv_file_response_dataframe(res)
-    assert df.shape[0] == 2  # +1 footnote
+    assert df.shape[0] == 1
 
 
 @mark.asyncio
@@ -86,7 +86,7 @@ async def test_retrieve_more_abstracts(mocker: Mocker, client: Client):
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     assert res.status_code == HTTP_200 and mock.call_count == 26
     df = load_csv_file_response_dataframe(res)
-    assert df.shape[0] == 2  # +1 footnote
+    assert df.shape[0] == 1
 
 
 @mark.asyncio

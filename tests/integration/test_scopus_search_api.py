@@ -103,7 +103,7 @@ async def test_search_one_page_one_result(mocker: Mocker, client: Client):
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     assert res.status_code == HTTP_200 and mock.call_count == 2
     df = load_csv_file_response_dataframe(res)
-    assert df.shape[0] == 2  # +1 footnote
+    assert df.shape[0] == 1
 
 
 @mark.asyncio
@@ -115,7 +115,7 @@ async def test_search_one_page_full_results(mocker: Mocker, client: Client):
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     assert res.status_code == HTTP_200 and mock.call_count == 26
     df = load_csv_file_response_dataframe(res)
-    assert df.shape[0] == 2  # +1 footnote
+    assert df.shape[0] == 1
 
 
 @mark.asyncio
@@ -129,7 +129,7 @@ async def test_search_two_pages_partial_results(
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     assert res.status_code == HTTP_200 and mock.call_count == 32
     df = load_csv_file_response_dataframe(res)
-    assert df.shape[0] == 2  # +1 footnote
+    assert df.shape[0] == 1
 
 
 @mark.asyncio
@@ -141,7 +141,7 @@ async def test_search_two_pages_full_results(mocker: Mocker, client: Client):
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     assert res.status_code == HTTP_200 and mock.call_count == 52
     df = load_csv_file_response_dataframe(res)
-    assert df.shape[0] == 2  # +1 footnote
+    assert df.shape[0] == 1
 
 
 @mark.asyncio
@@ -156,7 +156,7 @@ async def test_search_more_pages_partial_results(
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     assert res.status_code == HTTP_200 and mock.call_count == 158
     df = load_csv_file_response_dataframe(res)
-    assert df.shape[0] == 2  # +1 footnote
+    assert df.shape[0] == 1
 
 
 @mark.asyncio
@@ -169,7 +169,7 @@ async def test_search_more_pages_full_results(mocker: Mocker, client: Client):
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     assert res.status_code == HTTP_200 and mock.call_count == 182
     df = load_csv_file_response_dataframe(res)
-    assert df.shape[0] == 2  # +1 footnote
+    assert df.shape[0] == 1
 
 
 @mark.asyncio

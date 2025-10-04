@@ -18,6 +18,7 @@ from tests.mocks.raw import (
     RAW_ENTRY,
     RAW_HEADERS_OK,
     SCOPUS_ID,
+    SKIPROWS,
 )
 
 
@@ -67,9 +68,11 @@ def mock_from_iterable(*_) -> tuple[str, ...]:
 
 
 def load_csv_file_response_dataframe(response: Response) -> DataFrame:
-    """Load DataFrame from reading CSV from file response"""
+    """Load DataFrame from CSV file response ignoring metadata"""
     buffer_data = StringIO(response.content.decode())
-    return read_csv(buffer_data, sep=";", keep_default_na=False)
+    return read_csv(
+        buffer_data, sep=";", skiprows=SKIPROWS, keep_default_na=False
+    )
 
 
 def search_raw(total_results: int, entry_count: int | None = None) -> Json:

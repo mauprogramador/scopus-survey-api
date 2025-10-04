@@ -9,7 +9,7 @@ from src.adapters.gateway.scopus_abstract_retrieval_api import (
     ScopusAbstractRetrievalAPI,
 )
 from src.adapters.gateway.scopus_search_api import ScopusSearchAPI
-from src.core.config.scopus import FOOTNOTE
+from src.core.data.csv_builder import CSVBuilder
 from src.core.data.query_params import SearchParams
 from src.core.data.survey_details import SurveyDetails
 from src.core.use_cases.articles_similarity_filter import (

@@ -188,6 +188,7 @@ ALIAS_SEARCH_PARAMS_FULL = {
 
 # Mocks
 
+SKIPROWS = (0, 1, 2, 3)  # CSV metadata rows
 REQUEST = Mock(
     spec=Request,
     url=URL("http://any.com/mock"),
