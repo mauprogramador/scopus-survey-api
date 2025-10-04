@@ -19,7 +19,7 @@ from tests.mocks.raw import (
     URL_WEB,
 )
 
-BUILD = fqn(CSVResponse.build)
+RETRIEVE = fqn(CSVResponse.retrieve)
 
 
 @mark.asyncio
@@ -33,7 +33,7 @@ async def test_success_process_time(client: Client):
 
 @mark.asyncio
 async def test_uncaught_exception(mocker: Mocker, client: Client):
-    mocker.patch(BUILD, side_effect=RuntimeError("any"))
+    mocker.patch(RETRIEVE, side_effect=RuntimeError("any"))
     res = await client.get(URL_CSV, params=CSV_PARAMS)
     errors = assert_error_json(res, HTTP_500, "any")
     assert errors[0]["type"] == fqn(RuntimeError)

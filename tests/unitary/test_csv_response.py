@@ -23,8 +23,21 @@ def file_path_fixture():
     file_path.unlink(missing_ok=False)
 
 
-def test_csv_response(file: tuple[Path, str]):
-    response = CSVResponse.build("any")
+def test_build_response(file: tuple[Path, str]):
+    response = CSVResponse.build(f"any_{FILE}", "any", {"X-any": "any"})
+    assert response.status_code == HTTP_200
+    assert response.media_type == CSV_MEDIA
+    assert response.path == file[0] and response.filename == file[1]
+
+    assert response.headers.get("Content-Disposition")
+    assert response.headers.get("Content-Type")
+    assert response.headers.get("X-CSV-Filename") == file[1]
+    assert response.headers.get("X-API-Key") == "any"
+    assert response.headers.get("X-any") == "any"
+
+
+def test_retrieve_csv(file: tuple[Path, str]):
+    response = CSVResponse.retrieve("any")
     assert response.status_code == HTTP_200
     assert response.media_type == CSV_MEDIA
     assert response.path == file[0] and response.filename == file[1]
@@ -35,19 +48,8 @@ def test_csv_response(file: tuple[Path, str]):
     assert response.headers.get("X-API-Key") == "any"
 
 
-def test_csv_response_headers(file: tuple[Path, str]):
-    response = CSVResponse.build("any", {"X-any": "any"})
-    assert response.status_code == HTTP_200
-    assert response.media_type == CSV_MEDIA
-    assert response.path == file[0] and response.filename == file[1]
-
-    assert response.headers.get("X-CSV-Filename") == file[1]
-    assert response.headers.get("X-API-Key") == "any"
-    assert response.headers.get("X-any") == "any"
-
-
-def test_file_path_not_found():
+def test_csv_not_found():
     with raises(NotFound) as info:
-        CSVResponse.build("any")
+        CSVResponse.retrieve("any")
     assert_http_error(info, HTTP_404, CSV_NOT_FOUND)
     assert info.value.errors is None
