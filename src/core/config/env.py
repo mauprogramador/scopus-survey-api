@@ -32,6 +32,7 @@ class EnvConfig(BaseSettings):
     workers: int = Field(default=1, gt=0, lt=5, decimal_places=None)
     logging_file: bool = Field(default=False)
     debug: bool = Field(default=False)
+    progress_bar: bool = Field(default=True)
 
     @classmethod
     def settings_customise_sources(  # pylint: disable=R0913,R0917

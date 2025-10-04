@@ -4,7 +4,7 @@ from secrets import token_hex, token_urlsafe
 from slowapi import Limiter
 from slowapi.util import get_remote_address
 
-from src.core.config.env_csrf import EnvConfig
+from src.core.config.env import EnvConfig
 from src.utils.logging import Logging
 
 APP = "src.framework.fastapi.main:app"
