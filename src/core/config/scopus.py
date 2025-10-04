@@ -17,8 +17,8 @@ SEARCH_API_URL = "https://api.elsevier.com/content/search/scopus"
 ARTICLE_PAGE_URL = "https://www.scopus.com/inward/record.uri"
 
 SCOPUS_DOCS = "https://dev.elsevier.com/documentation"
-FOOTNOTE = (
-    "# The data was retrieved from Scopus APIs on {date} via "
+DATA_SOURCE_NOTE = (
+    "data retrieved from Scopus APIs on {date} via "
     "http://api.elsevier.com and http://www.scopus.com."
 )
 
