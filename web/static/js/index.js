@@ -131,6 +131,9 @@ const detailsGroupLabels = {
 };
 
 function updateDetails(headers) {
+  for (let key in detailsCache) {
+    detailsCache[key] = null;
+  }
   detailsTbody.innerHTML = '';
 
   headers.forEach((headerValue, headerName) => {
