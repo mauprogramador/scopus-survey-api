@@ -20,12 +20,12 @@ class KeywordCombinationFinder:
         self,
         url_builder: URLBuilder,
         search_api: SearchAPI,
-        survey_detail: SurveyDetails,
+        survey_details: SurveyDetails,
     ) -> None:
         """Gathers, filters and compiles data from Scopus articles"""
         self._url_builder = url_builder
         self._search_api = search_api
-        self._survey_detail = survey_detail
+        self._details = survey_details
 
     async def survey_combinations(
         self, params: CombinationParams
@@ -56,12 +56,12 @@ class KeywordCombinationFinder:
             average = square_totals_sum / (nkeywords * sum(totals))
 
         average = int(average)
-        self._survey_detail.set_average_found(average)
+        self._details.set_average_found(average)
 
         LOG.combinations(nkeywords, totals, average)
-        LOG.quota(*self._survey_detail.log_data)
+        LOG.quota(*self._details.log_data)
 
-        headers = self._survey_detail.headers
+        headers = self._details.headers
         headers.update({"X-API-Key": params.api_key})
         headers.update({"Content-Type": "application/json; charset=utf-8"})
 

@@ -15,39 +15,39 @@ from src.core.use_cases.keyword_combination_finder import (
 
 
 def make_combinator() -> KeywordCombinationFinder:
-    survey_detail = SurveyDetails()
+    survey_details = SurveyDetails()
 
     url_builder = URLBuilder()
     http_client = HTTPClient()
 
-    search_api = ScopusSearchAPI(http_client, url_builder, survey_detail)
+    search_api = ScopusSearchAPI(http_client, url_builder, survey_details)
 
     combinator_finder = KeywordCombinationFinder(
-        url_builder, search_api, survey_detail
+        url_builder, search_api, survey_details
     )
 
     return combinator_finder
 
 
 def make_aggregator() -> ScopusArticlesAggregator:
-    survey_detail = SurveyDetails()
+    survey_details = SurveyDetails()
 
     url_builder = URLBuilder()
     search_http_client = HTTPClient()
     abstract_http_client = HTTPClient()
 
     search_api = ScopusSearchAPI(
-        search_http_client, url_builder, survey_detail
+        search_http_client, url_builder, survey_details
     )
 
     abstract_api = ScopusAbstractRetrievalAPI(
-        abstract_http_client, url_builder, survey_detail
+        abstract_http_client, url_builder, survey_details
     )
 
     similarity_filter = ArticlesSimilarityFilter()
 
     articles_aggregator = ScopusArticlesAggregator(
-        search_api, abstract_api, similarity_filter, survey_detail
+        search_api, abstract_api, similarity_filter, survey_details
     )
 
     return articles_aggregator

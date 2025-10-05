@@ -29,12 +29,12 @@ class ScopusAbstractRetrievalAPI:
         self,
         http_retry: HTTPClient,
         url_builder: URLBuilder,
-        survey_detail: SurveyDetails,
+        survey_details: SurveyDetails,
     ) -> None:
         """Retrieves Scopus abstracts via the Scopus Abstract Retrieval API"""
         self._http_retry = http_retry
         self._url_builder = url_builder
-        self._survey_detail = survey_detail
+        self._details = survey_details
         self._entry: list[ScopusEntry] = None
         self._abstracts: list[Json] = None
         self._total = 0
@@ -96,7 +96,7 @@ class ScopusAbstractRetrievalAPI:
         if remaining_tasks:
             await gather(*remaining_tasks, return_exceptions=True)
 
-        self._survey_detail.set_abstract_quota(last_completed)
+        self._details.set_abstract_quota(last_completed)
 
     async def retrieve_abstracts(
         self, api_key: str, entry: list[ScopusEntry]
@@ -111,7 +111,7 @@ class ScopusAbstractRetrievalAPI:
                 url = self._url_builder.abstract_url(url)
 
                 response = await self._http_retry.request(url)
-                self._survey_detail.set_abstract_quota(response)
+                self._details.set_abstract_quota(response)
 
                 abstract = ScopusResponse.validate_abstract(response)
                 self._abstracts.append(abstract.model_dump(by_alias=True))

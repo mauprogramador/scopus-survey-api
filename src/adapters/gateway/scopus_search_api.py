@@ -37,12 +37,12 @@ class ScopusSearchAPI:
         self,
         http_client: HTTPClient,
         url_builder: URLBuilder,
-        survey_detail: SurveyDetails,
+        survey_details: SurveyDetails,
     ) -> None:
         """Search and retrieve articles via the Scopus Search API"""
         self._http_client = http_client
         self._url_builder = url_builder
-        self._survey_detail = survey_detail
+        self._details = survey_details
         self._search: ScopusSearch = None
 
         try:
@@ -108,7 +108,7 @@ class ScopusSearchAPI:
             await gather(*remaining_tasks, return_exceptions=True)
 
         await self._http_client.close()
-        self._survey_detail.set_search_quota(last_completed)
+        self._details.set_search_quota(last_completed)
 
         return [bundle.model_dump() for bundle in bundles_map.values()]
 
@@ -168,7 +168,7 @@ class ScopusSearchAPI:
         if remaining_tasks:
             await gather(*remaining_tasks, return_exceptions=True)
 
-        self._survey_detail.set_search_quota(last_completed)
+        self._details.set_search_quota(last_completed)
 
     async def search_articles(self, params: SearchParams) -> list[ScopusEntry]:
         url = self._url_builder.search_url(params)
@@ -176,15 +176,15 @@ class ScopusSearchAPI:
         try:
             response = await self._http_client.request(url)
             self._search = ScopusResponse.validate_search(response)
-            self._survey_detail.set_search_data(self._search)
-            self._survey_detail.set_search_quota(response)
+            self._details.set_search_data(self._search)
+            self._details.set_search_quota(response)
 
             if self._search.total_results == 0:
                 raise NotFound(ARTICLES_NOT_FOUND)
 
             if self._search.pages_count == 2:
                 response = await self._get_by_pagination(self._PAGE_TWO_INDEX)
-                self._survey_detail.set_search_quota(response)
+                self._details.set_search_quota(response)
 
                 search = ScopusResponse.validate_search(response)
                 self._search.entry.extend(search.entry)

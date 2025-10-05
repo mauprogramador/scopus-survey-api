@@ -27,13 +27,13 @@ class ScopusArticlesAggregator:
         search_api: SearchAPI,
         abstract_api: AbstractAPI,
         similarity_filter: SimilarityFilter,
-        survey_detail: SurveyDetails,
+        survey_details: SurveyDetails,
     ) -> None:
         """Gathers, filters and compiles data from Scopus articles"""
         self._search_api = search_api
         self._abstract_api = abstract_api
         self._similarity_filter = similarity_filter
-        self._survey_detail = survey_detail
+        self._details = survey_details
         self._docs: DataFrame = None
 
     async def retrieve_articles(self, params: SearchParams) -> FileResponse:
@@ -61,15 +61,13 @@ class ScopusArticlesAggregator:
 
         final = initial - self._docs.shape[self._ROWS_INDEX]
         loss = 0.0 if final == 0 else (final / initial) * self._PERCENT
-        self._survey_detail.set_loss(final, loss)
+        self._details.set_loss(final, loss)
 
         LOG.loss(initial, final, loss)
-        LOG.quota(*self._survey_detail.log_data)
+        LOG.quota(*self._details.log_data)
 
-        filename = CSVBuilder.write(
-            self._docs, params, self._survey_detail.metadata
-        )
+        filename = CSVBuilder.write(self._docs, params, self._details.metadata)
 
         return CSVResponse.build(
-            filename, params.api_key, self._survey_detail.headers
+            filename, params.api_key, self._details.headers
         )
