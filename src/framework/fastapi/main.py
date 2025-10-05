@@ -6,7 +6,7 @@ from fastapi.staticfiles import StaticFiles
 from starlette.middleware.sessions import SessionMiddleware
 
 from src import __version__
-from src.core.config.config import DIRECTORY, ENV, LIMITER, SECRET_KEY
+from src.core.config.config import DIRECTORY, ENV, LIMITER, LOG, SECRET_KEY
 from src.core.domain.translations import Translations
 from src.framework.fastapi.routes import favicon_router, router
 from src.framework.fastapi.swagger import (
@@ -26,6 +26,10 @@ from src.framework.middleware import (
 async def lifespan(app: FastAPI):  # pylint: disable=W0621,W0613
     DIRECTORY.mkdir(parents=True, exist_ok=True)
     Translations.load_all()
+
+    if ENV.host == "0.0.0.0":
+        LOG.info(f"Please access at \033[37;1mhttp://localhost:{ENV.port}")
+
     yield
 
 
