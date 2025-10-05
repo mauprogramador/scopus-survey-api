@@ -103,7 +103,7 @@ Create an `.env` file to configure the following options:
 | `WORKERS`      | Sets multiple worker processes                           | `1`         |
 | `LOGGING_FILE` | Enable saving logs to files                              | `false`     |
 | `DEBUG`        | Enable the debug mode and debug logs                     | `false`     |
-| `PROGRESS_BAR` | Displays the progress bar of the request process         | `true`     |
+| `PROGRESS_BAR` | Displays the progress bar of the request process         | `true`      |
 
 - The `RELOAD` and `WORKERS` options are **mutually exclusive**.
 
@@ -206,9 +206,11 @@ These quotas, are **unique to each** <abbr title="Application Programming Interf
 
 ## Examples
 
-| Keywords | Total gather | Process time | Loss |
-| -------- | ------------ | ------------ | ---- |
-|          |              |              |      |
+| Keywords             | Total gather | Process time | Loss         |
+| -------------------- | ------------ | ------------ | ------------ |
+| Web API AND Scopus   | 25           | 3.63s        | 0doc / 0.00% |
+| Python AND Scopus    | 141          | 19.26s       | 1doc / 0.71% |
+| Bibliographic Survey | 1073         | 246.38s      | 7doc / 0.65% |
 
 > [!TIP]
 > <a href="./docs/assets/data/example.csv" download="example.csv">Download a sample survey <abbr title="Comma-Separated Values">CSV</abbr> file</a> and take a look.
