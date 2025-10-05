@@ -29,7 +29,7 @@ COMBINATION_FINDER = KeywordCombinationFinder(
         spec=ScopusSearchAPI,
         survey_totals_found=AsyncMock(side_effect=mock_survey_totals_found),
     ),
-    MagicMock(spec=SurveyDetails, log_data=LOG_DATA),
+    MagicMock(spec=SurveyDetails, search_quota=LOG_DATA),
 )
 RANDINT = fqn(mock_survey_totals_found, "randint")
 

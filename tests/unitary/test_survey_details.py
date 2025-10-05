@@ -52,6 +52,7 @@ def test_average_found():
 
 
 def test_full_headers():
-    assert len(SURVEY_DETAIL.log_data) == 2
-    assert len(SURVEY_DETAIL.headers) == 13
+    assert len(SURVEY_DETAIL.search_quota) == 2
+    assert len(SURVEY_DETAIL.abstract_quota) == 2
+    assert len(SURVEY_DETAIL.headers) == 15
     assert len(SURVEY_DETAIL.metadata) == 4

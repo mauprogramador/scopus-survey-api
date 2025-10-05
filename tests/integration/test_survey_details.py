@@ -80,7 +80,7 @@ async def test_search_details_one_result(mocker: Mocker, client: Client):
     spy_search_quota.assert_called_once()
     spy_abstract_quota.assert_called_once()
     spy_loss.assert_called_once()
-    spy_log.assert_called_once()
+    spy_log.assert_called()
 
     assert res.status_code == spy_log.call_args_list[0].args[1] == HTTP_200
     assert isinstance(spy_log.call_args_list[0].args[0], ScopusHeaders)
@@ -128,7 +128,7 @@ async def test_search_details_more_results(mocker: Mocker, client: Client):
     spy_search_quota.assert_called_once()
     spy_abstract_quota.assert_called_once()
     spy_loss.assert_called_once()
-    spy_log.assert_called_once()
+    spy_log.assert_called()
 
     assert res.status_code == spy_log.call_args_list[0].args[1] == HTTP_200
     assert isinstance(spy_log.call_args_list[0].args[0], ScopusHeaders)

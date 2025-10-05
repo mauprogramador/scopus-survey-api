@@ -35,7 +35,12 @@ ARTICLES_AGGREGATOR = ScopusArticlesAggregator(
         retrieve_abstracts=RETRIEVE_ABSTRACTS,
     ),
     MagicMock(spec=ArticlesSimilarityFilter, filter=FILTER),
-    MagicMock(spec=SurveyDetails, log_data=LOG_DATA, set_loss=SET_LOSS),
+    MagicMock(
+        spec=SurveyDetails,
+        search_quota=LOG_DATA,
+        abstract_quota=LOG_DATA,
+        set_loss=SET_LOSS,
+    ),
 )
 PARAMS = SearchParams(**ALIAS_SEARCH_PARAMS)
 
