@@ -30,6 +30,7 @@ class KeywordCombinationFinder:
     async def survey_combinations(
         self, params: CombinationParams
     ) -> JSONResponse:
+        self._details.set_keywords(params.keywords)
         self._url_builder.set_combination_query(params)
 
         max_size = min(len(params.keywords) + self._START, self._MAX_SIZE)

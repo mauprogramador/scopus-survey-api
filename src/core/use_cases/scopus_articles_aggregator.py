@@ -37,6 +37,7 @@ class ScopusArticlesAggregator:
         self._docs: DataFrame = None
 
     async def retrieve_articles(self, params: SearchParams) -> FileResponse:
+        self._details.set_combination(params.combination)
         entry_items = await self._search_api.search_articles(params)
 
         self._docs = await self._abstract_api.retrieve_abstracts(

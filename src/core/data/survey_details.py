@@ -1,5 +1,5 @@
 from src.core.common.types import ResponseBundle
-from src.core.config.scopus import MAX_ITEMS_PER_PAGE
+from src.core.config.scopus import BOOLEAN_OPERATOR, MAX_ITEMS_PER_PAGE
 from src.core.data.serializers import ScopusHeaders, ScopusSearch
 
 
@@ -12,6 +12,12 @@ class SurveyDetails:
         self._metadata: list[str] = []
         self._search_quota: tuple[ScopusHeaders, int] = None
         self._abstract_quota: tuple[ScopusHeaders, int] = None
+
+    def set_keywords(self, keywords: list[str]) -> None:
+        self._headers.update({"X-Keywords": BOOLEAN_OPERATOR.join(keywords)})
+
+    def set_combination(self, combination: str) -> None:
+        self._headers.update({"X-Combination": combination})
 
     def set_search_data(self, scopus_search: ScopusSearch) -> None:
         if scopus_search.total_results > MAX_ITEMS_PER_PAGE:

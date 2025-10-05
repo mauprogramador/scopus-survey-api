@@ -7,6 +7,7 @@ from src.core.common.types import (
     CombinationParams,
     Json,
     Keyword,
+    Quota,
     ResponseBundle,
     SearchParams,
 )
@@ -14,6 +15,12 @@ from src.core.data.serializers import ScopusEntry, ScopusSearch
 
 
 class SurveyDetails(Protocol):
+    def set_keywords(self, keywords: list[str]) -> None:
+        pass
+
+    def set_combination(self, combination: str) -> None:
+        pass
+
     def set_search_data(self, scopus_search: ScopusSearch) -> None:
         pass
 
