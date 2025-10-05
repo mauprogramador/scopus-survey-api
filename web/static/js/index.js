@@ -74,7 +74,7 @@ function populateTable(combinations) {
     tdFormCheck.appendChild(clone);
 
     let tdTotal = document.createElement('td');
-    tdTotal.innerText = Number(item.total.trim()).toLocaleString();
+    tdTotal.innerText = Number(item.total).toLocaleString();
 
     let tr = document.createElement('tr');
     tr.appendChild(thIndex);
@@ -89,8 +89,6 @@ function populateTable(combinations) {
 const detailsTbody = document.getElementById('details-tbody');
 const detailsCache = {
   'x-api-key': null,
-  'x-items-per-page': null,
-  'x-pages-count': null,
   'x-search-limit': null,
   'x-search-remaining': null,
   'x-search-reset': null,
@@ -99,11 +97,37 @@ const detailsCache = {
   'x-abstract-remaining': null,
   'x-abstract-reset': null,
   'x-abstract-els-status': null,
+  'x-keywords-combination': null,
   'x-total': null,
-  'x-loss': null,
+  'x-pages-count': null,
+  'x-items-per-page': null,
   'x-average-found': null,
+  'x-loss': null,
   'x-process-time': null,
   'x-csv-filename': null,
+};
+const detailsGroupLabels = {
+  'API Key': {
+    'x-api-key': 'API Key',
+    'x-search-limit': 'Search limit',
+    'x-search-remaining': 'Search remaining',
+    'x-search-reset': 'Search reset',
+    'x-search-els-status': 'Search ELS status',
+    'x-abstract-limit': 'Abstract limit',
+    'x-abstract-remaining': 'Abstract remaining',
+    'x-abstract-reset': 'Abstract reset',
+    'x-abstract-els-status': 'Abstract ELS status',
+  },
+  Survey: {
+    'x-keywords-combination': 'Keywords combination',
+    'x-total': 'Total',
+    'x-pages-count': 'Pages count',
+    'x-items-per-page': 'Items per page',
+    'x-average-found': 'Average found',
+    'x-loss': 'Loss',
+    'x-process-time': 'Process time',
+    'x-csv-filename': 'CSV filename',
+  },
 };
 
 function updateDetails(headers) {
@@ -115,24 +139,32 @@ function updateDetails(headers) {
     }
   });
 
-  Object.entries(detailsCache)
-    .filter((item) => item[1] !== null)
-    .forEach(([headerName, headerValue]) => {
-      // let processedName = headerName.replace(/^x-/i, '').replace(/-/g, ' ');
-      let processedName = headerName.replace(/^x-/i, '');
+  Object.entries(detailsGroupLabels).forEach(([groupName, groupLabels]) => {
+    let thGroupLabel = document.createElement('th');
+    thGroupLabel.classList.add('group-header');
+    thGroupLabel.scope = 'row';
+    thGroupLabel.colSpan = '2';
+    thGroupLabel.innerText = groupName;
 
-      let tdHeaderName = document.createElement('td');
-      tdHeaderName.classList.add('text-capitalize');
-      tdHeaderName.innerText = processedName;
+    let trGroupLabel = document.createElement('tr');
+    trGroupLabel.appendChild(thGroupLabel);
+    detailsTbody.appendChild(trGroupLabel);
 
-      let tdHeaderValue = document.createElement('td');
-      tdHeaderValue.innerText = headerValue;
+    Object.entries(groupLabels)
+      .filter((item) => detailsCache[item[0]] !== null)
+      .forEach(([headerName, headerLabel]) => {
+        let tdHeaderName = document.createElement('td');
+        tdHeaderName.innerText = headerLabel;
 
-      let tr = document.createElement('tr');
-      tr.appendChild(tdHeaderName);
-      tr.appendChild(tdHeaderValue);
-      detailsTbody.appendChild(tr);
-    });
+        let tdHeaderValue = document.createElement('td');
+        tdHeaderValue.innerText = detailsCache[headerName];
+
+        let tr = document.createElement('tr');
+        tr.appendChild(tdHeaderName);
+        tr.appendChild(tdHeaderValue);
+        detailsTbody.appendChild(tr);
+      });
+  });
 }
 
 // Buttons

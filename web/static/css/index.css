@@ -20,12 +20,17 @@
   table-layout: fixed;
 }
 #details-table thead th {
-  --bs-table-color: var(--focus-color);
-  line-height: normal;
-  font-weight: 400;
+  background-color: var(--emphasis-color);
+  --bs-table-color: var(--white);
+  text-align: center;
 }
-#details-table .table-group-divider {
+#details-table .group-header {
+  border-bottom: calc(var(--bs-border-width) * 2) solid var(--focus-color);
   color: var(--focus-color);
+  line-height: normal;
+  padding-top: 1.5rem;
+  font-weight: 400;
+  box-shadow: none;
 }
 #details-tbody td {
   text-overflow: ellipsis;
