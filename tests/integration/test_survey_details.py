@@ -7,6 +7,7 @@ from pytest import mark
 from pytest_mock import MockerFixture as Mocker
 
 from src.core.common.types import ResponseBundle
+from src.core.config.scopus import BOOLEAN_OPERATOR
 from src.core.data.csv_builder import CSVBuilder
 from src.core.data.serializers import ScopusHeaders, ScopusSearch
 from src.core.data.survey_details import SurveyDetails
@@ -51,6 +52,7 @@ async def test_combination_details(mocker: Mocker, client: Client):
     assert isinstance(spy_log.call_args_list[0].args[0], ScopusHeaders)
     assert bundle.headers == HEADERS
 
+    assert res.headers["X-Keywords"] == BOOLEAN_OPERATOR.join(KEYWORDS[:2])
     assert res.headers["X-Search-Limit"] == "20000"
     assert res.headers["X-Search-Remaining"] == "12345"
     assert res.headers["X-Search-Reset"] == RESET_DATETIME
@@ -92,6 +94,7 @@ async def test_search_details_one_result(mocker: Mocker, client: Client):
     assert metadata[2] == "pages_count=1"
     assert metadata[3] == "loss=0doc / 0.00%"
 
+    assert res.headers["X-Combination"] == KEYWORDS[0]
     assert res.headers["X-Total"] == "1"
     assert res.headers["X-Items-Per-Page"] == "1"
     assert res.headers["X-Pages-Count"] == "1"
@@ -140,6 +143,7 @@ async def test_search_details_more_results(mocker: Mocker, client: Client):
     assert metadata[2] == "pages_count=1"
     assert metadata[3] == "loss=2doc / 66.67%"
 
+    assert res.headers["X-Combination"] == KEYWORDS[0]
     assert res.headers["X-Total"] == "3"
     assert res.headers["X-Items-Per-Page"] == "3"
     assert res.headers["X-Pages-Count"] == "1"

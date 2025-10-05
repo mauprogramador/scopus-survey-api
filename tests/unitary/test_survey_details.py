@@ -1,14 +1,28 @@
 from src.core.common.types import ResponseBundle
+from src.core.config.scopus import BOOLEAN_OPERATOR
 from src.core.data.serializers import ScopusSearch
 from src.core.data.survey_details import SurveyDetails
 from tests.mocks.raw import (
     HTTP_200,
+    KEYWORDS,
     RAW_HEADERS_OK,
     RAW_SEARCH_OK,
     RESET_DATETIME,
 )
 
 SURVEY_DETAIL = SurveyDetails()
+
+
+def test_keywords():
+    SURVEY_DETAIL.set_keywords(KEYWORDS)
+    assert SURVEY_DETAIL.headers["X-Keywords"] == BOOLEAN_OPERATOR.join(
+        KEYWORDS
+    )
+
+
+def test_combination():
+    SURVEY_DETAIL.set_combination("Python AND AI")
+    assert SURVEY_DETAIL.headers["X-Combination"] == "Python AND AI"
 
 
 def test_search_data():

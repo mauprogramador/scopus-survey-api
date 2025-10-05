@@ -120,6 +120,7 @@ class TestE2EUserFlow:
         assert res.headers.get("Content-Type") == JSON_CONTENT_TYPE
         assert res.cookies.get("session") is not None
         assert res.headers.get("X-API-Key") == cls._api_key
+        assert res.headers.get("X-Keywords") == "FastAPI AND API"
         assert res.headers.get("X-Search-Limit") == "20000"
         assert res.headers.get("X-Search-Remaining") == "20000"
         assert res.headers.get("X-Search-Reset") == RESET_DATETIME
@@ -154,6 +155,7 @@ class TestE2EUserFlow:
         assert res.headers.get("Content-Type") == CSV_CONTENT_TYPE
         assert res.cookies.get("session") is not None
         assert res.headers.get("X-API-Key") == cls._api_key
+        assert res.headers.get("X-Combination") == cls._combination
         assert res.headers.get("X-Total") == "1"
         assert res.headers.get("X-Items-Per-Page") == "1"
         assert res.headers.get("X-Pages-Count") == "1"
