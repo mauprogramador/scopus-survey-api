@@ -113,7 +113,7 @@ class ArticlesSimilarityFilter:
                         similar_titles.add(rows_indexes)
                         continue
 
-                    similar_titles_subset = self._filtered_df.iloc[
+                    similar_titles_subset = self._filtered_df.loc[
                         list(rows_indexes)
                     ]
                     latest_index = similar_titles_subset[Column.DATE].idxmax()
