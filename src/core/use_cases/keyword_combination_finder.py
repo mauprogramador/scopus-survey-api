@@ -59,7 +59,7 @@ class KeywordCombinationFinder:
         self._details.set_average_found(average)
 
         LOG.combinations(nkeywords, totals, average)
-        LOG.quota(*self._details.log_data)
+        LOG.quota(*self._details.search_quota)
 
         headers = self._details.headers
         headers.update({"X-API-Key": params.api_key})

@@ -21,7 +21,7 @@ from uvicorn.config import LOGGING_CONFIG
 
 from src.core.common.patterns import ANSI_ESCAPE_PATTERN, API_KEY_LOG_PATTERN
 from src.core.common.types import LogParams, Quota, RateStrategy
-from src.core.config.scopus import NO_RESULTS, SEARCH_API_URL
+from src.core.config.scopus import MAX_SEARCH_QUOTA, NO_RESULTS, SEARCH_API_URL
 
 
 class _Prefix(StrEnum):
@@ -33,6 +33,8 @@ class _Prefix(StrEnum):
     EXCEPTION = "\033[31mEXCEPTION\033[m:".ljust(17)
     SEARCH = "\033[36mSEARCH\033[m:".ljust(17)
     ABSTRACT = "\033[36mABSTRACT\033[m:".ljust(17)
+    SEARCH_QUOTA = "Search"
+    ABSTRACT_QUOTA = "Abstract"
 
 
 class _ANSIFormatter(Formatter):
@@ -57,6 +59,7 @@ class Logging:
 
     _METHOD_COLOR = {"GET": "94", "POST": "92", "PUT": "93", "DELETE": "91"}
     _QUOTA = (
+        "Scopus API: \033[32m{log_prefix}\033[m. "
         "Limit: \033[33m{limit}\033[m. Remaining: \033[33m{remaining}\033[m"
         ". Reset: \033[33m{reset}\033[m. ELS-Status: \033[{color}m{status}"
     )
@@ -174,10 +177,16 @@ class Logging:
         self.info(message)
 
     def quota(self, quota: Quota, code: int) -> None:
+        if quota.limit == MAX_SEARCH_QUOTA:
+            log_prefix = _Prefix.SEARCH_QUOTA
+        else:
+            log_prefix = _Prefix.ABSTRACT_QUOTA
+
         if quota.status.startswith(NO_RESULTS):
             code = HTTPStatus.NOT_FOUND.value
 
         message = self._QUOTA.format(
+            log_prefix=log_prefix,
             limit=quota.limit,
             remaining=quota.remaining,
             reset=quota.reset_datetime,

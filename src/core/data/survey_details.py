@@ -10,7 +10,8 @@ class SurveyDetails:
         """Gather Scopus API search and quota details"""
         self._headers: dict[str, str] = {}
         self._metadata: list[str] = []
-        self._log_data: tuple[ScopusHeaders, int] = None
+        self._search_quota: tuple[ScopusHeaders, int] = None
+        self._abstract_quota: tuple[ScopusHeaders, int] = None
 
     def set_search_data(self, scopus_search: ScopusSearch) -> None:
         if scopus_search.total_results > MAX_ITEMS_PER_PAGE:
@@ -34,7 +35,7 @@ class SurveyDetails:
 
     def set_search_quota(self, response: ResponseBundle) -> None:
         quota = ScopusHeaders.model_validate(response.headers)
-        self._log_data = (quota, response.code)
+        self._search_quota = (quota, response.code)
         self._headers.update(
             {
                 "X-Search-Limit": str(quota.limit),
@@ -46,7 +47,7 @@ class SurveyDetails:
 
     def set_abstract_quota(self, response: ResponseBundle) -> None:
         quota = ScopusHeaders.model_validate(response.headers)
-        self._log_data = (quota, response.code)
+        self._abstract_quota = (quota, response.code)
         self._headers.update(
             {
                 "X-Abstract-Limit": str(quota.limit),
@@ -65,8 +66,12 @@ class SurveyDetails:
         self._headers.update({"X-Average-Found": f"~{average:,}"})
 
     @property
-    def log_data(self) -> tuple[ScopusHeaders, int]:
-        return self._log_data
+    def search_quota(self) -> tuple[ScopusHeaders, int]:
+        return self._search_quota
+
+    @property
+    def abstract_quota(self) -> tuple[ScopusHeaders, int]:
+        return self._abstract_quota
 
     @property
     def headers(self) -> dict[str, str]:

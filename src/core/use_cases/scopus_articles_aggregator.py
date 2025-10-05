@@ -64,7 +64,8 @@ class ScopusArticlesAggregator:
         self._details.set_loss(final, loss)
 
         LOG.loss(initial, final, loss)
-        LOG.quota(*self._details.log_data)
+        LOG.quota(*self._details.search_quota)
+        LOG.quota(*self._details.abstract_quota)
 
         filename = CSVBuilder.write(self._docs, params, self._details.metadata)
 

@@ -30,7 +30,11 @@ class SurveyDetails(Protocol):
         pass
 
     @property
-    def log_data(self) -> tuple[Json, int]:
+    def search_quota(self) -> tuple[Quota, int]:
+        pass
+
+    @property
+    def abstract_quota(self) -> tuple[Quota, int]:
         pass
 
     @property
