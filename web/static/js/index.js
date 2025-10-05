@@ -52,6 +52,8 @@ endYearField.setAttribute('min', (lastDecade + 1).toString());
 // Populate Combinations
 const combTbody = document.getElementById('combination-tbody');
 const template = document.getElementById('combination-row-opt');
+const maxQuota = 20000;
+const beyondMsg = `Beyond the max quota of ${maxQuota} requests`;
 
 function populateTable(combinations) {
   combinations.forEach((item) => {
@@ -74,7 +76,19 @@ function populateTable(combinations) {
     tdFormCheck.appendChild(clone);
 
     let tdTotal = document.createElement('td');
-    tdTotal.innerText = Number(item.total).toLocaleString();
+    let totalNumber = Number(item.total);
+    let totalLocale = totalNumber.toLocaleString();
+
+    if (totalNumber > maxQuota) {
+      tdTotal.classList.add('text-danger');
+      tdTotal.ariaLabel = beyondMsg;
+
+      let beyondQuota = document.createElement('s');
+      beyondQuota.innerText = totalLocale;
+      tdTotal.appendChild(beyondQuota);
+    } else {
+      tdTotal.innerText = totalLocale;
+    }
 
     let tr = document.createElement('tr');
     tr.appendChild(thIndex);
