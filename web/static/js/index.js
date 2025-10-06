@@ -82,6 +82,7 @@ function populateTable(combinations) {
     if (totalNumber > maxQuota) {
       tdTotal.classList.add('text-danger');
       tdTotal.ariaLabel = beyondMsg;
+      tdTotal.title = beyondMsg;
 
       let beyondQuota = document.createElement('s');
       beyondQuota.innerText = totalLocale;
