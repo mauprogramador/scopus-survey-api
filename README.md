@@ -202,15 +202,33 @@ There's a **maximum limit to the number of requests** we can make to [Scopus API
 
 These quotas, are **unique to each** <abbr title="Application Programming Interface">**API**</abbr>. According to the [API Key Settings](https://dev.elsevier.com/api_key_settings.html), for the APIs we are using, **Scopus Search** has a **weekly quota of 20,000**, and **Abstract Retrieval** has a **weekly quota of 10,000**.
 
+To avoid [exceeding the API's request rate limit](https://dev.elsevier.com/api_key_settings.html), we employ **progressive rate strategies**, adjusting the **rate**, **backoff time**, **sleep duration**, and **concurrent requests** based on the **total number of requests to be made**.
+
+---
+
+### Visualization
+
+To visualize the documents (at least the preview), you can use:
+
+- The **URL** in the **Article Preview Page URL** column:<br>
+<https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=[SCOPUS_ID]&origin=inward>
+
+- The **Digital Object Identifier (DOI)** in the **DOI** column and be redirected to the [Science Direct](https://www.sciencedirect.com/) journal page:<br>
+<https://doi.org/[DOI]><br>
+
+> [!TIP]
+> URL: <https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=85159320911&origin=inward>
+> DOI: <https://doi.org/10.1016/j.microc.2023.108858>
+
 ---
 
 ## Examples
 
-| Keywords             | Total gather | Process time | Loss         |
-| -------------------- | ------------ | ------------ | ------------ |
-| Web API AND Scopus   | 25           | 3.63s        | 0doc / 0.00% |
-| Python AND Scopus    | 141          | 19.26s       | 1doc / 0.71% |
-| Bibliographic Survey | 1073         | 246.38s      | 7doc / 0.65% |
+| Keywords             | Total gather | Process time    | Loss         |
+| -------------------- | ------------ | --------------- | ------------ |
+| Web API AND Scopus   | 25           | 3.63s           | 0doc / 0.00% |
+| Python AND Scopus    | 141          | 19.26s          | 1doc / 0.71% |
+| Bibliographic Survey | 1073         | 246.38s (4.10m) | 7doc / 0.65% |
 
 > [!TIP]
 > <a href="./docs/assets/data/example.csv" download="example.csv">Download a sample survey <abbr title="Comma-Separated Values">CSV</abbr> file</a> and take a look.
