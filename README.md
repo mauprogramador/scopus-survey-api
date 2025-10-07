@@ -216,10 +216,6 @@ To visualize the documents (at least the preview), you can use:
 - The **Digital Object Identifier (DOI)** in the **DOI** column and be redirected to the [Science Direct](https://www.sciencedirect.com/) journal page:<br>
 <https://doi.org/[DOI]><br>
 
-> [!TIP]
-> URL: <https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=85159320911&origin=inward>
-> DOI: <https://doi.org/10.1016/j.microc.2023.108858>
-
 ---
 
 ## Examples
