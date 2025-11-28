@@ -13,7 +13,7 @@ Scopus Survey API
 Web API for bibliographic survey of Scopus articles
 """
 
-__version__ = "3.0.0"
+__version__ = "3.2.5"
 __license__ = "MIT"
 
 __author__ = "mauprogramador"
