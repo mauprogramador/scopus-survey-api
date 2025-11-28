@@ -2,7 +2,7 @@
 
 **Scopus Survey API** - _Web API for bibliographic survey of Scopus articles_
 
-> _Last updated: August 10, 2025_
+> _Last updated: November 28, 2025_
 
 Instituto Federal de Educação, Ciência e Tecnologia de Mato Grosso do Sul - [IFMS Campus Três Lagoas](https://www.ifms.edu.br/campi/campus-tres-lagoas)<br/>
 Tecnologia em Análise e Desenvolvimento de Sistemas - [TADS](https://www.ifms.edu.br/campi/campus-tres-lagoas/cursos/graduacao/analise-e-desenvolvimento-de-sistemas)<br/>
@@ -27,17 +27,17 @@ The only type of cookies our Service implement and manage is called **"essential
 We only set and use two **"first-party"** and **"essential"** Cookies:
 
 - **Session Cookie:** Using [Starlette's SessionMiddleware](https://www.starlette.io/middleware/#sessionmiddleware) to add a signed cookie-based HTTP sessions to track and control the **Session** time.
-- **Token Cookie:** Strictly necessary for authentication and protection against **CSRF** (Cross-Site Request Forgery). Automatically manage a **CSRF Token**, created using [ItsDangerous's URLSafeTimedSerializer](https://itsdangerous.palletsprojects.com/en/stable/url_safe/), through headers, cookies, query parameters, and session, and is essential for maintaining secure interactions within the Service.
+- **Token Cookie:** Strictly necessary for authentication and protection against **CSRF** (Cross-Site Request Forgery). Automatically manage a **CSRF Token**, created using [ItsDangerous's URLSafeTimedSerializer](https://itsdangerous.palletsprojects.com/en/stable/url_safe/), through HTTP headers, cookies, query parameters, and session, and is essential for maintaining secure interactions within the Service.
 
 ## 3. Cookie Duration
 
 - **Session Cookies**: Temporary and expire when you close your browser.
 - **Persistent Cookies**: Remain on your device for a set period of time or until you delete them.
 
-| Cookie       | Type                       | Duration        |
-| ------------ | -------------------------- | --------------- |
-| `session`    | **Essential / Session**    | Browser session |
-| `csrf-token` | **Essential / Persistent** | **1 hour**      |
+| Cookie       | Type                   | Duration        |
+| ------------ | ---------------------- | --------------- |
+| `session`    | Essential / Session    | Browser session |
+| `csrf-token` | Essential / Persistent | 1 hour          |
 
 ## 4. How can I Control Cookies?
 
@@ -60,7 +60,7 @@ We may update this Cookie Policy from time to time to reflect changes in legal r
 
 ## 6. Reference
 
-- **MDN web docs:** [Cookies HTTP](https://developer.mozilla.org/pt-BR/docs/Web/HTTP/Guides/Cookies).
+- **MDN web docs:** [Cookies HTTP](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Cookies).
 - **Cloudflare:** [What are cookies?](https://www.cloudflare.com/learning/privacy/what-are-cookies/).
 - **Starlette:** [SessionMiddleware](https://www.starlette.io/middleware/#sessionmiddleware).
 - **ItsDangerous:** [URLSafeTimedSerializer](https://itsdangerous.palletsprojects.com/en/stable/url_safe/).
