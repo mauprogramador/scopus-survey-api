@@ -1,0 +1,81 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: Scopus Survey API
+message: 'If you use this software, please cite it as below.'
+type: software
+authors:
+  - given-names: Maurício
+    family-names: Silva Batista
+    name-particle: da
+    email: sir.silvabmaurício@gmail.com
+    affiliation: >-
+      Instituto Federal de Educação Ciência e Tecnologia do
+      Mato Grosso do Sul (IFMS) - Campus Três Lagoas
+repository-code: 'https://github.com/mauprogramador/scopus-survey-api'
+url: 'https://mauprogramador.github.io/scopus-survey-api/'
+abstract: Web API for bibliographic survey of Scopus articles
+keywords:
+  - python
+  - web api
+  - scopus
+  - bibliographic survey
+license: MIT
+commit: d8d9eee549848e2f543037054f72ef02ca47562f
+version: v3.2.5
+date-released: '2025-08-09'
+license-url: 'https://github.com/mauprogramador/scopus-survey-api/blob/main/LICENSE'
+references:
+  - type: article
+    title: 'Scopus Survey API: Web API for bibliographic survey of Scopus articles'
+    authors:
+      - given-names: Maurício
+        family-names: Silva Batista
+        name-particle: da
+        email: sir.silvabmaurício@gmail.com
+        affiliation: Instituto Federal de Educação Ciência e Tecnologia do Mato Grosso do
+          Sul (IFMS) - Campus Três Lagoas
+      - given-names: Alex
+        family-names: Fernando de Araujo
+        name-particle: de
+        alias: Orientador
+        email: alex.araujo@ifms.edu.br
+        affiliation: Instituto Federal de Educação Ciência e Tecnologia do Mato Grosso do
+          Sul (IFMS) - Campus Três Lagoas
+    keywords:
+      - python
+      - web api
+      - scopus
+      - bibliographic survey
+    languages:
+      - pt
+    institution:
+        name: 'Instituto Federal de Educação Ciência e Tecnologia do Mato Grosso do Sul (IFMS) - Campus Três Lagoas'
+        alias: 'Instituto Federal do Mato Grosso do Sul (IFMS)'
+        email: 'tres.lagoas@ifms.edu.br'
+        website: 'https://www.ifms.edu.br/campi/campus-tres-lagoas'
+        address: 'Rua Ângelo Melão, 790, Jardim das Paineiras - Três Lagoas/MS'
+        post-code: 79641-162
+        country: BR
+    department: Technology in Systems Analysis and Development (TADS)
+    thesis-type: graduation article
+    status: in-preparation
+    pages: 46
+    year: 2025
+  - type: database
+    title: Scopus
+    copyright: © 2024-2025 Elsevier B.V. All rights reserved.
+    authors:
+      - name: Elsevier B.V.
+        alias: Elsevier
+        website: 'https://www.elsevier.com/'
+    abstract: 'Scopus é uma base de dados bibliográfica de alta qualidade com curadoria
+      e extensa cobertura, que nos permite, através de suas APIs, realizar
+      consultas personalizadas com sintaxe booleana e recuperar informações
+      relevantes da literatura acadêmica.'
+    url: 'https://www.scopus.com/'
+    notes: 'Todos os dados que são obtidos "TAL COMO ESTÃO" da Scopus. Declaramos que
+      não há qualquer endosso ou afiliação por parte dos detentores.
+      Reconhecemos que toda a utilização se destina à pesquisa acadêmica não
+      comercial e está sujeita aos Termos e Políticas listados.'
