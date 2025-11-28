@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-# Copyright (C) 2024 All rights reserved.
-# Federal Institute of Mato Grosso do Sul (IFMS - Campus Três Lagoas)
-# - Homepage: https://www.ifms.edu.br/campi/campus-tres-lagoas
+# Instituto Federal de Educação Ciência e Tecnologia de Mato Grosso do Sul
+# Federal Institute of Education, Science and Technology of Mato Grosso do Sul
+# Tecnologia em Análise e Desenvolvimento de Sistemas
+# Technology in Systems Analysis and Development
+# IFMS - TADS - Campus Três Lagoas
 # Maurício da Silva Batista (@mauprogramador)
-# - GitHub: https://github.com/mauprogramador
 # Source Code: https://github.com/mauprogramador/scopus-survey-api
 # Documentation: https://mauprogramador.github.io/scopus-survey-api/
 
@@ -15,6 +16,7 @@ Web API for bibliographic survey of Scopus articles
 
 __version__ = "3.2.5"
 __license__ = "MIT"
+__copyright__ = "© IFMS - Maurício da Silva Batista"
 
 __author__ = "mauprogramador"
 __contact__ = "sir.silvabmauricio@gmail.com"
