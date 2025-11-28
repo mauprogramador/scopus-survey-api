@@ -2,7 +2,7 @@
 
 **Scopus Survey API** - _Web API for bibliographic survey of Scopus articles_
 
-> _Last updated: August 25, 2025_
+> _Last updated: November 28, 2025_
 
 Instituto Federal de Educação, Ciência e Tecnologia de Mato Grosso do Sul - [IFMS Campus Três Lagoas](https://www.ifms.edu.br/campi/campus-tres-lagoas)<br/>
 Tecnologia em Análise e Desenvolvimento de Sistemas - [TADS](https://www.ifms.edu.br/campi/campus-tres-lagoas/cursos/graduacao/analise-e-desenvolvimento-de-sistemas)<br/>
@@ -20,7 +20,7 @@ This project incorporates various resources, including fonts, images, icons, log
 
 ## Data Source
 
-All data we handle is retrieved and obtained **"AS IS"** from [Scopus](https://www.scopus.com)®, maintained by [Elsevier B.V.](https://www.elsevier.com/), using the [Scopus APIs](https://dev.elsevier.com/sc_apis.html).
+All data we handle is retrieved and obtained **"AS IS"** from [Scopus](https://www.scopus.com)®, maintained by © [Elsevier B.V.](https://www.elsevier.com/), using the [Scopus APIs](https://dev.elsevier.com/sc_apis.html).
 
 We declare that there is no implied endorsement of Scopus and also comply that all use is for [non-commercial academic research](https://dev.elsevier.com/academic_research_scopus.html) and is subject to our [Terms](./TERMS_OF_SERVICE.md), as well as the [Elsevier Terms](https://www.elsevier.com/legal/elsevier-website-terms-and-conditions) and [Scopus Policy](https://dev.elsevier.com/academic_research_scopus.html).
 
@@ -40,7 +40,7 @@ This project adopts industry-standard software development practices to ensure m
 
 ## Web Design
 
-The web page design draws inspiration from various public domain sources and freely available resources. While certain design elements, color schemes, typographic choices, or layout concepts may resemble other works, all implementation code was developed independently and built by me.
+The web page design draws inspiration from various public domain sources and freely available resources. While certain design elements, color schemes, typographic choices, or layout concepts may resemble other works, all implementation code was developed independently and built by me [@mauprogramador](https://github.com/mauprogramador).
 
 I took inspiration from the following websites:
 
@@ -98,6 +98,7 @@ The logos we use are from permitted brand guidelines or sourced from public doma
   - **Use:** footer reference to the institution website
 
 - **DEV**
+
   - **File:** `dev.png`
   - **Owner:** DEV Community © 2016 - 2025
   - **Source:** [DEV Brand Guidelines](https://dev.to/brand)
