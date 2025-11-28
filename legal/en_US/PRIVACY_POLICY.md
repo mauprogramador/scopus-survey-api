@@ -2,7 +2,7 @@
 
 **Scopus Survey API** - _Web API for bibliographic survey of Scopus articles_
 
-> _Last updated: August 10, 2025_
+> _Last updated: November 28, 2025_
 
 Instituto Federal de Educação, Ciência e Tecnologia de Mato Grosso do Sul - [IFMS Campus Três Lagoas](https://www.ifms.edu.br/campi/campus-tres-lagoas)<br/>
 Tecnologia em Análise e Desenvolvimento de Sistemas - [TADS](https://www.ifms.edu.br/campi/campus-tres-lagoas/cursos/graduacao/analise-e-desenvolvimento-de-sistemas)<br/>
@@ -32,7 +32,7 @@ When you access and use the Service, we automatically collect certain informatio
 
 - **Usage Data:** This may include your IP address, browser info, the pages of our Service that you visit, the time and date of your visit, the time spent on those pages, and other diagnostic data.
 - **Session Cookie:** We use [Starlette's SessionMiddleware](https://www.starlette.io/middleware/#sessionmiddleware) to add a signed cookie-based HTTP sessions to track and control the **Session** time.
-- **Token Cookie:** This is strictly necessary for authentication and protection against **CSRF** (Cross-Site Request Forgery). Your **CSRF Token**, is automatically managed through headers, cookies, query parameters, and session, and is essential for maintaining secure interactions within the Service.
+- **Token Cookie:** This is strictly necessary for authentication and protection against **CSRF** (Cross-Site Request Forgery) attacks. Your **CSRF Token** is automatically managed through HTTP headers, cookies, query parameters, and session, and is essential for maintaining secure interactions within the Service.
 - **Tracking Technologies:** Since we use [Slowapi's Limiter](https://slowapi.readthedocs.io/en/latest/) to control the Service rate limit, it will obtain and store your IP address by default.
 
 ### 1.3. Information from Third-Party Sources (Scopus Data)
@@ -55,7 +55,7 @@ The Service only uses your **API Key** to systematically retrieve, validate, and
 
 ## 3. How We Share Your Information
 
-We do not sell your personal information. We may share it only in the following situations:
+We DO NOT sell your personal information. We may share it only in the following situations:
 
 - **Service Providers:** We may share your data with third-party vendors and service providers who perform services on our behalf, such as hosting providers, but they are also obligated to protect your information and use it only for the purposes for which it was disclosed.
 - **Legal Reasons:** We may disclose your personal data if required to do so by law or in response to valid requests by public authorities, such as a court or a government agency.
@@ -102,20 +102,14 @@ We reserve the right to update these Terms at any time. We will notify users of 
 
 <br>
 
-## 8. Reference links
+## 8. Reference
 
 - [**Elsevier Privacy Policy**](https://www.elsevier.com/legal/privacy-policy)
-
 - [**Elsevier Use Policies**](https://dev.elsevier.com/policy.html)
-
-- [**Brazilian Data Protection Law (LGPD)**](https://www.gov.br/anpd/pt-br/centrais-de-conteudo/outros-documentos-e-publicacoes-institucionais/lgpd-en-lei-no-13-709-capa.pdf)
-
-- **`pt-BR`** [**Lei Geral de Proteção de Dados Pessoais (LGPD)**](https://www.gov.br/esporte/pt-br/acesso-a-informacao/lgpd)
-
+- [**Brazilian Data Protection Law (LGPD)**](https://www.gov.br/anpd/pt-br/centrais-de-conteudo/outros-documentos-e-publicacoes-institucionais/lgpd-en-lei-no-13-709-capa.pdf) **`PDF`**
+- [**Lei Geral de Proteção de Dados Pessoais (LGPD)**](https://www.gov.br/esporte/pt-br/acesso-a-informacao/lgpd) **`pt-BR`**
 - [**Scopus Search API Documentation**](https://dev.elsevier.com/documentation/ScopusSearchAPI.wadl)
-
 - [**Abstract Retrieval API Documentation**](https://dev.elsevier.com/documentation/AbstractRetrievalAPI.wadl)
-
 - [**API Key Settings**](https://dev.elsevier.com/api_key_settings.html)
 
 <br>
