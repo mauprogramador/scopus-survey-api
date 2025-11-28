@@ -1,11 +1,14 @@
 # Cookie Policy
 
-**Scopus Survey API** - *Web API for bibliographic survey of Scopus articles*
+**Scopus Survey API** - _Web API for bibliographic survey of Scopus articles_
 
-> *Last updated: August 10, 2025*
+> _Last updated: August 10, 2025_
 
-Federal Institute of Mato Grosso do Sul - [IFMS - Campus Três Lagoas](https://www.ifms.edu.br/campi/campus-tres-lagoas)<br/>
-Technology in Systems Analysis and Development - [TADS](https://www.ifms.edu.br/campi/campus-tres-lagoas/cursos/graduacao/analise-e-desenvolvimento-de-sistemas)<br/>
+Instituto Federal de Educação, Ciência e Tecnologia de Mato Grosso do Sul - [IFMS Campus Três Lagoas](https://www.ifms.edu.br/campi/campus-tres-lagoas)<br/>
+Tecnologia em Análise e Desenvolvimento de Sistemas - [TADS](https://www.ifms.edu.br/campi/campus-tres-lagoas/cursos/graduacao/analise-e-desenvolvimento-de-sistemas)<br/>
+
+> _Federal Institute of Education, Science and Technology of Mato Grosso do Sul_ <br/>
+> _Technology in Systems Analysis and Development_
 
 ---
 
@@ -32,7 +35,7 @@ We only set and use two **"first-party"** and **"essential"** Cookies:
 - **Persistent Cookies**: Remain on your device for a set period of time or until you delete them.
 
 | Cookie       | Type                       | Duration        |
-|--------------|----------------------------|-----------------|
+| ------------ | -------------------------- | --------------- |
 | `session`    | **Essential / Session**    | Browser session |
 | `csrf-token` | **Essential / Persistent** | **1 hour**      |
 

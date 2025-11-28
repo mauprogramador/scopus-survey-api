@@ -69,11 +69,11 @@
 
 ---
 
-Federal Institute of Mato Grosso do Sul &nbsp;&#8226;&nbsp; [IFMS - Campus Três Lagoas](https://www.ifms.edu.br/campi/campus-tres-lagoas)
+Instituto Federal de Mato Grosso do Sul &nbsp;&#8226;&nbsp; [IFMS - Campus Três Lagoas](https://www.ifms.edu.br/campi/campus-tres-lagoas)
 <br/>
 Technology in Systems Analysis and Development &nbsp;&#8226;&nbsp; [TADS](https://www.ifms.edu.br/campi/campus-tres-lagoas/cursos/graduacao/analise-e-desenvolvimento-de-sistemas)
 <br/>
-Data provided by [Scopus](https://www.scopus.com)® &nbsp;&#8226;&nbsp; [Elsevier](https://www.elsevier.com)
+Data provided by [Scopus](https://www.scopus.com)® &nbsp;&#8226;&nbsp; © [Elsevier](https://www.elsevier.com)
 
 - Documentation: <https://mauprogramador.github.io/scopus-survey-api/>
 - Web API: <http://127.0.0.1:8000/v2/scopus-survey/en-US/search-articles>
@@ -164,8 +164,7 @@ make docker
 
 All data we handle is retrieved and obtained **"AS IS"** from [Scopus](https://www.scopus.com)®, maintained by [Elsevier B.V.](https://www.elsevier.com/), a database known for its **curated content of peer-reviewed literature**. We declare that there is **no implied endorsement by the rights owners** and also comply that all use is for [non-commercial academic research](https://dev.elsevier.com/academic_research_scopus.html) and is subject to [our Terms](./TERMS_OF_SERVICE.md), as well as the [Elsevier Terms](https://www.elsevier.com/legal/elsevier-website-terms-and-conditions) and [Scopus Policy](https://dev.elsevier.com/academic_research_scopus.html).
 
-> [!CAUTION]
-> **You are strictly prohibited from misuse or attempt to misuse data obtained from the Scopus APIs in violation of [Elsevier API Service Agreement](https://dev.elsevier.com/policy/API-service-agreement.pdf).**
+> [!CAUTION] > **You are strictly prohibited from misuse or attempt to misuse data obtained from the Scopus APIs in violation of [Elsevier API Service Agreement](https://dev.elsevier.com/policy/API-service-agreement.pdf).**
 
 ---
 
@@ -211,10 +210,10 @@ To avoid [exceeding the API's request rate limit](https://dev.elsevier.com/api_k
 To visualize the documents (at least the preview), you can use:
 
 - The **URL** in the **Article Preview Page URL** column:<br>
-<https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=[SCOPUS_ID]&origin=inward>
+  <https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=[SCOPUS_ID]&origin=inward>
 
 - The **Digital Object Identifier (DOI)** in the **DOI** column and be redirected to the [Science Direct](https://www.sciencedirect.com/) journal page:<br>
-<https://doi.org/[DOI]><br>
+  <https://doi.org/[DOI]><br>
 
 ---
 
@@ -226,8 +225,7 @@ To visualize the documents (at least the preview), you can use:
 | Python AND Scopus    | 141          | 19.26s          | 1doc / 0.71% |
 | Bibliographic Survey | 1073         | 246.38s (4.10m) | 7doc / 0.65% |
 
-> [!TIP]
-> <a href="./docs/assets/data/example.csv" download="example.csv">Download a sample survey <abbr title="Comma-Separated Values">CSV</abbr> file</a> and take a look.
+> [!TIP] > <a href="./docs/assets/data/example.csv" download="example.csv">Download a sample survey <abbr title="Comma-Separated Values">CSV</abbr> file</a> and take a look.
 
 ---
 

@@ -4,10 +4,13 @@
 
 > _Last updated: August 10, 2025_
 
-Federal Institute of Mato Grosso do Sul - [IFMS - Campus Três Lagoas](https://www.ifms.edu.br/campi/campus-tres-lagoas)<br/>
-Technology in Systems Analysis and Development - [TADS](https://www.ifms.edu.br/campi/campus-tres-lagoas/cursos/graduacao/analise-e-desenvolvimento-de-sistemas)<br/>
+Instituto Federal de Educação, Ciência e Tecnologia de Mato Grosso do Sul - [IFMS Campus Três Lagoas](https://www.ifms.edu.br/campi/campus-tres-lagoas)<br/>
+Tecnologia em Análise e Desenvolvimento de Sistemas - [TADS](https://www.ifms.edu.br/campi/campus-tres-lagoas/cursos/graduacao/analise-e-desenvolvimento-de-sistemas)<br/>
 
-Data provided by **Scopus® (Elsevier)**.
+> _Federal Institute of Education, Science and Technology of Mato Grosso do Sul_ <br/>
+> _Technology in Systems Analysis and Development_
+
+Data provided by [Scopus](https://www.scopus.com)®. © [Elsevier](https://www.elsevier.com). All rights reserved.
 
 ---
 
@@ -82,7 +85,7 @@ You are also prohibited from mass downloading, systematic harvesting, or data sc
 
 ### 4.1. Our Intellectual Property
 
-The Service and its original content (excluding content provided by third-party frameworks and libraries), features, and functionality are and will remain the exclusive property of the [Federal Institute of Mato Grosso do Sul (IFMS) - Campus Três Lagoas](https://www.ifms.edu.br/campi/campus-tres-lagoas). The Service is protected by copyright and other laws of Brazil. Therefore, the Service cannot be used in connection with any product or service without the prior written consent.
+The Service and its original content (excluding content provided by third-party frameworks and libraries), features, and functionality are and will remain the exclusive property of the [Instituto Federal de Mato Grosso do Sul (IFMS) - Campus Três Lagoas](https://www.ifms.edu.br/campi/campus-tres-lagoas). The Service is protected by copyright and other laws of Brazil. Therefore, the Service cannot be used in connection with any product or service without the prior written consent.
 
 ### 4.2. Third-Party Data (Scopus)
 

@@ -1,11 +1,14 @@
 # Translation Guide
 
-**Scopus Survey API** - *Web API for bibliographic survey of Scopus articles*
+**Scopus Survey API** - _Web API for bibliographic survey of Scopus articles_
 
-> *Last updated: August 10, 2025*
+> _Last updated: August 10, 2025_
 
-Federal Institute of Mato Grosso do Sul - [IFMS - Campus Três Lagoas](https://www.ifms.edu.br/campi/campus-tres-lagoas)<br/>
-Technology in Systems Analysis and Development - [TADS](https://www.ifms.edu.br/campi/campus-tres-lagoas/cursos/graduacao/analise-e-desenvolvimento-de-sistemas)<br/>
+Instituto Federal de Educação, Ciência e Tecnologia de Mato Grosso do Sul - [IFMS Campus Três Lagoas](https://www.ifms.edu.br/campi/campus-tres-lagoas)<br/>
+Tecnologia em Análise e Desenvolvimento de Sistemas - [TADS](https://www.ifms.edu.br/campi/campus-tres-lagoas/cursos/graduacao/analise-e-desenvolvimento-de-sistemas)<br/>
+
+> _Federal Institute of Education, Science and Technology of Mato Grosso do Sul_ <br/>
+> _Technology in Systems Analysis and Development_
 
 ---
 
@@ -27,16 +30,16 @@ We then use [Python's gettext module](https://docs.python.org/3/library/gettext.
 
 ## 2. Prefix Convention
 
-| Prefix | Category        | Example `msgid` | Scope                                 |
-|--------|-----------------|-----------------|---------------------------------------|
-| `T`    | General Text    | `T0709`         | Headings, Paragraphs, Divs            |
-| `E`    | Errors          | `E0709`         | Validation, API Errors, Exceptions    |
-| `F`    | Form items      | `F0709`         | Labels, Placeholders, Fields, Buttons |
-| `M`    | Messages        | `M0709`         | Alerts, Modals                        |
-| `H`    | Help text       | `H0709`         | Instructions, Labels, Feedbacks       |
-| `I`    | Icons / Images  | `I0709`         | Aria-labels, Descriptions             |
-| `A`    | Abbreviations   | `A0709`         | Abbr elements's title                 |
-| Custom | Custom          | `required`      | Custom specific translation code      |
+| Prefix | Category       | Example `msgid` | Scope                                 |
+| ------ | -------------- | --------------- | ------------------------------------- |
+| `T`    | General Text   | `T0709`         | Headings, Paragraphs, Divs            |
+| `E`    | Errors         | `E0709`         | Validation, API Errors, Exceptions    |
+| `F`    | Form items     | `F0709`         | Labels, Placeholders, Fields, Buttons |
+| `M`    | Messages       | `M0709`         | Alerts, Modals                        |
+| `H`    | Help text      | `H0709`         | Instructions, Labels, Feedbacks       |
+| `I`    | Icons / Images | `I0709`         | Aria-labels, Descriptions             |
+| `A`    | Abbreviations  | `A0709`         | Abbr elements's title                 |
+| Custom | Custom         | `required`      | Custom specific translation code      |
 
 <br>
 
@@ -56,8 +59,7 @@ msgfmt web/locales/en_US/LC_MESSAGES/file.po -o web/locales/en_US/LC_MESSAGES/fi
 
 - **Python Docs:** [gettext - Multilingual internationalization services](https://docs.python.org/3/library/gettext.html).
 - **GNU:** [msgfmt Invocation (GNU gettext utilities)](https://www.gnu.org/software/gettext/manual/html_node/msgfmt-Invocation.html).
-- **GNU:** [gettext - GNU Project - Free Software Foundation](https://www.gnu.org/software/gettext/
-).
+- **GNU:** [gettext - GNU Project - Free Software Foundation](https://www.gnu.org/software/gettext/).
 - **GNU:** [The Format of GNU PO Files (GNU gettext utilities)](https://www.gnu.org/software/gettext/manual/html_node/PO-Files.html).
 - **GNU:** [The Format of GNU MO Files (GNU gettext utilities)](https://www.gnu.org/software/gettext/manual/html_node/MO-Files.html).
 - **Wikipedia:** [Internationalization and localization](https://en.wikipedia.org/wiki/Internationalization_and_localization).

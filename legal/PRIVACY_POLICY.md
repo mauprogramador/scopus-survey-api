@@ -1,13 +1,16 @@
 # Privacy Policy
 
-**Scopus Survey API** - *Web API for bibliographic survey of Scopus articles*
+**Scopus Survey API** - _Web API for bibliographic survey of Scopus articles_
 
-> *Last updated: August 10, 2025*
+> _Last updated: August 10, 2025_
 
-Federal Institute of Mato Grosso do Sul - [IFMS - Campus Três Lagoas](https://www.ifms.edu.br/campi/campus-tres-lagoas)<br/>
-Technology in Systems Analysis and Development - [TADS](https://www.ifms.edu.br/campi/campus-tres-lagoas/cursos/graduacao/analise-e-desenvolvimento-de-sistemas)<br/>
+Instituto Federal de Educação, Ciência e Tecnologia de Mato Grosso do Sul - [IFMS Campus Três Lagoas](https://www.ifms.edu.br/campi/campus-tres-lagoas)<br/>
+Tecnologia em Análise e Desenvolvimento de Sistemas - [TADS](https://www.ifms.edu.br/campi/campus-tres-lagoas/cursos/graduacao/analise-e-desenvolvimento-de-sistemas)<br/>
 
-Data provided by **Scopus® (Elsevier)**.
+> _Federal Institute of Education, Science and Technology of Mato Grosso do Sul_ <br/>
+> _Technology in Systems Analysis and Development_
+
+Data provided by [Scopus](https://www.scopus.com)®. © [Elsevier](https://www.elsevier.com). All rights reserved.
 
 ---
 
