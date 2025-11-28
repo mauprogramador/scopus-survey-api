@@ -2,7 +2,7 @@
 
 **Scopus Survey API** - _Web API for bibliographic survey of Scopus articles_
 
-> _Last updated: August 10, 2025_
+> _Last updated: November 28, 2025_
 
 Instituto Federal de Educação, Ciência e Tecnologia de Mato Grosso do Sul - [IFMS Campus Três Lagoas](https://www.ifms.edu.br/campi/campus-tres-lagoas)<br/>
 Tecnologia em Análise e Desenvolvimento de Sistemas - [TADS](https://www.ifms.edu.br/campi/campus-tres-lagoas/cursos/graduacao/analise-e-desenvolvimento-de-sistemas)<br/>
@@ -20,9 +20,9 @@ Therefore, the fact that this web API is a **Brazilian project** owned by an **e
 
 <br>
 
-## 1. About gettext
+## 1. About `gettext`
 
-To perform the translations, we first write all the text data to [Portable Object (PO)](https://www.gnu.org/software/gettext/manual/html_node/PO-Files.html) format files. We then use the [GNU msgfmt](https://www.gnu.org/software/gettext/manual/html_node/msgfmt-Invocation.html) program to generate a binary message catalog from a textual translation description, resulting in [Machine Object (MO)](ttps://www.gnu.org/software/gettext/manual/html_node/MO-Files.html) format files.
+To perform the translations, we first write all the text data to [Portable Object (PO)](https://www.gnu.org/software/gettext/manual/html_node/PO-Files.html) format files. We then use the [GNU msgfmt](https://www.gnu.org/software/gettext/manual/html_node/msgfmt-Invocation.html) program to generate a binary message catalog from a textual translation description, resulting in [Machine Object (MO)](https://www.gnu.org/software/gettext/manual/html_node/MO-Files.html) format files.
 
 We then use [Python's gettext module](https://docs.python.org/3/library/gettext.html), which provides internationalization and localization, to **load all these MO binary data files and store the translations in a global cache** for later use in building **Jinja templates** and **JSON responses**.
 
@@ -39,7 +39,6 @@ We then use [Python's gettext module](https://docs.python.org/3/library/gettext.
 | `H`    | Help text      | `H0709`         | Instructions, Labels, Feedbacks       |
 | `I`    | Icons / Images | `I0709`         | Aria-labels, Descriptions             |
 | `A`    | Abbreviations  | `A0709`         | Abbr elements's title                 |
-| Custom | Custom         | `required`      | Custom specific translation code      |
 
 <br>
 
