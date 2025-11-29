@@ -2,7 +2,7 @@
 
 **Scopus Survey API** - _Web API for bibliographic survey of Scopus articles_
 
-> _Last updated: August 10, 2025_
+> _Last updated: November 29, 2025_
 
 Instituto Federal de Educação, Ciência e Tecnologia de Mato Grosso do Sul - [IFMS Campus Três Lagoas](https://www.ifms.edu.br/campi/campus-tres-lagoas)<br/>
 Tecnologia em Análise e Desenvolvimento de Sistemas - [TADS](https://www.ifms.edu.br/campi/campus-tres-lagoas/cursos/graduacao/analise-e-desenvolvimento-de-sistemas)<br/>
@@ -71,7 +71,7 @@ You agree to use the Service solely for its intended purpose as described in [Se
 - Use any device, software, or routine that interferes with the proper working of the Service.
 - Introduce any viruses, trojan horses, worms, logic bombs, or other material that is malicious or technologically harmful.
 - Attempt to gain unauthorized access to, interfere with, damage, or disrupt any parts of the Service, including the server on which the Service is running.
-- Attack the Service via a denial-of-service attack or a distributed denial-of-service attack.
+- Attack the Service via a Denial-of-service (DoS) attack or a distributed DoS attack.
 
 ### 3.4. Regarding Scopus Data
 
@@ -112,7 +112,7 @@ Our use of Scopus data does not imply endorsement by, or affiliation with, [Else
 
 ### 6.1. Your Scopus API Key
 
-You must obtain an **API Key** to use the [Scopus APIs](https://dev.elsevier.com/sc_apis.html). It can be obtained by accessing the [Elsevier Developer Portal](https://dev.elsevier.com/), clicking on the **I want an API Key** button and registering.
+You must obtain an **API Key** to use the [Scopus APIs](https://dev.elsevier.com/sc_apis.html). It can be obtained by accessing the [Elsevier Developer Portal](https://dev.elsevier.com/), clicking on the **`I want an API Key`** button and registering.
 
 If you are part of an educational institution, you can try to confirm if your institution is registered with [Elsevier](https://www.elsevier.com) to sign in via your organization, or you can also try to register with your academic email.
 
@@ -127,7 +127,7 @@ In connection with our Service, by registering with Elsevier, you agree to:
 - Not create an account for anyone other than yourself without proper authorization.
 - Not create multiple accounts or transfer your account to another person.
 
-**This account is solely managed by Elsevier.**
+**Note: This account is solely managed by Elsevier.**
 
 ### 6.3. Institutional Network
 
@@ -173,19 +173,19 @@ About of what we use in the [Scopus Search API](https://dev.elsevier.com/documen
 **Query Params:**
 
 ```txt
-  apiKey, query, field, suppressNavLinks, date, start, count, sort
+apiKey, query, field, suppressNavLinks, date, start, count, sort
 ```
 
-**Query:**
+**Query Fields:**
 
 ```txt
-  TITLE-ABS-KEY(), AND, OR, AND NOT, DOCTYPE, PUBSTAGE, LANGUAGE, OPENACCESS, SRCTYPE, SUBJAREA, PAGES
+TITLE-ABS-KEY, AND, OR, AND NOT, DOCTYPE, PUBSTAGE, LANGUAGE, OPENACCESS, SRCTYPE, SUBJAREA, PAGES
 ```
 
 **Fields:**
 
 ```txt
-  prism:url, dc:identifier, eid, dc:title, dc:description, prism:publicationName, citedby-count, prism:volume, prism:coverDate, prism:doi, dc:creator, authors
+prism:url, dc:identifier, eid, dc:title, dc:description, prism:publicationName, citedby-count, prism:volume, prism:coverDate, prism:doi, dc:creator, authors
 ```
 
 Take a look at the [Scopus Search Guide](https://dev.elsevier.com/sc_search_tips.html) and the [Scopus Search Views](https://dev.elsevier.com/sc_search_views.html) in the documentation.
@@ -194,12 +194,15 @@ Take a look at the [Scopus Search Guide](https://dev.elsevier.com/sc_search_tips
 
 Because the Service's survey result is a CSV file, which is essentially a dataset retrieved from the Scopus APIs, we must, following the [Scopus Attribution Guide](https://dev.elsevier.com/tecdoc_attribution_scopus.html), acknowledge both **Scopus** and **Elsevier** as the data source, linking to their websites and describing the access date.
 
-We had added a **footnote** (as a comment) to the end of the CSV file, indicating the date the data was retrieved.
+We add some **metadata** (as a comment) at the top of the CSV file, indicating the date the data was retrieved.
 
 **Example:**
 
 ```txt
-  # The data was retrieved from Scopus APIs on September 15, 2015 via http://api.elsevier.com and http://www.scopus.com.
+# GeneratedBy: ScopusSurveyAPI https://github.com/mauprogramador/scopus-survey-api
+# Params: api_key=..., date=2022-2025, keywords=['Python', 'Web API', 'Scopus', 'bibliographic survey'], combination=Python AND Web API AND Scopus, ratio=80
+# Survey: total=5, items_per_page=5, pages_count=1, loss=0doc / 0.00%
+# Source: data retrieved from Scopus APIs on November 22, 2025 via http://api.elsevier.com and http://www.scopus.com.
 ```
 
 <br>
@@ -222,26 +225,17 @@ We reserve the right to restrict, suspend, or terminate your access to the Servi
 
 <br>
 
-## 11. Reference links
+## 11. Reference
 
 - [**Elsevier Terms and Conditions**](https://www.elsevier.com/legal/elsevier-website-terms-and-conditions)
-
 - [**Elsevier API Service Agreement**](https://dev.elsevier.com/policy/API-service-agreement.pdf)
-
 - [**Elsevier Use Policies**](https://dev.elsevier.com/policy.html)
-
 - [**Scopus Attribution Guide**](https://dev.elsevier.com/tecdoc_attribution_scopus.html)
-
 - [**Scopus Search API Documentation**](https://dev.elsevier.com/documentation/ScopusSearchAPI.wadl)
-
 - [**Abstract Retrieval API Documentation**](https://dev.elsevier.com/documentation/AbstractRetrievalAPI.wadl)
-
 - [**API Key Settings**](https://dev.elsevier.com/api_key_settings.html)
-
 - [**Elsevier Use Cases**](https://dev.elsevier.com/use_cases.html)
-
 - [**Scopus Search Guide**](https://dev.elsevier.com/sc_search_tips.html)
-
 - [**Scopus Search Views**](https://dev.elsevier.com/sc_search_views.html)
 
 <br>
