@@ -268,6 +268,12 @@
   width: 100%;
   left: 0;
 }
+.field-feedback.pe-lg-5 {
+  padding-left: calc(var(--bs-gutter-x) * .5);
+}
+.field-feedback.ps-lg-5 {
+  padding-right: calc(var(--bs-gutter-x) * .5);
+}
 
 /* Help */
 .field-help {
