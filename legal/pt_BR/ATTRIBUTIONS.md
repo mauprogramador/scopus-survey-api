@@ -2,7 +2,7 @@
 
 **Scopus Survey API** - _API da Web para levantamento bibliográfico de artigos da Scopus_
 
-> _Última atualização: 28 de Novembro de 2025_
+> _Última atualização: 30 de Novembro de 2025_
 
 Instituto Federal de Educação, Ciência e Tecnologia de Mato Grosso do Sul - [IFMS Campus Três Lagoas](https://www.ifms.edu.br/campi/campus-tres-lagoas)<br/>
 Tecnologia em Análise e Desenvolvimento de Sistemas - [TADS](https://www.ifms.edu.br/campi/campus-tres-lagoas/cursos/graduacao/analise-e-desenvolvimento-de-sistemas)<br/>

@@ -2,7 +2,7 @@
 
 **Scopus Survey API** - _API da Web para levantamento bibliográfico de artigos da Scopus_
 
-> _Última atualização: 29 de Novembro de 2025_
+> _Última atualização: 30 de Novembro de 2025_
 
 Instituto Federal de Educação, Ciência e Tecnologia de Mato Grosso do Sul - [IFMS Campus Três Lagoas](https://www.ifms.edu.br/campi/campus-tres-lagoas)<br/>
 Tecnologia em Análise e Desenvolvimento de Sistemas - [TADS](https://www.ifms.edu.br/campi/campus-tres-lagoas/cursos/graduacao/analise-e-desenvolvimento-de-sistemas)<br/>
@@ -29,7 +29,7 @@ Dessa forma, apenas os **dados mais relevantes e recentes** serão mantidos e re
 
 ## 2. Aceitação
 
-> _Data de vigência: 10 de Agosto de 2025_
+> _Data de vigência: 07 de Dezembro de 2025_
 
 - Ao acessar ou usar o Serviço, você concorda integralmente com estes Termos de Serviço e com nossa [Política de Privacidade](./PRIVACY_POLICY.md).
 - Estes termos constituem um acordo juridicamente vinculativo, se você não concordar com estes Termos, você **NÃO DEVE** acessar ou usar o Serviço.
