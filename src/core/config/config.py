@@ -1,3 +1,4 @@
+from contextvars import ContextVar
 from pathlib import Path
 from secrets import token_hex, token_urlsafe
 
@@ -9,6 +10,7 @@ from src.utils.logging import Logging
 
 APP = "src.framework.fastapi.main:app"
 PREFIX = "/v2/scopus-survey"
+TRACE_ID_CTX: ContextVar[str] = ContextVar("trace_id")
 
 DIRECTORY = Path("csv")
 FILE = "docs.csv"
