@@ -21,7 +21,7 @@ Este projeto incorpora vários recursos, incluindo fontes, imagens, ícones, log
 
 Todos os dados que manuseiamos são obtidos **"TAL COMO ESTÃO"** da [Scopus](https://www.scopus.com)®, mantida pela © [Elsevier B.V.](https://www.elsevier.com/), utilizando as [APIs da Scopus](https://dev.elsevier.com/sc_apis.html).
 
-Declaramos que não há endosso implícito da Scopus e concordamos que todo o uso se destina à [pesquisa acadêmica não comercial](https://dev.elsevier.com/academic_research_scopus.html) e está sujeito aos nossos [Termos](./../en_US/TERMS_OF_SERVICE.md), bem como aos [Termos da Elsevier](https://www.elsevier.com/legal/elsevier-website-terms-and-conditions) e à [Política do Scopus](https://dev.elsevier.com/academic_research_scopus.html).
+Declaramos que não há endosso implícito da Scopus e concordamos que todo o uso se destina à [pesquisa acadêmica não comercial](https://dev.elsevier.com/academic_research_scopus.html) e está sujeito aos nossos [Termos](./../en_US/TERMS_OF_SERVICE.md), bem como aos [Termos da Elsevier](https://www.elsevier.com/legal/elsevier-website-terms-and-conditions) e à [Política da Scopus](https://dev.elsevier.com/academic_research_scopus.html).
 
 <br>
 

@@ -1,4 +1,4 @@
-# Guia de Tradução
+# Traduções
 
 **Scopus Survey API** - _API da Web para levantamento bibliográfico de artigos da Scopus_
 

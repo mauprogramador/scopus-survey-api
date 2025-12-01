@@ -11,7 +11,7 @@ Tecnologia em Análise e Desenvolvimento de Sistemas - [TADS](https://www.ifms.e
 
 ---
 
-Este acordo (**"Política de Cookies"**) explica os cookies e sob quais condições você e a Scopus Survey API (**"Serviço"**), fornecida por nós (**"nós"** ou **"nossos"**), poderá gerir as preferências e a utilização de cookies para melhorar a sua experiência.
+Este acordo (**"Política de Cookies"**) explica os cookies e sob quais condições você e a Scopus Survey API (**"Serviço"**), fornecida por nós (**"nós"**, **"nos"**, **"nosso"**, ou **"nossos"**), poderá gerir as preferências e a utilização de cookies para melhorar a sua experiência.
 
 <br>
 
@@ -26,7 +26,7 @@ O único tipo de cookies que o nosso Serviço implementa e gerencia são os cham
 Utilizamos apenas dois cookies **primários** e **essenciais**:
 
 - **Cookie de Sessão**: Utiliza o [Middleware de Sessão do Starlette](https://www.starlette.io/middleware/#sessionmiddleware) para adicionar sessões HTTP baseadas em cookies criptografados para rastrear e controlar o tempo da **Sessão**.
-- **Cookie de Token**: Estritamente necessário para autenticação e proteção contra **CSRF** (Cross-Site Request Forgery). Gerencia automaticamente um **Token CSRF**, criado usando o serializador [URLSafeTimedSerializer da ItsDangerous](https://itsdangerous.palletsprojects.com/en/stable/url_safe/), por meio de cabeçalhos HTTP, cookies, parâmetros de consulta e sessão, sendo essencial para manter interações seguras dentro do Serviço.
+- **Token de Cookie**: Estritamente necessário para autenticação e proteção contra **CSRF** (Cross-Site Request Forgery). Gerencia automaticamente um **Token CSRF**, criado usando o serializador [URLSafeTimedSerializer da ItsDangerous](https://itsdangerous.palletsprojects.com/en/stable/url_safe/), por meio de cabeçalhos HTTP, cookies, parâmetros de consulta e sessão, sendo essencial para manter interações seguras dentro do Serviço.
 
 ## 3. Duração dos Cookies
 

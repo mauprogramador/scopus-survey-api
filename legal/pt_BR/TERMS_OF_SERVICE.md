@@ -13,7 +13,7 @@ Dados fornecidos pela [Scopus](https://www.scopus.com)®. © [Elsevier](https://
 
 ---
 
-Este contrato (**"Termos de Serviço"**) define as condições sob as quais você pode acessar e usar a API de Levantamento da Scopus (**"Serviço"**), fornecida por nós (**"nós"**, **"nos"**, **"nosso"**, ou **"nossos"**).
+Este contrato (**"Termos de Serviço"**) define as condições sob as quais você pode acessar e usar a Scopus Survey API (**"Serviço"**), fornecida por nós (**"nós"**, **"nos"**, **"nosso"**, ou **"nossos"**).
 
 <br>
 
@@ -88,7 +88,7 @@ O Serviço e seu conteúdo original (excluindo conteúdo fornecido por framework
 
 ### 4.2. Dados de Terceiros (Scopus)
 
-Todos os direitos de propriedade intelectual relativos aos dados fornecidos pela [Scopus Search API](https://dev.elsevier.com/documentation/SCOPUSSearchAPI.wadl) e pela [Scopus Abstract Retrieval API](https://dev.elsevier.com/documentation/AbstractRetrievalAPI.wadl), incluindo, entre outros, títulos de artigos, resumos, informações sobre autores, detalhes de publicação e dados de citação, pertencem à **Elsevier B.V.** e/ou seus licenciadores. O uso desses dados por meio do nosso Serviço é regido por estes Termos, nossa [Política de Privacidade](./PRIVACY_POLICY.md) e está expressamente sujeito ao [Contrato de Serviço de API da Elsevier](https://dev.elsevier.com/policy/API-service-agreement.pdf). Você **DEVE** reconhecer que não adquire quaisquer direitos de propriedade sobre os dados da Scopus ao usar o Serviço.
+Todos os direitos de propriedade intelectual relativos aos dados fornecidos pela [API de Busca da Scopus](https://dev.elsevier.com/documentation/SCOPUSSearchAPI.wadl) (_Scopus Search API_) e pela [API de Recuperação de Resumos da Scopus](https://dev.elsevier.com/documentation/AbstractRetrievalAPI.wadl) (_Scopus Abstract Retrieval API_), incluindo, entre outros, títulos de artigos, resumos, informações sobre autores, detalhes de publicação e dados de citação, pertencem à **Elsevier B.V.** e/ou seus licenciadores. O uso desses dados por meio do nosso Serviço é regido por estes Termos, nossa [Política de Privacidade](./PRIVACY_POLICY.md) e está expressamente sujeito ao [Contrato de Serviço de API da Elsevier](https://dev.elsevier.com/policy/API-service-agreement.pdf). Você **DEVE** reconhecer que não adquire quaisquer direitos de propriedade sobre os dados da Scopus ao usar o Serviço.
 
 <br>
 
@@ -136,7 +136,7 @@ Observe que a **Chave de API** só será autenticada corretamente se você a env
 
 ## 7. Dados da Scopus
 
-Como o Serviço utiliza dados obtidos do banco de dados Scopus por meio da [Scopus Search API](https://dev.elsevier.com/documentation/SCOPUSSearchAPI.wadl) e da [Scopus Abstract Retrieval API](https://dev.elsevier.com/documentation/AbstractRetrievalAPI.wadl), mantidas pela [Elsevier](https://www.elsevier.com), cumprimos e reconhecemos solenemente que todo o uso das [APIs da Scopus](https://dev.elsevier.com/sc_apis.html) e dos dados está sujeito à [Política de Pesquisa Acadêmica](https://dev.elsevier.com/academic_research_scopus.html).
+Como o Serviço utiliza dados obtidos do banco de dados Scopus por meio da [API de Busca da Scopus](https://dev.elsevier.com/documentation/SCOPUSSearchAPI.wadl) e da [API de Recuperação de Resumos da Scopus](https://dev.elsevier.com/documentation/AbstractRetrievalAPI.wadl), mantidas pela [Elsevier](https://www.elsevier.com), cumprimos e reconhecemos solenemente que todo o uso das [APIs da Scopus](https://dev.elsevier.com/sc_apis.html) e dos dados está sujeito à [Política de Pesquisa Acadêmica](https://dev.elsevier.com/academic_research_scopus.html).
 
 Também cumprimos as condições de uso predefinidas:
 
@@ -167,7 +167,7 @@ Finalmente, os documentos serão **filtrados e removidos** na seguinte ordem:
 
 ### 7.2. Especificação das APIs
 
-Sobre o que usamos na [Scopus Search API](https://dev.elsevier.com/documentation/SCOPUSSearchAPI.wadl) e na [Scopus Abstract Retrieval API](https://dev.elsevier.com/documentation/AbstractRetrievalAPI.wadl):
+Sobre o que usamos na [API de Busca da Scopus](https://dev.elsevier.com/documentation/SCOPUSSearchAPI.wadl) e na [API de Recuperação de Resumos da Scopus](https://dev.elsevier.com/documentation/AbstractRetrievalAPI.wadl):
 
 **Parâmetros de Consulta:**
 
@@ -239,8 +239,8 @@ Reservamo-nos o direito de restringir, suspender ou encerrar seu acesso ao Servi
 - [**Acordo de Serviço de API da Elsevier**](https://dev.elsevier.com/policy/API-service-agreement.pdf)
 - [**Políticas de Uso da Elsevier**](https://dev.elsevier.com/policy.html)
 - [**Guia de Atribuição da Scopus**](https://dev.elsevier.com/tecdoc_attribution_scopus.html)
-- [**Documentação da Scopus Search API**](https://dev.elsevier.com/documentation/ScopusSearchAPI.wadl)
-- [**Documentação da Abstract Retrieval API**](https://dev.elsevier.com/documentation/AbstractRetrievalAPI.wadl)
+- [**Documentação da API de Busca da Scopus**](https://dev.elsevier.com/documentation/ScopusSearchAPI.wadl)
+- [**Documentação da API de Recuperação de Resumos da Scopus**](https://dev.elsevier.com/documentation/AbstractRetrievalAPI.wadl)
 - [**Configurações da Chave de API**](https://dev.elsevier.com/api_key_settings.html)
 - [**Casos de Uso da Elsevier**](https://dev.elsevier.com/use_cases.html)
 - [**Guia de Busca da Scopus**](https://dev.elsevier.com/sc_search_tips.html)

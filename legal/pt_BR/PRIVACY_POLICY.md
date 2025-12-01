@@ -32,11 +32,11 @@ Ao acessar e usar o Serviço, nós coletamos automaticamente certas informaçõe
 - **Dados de Uso:** Isso pode incluir seu endereço IP, informações do navegador, as páginas do nosso Serviço que você visita, a data e hora da sua visita, o tempo gasto nessas páginas e outros dados de diagnóstico.
 - **Cookie de Sessão:** Usamos o [Middleware de Sessão do Starlette](https://www.starlette.io/middleware/#sessionmiddleware) para adicionar sessões HTTP baseadas em cookies criptografados para rastrear e controlar o tempo da **Sessão**.
 - **Token de Cookie:** Estritamente necessário para autenticação e proteção contra ataques **CSRF** (Cross-Site Request Forgery). Seu **Token CSRF** é gerenciado automaticamente por meio de cabeçalhos HTTP, cookies, parâmetros de consulta e sessão, e é essencial para manter interações seguras dentro do Serviço.
-**Tecnologias de Rastreamento:** Como utilizamos o [Limitador do Slowapi](https://slowapi.readthedocs.io/en/latest/) para controlar a taxa de limite de requisições do Serviço, seu endereço IP será obtido e armazenado por padrão.
+  **Tecnologias de Rastreamento:** Como utilizamos o [Limitador do Slowapi](https://slowapi.readthedocs.io/en/latest/) para controlar a taxa de limite de requisições do Serviço, seu endereço IP será obtido e armazenado por padrão.
 
 ### 1.3. Informações de Fontes de Terceiros (Dados da Scopus)
 
-Nosso Serviço consulta e acessa o banco de dados Scopus® por meio da [Scopus Search API](https://dev.elsevier.com/documentation/SCOPUSSearchAPI.wadl) e da [Scopus Abstract Retrieval API](https://dev.elsevier.com/documentation/AbstractRetrievalAPI.wadl). No entanto, o que é recuperado consiste principalmente em informações de publicações acadêmicas, como títulos de artigos, resumos, detalhes dos autores, citações e palavras-chave, que são conteúdo público ou com licença acadêmica.
+Nosso Serviço consulta e acessa o banco de dados Scopus® por meio da [API de Busca da Scopus](https://dev.elsevier.com/documentation/SCOPUSSearchAPI.wadl) (_Scopus Search API_) e da [API de Recuperação de Resumos da Scopus](https://dev.elsevier.com/documentation/AbstractRetrievalAPI.wadl) (_Scopus Abstract Retrieval API_). No entanto, o que é recuperado consiste principalmente em informações de publicações acadêmicas, como títulos de artigos, resumos, detalhes dos autores, citações e palavras-chave, que são conteúdo público ou com licença acadêmica.
 
 Gostaríamos de esclarecer que **não coletamos nem processamos nenhuma informação do usuário por meio das APIs da Scopus, nem processamos nenhuma informação da sua conta**. Os únicos dados da Scopus que utilizamos são a sua **Chave de API**, que não está diretamente vinculada às suas informações pessoais e nem nos permite acessá-las.
 
@@ -107,8 +107,8 @@ Reservamo-nos o direito de atualizar estes Termos a qualquer momento. Notificare
 - [**Políticas de uso da Elsevier**](https://dev.elsevier.com/policy.html)
 - [**Lei Geral de Proteção de Dados (LGPD)**](https://www.gov.br/anpd/pt-br/centrais-de-conteudo/outros-documentos-e-publicacoes-institucionais/lgpd-en-lei-no-13-709-capa.pdf) **`PDF`**
 - [**Lei Geral de Proteção de Dados Pessoais (LGPD)**](https://www.gov.br/esporte/pt-br/acesso-a-informacao/lgpd)
-- [**Documentação da Scopus Search API**](https://dev.elsevier.com/documentation/ScopusSearchAPI.wadl)
-- [**Documentação da Abstract Retrieval API**](https://dev.elsevier.com/documentation/AbstractRetrievalAPI.wadl)
+- [**Documentação da API de Busca da Scopus**](https://dev.elsevier.com/documentation/ScopusSearchAPI.wadl)
+- [**Documentação da API de Recuperação de Resumos da Scopus**](https://dev.elsevier.com/documentation/AbstractRetrievalAPI.wadl)
 - [**Configurações da Chave de API**](https://dev.elsevier.com/api_key_settings.html)
 
 <br>
