@@ -19,11 +19,11 @@ Este contrato (**"Termos de Serviço"**) define as condições sob as quais voc�
 
 ## 1. Visão Geral
 
-A **Scopus Survey API** é uma API da web projetada para facilitar a coleta de informações de documentos acadêmicos que serão usados como fontes de literatura de alta qualidade na web para pesquisa, referências bibliográficas e revisões sistemáticas. Ela se destina principalmente ao uso acadêmico gratuito e [não comercial](https://dev.elsevier.com/academic_research_scopus.html) por estudantes, melhorando assim a acessibilidade.
+Esta **API da web** foi projetada para, dentro de suas limitações, realizar **levantamentos bibliográficos sistemáticos utilizando dados da [base de dados Scopus](https://www.elsevier.com/pt-br/products/scopus)**, promovendo o acesso a fontes bibliográficas relevantes e de alta qualidade por meio de uma interface simples e bem documentada, reduzindo assim a barreira inicial de entrada para **estudantes** e acadêmicos.
 
-Por meio de um formulário web, o aplicativo visa possibilitar uma pesquisa personalizada, utilizando inicialmente a **chave de API**, palavras-chave e outros parâmetros de busca enviados pelo usuário para consultar o vasto banco de dados de resumos e citações de alta qualidade da Scopus, usando a API de Busca da Scopus e a API de Recuperação de Resumos da Scopus, mantidas pela Elsevier.
+Como uma ferramenta [gratuita e não comercial de automação acadêmica](https://dev.elsevier.com/academic_research_scopus.html), a aplicação integra **múltiplos critérios de seleção**, incluindo múltiplos parâmetros de consulta, combinações de palavras-chave e [busca Booleana](https://dev.elsevier.com/sc_search_tips.html), com **mecanismos** para recuperação, validação, serialização e filtragem personalizadas de **grandes volumes de dados** das [APIs da Scopus](https://dev.elsevier.com/sc_apis.html).
 
-Finalmente, todos os dados dos documentos serão sistematicamente baixados e coletados, validados, processados e refinados com base na similaridade de conteúdo, removendo duplicatas e filtrando documentos semelhantes, restando apenas os dados mais relevantes e recentes, que serão organizados e retornados em um arquivo CSV, permitindo que você utilize os documentos como desejar, de acordo com suas necessidades.
+Dessa forma, apenas os **dados mais relevantes e recentes** serão mantidos e retornados em um **arquivo CSV**, sendo adequados para estudos e levantamentos bibliométricos, pesquisas, [revisões sistemáticas](https://pt.wikipedia.org/wiki/Revis%C3%A3o_sistem%C3%A1tica), etc., permitindo que os alunos reúnam rapidamente um conjunto de fontes de literatura revisadas por pares para uma tese ou projeto.
 
 <br>
 
@@ -70,7 +70,7 @@ Você concorda em usar o Serviço exclusivamente para a finalidade pretendida, c
 - Utilizar qualquer dispositivo, software ou rotina que interfira com o funcionamento adequado do Serviço.
 - Introduzir quaisquer vírus, "cavalos de Troia", _worms_, "bombas lógicas" ou outro material malicioso ou tecnologicamente prejudicial.
 - Tentar obter acesso não autorizado para interferir, danificar ou interromper qualquer parte do Serviço, incluindo o servidor em que o Serviço está sendo executado.
-- Atacar o Serviço por meio de um ataque _Denial-of-service_ (DoS) ou um ataque distribuído de DoS.
+- Atacar o Serviço por meio de um ataque [_Denial-of-service_ (DoS)](https://www.cloudflare.com/pt-br/learning/ddos/glossary/denial-of-service/) ou um ataque distribuído de DoS.
 
 ### 3.4. Em Relação aos Dados da Scopus
 
@@ -224,6 +224,8 @@ O Serviço é fornecido **"NO ESTADO EM QUE SE ENCONTRA"** e **"CONFORME DISPON�
 ## 9. Atualizações
 
 Reservamo-nos o direito de atualizar estes Termos a qualquer momento. Notificaremos os usuários sobre quaisquer alterações significativas por meio de nosso [repositório do GitHub](https://github.com/mauprogramador/scopus-survey-api) ou [Documentação](https://mauprogramador.github.io/scopus-survey-api/). Seu uso contínuo do Serviço após tais alterações constitui sua aceitação dos novos Termos.
+
+> **Nota:** Confira os detalhes e atualizações no [arquivo de informações legais](../LEGAL.md)
 
 <br>
 

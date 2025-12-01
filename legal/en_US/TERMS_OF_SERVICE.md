@@ -20,11 +20,11 @@ This agreement (**"Terms of Service"**) defines the conditions under which you m
 
 ## 1. Overview
 
-The **Scopus Survey API** is a web API designed to facilitate the survey of information from academic documents that will be used as high-quality literature sources on the web for research, bibliographic references, and systematic reviews. It is primarily intended for free, [non-commercial academic use](https://dev.elsevier.com/academic_research_scopus.html) by students, thus improving accessibility.
+This **web API** is designed, within its limitations, to perform **systematic bibliographic surveys using data from the [Scopus database](https://www.elsevier.com/products/scopus)**, promoting access to relevant and high-quality bibliographic sources through a simple and well-documented interface, thus reducing the initial barrier to entry for **students** and academics.
 
-Through a web form, the application aims to enable a personalized survey, by first using the **API key**, keywords, and other search parameters submitted by the user to query [Scopus](https://www.scopus.com/home.uri)'s vast database of high-quality abstract and citation sources, using the [Scopus Search API](https://dev.elsevier.com/documentation/SCOPUSSearchAPI.wadl) and the [Scopus Abstract Retrieval API](https://dev.elsevier.com/documentation/AbstractRetrievalAPI.wadl), maintained by [Elsevier](https://www.elsevier.com).
+As a [free, non-commercial academic automation tool](https://dev.elsevier.com/academic_research_scopus.html), the application integrates **multiple selection criteria**, including multiple query parameters, keyword combinations, and [Boolean search](https://dev.elsevier.com/sc_search_tips.html), with **mechanisms** for retrieval, validation, serialization, and customized filtering of **large volumes of data** from the [Scopus APIs](https://dev.elsevier.com/sc_apis.html).
 
-Finally, all document data will be systematically downloaded and gathered, then validated, processed, and refined based on content similarity, removing duplicates and filtering similar documents, leaving only the most relevant and recent data, which will be organized and returned in a CSV file, allowing you to use the documents as you wish, depending on your circumstances.
+This way, only the **most relevant and recent data** will be retained and returned in a **CSV file**, making it suitable bibliometric studies and surveys, research, [systematic reviews](https://en.wikipedia.org/wiki/Systematic_review), etc., allowing students to quickly gather a set of peer-reviewed literature sources for a thesis or project.
 
 <br>
 
@@ -71,7 +71,7 @@ You agree to use the Service solely for its intended purpose as described in [Se
 - Use any device, software, or routine that interferes with the proper working of the Service.
 - Introduce any viruses, trojan horses, worms, logic bombs, or other material that is malicious or technologically harmful.
 - Attempt to gain unauthorized access to, interfere with, damage, or disrupt any parts of the Service, including the server on which the Service is running.
-- Attack the Service via a Denial-of-service (DoS) attack or a distributed DoS attack.
+- Attack the Service via a [Denial-of-service (DoS)](https://www.cloudflare.com/learning/ddos/glossary/denial-of-service/) attack or a distributed DoS attack.
 
 ### 3.4. Regarding Scopus Data
 
@@ -213,9 +213,11 @@ The Service is provided on an **"AS IS"** and **"AS AVAILABLE"** basis, without 
 
 <br>
 
-## 9. Changes
+## 9. Updates
 
 We reserve the right to update these Terms at any time. We will notify users of any significant changes via our [GitHub repository](https://github.com/mauprogramador/scopus-survey-api) or [Documentation](https://mauprogramador.github.io/scopus-survey-api/). Your continued use of the Service after such changes constitutes your acceptance of the new Terms.
+
+**Note:** Check the details and updates in the [legal information file](../LEGAL.md)
 
 <br>
 

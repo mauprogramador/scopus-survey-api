@@ -57,6 +57,8 @@ Você tem controle sobre como os cookies são gerenciados no seu dispositivo, im
 
 Podemos atualizar esta Política de Cookies periodicamente para refletir alterações nos requisitos legais ou em nosso uso de cookies. Notificaremos os usuários sobre quaisquer alterações significativas por meio de nosso [repositório do GitHub](https://github.com/mauprogramador/scopus-survey-api) ou [Documentação](https://mauprogramador.github.io/scopus-survey-api/). Seu uso contínuo do Serviço após tais alterações constitui sua aceitação dos novos Termos.
 
+> **Nota:** Confira os detalhes e atualizações no [arquivo de informações legais](../LEGAL.md)
+
 ## 6. Referências
 
 - **Documentação da MDN:** [Cookies HTTP](https://developer.mozilla.org/pt-BR/docs/Web/HTTP/Guides/Cookies).

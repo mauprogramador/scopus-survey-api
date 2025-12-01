@@ -96,9 +96,11 @@ Under the **Brazilian General Data Protection Law (LGPD)**, you have specific ri
 
 <br>
 
-## 7. Changes
+## 7. Updates
 
 We reserve the right to update these Terms at any time. We will notify users of any significant changes via our [GitHub repository](https://github.com/mauprogramador/scopus-survey-api) or [Documentation](https://mauprogramador.github.io/scopus-survey-api/). Your continued use of the Service after such changes constitutes your acceptance of the new Terms.
+
+**Note:** Check the details and updates in the [legal information file](../LEGAL.md)
 
 <br>
 

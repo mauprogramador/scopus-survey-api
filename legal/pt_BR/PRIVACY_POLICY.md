@@ -32,7 +32,7 @@ Ao acessar e usar o Serviço, nós coletamos automaticamente certas informaçõe
 - **Dados de Uso:** Isso pode incluir seu endereço IP, informações do navegador, as páginas do nosso Serviço que você visita, a data e hora da sua visita, o tempo gasto nessas páginas e outros dados de diagnóstico.
 - **Cookie de Sessão:** Usamos o [Middleware de Sessão do Starlette](https://www.starlette.io/middleware/#sessionmiddleware) para adicionar sessões HTTP baseadas em cookies criptografados para rastrear e controlar o tempo da **Sessão**.
 - **Token de Cookie:** Estritamente necessário para autenticação e proteção contra ataques **CSRF** (Cross-Site Request Forgery). Seu **Token CSRF** é gerenciado automaticamente por meio de cabeçalhos HTTP, cookies, parâmetros de consulta e sessão, e é essencial para manter interações seguras dentro do Serviço.
-  **Tecnologias de Rastreamento:** Como utilizamos o [Limitador do Slowapi](https://slowapi.readthedocs.io/en/latest/) para controlar a taxa de limite de requisições do Serviço, seu endereço IP será obtido e armazenado por padrão.
+- **Tecnologias de Rastreamento:** Como utilizamos o [Limitador do Slowapi](https://slowapi.readthedocs.io/en/latest/) para controlar a taxa de limite de requisições do Serviço, seu endereço IP será obtido e armazenado por padrão.
 
 ### 1.3. Informações de Fontes de Terceiros (Dados da Scopus)
 
@@ -98,6 +98,8 @@ De acordo com a **Lei Geral de Proteção de Dados (LGPD)**, você tem direitos 
 ## 7. Atualizações
 
 Reservamo-nos o direito de atualizar estes Termos a qualquer momento. Notificaremos os usuários sobre quaisquer alterações significativas por meio de nosso [repositório do GitHub](https://github.com/mauprogramador/scopus-survey-api) ou [Documentação](https://mauprogramador.github.io/scopus-survey-api/). Seu uso contínuo do Serviço após tais alterações constitui sua aceitação dos novos Termos.
+
+> **Nota:** Confira os detalhes e atualizações no [arquivo de informações legais](../LEGAL.md)
 
 <br>
 
