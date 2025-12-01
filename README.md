@@ -69,10 +69,14 @@
 
 ---
 
-Instituto Federal de Mato Grosso do Sul &nbsp;&#8226;&nbsp; [IFMS - Campus Três Lagoas](https://www.ifms.edu.br/campi/campus-tres-lagoas)
-<br/>
-Technology in Systems Analysis and Development &nbsp;&#8226;&nbsp; [TADS](https://www.ifms.edu.br/campi/campus-tres-lagoas/cursos/graduacao/analise-e-desenvolvimento-de-sistemas)
-<br/>
+**🌐 Idiomas:** Leia em [**`Português [pt-BR]`**](./README.pt_BR.md)<br/>
+
+Instituto Federal de Educação, Ciência e Tecnologia de Mato Grosso do Sul &nbsp;&#8226;&nbsp; [IFMS Campus Três Lagoas](https://www.ifms.edu.br/campi/campus-tres-lagoas)<br/>
+Tecnologia em Análise e Desenvolvimento de Sistemas &nbsp;&#8226;&nbsp; [TADS](https://www.ifms.edu.br/campi/campus-tres-lagoas/cursos/graduacao/analise-e-desenvolvimento-de-sistemas)<br/>
+
+> _Federal Institute of Education, Science and Technology of Mato Grosso do Sul_ <br/>
+> _Technology in Systems Analysis and Development_
+
 Data provided by [Scopus](https://www.scopus.com)® &nbsp;&#8226;&nbsp; © [Elsevier](https://www.elsevier.com)
 
 - Documentation: <https://mauprogramador.github.io/scopus-survey-api/>
@@ -81,17 +85,17 @@ Data provided by [Scopus](https://www.scopus.com)® &nbsp;&#8226;&nbsp; © [Else
 
 ---
 
-## Overview
+## 1. Overview
 
-This a **web** <abbr title="Application Programming Interface">**API**</abbr> is designed to facilitate the **survey of information from academic documents** that will be used as high-quality literature sources on the web for research, bibliographic references, and [systematic reviews](https://en.wikipedia.org/wiki/Systematic_review). It is primarily intended for free, [non-commercial academic use](https://dev.elsevier.com/academic_research_scopus.html) by **students**, thus **improving accessibility**.
+This **web API** is designed, within its limitations, to perform **systematic bibliographic surveys using data from the [Scopus database](https://www.elsevier.com/products/scopus)**, promoting access to relevant and high-quality bibliographic sources through a simple and well-documented interface, thus reducing the initial barrier to entry for **students** and academics.
 
-Through a web form, the application aims to enable a **personalized survey**, by first using the **API key**, **keywords**, and other **search parameters** submitted by the user to query [Scopus's vast database](https://www.elsevier.com/products/scopus) of high-quality abstract and citation sources, using the [Scopus Search API](https://dev.elsevier.com/documentation/SCOPUSSearchAPI.wadl) and the [Scopus Abstract Retrieval API](https://dev.elsevier.com/documentation/AbstractRetrievalAPI.wadl), maintained by [Elsevier](https://www.elsevier.com).
+As a [free, non-commercial academic automation tool](https://dev.elsevier.com/academic_research_scopus.html), the application integrates **multiple selection criteria**, including multiple query parameters, keyword combinations, and [Boolean search](https://dev.elsevier.com/sc_search_tips.html), with **mechanisms** for retrieval, validation, serialization, and customized filtering of **large volumes of data** from the [Scopus APIs](https://dev.elsevier.com/sc_apis.html).
 
-Finally, all document data will be **systematically downloaded and gathered**, then validated, processed, and refined based on content similarity, removing duplicates and filtering similar documents, leaving only the **most relevant and recent data**, which will be organized and returned in a <abbr title="Comma-separated Values">**CSV**</abbr> **file**, allowing you to use the documents as you wish, depending on your circumstances.
+This way, only the **most relevant and recent data** will be retained and returned in a **CSV file**, making it suitable bibliometric studies and surveys, research, [systematic reviews](https://en.wikipedia.org/wiki/Systematic_review), etc., allowing students to quickly gather a set of peer-reviewed literature sources for a thesis or project.
 
 ---
 
-## Configuration
+## 2. Configuration
 
 Create an `.env` file to configure the following options:
 
@@ -121,7 +125,9 @@ Create an `.env` file to configure the following options:
 
 ---
 
-## Run locally with Poetry or Pip
+## 3. Run
+
+### 3.1. With Poetry or Pip
 
 You will need [Python3.12](https://www.python.org/downloads/release/python-31211/) with [Pip](https://pip.pypa.io/en/stable/installation/) and [Venv](https://docs.python.org/3/library/venv.html) installed.
 
@@ -135,11 +141,11 @@ source .venv/bin/activate
 # Update Pip
 (.venv) pip install --upgrade pip
 
-# Install Wheel and Poetry
+# Install Wheel
 (.venv) pip3 install wheel
-(.venv) pip3 install poetry
 
 # Install dependencies with Poetry [1]
+(.venv) pip3 install poetry
 (.venv) make install
 
 # Install dependencies with Pip [2]
@@ -149,7 +155,7 @@ source .venv/bin/activate
 (.venv) make run
 ```
 
-## Run with Docker
+### 3.2. With Docker
 
 You will need [Docker](https://www.docker.com/) installed.
 
@@ -160,64 +166,175 @@ make docker
 
 ---
 
-### Data Source
+## 4. Important Information
 
-All data we handle is retrieved and obtained **"AS IS"** from [Scopus](https://www.scopus.com)®, maintained by [Elsevier B.V.](https://www.elsevier.com/), a database known for its **curated content of peer-reviewed literature**. We declare that there is **no implied endorsement by the rights owners** and also comply that all use is for [non-commercial academic research](https://dev.elsevier.com/academic_research_scopus.html) and is subject to [our Terms](./TERMS_OF_SERVICE.md), as well as the [Elsevier Terms](https://www.elsevier.com/legal/elsevier-website-terms-and-conditions) and [Scopus Policy](https://dev.elsevier.com/academic_research_scopus.html).
+### 4.1. Data Source
 
-> [!CAUTION] > **You are strictly prohibited from misuse or attempt to misuse data obtained from the Scopus APIs in violation of [Elsevier API Service Agreement](https://dev.elsevier.com/policy/API-service-agreement.pdf).**
+We declare that all use of the [Scopus](https://www.scopus.com)® [database](https://www.elsevier.com/products/scopus) and its [APIs](https://dev.elsevier.com/sc_apis.html), owned and maintained by © [Elsevier B.V.](https://www.elsevier.com/), is intended only for [non-commercial academic research](https://dev.elsevier.com/academic_research_scopus.html), **without implying endorsement or affiliation**, and is subject to [our Terms](./legal/en_US/TERMS_OF_SERVICE.md), as well as [Elsevier's Terms](https://www.elsevier.com/legal/elsevier-website-terms-and-conditions) and [Scopus's Policy](https://dev.elsevier.com/academic_research_scopus.html). All data we handle is retrieved and obtained **"AS IS"** and, therefore, despite its known reliability, we do not guarantee or assume responsibility for any errors or inaccuracies in the data in the Scopus database.
+
+> [!CAUTION]
+> **You are strictly prohibited from misuse or attempt to misuse data obtained from the Scopus APIs in violation of [Elsevier API Service Agreement](https://dev.elsevier.com/policy/API-service-agreement.pdf).**
+
+### 4.2. Data Manipulation
+
+In general, the data will be preserved without any direct alteration; however, since they are obtained **"AS IS"**, it will need to be properly validated based on the HTTP response fields from the APIs:
+
+- Those that returned a value will be kept as is;
+- Those that did not return any value will be set to "`null`" by default;
+- The "`authors`" field will be set to the first author ("`dc:creator`") or all authors ("`authors`") concatenated, depending on what is returned.
+
+Finally, the documents will be **filtered and removed** in the following order:
+
+1. Exact duplicates, where the first one will be kept.
+2. Exactly the same title and same author(s), where the first one will be kept.
+3. Same author(s) with similar titles, where the one with the most recent publication date will be kept.
+
+### 4.3. Search
+
+In accordance with the [API Service Agreement](https://dev.elsevier.com/policy/API-service-agreement.pdf) and [Use Policies](https://dev.elsevier.com/policy.html), **Elsevier** will issue you an **API Key** that grants you a limited license to use the [Scopus APIs](https://dev.elsevier.com/sc_apis.html), so that you can properly authenticate to query the Scopus database. It can be obtained by accessing the [Elsevier Developer Portal](https://dev.elsevier.com/) and registering. If you are part of an **educational institution**, you can try to [signing in using your organization's or academic email](https://www.scopus.com/signin.uri).
+
+About the fields we use in the search to produce more relevant results:
+
+1. The [combined field "`TITLE-ABS-KEY`"](https://dev.elsevier.com/sc_search_tips.html) to **simultaneously search for keyword combinations in abstracts, keywords, and titles, and retrieve the literature where they are found**.
+2. The "`date`" and "`sort`" fields to delimit the period of interest for publications, and sort by year and date of publication and by relevance.
+3. Other **optional additional** fields that we can send by combining them with the [Boolean operator "`AND`"](https://dev.elsevier.com/sc_search_tips.html), such as subject area and language.
+
+The searches will be conducted as follows:
+
+1. Retrieve the total number of results found for each keyword combination, concatenating them with the [Boolean operator "`AND`"](https://dev.elsevier.com/sc_search_tips.html).
+2. Effectively perform the final search with the selected combination and obtain the **Scopus ID** of each result in the pagination.
+3. Retrieve a complete dataset with comprehensive metadata by **Scopus ID**, obtaining all fields with relevant bibliographic information for each result of the previous search.
+
+### 4.4. Institutional Network <img src="https://img.shields.io/badge/Required-dc3545" alt="Required">
+
+Please be aware that the **API Key** will only authenticate correctly if you submit it while using your **academic institution's network**, which must be **registered with Elsevier**. This **does not include** <abbr title="Virtual Private Network">VPN</abbr> or proxy access. Therefore, if you are **fully remote** and **off-campus**, some data may **not be returned**.
+
+### 4.5. Quota and Rate Limits <img src="https://img.shields.io/badge/Important-ffc107" alt="Important">
+
+There's a **maximum limit to the number of requests** we can make to [Scopus APIs](https://dev.elsevier.com/sc_apis.html) using your **API Key**. This **request quota resets every seven days**, is **unique to each API**, and you can **check its availability** in the **details panel after each operation**. If requests **exceed the quota or throttling rate**, an **error will be returned**. See the [API Key Settings](https://dev.elsevier.com/api_key_settings.html).
+
+| Scopus API             | Weekly Quota | Rate Limit |
+| ---------------------- | ------------ | ---------- |
+| Search API             | 20,000       | 9req/s     |
+| Abstract Retrieval API | 10,000       | 9req/s     |
+
+### 4.6. Async HTTP Client
+
+To avoid exceeding the [API's request Rate Limit and Quota](https://dev.elsevier.com/api_key_settings.html) when making several requests, we built an asynchronous HTTP client with flow control and error handling mechanisms to handle this large volume of requests concurrently, while respecting the API limits based on the **total number of requests to be made**. We employ:
+
+- `asyncio.Semaphore` and `asyncio.sleep` to control concurrency and insert additional delays;
+- `aiohttp.ClientSession` and `aiohttp.ClientTimeout` to manage the client session, timeout, and connection;
+- `aiolimiter.AsyncLimiter` for rate limiting;
+- `aiohttp_retry.RetryClient` and `aiohttp_retry.JitterRetry` for automatic retry mechanisms, with jitter, backoff, and timeout.
+
+For **retries**, up to **3 attempts** will be made, and for **rate limiting**, a dynamic strategy will be used based on the number of requests to be made.
+
+| Requests | Rate Limit | Backoff Factor | Sleep | Concurrent Requests |
+| :------- | :--------- | :------------- | :---- | :------------------ |
+| 100      | 8.0 req/s  | 2.0            | 0.0s  | 10                  |
+| 500      | 6.0 req/s  | 3.0            | 0.15s | 5                   |
+| 1000     | 5.0 req/s  | 3.5            | 0.25s | 3                   |
+| 2000     | 4.0 req/s  | 4.5            | 0.35s | 2                   |
 
 ---
 
-### API Key <img src="https://img.shields.io/badge/Required-dc3545" alt="Required">
+## 5. Fields
 
-In accordance with the [API Service Agreement](https://dev.elsevier.com/policy/API-service-agreement.pdf) and [Use Policies](https://dev.elsevier.com/policy.html), **Elsevier** will issue you an **API Key** that grants you a limited license to use the [Scopus APIs](https://dev.elsevier.com/sc_apis.html) integrated with this **web API**, so that you can properly authenticate to query the Scopus database.
+### 5.1. Form Multi-Steps
 
-It can be obtained by accessing the [Elsevier Developer Portal](https://dev.elsevier.com/), clicking on the **I want an API Key** button and registering. If you are part of an **educational institution**, you can try to confirm if your institution is **registered with Elsevier** to [signing in using your organization's or academic email](https://www.scopus.com/signin.uri).
+- **STEP 1 - API Key**
 
----
+In this step, you will need to enter the **API Key**, issued by Elsevier. This is the main parameter without which the application cannot be run, as it is necessary for correct authentication and use of the Scopus APIs. If you have already conducted a survey before, you can also **try downloading the previously generated CSV file**, which may still be stored.
 
-### Keywords <img src="https://img.shields.io/badge/Required-dc3545" alt="Required">
+- **STEP 2 - Additional Params**
 
-Based on the theme or subject of your research, you must select a **minimum of two** (**required**) and a **maximum of four Keywords**, which will be used to **simultaneously search in the abstracts, keywords, and titles**, and find the documents you are searching for that **contain all of them**.
+In this step, you can **enter and select multiple fields** that will be combined using the `AND` operator and sent, when filled in, as parameters to perform a Boolean query in the Scopus database and produce more relevant results.
 
-Using the [combined field `TITLE-ABS-KEY`](https://dev.elsevier.com/sc_search_tips.html), we survey data and the **total of documents found in Scopus** for each combination of keywords [concatenated by the Boolean operator `AND`](https://dev.elsevier.com/sc_search_tips.html).
+- **STEP 3 - Keyword Combination**
 
-They must be **written in English**, with a **minimum of 2** and a **maximum of 70 characters**. They can contain **letters**, **numbers**, **spaces**, **hyphens**, **underscores**, [**phrases**, **wildcards**, and the **Boolean operators `OR` and `AND NOT`**](https://dev.elsevier.com/sc_search_tips.html).
+In this step, you must select **keywords** based on the theme or subject of your research. These keywords will be concatenated using the Boolean operator `AND`, generating all possible combinations. Finally, the **total number of documents found** in Scopus will be retrieved, searching abstracts, keywords, and titles **for each combination**, thus narrowing the scope of your search based on the chosen combination and the total results returned.
+
+- **STEP 4 - Final Survey**
+
+In this final step, all filled fields will be submitted for systematic information survey, removing duplicates and filtering similar documents, leaving only the most relevant and recent data.
+
+### 5.2. Required Fields <img src="https://img.shields.io/badge/Required-dc3545" alt="Required">
+
+- **API Key:** The API key issued by Elsevier, obtained by accessing the Elsevier Portal and registering.
+- **Keywords:** The Keywords, with a **minimum of two** (required) and a **maximum of four**, that the documents you are searching for contain. They must be **written in English**, with a **maximum of 70 characters**, and can contain **letters**, **numbers**, **spaces**, **hyphens**, **underscores**, [**phrases**, **wildcards**, and the **Boolean operators `OR` and `AND NOT`**](https://dev.elsevier.com/sc_search_tips.html).
 
 > [!WARNING]
 > Because **`AND NOT`** can [generate unexpected results](https://dev.elsevier.com/sc_search_tips.html), it should be used in the **last field**.
 
----
+- **Combination:** The keyword combination option that best suits your needs based on the total number of documents found.
 
-### Institutional Network <img src="https://img.shields.io/badge/Required-dc3545" alt="Required">
+### 5.3. Optional Fields <img src="https://img.shields.io/badge/Optional-6C757D" alt="Optional">
 
-Please be aware that the **API Key** will only authenticate correctly if you submit it while using your **academic institution's network**, which must be **registered with Elsevier**. This **does not include** <abbr title="Virtual Private Network">VPN</abbr> or proxy access. Therefore, if you are **fully remote** and **off-campus**, some data may **not be returned**.
-
----
-
-### Quota and Rate Limits <img src="https://img.shields.io/badge/Important-ffc107" alt="Important">
-
-There's a **maximum limit to the number of requests** we can make to [Scopus APIs](https://dev.elsevier.com/sc_apis.html) using your **API Key**. This **request quota resets every seven days**, and you can **check its availability** in the **details panel after completing your survey**. If requests **exceed the quota or throttling rate**, an **error will be returned**. See the [API Key Settings](https://dev.elsevier.com/api_key_settings.html).
-
-These quotas, are **unique to each** <abbr title="Application Programming Interface">**API**</abbr>. According to the [API Key Settings](https://dev.elsevier.com/api_key_settings.html), for the APIs we are using, **Scopus Search** has a **weekly quota of 20,000**, and **Abstract Retrieval** has a **weekly quota of 10,000**.
-
-To avoid [exceeding the API's request rate limit](https://dev.elsevier.com/api_key_settings.html), we employ **progressive rate strategies**, adjusting the **rate**, **backoff time**, **sleep duration**, and **concurrent requests** based on the **total number of requests to be made**.
+- **Date:** The range of years, from the last ten years to the current year, as the target of interest for published articles. By default, the last three years are considered.
+- **Doctype:** The type in which the document is classified.
+- **Pubstage:** The publication stage of the document.
+- **Language:** The language in which the original document was written.
+- **Open Access:** Whether the indexed content is open access or not.
+- **Srctype:** The type of source from which the document originates.
+- **Subjarea:** The subject area in which the document is classified.
+- **Pages:** Whether the document is short (up to 4 pages, such as research notes) or complete (5 pages or more), by the number of pages.
+- **Similarity Threshold:** The threshold value, in the range of 0 to 100, used to filter documents with the same author(s) and similar titles, keeping the one with the most recent publication date.
 
 ---
 
-### Visualization
+## 6. Results
+
+### 6.1. Fields Retrieved
+
+Mapped fields of the CSV file
+
+| Field                     | Column                   | Description                                   |
+| :------------------------ | :----------------------- | :-------------------------------------------- |
+| link `ref=scopus`         | Article Preview Page URL | Scopus article preview page URL               |
+| `dc:identifier`           | Scopus ID                | Article Scopus ID                             |
+| `authors` or `dc:creator` | Authors                  | Complete author list or only the first author |
+| `dc:title`                | Title                    | Article title                                 |
+| `prism:publicationName`   | Publication Name         | Source title                                  |
+| `dc:description`          | Abstract                 | Article complete abstract                     |
+| `prism:coverDate`         | Date                     | Article complete abstract                     |
+| `eid`                     | Electronic ID            | Article Electronic ID                         |
+| `prism:doi`               | DOI                      | Document Object Identifier                    |
+| `prism:volume`            | Volume                   | Identifier for a serial publication           |
+| `citedby-count`           | Citations                | Cited-by count                                |
+
+### 6.2. CSV Metadada
+
+Since the result of the survey is a CSV file, which is essentially a dataset obtained from the Scopus APIs, we must [**acknowledge** both Scopus and Elsevier as **data sources**](https://dev.elsevier.com/tecdoc_attribution_scopus.html). Therefore, we will add some metadata at the **top of the file (4 lines) as comments** indicating the parameters used, survey details, and the date the data was obtained.
+
+**Example:**
+
+```txt
+# GeneratedBy: ScopusSurveyAPI https://github.com/mauprogramador/scopus-survey-api
+# Params: api_key=..., date=2022-2025, keywords=['Python', 'Web API', 'Scopus', 'bibliographic survey'], combination=Python AND Web API AND Scopus, ratio=80
+# Survey: total=5, items_per_page=5, pages_count=1, loss=0doc / 0.00%
+# Source: data retrieved from Scopus APIs on November 22, 2025 via http://api.elsevier.com and http://www.scopus.com.
+```
+
+It is possible to perform more than one survey using the keyword combinations from the table. Therefore, in order to avoid confusion, we will save the CSV files with the combination used to produce that result by default.
+
+**Example:**
+
+| Combination                   | Filename                                  |
+| ----------------------------- | ----------------------------------------- |
+| Python AND Scopus             | [API Key]\_python-scopus_docs.csv         |
+| Python AND Scopus AND Web API | [API Key]\_python-scopus-web-api_docs.csv |
+
+### 6.3. Visualization
 
 To visualize the documents (at least the preview), you can use:
 
 - The **URL** in the **Article Preview Page URL** column:<br>
   <https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=[SCOPUS_ID]&origin=inward>
 
-- The **Digital Object Identifier (DOI)** in the **DOI** column and be redirected to the [Science Direct](https://www.sciencedirect.com/) journal page:<br>
+- The **Digital Object Identifier (DOI)** in the **DOI** column:<br>
   <https://doi.org/[DOI]><br>
 
----
-
-## Examples
+### 6.4. Performance
 
 | Keywords             | Total gather | Process time    | Loss         |
 | -------------------- | ------------ | --------------- | ------------ |
@@ -225,19 +342,20 @@ To visualize the documents (at least the preview), you can use:
 | Python AND Scopus    | 141          | 19.26s          | 1doc / 0.71% |
 | Bibliographic Survey | 1073         | 246.38s (4.10m) | 7doc / 0.65% |
 
-> [!TIP] > <a href="./docs/assets/data/example.csv" download="example.csv">Download a sample survey <abbr title="Comma-Separated Values">CSV</abbr> file</a> and take a look.
+> [!TIP]
+> <a href="./docs/assets/data/example.csv" download="example.csv">Download a sample survey <abbr title="Comma-Separated Values">CSV</abbr> file</a> and take a look.
 
 ---
 
 For questions or concerns please contact me at <sir.silvabmauricio@gmail.com>.
 
-[Terms of Service](./TERMS_OF_SERVICE.md)
+[Terms of Service](./legal/en_US/TERMS_OF_SERVICE.md)
 &nbsp;&#8226;&nbsp;
-[Privacy Policy](./PRIVACY_POLICY.md)
+[Privacy Policy](./legal/en_US/PRIVACY_POLICY.md)
 &nbsp;&#8226;&nbsp;
-[Cookie Policy](./COOKIE_POLICY.md)
+[Cookie Policy](./legal/en_US/COOKIE_POLICY.md)
 &nbsp;&#8226;&nbsp;
-[Attributions](./ATTRIBUTIONS.md)
+[Attributions](./legal/en_US/ATTRIBUTIONS.md)
 
 [License](./LICENSE)
 &nbsp;&#8226;&nbsp;
