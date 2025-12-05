@@ -1,94 +1,98 @@
 #!/bin/bash
 
-REGEX="^[0-9]{1,2}$"
-trap "echo -e '\033[35;1m!\033[m \033[91mGot an interruption ✘\033[m' ; exit 1" SIGINT
-echo -e "\033[35;1m>\033[m Checking Prerequisites..."
+REQUIRED_VERSION="3.12"
+VENV_NAME=".venv"
 
-# Checking if Python3 (and which of it) is installed
+trap "echo -e '\033[35;1m!\033[m \033[91mGot an interruption ✘\033[m'; exit 1" SIGINT
+echo "Checking Prerequisites..."
+echo -e "- Using version\033[37;1m ^$REQUIRED_VERSION\033[m for \033[37;1mPython3\033[m"
+
+# Checking Python
 if command -v python3 &>/dev/null; then
 
-    version="11"
-    echo "Args: $1"
-    if [[ -n "$1" ]]; then
-        if ! [[ "$1" =~ $REGEX ]]; then
-            echo -e "-\033[91m Invalid Python3 version ✘\033[m"
-            echo -e "\033[35;1m!\033[m Please inform a valid Python3 version (e.g. inform \033[37;1m11\033[m for Python3.11)"
-            exit 1
-        fi
-        version="$1"
-    fi
-
-    if command -v python3."$version" &>/dev/null; then
-        echo -e "-\033[92m $(python3."$version" -V) installed ✔\033[m"
-        version="11"
-    else
-        version=$(ls -1 /usr/bin/python3* | grep -Eo 'python3\.[0-9]*$' | sort -V | uniq | tail -n 1 | grep -oP '\d+\.\K\d+')
-
-        echo -e "-\033[91m Python 3."$version" not installed ✘\033[m"
-        echo -e "\033[93mWARNING:\033[m This application was built on \033[37;1mPython3.11.0rc1\033[m, so some unexpected errors may occur when using a different version."
-
-        echo -ne "\033[35;1m?\033[m Would you like to continue with \033[37;1m$(python3."$version" -V)\033[m? [\033[32my\033[m/\033[31mn\033[m]: "
-        read answer
-
-        if [ "$answer" = "Y" ] || [ "$answer" = "y" ]; then
-            echo -e "-\033[92m Running with $(python3."$version" -V) ✔\033[m"
-        else
-            echo -e "\033[35;1m!\033[m Please install \033[37;1mPython\033[m at least version \033[37;1m3.11\033[m. For further information visit https://docs.python-guide.org/starting/install3/linux/"
-            exit 1
-        fi
-    fi
+	if command -v python"$REQUIRED_VERSION" &>/dev/null; then
+		echo -e "-\033[32m $(python"$REQUIRED_VERSION" -V) found ✔\033[m"
+	else
+		echo -e "-\033[91m Python $REQUIRED_VERSION not found ✘\033[m"
+		echo ""
+		echo -e "\033[33m$(python3 -V) found, but Python $REQUIRED_VERSION is required, please install it\033[m"
+		exit 1
+	fi
 else
-    echo -e "-\033[91m Python3 not installed ✘\033[m"
-    echo -e "\033[35;1m!\033[m Please install \033[37;1mPython\033[m at least version \033[37;1m3.11\033[m. For further information visit https://docs.python-guide.org/starting/install3/linux/"
-    exit 1
+	echo -e "-\033[91m Python3 not found ✘\033[m"
+	echo ""
+	echo -e "\033[33mPython $REQUIRED_VERSION is required, please install it\033[m"
+	exit 1
 fi
 
-# Checking if Pip is installed
+# Checking Pip
 if command -v pip &>/dev/null; then
-    echo -e "-\033[92m Pip $(pip --version | awk '{print $2}') installed ✔\033[m"
+	echo -e "-\033[32m Pip $(pip --version | awk '{print $2}') found ✔\033[m"
 else
-    echo -e "-\033[91m Pip not installed ✘\033[m"
-    exit 1
+	echo -e "-\033[91m Pip not found ✘\033[m"
+	echo ""
+	echo -e "\033[33mPip is required, please install it\033[m"
+	exit 1
 fi
 
-# Checking if Venv is installed
+# Checking Venv
 if python3 -c 'import venv' &>/dev/null; then
-    echo -e "-\033[92m Venv Module installed ✔\033[m"
+	echo -e "-\033[32m Venv module found ✔\033[m"
 else
-    echo -e "-\033[91m Venv Module not installed ✘\033[m"
-    exit 1
+	echo -e "-\033[91m Venv module not found ✘\033[m"
+	echo ""
+	echo -e "\033[33mVenv module is required, please install it\033[m"
+	exit 1
 fi
 
-echo -e "\033[35;1m>\033[m Creating \033[37;1mPython Virtual Environment\033[m..."
+echo "Creating Virtual Environment..."
 
-if [ ! -d ".venv" ]; then
-    python3."$version" -m venv .venv
+if [ ! -d "$VENV_NAME" ]; then
+	python"$REQUIRED_VERSION" -m venv "$VENV_NAME"
+else
+	echo -e "-\033[91m Venv conflicting ✘ \033[m"
+	echo ""
+	echo -e "\033[33mVenv directory \033[m(\033[37;1m$VENV_NAME\033[m\033[m)\033[33m already exists, skipping creation\033[m"
+	exit 1
 fi
 
-# Check the exit status of the venv creation
+# Check Exit Status
 if [ $? -ne 0 ]; then
-    echo -e "-\033[91m Failed to create Python Venv ✘ \033[m"
-    echo -e "\033[35;1m>\033[m Removing directory..."
-    if [ -d ".venv" ]; then
-        rm -rf ".venv"
-    fi
-    exit 1
+	echo -e "-\033[91m Failed to create Venv ✘ \033[m"
+	echo ""
+	echo -e "\033[33mRemoving Venv directory, please try later\033[m"
+
+	if [ -d "$VENV_NAME" ]; then
+		rm -rf "$VENV_NAME"
+	fi
+	exit 1
 fi
 
-echo -e "-\033[92m Virtual Environment \033[m(\033[34;1m.venv\033[m\033[m)\033[92m created ✔\033[m"
+echo -e "-\033[32m Venv \033[m(\033[37;1m$VENV_NAME\033[m\033[m)\033[32m created ✔\033[m"
 
-source .venv/bin/activate
+# shellcheck source=.venv/
+source "$VENV_NAME/bin/activate"
 
-echo -e "\033[35;1m>\033[m Upgrading \033[37;1mPip\033[m and installing packages...\033[m"
+echo "Setting Pip, Setuptools and Wheel..."
 
-pip install --upgrade pip
+pip install --upgrade pip setuptools wheel
 
-pip3 install wheel
+# Check Exit Status
+if [ $? -ne 0 ]; then
+	echo -e "-\033[91m Failed in Setting Packages ✘ \033[m"
+	echo ""
+	echo -e "\033[33mRemoving Venv directory, please try later\033[m"
 
-pip3 install poetry
+	if [ -d "$VENV_NAME" ]; then
+		deactivate
+		rm -rf "$VENV_NAME"
+	fi
+	exit 1
+fi
 
-echo -e "-\033[92m Wheel and Poetry packages installed ✔\033[m"
+echo -e "-\033[32m Packages installed ✔\033[m"
 
 deactivate
 
-echo -e "\033[35;1m>\033[m Completed. Please run\033[37;1m make install\033[m\n"
+echo -e "\033[92mAll Done ✔\033[m"
+exit 0
