@@ -86,18 +86,10 @@ audit:
 
 
 # Requirements
+# poetry self add poetry-plugin-export
 
 req:
-	@poetry export -f requirements.txt -o requirements/requirements.txt --without-hashes --without-urls --only main
+	@poetry export -f requirements.txt -o requirements.txt --without-hashes --without-urls --only main
 
 req-dev:
-	@poetry export -f requirements.txt -o requirements/dev_requirements.txt --without-hashes --without-urls --with dev
-
-req-docs:
-	@poetry export -f requirements.txt -o requirements/docs_requirements.txt --without-hashes --without-urls --only docs
-
-req-test:
-	@poetry export -f requirements.txt -o requirements/tests_requirements.txt --without-hashes --without-urls --with test
-
-req-all:
-	@poetry export -f requirements.txt -o requirements/all_requirements.txt --without-hashes --without-urls --with dev --with docs --with test
+	@poetry export -f requirements.txt -o requirements-dev.txt --without-hashes --without-urls --all-groups
