@@ -7,6 +7,7 @@ from starlette.middleware.base import _StreamingResponse
 from src.adapters.presenters.csv_response import CSVResponse
 from src.adapters.presenters.json_response import ErrorJSON
 from src.adapters.presenters.template_response import TemplateResponse
+from src.core.config.config import RATELIMIT_POLICY, SERVER
 from tests.conftest import assert_error_json
 from tests.mocks.helpers import fqn
 from tests.mocks.raw import (
@@ -23,12 +24,15 @@ RETRIEVE = fqn(CSVResponse.retrieve)
 
 
 @mark.asyncio
-async def test_success_process_time(client: Client):
+async def test_success_headers(client: Client):
     client.cookies.clear()
     client.headers.clear()
     res = await client.get(URL_WEB)
     assert res.status_code == HTTP_200
-    assert res.headers["X-Process-Time"] and res.headers["X-RateLimit-Policy"]
+    assert res.headers["X-Trace-ID"] and res.headers["X-Process-Time"]
+    assert res.headers["Content-Security-Policy"] is not None
+    assert res.headers["X-RateLimit-Policy"] == RATELIMIT_POLICY
+    assert res.headers["Server"] == SERVER.get()
 
 
 @mark.asyncio

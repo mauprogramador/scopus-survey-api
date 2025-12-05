@@ -9,7 +9,7 @@ from uvloop import EventLoopPolicy, install
 
 from src.adapters.presenters.json_response import ErrorJSON, ErrorResponse
 from src.core.common.types import Json
-from src.core.config.config import DIRECTORY, PREFIX
+from src.core.config.config import DIRECTORY, PREFIX, SERVER
 from src.core.domain.http_exceptions import HTTPError
 from src.core.domain.translations import Translations
 from src.framework.fastapi.main import app
@@ -34,6 +34,8 @@ def event_loop_policy():
 
 @fixture(scope="session", autouse=True)
 def lifespan():
+    SERVER.set("Pytest/1.2.3")
+
     Translations.load_all()
     csv_file_path = DIRECTORY / CSV_FILE_NAME
 
