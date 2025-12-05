@@ -39,7 +39,9 @@ from tests.mocks.raw import (
 GET = fqn(RetryClient.get)
 
 
-class TestE2EUserFlow:
+class TestUserFlowSurveySteps:
+    """Complete user survey steps flow"""
+
     _token_header: str = None
     _token_session: str = None
     _token_cookie: str = None
@@ -58,7 +60,7 @@ class TestE2EUserFlow:
 
     @mark.asyncio
     @classmethod
-    async def test_01_web(cls, client: Client):
+    async def test_01_web_form_spa(cls, client: Client):
         client.cookies.clear()
         client.headers.clear()
 
@@ -76,7 +78,7 @@ class TestE2EUserFlow:
 
     @mark.asyncio
     @classmethod
-    async def test_02_csv_previous(cls, client: Client):
+    async def test_02_previous_survey_csv(cls, client: Client):
         cls._api_key = token_hex(16)
         csv_params = {
             "csrfToken": cls._token_header,
@@ -98,7 +100,7 @@ class TestE2EUserFlow:
 
     @mark.asyncio
     @classmethod
-    async def test_03_combination(cls, mocker: Mocker, client: Client):
+    async def test_03_keyword_combination(cls, mocker: Mocker, client: Client):
         combination_params = {
             "csrfToken": cls._token_header,
             "apiKey": cls._api_key,
@@ -132,7 +134,7 @@ class TestE2EUserFlow:
 
     @mark.asyncio
     @classmethod
-    async def test_04_survey(cls, mocker: Mocker, client: Client):
+    async def test_04_final_survey(cls, mocker: Mocker, client: Client):
         search_params = {
             "csrfToken": cls._token_header,
             "apiKey": cls._api_key,
