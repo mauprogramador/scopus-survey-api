@@ -20,7 +20,11 @@ run:
 
 docker:
 	@docker build -q -t scopus-survey-api .
-	@docker run -d --env HOST=0.0.0.0 --env-file .env --name scopus-survey-api -p ${PORT}:${PORT} scopus-survey-api
+	@docker run -d --env HOST=${HOST} --env-file .env --name scopus-survey-api -p ${PORT}:${PORT} scopus-survey-api
+	@docker ps --filter "name=scopus-survey-api"
+
+docker-logs:
+	@docker logs --tail 50 --follow scopus-survey-api
 
 
 # Documentation
@@ -34,16 +38,10 @@ docs:
 test:
 	@poetry run pytest -v --color=yes
 
-test-docker:
-	@docker exec -it scopus-survey-api poetry run pytest -v --color=yes
-
 coverage:
 	@poetry run coverage erase
 	@poetry run coverage run -m pytest -q
 	@poetry run coverage report
-
-coverage-docker:
-	@docker exec -it scopus-survey-api poetry run coverage erase && coverage run -m pytest -q && coverage report
 
 
 # Formatting and Linting
