@@ -154,6 +154,8 @@ Dependências da Aplicação
 - [AIOHTTP-Retry `v2.9.1`](https://github.com/inyutin/aiohttp_retry)
 - [AIOLimiter `v1.2.1`](https://aiolimiter.readthedocs.io/en/stable/)
 - [Uvloop `v0.21.0`](https://uvloop.readthedocs.io/)
+- [Gunicorn `v23.0.0`](https://gunicorn.org/)
+- [Uvicorn-worker `v0.4.0`](https://github.com/Kludex/uvicorn-worker)
 - [TheFuzz `v0.22.1`](https://github.com/seatgeek/thefuzz)
 - [Python-Levenshtein `v0.27.1`](https://pypi.org/project/python-Levenshtein/)
 - [tqdm `v4.67.5`](https://pypi.org/project/tqdm)

@@ -114,7 +114,7 @@ Crie um arquivo `.env` para configurar as seguintes opções:
 
 - Defina o parâmetro `WORKERS` para iniciar **múltiplos processos do servidor**. **Máximo de 4**.
 
-- Desative a barra de progresso ao executar em produção.
+- Em produção, `RELOAD`, `DEBUG`, e `PROGRESS_BAR` são desativados automaticamente.
 
 > [!TIP]
 > Dê uma olhada no arquivo [`.env.example`](./.env.example).
@@ -123,41 +123,52 @@ Crie um arquivo `.env` para configurar as seguintes opções:
 
 ## 3. Execução
 
-### 3.1. Com o Poetry ou Pip
+### 3.1. Configurar um Ambiente Virtual (venv) do Python
 
 Você precisará do [Python3.12](https://www.python.org/downloads/release/python-31211/) com o [Pip](https://pip.pypa.io/en/stable/installation/) e o [Venv](https://docs.python.org/3/library/venv.html) instalados.
 
 ```bash
-# Crie um novo ambiente virtal (Venv)
-python3.12 -m venv .venv
+# Crie um novo ambiente virtal (.venv)
+make venv
 
 # Ative o Venv
 source .venv/bin/activate
-
-# Atualize o Pip
-(.venv) pip install --upgrade pip
-
-# Instale o pacote Wheel
-(.venv) pip3 install wheel
-
-# Instale as dependências com Poetry [1]
-(.venv) pip3 install poetry
-(.venv) make install
-
-# Instale as dependências com Pip [2]
-(.venv) pip3 install -r requirements/requirements.txt
-
-# Execute o App localmente
-(.venv) make run
 ```
 
-### 3.2. Com o Docker
+### 3.2. Desenvolvimento (Poetry)
 
-Você precisará do [Docker](https://www.docker.com/) instalado.
+Instale o [Poetry](https://python-poetry.org/) com todas as dependências: `app`, `dev`, `tests`, `docs` e execute com o [Uvicorn](https://uvicorn.dev/).
 
 ```bash
-# Execute o App em Contêiner Docker
+# Instale todos os grupos de dependencias do pyproject.toml com o Poetry
+(.venv) make install-dev
+
+# Execute com o Poetry
+(.venv) make run-dev
+```
+
+### 3.3. Produção (Pip)
+
+Instale apenas as principais dependências: `app` e execute com o [Gunicorn](https://gunicorn.org/).
+
+```bash
+# Instale apenas as principais dependências do requirements.txt com o Pip
+(.venv) make install-prod
+
+# Execute com o Gunicorn
+(.venv) make run-prod
+```
+
+### 3.4. Docker
+
+Você precisará ter o [Docker](https://www.docker.com/) instalado. Crie a imagem `scopus-survey-api` a partir do [Dockerfile](https://docs.docker.com/reference/dockerfile/), instale apenas as principais dependências do `requirements.txt` com o [Pip](https://pip.pypa.io/en/stable/installation/) e execute com o [Uvicorn](https://uvicorn.dev/).
+
+```bash
+# Execute em um contêiner Docker a partir do Dockerfile
 make docker
+
+# Acompanhe e exiba os últimos logs
+make docker-logs
 ```
 
 ---

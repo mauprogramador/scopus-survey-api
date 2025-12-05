@@ -118,7 +118,7 @@ Create an `.env` file to configure the following options:
 
 - Set `WORKERS`, **maximum 4**, to start **multiple server processes**.
 
-- Disable progress bar when running in production.
+- In production, `RELOAD`, `DEBUG`, and `PROGRESS_BAR` are automatically disabled.
 
 > [!TIP]
 > Take a look at the [`.env.example`](./.env.example) file.
@@ -127,41 +127,52 @@ Create an `.env` file to configure the following options:
 
 ## 3. Run
 
-### 3.1. With Poetry or Pip
+### 3.1. Set Up a Python Venv
 
 You will need [Python3.12](https://www.python.org/downloads/release/python-31211/) with [Pip](https://pip.pypa.io/en/stable/installation/) and [Venv](https://docs.python.org/3/library/venv.html) installed.
 
 ```bash
-# Create new Venv
-python3.12 -m venv .venv
+# Create new Venv (.venv)
+make venv
 
 # Activate Venv
 source .venv/bin/activate
-
-# Update Pip
-(.venv) pip install --upgrade pip
-
-# Install Wheel
-(.venv) pip3 install wheel
-
-# Install dependencies with Poetry [1]
-(.venv) pip3 install poetry
-(.venv) make install
-
-# Install dependencies with Pip [2]
-(.venv) pip3 install -r requirements/requirements.txt
-
-# Run the App locally
-(.venv) make run
 ```
 
-### 3.2. With Docker
+### 3.2.  Development (Poetry)
 
-You will need [Docker](https://www.docker.com/) installed.
+Install [Poetry](https://python-poetry.org/) with all dependencies: `app`, `dev`, `tests`, `docs`, and run with [Uvicorn](https://uvicorn.dev/).
 
 ```bash
-# Run the App in Docker Container
+# Install all dependencies groups from pyproject.toml with Poetry
+(.venv) make install-dev
+
+# Run with Poetry
+(.venv) make run-dev
+```
+
+### 3.3. Production (Pip)
+
+Install only the main dependencies: `app` and run with [Gunicorn](https://gunicorn.org/).
+
+```bash
+# Install only main dependencies from requirements.txt with Pip
+(.venv) make install-prod
+
+# Run with Gunicorn
+(.venv) make run-prod
+```
+
+### 3.4. Docker
+
+You will need [Docker](https://www.docker.com/) installed. Build the `scopus-survey-api` image from the [Dockerfile](https://docs.docker.com/reference/dockerfile/), install only the main dependencies from `requirements.txt` with [Pip](https://pip.pypa.io/en/stable/installation/), and run with [Uvicorn](https://uvicorn.dev/).
+
+```bash
+# Run in Docker Container from Dockerfile
 make docker
+
+# Follow and show the last logs
+make docker-logs
 ```
 
 ---
