@@ -34,14 +34,15 @@ class FlowGuardingMonitorMiddleware(BaseHTTPMiddleware):
     async def dispatch(
         self, request: Request, call_next: RequestResponseEndpoint
     ) -> Response | ErrorJSON | HTMLResponse:
-        trace_id = str(uuid4())
-        token = TRACE_ID_CTX.set(trace_id)
+        token = TRACE_ID_CTX.set(str(uuid4()))
         start_time = perf_counter()
 
         try:
             response = await call_next(request)
+            trace_id = TRACE_ID_CTX.get()
 
         except Exception as exc:  # pylint: disable=W0718
+            trace_id = TRACE_ID_CTX.get()
             message = LOG.error_message(exc)
 
             LOG.error(message)

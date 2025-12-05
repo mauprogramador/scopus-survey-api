@@ -10,6 +10,7 @@ from src.utils.logging import Logging
 
 APP = "src.framework.fastapi.main:app"
 PREFIX = "/v2/scopus-survey"
+
 TRACE_ID_CTX: ContextVar[str] = ContextVar("trace_id")
 
 DIRECTORY = Path("csv")
