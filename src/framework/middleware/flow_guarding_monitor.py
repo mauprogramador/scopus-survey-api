@@ -15,7 +15,13 @@ from starlette.responses import Response
 from src.adapters.presenters.json_response import ErrorJSON
 from src.adapters.presenters.template_response import TemplateResponse
 from src.core.common.patterns import API_ROUTES_PATTERN
-from src.core.config.config import LOG, RATELIMIT_POLICY, TRACE_ID_CTX
+from src.core.config.config import (
+    HEADERS,
+    LOG,
+    RATELIMIT_POLICY,
+    SERVER,
+    TRACE_ID_CTX,
+)
 from src.core.domain.http_exceptions import HTTPError
 
 
@@ -23,6 +29,7 @@ class FlowGuardingMonitorMiddleware(BaseHTTPMiddleware):
     """Middleware for tracing, process time and uncaught errors"""
 
     _RATELIMIT_POLICY = "X-RateLimit-Policy"
+    _SERVER = {"Server": SERVER.get()}
     _PROCESS_TIME = "X-Process-Time"
     _TRACE_ID = "X-Trace-ID"
     _ONE_MINUTE = 60
@@ -70,9 +77,9 @@ class FlowGuardingMonitorMiddleware(BaseHTTPMiddleware):
         response.headers[self._TRACE_ID] = trace_id
         response.headers[self._PROCESS_TIME] = duration
 
+        response.headers.update(HEADERS)
         response.headers[self._RATELIMIT_POLICY] = RATELIMIT_POLICY
-
-        LOG.trace(request, response.status_code, process_time)
+        response.headers.update(self._SERVER)
 
         is_error = response.status_code >= HTTPStatus.BAD_REQUEST
         if is_error and not match(API_ROUTES_PATTERN, request.url.path):

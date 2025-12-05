@@ -12,6 +12,7 @@ APP = "src.framework.fastapi.main:app"
 PREFIX = "/v2/scopus-survey"
 
 TRACE_ID_CTX: ContextVar[str] = ContextVar("trace_id")
+SERVER: ContextVar[str] = ContextVar("server")
 
 DIRECTORY = Path("csv")
 FILE = "docs.csv"
@@ -36,11 +37,12 @@ CSP = (
     "'sha256-jRsTyupz2e+ruvGYICFat6kc2Gm1ilk7iLSex8+pM+I=' "
     "https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui-bundle.js; "
     f"style-src 'self' 'unsafe-inline' {BASE_URL}/styles {BASE_URL}/libs "
-    "https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui.css; "
+    "https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui.css "
+    "https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui.css.map; "
     f"img-src 'self' data: {BASE_URL}/images {BASE_URL}/svgs "
     "https://fastapi.tiangolo.com/img/favicon.png; "
     f"font-src 'self' {BASE_URL}/fonts; "
-    f"connect-src 'self' {BASE_URL}; "
+    f"connect-src 'self' {BASE_URL} https://cdn.jsdelivr.net; "
     "frame-ancestors 'none'; "
     "form-action 'self'; "
     "object-src 'none'; "
@@ -48,11 +50,11 @@ CSP = (
     "frame-src 'none'; "
     "base-uri 'none'"
 )
-HEADERS = [
-    ("Content-Security-Policy", CSP),
-    ("Cross-Origin-Opener-Policy", "same-origin"),
-    ("Referrer-Policy", "strict-origin-when-cross-origin"),
-    ("X-Content-Type-Options", "nosniff"),
-    ("X-Frame-Options", "DENY"),
-    ("X-XSS-Protection", "1; mode=block"),
-]
+HEADERS = {
+    "Content-Security-Policy": CSP,
+    "Cross-Origin-Opener-Policy": "same-origin",
+    "Referrer-Policy": "strict-origin-when-cross-origin",
+    "X-Content-Type-Options": "nosniff",
+    "X-Frame-Options": "DENY",
+    "X-XSS-Protection": "1; mode=block",
+}
