@@ -66,7 +66,7 @@ class Logging:
     _TRACE = (
         "[\033[36m{host}\033[m:\033[36m{port}\033[m] \033[{method_color}m"
         "{method} \033[37;1m{url}\033[m \033[{status_color}m{code} "
-        "{status_phrase} \033[m{time:.2f}s"
+        "{status_phrase} \033[m{time}"
     )
     _COMBINATIONS = (
         "Keywords: \033[33m{keywords}\033[m. Combinations: \033[33m"
@@ -235,7 +235,7 @@ class Logging:
         log_prefix: _Prefix,
         request: Request | _LogRequest,
         code: int,
-        time: float,
+        time: str,
     ) -> None:
         if request.client is None:
             host, port = self._params.host, self._params.port
@@ -257,7 +257,7 @@ class Logging:
         self._logger.setLevel(INFO)
         self._logger.info("%s %s\033[m", log_prefix, message)
 
-    def trace(self, request: Request, code: int, time: float) -> None:
+    def trace(self, request: Request, code: int, time: str) -> None:
         self._trace(_Prefix.TRACE, request, code, time)
 
     def api_call(self, url: str, code: int, time: float) -> None:
@@ -266,4 +266,5 @@ class Logging:
         else:
             log_prefix = _Prefix.ABSTRACT
         url = sub(API_KEY_LOG_PATTERN, self._HIDE_API_KEY, url)
-        self._trace(log_prefix, _LogRequest(url), code, time)
+        self._trace(log_prefix, _LogRequest(url), code, f"{time:.2f}s")
+

@@ -17,7 +17,9 @@ FILE = "docs.csv"
 
 TOKEN = token_hex(nbytes=20)
 SECRET_KEY = token_urlsafe(nbytes=20)
+
 SALT = "scopus-survey-csrf-token"
+MAX_AGE = 3600  # 1 hour
 
 ENV = EnvConfig()
 LOG = Logging(ENV.log_params)
@@ -25,9 +27,6 @@ LOG = Logging(ENV.log_params)
 LIMITER = Limiter(key_func=get_remote_address, headers_enabled=True)
 RATELIMIT_POLICY = "60 requests per 2 seconds per user (slowapi)"
 LIMIT = "60/2seconds"
-
-MAX_AGE = 3600  # 1 hour
-SHUTDOWN_TIMEOUT = 5
 
 BASE_URL = f"http://{ENV.host}:{ENV.port}"
 CSP = (

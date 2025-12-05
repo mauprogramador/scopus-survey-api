@@ -25,6 +25,7 @@ class FlowGuardingMonitorMiddleware(BaseHTTPMiddleware):
     _RATELIMIT_POLICY = "X-RateLimit-Policy"
     _PROCESS_TIME = "X-Process-Time"
     _TRACE_ID = "X-Trace-ID"
+    _ONE_MINUTE = 60
 
     def __init__(self, app: FastAPI):
         """Middleware for tracing, process time and uncaught errors"""
@@ -57,8 +58,17 @@ class FlowGuardingMonitorMiddleware(BaseHTTPMiddleware):
             TRACE_ID_CTX.reset(token)
 
         process_time = perf_counter() - start_time
+        if process_time > self._ONE_MINUTE:
+            minutes = process_time / self._ONE_MINUTE
+            duration = f"{process_time:.2f}s ({minutes:.2f}m)"
+        else:
+            duration = f"{process_time:.2f}s"
+
+        LOG.trace(request, response.status_code, duration)
+
         response.headers[self._TRACE_ID] = trace_id
-        response.headers[self._PROCESS_TIME] = f"{process_time:.2f}s"
+        response.headers[self._PROCESS_TIME] = duration
+
         response.headers[self._RATELIMIT_POLICY] = RATELIMIT_POLICY
 
         LOG.trace(request, response.status_code, process_time)
