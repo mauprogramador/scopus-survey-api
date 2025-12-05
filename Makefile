@@ -1,22 +1,63 @@
 -include .env
 .PHONY: $(MAKECMDGOALS)
 
+POETRY_VERSION := 2.1.3
+HOST=0.0.0.0
 PORT ?= 8000
 
+# Help
 
-# Environment setup
+help:
+	@echo "          AVAILABLE COMMANDS"
+	@echo "          venv  Creates Venv and .env"
+	@echo "   install-dev  Installs all dependencies for Dev"
+	@echo "  install-prod  Installs only Prod dependencies"
+	@echo "         clean  Removes Venv, logs, and caches"
+	@echo "       run-dev  Runs in Dev environment"
+	@echo "      run-prod  Runs in Prod environment"
+	@echo "        docker  Builds and runs in Docker Container"
+	@echo "   docker-logs  Streams the Container's recent logs"
+	@echo "          docs  Runs the documentation (MKDocs)"
+	@echo "          test  Runs the tests (Pytest)"
+	@echo "      coverage  Runs the test Coverage"
+	@echo "        format  Runs the code formatters"
+	@echo "          lint  Runs the code linters"
+	@echo "    lint-tests  Runs the code linters on tests"
+	@echo "       locales  Compiles the translation files"
+	@echo "         audit  Runs vulnerability audits"
+	@echo "           req  Compiles Prod requirements"
+	@echo "       req-dev  Compiles Dev requirements"
+
+# Environment
 
 venv:
 	@bash venv.sh
+	@cp .env.example .env
 
-install:
-	@poetry install --no-root
+install-dev:
+	@pip install --no-cache-dir poetry==$(POETRY_VERSION)
+	@poetry install --all-groups
+
+install-prod:
+	@pip install --no-deps -r requirements.txt
+
+clean:
+	@deactivate
+	@rm -rf .venv/
+	@rm -rf .logs/
+	@rm -rf __pycache__/
+	@rm -rf .pytest_cache/
+	@rm -rf .mypy_cache/
+	@rm .coverage
 
 
-# Run application
+# Run
 
-run:
+run-dev:
 	@poetry run python3 -m src
+
+run-prod:
+	@gunicorn -c src/gunicorn.conf.py
 
 docker:
 	@docker build -q -t scopus-survey-api .
@@ -75,7 +116,7 @@ locales:
 	@msgfmt web/locales/pt_BR/LC_MESSAGES/error.po -o web/locales/pt_BR/LC_MESSAGES/error.mo
 
 
-# Vulnerability audit
+# Vulnerability
 
 audit:
 	@poetry run pip-audit
