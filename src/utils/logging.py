@@ -17,6 +17,7 @@ from sys import exc_info, stdout
 from traceback import FrameSummary, extract_tb
 
 from fastapi import Request
+from gunicorn.glogging import Logger as GuniLogger
 from uvicorn.config import LOGGING_CONFIG
 
 from src.core.common.patterns import ANSI_ESCAPE_PATTERN, API_KEY_LOG_PATTERN
@@ -268,3 +269,13 @@ class Logging:
         url = sub(API_KEY_LOG_PATTERN, self._HIDE_API_KEY, url)
         self._trace(log_prefix, _LogRequest(url), code, f"{time:.2f}s")
 
+
+class _CustomGunicornLogger(GuniLogger):
+    """Custom logger for Gunicorn log messages"""
+
+    error_fmt = r"%(asctime)s %(levelname)s: %(message)s"
+    datefmt = r"%Y-%m-%d %H:%M:%S"
+    access_fmt = ""
+
+    def access(self, resp, req, environ, request_time):
+        pass
