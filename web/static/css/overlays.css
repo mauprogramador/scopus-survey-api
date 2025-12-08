@@ -113,11 +113,12 @@
   animation-direction: normal;
   animation-duration: 0.5s;
   align-items: center;
-  position: absolute;
+  position: fixed;
   margin-top: 0.7rem;
   max-width: 500px;
   display: flex;
   z-index: 6;
+  top: 8px;
 }
 .alert-msg {
   justify-content: space-evenly;
@@ -132,6 +133,9 @@
 }
 .btn-close {
   --bs-btn-close-bg: url('/svgs/close.svg');
+}
+.alert-dismissible .btn-close {
+  padding: 0;
 }
 
 /* Alerts Color */

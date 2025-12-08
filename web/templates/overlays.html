@@ -12,14 +12,14 @@
 </dialog>
 
 
-<dialog id="success-alert" class="container alert fade show" role="alert" tabindex="-1" aria-label="Operation succeeded"
-  aria-live="polite" aria-atomic="true" aria-modal="false" hidden>
+<dialog id="success-alert" class="container alert alert-dismissible fade show" role="alert" tabindex="-1"
+  aria-label="Operation succeeded" aria-live="polite" aria-atomic="true" aria-modal="false" hidden>
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" aria-hidden="true">
     <path
       d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
   </svg>
   <div id="success-alert-msg" class="alert-msg"></div>
-  <button class="btn-close" type="button" aria-label="Close alert"></button>
+  <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close alert"></button>
 </dialog>
 
 <dialog id="warning-alert" class="container alert fade show" role="alert" tabindex="-1"
@@ -59,12 +59,12 @@
 </dialog>
 
 <div id="details-modal" class="modal fade modal-fullscreen-sm-down" role="dialog" data-bs-backdrop="static"
-  data-bs-keyboard="false" tabindex="-1" aria-modal="true" aria-expanded="false" aria-labelledby="modal-title"
+  data-bs-keyboard="false" tabindex="-1" aria-modal="true" aria-expanded="false" aria-labelledby="details-title"
   aria-describedby="modal-desc" hidden>
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 id="modal-title" class="modal-title">Details</h5>
+        <h5 id="details-title" class="modal-title">Details</h5>
         <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close details"></button>
       </div>
       <div class="modal-body" aria-live="polite" aria-atomic="false">
@@ -82,6 +82,27 @@
           </thead>
           <tbody id="details-tbody"></tbody>
         </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="warning-modal" class="modal fade modal-dialog modal-dialog-centered modal-fullscreen-sm-down" role="dialog"
+  data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-modal="true" aria-expanded="false"
+  aria-labelledby="warning-title" aria-describedby="modal-body" hidden>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 id="warning-title" class="modal-title">Warning</h5>
+        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close warning"></button>
+      </div>
+      <div class="modal-body" aria-live="polite" aria-atomic="false">
+        <p id="quota-exceed-warning" role="alert" aria-live="polite" aria-atomic="true" hidden>
+          It will not get all the results for options beyond the max quota limit
+        </p>
+        <p id="high-requests-warning" role="alert" aria-live="polite" aria-atomic="true" hidden>
+          It have a very high total requests to make (it gonna take too long)
+        </p>
       </div>
     </div>
   </div>
