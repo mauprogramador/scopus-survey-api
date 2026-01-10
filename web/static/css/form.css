@@ -25,11 +25,16 @@
 
 /* Input Icon */
 .field-wrapper .field-icon {
+  color: var(--emphasis-color);
   padding-bottom: 0.2rem;
   padding-left: 0.3rem;
-  color: var(--emphasis-color);
   align-items: end;
   display: flex;
+}
+.field-icon:has(
+    + :is(input:not([type='radio']), select):is(:focus, :focus-visible)
+  ) {
+  color: var(--focus-color) !important;
 }
 
 /* Fields */
@@ -41,8 +46,8 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   line-height: normal;
-  border-radius: 0;
   color: var(--black);
+  border-radius: 0;
   border: none;
 }
 .field-wrapper input:not([type='radio'])::placeholder {
@@ -52,26 +57,52 @@
   -webkit-box-shadow: 0 0 0 1000px var(--white) inset !important;
   box-shadow: 0 0 0 1000px var(--white) inset !important;
 }
-.field-wrapper :is(input:not([type='radio']), select):focus {
-  background-color: var(--white);
-  box-shadow: none;
-  color: var(--black);
-}
-.field-wrapper:has(:is(input:not([type='radio']), select):focus-visible) {
-  box-shadow: 9px -1px 2px var(--white), 7px 7px 3px -2px #bbbbbb;
-}
-.field-wrapper:has(
-    input:not([type='radio']):focus-visible,
-    select:focus-visible
-  )
-  .field-icon {
-  color: var(--focus-color) !important;
-}
 .field-wrapper input:not([type='radio']):focus::placeholder {
   color: var(--focus-color) !important;
 }
-.field-wrapper select:has(option:first-child:checked):focus {
-  color: var(--focus-color) !important;
+.field-wrapper :is(input:not([type='radio']), select):focus {
+  background-color: var(--white);
+  box-shadow: none;
+}
+.field-wrapper:has(input:not([type='radio']), select):is(
+    :hover,
+    :focus-within
+  ) {
+  border-color: var(--primary-color) !important;
+}
+.field-wrapper:has(
+    input[data-checked='true'][aria-invalid='false']:valid:not(
+        [type='radio'],
+        :placeholder-shown
+      )
+  ) {
+  border-color: var(--valid-color) !important;
+}
+.field-wrapper:has(
+    input[data-checked='true'][aria-invalid='true']:invalid:not([type='radio'])
+  ) {
+  border-color: var(--invalid-color) !important;
+}
+.field-wrapper:has(input:not([type='radio']), select):focus-within {
+  box-shadow: 1px 5px 3px -3px #bbbbbb;
+  outline: 3px dashed var(--focus-color);
+  outline-offset: 3px;
+}
+.field-wrapper:has(
+    :is(
+        input:not([type='radio'], :placeholder-shown),
+        select
+      )[data-checked='true'][aria-invalid='false']:valid
+  ):focus-within {
+  outline-color: var(--valid-color);
+}
+.field-wrapper:has(
+    :is(
+        input:not([type='radio']),
+        select
+      )[data-checked='true'][aria-invalid='true']:invalid
+  ) {
+  outline-color: var(--invalid-color);
 }
 
 /* Select */
@@ -94,6 +125,19 @@
 }
 .field-wrapper select option:not(:first-child, :checked) {
   color: var(--black);
+}
+.field-wrapper select:has(option:first-child:checked):focus {
+  color: var(--focus-color) !important;
+}
+.field-wrapper:has(
+    select[data-checked='true'][aria-invalid='false']:valid:not(
+        :has(option:first-child:checked)
+      )
+  ) {
+  border-color: var(--valid-color) !important;
+}
+.field-wrapper:has(select[data-checked='true'][aria-invalid='true']:invalid) {
+  border-color: var(--invalid-color) !important;
 }
 
 /* Input Radio */
@@ -122,45 +166,23 @@
 .form-check-input:focus {
   border-color: var(--radio-border-color);
   box-shadow: none;
-  outline: none;
 }
-
-/* Border Color */
-.field-wrapper:has(input:not([type='radio'])):hover {
-  border-color: var(--primary-color) !important;
+.form-check-input:focus-visible {
+  outline: 3px dashed var(--focus-color);
+  outline-offset: 3px;
 }
-.field-wrapper:has(
-    :is(input:not([type='radio']), select):is(:hover, :focus-visible, :active)
-  ) {
-  border-color: var(--primary-color) !important;
+.form-check-input[data-checked='true'][aria-invalid='false']:checked:valid {
+  border-color: var(--valid-color) !important;
 }
-#combination-table:has(.field-wrapper:hover) .table-group-divider {
-  color: var(--primary-color);
+.form-check-input[data-checked='true'][aria-invalid='true']:invalid {
+  border-color: var(--invalid-color) !important;
 }
-#combination-table:has(.field-wrapper:hover) thead th {
-  color: var(--focus-color);
-}
-#combination-table:has(input:is(:hover, :focus-visible, :active))
+#combination-table:has(.field-wrapper:is(:hover, :focus-within))
   .table-group-divider {
   color: var(--primary-color);
 }
-#combination-table:has(input:is(:hover, :focus-visible, :active)) thead th {
+#combination-table:has(.field-wrapper:is(:hover, :focus-within)) thead th {
   color: var(--focus-color);
-}
-.field-wrapper:has(
-    input[data-checked='true'][aria-invalid='false']:valid:not(
-        [type='radio'],
-        :placeholder-shown
-      )
-  ) {
-  border-color: var(--valid-color) !important;
-}
-.field-wrapper:has(
-    select[data-checked='true'][aria-invalid='false']:valid:not(
-        :has(option:first-child:checked)
-      )
-  ) {
-  border-color: var(--valid-color) !important;
 }
 #combination-table:has(
     input[data-checked='true'][aria-invalid='false']:checked:valid
@@ -168,51 +190,26 @@
   .table-group-divider {
   color: var(--valid-color);
 }
-.field-wrapper:has(
-    input[data-checked='true'][aria-invalid='true']:invalid:not([type='radio'])
-  ) {
-  border-color: var(--invalid-color) !important;
-}
-.field-wrapper:has(select[data-checked='true'][aria-invalid='true']:invalid) {
-  border-color: var(--invalid-color) !important;
-}
 #combination-table:has(input[data-checked='true'][aria-invalid='true']:invalid)
   .table-group-divider {
   color: var(--invalid-color);
 }
-
-/* Box-Shadow Color */
-.field-wrapper:has(
-    :is(
-        input:not([type='radio'], :placeholder-shown),
-        select
-      )[data-checked='true'][aria-invalid='false']:valid
-  ):is(:hover, :focus-within) {
-  box-shadow: 0 0 0 3px var(--valid-color-shadow);
-  border-radius: 3px;
+#combination-table:focus-within tbody {
+  outline: 3px dashed var(--focus-color);
+  outline-offset: 3px;
 }
-#combination-table:has(
-    input[data-checked='true'][aria-invalid='false']:checked:valid
-  )
-  thead
-  tr:is(:hover, :focus, :focus-visible) {
-  box-shadow: 0 0 0 3px var(--valid-color-shadow);
-  border-radius: 3px;
+#combination-table:focus-within
+  tbody:has(input[data-checked='true'][aria-invalid='false']:checked:valid) {
+  outline-color: var(--valid-color) !important;
 }
-.field-wrapper:has(
-    :is(
-        input:not([type='radio']),
-        select
-      )[data-checked='true'][aria-invalid='true']:invalid
-  ):is(:hover, :focus-within) {
-  box-shadow: 0 0 0 3px var(--invalid-color-shadow);
-  border-radius: 3px;
+#combination-table:focus-within
+  tbody:has(input[data-checked='true'][aria-invalid='true']:invalid) {
+  outline-color: var(--invalid-color) !important;
 }
-#combination-table:has(input[data-checked='true'][aria-invalid='true']:invalid)
-  thead
-  tr:is(:hover, :active, :focus-visible) {
-  box-shadow: 0 0 0 3px var(--invalid-color-shadow);
-  border-radius: 3px;
+#combination-table
+  tbody
+  tr:has(input[data-checked='true'][aria-invalid='false']:checked:valid) {
+  outline: 1px solid var(--valid-color);
 }
 
 /* After */
@@ -269,10 +266,10 @@
   left: 0;
 }
 .field-feedback.pe-lg-5 {
-  padding-left: calc(var(--bs-gutter-x) * .5);
+  padding-left: calc(var(--bs-gutter-x) * 0.5);
 }
 .field-feedback.ps-lg-5 {
-  padding-right: calc(var(--bs-gutter-x) * .5);
+  padding-right: calc(var(--bs-gutter-x) * 0.5);
 }
 
 /* Help */
