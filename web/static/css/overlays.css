@@ -134,9 +134,6 @@
 .btn-close {
   --bs-btn-close-bg: url('/svgs/close.svg');
 }
-.alert-dismissible .btn-close {
-  padding: 0;
-}
 
 /* Alerts Color */
 #warning-alert {
@@ -213,4 +210,16 @@
   word-break: break-all;
   word-wrap: break-word;
   text-align: left;
+}
+
+/* Tooltips */
+.tooltip {
+  --bs-tooltip-bg: var(--text-emphasis-color) !important;
+  --bs-tooltip-color: var(--white) !important;
+  --bs-tooltip-opacity: 1 !important;
+}
+
+.list-group {
+  --bs-list-group-border-color: #dee2e6 !important;
+  --bs-list-group-bg: var(--white) !important;
 }

@@ -8,7 +8,8 @@
 .modal-content {
   border-top: 2px solid var(--primary-color);
 }
-#details-table.table {
+#details-table.table,
+#warning-table.table {
   --bs-table-striped-color: var(--bs-body-color);
   --bs-table-color: var(--bs-body-color);
   --bs-table-border-color: #dddddd;
@@ -19,12 +20,14 @@
   --bs-border-width: 1px;
   table-layout: fixed;
 }
-#details-table thead th {
+#details-table thead th,
+#warning-table thead th {
   background-color: var(--emphasis-color);
   --bs-table-color: var(--white);
   text-align: center;
 }
-#details-table .group-header {
+#details-table .group-header,
+#warning-table .group-header {
   border-bottom: calc(var(--bs-border-width) * 2) solid var(--focus-color);
   color: var(--focus-color);
   line-height: normal;
@@ -32,7 +35,8 @@
   font-weight: 400;
   box-shadow: none;
 }
-#details-tbody td {
+#details-tbody td,
+#warning-tbody td {
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
@@ -106,6 +110,9 @@ nav .icon-link-hover {
   box-shadow: 5px 5px 5px -2px #777777;
   background-color: #edeff1;
   color: var(--badge-color);
+}
+#ifms-tads p {
+  cursor: help;
 }
 
 /* Section */
