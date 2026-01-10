@@ -21,8 +21,8 @@ from src.core.common.patterns import (
 from src.core.common.types import Json, Keyword
 from src.core.config.scopus import (
     CURRENT_YEAR,
-    LAST_DECADE,
     LAST_THREE_YEARS,
+    MAX_RECENT_PUBLICATIONS,
     PAGE_RANGE,
 )
 from src.core.data.enums import (
@@ -75,7 +75,7 @@ class CombinationParams(CSVParams):
         description="Date range start year",
         examples=[LAST_THREE_YEARS],
         exclude=True,
-        ge=LAST_DECADE,
+        ge=MAX_RECENT_PUBLICATIONS,
         le=(CURRENT_YEAR - 1),
     )
     end_year: int = Field(
@@ -85,7 +85,7 @@ class CombinationParams(CSVParams):
         description="Date range end year",
         examples=[CURRENT_YEAR],
         exclude=True,
-        ge=(LAST_DECADE + 1),
+        ge=(MAX_RECENT_PUBLICATIONS + 1),
         le=CURRENT_YEAR,
     )
     doctype: DocType = Field(

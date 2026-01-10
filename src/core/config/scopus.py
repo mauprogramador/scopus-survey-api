@@ -4,8 +4,10 @@ from http import HTTPStatus
 from src.core.data.enums import PageRange
 
 CURRENT_YEAR = datetime.now().year
+# Last 3 years: considering rapidly evolving fields of study.
 LAST_THREE_YEARS = CURRENT_YEAR - 3
-LAST_DECADE = CURRENT_YEAR - 10
+# Last 15 years: considering slowly evolving fields of study (with leeway).
+MAX_RECENT_PUBLICATIONS = CURRENT_YEAR - 15
 
 BOOLEAN_OPERATOR = " AND "
 NULL = "null"
