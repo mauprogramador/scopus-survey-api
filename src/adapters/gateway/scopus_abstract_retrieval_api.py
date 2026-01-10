@@ -12,11 +12,15 @@ from pandas import DataFrame
 
 from src.adapters.helpers.scopus_response import ScopusResponse
 from src.core.common.error_messages import CANCELLED_ERROR
-from src.core.common.types import Json, ResponseBundle
+from src.core.common.types import ResponseBundle
 from src.core.config.config import LOG
-from src.core.data.serializers import ScopusEntry
 from src.core.domain.http_exceptions import HTTPError, ServiceUnavailable
-from src.core.domain.protocols import HTTPClient, SurveyDetails, URLBuilder
+from src.core.domain.protocols import (
+    HTTPClient,
+    QuotaResultsHandler,
+    SurveyDetails,
+    URLBuilder,
+)
 from src.utils.progress_bar import ProgressBar
 
 
@@ -24,6 +28,8 @@ class ScopusAbstractRetrievalAPI:
     """Retrieves Scopus abstracts via the Scopus Abstract Retrieval API"""
 
     _ONE_RESULT_INDEX = 0
+    _TWO_RESULTS_INDEX = 1
+    _FIRST_ABSTRACT = 1
 
     def __init__(
         self,
@@ -35,9 +41,7 @@ class ScopusAbstractRetrievalAPI:
         self._http_retry = http_retry
         self._url_builder = url_builder
         self._details = survey_details
-        self._entry: list[ScopusEntry] = None
-        self._abstracts: list[Json] = None
-        self._total = 0
+        self._results: QuotaResultsHandler = None
 
         try:
             self._workers = min(2 * len(sched_getaffinity(0)), 32)
@@ -45,11 +49,12 @@ class ScopusAbstractRetrievalAPI:
             self._workers = min(2 * (cpu_count() or 4), 32)
 
     async def _get_abstract(self, index: int) -> ResponseBundle:
-        url = self._url_builder.abstract_url(self._entry[index].url)
+        url = self._url_builder.abstract_url(self._results.entry[index].url)
         return await self._http_retry.request(url)
 
     async def _get_multiple_abstracts(self) -> None:
-        max_workers = min(self._total, self._workers)
+        total = self._results.total_abstracts - self._FIRST_ABSTRACT
+        max_workers = min(total, self._workers)
         LOG.debug({"max_workers": max_workers})
 
         all_tasks = {
@@ -57,14 +62,14 @@ class ScopusAbstractRetrievalAPI:
                 self._get_abstract(index),
                 name=f"entry_index:{index}",
             )
-            for index in range(self._total)
+            for index in range(total)
         }
         remaining_tasks = all_tasks.copy()
         last_completed: ResponseBundle = None
 
         with (
             ThreadPoolExecutor(max_workers) as executor,
-            ProgressBar.start(self._total) as progress_bar,
+            ProgressBar.start(total) as progress_bar,
         ):
             for future in as_completed(all_tasks):
                 remaining_tasks.discard(future)
@@ -79,7 +84,7 @@ class ScopusAbstractRetrievalAPI:
                         response,
                     )
                     abstract_data = abstract.model_dump(by_alias=True)
-                    self._abstracts.append(abstract_data)
+                    self._results.abstracts.append(abstract_data)
                     progress_bar.step()
 
                 except (CancelledError, HTTPError, Exception) as exc:
@@ -98,28 +103,41 @@ class ScopusAbstractRetrievalAPI:
 
         self._details.set_abstract_quota(last_completed)
 
+    async def _get_one_abstract(self, index: int) -> None:
+        url = self._results.entry[index].url
+        url = self._url_builder.abstract_url(url)
+
+        response = await self._http_retry.request(url)
+        self._details.set_abstract_quota(response)
+
+        abstract = ScopusResponse.validate_abstract(response)
+        abstract_data = abstract.model_dump(by_alias=True)
+        self._results.abstracts.append(abstract_data)
+
     async def retrieve_abstracts(
-        self, api_key: str, entry: list[ScopusEntry]
+        self, api_key: str, results: QuotaResultsHandler
     ) -> DataFrame:
-        self._abstracts = []
-        self._entry, self._total = entry, len(entry)
+        self._results = results
         self._url_builder.set_abstract_query(api_key)
 
         try:
-            if self._total == 1:
-                url = self._entry[self._ONE_RESULT_INDEX].url
-                url = self._url_builder.abstract_url(url)
+            await self._get_one_abstract(self._ONE_RESULT_INDEX)
 
-                response = await self._http_retry.request(url)
-                self._details.set_abstract_quota(response)
+            if self._results.total_abstracts > 1:
+                self._results.handle_abstract_quota(
+                    self._details.abstract_quota
+                )
 
-                abstract = ScopusResponse.validate_abstract(response)
-                self._abstracts.append(abstract.model_dump(by_alias=True))
+            if self._results.total_abstracts == 2:
+                await self._get_one_abstract(self._TWO_RESULTS_INDEX)
 
-            else:
-                await self._http_retry.update_strategy(self._total)
+            if self._results.total_abstracts > 2:
+                await self._http_retry.update_strategy(
+                    self._results.total_abstracts
+                )
                 await self._get_multiple_abstracts()
         finally:
             await self._http_retry.close()
 
-        return DataFrame(self._abstracts)
+        self._details.set_results(self._results.total_abstracts)
+        return DataFrame(self._results.abstracts)

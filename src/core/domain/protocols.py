@@ -45,6 +45,21 @@ class SurveyDetails(Protocol):
         pass
 
 
+class QuotaResultsHandler(Protocol):
+    total_results: int
+    items_per_page: int
+    entry: list[ScopusEntry]
+    abstracts: list[Json]
+    total_abstracts: int
+    pages_count: int
+
+    def handle_search_quota(self, quota: tuple[Quota, int]) -> None:
+        pass
+
+    def handle_abstract_quota(self, quota: tuple[Quota, int]) -> None:
+        pass
+
+
 class HTTPClient(Protocol):
 
     async def update_strategy(self, total_requests: int) -> None:
@@ -91,14 +106,16 @@ class SearchAPI(Protocol):
     ) -> list[Json]:
         pass
 
-    async def search_articles(self, params: SearchParams) -> list[ScopusEntry]:
+    async def search_articles(
+        self, params: SearchParams
+    ) -> QuotaResultsHandler:
         pass
 
 
 class AbstractAPI(Protocol):
 
     async def retrieve_abstracts(
-        self, api_key: str, entry: list[ScopusEntry]
+        self, api_key: str, results: QuotaResultsHandler
     ) -> DataFrame:
         pass
 
