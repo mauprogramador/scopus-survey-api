@@ -18,7 +18,7 @@ from src.core.use_cases.scopus_articles_aggregator import (
     ScopusArticlesAggregator,
 )
 from tests.mocks.helpers import mock_filter
-from tests.mocks.raw import ALIAS_SEARCH_PARAMS, HTTP_200, LOG_DATA
+from tests.mocks.raw import ALIAS_SEARCH_PARAMS, HTTP_200, LOG_QUOTA
 from tests.mocks.unitary import (
     DIFFERENT_ARTICLES,
     EXACT_DUPLICATES,
@@ -37,9 +37,11 @@ ARTICLES_AGGREGATOR = ScopusArticlesAggregator(
     MagicMock(spec=ArticlesSimilarityFilter, filter=FILTER),
     MagicMock(
         spec=SurveyDetails,
-        search_quota=LOG_DATA,
-        abstract_quota=LOG_DATA,
         set_loss=SET_LOSS,
+        search_quota=LOG_QUOTA,
+        abstract_quota=LOG_QUOTA,
+        metadata=["any=any"],
+        headers={},
     ),
 )
 PARAMS = SearchParams(**ALIAS_SEARCH_PARAMS)

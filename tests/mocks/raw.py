@@ -75,6 +75,18 @@ RAW_HEADERS_OK = {
     "X-RateLimit-Reset": str(RESET),
     "X-ELS-Status": "OK",
 }
+RAW_HEADERS_ONE_QUOTA = {
+    "X-RateLimit-Limit": "20000",
+    "X-RateLimit-Remaining": "1",
+    "X-RateLimit-Reset": str(RESET),
+    "X-ELS-Status": "OK",
+}
+RAW_HEADERS_NO_QUOTA = {
+    "X-RateLimit-Limit": "20000",
+    "X-RateLimit-Remaining": "0",
+    "X-RateLimit-Reset": str(RESET),
+    "X-ELS-Status": "OK",
+}
 RAW_ENTRY = {
     "@_fa": "true",
     "prism:url": ABSTRACT_URL,
@@ -139,7 +151,9 @@ RAW_SERVICE_ERROR_QUOTA = {
 RAW_ERROR_RESPONSE_RATE_LIMIT = {
     "error-response": {"error-code": ScopusCode.RATE_LIMIT}
 }
-LOG_DATA = (ScopusHeaders(**RAW_HEADERS_OK), HTTPStatus.OK.value)
+LOG_QUOTA = (ScopusHeaders(**RAW_HEADERS_OK), HTTPStatus.OK.value)
+LOG_ONE_QUOTA = (ScopusHeaders(**RAW_HEADERS_ONE_QUOTA), HTTPStatus.OK.value)
+LOG_NO_QUOTA = (ScopusHeaders(**RAW_HEADERS_NO_QUOTA), HTTPStatus.OK.value)
 
 # Models params
 

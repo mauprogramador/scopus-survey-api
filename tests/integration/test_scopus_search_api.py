@@ -7,7 +7,11 @@ from httpx import AsyncClient as Client
 from pytest import mark
 from pytest_mock import MockerFixture as Mocker
 
-from src.core.common.error_messages import ARTICLES_NOT_FOUND, CANCELLED_ERROR
+from src.core.common.error_messages import (
+    ARTICLES_NOT_FOUND,
+    CANCELLED_ERROR,
+    QUOTA_EXCEEDED,
+)
 from src.utils.progress_bar import ProgressBar
 from tests.conftest import assert_error_json
 from tests.mocks.helpers import fqn, load_csv_file_response_dataframe
@@ -15,9 +19,11 @@ from tests.mocks.integration import (
     SEARCH_CANCELLED_ERROR,
     SEARCH_MORE_PAGES_FULL_RESULTS,
     SEARCH_MORE_PAGES_PARTIAL_RESULTS,
+    SEARCH_NO_QUOTA,
     SEARCH_NOT_FOUND,
     SEARCH_ONE_PAGE_FULL_RESULTS,
     SEARCH_ONE_PAGE_ONE_RESULT,
+    SEARCH_ONE_QUOTA,
     SEARCH_TWO_PAGES_FULL_RESULTS,
     SEARCH_TWO_PAGES_PARTIAL_RESULTS,
     SURVEY_CANCELLED_ERROR,
@@ -29,6 +35,7 @@ from tests.mocks.raw import (
     COMBINATION_PARAMS,
     HTTP_200,
     HTTP_404,
+    HTTP_429,
     HTTP_503,
     KEYWORDS,
     SEARCH_PARAMS,
@@ -36,7 +43,6 @@ from tests.mocks.raw import (
     URL_SEARCH,
 )
 
-# SET_COUNT_LIMIT = fqn(ScopusSearch.set_count_limit)
 STEP = fqn(ProgressBar.step)
 GET = fqn(RetryClient.get)
 
@@ -148,7 +154,6 @@ async def test_search_two_pages_full_results(mocker: Mocker, client: Client):
 async def test_search_more_pages_partial_results(
     mocker: Mocker, client: Client
 ):
-    # mocker.patch(SET_COUNT_LIMIT)
     mock = mocker.patch(
         GET,
         new=AsyncMock(side_effect=SEARCH_MORE_PAGES_PARTIAL_RESULTS),
@@ -161,7 +166,6 @@ async def test_search_more_pages_partial_results(
 
 @mark.asyncio
 async def test_search_more_pages_full_results(mocker: Mocker, client: Client):
-    # mocker.patch(SET_COUNT_LIMIT)
     mock = mocker.patch(
         GET,
         new=AsyncMock(side_effect=SEARCH_MORE_PAGES_FULL_RESULTS),
@@ -183,9 +187,32 @@ async def test_search_not_found(mocker: Mocker, client: Client):
     assert errors is None and mock.call_count == 1
 
 
-# @mark.asyncio
-# async def test_search_count_limit_default(mocker: Mocker, client: CLient):
-#     ?????
+@mark.asyncio
+async def test_search_one_last_quota(mocker: Mocker, client: Client):
+    mock = mocker.patch(GET, new=AsyncMock(side_effect=SEARCH_ONE_QUOTA))
+    res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
+    assert res.status_code == HTTP_200 and mock.call_count == 52
+    df = load_csv_file_response_dataframe(res)
+    assert df.shape[0] == 1
+
+
+@mark.asyncio
+async def test_search_no_remaining_quota(mocker: Mocker, client: Client):
+    mock = mocker.patch(
+        GET, new=AsyncMock(side_effect=SEARCH_ONE_PAGE_FULL_RESULTS)
+    )
+    res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
+    assert res.status_code == HTTP_200 and mock.call_count == 26
+    df = load_csv_file_response_dataframe(res)
+    assert df.shape[0] == 1
+
+
+@mark.asyncio
+async def test_search_quota_exceeded(mocker: Mocker, client: Client):
+    mock = mocker.patch(GET, new=AsyncMock(side_effect=SEARCH_NO_QUOTA))
+    res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
+    errors = assert_error_json(res, HTTP_429, QUOTA_EXCEEDED)
+    assert errors is None and mock.call_count == 1
 
 
 @mark.asyncio

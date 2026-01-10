@@ -7,7 +7,7 @@ from httpx import AsyncClient as Client
 from pytest import mark
 from pytest_mock import MockerFixture as Mocker
 
-from src.core.common.error_messages import CANCELLED_ERROR
+from src.core.common.error_messages import CANCELLED_ERROR, QUOTA_EXCEEDED
 from src.core.data.enums import Column
 from src.utils.progress_bar import ProgressBar
 from tests.conftest import assert_error_json
@@ -15,12 +15,20 @@ from tests.mocks.helpers import fqn, load_csv_file_response_dataframe
 from tests.mocks.integration import (
     RETRIEVE_CANCELLED_ERROR,
     RETRIEVE_MORE_ABSTRACTS,
+    RETRIEVE_NO_QUOTA,
     RETRIEVE_ONE_ABSTRACT_AUTHORS,
     RETRIEVE_ONE_ABSTRACT_FULL,
     RETRIEVE_ONE_PARTIAL_ABSTRACT,
+    RETRIEVE_ONE_QUOTA,
     RETRIEVE_TWO_ABSTRACTS,
 )
-from tests.mocks.raw import HTTP_200, HTTP_503, SEARCH_PARAMS, URL_SEARCH
+from tests.mocks.raw import (
+    HTTP_200,
+    HTTP_429,
+    HTTP_503,
+    SEARCH_PARAMS,
+    URL_SEARCH,
+)
 
 STEP = fqn(ProgressBar.step)
 GET = fqn(RetryClient.get)
@@ -87,6 +95,35 @@ async def test_retrieve_more_abstracts(mocker: Mocker, client: Client):
     assert res.status_code == HTTP_200 and mock.call_count == 26
     df = load_csv_file_response_dataframe(res)
     assert df.shape[0] == 1
+
+
+@mark.asyncio
+async def test_retrieve_one_last_quota(mocker: Mocker, client: Client):
+    mock = mocker.patch(GET, new=AsyncMock(side_effect=RETRIEVE_ONE_QUOTA))
+    res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
+    assert res.status_code == HTTP_200 and mock.call_count == 3
+    df = load_csv_file_response_dataframe(res)
+    assert df.shape[0] == 1
+
+
+@mark.asyncio
+async def test_retrieve_no_remaining_quota(mocker: Mocker, client: Client):
+    mock = mocker.patch(
+        GET,
+        new=AsyncMock(side_effect=RETRIEVE_ONE_PARTIAL_ABSTRACT),
+    )
+    res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
+    assert res.status_code == HTTP_200 and mock.call_count == 2
+    df = load_csv_file_response_dataframe(res)
+    assert df.shape[0] == 1
+
+
+@mark.asyncio
+async def test_retrieve_quota_exceed(mocker: Mocker, client: Client):
+    mock = mocker.patch(GET, new=AsyncMock(side_effect=RETRIEVE_NO_QUOTA))
+    res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
+    errors = assert_error_json(res, HTTP_429, QUOTA_EXCEEDED)
+    assert errors is None and mock.call_count == 2
 
 
 @mark.asyncio

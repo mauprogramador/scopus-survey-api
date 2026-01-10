@@ -12,6 +12,9 @@ from pandas import DataFrame, read_csv
 
 from src.core.common.types import CombinationBundle, Json
 from src.core.config.config import DIRECTORY
+from src.core.config.scopus import MAX_ITEMS_PER_PAGE
+from src.core.data.quota_results_handler import QuotaResultsHandler
+from src.core.data.serializers import ScopusSearch
 from tests.mocks.raw import (
     CSV_FILE_NAME,
     HTTP_200,
@@ -77,7 +80,7 @@ def load_csv_file_response_dataframe(response: Response) -> DataFrame:
 
 def search_raw(total_results: int, entry_count: int | None = None) -> Json:
     """Build a raw search response"""
-    items_per_page = min(total_results, 25)
+    items_per_page = min(total_results, MAX_ITEMS_PER_PAGE)
     count = items_per_page if entry_count is None else entry_count
     return {
         "search-results": {
@@ -128,3 +131,9 @@ def response_mock(
         headers=headers if headers else RAW_HEADERS_OK,
         json=json,
     )
+
+
+def results_mock(total_results: int) -> QuotaResultsHandler:
+    """Builds a QuotaResultsHandler instance"""
+    first_search = ScopusSearch(**search_raw(total_results))
+    return QuotaResultsHandler(first_search)

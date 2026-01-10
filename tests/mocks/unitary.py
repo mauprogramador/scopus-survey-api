@@ -6,7 +6,7 @@ from pandas import DataFrame
 
 from src.core.common.types import CombinationBundle
 from src.core.data.enums import Column
-from src.core.data.serializers import ScopusAbstract, ScopusEntry, ScopusSearch
+from src.core.data.serializers import ScopusAbstract, ScopusSearch
 from tests.mocks.errors import CONTENT_TYPE_ERROR, JSON_DECODE_ERROR
 from tests.mocks.helpers import abstract_raw, response_mock, search_raw
 from tests.mocks.raw import (
@@ -15,7 +15,6 @@ from tests.mocks.raw import (
     RAW_ABSTRACT_AUTHORS,
     RAW_ABSTRACT_FULL,
     RAW_ABSTRACT_OK,
-    RAW_ENTRY,
     RAW_SEARCH_OK,
 )
 
@@ -55,26 +54,20 @@ SURVEY_RESULTS = list(SURVEY_MAP.values())
 ONE_PAGE_ONE_RESULT = ScopusSearch(**RAW_SEARCH_OK)
 ONE_PAGE_FULL_RESULTS = ScopusSearch(**search_raw(25))
 TWO_PAGES_PARTIAL_RESULTS = [
-    ScopusSearch(**search_raw(30)),  # 1st instance independent
+    ScopusSearch(**search_raw(30)),
     ScopusSearch(**search_raw(30, 5)),
 ]
-TWO_PAGES_FULL_RESULTS = [
-    ScopusSearch(**search_raw(50)),  # 1st instance independent
-    ScopusSearch(**search_raw(50)),
-]
+TWO_PAGES_FULL_RESULTS = [ScopusSearch(**search_raw(50))] * 2
 MORE_PAGES_PARTIAL_RESULTS = [
-    ScopusSearch(**search_raw(151)),  # 1st instance independent
-    *[ScopusSearch(**search_raw(151))] * 5,
+    *[ScopusSearch(**search_raw(151))] * 6,
     ScopusSearch(**search_raw(151, 1)),
 ]
-MORE_PAGES_FULL_RESULTS = [
-    ScopusSearch(**search_raw(175)),  # 1st instance independent
-    *[ScopusSearch(**search_raw(175))] * 6,
-]
+MORE_PAGES_FULL_RESULTS = [ScopusSearch(**search_raw(175))] * 7
+MORE_PAGES_ONE_QUOTA = [ScopusSearch(**search_raw(175))] * 2
+MORE_PAGES_NO_QUOTA = [ScopusSearch(**search_raw(175))]
 
 # ScopusabstractRetrievalAPI.retrieve_abstracts
 
-ENTRIES = [ScopusEntry(**RAW_ENTRY)] * 7
 ONE_ABSTRACT = ScopusAbstract(**RAW_ABSTRACT_OK)
 ONE_ABSTRACT_AUTHORS = ScopusAbstract(**RAW_ABSTRACT_AUTHORS)
 ONE_ABSTRACT_FULL = ScopusAbstract(**RAW_ABSTRACT_FULL)

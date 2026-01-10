@@ -18,7 +18,7 @@ from tests.mocks.helpers import (
     mock_combination_url,
     mock_survey_totals_found,
 )
-from tests.mocks.raw import API_KEY, HTTP_200, KEYWORDS, LOG_DATA
+from tests.mocks.raw import API_KEY, HTTP_200, KEYWORDS, LOG_QUOTA
 
 COMBINATION_FINDER = KeywordCombinationFinder(
     MagicMock(
@@ -29,7 +29,7 @@ COMBINATION_FINDER = KeywordCombinationFinder(
         spec=ScopusSearchAPI,
         survey_totals_found=AsyncMock(side_effect=mock_survey_totals_found),
     ),
-    MagicMock(spec=SurveyDetails, search_quota=LOG_DATA),
+    MagicMock(spec=SurveyDetails, search_quota=LOG_QUOTA, headers={}),
 )
 RANDINT = fqn(mock_survey_totals_found, "randint")
 

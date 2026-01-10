@@ -13,6 +13,8 @@ from tests.mocks.raw import (
     RAW_ABSTRACT_FULL,
     RAW_ABSTRACT_OK,
     RAW_ERROR_RESPONSE_RATE_LIMIT,
+    RAW_HEADERS_NO_QUOTA,
+    RAW_HEADERS_ONE_QUOTA,
     RAW_SEARCH_NOT_FOUND,
     RAW_SEARCH_OK,
     RAW_SERVICE_ERROR_QUOTA,
@@ -42,12 +44,12 @@ GET_RATE_LIMIT = [
     *GET_SUCCESS,
 ]
 GET_STRATEGY = [
-    response_mock(search_raw(111)),
-    response_mock(search_raw(111)),
-    response_mock(search_raw(111)),
-    response_mock(search_raw(111)),
-    response_mock(search_raw(111, 11)),
-    *[response_mock(RAW_ABSTRACT_OK)] * 111,
+    response_mock(search_raw(113)),
+    response_mock(search_raw(113)),
+    response_mock(search_raw(113)),
+    response_mock(search_raw(113)),
+    response_mock(search_raw(113, 13)),
+    *[response_mock(RAW_ABSTRACT_OK)] * 113,
 ]
 
 # ScopusSearchAPI.survey_totals_found
@@ -88,6 +90,14 @@ SEARCH_MORE_PAGES_FULL_RESULTS = [
     *[response_mock(RAW_ABSTRACT_OK)] * 175,
 ]
 SEARCH_NOT_FOUND = response_mock(RAW_SEARCH_NOT_FOUND)
+SEARCH_ONE_QUOTA = [
+    response_mock(search_raw(175), headers=RAW_HEADERS_ONE_QUOTA),
+    response_mock(search_raw(175), headers=RAW_HEADERS_NO_QUOTA),
+    *[response_mock(RAW_ABSTRACT_OK)] * 50,
+]
+SEARCH_NO_QUOTA = [
+    response_mock(search_raw(175), headers=RAW_HEADERS_NO_QUOTA),
+]
 SEARCH_CANCELLED_ERROR = [response_mock(search_raw(125))] * 5
 
 # ScopusabstractRetrievalAPI.retrieve_abstracts
@@ -111,6 +121,15 @@ RETRIEVE_TWO_ABSTRACTS = [
 RETRIEVE_MORE_ABSTRACTS = [
     response_mock(search_raw(25)),
     *[response_mock(RAW_ABSTRACT_OK)] * 25,
+]
+RETRIEVE_ONE_QUOTA = [
+    response_mock(search_raw(25)),
+    response_mock(RAW_ABSTRACT_OK, headers=RAW_HEADERS_ONE_QUOTA),
+    response_mock(RAW_ABSTRACT_OK, headers=RAW_HEADERS_NO_QUOTA),
+]
+RETRIEVE_NO_QUOTA = [
+    response_mock(search_raw(25)),
+    response_mock(RAW_ABSTRACT_OK, headers=RAW_HEADERS_NO_QUOTA),
 ]
 RETRIEVE_CANCELLED_ERROR = [
     response_mock(search_raw(7)),
