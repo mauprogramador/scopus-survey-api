@@ -92,7 +92,8 @@ async def test_search_details_one_result(mocker: Mocker, client: Client):
 
     assert metadata[0] == "total=1" and metadata[1] == "items_per_page=1"
     assert metadata[2] == "pages_count=1"
-    assert metadata[3] == "loss=0doc / 0.00%"
+    assert metadata[3] == "results=1doc / 1doc"
+    assert metadata[4] == "loss=0doc / 0.00%"
 
     assert res.headers["X-Combination"] == KEYWORDS[0]
     assert res.headers["X-Total"] == "1"
@@ -106,6 +107,7 @@ async def test_search_details_one_result(mocker: Mocker, client: Client):
     assert res.headers["X-Abstract-Remaining"] == "12345"
     assert res.headers["X-Abstract-Reset"] == RESET_DATETIME
     assert res.headers["X-Abstract-ELS-Status"] == "OK"
+    assert res.headers["X-Results"] == "1doc / 1doc"
     assert res.headers["X-Loss"] == "0doc / 0.00%"
 
 
@@ -129,7 +131,7 @@ async def test_search_details_more_results(mocker: Mocker, client: Client):
 
     spy_search.assert_called_once()
     spy_search_quota.assert_called_once()
-    spy_abstract_quota.assert_called_once()
+    assert spy_abstract_quota.call_count == 2
     spy_loss.assert_called_once()
     spy_log.assert_called()
 
@@ -141,7 +143,8 @@ async def test_search_details_more_results(mocker: Mocker, client: Client):
 
     assert metadata[0] == "total=3" and metadata[1] == "items_per_page=3"
     assert metadata[2] == "pages_count=1"
-    assert metadata[3] == "loss=2doc / 66.67%"
+    assert metadata[3] == "results=3doc / 3doc"
+    assert metadata[4] == "loss=2doc / 66.67%"
 
     assert res.headers["X-Combination"] == KEYWORDS[0]
     assert res.headers["X-Total"] == "3"
@@ -155,4 +158,5 @@ async def test_search_details_more_results(mocker: Mocker, client: Client):
     assert res.headers["X-Abstract-Remaining"] == "12345"
     assert res.headers["X-Abstract-Reset"] == RESET_DATETIME
     assert res.headers["X-Abstract-ELS-Status"] == "OK"
+    assert res.headers["X-Results"] == "3doc / 3doc"
     assert res.headers["X-Loss"] == "2doc / 66.67%"

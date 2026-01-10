@@ -54,10 +54,16 @@ def test_abstract_quota():
     assert SURVEY_DETAIL.headers["X-Abstract-ELS-Status"] == "OK"
 
 
+def test_results():
+    SURVEY_DETAIL.set_results(1)
+    assert SURVEY_DETAIL.headers["X-Results"] == "1doc / 1doc"
+    assert SURVEY_DETAIL.metadata[3] == "results=1doc / 1doc"
+
+
 def test_loss():
     SURVEY_DETAIL.set_loss(5, 13.5671)
     assert SURVEY_DETAIL.headers["X-Loss"] == "5doc / 13.57%"
-    assert SURVEY_DETAIL.metadata[3] == "loss=5doc / 13.57%"
+    assert SURVEY_DETAIL.metadata[4] == "loss=5doc / 13.57%"
 
 
 def test_average_found():
@@ -68,5 +74,5 @@ def test_average_found():
 def test_full_headers():
     assert len(SURVEY_DETAIL.search_quota) == 2
     assert len(SURVEY_DETAIL.abstract_quota) == 2
-    assert len(SURVEY_DETAIL.headers) == 15
-    assert len(SURVEY_DETAIL.metadata) == 4
+    assert len(SURVEY_DETAIL.headers) == 16
+    assert len(SURVEY_DETAIL.metadata) == 5
