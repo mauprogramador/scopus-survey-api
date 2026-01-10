@@ -8,22 +8,22 @@ class SurveyDetails:
 
     def __init__(self) -> None:
         """Gather Scopus API search and quota details"""
-        self._headers: dict[str, str] = {}
-        self._metadata: list[str] = []
-        self._search_quota: tuple[ScopusHeaders, int] = None
-        self._abstract_quota: tuple[ScopusHeaders, int] = None
+        self.headers: dict[str, str] = {}
+        self.metadata: list[str] = []
+        self.search_quota: tuple[ScopusHeaders, int] = None
+        self.abstract_quota: tuple[ScopusHeaders, int] = None
 
     def set_keywords(self, keywords: list[str]) -> None:
-        self._headers.update({"X-Keywords": BOOLEAN_OPERATOR.join(keywords)})
+        self.headers.update({"X-Keywords": BOOLEAN_OPERATOR.join(keywords)})
 
     def set_combination(self, combination: str) -> None:
-        self._headers.update({"X-Combination": combination})
+        self.headers.update({"X-Combination": combination})
 
     def set_search_data(self, scopus_search: ScopusSearch) -> None:
         if scopus_search.total_results > MAX_ITEMS_PER_PAGE:
             scopus_search.items_per_page = MAX_ITEMS_PER_PAGE
 
-        self._headers.update(
+        self.headers.update(
             {
                 "X-Total": str(scopus_search.total_results),
                 "X-Items-Per-Page": str(scopus_search.items_per_page),
@@ -31,7 +31,7 @@ class SurveyDetails:
             }
         )
 
-        self._metadata.extend(
+        self.metadata.extend(
             [
                 f"total={scopus_search.total_results}",
                 f"items_per_page={scopus_search.items_per_page}",
@@ -41,8 +41,8 @@ class SurveyDetails:
 
     def set_search_quota(self, response: ResponseBundle) -> None:
         quota = ScopusHeaders.model_validate(response.headers)
-        self._search_quota = (quota, response.code)
-        self._headers.update(
+        self.search_quota = (quota, response.code)
+        self.headers.update(
             {
                 "X-Search-Limit": str(quota.limit),
                 "X-Search-Remaining": str(quota.remaining),
@@ -53,8 +53,8 @@ class SurveyDetails:
 
     def set_abstract_quota(self, response: ResponseBundle) -> None:
         quota = ScopusHeaders.model_validate(response.headers)
-        self._abstract_quota = (quota, response.code)
-        self._headers.update(
+        self.abstract_quota = (quota, response.code)
+        self.headers.update(
             {
                 "X-Abstract-Limit": str(quota.limit),
                 "X-Abstract-Remaining": str(quota.remaining),
@@ -65,24 +65,8 @@ class SurveyDetails:
 
     def set_loss(self, loss_amount: int, loss_percent: float) -> None:
         loss = f"{loss_amount}doc / {loss_percent:.2f}%"
-        self._headers.update({"X-Loss": loss})
-        self._metadata.append(f"loss={loss}")
+        self.headers.update({"X-Loss": loss})
+        self.metadata.append(f"loss={loss}")
 
     def set_average_found(self, average: int) -> None:
-        self._headers.update({"X-Average-Found": f"~{average:,}"})
-
-    @property
-    def search_quota(self) -> tuple[ScopusHeaders, int]:
-        return self._search_quota
-
-    @property
-    def abstract_quota(self) -> tuple[ScopusHeaders, int]:
-        return self._abstract_quota
-
-    @property
-    def headers(self) -> dict[str, str]:
-        return self._headers
-
-    @property
-    def metadata(self) -> list[str]:
-        return self._metadata
+        self.headers.update({"X-Average-Found": f"~{average:,}"})

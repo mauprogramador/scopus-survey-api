@@ -15,6 +15,11 @@ from src.core.data.serializers import ScopusEntry, ScopusSearch
 
 
 class SurveyDetails(Protocol):
+    search_quota: tuple[Quota, int]
+    abstract_quota: tuple[Quota, int]
+    headers: dict[str, str]
+    metadata: list[str]
+
     def set_keywords(self, keywords: list[str]) -> None:
         pass
 
@@ -34,22 +39,6 @@ class SurveyDetails(Protocol):
         pass
 
     def set_average_found(self, average: int) -> None:
-        pass
-
-    @property
-    def search_quota(self) -> tuple[Quota, int]:
-        pass
-
-    @property
-    def abstract_quota(self) -> tuple[Quota, int]:
-        pass
-
-    @property
-    def headers(self) -> dict[str, str]:
-        pass
-
-    @property
-    def metadata(self) -> list[str]:
         pass
 
 
