@@ -29,9 +29,9 @@
             </svg>
           </span>
           <input id="startyear" class="form-control combfield" name="startYear" form="survey-form" type="number"
-            min="2015" max="2025" step="1" size="4" data-checked="false" autocomplete="on" placeholder="Start Year"
-            inputmode="numeric" aria-invalid="false" aria-required="false" aria-autocomplete="both"
-            aria-labelledby="date-title" aria-describedby="date-desc" aria-details="date-help"
+            min="2015" max="2025" step="1" size="4" minlength="4" maxlength="4" data-checked="false" autocomplete="on"
+            placeholder="Start Year" inputmode="numeric" aria-invalid="false" aria-required="false"
+            aria-autocomplete="both" aria-labelledby="date-title" aria-describedby="date-desc" aria-details="date-help"
             aria-errormessage="date-feedback" />
           <span class="field-icon" aria-hidden="true">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" aria-hidden="true">
@@ -40,9 +40,9 @@
             </svg>
           </span>
           <input id="endyear" class="form-control combfield" name="endYear" form="survey-form" type="number" min="2015"
-            max="2025" step="1" size="4" data-checked="false" autocomplete="on" placeholder="End Year"
-            inputmode="numeric" aria-invalid="false" aria-required="false" aria-autocomplete="both"
-            aria-labelledby="date-title" aria-describedby="date-desc" aria-details="date-help"
+            max="2025" step="1" size="4" minlength="4" maxlength="4" data-checked="false" autocomplete="on"
+            placeholder="End Year" inputmode="numeric" aria-invalid="false" aria-required="false"
+            aria-autocomplete="both" aria-labelledby="date-title" aria-describedby="date-desc" aria-details="date-help"
             aria-errormessage="date-feedback" />
         </div>
         <div id="date-feedback" class="field-feedback" role="alert" aria-live="assertive" hidden>
@@ -144,9 +144,9 @@
             </svg>
           </span>
           <input id="language" class="form-control combfield" name="language" form="survey-form" type="text"
-            list="common-languages" minlength="3" maxlength="30" size="30" pattern="[a-z \-]{3,30}"
-            data-checked="false" spellcheck="true" autocomplete="on" placeholder="Language" inputmode="text"
-            aria-invalid="false" aria-required="false" aria-autocomplete="both" aria-labelledby="language-title"
+            list="common-languages" minlength="3" maxlength="30" size="30" pattern="[a-z \-]{3,30}" data-checked="false"
+            spellcheck="true" autocomplete="on" placeholder="Language" inputmode="text" aria-invalid="false"
+            aria-required="false" aria-autocomplete="both" aria-labelledby="language-title"
             aria-describedby="language-desc" aria-details="language-help" aria-errormessage="language-feedback" />
           <datalist id="common-languages">
             <option value="english">english</option>
