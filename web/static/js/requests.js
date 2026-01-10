@@ -25,7 +25,7 @@ import {
   showSuccess,
   showError,
 } from './dialogs.js';
-import { successMessages } from './translations.js';
+import { translationTexts } from './translations.js';
 import { fieldsValidity } from './validation.js';
 
 // Headers
@@ -149,7 +149,7 @@ prevSurveyBtn.button.addEventListener('click', () => {
         downloadLink.click();
         setTimeout(() => URL.revokeObjectURL(blobUrl), 100);
 
-        showSuccess(successMessages[lang].T01);
+        showSuccessAlert(translationTexts[lang].S01);
       });
     }
   }).then((result) => {
@@ -195,7 +195,7 @@ survCombBtn.button.addEventListener('click', () => {
         showFinalStep();
         populateTable(json['data']['combinations']);
 
-        showSuccess(successMessages[lang].T02);
+        showSuccessAlert(translationTexts[lang].S02);
       });
     }
   }).then((result) => {
@@ -255,7 +255,7 @@ survDocsBtn.button.addEventListener('click', () => {
         downloadLink.click();
         URL.revokeObjectURL(blobUrl);
 
-        showSuccess(successMessages[lang].T03);
+        showSuccessAlert(translationTexts[lang].S03);
       });
     }
   }).then((result) => {
@@ -293,7 +293,7 @@ downloadBtn.button.addEventListener('click', () => {
         downloadLink.click();
         setTimeout(() => URL.revokeObjectURL(blobUrl), 100);
 
-        showSuccess(successMessages[lang].T01);
+        showSuccessAlert(translationTexts[lang].S01);
       });
     }
   }).then((result) => {

@@ -1,18 +1,58 @@
-// Success alert messages
-const successMessages = {
+// Translations Texts
+const translationTexts = {
   'en-US': {
-    T01: 'CSV downloaded successfully',
-    T02: 'Combinations found successfully',
-    T03: 'Articles found successfully',
+    S01: 'CSV downloaded successfully.',
+    S02: 'Combinations found successfully.',
+    S03: 'Articles found successfully.',
+    W01: 'This option exceeds the available API Key request quotas.',
+    W02: 'There are no remaining API Key request quotas.',
+    W03: 'Dealing with this high total of results will take some time.',
+    W04: (used) => `This will consume ${used} of your \
+      remaining API Key request quotas.`,
+    W05: 'We can only retrieve the results up to the \
+      available API Key request quotas.',
+    W06: 'There are no remaining API Key request quotas,\
+      nor valid options with results above zero.',
+    E01: (wildcard) => `Wildcard '${wildcard}' must have text after it.`,
+    E02: (wildcard) => `Wildcard '${wildcard}' must have text before it.`,
+    E03: (wildcard) =>
+      `Wildcard '${wildcard}' must have text before or after it.`,
+    E04: 'Unmatched double quotation marks.',
+    E05: 'Quoted text cannot be empty.',
+    E06: 'Quoted text cannot contain only spaces.',
+    E07: 'Unmatched curly braces.',
+    E08: 'Braced text cannot be empty.',
+    E09: 'Braced text cannot contain only spaces.',
   },
   'pt-BR': {
-    T01: 'Download do CSV com sucesso',
-    T02: 'Combinações encontradas com sucesso',
-    T03: 'Artigos encontradas com sucesso',
+    S01: 'Download do CSV com sucesso.',
+    S02: 'Combinações encontradas com sucesso.',
+    S03: 'Artigos encontradas com sucesso.',
+    W01: 'Excede a cota de solicitações disponível para a Chave de API.',
+    W02: 'Não há mais solicitações disponíveis para a Chave de API.',
+    W03: 'Lidar com esse grande número de resultados levará algum tempo.',
+    W04: (used) => `Isso consumirá ${used} das suas cotas restantes \
+      de requisições da Chave de API.`,
+    W05: 'Só podemos obter resultados até o limite das cotas de solicitação\
+      de Chave de API disponíveis',
+    W06: 'Não há cotas restantes de solicitação de Chave de API\
+      nem opções válidas com resultados acima de zero.',
+    E01: (wildcard) =>
+      `O caractere curinga '${wildcard}' deve ter texto após ele.`,
+    E02: (wildcard) =>
+      `O caractere curinga '${wildcard}' deve ter texto antes dele.`,
+    E03: (wildcard) =>
+      `O caractere curinga '${wildcard}' deve ter texto antes ou depois dele.`,
+    E04: 'Aspas duplas não correspondentes.',
+    E05: 'Texto entre aspas não pode estar vazio.',
+    E06: 'Texto entre aspas não pode conter apenas espaços.',
+    E07: 'Chaves não correspondentes.',
+    E08: 'Texto entre chaves não pode estar vazio.',
+    E09: 'Texto entre chaves não pode conter apenas espaços.',
   },
 };
 
-//
+// Error Feedbacks
 const errorFeedbacks = {
   'en-US': {
     valueMissing: 'Fill in this required field',
@@ -22,6 +62,10 @@ const errorFeedbacks = {
     patternMismatch: 'Value with invalid pattern',
     rangeOverflow: 'Value greater than maximum',
     rangeUnderflow: 'Value less than minimum',
+    noInterval: 'Interval must be at least one year',
+    startyear: 'Start Year must be less than End Year',
+    endyear: 'End Year must be greater than Start Year',
+    multipleSpaces: 'Multiple consecutive spaces are not allowed',
   },
   'pt-BR': {
     valueMissing: 'Preencha este campo obrigatório',
@@ -31,12 +75,11 @@ const errorFeedbacks = {
     patternMismatch: 'Valor com padrão inválido',
     rangeOverflow: 'Valor maior que o máximo',
     rangeUnderflow: 'Valor menor que o mínimo',
-  },
-  year: {
-    noInterval: 'Interval must be at least one year',
-    startyear: 'Start Year must be less than End Year',
-    endyear: 'End Year must be greater than Start Year',
+    noInterval: 'Intervalo deve ser de pelo menos um ano',
+    startyear: 'Ano inicial deve ser menor que o ano final',
+    endyear: 'Ano final deve ser maior que o ano inicial',
+    multipleSpaces: 'Múltiplos espaços consecutivos não são permitidos',
   },
 };
 
-export { successMessages, errorFeedbacks };
+export { translationTexts, errorFeedbacks };
