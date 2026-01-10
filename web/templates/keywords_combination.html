@@ -151,15 +151,14 @@
             <th scope="col">Total</th>
           </tr>
         </thead>
-        <tbody id="combination-tbody" class="table-group-divider"></tbody>
+        <tbody id="combination-tbody" class="table-group-divider" role="radiogroup" aria-required="true"></tbody>
       </table>
       <template id="combination-row-opt">
-        <div class="form-check field-wrapper">
+        <div class="form-check field-wrapper" role="radiogroup" aria-labelledby="combination-title">
           <input id="" class="form-check-input combination-opt" name="combination" form="survey-form" type="radio"
-            value="" required data-checked="false" autocomplete="on" aria-invalid="false" aria-required="true"
-            aria-checked="false" aria-autocomplete="both" aria-labelledby="combination-title"
-            aria-describedby="combination-desc" aria-details="combination-help" aria-errormessage="combination-feedback"
-            tabindex="0">
+            value="" required data-checked="false" aria-invalid="false" aria-required="true" aria-checked="false"
+            aria-labelledby="combination-title" aria-describedby="combination-desc" aria-details="combination-help"
+            aria-errormessage="combination-feedback" tabindex="0">
           <label class="form-check-label" for=""></label>
         </div>
       </template>
