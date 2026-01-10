@@ -94,6 +94,14 @@ class UnprocessableContent(HTTPError):
         super().__init__(HTTPStatus.UNPROCESSABLE_ENTITY, message, error)
 
 
+class TooManyRequests(HTTPError):
+    """HTTP error status code 429"""
+
+    def __init__(self, message: str, error: Exception = None) -> None:
+        """HTTP error status code 429"""
+        super().__init__(HTTPStatus.TOO_MANY_REQUESTS, message, error)
+
+
 class InternalError(HTTPError):
     """HTTP error status code 500"""
 
