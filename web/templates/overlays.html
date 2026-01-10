@@ -87,22 +87,45 @@
   </div>
 </div>
 
-<div id="warning-modal" class="modal fade modal-dialog modal-dialog-centered modal-fullscreen-sm-down" role="dialog"
-  data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-modal="true" aria-expanded="false"
-  aria-labelledby="warning-title" aria-describedby="modal-body" hidden>
+<div id="warning-modal" class="modal fade modal-fullscreen-sm-down" role="dialog" data-bs-backdrop="static"
+  data-bs-keyboard="false" tabindex="-1" aria-modal="true" aria-expanded="false" aria-labelledby="warning-title"
+  aria-describedby="warnings-caption" hidden>
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 id="warning-title" class="modal-title">Warning</h5>
+        <h5 id="warning-title" class="modal-title">
+          Warnings
+          <span id="warnings-number" class="badge text-bg-danger" aria-hidden="true"></span>
+        </h5>
         <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close warning"></button>
       </div>
       <div class="modal-body" aria-live="polite" aria-atomic="false">
-        <p id="quota-exceed-warning" role="alert" aria-live="polite" aria-atomic="true" hidden>
-          It will not get all the results for options beyond the max quota limit
-        </p>
-        <p id="high-requests-warning" role="alert" aria-live="polite" aria-atomic="true" hidden>
-          It have a very high total requests to make (it gonna take too long)
-        </p>
+        <ul id="warnings-messages" class="list-group list-group-flush" role="alert" aria-label="Warnings list"></ul>
+      </div>
+      <div class="modal-footer">
+        <table id="warning-table" class="table table-striped caption-top">
+          <caption id="warnings-caption" class="mb-3">
+            Consumption and limitations for the selected option.
+          </caption>
+          <colgroup>
+            <col span="1">
+            <col span="1">
+          </colgroup>
+          <tbody id="warning-tbody">
+            <tr>
+              <td>Search quotas</td>
+              <td id="search-quotas-td"></td>
+            </tr>
+            <tr>
+              <td>Abstract quotas</td>
+              <td id="abstract-quotas-td"></td>
+            </tr>
+            <tr>
+              <td>Retrievable results</td>
+              <td id="retrievable-results-td"></td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
