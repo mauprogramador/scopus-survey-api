@@ -35,6 +35,9 @@ class SurveyDetails(Protocol):
     def set_abstract_quota(self, response: ResponseBundle) -> None:
         pass
 
+    def set_results(self, retrieved: int) -> None:
+        pass
+
     def set_loss(self, loss_amount: int, loss_percent: float) -> None:
         pass
 
@@ -43,6 +46,7 @@ class SurveyDetails(Protocol):
 
 
 class HTTPClient(Protocol):
+
     async def update_strategy(self, total_requests: int) -> None:
         pass
 
@@ -54,6 +58,7 @@ class HTTPClient(Protocol):
 
 
 class URLBuilder(Protocol):
+
     @staticmethod
     def article_page_url(scopus_id: str) -> str:
         pass
@@ -91,6 +96,7 @@ class SearchAPI(Protocol):
 
 
 class AbstractAPI(Protocol):
+
     async def retrieve_abstracts(
         self, api_key: str, entry: list[ScopusEntry]
     ) -> DataFrame:
@@ -98,5 +104,6 @@ class AbstractAPI(Protocol):
 
 
 class SimilarityFilter(Protocol):
+
     def filter(self, dataframe: DataFrame, similarity_ratio: int) -> DataFrame:
         pass

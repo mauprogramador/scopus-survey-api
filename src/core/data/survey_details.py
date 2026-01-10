@@ -63,6 +63,12 @@ class SurveyDetails:
             }
         )
 
+    def set_results(self, retrieved: int) -> None:
+        total = int(self.headers["X-Total"])
+        results = f"{retrieved:,}doc / {total:,}doc"
+        self.headers.update({"X-Results": results})
+        self.metadata.append(f"results={results}")
+
     def set_loss(self, loss_amount: int, loss_percent: float) -> None:
         loss = f"{loss_amount}doc / {loss_percent:.2f}%"
         self.headers.update({"X-Loss": loss})
