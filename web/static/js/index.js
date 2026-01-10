@@ -1,4 +1,5 @@
 import { Button } from './button.js';
+import { translationTexts } from './translations.js';
 
 // Get context data
 const downloadLink = document.getElementById('download-link');
@@ -9,7 +10,8 @@ contextData.remove();
 
 // Focused element state
 const main = document.getElementById('main-content');
-window.PreviousFocusedEl = main;
+// var previousFocusedEl = main;
+window.previousFocusedEl = main;
 
 function currentFocusedEl() {
   if (document.activeElement && document.activeElement !== document.body) {
@@ -22,20 +24,23 @@ function currentFocusedEl() {
 }
 
 // Populate Details
+// - Scopus Search and Abstract Retrieval APIs weekly quota
+//   https://dev.elsevier.com/api_key_settings.html
 const detailsTbody = document.getElementById('details-tbody');
 const detailsCache = {
   'x-api-key': null,
-  'x-search-limit': null,
-  'x-search-remaining': null,
+  'x-search-limit': 20000,
+  'x-search-remaining': 20000,
   'x-search-reset': null,
   'x-search-els-status': null,
-  'x-abstract-limit': null,
-  'x-abstract-remaining': null,
+  'x-abstract-limit': 10000,
+  'x-abstract-remaining': 10000,
   'x-abstract-reset': null,
   'x-abstract-els-status': null,
   'x-keywords': null,
   'x-combination': null,
   'x-total': null,
+  'x-results': null,
   'x-pages-count': null,
   'x-items-per-page': null,
   'x-average-found': null,
@@ -59,6 +64,7 @@ const detailsGroupLabels = {
     'x-keywords': 'Keywords',
     'x-combination': 'Combination',
     'x-total': 'Total',
+    'x-results': 'Results',
     'x-pages-count': 'Pages count',
     'x-items-per-page': 'Items per page',
     'x-average-found': 'Average found',
@@ -67,11 +73,22 @@ const detailsGroupLabels = {
     'x-csv-filename': 'CSV filename',
   },
 };
+const apiKeyQuota = [
+  'x-api-key',
+  'x-search-remaining',
+  'x-search-reset',
+  'x-abstract-remaining',
+  'x-abstract-reset',
+];
 
 function updateDetails(headers) {
-  for (let key in detailsCache) {
-    detailsCache[key] = null;
-  }
+  detailsCache['x-total'] = null;
+  detailsCache['x-pages-count'] = null;
+  detailsCache['x-items-per-page'] = null;
+  detailsCache['x-average-found'] = null;
+  detailsCache['x-loss'] = null;
+  detailsCache['x-csv-filename'] = null;
+
   detailsTbody.innerHTML = '';
 
   headers.forEach((headerValue, headerName) => {
@@ -105,6 +122,171 @@ function updateDetails(headers) {
         tr.appendChild(tdHeaderValue);
         detailsTbody.appendChild(tr);
       });
+  });
+
+  let apiKeyQuotaData = Object.entries(detailsCache).filter(([key, value]) =>
+    apiKeyQuota.includes(key)
+  );
+  sessionStorage.setItem(
+    detailsCache['x-api-key'],
+    JSON.stringify(apiKeyQuotaData)
+  );
+}
+
+// API Key quota, limitation, and warnings
+const highResults = 300;
+const pagination = 25;
+const noResults = 0;
+
+function noRemainingQuota() {
+  return (
+    detailsCache['x-search-remaining'] === noResults ||
+    detailsCache['x-abstract-remaining'] === noResults
+  );
+}
+
+function remainingQuota(total) {
+  let pages_count = Math.ceil(total / pagination);
+  let has_search_quota = detailsCache['x-search-remaining'] >= pages_count;
+  let has_abstract_quota = detailsCache['x-abstract-remaining'] >= total;
+  return has_search_quota && has_abstract_quota;
+}
+
+const searchQuotasTd = document.getElementById('search-quotas-td');
+const abstractQuotasTd = document.getElementById('abstract-quotas-td');
+const retrievableResultsTd = document.getElementById('retrievable-results-td');
+
+function updateWarningsSummary(
+  total = 0,
+  retrievableResults = 0,
+  searchQuotas = detailsCache['x-search-remaining'],
+  abstractQuotas = detailsCache['x-abstract-remaining']
+) {
+  searchQuotasTd.innerText = `${searchQuotas.toLocaleString()} /\
+    ${detailsCache['x-search-remaining'].toLocaleString()}`;
+  abstractQuotasTd.innerText = `${abstractQuotas.toLocaleString()} /\
+    ${detailsCache['x-abstract-remaining'].toLocaleString()}`;
+  retrievableResultsTd.innerText = `${retrievableResults.toLocaleString()} /\
+    ${total.toLocaleString()}`;
+}
+
+function loadApiKeyQuota(apiKey) {
+  if (!sessionStorage.hasOwnProperty(apiKey)) {
+    let apiKeyQuotaData = Object.entries(detailsCache).filter(([key, value]) =>
+      apiKeyQuota.includes(key)
+    );
+    sessionStorage.setItem(apiKey, JSON.stringify(apiKeyQuotaData));
+  } else {
+    let storedData = JSON.parse(sessionStorage.getItem(apiKey));
+    storedData.forEach(([key, value]) => {
+      detailsCache[key] = value;
+    });
+  }
+  updateWarningsSummary();
+  return noRemainingQuota() ? [translationTexts[lang].W02] : [];
+}
+
+function verifyQuota(total) {
+  let warnings = [];
+  if (total === noResults) {
+    return warnings;
+  }
+  if (noRemainingQuota()) {
+    updateWarningsSummary(total, 0, 0, 0);
+    warnings.push(translationTexts[lang].W02);
+    return warnings;
+  }
+  let used = Math.ceil(total / pagination) + total;
+  warnings.push(translationTexts[lang].W04(used.toLocaleString()));
+  if (remainingQuota(total)) {
+    updateWarningsSummary(total, total, Math.ceil(total / pagination), total);
+    if (total >= highResults) {
+      warnings.push(translationTexts[lang].W03);
+      return warnings;
+    }
+    return warnings;
+  }
+  warnings.push(translationTexts[lang].W01);
+  warnings.push(translationTexts[lang].W05);
+  let possibleSearches = detailsCache['x-search-remaining'] * pagination;
+  let allowedRequests = Math.min(
+    possibleSearches,
+    detailsCache['x-abstract-remaining']
+  );
+  let searchQuotas = 0;
+  let abstractQuotas = 0;
+  if (allowedRequests === possibleSearches) {
+    searchQuotas = detailsCache['x-search-remaining'];
+    abstractQuotas = possibleSearches;
+  } else {
+    searchQuotas = Math.floor(allowedRequests / pagination);
+    abstractQuotas = detailsCache['x-abstract-remaining'];
+  }
+  updateWarningsSummary(total, allowedRequests, searchQuotas, abstractQuotas);
+  if (allowedRequests >= highResults) {
+    warnings.push(translationTexts[lang].W03);
+  }
+  return warnings;
+}
+
+// Populate Combinations
+const combTbody = document.getElementById('combination-tbody');
+const template = document.getElementById('combination-row-opt');
+
+function populateTable(combinations) {
+  combinations.forEach((item) => {
+    let clone = template.content.cloneNode(true);
+    let id = `combination-opt${item.index}`;
+
+    let input = clone.querySelector('input');
+    input.id = id;
+    input.value = item.combination;
+
+    let label = clone.querySelector('label');
+    label.htmlFor = id;
+    label.innerText = item.combination;
+
+    let thIndex = document.createElement('th');
+    thIndex.scope = 'row';
+    thIndex.innerText = item.index;
+
+    let tdFormCheck = document.createElement('td');
+    tdFormCheck.appendChild(clone);
+
+    let tdTotal = document.createElement('td');
+    let totalNumber = Number(item.total);
+    input.dataset.total = totalNumber;
+    let totalLocale = totalNumber.toLocaleString();
+
+    if (totalNumber === noResults || noRemainingQuota()) {
+      input.disabled = true;
+      tdTotal.innerText = totalLocale;
+    } else if (!remainingQuota(totalNumber)) {
+      tdTotal.classList.add('text-danger');
+      tdTotal.ariaLabel = translationTexts[lang].W01;
+      tdTotal.title = translationTexts[lang].W01;
+
+      new bootstrap.Tooltip(tdTotal);
+      tdTotal.dataset.bsToggle = 'tooltip';
+      tdTotal.dataset.bsPlacement = 'top';
+      tdTotal.dataset.bsTitle = translationTexts[lang].W01;
+
+      let beyondQuota = document.createElement('s');
+      beyondQuota.innerText = totalLocale;
+      tdTotal.appendChild(beyondQuota);
+    } else {
+      tdTotal.innerText = totalLocale;
+    }
+
+    let tr = document.createElement('tr');
+    tr.role = 'radio';
+    tr.ariaChecked = 'false';
+    tr.tabIndex = '0';
+    tr.appendChild(thIndex);
+    tr.appendChild(tdFormCheck);
+    tr.appendChild(tdTotal);
+
+    combTbody.appendChild(tr);
   });
 }
 
@@ -159,7 +341,6 @@ function hideFinalStep() {
     .querySelector('.field-feedback');
   fieldFeedback.toggleAttribute('hidden', true);
   fieldFeedback.innerHTML = '';
-  // Include Max Count in future
 
   survDocsBtn.disable();
   downloadBtn.disable();
@@ -176,15 +357,17 @@ export {
   main,
   csrfToken,
   downloadLink,
-  startYearField,
-  endYearField,
-  errorRawJson,
   combTbody,
   apiKeyField,
   allCombFields,
   keywordsFields,
   allFreshFields,
   currentFocusedEl,
+  noRemainingQuota,
+  remainingQuota,
+  loadApiKeyQuota,
+  updateWarningsSummary,
+  verifyQuota,
   updateDetails,
   populateTable,
   hideFinalStep,
@@ -195,4 +378,8 @@ export {
   survDocsBtn,
   downloadBtn,
   survDocsDetailsBtn,
+  highResults,
+  noResults,
+  pagination,
+  detailsCache,
 };
