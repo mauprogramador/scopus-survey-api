@@ -1,5 +1,3 @@
-from math import ceil
-
 from pydantic import ValidationError
 from pytest import raises
 
@@ -44,7 +42,7 @@ def test_scopus_entry_raise_errors():
 def test_scopus_search_valid_data():
     model = ScopusSearch(**search_raw(156, 1))
     assert model.total_results == 156 and model.items_per_page == 25
-    assert model.pages_count == ceil(156 / 25) and len(model.entry) == 1
+    assert model.pages_count == 7 and len(model.entry) == 1
 
 
 def test_scopus_search_raise_errors():

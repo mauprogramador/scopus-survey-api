@@ -183,9 +183,9 @@ async def test_update_strategy_and_additional_sleep(
     mock = mocker.patch(GET, new=AsyncMock(side_effect=GET_STRATEGY))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     strategy: RateStrategy = spy_log.call_args_list[2].args[0]
-    assert res.status_code == HTTP_200 and mock.call_count == 116
+    assert res.status_code == HTTP_200 and mock.call_count == 118
     assert strategy.rate == 7.5 and strategy.backoff == 2.2
-    assert spy_sleep.call_count == 3  # +1 close
+    assert spy_sleep.call_count == 4  # +1 close
     spy_sleep.assert_awaited()
     spy_log.assert_called()
     mock.assert_awaited()
