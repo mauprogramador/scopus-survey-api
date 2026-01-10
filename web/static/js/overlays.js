@@ -1,28 +1,139 @@
-import { main, currentFocusedEl, errorRawJson } from './index.js';
+import {
+  main,
+  currentFocusedEl,
+  survCombDetailsBtn,
+  survDocsDetailsBtn,
+} from './index.js';
+import { Button } from './button.js';
 
-// Close buttons
-document.querySelectorAll('.alert .btn-close').forEach((btnClose) => {
-  btnClose.addEventListener('click', () => {
-    btnClose.closest('.alert').close();
+// Tooltips and Btn-Close
+document
+  .querySelectorAll('[data-bs-toggle="tooltip"]')
+  .forEach((tooltipEl) => new bootstrap.Tooltip(tooltipEl));
+
+document.querySelectorAll('.btn-close').forEach((btnClose) => {
+  btnClose.addEventListener('click', (event) => {
+    event.target.blur();
   });
 });
 
-// Close any open dialog
-function closeAny() {
-  let currentOpen = document.querySelector('dialog[open]');
-  if (currentOpen) {
-    let alertOpen = new bootstrap.Alert(currentOpen);
-    alertOpen.close();
-  }
-  window.PreviousFocusedEl = currentFocusedEl();
+// Handle dropdown translate menu
+const translateButton = new Button('#translate-button');
+const translateDropdown = document.getElementById('translate-dropdown');
+
+translateButton.button.addEventListener('shown.bs.dropdown', () => {
+  translateDropdown.focus();
+  translateDropdown.ariaExpanded = 'true';
+  translateButton.ariaActive();
+});
+
+translateButton.button.addEventListener('hidden.bs.dropdown', () => {
+  translateButton.button.focus();
+  translateDropdown.ariaExpanded = 'false';
+  translateButton.ariaInactive();
+});
+
+// Handle accordion
+const accordionJsonButton = new Button('#accordion-json-button');
+const jsonTreeCollapse = document.getElementById('json-tree-collapse');
+const errorRawJson = document.getElementById('error-raw-json');
+
+jsonTreeCollapse.addEventListener('shown.bs.collapse', () => {
+  jsonTreeCollapse.ariaExpanded = 'true';
+  accordionJsonButton.ariaActive();
+  errorRawJson.focus();
+});
+
+jsonTreeCollapse.addEventListener('hidden.bs.collapse', () => {
+  accordionJsonButton.button.focus();
+  accordionJsonButton.ariaInactive();
+  jsonTreeCollapse.ariaExpanded = 'false';
+});
+
+// Handle warning modal
+const warningModal = document.getElementById('warning-modal');
+const warningBSModal = new bootstrap.Modal('#warning-modal');
+const warningsNumber = document.getElementById('warnings-number');
+const warningMessages = document.getElementById('warnings-messages');
+
+warningModal.addEventListener('show.bs.modal', () => {
+  window.previousFocusedEl = currentFocusedEl();
+  main.setAttribute('aria-hidden', 'true');
+  main.inert = true;
+
+  warningModal.toggleAttribute('hidden', false);
+  warningModal.ariaExpanded = 'true';
+  warningModal.focus();
+});
+
+warningModal.addEventListener('hidden.bs.modal', () => {
+  warningModal.toggleAttribute('hidden', true);
+  warningModal.ariaExpanded = 'false';
+
+  main.setAttribute('aria-hidden', 'false');
+  main.inert = false;
+  window.previousFocusedEl.focus();
+});
+
+function showWarning(warnings) {
+  warningsNumber.innerText = warnings.length;
+  warningMessages.innerHTML = '';
+
+  warnings.forEach((warning) => {
+    let liWarning = document.createElement('li');
+    liWarning.classList.add('list-group-item');
+    liWarning.classList.add('fw-bold');
+    liWarning.innerText = warning;
+    warningMessages.appendChild(liWarning);
+  });
+
+  warningBSModal.show();
 }
 
-// Request loader
+// Handle details modal
+const detailsModal = document.getElementById('details-modal');
+
+detailsModal.addEventListener('show.bs.modal', () => {
+  window.previousFocusedEl = currentFocusedEl();
+  main.setAttribute('aria-hidden', 'true');
+  main.inert = true;
+
+  detailsModal.toggleAttribute('hidden', false);
+  detailsModal.ariaExpanded = 'true';
+  detailsModal.focus();
+
+  survCombDetailsBtn.ariaActive();
+  survDocsDetailsBtn.ariaActive();
+});
+
+detailsModal.addEventListener('hidden.bs.modal', () => {
+  detailsModal.toggleAttribute('hidden', true);
+  detailsModal.ariaExpanded = 'false';
+
+  main.setAttribute('aria-hidden', 'false');
+  main.inert = false;
+
+  survCombDetailsBtn.ariaInactive();
+  survDocsDetailsBtn.ariaInactive();
+  window.previousFocusedEl.focus();
+});
+
+// Close all open dialog
+function closeAll() {
+  let currentOpen = document.querySelector('dialog[open]');
+  if (currentOpen) {
+    new bootstrap.Alert(currentOpen).close();
+    currentOpen.blur();
+  }
+  window.previousFocusedEl = currentFocusedEl();
+}
+
+// Loader
 const loader = document.getElementById('loader-dialog');
 
 function showLoader() {
   requestAnimationFrame(() => {
-    closeAny();
+    closeAll();
     main.setAttribute('aria-hidden', 'true');
     main.inert = true;
     loader.toggleAttribute('hidden', false);
@@ -37,19 +148,20 @@ function hideLoader() {
     loader.toggleAttribute('hidden', true);
     main.inert = false;
     main.setAttribute('aria-hidden', 'false');
-    window.PreviousFocusedEl.focus();
+    window.previousFocusedEl.focus();
   });
 }
 
-// Warning
+// Warning Alert
 const warningAlert = document.getElementById('warning-alert');
+const warningBSAlert = new bootstrap.Alert('#warning-alert');
 
-warningAlert.addEventListener('close', () => {
+warningAlert.addEventListener('closed.bs.alert', () => {
   warningAlert.toggleAttribute('hidden', true);
-  window.PreviousFocusedEl.focus();
+  window.previousFocusedEl.focus();
 });
 
-function showWarning(event) {
+function showWarningAlert(event) {
   event.preventDefault();
   event.returnValue = '';
 
@@ -60,54 +172,55 @@ function showWarning(event) {
 
     setTimeout(() => {
       if (warningAlert.open) {
-        warningAlert.close();
+        warningBSAlert.close();
       }
     }, 7000);
   });
 }
 
-// Success
+// Success Alert
 const successAlert = document.getElementById('success-alert');
+const successBSAlert = new bootstrap.Alert('#success-alert');
 const successMessage = document.getElementById('success-alert-msg');
 
-successAlert.addEventListener('close', () => {
+successAlert.addEventListener('closed.bs.alert', () => {
   successAlert.toggleAttribute('hidden', true);
   successMessage.innerHTML = '';
-  window.PreviousFocusedEl.focus();
+  window.previousFocusedEl.focus();
 });
 
-function showSuccess(message) {
+function showSuccessAlert(message) {
   successMessage.innerText = message;
 
   requestAnimationFrame(() => {
-    closeAny();
+    closeAll();
     successAlert.toggleAttribute('hidden', false);
-    successAlert.focus();
+    successAlert.querySelector('.btn-close').focus();
     successAlert.show();
 
     setTimeout(() => {
       if (successAlert.open) {
-        successAlert.close();
+        successBSAlert.close();
       }
     }, 7000);
   });
 }
 
-// Error
+// Error Alert
 const errorAlert = document.getElementById('error-alert');
 const errorMessage = document.getElementById('error-alert-msg');
 
-errorAlert.addEventListener('close', () => {
+errorAlert.addEventListener('closed.bs.alert', () => {
   errorAlert.toggleAttribute('hidden', true);
   main.inert = false;
   main.setAttribute('aria-hidden', 'false');
 
-  window.PreviousFocusedEl.focus();
+  window.previousFocusedEl.focus();
   errorMessage.innerHTML = '';
   errorRawJson.innerHTML = '';
 });
 
-function showError(message, rawJson) {
+function showErrorAlert(message, rawJson) {
   errorMessage.innerText = message || 'An error occurred';
 
   let json = null;
@@ -121,7 +234,7 @@ function showError(message, rawJson) {
   jsonview.render(jsonTree, errorRawJson);
 
   requestAnimationFrame(() => {
-    closeAny();
+    closeAll();
     main.setAttribute('aria-hidden', 'true');
     main.inert = true;
 
@@ -132,10 +245,11 @@ function showError(message, rawJson) {
 }
 
 export {
-  closeAny,
+  closeAll,
   showLoader,
   hideLoader,
+  showWarningAlert,
+  showSuccessAlert,
+  showErrorAlert,
   showWarning,
-  showSuccess,
-  showError,
 };

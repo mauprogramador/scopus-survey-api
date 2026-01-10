@@ -18,15 +18,15 @@ import {
   allFreshFields,
 } from './index.js';
 import {
-  closeAny,
+  closeAll,
   showLoader,
   hideLoader,
-  showWarning,
-  showSuccess,
-  showError,
-} from './dialogs.js';
+  showWarningAlert,
+  showSuccessAlert,
+  showErrorAlert,
+} from './overlays.js';
 import { translationTexts } from './translations.js';
-import { fieldsValidity } from './validation.js';
+import { fieldsValidity, noRadios } from './validation.js';
 
 // Headers
 const headers = {
@@ -70,12 +70,12 @@ function request(url, callback) {
     cache: 'no-store',
   });
 
-  window.addEventListener('beforeunload', showWarning);
+  window.addEventListener('beforeunload', showWarningAlert);
   showLoader();
 
   return fetch(request)
     .then((response) => {
-      window.removeEventListener('beforeunload', showWarning);
+      window.removeEventListener('beforeunload', showWarningAlert);
       hideLoader();
 
       if (response.ok) {
@@ -84,7 +84,7 @@ function request(url, callback) {
           return callback(response);
         } catch (error) {
           console.error(error);
-          showError(error.message, errorToJSON(error));
+          showErrorAlert(error.message, errorToJSON(error));
           return false;
         }
       } else {
@@ -92,31 +92,31 @@ function request(url, callback) {
           .json()
           .then((json) => {
             console.error(json);
-            showError(json['message'], json);
+            showErrorAlert(json['message'], json);
 
             let isUnauthorized = response.status === 401;
             let missingCSRF = 'Missing CSRF Token Cookie';
 
             if (isUnauthorized && json['message'] === missingCSRF) {
               setTimeout(() => {
-                closeAny();
+                closeAll();
                 location.reload();
               }, 5000);
             }
           })
           .catch((error) => {
             console.error(error);
-            showError(error.message, errorToJSON(error));
+            showErrorAlert(error.message, errorToJSON(error));
           });
         return false;
       }
     })
     .catch((error) => {
-      window.removeEventListener('beforeunload', showWarning);
+      window.removeEventListener('beforeunload', showWarningAlert);
       hideLoader();
 
       console.error(error);
-      showError(error.message, errorToJSON(error));
+      showErrorAlert(error.message, errorToJSON(error));
 
       return false;
     });
@@ -196,6 +196,7 @@ survCombBtn.button.addEventListener('click', () => {
         populateTable(json['data']['combinations']);
 
         showSuccessAlert(translationTexts[lang].S02);
+        noRadios();
       });
     }
   }).then((result) => {
