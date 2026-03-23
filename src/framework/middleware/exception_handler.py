@@ -16,6 +16,7 @@ from src.core.domain.http_exceptions import HTTPError, ScopusAPIError
 
 class ExceptionHandler:
     """Handles exceptions and returns their JSON representation"""
+    _CHROME_DEVTOOLS_URL = ".well-known/appspecific/com.chrome.devtools.json"
 
     @property
     def handlers(self) -> dict:
@@ -65,8 +66,9 @@ class ExceptionHandler:
         request: Request,
         exc: StarletteHTTPException | FastAPIHTTPException,
     ) -> ErrorJSON:
-        LOG.error(exc.detail)
-        LOG.exception(exc)
+        if not request.url.path.endswith(self._CHROME_DEVTOOLS_URL):
+            LOG.error(exc.detail)
+            LOG.exception(exc)
         return ErrorJSON(request, exc.status_code, exc.detail)
 
     async def fastapi_validation_error(
