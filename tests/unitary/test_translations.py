@@ -15,6 +15,7 @@ def test_load_all():
 
 
 def test_error_load_all(mocker: Mocker):
+    Translations.load_all.cache_clear()
     target = fqn(Translations, translation)
     mocker.patch(target, side_effect=FileNotFoundError("any"))
     with raises(FileNotFoundError) as info:

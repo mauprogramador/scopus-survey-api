@@ -1,3 +1,4 @@
+from functools import lru_cache
 from gettext import GNUTranslations, translation
 from pathlib import Path
 
@@ -16,6 +17,7 @@ class Translations:
     WEB: dict[Lang, GNUTranslations] = {}
 
     @classmethod
+    @lru_cache(maxsize=10)
     def load_all(cls) -> None:
         try:
             cls.WEB[Lang.EN_US] = translation(
