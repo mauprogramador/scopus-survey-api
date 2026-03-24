@@ -164,6 +164,14 @@ abbr {
   padding: 1rem;
 }
 
+/* Horizontal rules */
+hr {
+  --bs-border-width: 1px;
+  color: #d2d6db;
+  width: 100%;
+  opacity: 1;
+}
+
 /* Badge */
 .step-badge {
   border-top: 4px solid var(--badge-border-color);
