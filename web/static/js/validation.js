@@ -31,7 +31,7 @@ endYearField.setAttribute('min', (publicationsPastTimeLimit + 1).toString());
 // Fields Validity
 function fieldsValidity(fields) {
   return Array.from(fields).every(
-    (field) => field.validity.valid && field.ariaInvalid === 'false'
+    (field) => field.validity.valid && field.ariaInvalid === 'false',
   );
 }
 
@@ -199,7 +199,7 @@ form.addEventListener('input', (event) => {
 form.addEventListener('change', (event) => {
   if (
     event.target.matches(
-      'input[type="number"], select, input[type="radio"]:not(:disabled)'
+      'input[type="number"], select, input[type="radio"]:not(:disabled)',
     )
   ) {
     toggleValidity(event.target);
@@ -220,7 +220,7 @@ combTbody.addEventListener('change', (event) => {
 // No remaining quota
 function noRadios() {
   let radios = combTbody.querySelectorAll('input[type="radio"]');
-  let allDisable = Array.from(radios).every(radio => radio.disabled);
+  let allDisable = Array.from(radios).every((radio) => radio.disabled);
   if (allDisable) {
     survDocsBtn.disable();
     showWarning(translationTexts[lang].W06);

@@ -52,7 +52,7 @@ function errorToJSON(error) {
     jsonError.status = error.response.statusText;
     jsonError.data = error.response.data;
     jsonError.headers = Object.fromEntries(
-      error.response.headers?.entries() || []
+      error.response.headers?.entries() || [],
     );
   }
 
@@ -237,7 +237,7 @@ survDocsBtn.button.addEventListener('click', () => {
 
   url.searchParams.set('keywords', keywords.join(','));
   const combination = Array.from(
-    document.querySelectorAll('.combination-opt')
+    document.querySelectorAll('.combination-opt'),
   ).filter((field) => field.checked)[0];
 
   url.searchParams.set(combination.name, combination.value);

@@ -57,39 +57,41 @@ function updateDetails(headers) {
     }
   });
 
-  Object.entries(detailsGroupLabels).forEach(([groupName, groupLabels]) => {
-    let thGroupLabel = document.createElement('th');
-    thGroupLabel.classList.add('group-header');
-    thGroupLabel.scope = 'row';
-    thGroupLabel.colSpan = '2';
-    thGroupLabel.innerText = groupName;
+  Object.entries(detailsGroupLabels[lang]).forEach(
+    ([groupName, groupLabels]) => {
+      let thGroupLabel = document.createElement('th');
+      thGroupLabel.classList.add('group-header');
+      thGroupLabel.scope = 'row';
+      thGroupLabel.colSpan = '2';
+      thGroupLabel.innerText = groupName;
 
-    let trGroupLabel = document.createElement('tr');
-    trGroupLabel.appendChild(thGroupLabel);
-    detailsTbody.appendChild(trGroupLabel);
+      let trGroupLabel = document.createElement('tr');
+      trGroupLabel.appendChild(thGroupLabel);
+      detailsTbody.appendChild(trGroupLabel);
 
-    Object.entries(groupLabels)
-      .filter((item) => detailsCache[item[0]] !== null)
-      .forEach(([headerName, headerLabel]) => {
-        let tdHeaderName = document.createElement('td');
-        tdHeaderName.innerText = headerLabel;
+      Object.entries(groupLabels)
+        .filter((item) => detailsCache[item[0]] !== null)
+        .forEach(([headerName, headerLabel]) => {
+          let tdHeaderName = document.createElement('td');
+          tdHeaderName.innerText = headerLabel;
 
-        let tdHeaderValue = document.createElement('td');
-        tdHeaderValue.innerText = detailsCache[headerName];
+          let tdHeaderValue = document.createElement('td');
+          tdHeaderValue.innerText = detailsCache[headerName];
 
-        let tr = document.createElement('tr');
-        tr.appendChild(tdHeaderName);
-        tr.appendChild(tdHeaderValue);
-        detailsTbody.appendChild(tr);
-      });
-  });
+          let tr = document.createElement('tr');
+          tr.appendChild(tdHeaderName);
+          tr.appendChild(tdHeaderValue);
+          detailsTbody.appendChild(tr);
+        });
+    },
+  );
 
   let apiKeyQuotaData = Object.entries(detailsCache).filter(([key, value]) =>
-    apiKeyQuota.includes(key)
+    apiKeyQuota.includes(key),
   );
   sessionStorage.setItem(
     detailsCache['x-api-key'],
-    JSON.stringify(apiKeyQuotaData)
+    JSON.stringify(apiKeyQuotaData),
   );
 }
 
@@ -120,7 +122,7 @@ function updateWarningsSummary(
   total = 0,
   retrievableResults = 0,
   searchQuotas = detailsCache['x-search-remaining'],
-  abstractQuotas = detailsCache['x-abstract-remaining']
+  abstractQuotas = detailsCache['x-abstract-remaining'],
 ) {
   searchQuotasTd.innerText = `${searchQuotas.toLocaleString()} /\
     ${detailsCache['x-search-remaining'].toLocaleString()}`;
@@ -133,7 +135,7 @@ function updateWarningsSummary(
 function loadApiKeyQuota(apiKey) {
   if (!sessionStorage.hasOwnProperty(apiKey)) {
     let apiKeyQuotaData = Object.entries(detailsCache).filter(([key, value]) =>
-      apiKeyQuota.includes(key)
+      apiKeyQuota.includes(key),
     );
     sessionStorage.setItem(apiKey, JSON.stringify(apiKeyQuotaData));
   } else {
@@ -171,7 +173,7 @@ function verifyQuota(total) {
   let possibleSearches = detailsCache['x-search-remaining'] * pagination;
   let allowedRequests = Math.min(
     possibleSearches,
-    detailsCache['x-abstract-remaining']
+    detailsCache['x-abstract-remaining'],
   );
   let searchQuotas = 0;
   let abstractQuotas = 0;
@@ -269,7 +271,7 @@ const allFreshFields = {
       return this.elements;
     }
     this.elements = document.querySelectorAll(
-      'input:not(template input), select'
+      'input:not(template input), select',
     );
     return this.elements;
   },
@@ -277,7 +279,7 @@ const allFreshFields = {
 
 // Final step
 const combTableSection = document.getElementById('combination-table-section');
-const formStep3 = document.getElementById('form-step-3');
+const formStep4 = document.getElementById('form-step-4');
 const thresholdField = document.getElementById('threshold');
 const inputEvent = new InputEvent('input', {
   bubbles: true,
@@ -287,7 +289,7 @@ const inputEvent = new InputEvent('input', {
 
 function hideFinalStep() {
   combTableSection.toggleAttribute('hidden', true);
-  formStep3.toggleAttribute('hidden', true);
+  formStep4.toggleAttribute('hidden', true);
   combTbody.innerHTML = '';
 
   thresholdField.value = '';
@@ -309,7 +311,7 @@ function hideFinalStep() {
 
 function showFinalStep() {
   combTableSection.toggleAttribute('hidden', false);
-  formStep3.toggleAttribute('hidden', false);
+  formStep4.toggleAttribute('hidden', false);
 }
 
 export {
