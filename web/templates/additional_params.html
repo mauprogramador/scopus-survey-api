@@ -1,25 +1,11 @@
-<article class="container mt-4 pt-0" aria-labelledby="step-1-title" aria-describedby="step-1-desc">
-  <h3 id="step-1-title" class="step-badge">STEP 2 - Additional params</h3>
-  <p id="step-1-desc" class="mb-0 mt-4">
-    The fields below can be submitted via the <strong>"query"</strong> query parameter, allowing a <strong>Boolean
-      search combining fields with the AND operator</strong> to be performed on the <strong>Scopus cluster</strong> and
-    produce more relevant results. <strong>Optional fields left unfilled will not be sent by default</strong>. See the
-    <a class="link" href="https://dev.elsevier.com/sc_search_tips.html" target="_blank"
-      rel="help nofollow noopener noreferrer">Scopus Search Guide</a>.
-  </p>
+<article class="container mt-4 pt-0" aria-labelledby="step-2-title" aria-describedby="step-2-desc">
+  {{ partial_steps.step2() }}
   <hr class="w-50 mx-auto mt-2 mb-5 text-success opacity-50" aria-hidden="true">
   <div class="row row-cols-1 row-cols-lg-2 align-items-end">
 
     <section class="col pe-lg-5 text-group mb-5" role="region" aria-labelledby="date-title"
       aria-describedby="date-desc">
-      <h4 id="date-title">
-        Date
-        <span class="badge text-bg-secondary" aria-hidden="true">Optional</span>
-      </h4>
-      <p id="date-desc">
-        The range of years, from the <strong>last ten years</strong> to the <strong>current year</strong>, as the
-        target of interest of published articles. <strong>Default to the last three years</strong>.
-      </p>
+      {{ partial_fields.date_range() }}
       <div class="field-container">
         <div class="field-wrapper">
           <span class="field-icon" aria-hidden="true">
@@ -52,13 +38,7 @@
 
     <section class="col ps-lg-5 text-group mb-5" role="region" aria-labelledby="doctype-title"
       aria-describedby="doctype-desc">
-      <h4 id="doctype-title">
-        Doctype
-        <span class="badge text-bg-secondary" aria-hidden="true">Optional</span>
-      </h4>
-      <p id="doctype-desc">
-        The <strong>type</strong> in which the document is <strong>classified</strong>.
-      </p>
+      {{ partial_fields.doctype() }}
       <div class="field-container">
         <div class="field-wrapper">
           <span class="field-icon" aria-hidden="true">
@@ -71,21 +51,7 @@
             autocomplete="on" aria-invalid="false" aria-required="false" aria-autocomplete="both"
             aria-labelledby="doctype-title" aria-describedby="doctype-desc" aria-details="doctype-help"
             aria-errormessage="doctype-feedback">
-            <option value="" selected>Document Type</option>
-            <option value="ar">Article</option>
-            <option value="ab">Abstract Report</option>
-            <option value="bk">Book</option>
-            <option value="bz">Business Article</option>
-            <option value="ch">Book Chapter</option>
-            <option value="cp">Conference Paper</option>
-            <option value="cr">Conference Review</option>
-            <option value="ed">Editorial</option>
-            <option value="er">Erratum</option>
-            <option value="le">Letter</option>
-            <option value="no">Note</option>
-            <option value="pr">Press Release</option>
-            <option value="re">Review</option>
-            <option value="sh">Short Survey</option>
+            {{ partial_values.doctype() }}
           </select>
         </div>
         <div id="doctype-feedback" class="field-feedback" role="alert" aria-live="assertive" hidden></div>
@@ -95,11 +61,7 @@
 
     <section class="col pe-lg-5 text-group mb-5" role="region" aria-labelledby="pubstage-title"
       aria-describedby="pubstage-desc">
-      <h4 id="pubstage-title">
-        Pubstage
-        <span class="badge text-bg-secondary" aria-hidden="true">Optional</span>
-      </h4>
-      <p id="pubstage-desc">The <strong>publication stage</strong> of the document.</p>
+      {{ partial_fields.pubstage() }}
       <div class="field-container">
         <div class="field-wrapper">
           <span class="field-icon" aria-hidden="true">
@@ -112,9 +74,7 @@
             autocomplete="on" aria-invalid="false" aria-required="false" aria-autocomplete="both"
             aria-labelledby="pubstage-title" aria-describedby="pubstage-desc" aria-details="pubstage-help"
             aria-errormessage="pubstage-feedback">
-            <option value="" selected>Publication Stage</option>
-            <option value="aip">Article in Press</option>
-            <option value="final">Final Document</option>
+            {{ partial_values.pubstage() }}
           </select>
         </div>
         <div id="pubstage-feedback" class="field-feedback" role="alert" aria-live="assertive" hidden></div>
@@ -124,14 +84,7 @@
 
     <section class="col ps-lg-5 text-group mb-5" role="region" aria-labelledby="language-title"
       aria-describedby="language-desc">
-      <h4 id="language-title">
-        Language
-        <span class="badge text-bg-secondary" aria-hidden="true">Optional</span>
-      </h4>
-      <p id="language-desc">
-        The <strong>language</strong> (in <strong>English</strong>) in which the original document was
-        <strong>written</strong>.
-      </p>
+      {{ partial_fields.language() }}
       <div class="field-container">
         <div class="field-wrapper">
           <span class="field-icon" aria-hidden="true">
@@ -146,13 +99,17 @@
             aria-invalid="false" aria-required="false" aria-autocomplete="both" aria-labelledby="language-title"
             aria-describedby="language-desc" aria-details="language-help" aria-errormessage="language-feedback" />
           <datalist id="common-languages">
+            <option value="chinese">chinese</option>
             <option value="english">english</option>
-            <option value="spanish">spanish</option>
             <option value="french">french</option>
             <option value="german">german</option>
-            <option value="portuguese">portuguese</option>
+            <option value="indian">indian</option>
+            <option value="italian">italian</option>
             <option value="japanese">japanese</option>
-            <option value="chinese">chinese</option>
+            <option value="korean">korean</option>
+            <option value="portuguese">portuguese</option>
+            <option value="russian">russian</option>
+            <option value="spanish">spanish</option>
           </datalist>
         </div>
         <div id="language-feedback" class="field-feedback" role="alert" aria-live="assertive" hidden></div>
@@ -162,13 +119,7 @@
 
     <section class="col pe-lg-5 text-group mb-5" role="region" aria-labelledby="openaccess-title"
       aria-describedby="openaccess-desc">
-      <h4 id="openaccess-title">
-        Open Access
-        <span class="badge text-bg-secondary" aria-hidden="true">Optional</span>
-      </h4>
-      <p id="openaccess-desc">
-        Whether the indexed content is <strong>open access</strong> or <strong>not</strong>.
-      </p>
+      {{ partial_fields.open_access() }}
       <div class="field-container">
         <div class="field-wrapper">
           <span class="field-icon" aria-hidden="true">
@@ -181,9 +132,7 @@
             data-checked="false" autocomplete="on" aria-invalid="false" aria-required="false" aria-autocomplete="both"
             aria-labelledby="openaccess-title" aria-describedby="openaccess-desc" aria-details="openaccess-help"
             aria-errormessage="openaccess-feedback">
-            <option value="" selected>Access</option>
-            <option value="1">Open Access</option>
-            <option value="0">Subscription-based</option>
+            {{ partial_values.open_access() }}
           </select>
         </div>
         <div id="openaccess-feedback" class="field-feedback" role="alert" aria-live="assertive" hidden></div>
@@ -193,11 +142,7 @@
 
     <section class="col ps-lg-5 text-group mb-5" role="region" aria-labelledby="srctype-title"
       aria-describedby="srctype-desc">
-      <h4 id="srctype-title">
-        Srctype
-        <span class="badge text-bg-secondary" aria-hidden="true">Optional</span>
-      </h4>
-      <p id="srctype-desc">The <strong>type of source</strong> the document comes from.</p>
+      {{ partial_fields.srctype() }}
       <div class="field-container">
         <div class="field-wrapper">
           <span class="field-icon" aria-hidden="true">
@@ -210,13 +155,7 @@
             autocomplete="on" aria-invalid="false" aria-required="false" aria-autocomplete="both"
             aria-labelledby="srctype-title" aria-describedby="srctype-desc" aria-details="srctype-help"
             aria-errormessage="srctype-feedback">
-            <option value="" selected>Source Type</option>
-            <option value="j">Journal</option>
-            <option value="b">Book</option>
-            <option value="k">Book Series</option>
-            <option value="p">Conference Proceeding</option>
-            <option value="r">Report</option>
-            <option value="d">Trade Publication</option>
+            {{ partial_values.srctype() }}
           </select>
         </div>
         <div id="srctype-feedback" class="field-feedback" role="alert" aria-live="assertive" hidden></div>
@@ -226,13 +165,7 @@
 
     <section class="col pe-lg-5 text-group mb-5 mb-lg-0" role="region" aria-labelledby="subjarea-title"
       aria-describedby="subjarea-desc">
-      <h4 id="subjarea-title">
-        Subjarea
-        <span class="badge text-bg-secondary" aria-hidden="true">Optional</span>
-      </h4>
-      <p id="subjarea-desc">
-        The <strong>subject area</strong> in which the document is classified.
-      </p>
+      {{ partial_fields.subjarea() }}
       <div class="field-container">
         <div class="field-wrapper">
           <span class="field-icon" aria-hidden="true">
@@ -245,34 +178,7 @@
             autocomplete="on" aria-invalid="false" aria-required="false" aria-autocomplete="both"
             aria-labelledby="subjarea-title" aria-describedby="subjarea-desc" aria-details="subjarea-help"
             aria-errormessage="subjarea-feedback">
-            <option value="" selected>Subject Area</option>
-            <option value="AGRI">Agricultural and Biological Sciences</option>
-            <option value="ARTS">Arts and Humanities</option>
-            <option value="BIOC">Biochemistry, Genetics and Molecular Biology</option>
-            <option value="BUSI">Business, Management and Accounting</option>
-            <option value="CENG">Chemical Engineering</option>
-            <option value="CHEM">Chemistry</option>
-            <option value="COMP">Computer Science</option>
-            <option value="DECI">Decision Sciences</option>
-            <option value="DENT">Dentistry</option>
-            <option value="EART">Earth and Planetary Sciences</option>
-            <option value="ECON">Economics, Econometrics and Finance</option>
-            <option value="ENER">Energy</option>
-            <option value="ENGI">Engineering</option>
-            <option value="ENVI">Environmental Science</option>
-            <option value="HEAL">Health Professions</option>
-            <option value="IMMU">Immunology and Microbiology</option>
-            <option value="MATE">Materials Science</option>
-            <option value="MATH">Mathematics</option>
-            <option value="MEDI">Medicine</option>
-            <option value="NEUR">Neuroscience</option>
-            <option value="NURS">Nursing</option>
-            <option value="PHAR">Pharmacology, Toxicology and Pharmaceutics</option>
-            <option value="PHYS">Physics and Astronomy</option>
-            <option value="PSYC">Psychology</option>
-            <option value="SOCI">Social Sciences</option>
-            <option value="VETE">Veterinary</option>
-            <option value="MULT">Multidisciplinary</option>
+            {{ partial_values.subjarea() }}
           </select>
         </div>
         <div id="subjarea-feedback" class="field-feedback" role="alert" aria-live="assertive" hidden></div>
@@ -281,14 +187,7 @@
     </section>
 
     <section class="col ps-lg-5 text-group" role="region" aria-labelledby="pages-title" aria-describedby="pages-desc">
-      <h4 id="pages-title">
-        Pages
-        <span class="badge text-bg-secondary" aria-hidden="true">Optional</span>
-      </h4>
-      <p id="pages-desc">
-        Whether the document is <strong>short</strong> (up to 4 pages, such as research notes) or <strong>full</strong>
-        (5 or more pages), <strong>by page count</strong>.
-      </p>
+      {{ partial_fields.pages() }}
       <div class="field-container">
         <div class="field-wrapper">
           <span class="field-icon" aria-hidden="true">
@@ -304,9 +203,7 @@
             autocomplete="on" aria-invalid="false" aria-required="false" aria-autocomplete="both"
             aria-labelledby="pages-title" aria-describedby="pages-desc" aria-details="pages-help"
             aria-errormessage="pages-feedback">
-            <option value="" selected>Pages</option>
-            <option value="SHORT">Short papers</option>
-            <option value="LONG">Full papers</option>
+            {{ partial_values.pages() }}
           </select>
         </div>
         <div id="pages-feedback" class="field-feedback" role="alert" aria-live="assertive" hidden></div>

@@ -48,6 +48,9 @@
       {% include "information.html" %}
 
       <form id="survey-form" accept-charset="UTF-8" autocomplete="on" method="get" aria-labelledby="form-title">
+        {% import "partials/steps.html" as partial_steps with context %}
+        {% import "partials/fields.html" as partial_fields with context %}
+        {% import "partials/values.html" as partial_values with context %}
         <h2 id="form-title" hidden>{{_t('form_name')}}</h2>
         {% include "api_key.html" %}
         {% include "additional_params.html" %}

@@ -1,0 +1,170 @@
+{%- macro doctype() %}
+{% if lang == 'en-US' %}
+<option value="" selected>Document Type</option>
+<option value="ar">Article</option>
+<option value="ab">Abstract Report</option>
+<option value="bk">Book</option>
+<option value="bz">Business Article</option>
+<option value="ch">Book Chapter</option>
+<option value="cp">Conference Paper</option>
+<option value="cr">Conference Review</option>
+<option value="ed">Editorial</option>
+<option value="er">Erratum</option>
+<option value="le">Letter</option>
+<option value="no">Note</option>
+<option value="pr">Press Release</option>
+<option value="re">Review</option>
+<option value="sh">Short Survey</option>
+{% else %}
+<!-- cSpell:disable -->
+<option value="" selected>Tipo de Documento</option>
+<option value="ar">Artigo</option>
+<option value="ab">Relatório de Resumo</option>
+<option value="bk">Livro</option>
+<option value="bz">Artigo de Negócios</option>
+<option value="ch">Capítulo de Livro</option>
+<option value="cp">Paper de Conferência</option>
+<option value="cr">Revisão de Conferência</option>
+<option value="ed">Editorial</option>
+<option value="er">Errata</option>
+<option value="le">Carta</option>
+<option value="no">Nota</option>
+<option value="pr">Comunicado de Imprensa (Press Release)</option>
+<option value="re">Artigo de Revisão</option>
+<option value="sh">Revisão/Levantamento Curto</option>
+<!-- cSpell:enable -->
+{% endif %}
+{%- endmacro %}
+
+
+{%- macro pubstage() %}
+{% if lang == 'en-US' %}
+<option value="" selected>Publication Stage</option>
+<option value="aip">Article in Press</option>
+<option value="final">Final Document</option>
+{% else %}
+<!-- cSpell:disable -->
+<option value="" selected>Fase de Publicação</option>
+<option value="aip">Artigo no Prelo (In Press)</option>
+<option value="final">Documento Final</option>
+<!-- cSpell:enable -->
+{% endif %}
+{%- endmacro %}
+
+
+{%- macro open_access() %}
+{% if lang == 'en-US' %}
+<option value="" selected>Access</option>
+<option value="1">Open Access</option>
+<option value="0">Subscription-based</option>
+{% else %}
+<!-- cSpell:disable -->
+<option value="" selected>Acesso</option>
+<option value="1">Acesso Livre</option>
+<option value="0">Baseado em Assinatura</option>
+<!-- cSpell:enable -->
+{% endif %}
+{%- endmacro %}
+
+
+{%- macro srctype() %}
+{% if lang == 'en-US' %}
+<option value="" selected>Source Type</option>
+<option value="j">Journal</option>
+<option value="b">Book</option>
+<option value="k">Book Series</option>
+<option value="p">Conference Proceeding</option>
+<option value="r">Report</option>
+<option value="d">Trade Publication</option>
+{% else %}
+<!-- cSpell:disable -->
+<option value="" selected>Tipo de Fonte</option>
+<option value="j">Periódico (Revista)</option>
+<option value="b">Livro</option>
+<option value="k">Série de Livros</option>
+<option value="p">Anais de Conferência</option>
+<option value="r">Relatório</option>
+<option value="d">Publicação Comercial</option>
+<!-- cSpell:enable -->
+{% endif %}
+{%- endmacro %}
+
+
+{%- macro subjarea() %}
+{% if lang == 'en-US' %}
+<option value="" selected>Subject Area</option>
+<option value="AGRI">Agricultural and Biological Sciences</option>
+<option value="ARTS">Arts and Humanities</option>
+<option value="BIOC">Biochemistry, Genetics and Molecular Biology</option>
+<option value="BUSI">Business, Management and Accounting</option>
+<option value="CENG">Chemical Engineering</option>
+<option value="CHEM">Chemistry</option>
+<option value="COMP">Computer Science</option>
+<option value="DECI">Decision Sciences</option>
+<option value="DENT">Dentistry</option>
+<option value="EART">Earth and Planetary Sciences</option>
+<option value="ECON">Economics, Econometrics and Finance</option>
+<option value="ENER">Energy</option>
+<option value="ENGI">Engineering</option>
+<option value="ENVI">Environmental Science</option>
+<option value="HEAL">Health Professions</option>
+<option value="IMMU">Immunology and Microbiology</option>
+<option value="MATE">Materials Science</option>
+<option value="MATH">Mathematics</option>
+<option value="MEDI">Medicine</option>
+<option value="NEUR">Neuroscience</option>
+<option value="NURS">Nursing</option>
+<option value="PHAR">Pharmacology, Toxicology and Pharmaceutics</option>
+<option value="PHYS">Physics and Astronomy</option>
+<option value="PSYC">Psychology</option>
+<option value="SOCI">Social Sciences</option>
+<option value="VETE">Veterinary</option>
+<option value="MULT">Multidisciplinary</option>
+{% else %}
+<!-- cSpell:disable -->
+<option value="" selected>Áreas do Conhecimento</option>
+<option value="AGRI">Ciências Agrícolas e Biológicas</option>
+<option value="ARTS">Artes e Humanidades</option>
+<option value="BIOC">Bioquímica, Genética e Biologia Molecular</option>
+<option value="BUSI">Negócios, Gestão e Contabilidade</option>
+<option value="CENG">Engenharia Química</option>
+<option value="CHEM">Química</option>
+<option value="COMP">Ciência da Computação</option>
+<option value="DECI">Ciências da Decisão</option>
+<option value="DENT">Odontologia</option>
+<option value="EART">Ciências da Terra e Planetárias</option>
+<option value="ECON">Economia, Econometria e Finanças</option>
+<option value="ENER">Energia</option>
+<option value="ENGI">Engenharia</option>
+<option value="ENVI">Ciências Ambientais</option>
+<option value="HEAL">Profissões da Saúde</option>
+<option value="IMMU">Imunologia e Microbiologia</option>
+<option value="MATE">Ciência dos Materiais</option>
+<option value="MATH">Matemática</option>
+<option value="MEDI">Medicina</option>
+<option value="NEUR">Neurociência</option>
+<option value="NURS">Enfermagem</option>
+<option value="PHAR">Farmacologia, Toxicologia e Farmacêutica</option>
+<option value="PHYS">Física e Astronomia</option>
+<option value="PSYC">Psicologia</option>
+<option value="SOCI">Ciências Sociais</option>
+<option value="VETE">Veterinária</option>
+<option value="MULT">Multidisciplinar</option>
+<!-- cSpell:enable -->
+{% endif %}
+{%- endmacro %}
+
+
+{%- macro pages() %}
+{% if lang == 'en-US' %}
+<option value="" selected>Pages</option>
+<option value="SHORT">Short papers (up to 4 pages)</option>
+<option value="LONG">Full papers (5 or more pages)</option>
+{% else %}
+<!-- cSpell:disable -->
+<option value="" selected>Páginas</option>
+<option value="SHORT">Artigos curtos (até 4 páginas)</option>
+<option value="LONG">Artigos completos (5 ou mais páginas)</option>
+<!-- cSpell:enable -->
+{% endif %}
+{%- endmacro %}

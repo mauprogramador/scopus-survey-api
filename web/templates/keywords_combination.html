@@ -1,35 +1,31 @@
-<article class="container mt-4 pt-0" aria-labelledby="step-2-title" aria-describedby="step-2-desc">
-  <h3 id="step-2-title" class="step-badge">STEP 3 - Keywords combination</h3>
-  <p id="step-2-desc" class="mb-0 mt-4">
-    Based on the topic or subject of your research, you must select the keywords that will be used to <strong>search
-      in the abstracts, keywords, and titles</strong>, and find documents that <strong>contain them all</strong>.
-    Using the <a class="link" href="https://dev.elsevier.com/sc_search_tips.html" target="_blank"
-      rel="help nofollow noopener noreferrer">combined field <strong>TITLE-ABS-KEY</strong></a>, we survey data and the
-    <strong>total of documents found in Scopus</strong> for each combination of keywords <a class="link"
-      ref="https://dev.elsevier.com/sc_search_tips.html" target="_blank"
-      rel="help nofollow noopener noreferrer">concatenated by the Boolean operator AND</a>.
-  </p>
-  <hr class="w-50 mx-auto mt-2 mb-5 text-success opacity-50" aria-hidden="true">
+<article class="container mt-4 pt-0" aria-labelledby="step-3-title" aria-describedby="step-3-desc">
+  {{ partial_steps.step3() }}
+  <hr class="mt-2 mb-5" aria-hidden="true">
 
   <section id="keywords" class="text-group" role="region" aria-labelledby="keywords-title"
     aria-describedby="keywords-desc">
-    <h4 id="keywords-title">
-      Keywords
-      <span class="badge text-bg-danger" aria-hidden="true">Required</span>
-    </h4>
-    <p id="keywords-desc">
-      The keywords, with a <strong>minimum of two</strong> (<strong>required</strong>) and a <strong>maximum of
-        four</strong>, that the documents you are searching
-      contain. They must be <strong>written in English</strong>, with a <strong>minimum of 2</strong> and a
-      <strong>maximum of 70 characters</strong>. They can contain <strong>letters</strong>, <strong>numbers</strong>,
-      <strong>spaces</strong>, <strong>hyphens</strong>, <strong>underscores</strong>, <a class="link"
-        href="https://dev.elsevier.com/sc_search_tips.html" target="_blank"
-        rel="help nofollow noopener noreferrer"><strong>phrases</strong>, <strong>wildcards</strong>, and the
-        <strong>Boolean operators OR and AND NOT</strong></a>. Because <strong>AND NOT</strong> can <a class="link"
-        href="https://dev.elsevier.com/sc_search_tips.html" target="_blank"
-        rel="help nofollow noopener noreferrer">generate unexpected results</a>, it should be used in the <strong>last
-        field</strong>.
-    </p>
+    {{ partial_fields.keywords() }}
+    <div class="callout mt-3 d-flex align-items-center" role="note">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" class="flex-shrink-0" aria-hidden="true">
+        <path
+          d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+      </svg>
+      {% if lang == 'en-US' %}
+      <p class="ms-2">
+        Because the <strong>AND NOT</strong> operator can
+        <a class="link" href="https://dev.elsevier.com/sc_search_tips.html" target="_blank"
+          rel="help nofollow noopener noreferrer">generate unexpected results</a>,
+        it should be used in the <strong>last field</strong>.
+      </p>
+      {% else %}
+      <p class="ms-2">
+        Como o operador <strong>AND NOT</strong> pode
+        <a class="link" href="https://dev.elsevier.com/sc_search_tips.html" target="_blank"
+          rel="help nofollow noopener noreferrer">gerar resultados inesperados</a>,
+        ele deve ser usado no <strong>último campo</strong>.
+      </p>
+      {% endif %}
+    </div>
     <div class="row row-cols-1 row-cols-lg-2 align-items-end mt-3" role="group" aria-labelledby="keywords-title">
       <div class="field-container pe-lg-5">
         <div class="field-wrapper">
@@ -129,16 +125,10 @@
 
   <section id="combination-table-section" class="text-group mt-5" role="region" aria-labelledby="combination-title"
     aria-describedby="combination-desc" hidden>
-    <h4 id="combination-title">
-      Combination
-      <span class="badge text-bg-danger" aria-hidden="true">Required</span>
-    </h4>
-    <p id="combination-desc">
-      The keyword combination option that best suits you to <strong>refine the survey scope</strong> based on the
-      <strong>total of documents found</strong> for <strong>all possible keyword combinations</strong>.
-    </p>
+    {{ partial_fields.combination() }}
     <div class="field-container table-responsive-lg">
       <table id="combination-table" class="table table-striped table-hover" aria-describedby="combination-desc">
+        {% if lang == 'en-US' %}
         <caption hidden>Totals found from keyword combinations</caption>
         <thead>
           <tr>
@@ -147,6 +137,16 @@
             <th scope="col">Total</th>
           </tr>
         </thead>
+        {% else %}
+        <caption hidden>Totais encontrados a partir de combinações de palavras-chave</caption>
+        <thead>
+          <tr>
+            <th scope="col" abbr="Índice">#</th>
+            <th scope="col">Combinação</th>
+            <th scope="col">Total</th>
+          </tr>
+        </thead>
+        {% endif %}
         <tbody id="combination-tbody" class="table-group-divider" role="radiogroup" aria-required="true"></tbody>
       </table>
       <template id="combination-row-opt">

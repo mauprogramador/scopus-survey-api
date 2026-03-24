@@ -1,41 +1,18 @@
-<article id="form-step-3" class="container mt-4 pt-0" aria-labelledby="step-3-title" aria-describedby="step-3-desc"
+<article id="form-step-4" class="container mt-4 pt-0" aria-labelledby="step-4-title" aria-describedby="step-4-desc"
   hidden>
-  <h3 id="step-3-title" class="step-badge">STEP 4 - Survey documents</h3>
-  <p id="step-3-desc" class="mb-0 mt-4">
-    Finally, all fields are submitted to document survey, and their data will be systematically collected, validated,
-    and refined, <strong>removing duplicates</strong> and <strong>filtering similar documents</strong>, leaving only the
-    <strong>most relevant and recent data</strong>.
-  </p>
-  <hr class="w-50 mx-auto mt-2 mb-5 text-success opacity-50" aria-hidden="true">
+  {{ partial_steps.step4() }}
+  <hr class="mt-2 mb-5" aria-hidden="true">
 
   <div class="row align-items-start">
 
-    <section class="col pe-lg-5 text-group mb-5 mb-lg-0" role="region" aria-labelledby="quotas-title" aria-describedby="quotas-desc">
-      <h4 id="quotas-title">
-        Quotas
-        <span class="badge text-bg-warning" aria-hidden="true">Important</span>
-      </h4>
-      <p id="quotas-desc">
-        Quotas, which refer to the <strong>maximum number of requests executed</strong>, are <strong>unique to each
-          <abbr title="Application Programming Interface">API</abbr></strong>. According to the <a class="link"
-          href="https://dev.elsevier.com/api_key_settings.html" target="_blank"
-          rel="help nofollow noopener noreferrer">API Key Settings</a>, for the APIs we are using, <strong>Scopus
-          Search</strong> has a <strong>weekly quota of 20,000</strong>, and <strong>Abstract Retrieval</strong> has a
-        <strong>weekly quota of 10,000</strong>.
-      </p>
+    <section class="col pe-lg-5 text-group mb-5 mb-lg-0" role="region" aria-labelledby="quotas-title"
+      aria-describedby="quotas-desc">
+      {{ partial_fields.quotas() }}
     </section>
 
     <section class="col ps-lg-5 text-group" role="region" aria-labelledby="threshold-title"
       aria-describedby="threshold-desc">
-      <h4 id="threshold-title">
-        Similarity Threshold
-        <span class="badge text-bg-secondary" aria-hidden="true">Optional</span>
-      </h4>
-      <p id="threshold-desc">
-        The threshold value, in the <strong>range of 0 to 100</strong>, used to filter documents with the <strong>same
-          author(s) and similar titles</strong>, keeping the <strong>one with the most recent publication date</strong>.
-        <strong>Default to 80</strong>.
-      </p>
+      {{ partial_fields.threshold() }}
       <div class="field-container">
         <div class="field-wrapper">
           <span class="field-icon" aria-hidden="true">

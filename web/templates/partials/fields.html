@@ -1,0 +1,339 @@
+{% macro api_key() -%}
+{% if lang == 'en-US' %}
+<h4 id="apikey-title">
+  API Key
+  <span class="badge text-bg-danger" aria-hidden="true">Required</span>
+</h4>
+<p id="apikey-desc">
+  The <strong>API Key</strong> issued when you
+  <a class="link" href="https://www.scopus.com/signin.uri" target="_blank" rel="nofollow noopener noreferrer">
+    register with Elsevier</a>
+  using your <strong>academic email</strong> or through your <strong>institution</strong>.
+</p>
+{% else %}
+<!-- cSpell:disable -->
+<h4 id="apikey-title">
+  Chave de API
+  <span class="badge text-bg-danger" aria-hidden="true">Obrigatório</span>
+</h4>
+<p id="apikey-desc">
+  A <strong>Chave de API</strong> emitida quando você se
+  <a class="link" href="https://www.scopus.com/signin.uri" target="_blank" rel="nofollow noopener noreferrer">
+    cadastra na Elsevier</a>
+  usando seu <strong>e-mail acadêmico</strong> ou por meio da sua <strong>instituição</strong>.
+</p>
+<!-- cSpell:enable -->
+{% endif %}
+{%- endmacro %}
+
+
+{% macro prev_survey() -%}
+{% if lang == 'en-US' %}
+<h4 id="prevsurvey-title">Previous Survey</h4>
+<p id="prevsurvey-desc">
+  To retrieve the <abbr aria-label="Comma-separated Values" lang="en-US" data-bs-toggle="tooltip"
+    data-bs-title="Comma-separated Values">CSV</abbr> from a <strong>previous survey</strong> that may still be
+  <strong>stored</strong>, enter your <strong>API key</strong> and try <strong>downloading it again</strong>.
+</p>
+{% else %}
+<!-- cSpell:disable -->
+<h4 id="prevsurvey-title">Busca anterior</h4>
+<p id="prevsurvey-desc">
+  Para recuperar o <abbr aria-label="Comma-separated Values" lang="en-US" data-bs-toggle="tooltip"
+    data-bs-title="Comma-separated Values">arquivo CSV</abbr> de uma <strong>busca anterior</strong> que ainda possa
+  estar <strong>armazenado</strong>, insira sua <strong>Chave de API</strong> e tente <strong>baixá-lo
+    novamente</strong>.
+</p>
+<!-- cSpell:enable -->
+{% endif %}
+{%- endmacro %}
+
+
+{% macro date_range() -%}
+{% if lang == 'en-US' %}
+<h4 id="date-title">
+  Date
+  <span class="badge text-bg-secondary" aria-hidden="true">Optional</span>
+</h4>
+<p id="date-desc">
+  The <strong>range of years</strong> of the documents' <strong>published date</strong>, from the <strong>last fifteen
+    years</strong> to the <strong>current year</strong>. <strong>Default to the last three years</strong>.
+</p>
+{% else %}
+<!-- cSpell:disable -->
+<h4 id="date-title">
+  Data
+  <span class="badge text-bg-secondary" aria-hidden="true">Opcional</span>
+</h4>
+<p id="date-desc">
+  O <strong>intervalo de anos</strong> da <strong>data de publicação</strong> dos documentos, dos <strong>últimos quinze
+    anos</strong> até o <strong>ano atual</strong>. <strong>Últimos três anos por padrão</strong>.
+</p>
+<!-- cSpell:enable -->
+{% endif %}
+{%- endmacro %}
+
+
+{% macro doctype() -%}
+{% if lang == 'en-US' %}
+<h4 id="doctype-title">
+  Doctype
+  <span class="badge text-bg-secondary" aria-hidden="true">Optional</span>
+</h4>
+<p id="doctype-desc">
+  The <strong>type</strong> in which the document is <strong>classified</strong>.
+</p>
+{% else %}
+<!-- cSpell:disable -->
+<h4 id="doctype-title">
+  Doctype
+  <span class="badge text-bg-secondary" aria-hidden="true">Opcional</span>
+</h4>
+<p id="doctype-desc">
+  O <strong>tipo</strong> em que o documento está <strong>classificado</strong>.
+</p>
+<!-- cSpell:enable -->
+{% endif %}
+{%- endmacro %}
+
+
+{% macro pubstage() -%}
+{% if lang == 'en-US' %}
+<h4 id="pubstage-title">
+  Pubstage
+  <span class="badge text-bg-secondary" aria-hidden="true">Optional</span>
+</h4>
+<p id="pubstage-desc">The <strong>publication stage</strong> of the document.</p>
+{% else %}
+<!-- cSpell:disable -->
+<h4 id="pubstage-title">
+  Pubstage
+  <span class="badge text-bg-secondary" aria-hidden="true">Opcional</span>
+</h4>
+<p id="pubstage-desc">A <strong>fase de publicação</strong> do documento.</p>
+<!-- cSpell:enable -->
+{% endif %}
+{%- endmacro %}
+
+
+{% macro language() -%}
+{% if lang == 'en-US' %}
+<h4 id="language-title">
+  Language
+  <span class="badge text-bg-secondary" aria-hidden="true">Optional</span>
+</h4>
+<p id="language-desc">
+  The <strong>language name</strong> (in <strong>English</strong>) in which the original document was
+  <strong>written</strong>.
+</p>
+{% else %}
+<!-- cSpell:disable -->
+<h4 id="language-title">
+  Idioma
+  <span class="badge text-bg-secondary" aria-hidden="true">Opcional</span>
+</h4>
+<p id="language-desc">
+  O <strong>nome do idioma</strong> (em <strong>Inglês</strong>) em que o documento original foi
+  <strong>escrito</strong>.
+</p>
+<!-- cSpell:enable -->
+{% endif %}
+{%- endmacro %}
+
+
+{% macro open_access() -%}
+{% if lang == 'en-US' %}
+<h4 id="openaccess-title">
+  Open Access
+  <span class="badge text-bg-secondary" aria-hidden="true">Optional</span>
+</h4>
+<p id="openaccess-desc">
+  Whether the indexed content is <strong>open access</strong> or <strong>not</strong>.
+</p>
+{% else %}
+<!-- cSpell:disable -->
+<h4 id="openaccess-title">
+  Acesso Livre
+  <span class="badge text-bg-secondary" aria-hidden="true">Opcional</span>
+</h4>
+<p id="openaccess-desc">
+  Se o conteúdo indexado é de <strong>acesso livre</strong> ou <strong>não</strong>.
+</p>
+<!-- cSpell:enable -->
+{% endif %}
+{%- endmacro %}
+
+
+{% macro srctype() -%}
+{% if lang == 'en-US' %}
+<h4 id="srctype-title">
+  Srctype
+  <span class="badge text-bg-secondary" aria-hidden="true">Optional</span>
+</h4>
+<p id="srctype-desc">The <strong>type of source</strong> the document comes from.</p>
+{% else %}
+<!-- cSpell:disable -->
+<h4 id="srctype-title">
+  Srctype
+  <span class="badge text-bg-secondary" aria-hidden="true">Opcional</span>
+</h4>
+<p id="srctype-desc">O <strong>tipo de fonte</strong> de onde o documento provém.</p>
+<!-- cSpell:enable -->
+{% endif %}
+{%- endmacro %}
+
+
+{% macro subjarea() -%}
+{% if lang == 'en-US' %}
+<h4 id="subjarea-title">
+  Subjarea
+  <span class="badge text-bg-secondary" aria-hidden="true">Optional</span>
+</h4>
+<p id="subjarea-desc">
+  The <strong>subject area</strong> in which the document is classified.
+</p>
+{% else %}
+<!-- cSpell:disable -->
+<h4 id="subjarea-title">
+  Subjarea
+  <span class="badge text-bg-secondary" aria-hidden="true">Opcional</span>
+</h4>
+<p id="subjarea-desc">
+  A <strong>área do conhecimento</strong> em que o documento está classificado.
+</p>
+<!-- cSpell:enable -->
+{% endif %}
+{%- endmacro %}
+
+
+{% macro pages() -%}
+{% if lang == 'en-US' %}
+<h4 id="pages-title">
+  Pages
+  <span class="badge text-bg-secondary" aria-hidden="true">Optional</span>
+</h4>
+<p id="pages-desc">
+  The documents' <strong>size</strong> by <strong>page count</strong>.
+</p>
+{% else %}
+<!-- cSpell:disable -->
+<h4 id="pages-title">
+  Páginas
+  <span class="badge text-bg-secondary" aria-hidden="true">Opcional</span>
+</h4>
+<p id="pages-desc">
+  O <strong>tamanho</strong> dos documentos pelo <strong>número de páginas</strong>.
+</p>
+<!-- cSpell:enable -->
+{% endif %}
+{%- endmacro %}
+
+
+{% macro keywords() -%}
+{% if lang == 'en-US' %}
+<h4 id="keywords-title">
+  Keywords
+  <span class="badge text-bg-danger" aria-hidden="true">Required</span>
+</h4>
+<p id="keywords-desc">
+  The keywords in the documents you are searching for. Enter <strong>at least two</strong> (<strong>required</strong>),
+  that must be <strong>written in English</strong> and may contain <strong>hyphens</strong>,
+  <strong>underscores</strong>,
+  <a class="link" href="https://dev.elsevier.com/sc_search_tips.html" target="_blank"
+    rel="help nofollow noopener noreferrer"><strong>phrases</strong>, <strong>wildcards</strong>, and the
+    <strong>Boolean operators OR and AND NOT</strong></a>.
+</p>
+{% else %}
+<!-- cSpell:disable -->
+<h4 id="keywords-title">
+  Palavras-chave
+  <span class="badge text-bg-danger" aria-hidden="true">Obrigatório</span>
+</h4>
+<p id="keywords-desc">
+  As palavras-chave presentes nos documentos que você está procurando. Insira <strong>pelo menos duas</strong>
+  (<strong>obrigatórias</strong>), que devem ser <strong>escritas em inglês</strong> e podem conter
+  <strong>hífens</strong>, <strong>sublinhados</strong>,
+  <a class="link" href="https://dev.elsevier.com/sc_search_tips.html" target="_blank"
+    rel="help nofollow noopener noreferrer"><strong>frases</strong>, <strong>caracteres curinga</strong> e os
+    <strong>operadores Booleanos OR e AND NOT</strong></a>.
+</p>
+<!-- cSpell:enable -->
+{% endif %}
+{%- endmacro %}
+
+
+{% macro combination() -%}
+{% if lang == 'en-US' %}
+<h4 id="combination-title">
+  Combination
+  <span class="badge text-bg-danger" aria-hidden="true">Required</span>
+</h4>
+<p id="combination-desc">
+  The keyword <strong>combination option</strong> that best suits you to <strong>refine the survey scope</strong> based
+  on the <strong>total</strong> of documents found for <strong>all possible keyword combinations</strong>.
+</p>
+{% else %}
+<!-- cSpell:disable -->
+<h4 id="combination-title">
+  Combinação
+  <span class="badge text-bg-danger" aria-hidden="true">Obrigatório</span>
+</h4>
+<p id="combination-desc">
+  A <strong>opção de combinação</strong> de palavras-chave que melhor se adequa às suas necessidades para
+  <strong>refinar o escopo da busca</strong> com base no <strong>total</strong> de documentos encontrados para
+  <strong>todas as combinações de palavras-chave possíveis</strong>.
+</p>
+<!-- cSpell:enable -->
+{% endif %}
+{%- endmacro %}
+
+
+{% macro quotas() -%}
+{% if lang == 'en-US' %}
+<h4 id="quotas-title">Quotas</h4>
+<p id="quotas-desc">
+  The <strong>maximum number of requests by API Key</strong>, with the <strong>Search</strong> and <strong>Abstract
+    Retrieval</strong> APIs with a
+  <a class="link" href="https://dev.elsevier.com/api_key_settings.html" target="_blank"
+    rel="help nofollow noopener noreferrer">weekly quota of 20,000 and 10,000</a>,
+  respectively.
+</p>
+{% else %}
+<!-- cSpell:disable -->
+<h4 id="quotas-title">Cotas</h4>
+<p id="quotas-desc">
+  O <strong>número máximo de requisições por chave de API</strong>, com as APIs <strong>Search</strong> e
+  <strong>Abstract Retrieval</strong> tendo uma
+  <a class="link" href="https://dev.elsevier.com/api_key_settings.html" target="_blank"
+    rel="help nofollow noopener noreferrer">cota semanal de 20,000 e 10,000</a>,
+  respectivamente.
+</p>
+<!-- cSpell:enable -->
+{% endif %}
+{%- endmacro %}
+
+
+{% macro threshold() -%}
+{% if lang == 'en-US' %}
+<h4 id="threshold-title">
+  Similarity Threshold
+  <span class="badge text-bg-secondary" aria-hidden="true">Optional</span>
+</h4>
+<p id="threshold-desc">
+  The value, <strong>from 0 to 100</strong>, used to filter documents with the <strong>same
+    author(s) and similar titles</strong>, keeping <strong>the most recent one</strong>.
+  <strong>Default to 80</strong>.
+</p>
+{% else %}
+<!-- cSpell:disable -->
+<h4 id="threshold-title">
+  Similarity Threshold
+  <span class="badge text-bg-secondary" aria-hidden="true">Optional</span>
+</h4>
+<p id="threshold-desc">
+  O valor, <strong>de 0 a 100</strong>, usado para filtrar documentos com <strong>o(s) mesmo(s) autor(es) e títulos
+    semelhantes</strong>, mantendo <strong>o mais recente</strong>. <strong>Valor 80 por padrão</strong>.
+</p>
+<!-- cSpell:enable -->
+{% endif %}
+{%- endmacro %}

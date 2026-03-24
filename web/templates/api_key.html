@@ -1,31 +1,11 @@
 <article class="container mt-4 pt-0" aria-labelledby="step-1-title" aria-describedby="step-1-desc">
-  <h3 id="step-1-title" class="step-badge">STEP 1 - API Key</h3>
-  <p id="step-1-desc" class="mb-0 mt-4">
-    In accordance with the <a class="link" href="https://dev.elsevier.com/policy/API-service-agreement.pdf"
-      target="_blank" rel="nofollow noopener noreferrer">API Service Agreement</a> and <a class="link"
-      href="https://dev.elsevier.com/policy.html" target="_blank" rel="nofollow noopener noreferrer">Use Policies</a>,
-    <a class="link" href="https://www.elsevier.com/" target="_blank" rel="nofollow noopener noreferrer">Elsevier</a>
-    will issue you an <strong>API Key</strong> that grants you a limited license to use the <a class="link"
-      href="https://dev.elsevier.com/sc_apis.html" target="_blank" rel="nofollow noopener noreferrer">Scopus APIs</a>
-    integrated with this <strong>Web API</strong>, so that you can properly authenticate to query the Scopus database.
-  </p>
+  {{ partial_steps.step1() }}
   <hr class="w-50 mx-auto mt-2 mb-5 text-success opacity-50" aria-hidden="true">
   <div class="row row-cols-1 row-cols-lg-2 align-items-end">
 
     <section class="col pe-lg-5 text-group mb-5 mb-lg-0" role="region" aria-labelledby="apikey-title"
       aria-describedby="apikey-desc">
-      <h4 id="apikey-title">
-        API Key
-        <span class="badge text-bg-danger" aria-hidden="true">Required</span>
-      </h4>
-      <p id="apikey-desc">
-        The <strong>API Key</strong> issued by <a class="link" href="https://www.elsevier.com/" target="_blank"
-          rel="nofollow noopener noreferrer">Elsevier</a> and obtained by accessing the
-        <a class="link" href="https://dev.elsevier.com/" target="_blank" rel="help nofollow noopener noreferrer">
-          Elsevier Portal</a> and registering. If you are part of an educational institution, you can try
-        <a class="link" href="https://www.scopus.com/signin.uri" target="_blank" rel="nofollow noopener noreferrer">
-          signing in using your organization's or academic email</a>.
-      </p>
+      {{ partial_fields.api_key() }}
       <div class="field-container">
         <div class="field-wrapper">
           <span class="field-icon" aria-hidden="true">
@@ -47,15 +27,7 @@
 
     <section class="col ps-lg-5 text-group" role="region" aria-labelledby="prevsurvey-title"
       aria-describedby="prevsurvey-desc">
-      <h4 id="prevsurvey-title" aria-hidden="true">
-        Previous Survey
-        <span class="badge text-bg-warning" aria-hidden="true">Important</span>
-      </h4>
-      <p id="prevsurvey-desc">
-        If you have already <strong>performed a survey before</strong> and want to get the <strong>previously generated
-          CSV</strong> file that may still be <strong>stored</strong>, you can, after entering your <strong>API
-          key</strong>, try to <strong>download it again</strong>.
-      </p>
+      {{ partial_fields.prev_survey() }}
       <div class="field-container">
         <div class="field-wrapper">
           <button id="prevsurvey-button" class="btn btn-scopus text-nowrap col-12 col-md-auto" type="button"

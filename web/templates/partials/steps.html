@@ -1,0 +1,101 @@
+{% macro step1() -%}
+{% if lang == 'en-US' %}
+<h3 id="step-1-title" class="step-badge">STEP 1 - API KEY</h3>
+<p id="step-1-desc" class="mb-0 mt-4">
+  In accordance with the
+  <a class="link" href="https://dev.elsevier.com/policy/API-service-agreement.pdf" target="_blank"
+    rel="nofollow noopener noreferrer">API Service Agreement</a>
+  and
+  <a class="link" href="https://dev.elsevier.com/policy.html" target="_blank" rel="nofollow noopener noreferrer">Use
+    Policies</a>,
+  <a class="link" href="https://www.elsevier.com/" target="_blank" rel="nofollow noopener noreferrer">Elsevier</a>
+  will issue you an <strong>API Key</strong> that grants you a limited license of usage when you
+  <strong>authenticate</strong>.
+</p>
+{% else %}
+<!-- cSpell:disable -->
+<h3 id="step-1-title" class="step-badge">ETAPA 1 - CHAVE DE API</h3>
+<p id="step-1-desc" class="mb-0 mt-4">
+  De acordo com o
+  <a class="link" href="https://dev.elsevier.com/policy/API-service-agreement.pdf" target="_blank"
+    rel="nofollow noopener noreferrer">Acordo de Serviço de API</a>
+  e as
+  <a class="link" href="https://dev.elsevier.com/policy.html" target="_blank"
+    rel="nofollow noopener noreferrer">Políticas de Uso</a>,
+  a
+  <a class="link" href="https://www.elsevier.com/pt-br" target="_blank" rel="nofollow noopener noreferrer">Elsevier</a>
+  emitirá uma <strong>Chave de API</strong> que lhe concede uma licença de uso limitada após a
+  <strong>autenticação</strong>.
+</p>
+<!-- cSpell:enable -->
+{% endif %}
+{%- endmacro %}
+
+
+{% macro step2() -%}
+{% if lang == 'en-US' %}
+<h3 id="step-2-title" class="step-badge">STEP 2 - ADDITIONAL PARAMS</h3>
+<p id="step-2-desc" class="mb-0 mt-4">
+  Add parameters to perform a
+  <a class="link" href="https://dev.elsevier.com/sc_search_tips.html" target="_blank"
+    rel="help nofollow noopener noreferrer">Boolean search by combining query fields</a>
+  and produce more relevant results. <strong>Optional fields left unfilled will not be sent by default</strong>.
+</p>
+{% else %}
+<!-- cSpell:disable -->
+<h3 id="step-2-title" class="step-badge">ETAPA 2 - PARÂMETROS ADICIONAIS</h3>
+<p id="step-2-desc" class="mb-0 mt-4">
+  Adicione parâmetros para realizar uma
+  <a class="link" href="https://dev.elsevier.com/sc_search_tips.html" target="_blank"
+    rel="help nofollow noopener noreferrer">busca Booleana combinando campos de consulta</a>
+  e produza resultados mais relevantes. <strong>Campos opcionais deixados em branco não serão enviados por
+    padrão</strong>.
+</p>
+<!-- cSpell:enable -->
+{% endif %}
+{%- endmacro %}
+
+
+{% macro step3() -%}
+{% if lang == 'en-US' %}
+<h3 id="step-3-title" class="step-badge">STEP 3 - KEYWORDS COMBINATION</h3>
+<p id="step-3-desc" class="mb-0 mt-4">
+  Based on the <strong>topic or subject of your research</strong>, you should <strong>select the keywords</strong> that
+  will be used to
+  <a class="link" href="https://dev.elsevier.com/sc_search_tips.html" target="_blank"
+    rel="help nofollow noopener noreferrer">search in the titles, abstracts, and keywords</a>,
+  and <strong>find all the documents in Scopus that contain them all</strong>.
+</p>
+{% else %}
+<!-- cSpell:disable -->
+<h3 id="step-3-title" class="step-badge">ETAPA 3 - COMBINAÇÃO DE PALAVRAS-CHAVE</h3>
+<p id="step-3-desc" class="mb-0 mt-4">
+  Baseado no <strong>tema ou assunto da sua pesquisa</strong>, você deve <strong>selecionar as palavras-chave</strong>
+  que serão usadas para
+  <a class="link" href="https://dev.elsevier.com/sc_search_tips.html" target="_blank"
+    rel="help nofollow noopener noreferrer">buscar nos títulos, resumos e palavras-chave</a>,
+  e <strong>encontrar todos os documentos na Scopus que as contenham</strong>.
+</p>
+<!-- cSpell:enable -->
+{% endif %}
+{%- endmacro %}
+
+
+{% macro step4() -%}
+{% if lang == 'en-US' %}
+<h3 id="step-4-title" class="step-badge">STEP 4 - SURVEY DOCUMENTS</h3>
+<p id="step-4-desc" class="mb-0 mt-4">
+  The Scopus data will be <strong>systematically gathered and validated</strong>, <strong>removing duplicates</strong>
+  and <strong>filtering similar documents</strong>, leaving only the <strong>most relevant and recent data</strong>.
+</p>
+{% else %}
+<!-- cSpell:disable -->
+<h3 id="step-4-title" class="step-badge">STEP 4 - BUSCAR DOCUMENTOS</h3>
+<p id="step-4-desc" class="mb-0 mt-4">
+  Os dados da Scopus serão <strong>sistematicamente reunidos e validados</strong>, <strong>removendo duplicatas</strong>
+  e <strong>filtrando documentos semelhantes</strong>, mantendo apenas os <strong>dados mais relevantes e
+    recentes</strong>.
+</p>
+<!-- cSpell:enable -->
+{% endif %}
+{%- endmacro %}

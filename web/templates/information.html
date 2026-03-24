@@ -42,55 +42,11 @@
   </div>
 
   <section class="text-group mb-5" role="region" aria-labelledby="info-title-1" aria-describedby="info-desc-1">
-    <h3 id="info-title-1">Overview</h3>
-    <p id="info-desc-1">
-      This web
-      <abbr title="Application Programming Interface">API</abbr>
-      is designed to facilitate the <strong>systematic survey of academic documents</strong>, which will be used as
-      <strong>bibliographic sources</strong> for research, bibliographic references, and
-      <a class="link" href="https://en.wikipedia.org/wiki/Systematic_review" target="_blank"
-        rel="nofollow noopener noreferrer">systematic reviews</a>.
-      It is primarily intended for
-      <a class="link" href="https://dev.elsevier.com/academic_research_scopus.html" target="_blank"
-        rel="nofollow noopener noreferrer" aria-label="Scopus Academic Research Use Case">free academic
-        use</a>
-      by <strong>students</strong>, thus <strong>improving accessibility</strong>. It will utilize
-      <a class="link" href="https://dev.elsevier.com/sc_apis.html" target="_blank"
-        rel="nofollow noopener noreferrer">Scopus APIs</a>
-      to query the vast
-      <a class="link" href="https://www.elsevier.com/products/scopus" target="_blank"
-        rel="nofollow noopener noreferrer">Scopus database</a>
-      and then collect, validate, filter, and retrieve information, leaving only the <strong>most relevant and recent
-        data</strong>, which will be organized and returned in a <strong>
-        <abbr title="Comma-separated Values">CSV</abbr>
-        file</strong>, which you may use as you wish, depending on your circumstances.
-    </p>
+    {% include "partials/overview.html" %}
   </section>
 
   <section class="text-group mb-5" role="region" aria-labelledby="info-title-2" aria-describedby="info-desc-2">
-    <h3 id="info-title-2">Data Source</h3>
-    <p id="info-desc-2">
-      All data we handle is retrieved and obtained <strong>"AS IS"</strong> from
-      <a class="link" href="https://www.scopus.com" target="_blank" rel="nofollow noopener noreferrer"
-        translate="no">Scopus</a>®,
-      maintained by
-      <a class="link" href="https://www.elsevier.com/" target="_blank" rel="nofollow noopener noreferrer"
-        translate="no">Elsevier B.V.</a>,
-      a database known for its <strong>curated content of peer-reviewed literature</strong>. We declare that there is
-      <strong>no implied endorsement by the rights owners</strong> and also comply that all use is for
-      <a class="link" href="https://dev.elsevier.com/academic_research_scopus.html" target="_blank"
-        rel="nofollow noopener noreferrer" aria-label="Scopus Academic Research Use Case">non-commercial
-        academic research</a>
-      and is subject to
-      <a class="link" href="https://github.com/mauprogramador/scopus-survey-api/blob/master/TERMS_OF_SERVICE.md"
-        target="_blank" rel="terms-of-service noopener noreferrer">our
-        Terms</a>,
-      as well as the <a class="link" href="https://www.elsevier.com/legal/elsevier-website-terms-and-conditions"
-        target="_blank" rel="nofollow noopener noreferrer">Elsevier Terms</a>
-      and
-      <a class="link" href="https://dev.elsevier.com/academic_research_scopus.html" target="_blank"
-        rel="nofollow noopener noreferrer">Scopus Policy</a>.
-    </p>
+    {% include "partials/data_source.html" %}
   </section>
 
   <section class="text-group mb-5" role="region" aria-labelledby="info-title-3" aria-describedby="info-desc-3">
