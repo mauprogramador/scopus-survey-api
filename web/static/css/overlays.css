@@ -108,7 +108,6 @@
   --bs-border-width: 1px;
   box-shadow: 4px 4px 2px -1px #cccccc;
   animation-timing-function: ease-in-out;
-  animation-fill-mode: forwards;
   animation-iteration-count: 1;
   animation-direction: normal;
   animation-duration: 0.5s;
@@ -149,10 +148,7 @@
   --bs-alert-bg: #e35d6a;
 }
 
-.alert:not([open]) {
-  transform: translateY(-50px);
-}
-.alert[open] {
+.alert[open].show {
   animation-name: alert-in;
 }
 
