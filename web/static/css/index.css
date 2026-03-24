@@ -156,6 +156,14 @@ abbr {
   }
 }
 
+/* Callout */
+.callout {
+  background-color: var(--bs-warning-bg-subtle);
+  border-left: 0.25rem solid var(--bs-warning);
+  color: var(--bs-body-color);
+  padding: 1rem;
+}
+
 /* Badge */
 .step-badge {
   border-top: 4px solid var(--badge-border-color);

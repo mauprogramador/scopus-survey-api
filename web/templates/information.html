@@ -49,37 +49,28 @@
     {% include "partials/data_source.html" %}
   </section>
 
-  <section class="text-group mb-5" role="region" aria-labelledby="info-title-3" aria-describedby="info-desc-3">
-    <h3 id="info-title-3">
-      Institutional Network
-      <span class="badge text-bg-danger" aria-hidden="true">Required</span>
-    </h3>
-    <p id="info-desc-3">
-      Please be aware that the <strong>API Key</strong> will only authenticate correctly if you submit it while using
-      your <strong>academic institution's network</strong>, which must be
-      <a class="link" href="https://www.scopus.com/signin.uri" target="_blank"
-        rel="nofollow noopener noreferrer">registered with Elsevier</a>.
-      This does not include
-      <abbr title="Virtual Private Network">VPN</abbr>
-      or proxy access. Therefore, if you are <strong>fully remote</strong> and <strong>off-campus</strong>, some data
-      may <strong>not be returned</strong>.
+  <div class="callout d-flex align-items-center" role="note">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" class="flex-shrink-0" aria-hidden="true">
+      <path
+        d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+    </svg>
+    {% if lang == 'en-US' %}
+    <p class="ms-2">
+      Please use an
+      <a class="link" href="" target="_blank" rel="nofollow noopener noreferrer">institutional network</a>
+      to authenticate correctly, and be aware of the
+      <a class="link" href="" target="_blank" rel="nofollow noopener noreferrer">quota and rate limits</a>
+      of your <strong>API Key</strong>.
     </p>
-  </section>
-
-  <section class="text-group" role="region" aria-labelledby="info-title-4" aria-describedby="info-desc-4">
-    <h3 id="info-title-4">
-      Quota and Rate Limits
-      <span class="badge text-bg-warning" aria-hidden="true">Important</span>
-    </h3>
-    <p id="info-desc-4">
-      There's a <strong>maximum limit to the number of requests</strong> we can make to <a class="link"
-        href="https://dev.elsevier.com/sc_apis.html" target="_blank" rel="nofollow noopener noreferrer">Scopus APIs</a>
-      using your <strong>API Key</strong>. This <strong>request quota resets every seven days</strong>, and you can
-      <strong>check its availability</strong> in the <strong>details panel after completing your survey</strong>. If
-      requests <strong>exceed the quota or throttling rate</strong>, an <strong>error will be returned</strong>. See the
-      <a class="link" href="https://dev.elsevier.com/api_key_settings.html" target="_blank"
-        rel="help nofollow noopener noreferrer">API Key Settings</a>.
+    {% else %}
+    <p class="ms-2">
+      Por favor, utilize uma
+      <a class="link" href="" target="_blank" rel="nofollow noopener noreferrer">rede institucional</a>
+      para autenticar corretamente e esteja ciente dos
+      <a class="link" href="" target="_blank" rel="nofollow noopener noreferrer">limites de cota e taxa</a>
+      da sua <strong>Chave de API</strong>.
     </p>
-  </section>
+    {% endif %}
+  </div>
 
 </article>
