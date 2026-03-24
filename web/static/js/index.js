@@ -8,21 +8,6 @@ const lang = contextData.dataset.lang;
 const csrfToken = contextData.dataset.csrfToken;
 contextData.remove();
 
-// Focused element state
-const main = document.getElementById('main-content');
-// var previousFocusedEl = main;
-window.previousFocusedEl = main;
-
-function currentFocusedEl() {
-  if (document.activeElement && document.activeElement !== document.body) {
-    document.activeElement.blur();
-    return document.activeElement;
-  } else {
-    main.blur();
-    return main;
-  }
-}
-
 // Populate Details
 // - Scopus Search and Abstract Retrieval APIs weekly quota
 //   https://dev.elsevier.com/api_key_settings.html
@@ -329,7 +314,6 @@ function showFinalStep() {
 
 export {
   lang,
-  main,
   csrfToken,
   downloadLink,
   combTbody,
@@ -337,7 +321,6 @@ export {
   allCombFields,
   keywordsFields,
   allFreshFields,
-  currentFocusedEl,
   noRemainingQuota,
   remainingQuota,
   loadApiKeyQuota,

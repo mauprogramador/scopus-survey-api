@@ -1,9 +1,4 @@
-import {
-  main,
-  currentFocusedEl,
-  survCombDetailsBtn,
-  survDocsDetailsBtn,
-} from './index.js';
+import { survCombDetailsBtn, survDocsDetailsBtn } from './index.js';
 import { Button } from './button.js';
 
 // Tooltips and Btn-Close
@@ -50,6 +45,20 @@ jsonTreeCollapse.addEventListener('hidden.bs.collapse', () => {
   jsonTreeCollapse.ariaExpanded = 'false';
 });
 
+// Focused element state
+const main = document.getElementById('main-content');
+var previousFocusedEl = main;
+
+function currentFocusedEl() {
+  if (document.activeElement && document.activeElement !== document.body) {
+    document.activeElement.blur();
+    return document.activeElement;
+  } else {
+    main.blur();
+    return main;
+  }
+}
+
 // Handle warning modal
 const warningModal = document.getElementById('warning-modal');
 const warningBSModal = new bootstrap.Modal('#warning-modal');
@@ -57,7 +66,7 @@ const warningsNumber = document.getElementById('warnings-number');
 const warningMessages = document.getElementById('warnings-messages');
 
 warningModal.addEventListener('show.bs.modal', () => {
-  window.previousFocusedEl = currentFocusedEl();
+  previousFocusedEl = currentFocusedEl();
   main.setAttribute('aria-hidden', 'true');
   main.inert = true;
 
@@ -72,7 +81,7 @@ warningModal.addEventListener('hidden.bs.modal', () => {
 
   main.setAttribute('aria-hidden', 'false');
   main.inert = false;
-  window.previousFocusedEl.focus();
+  previousFocusedEl.focus();
 });
 
 function showWarning(warnings) {
@@ -94,7 +103,7 @@ function showWarning(warnings) {
 const detailsModal = document.getElementById('details-modal');
 
 detailsModal.addEventListener('show.bs.modal', () => {
-  window.previousFocusedEl = currentFocusedEl();
+  previousFocusedEl = currentFocusedEl();
   main.setAttribute('aria-hidden', 'true');
   main.inert = true;
 
@@ -115,7 +124,7 @@ detailsModal.addEventListener('hidden.bs.modal', () => {
 
   survCombDetailsBtn.ariaInactive();
   survDocsDetailsBtn.ariaInactive();
-  window.previousFocusedEl.focus();
+  previousFocusedEl.focus();
 });
 
 // Close all open dialog
@@ -125,7 +134,7 @@ function closeAll() {
     new bootstrap.Alert(currentOpen).close();
     currentOpen.blur();
   }
-  window.previousFocusedEl = currentFocusedEl();
+  previousFocusedEl = currentFocusedEl();
 }
 
 // Loader
@@ -148,7 +157,7 @@ function hideLoader() {
     loader.toggleAttribute('hidden', true);
     main.inert = false;
     main.setAttribute('aria-hidden', 'false');
-    window.previousFocusedEl.focus();
+    previousFocusedEl.focus();
   });
 }
 
@@ -158,7 +167,7 @@ const warningBSAlert = new bootstrap.Alert('#warning-alert');
 
 warningAlert.addEventListener('closed.bs.alert', () => {
   warningAlert.toggleAttribute('hidden', true);
-  window.previousFocusedEl.focus();
+  previousFocusedEl.focus();
 });
 
 function showWarningAlert(event) {
@@ -186,7 +195,7 @@ const successMessage = document.getElementById('success-alert-msg');
 successAlert.addEventListener('closed.bs.alert', () => {
   successAlert.toggleAttribute('hidden', true);
   successMessage.innerHTML = '';
-  window.previousFocusedEl.focus();
+  previousFocusedEl.focus();
 });
 
 function showSuccessAlert(message) {
@@ -215,7 +224,7 @@ errorAlert.addEventListener('closed.bs.alert', () => {
   main.inert = false;
   main.setAttribute('aria-hidden', 'false');
 
-  window.previousFocusedEl.focus();
+  previousFocusedEl.focus();
   errorMessage.innerHTML = '';
   errorRawJson.innerHTML = '';
 });
