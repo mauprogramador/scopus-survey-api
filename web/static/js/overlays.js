@@ -127,22 +127,37 @@ detailsModal.addEventListener('hidden.bs.modal', () => {
   previousFocusedEl.focus();
 });
 
-// Close all open dialog
-function closeAll() {
+// Close dialogs
+function closeAlertWithFade(alert) {
+  alert.classList.remove('show');
+
+  setTimeout(() => {
+    alert.close();
+    alert.classList.add('show');
+  }, 150);
+}
+
+function closeDialog() {
   let currentOpen = document.querySelector('dialog[open]');
   if (currentOpen) {
-    new bootstrap.Alert(currentOpen).close();
+    currentOpen.close();
     currentOpen.blur();
   }
   previousFocusedEl = currentFocusedEl();
 }
+
+document.querySelectorAll('.alert').forEach((alert) => {
+  alert.querySelector('.btn-close').addEventListener('click', () => {
+    closeAlertWithFade(alert);
+  });
+});
 
 // Loader
 const loader = document.getElementById('loader-dialog');
 
 function showLoader() {
   requestAnimationFrame(() => {
-    closeAll();
+    closeDialog();
     main.setAttribute('aria-hidden', 'true');
     main.inert = true;
     loader.toggleAttribute('hidden', false);
@@ -163,9 +178,8 @@ function hideLoader() {
 
 // Warning Alert
 const warningAlert = document.getElementById('warning-alert');
-const warningBSAlert = new bootstrap.Alert('#warning-alert');
 
-warningAlert.addEventListener('closed.bs.alert', () => {
+warningAlert.addEventListener('close', () => {
   warningAlert.toggleAttribute('hidden', true);
   previousFocusedEl.focus();
 });
@@ -176,12 +190,12 @@ function showWarningAlert(event) {
 
   requestAnimationFrame(() => {
     warningAlert.toggleAttribute('hidden', false);
-    warningAlert.focus();
+    warningAlert.querySelector('.btn-close').focus();
     warningAlert.show();
 
     setTimeout(() => {
       if (warningAlert.open) {
-        warningBSAlert.close();
+        closeAlertWithFade(warningAlert);
       }
     }, 7000);
   });
@@ -189,10 +203,9 @@ function showWarningAlert(event) {
 
 // Success Alert
 const successAlert = document.getElementById('success-alert');
-const successBSAlert = new bootstrap.Alert('#success-alert');
 const successMessage = document.getElementById('success-alert-msg');
 
-successAlert.addEventListener('closed.bs.alert', () => {
+successAlert.addEventListener('close', () => {
   successAlert.toggleAttribute('hidden', true);
   successMessage.innerHTML = '';
   previousFocusedEl.focus();
@@ -202,14 +215,14 @@ function showSuccessAlert(message) {
   successMessage.innerText = message;
 
   requestAnimationFrame(() => {
-    closeAll();
+    closeDialog();
     successAlert.toggleAttribute('hidden', false);
     successAlert.querySelector('.btn-close').focus();
     successAlert.show();
 
     setTimeout(() => {
       if (successAlert.open) {
-        successBSAlert.close();
+        closeAlertWithFade(successAlert);
       }
     }, 7000);
   });
@@ -219,7 +232,7 @@ function showSuccessAlert(message) {
 const errorAlert = document.getElementById('error-alert');
 const errorMessage = document.getElementById('error-alert-msg');
 
-errorAlert.addEventListener('closed.bs.alert', () => {
+errorAlert.addEventListener('close', () => {
   errorAlert.toggleAttribute('hidden', true);
   main.inert = false;
   main.setAttribute('aria-hidden', 'false');
@@ -243,18 +256,18 @@ function showErrorAlert(message, rawJson) {
   jsonview.render(jsonTree, errorRawJson);
 
   requestAnimationFrame(() => {
-    closeAll();
+    closeDialog();
     main.setAttribute('aria-hidden', 'true');
     main.inert = true;
 
     errorAlert.toggleAttribute('hidden', false);
-    errorAlert.focus();
+    errorAlert.querySelector('.btn-close').focus();
     errorAlert.show();
   });
 }
 
 export {
-  closeAll,
+  closeDialog,
   showLoader,
   hideLoader,
   showWarningAlert,

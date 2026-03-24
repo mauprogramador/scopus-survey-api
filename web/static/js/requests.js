@@ -18,7 +18,7 @@ import {
   allFreshFields,
 } from './index.js';
 import {
-  closeAll,
+  closeDialog,
   showLoader,
   hideLoader,
   showWarningAlert,
@@ -99,7 +99,7 @@ function request(url, callback) {
 
             if (isUnauthorized && json['message'] === missingCSRF) {
               setTimeout(() => {
-                closeAll();
+                closeDialog();
                 location.reload();
               }, 5000);
             }
