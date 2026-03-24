@@ -10,7 +10,6 @@ from src import __version__
 from src.adapters.presenters.json_response import ErrorJSON
 from src.core.common.error_messages import UNEXPECTED_ERROR
 from src.core.config.config import MAX_AGE, PREFIX
-from src.core.config.scopus import CURRENT_YEAR
 from src.core.data.enums import Lang, Templates
 from src.core.domain.translations import Translations
 
@@ -43,7 +42,6 @@ class TemplateResponse:
             "prefix": PREFIX,
             "csrf_token": csrf_token,
             "lang": lang.value,
-            "current_year": CURRENT_YEAR,
             "_t": Translations.WEB[lang].gettext,
             "_e": Translations.ERROR[lang].gettext,
         }
