@@ -82,4 +82,57 @@ const errorFeedbacks = {
   },
 };
 
-export { translationTexts, errorFeedbacks };
+const detailsGroupLabels = {
+  'en-US': {
+    'API Key (Quota)': {
+      'x-api-key': 'API Key',
+      'x-search-limit': 'Search API: limit',
+      'x-search-remaining': 'Search API: remaining',
+      'x-search-reset': 'Search API: reset',
+      'x-search-els-status': 'Search API: ELS status',
+      'x-abstract-limit': 'Abstract API: limit',
+      'x-abstract-remaining': 'Abstract API: remaining',
+      'x-abstract-reset': 'Abstract API: reset',
+      'x-abstract-els-status': 'Abstract API: ELS status',
+    },
+    Survey: {
+      'x-keywords': 'Keywords',
+      'x-combination': 'Combination',
+      'x-total': 'Total',
+      'x-results': 'Results',
+      'x-pages-count': 'Pages count',
+      'x-items-per-page': 'Items per page',
+      'x-average-found': 'Average found',
+      'x-loss': 'Loss',
+      'x-process-time': 'Process time',
+      'x-csv-filename': 'CSV filename',
+    },
+  },
+  'pt-BR': {
+    'Chave de API (Cota)': {
+      'x-api-key': 'Chave de API',
+      'x-search-limit': 'Search API: limite',
+      'x-search-remaining': 'Search API: restante',
+      'x-search-reset': 'Search API: redefinição',
+      'x-search-els-status': 'Search API: status ELS',
+      'x-abstract-limit': 'Abstract API: limite',
+      'x-abstract-remaining': 'Abstract API: restante',
+      'x-abstract-reset': 'Abstract API: redefinição',
+      'x-abstract-els-status': 'Abstract API: status ELS',
+    },
+    Levantamento: {
+      'x-keywords': 'Palavras-chave',
+      'x-combination': 'Combinação',
+      'x-total': 'Total',
+      'x-results': 'Resultados',
+      'x-pages-count': 'Número de páginas',
+      'x-items-per-page': 'Itens por página',
+      'x-average-found': 'Média dos resultados',
+      'x-loss': 'Perda',
+      'x-process-time': 'Tempo de processamento',
+      'x-csv-filename': 'Nome do arquivo CSV',
+    },
+  },
+};
+
+export { translationTexts, errorFeedbacks, detailsGroupLabels };

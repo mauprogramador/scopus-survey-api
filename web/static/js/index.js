@@ -1,5 +1,5 @@
 import { Button } from './button.js';
-import { translationTexts } from './translations.js';
+import { translationTexts, detailsGroupLabels } from './translations.js';
 
 // Get context data
 const downloadLink = document.getElementById('download-link');
@@ -47,31 +47,6 @@ const detailsCache = {
   'x-loss': null,
   'x-process-time': null,
   'x-csv-filename': null,
-};
-const detailsGroupLabels = {
-  'API Key': {
-    'x-api-key': 'API Key',
-    'x-search-limit': 'Search limit',
-    'x-search-remaining': 'Search remaining',
-    'x-search-reset': 'Search reset',
-    'x-search-els-status': 'Search ELS status',
-    'x-abstract-limit': 'Abstract limit',
-    'x-abstract-remaining': 'Abstract remaining',
-    'x-abstract-reset': 'Abstract reset',
-    'x-abstract-els-status': 'Abstract ELS status',
-  },
-  Survey: {
-    'x-keywords': 'Keywords',
-    'x-combination': 'Combination',
-    'x-total': 'Total',
-    'x-results': 'Results',
-    'x-pages-count': 'Pages count',
-    'x-items-per-page': 'Items per page',
-    'x-average-found': 'Average found',
-    'x-loss': 'Loss',
-    'x-process-time': 'Process time',
-    'x-csv-filename': 'CSV filename',
-  },
 };
 const apiKeyQuota = [
   'x-api-key',
