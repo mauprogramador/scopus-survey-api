@@ -201,7 +201,7 @@ We add some **metadata** (as a comment) at the top of the CSV file, indicating t
 ```txt
 # GeneratedBy: ScopusSurveyAPI https://github.com/mauprogramador/scopus-survey-api
 # Params: api_key=..., date=2022-2025, keywords=['Python', 'Web API', 'Scopus', 'bibliographic survey'], combination=Python AND Web API AND Scopus, ratio=80
-# Survey: total=5, items_per_page=5, pages_count=1, loss=0doc / 0.00%
+# Survey: total=5, items_per_page=5, pages_count=1, results=5doc / 5doc, loss=0doc / 0.00%
 # Source: data retrieved from Scopus APIs on November 22, 2025 via http://api.elsevier.com and http://www.scopus.com.
 ```
 
