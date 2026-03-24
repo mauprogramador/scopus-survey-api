@@ -1,9 +1,9 @@
 <article class="container mt-2" aria-labelledby="info-title">
-  <h2 id="info-title" hidden>Information</h2>
+  <h2 id="info-title" hidden>{{_t('information')}}</h2>
 
-  <div id="ifms-tads" class="py-2 mb-5" role="region" aria-label="Institution and course banner">
-    <p class="d-flex justify-content-center align-items-baseline gap-1 m-0" aria-label="Institution"
-      title="Federal Institute of Education, Science and Technology of Mato Grosso do Sul">
+  <div id="ifms-tads" class="py-2 mb-5" role="region" aria-label="{{_t('ifms_tads.albl')}}">
+    <p class="d-flex justify-content-center align-items-baseline gap-1 m-0" aria-label="{{_t('institution.albl')}}"
+      data-bs-toggle="tooltip" data-bs-title="{{_t('institution.title')}}">
       <small lang="pt-BR">Instituto Federal de</small>
       <small class="d-sm-block d-none" lang="pt-BR">Educação, Ciência e Tecnologia de</small>
       <small lang="pt-BR">Mato Grosso do Sul</small>
@@ -13,8 +13,8 @@
         <small lang="pt-BR">IFMS Campus Três Lagoas</small>
       </a>
     </p>
-    <p class="d-flex justify-content-center align-items-baseline gap-1 m-0" aria-label="Course"
-      title="Technology in Systems Analysis and Development">
+    <p class="d-flex justify-content-center align-items-baseline gap-1 m-0" aria-label="{{_t('course.albl')}}"
+      data-bs-toggle="tooltip" data-bs-title="{{_t('course.title')}}">
       <small class="d-sm-block d-none" lang="pt-BR">Tecnologia em</small>
       <small lang="pt-BR">Análise e Desenvolvimento de Sistemas</small>
       <span class="d-md-block d-none px-1 opacity-50" role="separator" aria-hidden="true">&#8226;</span>
@@ -25,17 +25,17 @@
       </a>
     </p>
     <p class="d-md-none d-flex justify-content-center align-items-baseline gap-1 m-0 mt-1"
-      aria-label="Institution and course">
+      aria-label="{{_t('institution_course.albl')}}">
       <a class="link" href="https://www.ifms.edu.br/campi/campus-tres-lagoas" target="_blank"
-        rel="nofollow noopener noreferrer" translate="no"
-        title="Federal Institute of Education, Science and Technology of Mato Grosso do Sul">
+        rel="nofollow noopener noreferrer" translate="no" data-bs-toggle="tooltip"
+        data-bs-title="{{_t('institution.title')}}">
         <small lang="pt-BR">IFMS Três Lagoas</small>
       </a>
       <span class="px-1 opacity-50" role="separator" aria-hidden="true">&#8226;</span>
       <a class="link"
         href="https://www.ifms.edu.br/campi/campus-tres-lagoas/cursos/graduacao/analise-e-desenvolvimento-de-sistemas"
-        target="_blank" rel="nofollow noopener noreferrer" translate="no"
-        title="Technology in Systems Analysis and Development">
+        target="_blank" rel="nofollow noopener noreferrer" translate="no" data-bs-toggle="tooltip"
+        data-bs-title="{{_t('course.title')}}">
         <small lang="pt-BR">TADS</small>
       </a>
     </p>

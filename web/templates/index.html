@@ -48,7 +48,7 @@
       {% include "information.html" %}
 
       <form id="survey-form" accept-charset="UTF-8" autocomplete="on" method="get" aria-labelledby="form-title">
-        <h2 id="form-title" hidden>Multi-Step Survey</h2>
+        <h2 id="form-title" hidden>{{_t('form_name')}}</h2>
         {% include "api_key.html" %}
         {% include "additional_params.html" %}
         {% include "keywords_combination.html" %}

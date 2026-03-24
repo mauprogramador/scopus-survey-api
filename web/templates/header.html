@@ -9,18 +9,18 @@
     <small class="text-wrap">{{_t('api_description')}}</small>
   </hgroup>
 
-  <nav class="navbar navbar-expand-lg p-0 align-self-end flex-grow-1" aria-label="Main navigation">
+  <nav class="navbar navbar-expand-lg p-0 align-self-end flex-grow-1" aria-label="{{_t('nav.albl')}}">
     <ul class="navbar-nav justify-content-end flex-grow-1 align-items-center w-100 flex-row">
       <li class="nav-item d-flex">
         <a class="nav-link link" href="https://dev.elsevier.com/apikey/manage" rel="help nofollow noopener noreferrer">
-          <small>Your API Key</small>
+          <small>{{_t('nav.api_key')}}</small>
         </a>
       </li>
       <li class="nav-item d-flex">
         <a class="nav-link link" href="https://mauprogramador.github.io/scopus-survey-api/"
           rel="help noopener noreferrer">
-          <small class="d-none d-lg-inline">Documentation</small>
-          <small class="d-lg-none">Docs</small>
+          <small class="d-none d-lg-inline">{{_t('nav.docs')}}</small>
+          <small class="d-lg-none" translate="no">Docs</small>
         </a>
       </li>
       <li class="nav-item d-flex">
@@ -29,7 +29,7 @@
       <li class="nav-item d-flex align-items-center">
         <a class="nav-link link icon-link icon-link-hover gap-0"
           href="https://github.com/mauprogramador/scopus-survey-api/releases/latest" target="_blank"
-          rel="nofollow noopener noreferrer" translate="no" aria-label="Latest version release">
+          rel="nofollow noopener noreferrer" translate="no" aria-label="{{_t('version.albl')}}">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" aria-hidden="true">
             <path
               d="M856-390 570-104q-12 12-27 18t-30 6q-15 0-30-6t-27-18L103-457q-11-11-17-25.5T80-513v-287q0-33 23.5-56.5T160-880h287q16 0 31 6.5t26 17.5l352 353q12 12 17.5 27t5.5 30q0 15-5.5 29.5T856-390ZM513-160l286-286-353-354H160v286l353 354ZM260-640q25 0 42.5-17.5T320-700q0-25-17.5-42.5T260-760q-25 0-42.5 17.5T200-700q0 25 17.5 42.5T260-640Zm220 160Z" />
@@ -43,21 +43,21 @@
       <li class="nav-item dropdown">
         <button id="translate-button" class="btn btn-lg dropdown-toggle p-1 d-flex align-items-center border-0"
           type="button" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-controls="translate-dropdown"
-          aria-haspopup="menu" aria-expanded="false" aria-pressed="false" aria-label="Open translate menu">
+          aria-haspopup="menu" aria-expanded="false" aria-pressed="false" aria-label="{{_t('dropdown.btn.albl')}}">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" role="img">
             <path
               d="m476-80 182-480h84L924-80h-84l-43-122H603L560-80h-84ZM160-200l-56-56 202-202q-35-35-63.5-80T190-640h84q20 39 40 68t48 58q33-33 68.5-92.5T484-720H40v-80h280v-80h80v80h280v80H564q-21 72-63 148t-83 116l96 98-30 82-122-125-202 201Zm468-72h144l-72-204-72 204Z" />
           </svg>
         </button>
         <ul id="translate-dropdown" class="dropdown-menu dropdown-menu-end position-absolute" role="menu"
-          aria-label="Translate menu" aria-expanded="false">
-          <li role="menuitem" aria-label="Portuguese">
-            <a class="dropdown-item link" href="{{prefix}}/api/pt-BR/search-articles" rel="alternate">
+          aria-label="{{_t('dropdown.menu.albl')}}" aria-expanded="false">
+          <li role="menuitem" aria-label="{{_t('dropdown.pt.albl')}}">
+            <a class="dropdown-item link" href="{{prefix}}/web/pt-BR/search-articles" rel="alternate">
               <small translate="no" lang="pt-BR">Português (pt-BR)</small>
             </a>
           </li>
-          <li role="menuitem" aria-label="English">
-            <a class="dropdown-item link" href="{{prefix}}/api/en-US/search-articles" rel="alternate">
+          <li role="menuitem" aria-label="{{_t('dropdown.en.albl')}}">
+            <a class="dropdown-item link" href="{{prefix}}/web/en-US/search-articles" rel="alternate">
               <small translate="no">English (en-US)</small>
             </a>
           </li>

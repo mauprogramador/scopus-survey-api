@@ -30,9 +30,9 @@
           </span>
           <input id="startyear" class="form-control combfield" name="startYear" form="survey-form" type="number"
             min="2015" max="2025" step="1" size="4" minlength="4" maxlength="4" data-checked="false" autocomplete="on"
-            placeholder="Start Year" inputmode="numeric" aria-invalid="false" aria-required="false"
-            aria-autocomplete="both" aria-labelledby="date-title" aria-describedby="date-desc" aria-details="date-help"
-            aria-errormessage="date-feedback" />
+            placeholder="{{_t('start_year.placeholder')}}" inputmode="numeric" aria-invalid="false"
+            aria-required="false" aria-autocomplete="both" aria-labelledby="date-title" aria-describedby="date-desc"
+            aria-details="date-help" aria-errormessage="date-feedback" />
           <span class="field-icon" aria-hidden="true">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" aria-hidden="true">
               <path
@@ -41,13 +41,12 @@
           </span>
           <input id="endyear" class="form-control combfield" name="endYear" form="survey-form" type="number" min="2015"
             max="2025" step="1" size="4" minlength="4" maxlength="4" data-checked="false" autocomplete="on"
-            placeholder="End Year" inputmode="numeric" aria-invalid="false" aria-required="false"
+            placeholder="{{_t('end_year.placeholder')}}" inputmode="numeric" aria-invalid="false" aria-required="false"
             aria-autocomplete="both" aria-labelledby="date-title" aria-describedby="date-desc" aria-details="date-help"
             aria-errormessage="date-feedback" />
         </div>
-        <div id="date-feedback" class="field-feedback" role="alert" aria-live="assertive" hidden>
-        </div>
-        <div id="date-help" class="field-help">e.g. 2014 - 2024</div>
+        <div id="date-feedback" class="field-feedback" role="alert" aria-live="assertive" hidden></div>
+        <div id="date-help" class="field-help">{{_t('date_range.help')}}</div>
       </div>
     </section>
 
@@ -89,9 +88,8 @@
             <option value="sh">Short Survey</option>
           </select>
         </div>
-        <div id="doctype-feedback" class="field-feedback" role="alert" aria-live="assertive" hidden>
-        </div>
-        <div id="doctype-help" class="field-help">e.g. Article</div>
+        <div id="doctype-feedback" class="field-feedback" role="alert" aria-live="assertive" hidden></div>
+        <div id="doctype-help" class="field-help">{{_t('doctype.help')}}</div>
       </div>
     </section>
 
@@ -119,9 +117,8 @@
             <option value="final">Final Document</option>
           </select>
         </div>
-        <div id="pubstage-feedback" class="field-feedback" role="alert" aria-live="assertive" hidden>
-        </div>
-        <div id="pubstage-help" class="field-help">e.g. Final Document</div>
+        <div id="pubstage-feedback" class="field-feedback" role="alert" aria-live="assertive" hidden></div>
+        <div id="pubstage-help" class="field-help">{{_t('pubstage.help')}}</div>
       </div>
     </section>
 
@@ -145,8 +142,8 @@
           </span>
           <input id="language" class="form-control combfield" name="language" form="survey-form" type="text"
             list="common-languages" minlength="3" maxlength="30" size="30" pattern="[a-z \-]{3,30}" data-checked="false"
-            spellcheck="true" autocomplete="on" placeholder="Language" inputmode="text" aria-invalid="false"
-            aria-required="false" aria-autocomplete="both" aria-labelledby="language-title"
+            spellcheck="true" autocomplete="on" placeholder="{{_t('language.placeholder')}}" inputmode="text"
+            aria-invalid="false" aria-required="false" aria-autocomplete="both" aria-labelledby="language-title"
             aria-describedby="language-desc" aria-details="language-help" aria-errormessage="language-feedback" />
           <datalist id="common-languages">
             <option value="english">english</option>
@@ -158,9 +155,8 @@
             <option value="chinese">chinese</option>
           </datalist>
         </div>
-        <div id="language-feedback" class="field-feedback" role="alert" aria-live="assertive" hidden>
-        </div>
-        <div id="language-help" class="field-help">e.g. english</div>
+        <div id="language-feedback" class="field-feedback" role="alert" aria-live="assertive" hidden></div>
+        <div id="language-help" class="field-help">{{_t('language.help')}}</div>
       </div>
     </section>
 
@@ -190,9 +186,8 @@
             <option value="0">Subscription-based</option>
           </select>
         </div>
-        <div id="openaccess-feedback" class="field-feedback" role="alert" aria-live="assertive" hidden>
-        </div>
-        <div id="openaccess-help" class="field-help">e.g. Open Access</div>
+        <div id="openaccess-feedback" class="field-feedback" role="alert" aria-live="assertive" hidden></div>
+        <div id="openaccess-help" class="field-help">{{_t('open_access.help')}}</div>
       </div>
     </section>
 
@@ -224,9 +219,8 @@
             <option value="d">Trade Publication</option>
           </select>
         </div>
-        <div id="srctype-feedback" class="field-feedback" role="alert" aria-live="assertive" hidden>
-        </div>
-        <div id="srctype-help" class="field-help">e.g. Journal</div>
+        <div id="srctype-feedback" class="field-feedback" role="alert" aria-live="assertive" hidden></div>
+        <div id="srctype-help" class="field-help">{{_t('srctype.help')}}</div>
       </div>
     </section>
 
@@ -281,9 +275,8 @@
             <option value="MULT">Multidisciplinary</option>
           </select>
         </div>
-        <div id="subjarea-feedback" class="field-feedback" role="alert" aria-live="assertive" hidden>
-        </div>
-        <div id="subjarea-help" class="field-help">e.g. Computer Science</div>
+        <div id="subjarea-feedback" class="field-feedback" role="alert" aria-live="assertive" hidden></div>
+        <div id="subjarea-help" class="field-help">{{_t('subjarea.help')}}</div>
       </div>
     </section>
 
@@ -316,9 +309,8 @@
             <option value="LONG">Full papers</option>
           </select>
         </div>
-        <div id="pages-feedback" class="field-feedback" role="alert" aria-live="assertive" hidden>
-        </div>
-        <div id="pages-help" class="field-help">e.g. Full papers</div>
+        <div id="pages-feedback" class="field-feedback" role="alert" aria-live="assertive" hidden></div>
+        <div id="pages-help" class="field-help">{{_t('pages.help')}}</div>
       </div>
     </section>
 

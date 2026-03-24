@@ -1,3 +1,8 @@
+# English (en-US) translations for ScopusSurveyAPI.
+# Copyright (C) 2026 IFMS - Maurício da Silva Batista
+# This file is distributed under the same license as the ScopusSurveyAPI.
+# @mauprogramador <sir.silvabmauricio@gmail.com>, 2026.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: ScopusSurveyAPI v3.2.5\n"
@@ -15,21 +20,286 @@ msgstr ""
 "X-Poedit-SearchPath-0: web.po\n"
 
 # Custom
+
 msgid "api_description"
 msgstr "Web API for bibliographic survey of Scopus articles"
 
 msgid "title"
 msgstr "Search Articles - ScopusSurveyAPI"
 
-# Icons/Images
-msgid "I0101"
-msgstr "Close"
+msgid "version.albl"
+msgstr "Latest version release"
 
-msgid "I0102"
-msgstr "Info"
+msgid "form_name"
+msgstr "Multi-Step Survey"
 
-msgid "I0103"
-msgstr "Success"
+# Overlays
 
-msgid "I0104"
-msgstr "Error"
+msgid "loader.albl"
+msgstr "Processing request"
+
+msgid "loader.desc"
+msgstr "Please wait while we complete the operation"
+
+msgid "success_alert.albl"
+msgstr "Operation succeeded"
+
+msgid "alert.close_btn"
+msgstr "Close alert"
+
+msgid "warning_alert.albl"
+msgstr "Operation in progress"
+
+msgid "warning_alert.desc"
+msgstr "Operation in progress, please wait!"
+
+msgid "error_alert.albl"
+msgstr "Operation failed"
+
+msgid "collapse.close_btn"
+msgstr "Close JSON tree"
+
+msgid "error_alert.accordion.albl"
+msgstr "Response error JSON"
+
+msgid "details"
+msgstr "Details"
+
+msgid "details.close_btn"
+msgstr "Close details"
+
+msgid "details.caption"
+msgstr "Operation and Scopus APIs result details"
+
+msgid "details.field_col"
+msgstr "Field"
+
+msgid "details.value_col"
+msgstr "Value"
+
+msgid "warning"
+msgstr "Warnings"
+
+msgid "warning.close_btn"
+msgstr "Close warning"
+
+msgid "warning.list_group.albl"
+msgstr "List of warnings"
+
+msgid "warning.caption"
+msgstr "Consumption and limitations for the selected option."
+
+msgid "warning.search_quotas"
+msgstr "Search quotas"
+
+msgid "warning.abstract_quotas"
+msgstr "Abstract quotas"
+
+msgid "warning.retrievable_results"
+msgstr "Retrievable results"
+
+# Header
+
+msgid "nav.albl"
+msgstr "Main navigation"
+
+msgid "nav.api_key"
+msgstr "Your API Key"
+
+msgid "nav.docs"
+msgstr "Documentation"
+
+msgid "dropdown.btn.albl"
+msgstr "Open translate menu"
+
+msgid "dropdown.menu.albl"
+msgstr "Translate menu"
+
+msgid "dropdown.pt.albl"
+msgstr "Portuguese"
+
+msgid "dropdown.en.albl"
+msgstr "English"
+
+# Information
+
+msgid "information"
+msgstr "Information"
+
+msgid "ifms_tads.albl"
+msgstr "Institution and course banner"
+
+msgid "institution.albl"
+msgstr "Institution"
+
+msgid "institution.title"
+msgstr "Federal Institute of Education, Science and Technology of Mato Grosso do Sul"
+
+msgid "course.albl"
+msgstr "Course"
+
+msgid "course.title"
+msgstr "Technology in Systems Analysis and Development"
+
+msgid "institution_course.albl"
+msgstr "Institution and course"
+
+# Fields
+
+msgid "api_key.placeholder"
+msgstr "API Key"
+
+msgid "api_key.help"
+msgstr "e.g. 439f55d263cj..."
+
+msgid "prev_survey_btn"
+msgstr "Download Previous Survey CSV"
+
+msgid "prev_survey_btn.help"
+msgstr "e.g. 439f55d263cj..._docs.csv"
+
+msgid "start_year.placeholder"
+msgstr "Start Year"
+
+msgid "end_year.placeholder"
+msgstr "End Year"
+
+msgid "date_range.help"
+msgstr "e.g. 2014 - 2024"
+
+msgid "doctype.help"
+msgstr "e.g. Article"
+
+msgid "pubstage.help"
+msgstr "e.g. Final Document"
+
+msgid "language.placeholder"
+msgstr "Language"
+
+msgid "language.help"
+msgstr "e.g. english"
+
+msgid "open_access.help"
+msgstr "e.g. Open Access"
+
+msgid "srctype.help"
+msgstr "e.g. Journal"
+
+msgid "subjarea.help"
+msgstr "e.g. Computer Science"
+
+msgid "pages.help"
+msgstr "e.g. Full papers"
+
+msgid "keyword1.placeholder"
+msgstr "1st Keyword"
+
+msgid "keyword1.help"
+msgstr "e.g. Python, Standard OR Pattern"
+
+msgid "keyword2.placeholder"
+msgstr "2nd Keyword"
+
+msgid "keyword2.help"
+msgstr "e.g. Artificial Intelligence, behav*"
+
+msgid "keyword3.placeholder"
+msgstr "3rd Keyword"
+
+msgid "keyword3.help"
+msgstr "e.g. {Deep Learning}, \"Data Science\""
+
+msgid "keyword4.placeholder"
+msgstr "4th Keyword"
+
+msgid "keyword4.help"
+msgstr "e.g. Machine Learning, Template AND NOT Model"
+
+msgid "surv_comb_btn"
+msgstr "Survey Combination Totals"
+
+msgid "details_btn"
+msgstr "Show Result Details"
+
+msgid "combination.help"
+msgstr "e.g. Neural Network AND LLM"
+
+msgid "threshold.placeholder"
+msgstr "Threshold"
+
+msgid "threshold.help"
+msgstr "e.g. 80"
+
+msgid "surv_docs_btn"
+msgstr "Survey Documents"
+
+msgid "download_btn"
+msgstr "Download CSV"
+
+# Footer
+
+msgid "rights_reserved"
+msgstr "All rights reserved"
+
+msgid "author_github.albl"
+msgstr "Author's GitHub profile"
+
+msgid "built_by"
+msgstr "Designed and built by"
+
+msgid "help_of"
+msgstr "with the help of"
+
+msgid "social_media.albl"
+msgstr "Project resources and social media"
+
+msgid "project_github.albl"
+msgstr "Project GitHub repository"
+
+msgid "ifms_homepage.albl"
+msgstr "IFMS Campus Três Lagoas homepage"
+
+msgid "ifms_logo.alt"
+msgstr "IFMS logo"
+
+msgid "scopus_homepage.albl"
+msgstr "Scopus homepage"
+
+msgid "scopus_logo.alt"
+msgstr "Scopus logo"
+
+msgid "author_linkedin.albl"
+msgstr "Author's LinkedIn profile"
+
+msgid "author_dev.albl"
+msgstr "Author's DEV profile"
+
+msgid "dev_logo.alt"
+msgstr "DEV logo"
+
+msgid "cookies_notice_1"
+msgstr "We use necessary cookies for"
+
+msgid "cookies_notice_2"
+msgstr "security and functionality"
+
+msgid "data_source"
+msgstr "Data provided by"
+
+msgid "legal_docs.albl"
+msgstr "Legal and policy documents"
+
+msgid "terms_of_service"
+msgstr "Terms of Service"
+
+msgid "privacy_policy"
+msgstr "Privacy Policy"
+
+msgid "cookie_policy"
+msgstr "Cookie Policy"
+
+msgid "license"
+msgstr "License"
+
+msgid "attributions"
+msgstr "Attributions"
