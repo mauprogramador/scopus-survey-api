@@ -109,11 +109,11 @@ lint-tests:
 # Compile Locales
 
 locales:
-	@msgfmt web/locales/en_US/LC_MESSAGES/web.po -o web/locales/en_US/LC_MESSAGES/web.mo
-	@msgfmt web/locales/en_US/LC_MESSAGES/error.po -o web/locales/en_US/LC_MESSAGES/error.mo
+	@msgfmt locales/en_US/LC_MESSAGES/web.po -o locales/en_US/LC_MESSAGES/web.mo
+	@msgfmt locales/en_US/LC_MESSAGES/error.po -o locales/en_US/LC_MESSAGES/error.mo
 
-	@msgfmt web/locales/pt_BR/LC_MESSAGES/web.po -o web/locales/pt_BR/LC_MESSAGES/web.mo
-	@msgfmt web/locales/pt_BR/LC_MESSAGES/error.po -o web/locales/pt_BR/LC_MESSAGES/error.mo
+	@msgfmt locales/pt_BR/LC_MESSAGES/web.po -o locales/pt_BR/LC_MESSAGES/web.mo
+	@msgfmt locales/pt_BR/LC_MESSAGES/error.po -o locales/pt_BR/LC_MESSAGES/error.mo
 
 
 # Vulnerability

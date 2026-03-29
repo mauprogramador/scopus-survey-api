@@ -32,12 +32,12 @@ We then use [Python's gettext module](https://docs.python.org/3/library/gettext.
 
 ## 3. Compilation
 
-- **Locale Root Directory:** `web/locales/`.
+- **Locale Root Directory:** `locales/`.
 - **Languages Currently Supported:** English (`en-US`) and Português (`pt-BR`).
 
 ```bash
 # Compile .po to .mo
-msgfmt web/locales/en_US/LC_MESSAGES/file.po -o web/locales/en_US/LC_MESSAGES/file.mo
+msgfmt locales/en_US/LC_MESSAGES/file.po -o locales/en_US/LC_MESSAGES/file.mo
 ```
 
 <br>

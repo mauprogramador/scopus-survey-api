@@ -9,7 +9,7 @@ from src.core.data.enums import Lang
 class Translations:
     """Loads and stores translations"""
 
-    _LOCALEDIR = Path("web/locales")
+    _LOCALEDIR = Path("locales")
     _ERROR_DOMAIN = "error"
     _WEB_DOMAIN = "web"
 
