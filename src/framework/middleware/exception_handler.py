@@ -16,7 +16,9 @@ from src.core.domain.http_exceptions import HTTPError, ScopusAPIError
 
 class ExceptionHandler:
     """Handles exceptions and returns their JSON representation"""
+
     _CHROME_DEVTOOLS_URL = ".well-known/appspecific/com.chrome.devtools.json"
+    _LIVERELOAD_ROUTE = "/livereload"
 
     @property
     def handlers(self) -> dict:
@@ -42,6 +44,11 @@ class ExceptionHandler:
                 item["ctx"]["error"] = type(item["ctx"]["error"]).__name__
         return item
 
+    def _valid_routes_filter(self, path: str) -> bool:
+        is_devtools = path.endswith(self._CHROME_DEVTOOLS_URL)
+        is_livereload = path.count(self._LIVERELOAD_ROUTE)
+        return not is_devtools and not is_livereload
+
     async def custom_http_error(
         self, request: Request, exc: HTTPError
     ) -> ErrorJSON:
@@ -66,7 +73,7 @@ class ExceptionHandler:
         request: Request,
         exc: StarletteHTTPException | FastAPIHTTPException,
     ) -> ErrorJSON:
-        if not request.url.path.endswith(self._CHROME_DEVTOOLS_URL):
+        if self._valid_routes_filter(request.url.path):
             LOG.error(exc.detail)
             LOG.exception(exc)
         return ErrorJSON(request, exc.status_code, exc.detail)
