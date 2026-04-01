@@ -177,3 +177,17 @@ svg path {
     padding: 0.5rem 1rem !important;
   }
 }
+
+/* Skip to Content Link */
+#skip-to-content-link {
+  transform: translateY(-100%);
+  position: absolute;
+  z-index: 1000;
+  margin: 1rem;
+  opacity: 0;
+  left: 50%;
+}
+#skip-to-content-link:focus {
+  transform: translateY(0%);
+  opacity: 1;
+}
