@@ -8,6 +8,11 @@
 .modal-content {
   border-top: 2px solid var(--primary-color);
 }
+.modal-title {
+  color: var(--bs-heading-color);
+  font-size: 1.25rem;
+  font-weight: 500;
+}
 #details-table.table,
 #warning-table.table {
   --bs-table-striped-color: var(--bs-body-color);
@@ -56,6 +61,10 @@ article {
 /* Header */
 .navbar-brand a {
   --bs-link-color-rgb: 255, 108, 0;
+}
+#navbar-subtitle {
+  font-size: .875em;
+  margin-bottom: 0;
 }
 .navbar-nav {
   --bs-nav-link-hover-color: var(--nav-color);

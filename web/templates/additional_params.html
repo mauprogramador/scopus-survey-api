@@ -3,8 +3,7 @@
   <hr class="mt-2 mb-5" aria-hidden="true">
   <div class="row row-cols-1 row-cols-lg-2 align-items-end">
 
-    <section class="col pe-lg-5 text-group mb-5" role="region" aria-labelledby="date-title"
-      aria-describedby="date-desc">
+    <section class="col pe-lg-5 text-group mb-5" aria-labelledby="date-title" aria-describedby="date-desc">
       {{ partial_fields.date_range() }}
       <div class="field-container">
         <div class="field-wrapper">
@@ -15,10 +14,10 @@
             </svg>
           </span>
           <input id="startyear" class="form-control combfield" name="startYear" form="survey-form" type="number"
-            min="2015" max="2025" step="1" size="4" minlength="4" maxlength="4" data-checked="false" autocomplete="on"
+            min="2015" max="2025" step="1" data-checked="false" autocomplete="on"
             placeholder="{{_t('start_year.placeholder')}}" inputmode="numeric" aria-invalid="false"
-            aria-required="false" aria-autocomplete="both" aria-labelledby="date-title" aria-describedby="date-desc"
-            aria-details="date-help" aria-errormessage="date-feedback" />
+            aria-required="false" aria-labelledby="date-title" aria-describedby="date-desc" aria-details="date-help"
+            aria-errormessage="date-feedback">
           <span class="field-icon" aria-hidden="true">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" aria-hidden="true">
               <path
@@ -26,18 +25,16 @@
             </svg>
           </span>
           <input id="endyear" class="form-control combfield" name="endYear" form="survey-form" type="number" min="2015"
-            max="2025" step="1" size="4" minlength="4" maxlength="4" data-checked="false" autocomplete="on"
-            placeholder="{{_t('end_year.placeholder')}}" inputmode="numeric" aria-invalid="false" aria-required="false"
-            aria-autocomplete="both" aria-labelledby="date-title" aria-describedby="date-desc" aria-details="date-help"
-            aria-errormessage="date-feedback" />
+            max="2025" step="1" data-checked="false" autocomplete="on" placeholder="{{_t('end_year.placeholder')}}"
+            inputmode="numeric" aria-invalid="false" aria-required="false" aria-labelledby="date-title"
+            aria-describedby="date-desc" aria-details="date-help" aria-errormessage="date-feedback">
         </div>
         <div id="date-feedback" class="field-feedback" role="alert" aria-live="assertive" hidden></div>
         <div id="date-help" class="field-help">{{_t('date_range.help')}}</div>
       </div>
     </section>
 
-    <section class="col ps-lg-5 text-group mb-5" role="region" aria-labelledby="doctype-title"
-      aria-describedby="doctype-desc">
+    <section class="col ps-lg-5 text-group mb-5" aria-labelledby="doctype-title" aria-describedby="doctype-desc">
       {{ partial_fields.doctype() }}
       <div class="field-container">
         <div class="field-wrapper">
@@ -59,8 +56,7 @@
       </div>
     </section>
 
-    <section class="col pe-lg-5 text-group mb-5" role="region" aria-labelledby="pubstage-title"
-      aria-describedby="pubstage-desc">
+    <section class="col pe-lg-5 text-group mb-5" aria-labelledby="pubstage-title" aria-describedby="pubstage-desc">
       {{ partial_fields.pubstage() }}
       <div class="field-container">
         <div class="field-wrapper">
@@ -82,8 +78,7 @@
       </div>
     </section>
 
-    <section class="col ps-lg-5 text-group mb-5" role="region" aria-labelledby="language-title"
-      aria-describedby="language-desc">
+    <section class="col ps-lg-5 text-group mb-5" aria-labelledby="language-title" aria-describedby="language-desc">
       {{ partial_fields.language() }}
       <div class="field-container">
         <div class="field-wrapper">
@@ -98,7 +93,7 @@
             data-checked="false" spellcheck="true" autocomplete="on" placeholder="{{_t('language.placeholder')}}"
             inputmode="text" aria-invalid="false" aria-required="false" aria-autocomplete="both"
             aria-labelledby="language-title" aria-describedby="language-desc" aria-details="language-help"
-            aria-errormessage="language-feedback" />
+            aria-errormessage="language-feedback">
           <datalist id="common-languages">
             <option value="chinese">chinese</option>
             <option value="english">english</option>
@@ -118,8 +113,7 @@
       </div>
     </section>
 
-    <section class="col pe-lg-5 text-group mb-5" role="region" aria-labelledby="openaccess-title"
-      aria-describedby="openaccess-desc">
+    <section class="col pe-lg-5 text-group mb-5" aria-labelledby="openaccess-title" aria-describedby="openaccess-desc">
       {{ partial_fields.open_access() }}
       <div class="field-container">
         <div class="field-wrapper">
@@ -141,8 +135,7 @@
       </div>
     </section>
 
-    <section class="col ps-lg-5 text-group mb-5" role="region" aria-labelledby="srctype-title"
-      aria-describedby="srctype-desc">
+    <section class="col ps-lg-5 text-group mb-5" aria-labelledby="srctype-title" aria-describedby="srctype-desc">
       {{ partial_fields.srctype() }}
       <div class="field-container">
         <div class="field-wrapper">
@@ -164,7 +157,7 @@
       </div>
     </section>
 
-    <section class="col pe-lg-5 text-group mb-5 mb-lg-0" role="region" aria-labelledby="subjarea-title"
+    <section class="col pe-lg-5 text-group mb-5 mb-lg-0" aria-labelledby="subjarea-title"
       aria-describedby="subjarea-desc">
       {{ partial_fields.subjarea() }}
       <div class="field-container">
@@ -187,7 +180,7 @@
       </div>
     </section>
 
-    <section class="col ps-lg-5 text-group" role="region" aria-labelledby="pages-title" aria-describedby="pages-desc">
+    <section class="col ps-lg-5 text-group" aria-labelledby="pages-title" aria-describedby="pages-desc">
       {{ partial_fields.pages() }}
       <div class="field-container">
         <div class="field-wrapper">

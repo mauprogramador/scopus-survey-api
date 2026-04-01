@@ -4,10 +4,10 @@
 
 > _Last updated: November 28, 2025_
 
-Instituto Federal de Educação, Ciência e Tecnologia de Mato Grosso do Sul - [IFMS Campus Três Lagoas](https://www.ifms.edu.br/campi/campus-tres-lagoas)<br/>
-Tecnologia em Análise e Desenvolvimento de Sistemas - [TADS](https://www.ifms.edu.br/campi/campus-tres-lagoas/cursos/graduacao/analise-e-desenvolvimento-de-sistemas)<br/>
+Instituto Federal de Educação, Ciência e Tecnologia de Mato Grosso do Sul - [IFMS Campus Três Lagoas](https://www.ifms.edu.br/campi/campus-tres-lagoas)<br>
+Tecnologia em Análise e Desenvolvimento de Sistemas - [TADS](https://www.ifms.edu.br/campi/campus-tres-lagoas/cursos/graduacao/analise-e-desenvolvimento-de-sistemas)<br>
 
-> _Federal Institute of Education, Science and Technology of Mato Grosso do Sul_ <br/>
+> _Federal Institute of Education, Science and Technology of Mato Grosso do Sul_ <br>
 > _Technology in Systems Analysis and Development_
 
 <br>
@@ -69,7 +69,6 @@ The icons we use are from freely available or openly licensed (with proper attri
 [**SVG Repo**](https://www.svgrepo.com/)
 
 - `Page Separator SVG Vector`
-
   - **Creator:** [Remix Design](https://www.svgrepo.com/author/Remix%20Design/)
   - **License:** Apache License
 
@@ -84,21 +83,18 @@ The icons we use are from freely available or openly licensed (with proper attri
 The logos we use are from permitted brand guidelines or sourced from public domain websites. Their use does not imply endorsement or affiliation by the owners.
 
 - **Scopus (Shortcut Icon):**
-
   - **File:** `scopus.ico`
   - **Owner:** © Elsevier B.V.
   - **Source:** [Scopus preview](https://www.scopus.com/) (shortcut icon)
   - **Use:** footer reference to the data source website
 
 - **IFMS (Shortcut Icon)**
-
   - **File:** `ifms.ico`
   - **Owner:** © 2009-2022 Instituto Federal de Educação, Ciência e Tecnologia de Mato Grosso do Sul
   - **Source:** [Página Inicial - IFMS](https://www.ifms.edu.br/) (shortcut icon)
   - **Use:** footer reference to the institution website
 
 - **DEV**
-
   - **File:** `dev.png`
   - **Owner:** DEV Community © 2016 - 2025
   - **Source:** [DEV Brand Guidelines](https://dev.to/brand)

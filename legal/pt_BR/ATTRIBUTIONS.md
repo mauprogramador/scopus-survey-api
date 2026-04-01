@@ -4,8 +4,8 @@
 
 > _Última atualização: 30 de Novembro de 2025_
 
-Instituto Federal de Educação, Ciência e Tecnologia de Mato Grosso do Sul - [IFMS Campus Três Lagoas](https://www.ifms.edu.br/campi/campus-tres-lagoas)<br/>
-Tecnologia em Análise e Desenvolvimento de Sistemas - [TADS](https://www.ifms.edu.br/campi/campus-tres-lagoas/cursos/graduacao/analise-e-desenvolvimento-de-sistemas)<br/>
+Instituto Federal de Educação, Ciência e Tecnologia de Mato Grosso do Sul - [IFMS Campus Três Lagoas](https://www.ifms.edu.br/campi/campus-tres-lagoas)<br>
+Tecnologia em Análise e Desenvolvimento de Sistemas - [TADS](https://www.ifms.edu.br/campi/campus-tres-lagoas/cursos/graduacao/analise-e-desenvolvimento-de-sistemas)<br>
 
 > **Nota:** Esta tradução é fornecida apenas para conveniência e acessibilidade, prevalecendo a [versão em inglês](./../en_US/ATTRIBUTIONS.md) deste documento, para a qual você deve recorrer em caso de discrepâncias.
 
@@ -68,12 +68,10 @@ Os ícones que utilizamos são de repositórios de ícones gratuitos ou com lice
 [**SVG Repo**](https://www.svgrepo.com/)
 
 - `Page Separator SVG Vector`
-
   - **Criador:** [Remix Design](https://www.svgrepo.com/author/Remix%20Design/)
   - **Licença:** Licença Apache
 
 - `Lock Open Alt SVG Vector`
-
   - **Criador:** [Iconscout](https://www.svgrepo.com/author/Iconscout/)
   - **Licença:** Licença Apache
 
@@ -84,21 +82,18 @@ Os ícones que utilizamos são de repositórios de ícones gratuitos ou com lice
 Os logotipos que utilizamos são provenientes de diretrizes de marca permitidas ou de sites de domínio público. Seu uso não implica endosso ou afiliação por parte dos proprietários.
 
 - **Scopus (Ícone da página):**
-
   - **Arquivo:** `scopus.ico`
   - **Proprietário:** © Elsevier B.V.
   - **Fonte:** [Scopus _Preview_](https://www.scopus.com/) (ícone da página)
   - **Uso:** referência no rodapé para o site da fonte de dados
 
 - **IFMS (Ícone da página)**
-
   - **Arquivo:** `ifms.ico`
   - **Proprietário:** © 2009-2022 Instituto Federal de Educação, Ciência e Tecnologia de Mato Grosso do Sul
   - **Fonte:** [Página Inicial - IFMS](https://www.ifms.edu.br/) (ícone da página)
   - **Uso:** referência no rodapé para o site da instituição
 
 - **DEV**
-
   - **Arquivo:** `dev.png`
   - **Proprietário:** Comunidade DEV © 2016 - 2025
   - **Fonte:** [Diretrizes da Marca DEV](https://dev.to/brand)

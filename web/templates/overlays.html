@@ -1,7 +1,7 @@
-<dialog id="loader-dialog" role="status" tabindex="-1" aria-live="polite" aria-busy="true"
-  aria-label="{{_t('loader.albl')}}" aria-describedby="loader-desc" aria-modal="true" hidden>
-  <div id="spinner" aria-hidden="true"></div>
-  <div id="progress" aria-hidden="true">
+<dialog id="loader-dialog" tabindex="-1" aria-busy="true" aria-label="{{_t('loader.albl')}}"
+  aria-describedby="loader-desc" aria-modal="true" hidden>
+  <div id="spinner" aria-hidden="true" role="status"></div>
+  <div id="progress" aria-hidden="true" role="status">
     <span></span>
     <span></span>
     <span></span>
@@ -12,8 +12,8 @@
 </dialog>
 
 
-<dialog id="success-alert" class="container alert fade show" role="alert" tabindex="-1"
-  aria-label="{{_t('success_alert.albl')}}" aria-live="polite" aria-atomic="true" aria-modal="false" hidden>
+<dialog id="success-alert" class="container alert fade show" role="alertdialog" tabindex="-1"
+  aria-label="{{_t('success_alert.albl')}}" aria-modal="false" hidden>
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" aria-hidden="true">
     <path
       d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
@@ -22,8 +22,8 @@
   <button class="btn-close" type="button" aria-label="{{_t('alert.close_btn')}}"></button>
 </dialog>
 
-<dialog id="warning-alert" class="container alert fade show" role="alert" tabindex="-1"
-  aria-label="{{_t('warning_alert.albl')}}" aria-live="assertive" aria-atomic="true" aria-modal="false" hidden>
+<dialog id="warning-alert" class="container alert fade show" role="alertdialog" tabindex="-1"
+  aria-label="{{_t('warning_alert.albl')}}" aria-modal="false" hidden>
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" aria-hidden="true">
     <path
       d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2" />
@@ -32,9 +32,8 @@
   <button class="btn-close" type="button" aria-label="{{_t('alert.close_btn')}}"></button>
 </dialog>
 
-<dialog id="error-alert" class="container alert p-0 border-0 fade show" role="alert" tabindex="-1"
-  aria-label="{{_t('error_alert.albl')}}" aria-live="assertive" aria-atomic="true" aria-errormessage="error-alert-msg"
-  aria-modal="false" hidden>
+<dialog id="error-alert" class="container alert p-0 border-0 fade show" role="alertdialog" tabindex="-1"
+  aria-label="{{_t('error_alert.albl')}}" aria-modal="false" hidden>
   <div id="accordion-error-alert" class="accordion">
     <div class="accordion-item">
       <div class="accordion-header">
@@ -49,7 +48,7 @@
         <button class="btn-close" type="button" aria-label="{{_t('alert.close_btn')}}"></button>
       </div>
       <div id="json-tree-collapse" class="accordion-collapse collapse" data-bs-parent="#accordion-error-alert"
-        aria-expanded="false">
+        aria-expanded="false" role="region" aria-labelledby="accordion-json-button">
         <div id="error-raw-json" class="accordion-body" role="tree" spellcheck="false"
           aria-label="{{_t('error_alert.accordion.albl')}}" tabindex="0">
         </div>
@@ -64,7 +63,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 id="details-title" class="modal-title">{{_t('details')}}</h5>
+        <div id="details-title" class="modal-title">{{_t('details')}}</div>
         <button class="btn-close" type="button" data-bs-dismiss="modal"
           aria-label="{{_t('details.close_btn')}}"></button>
       </div>
@@ -94,16 +93,16 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 id="warning-title" class="modal-title">
+        <div id="warning-title" class="modal-title">
           {{_t('warning')}}
           <span id="warnings-number" class="badge text-bg-danger" aria-hidden="true"></span>
-        </h5>
+        </div>
         <button class="btn-close" type="button" data-bs-dismiss="modal"
           aria-label="{{_t('warning.close_btn')}}"></button>
       </div>
-      <div class="modal-body" aria-live="polite" aria-atomic="false">
-        <ul id="warnings-messages" class="list-group list-group-flush" role="alert"
-          aria-label="{{_t('warning.list_group.albl')}}"></ul>
+      <div class="modal-body" aria-live="polite" aria-atomic="false" role="alert">
+        <ul id="warnings-messages" class="list-group list-group-flush" aria-label="{{_t('warning.list_group.albl')}}">
+        </ul>
       </div>
       <div class="modal-footer">
         <table id="warning-table" class="table table-striped caption-top">

@@ -5,13 +5,11 @@
 
   <div class="row align-items-start">
 
-    <section class="col pe-lg-5 text-group mb-5 mb-lg-0" role="region" aria-labelledby="quotas-title"
-      aria-describedby="quotas-desc">
+    <section class="col pe-lg-5 text-group mb-5 mb-lg-0" aria-labelledby="quotas-title" aria-describedby="quotas-desc">
       {{ partial_fields.quotas() }}
     </section>
 
-    <section class="col ps-lg-5 text-group" role="region" aria-labelledby="threshold-title"
-      aria-describedby="threshold-desc">
+    <section class="col ps-lg-5 text-group" aria-labelledby="threshold-title" aria-describedby="threshold-desc">
       {{ partial_fields.threshold() }}
       <div class="field-container">
         <div class="field-wrapper">
@@ -22,10 +20,9 @@
             </svg>
           </span>
           <input id="threshold" class="form-control" name="threshold" form="survey-form" type="number" min="0" max="100"
-            step="1" size="3" data-checked="false" autocomplete="on" placeholder="{{_t('threshold.placeholder')}}"
-            inputmode="numeric" aria-invalid="false" aria-required="false" aria-autocomplete="both"
-            aria-labelledby="threshold-title" aria-describedby="threshold-desc" aria-details="threshold-help"
-            aria-errormessage="threshold-feedback" />
+            step="1" data-checked="false" autocomplete="on" placeholder="{{_t('threshold.placeholder')}}"
+            inputmode="numeric" aria-invalid="false" aria-required="false" aria-labelledby="threshold-title"
+            aria-describedby="threshold-desc" aria-details="threshold-help" aria-errormessage="threshold-feedback">
         </div>
         <div id="threshold-feedback" class="field-feedback" role="alert" aria-live="assertive" hidden></div>
         <div id="threshold-help" class="field-help" role="note">{{_t('threshold.help')}}</div>

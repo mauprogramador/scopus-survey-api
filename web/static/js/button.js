@@ -2,19 +2,17 @@
 class Button {
   constructor(buttonName) {
     this.button = document.querySelector(buttonName);
-    this.formAction = this.button.formAction;
+    this.actionUrl = this.button.dataset.actionUrl;
     this.name = this.button.name;
     this.value = this.button.value;
   }
 
   disable() {
     this.button.toggleAttribute('disabled', true);
-    this.button.ariaDisabled = 'true';
   }
 
   enable() {
     this.button.toggleAttribute('disabled', false);
-    this.button.ariaDisabled = 'false';
   }
 
   toggle(validity) {

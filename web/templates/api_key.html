@@ -3,8 +3,7 @@
   <hr class="mt-2 mb-5" aria-hidden="true">
   <div class="row row-cols-1 row-cols-lg-2 align-items-end">
 
-    <section class="col pe-lg-5 text-group mb-5 mb-lg-0" role="region" aria-labelledby="apikey-title"
-      aria-describedby="apikey-desc">
+    <section class="col pe-lg-5 text-group mb-5 mb-lg-0" aria-labelledby="apikey-title" aria-describedby="apikey-desc">
       {{ partial_fields.api_key() }}
       <div class="field-container">
         <div class="field-wrapper">
@@ -17,16 +16,15 @@
           <input id="apikey" class="form-control combfield" name="apiKey" form="survey-form" type="text" required
             minlength="32" maxlength="32" size="32" pattern="[a-zA-Z0-9]{32}" data-checked="false" spellcheck="false"
             autocomplete="on" placeholder="{{_t('api_key.placeholder')}}" inputmode="text" aria-invalid="false"
-            aria-required="true" aria-autocomplete="both" aria-labelledby="apikey-title" aria-describedby="apikey-desc"
-            aria-details="apikey-help" aria-errormessage="apikey-feedback" />
+            aria-autocomplete="both" aria-labelledby="apikey-title" aria-describedby="apikey-desc"
+            aria-details="apikey-help" aria-errormessage="apikey-feedback">
         </div>
         <div id="apikey-feedback" class="field-feedback" role="alert" aria-live="assertive" hidden></div>
         <div id="apikey-help" class="field-help">{{_t('api_key.help')}}</div>
       </div>
     </section>
 
-    <section class="col ps-lg-5 text-group" role="region" aria-labelledby="prevsurvey-title"
-      aria-describedby="prevsurvey-desc">
+    <section class="col ps-lg-5 text-group" aria-labelledby="prevsurvey-title" aria-describedby="prevsurvey-desc">
       {{ partial_fields.prev_survey() }}
       <div class="field-container">
         <div class="field-wrapper">
@@ -55,8 +53,7 @@
     {% if lang == 'en-US' %}
     <p class="ms-2">
       As the
-      <abbr aria-label="Comma-separated Values" lang="en-US" data-bs-toggle="tooltip"
-        data-bs-title="Comma-separated Values">CSV</abbr>
+      <abbr data-bs-toggle="tooltip" data-bs-title="Comma-separated Values" lang="en-US">CSV</abbr>
       file is saved with the <strong>API Key in its name</strong> (e.g. 439f55d263cj..._docs.csv), it can be
       <strong>overwritten</strong> by other surveys using the same one.
     </p>

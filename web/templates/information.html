@@ -2,8 +2,8 @@
   <h2 id="info-title" hidden>{{_t('information')}}</h2>
 
   <div id="ifms-tads" class="py-2 mb-5" role="region" aria-label="{{_t('ifms_tads.albl')}}">
-    <p class="d-flex justify-content-center align-items-baseline gap-1 m-0" aria-label="{{_t('institution.albl')}}"
-      data-bs-toggle="tooltip" data-bs-title="{{_t('institution.title')}}">
+    <p class="d-flex justify-content-center align-items-baseline gap-1 m-0" role="group"
+      aria-label="{{_t('institution.albl')}}" data-bs-toggle="tooltip" data-bs-title="{{_t('institution.title')}}">
       <small lang="pt-BR">Instituto Federal de</small>
       <small class="d-sm-block d-none" lang="pt-BR">Educação, Ciência e Tecnologia de</small>
       <small lang="pt-BR">Mato Grosso do Sul</small>
@@ -13,8 +13,8 @@
         <small lang="pt-BR">IFMS Campus Três Lagoas</small>
       </a>
     </p>
-    <p class="d-flex justify-content-center align-items-baseline gap-1 m-0" aria-label="{{_t('course.albl')}}"
-      data-bs-toggle="tooltip" data-bs-title="{{_t('course.title')}}">
+    <p class="d-flex justify-content-center align-items-baseline gap-1 m-0" role="group"
+      aria-label="{{_t('course.albl')}}" data-bs-toggle="tooltip" data-bs-title="{{_t('course.title')}}">
       <small class="d-sm-block d-none" lang="pt-BR">Tecnologia em</small>
       <small lang="pt-BR">Análise e Desenvolvimento de Sistemas</small>
       <span class="d-md-block d-none px-1 opacity-50" role="separator" aria-hidden="true">&#8226;</span>
@@ -24,7 +24,7 @@
         <small lang="pt-BR">TADS</small>
       </a>
     </p>
-    <p class="d-md-none d-flex justify-content-center align-items-baseline gap-1 m-0 mt-1"
+    <p class="d-md-none d-flex justify-content-center align-items-baseline gap-1 m-0 mt-1" role="group"
       aria-label="{{_t('institution_course.albl')}}">
       <a class="link" href="https://www.ifms.edu.br/campi/campus-tres-lagoas" target="_blank"
         rel="nofollow noopener noreferrer" translate="no" data-bs-toggle="tooltip"
@@ -41,11 +41,11 @@
     </p>
   </div>
 
-  <section class="text-group mb-5" role="region" aria-labelledby="info-title-1" aria-describedby="info-desc-1">
+  <section class="text-group mb-5" aria-labelledby="info-title-1" aria-describedby="info-desc-1">
     {% include "partials/overview.html" %}
   </section>
 
-  <section class="text-group mb-5" role="region" aria-labelledby="info-title-2" aria-describedby="info-desc-2">
+  <section class="text-group mb-5" aria-labelledby="info-title-2" aria-describedby="info-desc-2">
     {% include "partials/data_source.html" %}
   </section>
 
