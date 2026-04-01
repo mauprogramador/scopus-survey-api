@@ -66,12 +66,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.mount("/styles", StaticFiles(directory="web/static/css"))
-app.mount("/scripts", StaticFiles(directory="web/static/js"))
-app.mount("/libs", StaticFiles(directory="web/static/lib"))
-app.mount("/fonts", StaticFiles(directory="web/static/font"))
-app.mount("/images", StaticFiles(directory="web/static/img"))
-app.mount("/svgs", StaticFiles(directory="web/static/svg"))
+app.mount("/styles", StaticFiles(directory="web/static/css"), name="styles")
+app.mount("/scripts", StaticFiles(directory="web/static/js"), name="scripts")
+app.mount("/libs", StaticFiles(directory="web/static/lib"), name="libs")
+app.mount("/fonts", StaticFiles(directory="web/static/font"), name="fonts")
+app.mount("/images", StaticFiles(directory="web/static/img"), name="images")
+app.mount("/svgs", StaticFiles(directory="web/static/svg"), name="svgs")
 
 app.include_router(router)
 app.include_router(favicon_router)

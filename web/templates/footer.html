@@ -3,13 +3,12 @@
 
     <div class="hstack flex-grow-1 flex-wrap justify-content-center justify-content-xl-start">
       <span class="text-center text-sm-start">
-        <img id="footer-favicon" src="/images/favicon.ico" alt="Logo" loading="lazy" />
+        <img id="footer-favicon" src="{{url_for('images', path='/favicon.ico')}}" alt="Logo" loading="lazy">
 
         <small class="text-nowrap" translate="no">
           © <time datetime="2024">2024</time> ScopusSurveyAPI.
-          <a class="link" href="https://github.com/mauprogramador/scopus-survey-api/releases/tag/v{{version}}"
-            target="_blank" rel="nofollow noopener noreferrer" translate="no"
-            aria-label="{{_t('version.albl')}}">v{{version}}</a>.
+          <a class="link" href="{{repository}}/releases/tag/v{{version}}" target="_blank"
+            rel="nofollow noopener noreferrer" translate="no" aria-label="{{_t('version.albl')}}">v{{version}}</a>.
         </small>
 
         <small class="text-nowrap">{{_t('rights_reserved')}}</small>
@@ -38,8 +37,8 @@
 
     <nav class="nav flex-grow-1 flex-nowrap align-items-center justify-content-center justify-content-xl-end"
       aria-label="{{_t('social_media.albl')}}">
-      <a class="nav-link" href="https://github.com/mauprogramador/scopus-survey-api/tree/master" target="_blank"
-        rel="nofollow noopener noreferrer" data-bs-toggle="tooltip" data-bs-title="{{_t('project_github.albl')}}"
+      <a class="nav-link" href="{{repository}}/tree/master" target="_blank" rel="nofollow noopener noreferrer"
+        data-bs-toggle="tooltip" data-bs-title="{{_t('project_github.albl')}}"
         aria-label="{{_t('project_github.albl')}}">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" role="img" fill="#191717">
           <path
@@ -49,12 +48,12 @@
       <a class="nav-link" href="https://www.ifms.edu.br/campi/campus-tres-lagoas" target="_blank"
         rel="nofollow noopener noreferrer" data-bs-toggle="tooltip" data-bs-title="{{_t('ifms_homepage.albl')}}"
         aria-label="{{_t('ifms_homepage.albl')}}">
-        <img src="/images/ifms.ico" alt="{{_t('ifms_logo.alt')}}" loading="lazy" />
+        <img src="{{url_for('images', path='/ifms.ico')}}" alt="{{_t('ifms_logo.alt')}}" loading="lazy">
       </a>
       <a class="nav-link" href="https://www.scopus.com" target="_blank" rel="nofollow noopener noreferrer"
         data-bs-toggle="tooltip" data-bs-title="{{_t('scopus_homepage.albl')}}"
         aria-label="{{_t('scopus_homepage.albl')}}">
-        <img src="/images/scopus.ico" alt="{{_t('scopus_logo.alt')}}" loading="lazy" />
+        <img src="{{url_for('images', path='/scopus.ico')}}" alt="{{_t('scopus_logo.alt')}}" loading="lazy">
       </a>
       <a class="nav-link" href="https://www.linkedin.com/in/mauricio-silva-batista-0ba90322b/" target="_blank"
         rel="author noopener noreferrer" data-bs-toggle="tooltip" data-bs-title="{{_t('author_linkedin.albl')}}"
@@ -66,7 +65,7 @@
       </a>
       <a class="nav-link" href="https://dev.to/mauprogramador" target="_blank" rel="author noopener noreferrer"
         data-bs-toggle="tooltip" data-bs-title="{{_t('author_dev.albl')}}" aria-label="{{_t('author_dev.albl')}}">
-        <img src="/images/dev.png" alt="{{_t('dev_logo.alt')}}" loading="lazy" />
+        <img src="{{url_for('images', path='/dev.png')}}" alt="{{_t('dev_logo.alt')}}" loading="lazy">
       </a>
     </nav>
 
@@ -93,25 +92,24 @@
 
     <nav class="nav flex-grow-1 align-items-center justify-content-center justify-content-xl-end"
       aria-label="{{_t('legal_docs.albl')}}">
-      <a class="nav-link link"
-        href="https://github.com/mauprogramador/scopus-survey-api/blob/master/TERMS_OF_SERVICE.md" target="_blank"
+      <a class="nav-link link" href="{{repository}}/blob/master/TERMS_OF_SERVICE.md" target="_blank"
         rel="terms-of-service noopener noreferrer">
         <small class="text-nowrap">{{_t('terms_of_service')}}</small>
       </a>
-      <a class="nav-link link" href="https://github.com/mauprogramador/scopus-survey-api/blob/master/PRIVACY_POLICY.md"
-        target="_blank" rel="privacy-policy noopener noreferrer">
+      <a class="nav-link link" href="{{repository}}/blob/master/PRIVACY_POLICY.md" target="_blank"
+        rel="privacy-policy noopener noreferrer">
         <small class="text-nowrap">{{_t('privacy_policy')}}</small>
       </a>
-      <a class="nav-link link" href="https://github.com/mauprogramador/scopus-survey-api/blob/master/COOKIE_POLICY.md"
-        target="_blank" rel="privacy-policy noopener noreferrer">
+      <a class="nav-link link" href="{{repository}}/blob/master/COOKIE_POLICY.md" target="_blank"
+        rel="privacy-policy noopener noreferrer">
         <small class="text-nowrap">{{_t('cookie_policy')}}</small>
       </a>
-      <a class="nav-link link" href="https://github.com/mauprogramador/scopus-survey-api/blob/master/LICENSE"
-        target="_blank" rel="license noopener noreferrer">
+      <a class="nav-link link" href="{{repository}}/blob/master/LICENSE" target="_blank"
+        rel="license noopener noreferrer">
         <small class="text-nowrap">{{_t('license')}}</small>
       </a>
-      <a class="nav-link link" href="https://github.com/mauprogramador/scopus-survey-api/blob/master/ATTRIBUTIONS.md"
-        target="_blank" rel="nofollow noopener noreferrer">
+      <a class="nav-link link" href="{{repository}}/blob/master/ATTRIBUTIONS.md" target="_blank"
+        rel="nofollow noopener noreferrer">
         <small class="text-nowrap">{{_t('attributions')}}</small>
       </a>
     </nav>

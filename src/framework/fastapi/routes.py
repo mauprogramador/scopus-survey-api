@@ -54,7 +54,7 @@ async def favicon():
     responses=HTML_RESPONSE,
     response_class=HTMLResponse,
 )
-async def search_articles_page(
+async def web_form_page(
     request: Request,
     lang: Lang,
 ) -> HTMLResponse:
@@ -107,7 +107,7 @@ async def survey_total_combinations(
     response_class=FileResponse,
 )
 @LIMITER.limit(LIMIT)
-async def survey_articles(
+async def survey_bibliographic_data(
     request: Request,  # pylint: disable=W0613
     params: Annotated[SearchParams, Query()],
 ) -> FileResponse:

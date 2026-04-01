@@ -69,15 +69,15 @@
 
     <a id="download-link" href="#" rel="alternate" download="docs.csv" type="text/csv" hidden tabindex="-1">&#8203;</a>
 
-    <script src="/libs/bootstrap/bootstrap.bundle.min.js" type="text/javascript"></script>
-    <script src="/scripts/index.js" type="module"></script>
-    <script src="/scripts/validation.js" type="module"></script>
-    <script src="/scripts/translations.js" type="module"></script>
-    <script src="/scripts/button.js" type="module"></script>
-    <script src="/scripts/requests.js" type="module"></script>
-    <script src="/scripts/overlays.js" type="module"></script>
-    <script src="/scripts/handler.js" type="module"></script>
-    <script src="/libs/jsonview/jsonview.min.js" type="text/javascript"></script>
+    <script src="{{url_for('libs', path='/bootstrap/bootstrap.bundle.min.js')}}"></script>
+    <script src="{{url_for('scripts', path='/index.js')}}" type="module"></script>
+    <script src="{{url_for('scripts', path='/validation.js')}}" type="module"></script>
+    <script src="{{url_for('scripts', path='/translations.js')}}" type="module"></script>
+    <script src="{{url_for('scripts', path='/button.js')}}" type="module"></script>
+    <script src="{{url_for('scripts', path='/requests.js')}}" type="module"></script>
+    <script src="{{url_for('scripts', path='/overlays.js')}}" type="module"></script>
+    <script src="{{url_for('scripts', path='/handler.js')}}" type="module"></script>
+    <script src="{{url_for('libs', path='/jsonview/jsonview.min.js')}}"></script>
   </body>
 
 </html>

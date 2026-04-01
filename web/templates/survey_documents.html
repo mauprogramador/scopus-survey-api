@@ -33,8 +33,8 @@
 
   <div class="field-wrapper btn-section justify-content-center mt-5 mb-3 flex-wrap gap-3">
     <button id="survdocs-button" class="btn btn-scopus text-nowrap col-12 col-md-auto me-lg-4" type="button"
-      name="button" value="search" form="survey-form" formaction="{{prefix}}/api/survey" disabled aria-disabled="true"
-      aria-live="polite" aria-busy="false">
+      name="button" value="search" form="survey-form" data-action-url="{{url_for('survey_bibliographic_data')}}"
+      disabled aria-live="polite" aria-busy="false">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" aria-hidden="true">
         <path
           d="M200-800v241-1 400-640 200-200Zm0 720q-33 0-56.5-23.5T120-160v-640q0-33 23.5-56.5T200-880h320l240 240v100q-19-8-39-12.5t-41-6.5v-41H480v-200H200v640h241q16 24 36 44.5T521-80H200Zm460-120q42 0 71-29t29-71q0-42-29-71t-71-29q-42 0-71 29t-29 71q0 42 29 71t71 29ZM864-40 756-148q-21 14-45.5 21t-50.5 7q-75 0-127.5-52.5T480-300q0-75 52.5-127.5T660-480q75 0 127.5 52.5T840-300q0 26-7 50.5T812-204L920-96l-56 56Z" />
@@ -42,7 +42,7 @@
       {{_t('surv_docs_btn')}}
     </button>
     <button id="download-button" class="btn btn-scopus text-nowrap col-12 col-md-auto ms-lg-4 me-lg-4" type="button"
-      name="button" value="download" form="survey-form" formaction="{{prefix}}/api/csv" disabled aria-disabled="true"
+      name="button" value="download" form="survey-form" data-action-url="{{url_for('download_csv')}}" disabled
       aria-live="polite" aria-busy="false">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" aria-hidden="true">
         <path
@@ -51,7 +51,7 @@
       {{_t('download_btn')}}
     </button>
     <button id="survdocsdetls-button" class="btn btn-scopus text-nowrap col-12 col-md-auto ms-lg-4" type="button"
-      data-bs-toggle="modal" data-bs-target="#details-modal" disabled aria-disabled="true" aria-controls="details-modal"
+      data-bs-toggle="modal" data-bs-target="#details-modal" disabled aria-controls="details-modal"
       aria-haspopup="dialog" aria-expanded="false" aria-pressed="false">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" aria-hidden="true">
         <path

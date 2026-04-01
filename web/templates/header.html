@@ -2,8 +2,8 @@
 
   <hgroup class="align-self-start">
     <h1 class="navbar-brand p-0 m-0">
-      <img src="/images/favicon.ico" alt="Logo" loading="lazy" />
-      <a class="text-decoration-none fw-bold link-opacity-75-hover" href="{{prefix}}/api/{{lang}}/search-articles"
+      <img src="{{url_for('images', filename='/favicon.ico')}}" alt="Logo" loading="lazy">
+      <a class="text-decoration-none fw-bold link-opacity-75-hover" href="{{url_for('web_form_page', lang=lang)}}"
         rel="canonical" translate="no" tabindex="-1">ScopusSurveyAPI</a>
     </h1>
     <p id="navbar-subtitle" class="text-wrap">{{_t('api_description')}}</p>
@@ -17,8 +17,7 @@
         </a>
       </li>
       <li class="nav-item d-flex">
-        <a class="nav-link link" href="https://mauprogramador.github.io/scopus-survey-api/"
-          rel="help noopener noreferrer">
+        <a class="nav-link link" href="{{documentation}}" rel="help noopener noreferrer">
           <small class="d-none d-lg-inline">{{_t('nav.docs')}}</small>
           <small class="d-lg-none" translate="no">Docs</small>
         </a>
@@ -27,8 +26,7 @@
         <div class="vr mx-1" role="separator" aria-hidden="true"></div>
       </li>
       <li class="nav-item d-flex align-items-center">
-        <a class="nav-link link icon-link icon-link-hover gap-0"
-          href="https://github.com/mauprogramador/scopus-survey-api/releases/latest" target="_blank"
+        <a class="nav-link link icon-link icon-link-hover gap-0" href="{{repository}}/releases/latest" target="_blank"
           rel="nofollow noopener noreferrer" translate="no" aria-label="{{_t('version.albl')}}">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" aria-hidden="true">
             <path
@@ -52,12 +50,12 @@
         <ul id="translate-dropdown" class="dropdown-menu dropdown-menu-end position-absolute" role="menu"
           aria-label="{{_t('dropdown.menu.albl')}}" aria-expanded="false">
           <li role="menuitem" aria-label="{{_t('dropdown.pt.albl')}}">
-            <a class="dropdown-item link" href="{{prefix}}/web/pt-BR/search-articles" rel="alternate">
+            <a class="dropdown-item link" href="{{url_for('web_form_page', lang='pt-BR')}}" rel="alternate">
               <small translate="no" lang="pt-BR">Português (pt-BR)</small>
             </a>
           </li>
           <li role="menuitem" aria-label="{{_t('dropdown.en.albl')}}">
-            <a class="dropdown-item link" href="{{prefix}}/web/en-US/search-articles" rel="alternate">
+            <a class="dropdown-item link" href="{{url_for('web_form_page', lang='en-US')}}" rel="alternate">
               <small translate="no">English (en-US)</small>
             </a>
           </li>

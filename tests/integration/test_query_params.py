@@ -12,7 +12,7 @@ from src.core.use_cases.keyword_combination_finder import (
 from src.core.use_cases.scopus_articles_aggregator import (
     ScopusArticlesAggregator,
 )
-from src.framework.fastapi.routes import survey_articles
+from src.framework.fastapi.routes import survey_bibliographic_data
 from tests.conftest import assert_error_json
 from tests.mocks.helpers import (
     fqn,
@@ -33,8 +33,8 @@ from tests.mocks.raw import (
     URL_SEARCH,
 )
 
-MAKE_COMBINATOR = fqn(survey_articles, make_combinator)
-MAKE_AGGREGATOR = fqn(survey_articles, make_aggregator)
+MAKE_COMBINATOR = fqn(survey_bibliographic_data, make_combinator)
+MAKE_AGGREGATOR = fqn(survey_bibliographic_data, make_aggregator)
 SURVEY_COMBINATIONS = AsyncMock(
     spec=KeywordCombinationFinder,
     survey_combinations=AsyncMock(side_effect=mock_survey_combinations),
