@@ -1,46 +1,45 @@
 <!DOCTYPE html>
 <!-- cspell:ignoreRegExp >(.*?)< -->
 <html lang="{{lang}}" data-bs-theme="light">
+  {% set title = "Scopus Survey API" %}
+  {% set keywords = "Python; Web API; Scopus; Bibliography Survey" %}
+  {% set repository = "https://github.com/mauprogramador/scopus-survey-api" %}
+  {% set documentation = "https://mauprogramador.github.io/scopus-survey-api" %}
+  {% set year = "2024" %}
+  {% set date = "2025-08-09" %}
+  {% set created = "2024-02-26" %}
+  {% set modified = "2026-00-00" %}
 
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="color-scheme" content="light">
-    <meta name="description" content="ScopusSurveyAPI, {{_t('api_description')}}" />
-    <meta name="author" content="mauprogramador" />
-    <meta name="generator"
-      content="mkdocs-1.5.3, mkdocs-material-9.5.9, mkdocs-static-i18n-1.2.3, mkdocs-markdownextradata-plugin-0.2.5" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta property="og:site_name" content="ScopusSurveyAPI" />
-    <meta property="og:title" content="ScopusSurveyAPI" />
-    <meta property="og:description" content="{{_t('api_description')}}">
-    <meta property="og:type" content="website" />
-    <meta property="og:image" content="/images/logo.png" />
-    <meta property="og:image:type" content="image/png" />
-    <meta property="og:image:width" content="720" />
-    <meta property="og:image:height" content="300" />
-    <meta property="og:image:alt" content="ScopusSurveyAPI logo" />
-    <meta property="og:url" content="{{prefix}}/api" />
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:title" content="ScopusSurveyAPI" />
-    <meta property="twitter:description" content="{{_t('api_description')}}" />
-    <meta property="twitter:image" content="/images/logo.png" />
+    <link rel="canonical" href="{{url_for('web_form_page', lang=lang)}}">
+    <link rel="alternate" hreflang="en-US" href="{{url_for('web_form_page', lang='en-US')}}">
+    <link rel="alternate" hreflang="pt-BR" href="{{url_for('web_form_page', lang='pt-BR')}}">
+    <link rel="icon" href="/images/favicon.ico" sizes="256x256" type="image/x-icon">
+    <link rel="apple-touch-icon" href="/images/apple-icon.png" sizes="180x180" type="image/png">
+    <link rel="image_src" href="/images/social-card.png" sizes="1200x630" type="image/png">
 
-    <link rel="canonical" href="{{prefix}}/api" />
-    <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon" />
-    <link rel="alternate" hreflang="en-US" href="{{prefix}}/api/en-US/search-articles">
-    <link rel="alternate" hreflang="pt-BR" href="{{prefix}}/api/pt-BR/search-articles">
-
-    <link rel="stylesheet" href="/libs/bootstrap/bootstrap.min.css" type="text/css" />
-    <link rel="stylesheet" href="/styles/styles.css" type="text/css" />
-    <link rel="stylesheet" href="/styles/index.css" type="text/css" />
-    <link rel="stylesheet" href="/styles/form.css" type="text/css" />
-    <link rel="stylesheet" href="/styles/overlays.css" type="text/css" />
-
+    <meta name="generator" content="jinja2-3.1.5, bootstrap-5.3.7, jsonview-1.0.0">
     <title>{{_t('title')}}</title>
+
+    <link rel="stylesheet" href="/libs/bootstrap/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="/styles/styles.css" type="text/css">
+    <link rel="stylesheet" href="/styles/index.css" type="text/css">
+    <link rel="stylesheet" href="/styles/form.css" type="text/css">
+    <link rel="stylesheet" href="/styles/overlays.css" type="text/css">
+
+    {% include "meta.html" %}
+
+    <meta name="color-scheme" content="light">
+    <meta name="theme-color" content="#ff6c00">
   </head>
 
   <body>
+    <!-- COinS -->
+    <span class="Z3988" hidden title="{{_m('meta.coins')}}"></span>
+
     <!-- Skip to Content Link -->
     <a id="skip-to-content-link" class="link visually-hidden-focusable" href="#apikey">Skip to main content</a>
 
@@ -69,15 +68,15 @@
 
     <a id="download-link" href="#" rel="alternate" download="docs.csv" type="text/csv" hidden tabindex="-1">&#8203;</a>
 
-    <script src="{{url_for('libs', path='/bootstrap/bootstrap.bundle.min.js')}}"></script>
-    <script src="{{url_for('scripts', path='/index.js')}}" type="module"></script>
-    <script src="{{url_for('scripts', path='/validation.js')}}" type="module"></script>
-    <script src="{{url_for('scripts', path='/translations.js')}}" type="module"></script>
-    <script src="{{url_for('scripts', path='/button.js')}}" type="module"></script>
-    <script src="{{url_for('scripts', path='/requests.js')}}" type="module"></script>
-    <script src="{{url_for('scripts', path='/overlays.js')}}" type="module"></script>
-    <script src="{{url_for('scripts', path='/handler.js')}}" type="module"></script>
-    <script src="{{url_for('libs', path='/jsonview/jsonview.min.js')}}"></script>
+    <script src="/libs/bootstrap/bootstrap.bundle.min.js"></script>
+    <script src="/scripts/index.js" type="module"></script>
+    <script src="/scripts/validation.js" type="module"></script>
+    <script src="/scripts/translations.js" type="module"></script>
+    <script src="/scripts/button.js" type="module"></script>
+    <script src="/scripts/requests.js" type="module"></script>
+    <script src="/scripts/overlays.js" type="module"></script>
+    <script src="/scripts/handler.js" type="module"></script>
+    <script src="/libs/jsonview/jsonview.min.js"></script>
   </body>
 
 </html>
