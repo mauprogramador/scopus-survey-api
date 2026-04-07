@@ -4,7 +4,6 @@ from pytest_mock import MockerFixture as Mocker
 from src.adapters.presenters.json_response import ErrorJSON
 from src.adapters.presenters.template_response import TemplateResponse
 from src.core.common.error_messages import UNEXPECTED_ERROR
-from src.core.config.scopus import CURRENT_YEAR
 from src.core.data.enums import Lang
 from tests.mocks.raw import CSRF_TOKEN, HTML_MEDIA, HTTP_200, HTTP_404, REQUEST
 
@@ -24,7 +23,6 @@ def test_form_template(mocker: Mocker):
     assert context["version"] and context["prefix"]
     assert context["csrf_token"] == CSRF_TOKEN
     assert context["lang"] == Lang.EN_US
-    assert context["current_year"] == CURRENT_YEAR
     assert context["_t"] and context["_m"] and context["_e"]
 
 

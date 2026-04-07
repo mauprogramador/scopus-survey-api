@@ -48,7 +48,6 @@ async def test_web_search_articles_en_us(client: Client):
     assert res.headers.get("Content-Type") == HTML_CONTENT_TYPE
 
 
-@mark.skip(reason="pt-BR translations not implemented yet")
 @mark.asyncio
 async def test_web_search_articles_pt_br(client: Client):
     client.cookies.clear()
