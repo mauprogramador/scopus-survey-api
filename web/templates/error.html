@@ -1,36 +1,60 @@
 <!DOCTYPE html>
 <!-- cspell:ignoreRegExp >(.*?)< -->
 <html lang="en-US">
+  {% set keywords = "Python; Web API; Scopus; Bibliography Survey" %}
 
   <head>
-    <meta charset="UTF-8" />
-    <meta name="locale" content="en_US">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {% if status_code == 404 %}
     <meta name="robots" content="noindex, nofollow">
-    {% endif %}
-    <link rel="icon" href="{{url_for('images', path='/favicon.ico')}}" sizes="256x256" type="image/x-icon">
-    <link rel="stylesheet" href="{{url_for('libs', path='/bootstrap/bootstrap.min.css')}}" type="text/css">
-    <link rel="stylesheet" href="{{url_for('styles', path='/styles.css')}}" type="text/css">
-    <link rel="stylesheet" href="{{url_for('styles', path='/error.css')}}" type="text/css">
+
+    <link rel="canonical" href="{{url_for('web_form_page', lang='en-US')}}">
+    <link rel="icon" href="/images/favicon.ico" sizes="256x256" type="image/x-icon">
+    <link rel="apple-touch-icon" href="/images/apple-icon.png" sizes="180x180" type="image/png">
+    <link rel="image_src" href="images/social-card.png" sizes="1200x630" type="image/png">
+
+    <meta name="generator" content="jinja2-3.1.5, bootstrap-5.3.7, jsonview-1.0.0">
     <title>Error - ScopusSurveyAPI</title>
+
+    <link rel="stylesheet" href="/libs/bootstrap/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="/styles/styles.css" type="text/css">
+    <link rel="stylesheet" href="/styles/error.css" type="text/css">
+
+    <meta name="application-name" content="Scopus Survey API" lang="en-US">
+    <meta name="author" content="mauprogramador">
+    <meta name="description" content="An unexpected error occurred">
+    <meta name="keywords" content="{{keywords}}" lang="en-US">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Error - ScopusSurveyAPI">
+    <meta property="og:description" content="An unexpected error occurred">
+    <meta property="og:image:alt" content="Error - ScopusSurveyAPI">
+    <meta property="og:url" content="{{url_for('web_form_page', lang='en-US')}}">
+    <meta property="og:site_name" content="ScopusSurveyAPI">
+    <meta property="og:locale" content="en-US">
+
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:title" content="Error - ScopusSurveyAPI">
+    <meta property="twitter:description" content="An unexpected error occurred">
+
+    <meta name="color-scheme" content="light">
+    <meta name="theme-color" content="#dc3545">
   </head>
 
   <body>
     <main class="vstack justify-content-center align-items-center text-center my-5 mx-auto">
 
-      <div class="mb-4">
-        <h1 role="alert log" class="mb-1" aria-label="HTTP status code error">
-          {{status_code}}</h1>
-        <h2 role="alert log" aria-label="HTTP status error">{{status}}</h2>
-      </div>
+      <header class="mb-4" aria-label="HTTP Error">
+        <h1 class="mb-1">{{status_code}}</h1>
+        <h2>{{status}}</h2>
+      </header>
 
-      <div class="mb-3 text-white">
-        <div role="alert" aria-label="Error message">{{message}}</div>
+      <section class="mb-3 text-white" aria-label="Error details">
+        <div>{{message}}</div>
         <small>
-          <time datetime="{{timestamp}}" aria-label="Error timestamp">{{timestamp}}</time>
+          <time datetime="{{timestamp}}">{{timestamp}}</time>
         </small>
-      </div>
+      </section>
 
       <template id="buttons-group">
         <a class="btn btn-scopus text-nowrap" href="{{url_for('web_form_page', lang='en-US')}}">
@@ -73,10 +97,10 @@
       </div>
     </main>
 
-    <script src="{{url_for('libs', path='/bootstrap/bootstrap.bundle.min.js')}}"></script>
-    <script src="{{url_for('libs', path='/jsonview/jsonview.min.js')}}"></script>
-    <script src="{{url_for('scripts', path='/error.js')}}" type="module"></script>
-    <script src="{{url_for('scripts', path='/button.js')}}" type="module"></script>
+    <script src="/libs/bootstrap/bootstrap.bundle.min.js"></script>
+    <script src="/libs/jsonview/jsonview.min.js"></script>
+    <script src="/scripts/error.js" type="module"></script>
+    <script src="/scripts/button.js" type="module"></script>
   </body>
 
 </html>
