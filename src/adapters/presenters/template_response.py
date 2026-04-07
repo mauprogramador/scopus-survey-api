@@ -43,6 +43,7 @@ class TemplateResponse:
             "csrf_token": csrf_token,
             "lang": lang.value,
             "_t": Translations.WEB[lang].gettext,
+            "_m": Translations.META[lang].gettext,
             "_e": Translations.ERROR[lang].gettext,
         }
 

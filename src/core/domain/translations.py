@@ -11,9 +11,11 @@ class Translations:
 
     _LOCALEDIR = Path("locales")
     _ERROR_DOMAIN = "error"
+    _META_DOMAIN = "meta"
     _WEB_DOMAIN = "web"
 
     ERROR: dict[Lang, GNUTranslations] = {}
+    META: dict[Lang, GNUTranslations] = {}
     WEB: dict[Lang, GNUTranslations] = {}
 
     @classmethod
@@ -25,6 +27,11 @@ class Translations:
                 localedir=cls._LOCALEDIR,
                 languages=[Lang.EN_US.locale],
             )
+            cls.META[Lang.EN_US] = translation(
+                domain=cls._META_DOMAIN,
+                localedir=cls._LOCALEDIR,
+                languages=[Lang.EN_US.locale],
+            )
             cls.ERROR[Lang.EN_US] = translation(
                 domain=cls._ERROR_DOMAIN,
                 localedir=cls._LOCALEDIR,
@@ -33,6 +40,11 @@ class Translations:
 
             cls.WEB[Lang.PT_BR] = translation(
                 domain=cls._WEB_DOMAIN,
+                localedir=cls._LOCALEDIR,
+                languages=[Lang.PT_BR.locale],
+            )
+            cls.META[Lang.PT_BR] = translation(
+                domain=cls._META_DOMAIN,
                 localedir=cls._LOCALEDIR,
                 languages=[Lang.PT_BR.locale],
             )

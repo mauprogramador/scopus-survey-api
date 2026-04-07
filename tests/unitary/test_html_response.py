@@ -25,7 +25,7 @@ def test_form_template(mocker: Mocker):
     assert context["csrf_token"] == CSRF_TOKEN
     assert context["lang"] == Lang.EN_US
     assert context["current_year"] == CURRENT_YEAR
-    assert context["_t"] and context["_e"]
+    assert context["_t"] and context["_m"] and context["_e"]
 
 
 def test_not_found_template(mocker: Mocker):
