@@ -19,6 +19,7 @@ from src.framework.fastapi.swagger import (
 from src.framework.middleware import (
     ExceptionHandler,
     FlowGuardingMonitorMiddleware,
+    ProxyForwardedHeadersMiddleware,
 )
 
 
@@ -50,6 +51,8 @@ app = FastAPI(
 )
 app.state.limiter = LIMITER
 
+
+app.add_middleware(ProxyForwardedHeadersMiddleware)
 app.add_middleware(FlowGuardingMonitorMiddleware)
 
 app.add_middleware(
