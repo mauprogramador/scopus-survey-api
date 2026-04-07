@@ -1,0 +1,297 @@
+{% set type = "Software" %}
+
+<meta name="application-name" content="{{title}}" lang="en-US">
+<meta name="author" content="mauprogramador">
+<meta name="description" content="{{_m('meta.description')}}">
+<meta name="keywords" content="{{keywords}}" lang="en-US">
+<meta name="publisher" content="{{_m('meta.institution')}}" lang="pt-BR">
+<meta name="data-source" content="{{_m('meta.dataSource')}}">
+
+<!-- RDFa -->
+<link rel="schema.DCTERMS" href="http://purl.org/dc/terms/">
+<meta property="dcterms:title" content="{{title}}" lang="en-US">
+<meta property="dcterms:creator" content="{{_m('meta.author')}}" lang="pt-BR">
+<meta property="dcterms:subject" content="{{keywords}}" lang="en-US">
+<meta property="dcterms:description" content="{{_m('meta.description')}}" lang="{{lang}}">
+<meta property="dcterms:abstract" content="{{_m('meta.description')}}" lang="{{lang}}">
+<meta property="dcterms:publisher" content="{{_m('meta.institution')}}" lang="pt-BR">
+<meta property="dcterms:contributor" content="{{_m('meta.contributor')}}" lang="pt-BR">
+<meta property="dcterms:date" content="{{date}}">
+<meta property="dcterms:created" content="{{created}}">
+<meta property="dcterms:modified" content="{{modified}}">
+<meta property="dcterms:source" content="{{repository}}">
+<meta property="dcterms:relation" content="{{documentation}}">
+<meta property="dcterms:softwareVersion" content="{{version}}">
+<meta property="dcterms:identifier" content="{{repository}}/tree/v3.2.5">
+<meta property="dcterms:type" content="{{type}}">
+<meta property="dcterms:format" content="text/html">
+<meta property="dcterms:audience" content="{{_m('meta.audience')}}" lang="{{lang}}">
+<meta property="dcterms:instructionalMethod" content="{{_m('meta.subject')}}" lang="{{lang}}">
+<meta property="dcterms:language" content="{{lang}}">
+<meta property="dcterms:license" content="{{_m('meta.license')}}" lang="{{lang}}">
+<meta property="dcterms:bibliographicCitation" content="{{_m('meta.citation')}}" lang="{{lang}}">
+<meta property="dcterms:isPartOf" content="{{_m('meta.title')}}" lang="{{lang}}">
+<meta property="dcterms:rights" content="{{_m('meta.copyright')}}" lang="{{lang}}">
+<meta property="dcterms:rightsHolder" content="{{_m('meta.institution')}}" lang="pt-BR">
+{#
+<meta property="dcterms.isReferencedBy" content="">
+#}
+
+<!-- DCMI DC -->
+<link rel="schema.DC" href="http://purl.org/dc/elements/1.1/">
+<meta name="DC.Title" content="{{title}}" lang="en-US">
+<meta name="DC.Creator" content="{{_m('meta.author')}}" lang="pt-BR">
+<meta name="DC.Subject" content="{{keywords}}" lang="en-US">
+<meta name="DC.Description" content="{{_m('meta.description')}}" lang="{{lang}}">
+<meta name="DC.Publisher" content="{{_m('meta.institution')}}" lang="pt-BR">
+<meta name="DC.Contributor" content="{{_m('meta.contributor')}}" lang="pt-BR">
+<meta name="DC.Date" content="{{date}}">
+<meta name="DC.Source" content="{{repository}}">
+<meta name="DC.Relation" content="{{documentation}}">
+<meta name="DC.Identifier" content="{{repository}}/tree/v3.2.5">
+<meta name="DC.Type" content="{{type}}">
+<meta name="DC.Format" content="text/html">
+<meta name="DC.Language" content="{{lang}}">
+<meta name="DC.Rights" content="{{_m('meta.copyright')}}" lang="{{lang}}">
+
+<!-- DCMI DCTERMS -->
+<link rel="schema.dcterms" href="http://purl.org/dc/terms/">
+<meta name="dcterms.title" content="{{title}}" lang="en-US">
+<meta name="dcterms.creator" content="{{_m('meta.author')}}" lang="pt-BR">
+<meta name="dcterms.subject" content="{{keywords}}" lang="en-US">
+<meta name="dcterms.description" content="{{_m('meta.description')}}" lang="{{lang}}">
+<meta name="dcterms.abstract" content="{{_m('meta.description')}}" lang="{{lang}}">
+<meta name="dcterms.publisher" content="{{_m('meta.institution')}}" lang="pt-BR">
+<meta name="dcterms.contributor" content="{{_m('meta.contributor')}}" lang="pt-BR">
+<meta name="dcterms.date" content="{{date}}">
+<meta name="dcterms.created" content="{{created}}">
+<meta name="dcterms.modified" content="{{modified}}">
+<meta name="dcterms.source" content="{{repository}}">
+<meta name="dcterms.relation" content="{{documentation}}">
+<meta name="dcterms.softwareVersion" content="{{version}}">
+<meta name="dcterms.identifier" content="{{repository}}/tree/v3.2.5">
+<meta name="dcterms.type" content="{{type}}">
+<meta name="dcterms.format" content="text/html">
+<meta name="dcterms.audience" content="{{_m('meta.audience')}}" lang="{{lang}}">
+<meta name="dcterms.instructionalMethod" content="{{_m('meta.subject')}}" lang="{{lang}}">
+<meta name="dcterms.language" content="{{lang}}">
+<meta name="dcterms.license" content="{{_m('meta.license')}}" lang="{{lang}}">
+<meta name="dcterms.bibliographicCitation" content="{{_m('meta.citation')}}" lang="{{lang}}">
+<meta name="dcterms.isPartOf" content="{{_m('meta.title')}}" lang="{{lang}}">
+<meta name="dcterms.rights" content="{{_m('meta.copyright')}}" lang="{{lang}}">
+<meta name="dcterms.rightsHolder" content="{{_m('meta.institution')}}" lang="pt-BR">
+{#
+<meta name="dcterms.isReferencedBy" content="">
+#}
+
+<!-- Highwire Press -->
+<meta name="citation_title" content="{{title}}" lang="en-US">
+<meta name="citation_author" content="{{_m('meta.author')}}" lang="pt-BR">
+<meta name="citation_keywords" content="{{keywords}}" lang="en-US">
+<meta name="citation_author_institution" content="{{_m('meta.institution')}}" lang="pt-BR">
+<meta name="citation_author_email" content="sir.silvabmauricio@gmail.com">
+<meta name="citation_publisher" content="{{_m('meta.institution')}}" lang="pt-BR">
+<meta name="citation_technical_report_institution" content="{{_m('meta.institution')}}" lang="pt-BR">
+<meta name="citation_dissertation_institution" content="{{_m('meta.institution')}}" lang="pt-BR">
+<meta name="citation_date" content="{{date}}">
+<meta name="citation_year" content="{{year}}">
+<meta name="citation_public_url" content="{{repository}}">
+<meta name="citation_language" content="{{lang}}">
+<meta name="citation_abstract" content="{{_m('meta.description')}}" lang="{{lang}}">
+<meta name="citation_copyright" property="dcterms:rights" content="{{_m('meta.copyright')}}" lang="{{lang}}">
+<meta name="citation_article_type" content="{{type}}">
+<meta name="citation_software_version" content="{{version}}">
+<meta name="citation_programming_language" content="python">
+<meta name="citation_operating_system" content="web">
+
+<!-- PRISM -->
+<meta name="prism.title" content="{{title}}" lang="en-US">
+<meta name="prism.keyword" content="{{keywords}}" lang="en-US">
+<meta name="prism.organization" content="{{_m('meta.institution')}}" lang="pt-BR">
+<meta name="prism.distributor" content="{{_m('meta.institution')}}" lang="pt-BR">
+<meta name="prism.link" content="{{documentation}}">
+<meta name="prism.date" content="{{date}}">
+<meta name="prism.creationDate" content="{{created}}">
+<meta name="prism.modificationDate" content="{{modified}}">
+<meta name="prism.copyrightYear" content="{{year}}">
+<meta name="prism.url" content="{{repository}}">
+<meta name="prism.language" content="{{lang}}">
+<meta name="prism.contentType" content="{{type}}">
+<meta name="prism.academicField" content="{{_m('meta.subject')}}">
+<meta name="prism.versionIdentifier" content="{{version}}">
+
+<!-- Eprints -->
+<meta name="eprints.title" content="{{title}}" lang="en-US">
+<meta name="eprints.keywords" content="{{keywords}}" lang="en-US">
+<meta name="eprints.creators_name" content="{{_m('meta.author')}}" lang="pt-BR">
+<meta name="eprints.publisher" content="{{_m('meta.institution')}}" lang="pt-BR">
+<meta name="eprints.date" content="{{date}}">
+<meta name="eprints.official_url" content="{{repository}}">
+<meta name="eprints.abstract" content="{{_m('meta.description')}}" lang="{{lang}}">
+<meta name="eprints.citation" content="{{_m('meta.citation')}}" lang="{{lang}}">
+<meta name="eprints.format" content="text/html">
+<meta name="eprints.type" content="{{type}}">
+<meta name="eprints.language" content="{{lang}}">
+<meta name="eprints.license" content="{{_m('meta.license')}}" lang="{{lang}}">
+
+<!-- BE Press -->
+<meta name="bepress_citation_title" content="{{title}}" lang="en-US">
+<meta name="bepress_citation_keywords" content="{{keywords}}" lang="en-US">
+<meta name="bepress_citation_author" content="{{_m('meta.author')}}" lang="pt-BR">
+<meta name="bepress_citation_abstract" content="{{_m('meta.description')}}" lang="{{lang}}">
+<meta name="bepress_citation_author_institution" content="{{_m('meta.institution')}}" lang="pt-BR">
+<meta name="bepress_citation_date" content="{{date}}">
+<meta name="bepress_citation_publisher" content="{{_m('meta.institution')}}" lang="pt-BR">
+
+<!-- JSON-LD -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "{{title}}",
+  "author": {
+    "@type": "Person",
+    "name": "{{_m('meta.author')}}",
+    "familyName": "da Silva Batista",
+    "givenName": "Maurício",
+    "email": "sir.silvabmauricio@gmail.com",
+    "affiliation": {
+      "@type": "Organization",
+      "name": "{{_m('meta.institution')}}"
+    }
+  },
+  "about": "{{keywords}}",
+  "abstract": "{{_m('meta.description')}}",
+  "description": "{{_m('meta.description')}}",
+  "keywords": "{{keywords}}",
+  "url": "{{repository}}",
+  "sameAs": "{{documentation}}",
+  "datePublished": "{{date}}",
+  "dateCreated": "{{created}}",
+  "dateModified": "{{modified}}",
+  "applicationCategory": "ResearchApplication",
+  "operatingSystem": "Web-based",
+  "featureList": "{{_m('meta.featureList')}}",
+  "releaseNotes": "{{repository}}/releases/tag/v3.2.5",
+  "runtimePlatform": "Python 3.12",
+  "softwareRequirements": "Python, Docker",
+  "softwareVersion": "{{version}}",
+  "audience": "{{_m('meta.audience')}}",
+  "citation": "{{_m('meta.citation')}}",
+  "contributor": {
+    "@type": "Person",
+    "name": "{{_m('meta.contributor')}}",
+    "familyName": "Fernando de Araujo",
+    "givenName": "Alex",
+    "email": "alex.araujo@ifms.edu.br",
+    "affiliation": {
+      "@type": "Organization",
+      "name": "{{_m('meta.institution')}}"
+    }
+  },
+  "copyrightHolder": {
+    "@type": "Organization",
+    "name": "{{_m('meta.institution')}}"
+  },
+  "copyrightNotice": "{{_m('meta.copyright')}}",
+  "copyrightYear": "{{year}}",
+  "countryOfOrigin": {
+    "@type": "Country",
+    "name": "Brazil"
+  },
+  "conditionsOfAccess": "{{_m('meta.conditionsOfAccess')}}",
+  "creditText": "{{_m('meta.dataSource')}}",
+  "educationalUse": "{{_m('meta.subject')}}",
+  "inLanguage": "{{lang}}",
+  "isAccessibleForFree": "True",
+  "isPartOf": "{{_m('meta.title')}}",
+  "license": "{{_m('meta.license')}}",
+  "provider": {
+    "@type": "Organization",
+    "name": "GitHub",
+    "url": "{{repository}}"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "{{_m('meta.institution')}}"
+  },
+  "sourceOrganization": {
+    "@type": "Organization",
+    "name": "{{_m('meta.institution')}}"
+  },
+  "owner": {
+    "@type": "Organization",
+    "name": "{{_m('meta.institution')}}"
+  },
+  "usageInfo": "{{documentation}}",
+  "version": "{{version}}",
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": 0,
+    "ratingCount": 0
+  },
+  "offers": {
+    "@type": "Offer",
+    "price": 0
+  }
+}
+</script>
+
+<!-- BibTeX -->
+<script type="application/x-bibtex">
+@misc{Batista_Scopus_Survey_API_2024,
+  title = { {{title}} },
+  author = { {{_m('meta.author')}} },
+  keywords = { {{keywords}} },
+  abstract = { {{_m('meta.description')}} },
+  url = { {{repository}} },
+  year = { {{year}} },
+  collaborator = { {{_m('meta.contributor')}} },
+  annote = { {{_m('meta.description')}} },
+  note = { {{type}}, {{version}}, {{_m('meta.copyright')}} }
+  copyright = { {{_m('meta.copyright')}} }
+}
+</script>
+
+<!-- BibLaTeX -->
+<script type="application/x-biblatex">
+@software{Batista_Scopus_Survey_API_2024,
+  title = { {{title}} },
+  author = { {{_m('meta.author')}} },
+  keywords = { {{keywords}} },
+  url = { {{repository}} },
+  year = { {{year}} },
+  abstract = { {{_m('meta.description')}} },
+  annotation = { {{_m('meta.description')}} },
+  institution = { {{_m('meta.institution')}} },
+  organization = { {{_m('meta.institution')}} },
+  publisher = { {{_m('meta.institution')}} },
+  language = { {{lang}} },
+  date = { {{date}} },
+  type = { {{type}} },
+  license = { MIT },
+  version = { {{version}} },
+  note = { {{_m('meta.copyright')}} }
+}
+</script>
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="{{_m('title')}}">
+<meta property="og:description" content="{{_m('meta.description')}}">
+<meta property="og:image" content="{{url_for('images', path='/social-card.png')}}">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="ScopusSurveyAPI logo">
+<meta property="og:url" content="{{url_for('web_form_page', lang=lang)}}">
+<meta property="og:site_name" content="ScopusSurveyAPI">
+<meta property="og:locale" content="{{lang}}">
+<meta property="og:locale:alternate" content="en_US">
+<meta property="og:locale:alternate" content="pt_BR">
+
+<!-- Twitter -->
+<meta property="twitter:card" content="summary_large_image">
+<meta property="twitter:title" content="{{_m('title')}}">
+<meta property="twitter:description" content="{{_m('meta.description')}}">
+<meta property="twitter:image" content="{{url_for('images', path='/social-card.png')}}">
