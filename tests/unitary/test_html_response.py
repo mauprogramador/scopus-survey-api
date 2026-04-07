@@ -9,9 +9,9 @@ from src.core.data.enums import Lang
 from tests.mocks.raw import CSRF_TOKEN, HTML_MEDIA, HTTP_200, HTTP_404, REQUEST
 
 
-def test_search_template(mocker: Mocker):
+def test_form_template(mocker: Mocker):
     spy_jinja = mocker.spy(Jinja2Templates, "TemplateResponse")
-    res = TemplateResponse.search_template(REQUEST, CSRF_TOKEN, Lang.EN_US)
+    res = TemplateResponse.form_template(REQUEST, CSRF_TOKEN, Lang.EN_US)
 
     assert res.status_code == HTTP_200
     assert res.media_type == HTML_MEDIA and res.body

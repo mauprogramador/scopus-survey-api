@@ -26,7 +26,7 @@ class TemplateResponse:
     _TEMPLATES = Jinja2Templates(directory="web/templates")
 
     @classmethod
-    def search_template(
+    def form_template(
         cls, request: Request, csrf_token: str, lang: Lang
     ) -> HTMLResponse:
 
