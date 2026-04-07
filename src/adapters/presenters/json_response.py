@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from http import HTTPStatus
 from json import dumps
 
@@ -20,7 +20,7 @@ class BaseResponse(BaseModel):
     status_code: int
     status: str
     message: str
-    timestamp: str = datetime.now().isoformat()
+    timestamp: str = datetime.now(timezone.utc).isoformat(timespec="seconds")
 
 
 class ErrorResponse(BaseResponse):

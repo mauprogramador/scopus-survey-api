@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from http import HTTPStatus
 
 from fastapi import Request
@@ -64,7 +64,9 @@ class TemplateResponse:
             "message": UNEXPECTED_ERROR,
             "status_code": response.status_code,
             "status": HTTPStatus(response.status_code).phrase,
-            "timestamp": datetime.now().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(
+                timespec="seconds"
+            ),
             "error_json": response.body.decode(),  # type: ignore
         }
 
