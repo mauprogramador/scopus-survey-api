@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <!-- cspell:ignoreRegExp >(.*?)< -->
-<html lang="{{lang}}" data-bs-theme="light">
+<html lang="{{lang}}" data-bs-theme="light"
+  prefix="schema: https://schema.org/ dc: http://purl.org/dc/elements/1.1/ dcterms: http://purl.org/dc/terms/">
 
   <head>
     <meta charset="UTF-8">
@@ -69,6 +70,170 @@
     <script src="/scripts/overlays.js" type="module"></script>
     <script src="/scripts/handler.js" type="module"></script>
     <script src="/libs/jsonview/jsonview.min.js"></script>
+
+    <div class="visually-hidden" aria-hidden="true">
+
+      <!-- RDFa Lite [Schema.org] -->
+      <div vocab="https://schema.org/" typeof="SoftwareApplication">
+        <meta property="name" content="{{title}}">
+        <div property="author" typeof="Person">
+          <meta property="name" content="{{_m('meta.author')}}">
+          <meta property="familyName" content="da Silva Batista">
+          <meta property="givenName" content="Maurício">
+          <meta property="email" content="{{email}}">
+          <div property="affiliation" typeof="Organization">
+            <meta property="name" content="{{institution}}">
+          </div>
+        </div>
+        <meta property="about" content="{{_m('meta.keywords')}}">
+        <meta property="abstract" content="{{_m('meta.description')}}">
+        <meta property="description" content="{{_m('meta.description')}}">
+        <meta property="keywords" content="{{_m('meta.keywords')}}">
+        <meta property="url" content="{{repository}}/tree/{{version}}">
+        <meta property="sameAs" content="{{documentation}}">
+        <meta property="datePublished" content="{{date}}">
+        <meta property="dateCreated" content="{{created}}">
+        <meta property="dateModified" content="{{modified}}">
+        <meta property="applicationCategory" content="ResearchApplication">
+        <meta property="operatingSystem" content="Web-based">
+        <meta property="featureList" content="{{_m('meta.featureList')}}">
+        <meta property="releaseNotes" content="{{repository}}/releases/tag/{{version}}">
+        <meta property="runtimePlatform" content="Python 3.12">
+        <meta property="softwareRequirements" content="Python, Docker">
+        <meta property="softwareVersion" content="{{version}}">
+        <meta property="audience" content="{{_m('meta.audience')}}">
+        <meta property="citation" content="{{_m('meta.citation')}}">
+        <div property="contributor" typeof="Person">
+          <meta property="name" content="{{_m('meta.contributor')}}">
+          <meta property="familyName" content="Fernando de Araujo">
+          <meta property="givenName" content="Alex">
+          <meta property="email" content="alex.araujo@ifms.edu.br">
+          <div property="affiliation" typeof="Organization">
+            <meta property="name" content="{{institution}}">
+          </div>
+        </div>
+        <div property="copyrightHolder" typeof="Organization">
+          <meta property="name" content="{{institution}}">
+        </div>
+        <meta property="copyrightNotice" content="{{_m('meta.copyright')}}">
+        <meta property="copyrightYear" content="{{year}}">
+        <div property="countryOfOrigin" typeof="Country">
+          <meta property="name" content="Brazil">
+        </div>
+        <meta property="conditionsOfAccess" content="{{_m('meta.conditionsOfAccess')}}">
+        <meta property="creditText" content="{{_m('meta.dataSource')}}">
+        <meta property="educationalUse" content="{{_m('meta.subject')}}">
+        <meta property="inLanguage" content="{{lang}}">
+        <meta property="isAccessibleForFree" content="True">
+        <meta property="isPartOf" content="{{_m('meta.title')}}">
+        <meta property="license" content="https://opensource.org/license/mit">
+        <div property="provider" typeof="Organization">
+          <meta property="name" content="GitHub">
+          <meta property="url" content="{{repository}}">
+        </div>
+        <div property="publisher" typeof="Organization">
+          <meta property="name" content="{{institution}}">
+        </div>
+        <div property="sourceOrganization" typeof="Organization">
+          <meta property="name" content="{{institution}}">
+        </div>
+        <div property="owner" typeof="Organization">
+          <meta property="name" content="{{institution}}">
+        </div>
+        <meta property="usageInfo" content="{{documentation}}">
+        <meta property="version" content="{{version}}">
+        <div property="aggregateRating" typeof="AggregateRating">
+          <meta property="ratingCount" content="1">
+          <meta property="reviewCount" content="1">
+          <meta property="ratingValue" content="1">
+        </div>
+        <div property="offers" typeof="Offer">
+          <meta property="price" content="0">
+          <meta property="priceCurrency" content="BRL">
+        </div>
+      </div>
+
+      <!-- Microdata [Schema.org] -->
+      <div itemscope itemtype="https://schema.org/SoftwareApplication">
+        <meta itemprop="name" content="{{title}}">
+        <div itemprop="author" itemscope itemtype="https://schema.org/Person">
+          <meta itemprop="name" content="{{_m('meta.author')}}">
+          <meta itemprop="familyName" content="da Silva Batista">
+          <meta itemprop="givenName" content="Maurício">
+          <meta itemprop="email" content="{{email}}">
+          <div itemprop="affiliation" itemscope itemtype="https://schema.org/Organization">
+            <meta itemprop="name" content="{{institution}}">
+          </div>
+        </div>
+        <meta itemprop="about" content="{{_m('meta.keywords')}}">
+        <meta itemprop="abstract" content="{{_m('meta.description')}}">
+        <meta itemprop="description" content="{{_m('meta.description')}}">
+        <meta itemprop="keywords" content="{{_m('meta.keywords')}}">
+        <meta itemprop="url" content="{{repository}}/tree/{{version}}">
+        <meta itemprop="sameAs" content="{{documentation}}">
+        <meta itemprop="datePublished" content="{{date}}">
+        <meta itemprop="dateCreated" content="{{created}}">
+        <meta itemprop="dateModified" content="{{modified}}">
+        <meta itemprop="applicationCategory" content="ResearchApplication">
+        <meta itemprop="operatingSystem" content="Web-based">
+        <meta itemprop="featureList" content="{{_m('meta.featureList')}}">
+        <meta itemprop="releaseNotes" content="{{repository}}/releases/tag/{{version}}">
+        <meta itemprop="runtimePlatform" content="Python 3.12">
+        <meta itemprop="softwareRequirements" content="Python, Docker">
+        <meta itemprop="softwareVersion" content="{{version}}">
+        <meta itemprop="audience" content="{{_m('meta.audience')}}">
+        <meta itemprop="citation" content="{{_m('meta.citation')}}">
+        <div itemprop="contributor" itemscope itemtype="https://schema.org/Person">
+          <meta itemprop="name" content="{{_m('meta.contributor')}}">
+          <meta itemprop="familyName" content="Fernando de Araujo">
+          <meta itemprop="givenName" content="Alex">
+          <meta itemprop="email" content="alex.araujo@ifms.edu.br">
+          <div itemprop="affiliation" itemscope itemtype="https://schema.org/Organization">
+            <meta itemprop="name" content="{{institution}}">
+          </div>
+        </div>
+        <div itemprop="copyrightHolder" itemscope itemtype="https://schema.org/Organization">
+          <meta itemprop="name" content="{{institution}}">
+        </div>
+        <meta itemprop="copyrightNotice" content="{{_m('meta.copyright')}}">
+        <meta itemprop="copyrightYear" content="{{year}}">
+        <div itemprop="countryOfOrigin" itemscope itemtype="https://schema.org/Country">
+          <meta itemprop="name" content="Brazil">
+        </div>
+        <meta itemprop="conditionsOfAccess" content="{{_m('meta.conditionsOfAccess')}}">
+        <meta itemprop="creditText" content="{{_m('meta.dataSource')}}">
+        <meta itemprop="educationalUse" content="{{_m('meta.subject')}}">
+        <meta itemprop="inLanguage" content="{{lang}}">
+        <meta itemprop="isAccessibleForFree" content="True">
+        <meta itemprop="isPartOf" content="{{_m('meta.title')}}">
+        <meta itemprop="license" content="https://opensource.org/license/mit">
+        <div itemprop="provider" itemscope itemtype="https://schema.org/Organization">
+          <meta itemprop="name" content="GitHub">
+          <meta itemprop="url" content="{{repository}}">
+        </div>
+        <div itemprop="publisher" itemscope itemtype="https://schema.org/Organization">
+          <meta itemprop="name" content="{{institution}}">
+        </div>
+        <div itemprop="sourceOrganization" itemscope itemtype="https://schema.org/Organization">
+          <meta itemprop="name" content="{{institution}}">
+        </div>
+        <div itemprop="owner" itemscope itemtype="https://schema.org/Organization">
+          <meta itemprop="name" content="{{institution}}">
+        </div>
+        <meta itemprop="usageInfo" content="{{documentation}}">
+        <meta itemprop="version" content="{{version}}">
+        <div itemprop="aggregateRating" itemscope itemtype="https://schema.org/AggregateRating">
+          <meta itemprop="ratingCount" content="1">
+          <meta itemprop="reviewCount" content="1">
+          <meta itemprop="ratingValue" content="1">
+        </div>
+        <div itemprop="offers" itemscope itemtype="https://schema.org/Offer">
+          <meta itemprop="price" content="0">
+          <meta itemprop="priceCurrency" content="BRL">
+        </div>
+      </div>
+
+    </div>
   </body>
 
 </html>
