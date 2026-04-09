@@ -1,18 +1,50 @@
 from http import HTTPStatus
 
+from src import __contact__, __license__
 from src.adapters.presenters.json_response import ErrorResponse
 
 DESCRIPTION = """
-🌐 [**Web Application**](/v2/scopus-survey/web/en-US/search-articles)
-&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-📄 [**Documentation**](https://mauprogramador.github.io/scopus-survey-api/)
+<br>
+**Instituto Federal de Educação, Ciência e Tecnologia de Mato Grosso do Sul**
+&nbsp;&#8226;&nbsp;
+[IFMS Campus Três Lagoas](https://www.ifms.edu.br/campi/campus-tres-lagoas)
+<br>
+**Tecnologia em Análise e Desenvolvimento de Sistemas**
+&nbsp;&#8226;&nbsp;
+[TADS](https://www.ifms.edu.br/campi/campus-tres-lagoas/cursos/graduacao/analise-e-desenvolvimento-de-sistemas)
 
-**Scopus Documentation:**
-<br>🔑 [**API Key Settings**](https://dev.elsevier.com/api_key_settings.html)
-<br>🔍 [**Scopus Search API**](https://dev.elsevier.com/documentation/\
+
+_Federal Institute of Education, Science and Technology of Mato Grosso do Sul_
+<br>_Technology in Systems Analysis and Development_
+
+**© 2024, @mauprogramador, IFMS Campus Três Lagoas. All rights reserved.**<br>
+**Data provided by [Scopus](https://www.scopus.com)®
+&nbsp;&#8226;&nbsp;
+© [Elsevier](https://www.elsevier.com)**<br><br>
+
+📦 [**Source Code**](https://github.com/mauprogramador/scopus-survey-api)
+&nbsp;&#8226;&nbsp;
+🌐 [**Web Application**](/v2/scopus-survey/web/en-US/search-articles)
+&nbsp;&#8226;&nbsp;
+📄 [**Documentation**](https://mauprogramador.github.io/scopus-survey-api/)
+&nbsp;&#8226;&nbsp;
+🔖 [**Latest Release**](https://github.com/mauprogramador/scopus-survey-api/\
+releases/latest)
+
+<br>
+**References**
+<br>
+🔗 [API Key Settings](https://dev.elsevier.com/api_key_settings.html)
+<br>
+🔗 [Scopus Search API](https://dev.elsevier.com/documentation/\
 ScopusSearchAPI.wadl)
-<br>📄 [**Abstract Retrieval API**](https://dev.elsevier.com/documentation/\
+<br>
+🔗 [Abstract Retrieval API](https://dev.elsevier.com/documentation/\
 AbstractRetrievalAPI.wadl)
+<br>
+🔗 [Scopus Academic Research](https://dev.elsevier.com/\
+academic_research_scopus.html)
+<br><br>
 """
 TERMS_OF_SERVICE = (
     "https://github.com/mauprogramador/"
@@ -21,15 +53,12 @@ TERMS_OF_SERVICE = (
 CONTACT = {
     "name": "@mauprogramador",
     "url": "https://github.com/mauprogramador",
-    "email": "sir.silvabmauricio@gmail.com",
+    "email": __contact__,
 }
 LICENSE = {
     "name": "MIT License",
-    "identifier": "MIT",
-    "url": (
-        "https://github.com/mauprogramador/"
-        "scopus-survey-api/blob/master/LICENSE"
-    ),
+    "identifier": __license__,
+    "url": "https://opensource.org/license/mit",
 }
 RESPONSES = {
     HTTPStatus.BAD_REQUEST: {

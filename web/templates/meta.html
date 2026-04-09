@@ -1,5 +1,3 @@
-{% set type = "Software" %}
-
 <meta name="application-name" content="{{title}}" lang="en-US">
 <meta name="author" content="mauprogramador">
 <meta name="description" content="{{_m('meta.description')}}">
@@ -14,7 +12,7 @@
 <meta property="dcterms:subject" content="{{keywords}}" lang="en-US">
 <meta property="dcterms:description" content="{{_m('meta.description')}}" lang="{{lang}}">
 <meta property="dcterms:abstract" content="{{_m('meta.description')}}" lang="{{lang}}">
-<meta property="dcterms:publisher" content="{{_m('meta.institution')}}" lang="pt-BR">
+<meta property="dcterms:publisher" content="{{institution}}" lang="pt-BR">
 <meta property="dcterms:contributor" content="{{_m('meta.contributor')}}" lang="pt-BR">
 <meta property="dcterms:date" content="{{date}}">
 <meta property="dcterms:created" content="{{created}}">
@@ -22,17 +20,18 @@
 <meta property="dcterms:source" content="{{repository}}">
 <meta property="dcterms:relation" content="{{documentation}}">
 <meta property="dcterms:softwareVersion" content="{{version}}">
-<meta property="dcterms:identifier" content="{{repository}}/tree/v3.2.5">
+<meta property="dcterms:identifier" content="{{repository}}/tree/{{version}}">
+<meta property="dcterms.isVersionOf" content="{{repository}}">
 <meta property="dcterms:type" content="{{type}}">
-<meta property="dcterms:format" content="text/html">
+<meta property="dcterms:format" content="{{format}}">
 <meta property="dcterms:audience" content="{{_m('meta.audience')}}" lang="{{lang}}">
 <meta property="dcterms:instructionalMethod" content="{{_m('meta.subject')}}" lang="{{lang}}">
 <meta property="dcterms:language" content="{{lang}}">
-<meta property="dcterms:license" content="{{_m('meta.license')}}" lang="{{lang}}">
+<meta property="dcterms:license" content="https://opensource.org/license/mit" lang="{{lang}}">
 <meta property="dcterms:bibliographicCitation" content="{{_m('meta.citation')}}" lang="{{lang}}">
 <meta property="dcterms:isPartOf" content="{{_m('meta.title')}}" lang="{{lang}}">
 <meta property="dcterms:rights" content="{{_m('meta.copyright')}}" lang="{{lang}}">
-<meta property="dcterms:rightsHolder" content="{{_m('meta.institution')}}" lang="pt-BR">
+<meta property="dcterms:rightsHolder" content="{{institution}}" lang="pt-BR">
 {#
 <meta property="dcterms.isReferencedBy" content="">
 #}
@@ -43,14 +42,14 @@
 <meta name="DC.Creator" content="{{_m('meta.author')}}" lang="pt-BR">
 <meta name="DC.Subject" content="{{keywords}}" lang="en-US">
 <meta name="DC.Description" content="{{_m('meta.description')}}" lang="{{lang}}">
-<meta name="DC.Publisher" content="{{_m('meta.institution')}}" lang="pt-BR">
+<meta name="DC.Publisher" content="{{institution}}" lang="pt-BR">
 <meta name="DC.Contributor" content="{{_m('meta.contributor')}}" lang="pt-BR">
 <meta name="DC.Date" content="{{date}}">
 <meta name="DC.Source" content="{{repository}}">
 <meta name="DC.Relation" content="{{documentation}}">
-<meta name="DC.Identifier" content="{{repository}}/tree/v3.2.5">
+<meta name="DC.Identifier" content="{{repository}}">
 <meta name="DC.Type" content="{{type}}">
-<meta name="DC.Format" content="text/html">
+<meta name="DC.Format" content="{{format}}">
 <meta name="DC.Language" content="{{lang}}">
 <meta name="DC.Rights" content="{{_m('meta.copyright')}}" lang="{{lang}}">
 
@@ -87,12 +86,12 @@
 <!-- Highwire Press -->
 <meta name="citation_title" content="{{title}}" lang="en-US">
 <meta name="citation_author" content="{{_m('meta.author')}}" lang="pt-BR">
-<meta name="citation_keywords" content="{{keywords}}" lang="en-US">
-<meta name="citation_author_institution" content="{{_m('meta.institution')}}" lang="pt-BR">
-<meta name="citation_author_email" content="sir.silvabmauricio@gmail.com">
-<meta name="citation_publisher" content="{{_m('meta.institution')}}" lang="pt-BR">
-<meta name="citation_technical_report_institution" content="{{_m('meta.institution')}}" lang="pt-BR">
-<meta name="citation_dissertation_institution" content="{{_m('meta.institution')}}" lang="pt-BR">
+<meta name="citation_keywords" content="{{_m('meta.keywords')}}" lang="{{lang}}">
+<meta name="citation_author_institution" content="{{institution}}" lang="pt-BR">
+<meta name="citation_author_email" content="{{email}}">
+<meta name="citation_publisher" content="{{institution}}" lang="pt-BR">
+<meta name="citation_technical_report_institution" content="{{institution}}" lang="pt-BR">
+<meta name="citation_dissertation_institution" content="{{institution}}" lang="pt-BR">
 <meta name="citation_date" content="{{date}}">
 <meta name="citation_year" content="{{year}}">
 <meta name="citation_public_url" content="{{repository}}">
@@ -106,9 +105,9 @@
 
 <!-- PRISM -->
 <meta name="prism.title" content="{{title}}" lang="en-US">
-<meta name="prism.keyword" content="{{keywords}}" lang="en-US">
-<meta name="prism.organization" content="{{_m('meta.institution')}}" lang="pt-BR">
-<meta name="prism.distributor" content="{{_m('meta.institution')}}" lang="pt-BR">
+<meta name="prism.keyword" content="{{_m('meta.keywords')}}" lang="{{lang}}">
+<meta name="prism.organization" content="{{institution}}" lang="pt-BR">
+<meta name="prism.distributor" content="{{institution}}" lang="pt-BR">
 <meta name="prism.link" content="{{documentation}}">
 <meta name="prism.date" content="{{date}}">
 <meta name="prism.creationDate" content="{{created}}">
@@ -124,24 +123,23 @@
 <meta name="eprints.title" content="{{title}}" lang="en-US">
 <meta name="eprints.keywords" content="{{keywords}}" lang="en-US">
 <meta name="eprints.creators_name" content="{{_m('meta.author')}}" lang="pt-BR">
-<meta name="eprints.publisher" content="{{_m('meta.institution')}}" lang="pt-BR">
+<meta name="eprints.publisher" content="{{institution}}" lang="pt-BR">
 <meta name="eprints.date" content="{{date}}">
 <meta name="eprints.official_url" content="{{repository}}">
 <meta name="eprints.abstract" content="{{_m('meta.description')}}" lang="{{lang}}">
 <meta name="eprints.citation" content="{{_m('meta.citation')}}" lang="{{lang}}">
 <meta name="eprints.format" content="text/html">
-<meta name="eprints.type" content="{{type}}">
 <meta name="eprints.language" content="{{lang}}">
-<meta name="eprints.license" content="{{_m('meta.license')}}" lang="{{lang}}">
+<meta name="eprints.license" content="mit" lang="{{lang}}">
 
 <!-- BE Press -->
 <meta name="bepress_citation_title" content="{{title}}" lang="en-US">
 <meta name="bepress_citation_keywords" content="{{keywords}}" lang="en-US">
 <meta name="bepress_citation_author" content="{{_m('meta.author')}}" lang="pt-BR">
 <meta name="bepress_citation_abstract" content="{{_m('meta.description')}}" lang="{{lang}}">
-<meta name="bepress_citation_author_institution" content="{{_m('meta.institution')}}" lang="pt-BR">
+<meta name="bepress_citation_author_institution" content="{{institution}}" lang="pt-BR">
 <meta name="bepress_citation_date" content="{{date}}">
-<meta name="bepress_citation_publisher" content="{{_m('meta.institution')}}" lang="pt-BR">
+<meta name="bepress_citation_publisher" content="{{institution}}" lang="pt-BR">
 
 <!-- JSON-LD -->
 <script type="application/ld+json">
@@ -154,17 +152,17 @@
     "name": "{{_m('meta.author')}}",
     "familyName": "da Silva Batista",
     "givenName": "Maurício",
-    "email": "sir.silvabmauricio@gmail.com",
+    "email": "{{email}}",
     "affiliation": {
       "@type": "Organization",
-      "name": "{{_m('meta.institution')}}"
+      "name": "{{institution}}"
     }
   },
   "about": "{{keywords}}",
   "abstract": "{{_m('meta.description')}}",
   "description": "{{_m('meta.description')}}",
-  "keywords": "{{keywords}}",
-  "url": "{{repository}}",
+  "keywords": "{{_m('meta.keywords')}}",
+  "url": "{{repository}}/tree/{{version}}",
   "sameAs": "{{documentation}}",
   "datePublished": "{{date}}",
   "dateCreated": "{{created}}",
@@ -172,7 +170,7 @@
   "applicationCategory": "ResearchApplication",
   "operatingSystem": "Web-based",
   "featureList": "{{_m('meta.featureList')}}",
-  "releaseNotes": "{{repository}}/releases/tag/v3.2.5",
+  "releaseNotes": "{{repository}}/releases/tag/{{version}}",
   "runtimePlatform": "Python 3.12",
   "softwareRequirements": "Python, Docker",
   "softwareVersion": "{{version}}",
@@ -186,12 +184,12 @@
     "email": "alex.araujo@ifms.edu.br",
     "affiliation": {
       "@type": "Organization",
-      "name": "{{_m('meta.institution')}}"
+      "name": "{{institution}}"
     }
   },
   "copyrightHolder": {
     "@type": "Organization",
-    "name": "{{_m('meta.institution')}}"
+    "name": "{{institution}}"
   },
   "copyrightNotice": "{{_m('meta.copyright')}}",
   "copyrightYear": "{{year}}",
@@ -205,7 +203,7 @@
   "inLanguage": "{{lang}}",
   "isAccessibleForFree": "True",
   "isPartOf": "{{_m('meta.title')}}",
-  "license": "{{_m('meta.license')}}",
+  "license": "https://opensource.org/license/mit",
   "provider": {
     "@type": "Organization",
     "name": "GitHub",
@@ -213,15 +211,15 @@
   },
   "publisher": {
     "@type": "Organization",
-    "name": "{{_m('meta.institution')}}"
+    "name": "{{institution}}"
   },
   "sourceOrganization": {
     "@type": "Organization",
-    "name": "{{_m('meta.institution')}}"
+    "name": "{{institution}}"
   },
   "owner": {
     "@type": "Organization",
-    "name": "{{_m('meta.institution')}}"
+    "name": "{{institution}}"
   },
   "usageInfo": "{{documentation}}",
   "version": "{{version}}",

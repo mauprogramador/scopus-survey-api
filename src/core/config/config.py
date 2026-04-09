@@ -30,6 +30,23 @@ LIMITER = Limiter(key_func=get_remote_address, headers_enabled=True)
 RATELIMIT_POLICY = "60 requests per 2 seconds per user (slowapi)"
 LIMIT = "60/2seconds"
 
+INSTITUTION = (
+    "Instituto Federal de Educação, Ciência e Tecnologia de"
+    " Mato Grosso do Sul (IFMS) - Campus Três Lagoas"
+)
+META_INFO = {
+    "title": "Scopus Survey API",
+    "repository": "https://github.com/mauprogramador/scopus-survey-api",
+    "documentation": "https://mauprogramador.github.io/scopus-survey-api",
+    "institution": INSTITUTION,
+    "modified": "2026-00-00",
+    "created": "2024-02-26",
+    "date": "2025-08-09",
+    "year": "2024",
+    "format": "text/html",
+    "type": "software",
+}
+
 BASE_URL = f"http://{ENV.host}:{ENV.port}"
 CSP = (
     f"default-src 'self' {BASE_URL}; "

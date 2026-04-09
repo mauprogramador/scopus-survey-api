@@ -1,22 +1,32 @@
 #!/usr/bin/env python3
-# Instituto Federal de Educação Ciência e Tecnologia de Mato Grosso do Sul
-# Federal Institute of Education, Science and Technology of Mato Grosso do Sul
+# -*- coding: utf-8 -*-
+# Instituto Federal de Educação, Ciência e Tecnologia de Mato Grosso do Sul
 # Tecnologia em Análise e Desenvolvimento de Sistemas
+#
+# Federal Institute of Education, Science and Technology of Mato Grosso do Sul
 # Technology in Systems Analysis and Development
-# IFMS - TADS - Campus Três Lagoas
+#
+# IFMS Campus Três Lagoas - TADS
 # Maurício da Silva Batista (@mauprogramador)
+# Copyright (C) 2024. All rights reserved.
+#
+# Data provided by Scopus® https://www.scopus.com
 # Source Code: https://github.com/mauprogramador/scopus-survey-api
 # Documentation: https://mauprogramador.github.io/scopus-survey-api/
 
 """
-Scopus Survey API
+**Scopus Survey API**
 
-Web API for bibliographic survey of Scopus articles
+_Web API for bibliographic survey of Scopus articles_
 """
 
 __version__ = "3.2.5"
 __license__ = "MIT"
-__copyright__ = "© IFMS - Maurício da Silva Batista"
+__copyright__ = (
+    "Copyright (C) 2024 Maurício da Silva Batista. Produced at Instituto"
+    "Federal de Educação, Ciência e Tecnologia de Mato Grosso do Sul (IFMS)"
+    " - Campus Três Lagoas. MIT License. All rights reserved."
+)
 
 __author__ = "mauprogramador"
 __contact__ = "sir.silvabmauricio@gmail.com"

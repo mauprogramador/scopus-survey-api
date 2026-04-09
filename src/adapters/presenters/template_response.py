@@ -6,10 +6,10 @@ from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from starlette.responses import Response
 
-from src import __version__
+from src import __contact__, __version__
 from src.adapters.presenters.json_response import ErrorJSON
 from src.core.common.error_messages import UNEXPECTED_ERROR
-from src.core.config.config import MAX_AGE, PREFIX
+from src.core.config.config import MAX_AGE, META_INFO, PREFIX
 from src.core.data.enums import Lang, Templates
 from src.core.domain.translations import Translations
 
@@ -39,6 +39,7 @@ class TemplateResponse:
 
         context = {
             "version": __version__,
+            "email": __contact__,
             "prefix": PREFIX,
             "csrf_token": csrf_token,
             "lang": lang.value,
@@ -46,6 +47,7 @@ class TemplateResponse:
             "_m": Translations.META[lang].gettext,
             "_e": Translations.ERROR[lang].gettext,
         }
+        context.update(META_INFO)
 
         return cls._TEMPLATES.TemplateResponse(
             request,
