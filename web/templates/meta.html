@@ -1,15 +1,15 @@
 <meta name="application-name" content="{{title}}" lang="en-US">
 <meta name="author" content="mauprogramador">
 <meta name="description" content="{{_m('meta.description')}}">
-<meta name="keywords" content="{{keywords}}" lang="en-US">
-<meta name="publisher" content="{{_m('meta.institution')}}" lang="pt-BR">
+<meta name="keywords" content="{{_m('meta.keywords')}}" lang="{{lang}}">
+<meta name="publisher" content="{{institution}}" lang="pt-BR">
 <meta name="data-source" content="{{_m('meta.dataSource')}}">
 
 <!-- RDFa -->
 <link rel="schema.DCTERMS" href="http://purl.org/dc/terms/">
 <meta property="dcterms:title" content="{{title}}" lang="en-US">
 <meta property="dcterms:creator" content="{{_m('meta.author')}}" lang="pt-BR">
-<meta property="dcterms:subject" content="{{keywords}}" lang="en-US">
+<meta property="dcterms:subject" content="{{_m('meta.keywords')}}" lang="{{lang}}">
 <meta property="dcterms:description" content="{{_m('meta.description')}}" lang="{{lang}}">
 <meta property="dcterms:abstract" content="{{_m('meta.description')}}" lang="{{lang}}">
 <meta property="dcterms:publisher" content="{{institution}}" lang="pt-BR">
@@ -40,7 +40,7 @@
 <link rel="schema.DC" href="http://purl.org/dc/elements/1.1/">
 <meta name="DC.Title" content="{{title}}" lang="en-US">
 <meta name="DC.Creator" content="{{_m('meta.author')}}" lang="pt-BR">
-<meta name="DC.Subject" content="{{keywords}}" lang="en-US">
+<meta name="DC.Subject" content="{{_m('meta.keywords')}}" lang="{{lang}}">
 <meta name="DC.Description" content="{{_m('meta.description')}}" lang="{{lang}}">
 <meta name="DC.Publisher" content="{{institution}}" lang="pt-BR">
 <meta name="DC.Contributor" content="{{_m('meta.contributor')}}" lang="pt-BR">
@@ -98,7 +98,6 @@
 <meta name="citation_language" content="{{lang}}">
 <meta name="citation_abstract" content="{{_m('meta.description')}}" lang="{{lang}}">
 <meta name="citation_copyright" property="dcterms:rights" content="{{_m('meta.copyright')}}" lang="{{lang}}">
-<meta name="citation_article_type" content="{{type}}">
 <meta name="citation_software_version" content="{{version}}">
 <meta name="citation_programming_language" content="python">
 <meta name="citation_operating_system" content="web">
@@ -121,7 +120,7 @@
 
 <!-- Eprints -->
 <meta name="eprints.title" content="{{title}}" lang="en-US">
-<meta name="eprints.keywords" content="{{keywords}}" lang="en-US">
+<meta name="eprints.keywords" content="{{_m('meta.keywords')}}" lang="{{lang}}">
 <meta name="eprints.creators_name" content="{{_m('meta.author')}}" lang="pt-BR">
 <meta name="eprints.publisher" content="{{institution}}" lang="pt-BR">
 <meta name="eprints.date" content="{{date}}">
@@ -134,7 +133,7 @@
 
 <!-- BE Press -->
 <meta name="bepress_citation_title" content="{{title}}" lang="en-US">
-<meta name="bepress_citation_keywords" content="{{keywords}}" lang="en-US">
+<meta name="bepress_citation_keywords" content="{{_m('meta.keywords')}}" lang="{{lang}}">
 <meta name="bepress_citation_author" content="{{_m('meta.author')}}" lang="pt-BR">
 <meta name="bepress_citation_abstract" content="{{_m('meta.description')}}" lang="{{lang}}">
 <meta name="bepress_citation_author_institution" content="{{institution}}" lang="pt-BR">
@@ -158,7 +157,7 @@
       "name": "{{institution}}"
     }
   },
-  "about": "{{keywords}}",
+  "about": "{{_m('meta.keywords')}}",
   "abstract": "{{_m('meta.description')}}",
   "description": "{{_m('meta.description')}}",
   "keywords": "{{_m('meta.keywords')}}",
@@ -240,7 +239,7 @@
 @misc{Batista_Scopus_Survey_API_2024,
   title = { {{title}} },
   author = { {{_m('meta.author')}} },
-  keywords = { {{keywords}} },
+  keywords = { {{_m('meta.keywords')}} },
   abstract = { {{_m('meta.description')}} },
   url = { {{repository}} },
   year = { {{year}} },
@@ -256,8 +255,8 @@
 @software{Batista_Scopus_Survey_API_2024,
   title = { {{title}} },
   author = { {{_m('meta.author')}} },
-  keywords = { {{keywords}} },
-  url = { {{repository}} },
+  keywords = { {{_m('meta.keywords')}} },
+  url = { {{repository}}/tree/{{version}} },
   year = { {{year}} },
   abstract = { {{_m('meta.description')}} },
   annotation = { {{_m('meta.description')}} },
