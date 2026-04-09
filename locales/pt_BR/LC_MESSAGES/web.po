@@ -1,5 +1,5 @@
-# Portuguese (pt-BR) translations for ScopusSurveyAPI.
-# Copyright (C) 2026 IFMS - Maurício da Silva Batista
+# Portuguese (pt-BR) translations for ScopusSurveyAPI [web form].
+# Copyright (C) 2026 Maurício da Silva Batista, IFMS Campus Três Lagoas.
 # This file is distributed under the same license as the ScopusSurveyAPI.
 # @mauprogramador <sir.silvabmauricio@gmail.com>, 2026.
 #
@@ -7,20 +7,19 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ScopusSurveyAPI v3.2.5\n"
 "POT-Creation-Date: 2025-08-11 01:42-0400\n"
-"PO-Revision-Date: 2025-08-11 02:12-0400\n"
+"PO-Revision-Date: 2026-04-09 17:46-0400\n"
 "Last-Translator: mauprogramador <sir.silvabmauricio@gmail.com>\n"
 "Language-Team: mauprogramador sir.silvabmauricio@gmail.com\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 3.6\n"
+"X-Generator: Poedit 3.9\n"
 "X-Poedit-Basepath: .\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: web.po\n"
 
 # Custom
-
 msgid "api_description"
 msgstr "API da Web para levantamento bibliográfico de artigos Scopus"
 
@@ -31,7 +30,6 @@ msgid "form_name"
 msgstr "Levantamento em Múltiplas Etapas"
 
 # Overlays
-
 msgid "loader.albl"
 msgstr "Processando solicitação"
 
@@ -96,7 +94,6 @@ msgid "warning.retrievable_results"
 msgstr "Resultados recuperáveis"
 
 # Header
-
 msgid "nav.albl"
 msgstr "Navegação principal"
 
@@ -122,7 +119,6 @@ msgid "dropdown.en.albl"
 msgstr "Inglês"
 
 # Information
-
 msgid "information"
 msgstr "Informação"
 
@@ -145,7 +141,6 @@ msgid "institution_course.albl"
 msgstr "Instituição e curso"
 
 # Fields
-
 msgid "api_key.placeholder"
 msgstr "Chave de API"
 
@@ -237,7 +232,6 @@ msgid "download_btn"
 msgstr "Baixar CSV"
 
 # Footer
-
 msgid "rights_reserved"
 msgstr "Todos os direitos reservados"
 
@@ -256,26 +250,17 @@ msgstr "Recursos do projeto e mídias sociais"
 msgid "project_github.albl"
 msgstr "Repositório do projeto no GitHub"
 
-msgid "ifms_homepage.albl"
+msgid "ifms_homepage.alt"
 msgstr "Página inicial do IFMS Campus Três Lagoas"
 
-msgid "ifms_logo.alt"
-msgstr "Logo do IFMS"
-
-msgid "scopus_homepage.albl"
+msgid "scopus_homepage.alt"
 msgstr "Página inicial da Scopus"
-
-msgid "scopus_logo.alt"
-msgstr "Logo da Scopus"
 
 msgid "author_linkedin.albl"
 msgstr "Perfil do autor no LinkedIn"
 
-msgid "author_dev.albl"
+msgid "author_dev.alt"
 msgstr "Perfil do autor no DEV"
-
-msgid "dev_logo.alt"
-msgstr "Logo do DEV"
 
 msgid "cookies_notice_1"
 msgstr "Usamos cookies necessários para"
