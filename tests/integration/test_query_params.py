@@ -155,7 +155,7 @@ async def test_search_params_overridden_default(
         "keywords": KEYWORDS,
         "combination": "Python AND Web",
         "threshold": "25",
-        "button": Button.SEARCH.value,
+        "button": Button.SURVEY.value,
     }
     res = await client.get(URL_SEARCH, params=params)
     assert res.status_code == HTTP_200
@@ -180,7 +180,7 @@ async def test_search_params_empty_to_default(mocker: Mocker, client: Client):
         "pubStage": " ",
         "keywords": KEYWORDS,
         "combination": "Python",
-        "button": Button.SEARCH.value,
+        "button": Button.SURVEY.value,
     }
     res = await client.get(URL_SEARCH, params=params)
     assert res.status_code == HTTP_200

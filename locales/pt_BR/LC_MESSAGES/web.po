@@ -24,7 +24,7 @@ msgid "api_description"
 msgstr "API da Web para levantamento bibliográfico de artigos Scopus"
 
 msgid "title"
-msgstr "Pesquisar artigos - ScopusSurveyAPI"
+msgstr "Levantar bibliografias - ScopusSurveyAPI"
 
 msgid "form_name"
 msgstr "Levantamento em Múltiplas Etapas"
@@ -226,7 +226,7 @@ msgid "threshold.help"
 msgstr "ex. 80"
 
 msgid "surv_docs_btn"
-msgstr "Buscar Documentos"
+msgstr "Levantar Bibliografias"
 
 msgid "download_btn"
 msgstr "Baixar CSV"

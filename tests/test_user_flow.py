@@ -140,7 +140,7 @@ class TestUserFlowSurveySteps:
             "apiKey": cls._api_key,
             "keywords": ["FastAPI", "API"],
             "combination": cls._combination,
-            "button": "search",
+            "button": "survey",
         }
         cookies, headers = cls._cookies_and_headers()
 

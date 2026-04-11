@@ -24,7 +24,7 @@ msgid "api_description"
 msgstr "Web API for bibliographic survey of Scopus articles"
 
 msgid "title"
-msgstr "Search Articles - ScopusSurveyAPI"
+msgstr "Survey bibliographies - ScopusSurveyAPI"
 
 msgid "version.albl"
 msgstr "Latest version release"
@@ -226,7 +226,7 @@ msgid "threshold.help"
 msgstr "e.g. 80"
 
 msgid "surv_docs_btn"
-msgstr "Survey Documents"
+msgstr "Survey Bibliographies"
 
 msgid "download_btn"
 msgstr "Download CSV"

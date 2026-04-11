@@ -52,7 +52,7 @@ version = "3.2.5"
 
 [project.urls]
 documentation = "https://mauprogramador.github.io/scopus-survey-api/"
-homepage = "http://127.0.0.1:8000/v2/scopus-survey/web/en-US/search-articles"
+homepage = "http://127.0.0.1:8000/v2/scopus-survey/web/en-US/survey-bibliographies"
 repository = "https://github.com/mauprogramador/scopus-survey-api"
 
 [tool.poetry]

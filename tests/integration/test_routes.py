@@ -52,7 +52,7 @@ async def test_web_search_articles_en_us(client: Client):
 async def test_web_search_articles_pt_br(client: Client):
     client.cookies.clear()
     client.headers.clear()
-    res = await client.get(f"/web/{Lang.PT_BR}/search-articles")
+    res = await client.get(f"/web/{Lang.PT_BR}/survey-bibliographies")
     assert res.status_code == HTTP_200 and res.text
     assert res.cookies.get("session") is not None
     assert res.cookies.get("csrf-token") is not None

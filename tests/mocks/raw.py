@@ -33,7 +33,7 @@ CSRF_TOKEN, SIGNED_TOKEN = CSRFToken.generate_csrf_tokens()
 KEYWORDS = ["Python", "AI", "Automation", "Web"]
 CSV_FILE_NAME = f"{API_KEY}_{FILE}"
 
-URL_WEB = f"/web/{Lang.EN_US}/search-articles"
+URL_WEB = f"/web/{Lang.EN_US}/survey-bibliographies"
 URL_COMBINATION = "/api/combination"
 URL_SEARCH = "/api/survey"
 URL_CSV = "/api/csv"
@@ -54,7 +54,7 @@ SEARCH_PARAMS = {
     "apiKey": API_KEY,
     "keywords": KEYWORDS[:2],
     "combination": KEYWORDS[0],
-    "button": Button.SEARCH.value,
+    "button": Button.SURVEY.value,
 }
 
 CSV_MEDIA = "text/csv"
@@ -181,7 +181,7 @@ ALIAS_SEARCH_PARAMS = {
     "api_key": API_KEY,
     "keywords": KEYWORDS,
     "combination": "Python AND AI",
-    "button": Button.SEARCH.value,
+    "button": Button.SURVEY.value,
 }
 ALIAS_SEARCH_PARAMS_FULL = {
     "api_key": API_KEY,
@@ -197,7 +197,7 @@ ALIAS_SEARCH_PARAMS_FULL = {
     "keywords": KEYWORDS,
     "combination": "Python AND AI",
     "ratio": "25",
-    "button": Button.SEARCH.value,
+    "button": Button.SURVEY.value,
 }
 
 # Mocks

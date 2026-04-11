@@ -47,7 +47,7 @@ async def favicon():
 
 
 @router.get(
-    "/web/{lang}/search-articles",
+    "/web/{lang}/survey-bibliographies",
     status_code=HTTPStatus.OK,
     tags=["Web"],
     summary="Renders the multi-step web form page",

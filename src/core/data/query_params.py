@@ -229,8 +229,8 @@ class SearchParams(CombinationParams):
         ge=0,
         le=100,
     )
-    button: Literal[Button.SEARCH] = Field(
+    button: Literal[Button.SURVEY] = Field(
         description="The HTML button value",
-        examples=[Button.SEARCH],
+        examples=[Button.SURVEY],
         exclude=True,
     )

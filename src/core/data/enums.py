@@ -37,7 +37,7 @@ class Templates(StrEnum):
 class Button(StrEnum):
     PREVIOUS = auto()
     COMBINATION = auto()
-    SEARCH = auto()
+    SURVEY = auto()
     DOWNLOAD = auto()
 
 

@@ -24,7 +24,7 @@ _Federal Institute of Education, Science and Technology of Mato Grosso do Sul_
 
 📦 [**Source Code**](https://github.com/mauprogramador/scopus-survey-api)
 &nbsp;&#8226;&nbsp;
-🌐 [**Web Application**](/v2/scopus-survey/web/en-US/search-articles)
+🌐 [**Web Application**](/v2/scopus-survey/web/en-US/survey-bibliographies)
 &nbsp;&#8226;&nbsp;
 📄 [**Documentation**](https://mauprogramador.github.io/scopus-survey-api/)
 &nbsp;&#8226;&nbsp;

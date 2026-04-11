@@ -105,7 +105,7 @@ def test_search_params_valid_data():
     model = SearchParams(**ALIAS_SEARCH_PARAMS)
     assert model.api_key == API_KEY and model.keywords == KEYWORDS
     assert model.combination == "Python AND AI"
-    assert model.button == Button.SEARCH
+    assert model.button == Button.SURVEY
     assert model.ratio == 80
     assert model.date == f"{model.start_year}-{model.end_year}"
 
@@ -114,7 +114,7 @@ def test_search_params_overridden_default():
     model = SearchParams(**ALIAS_SEARCH_PARAMS_FULL)
     assert model.api_key == API_KEY and model.keywords == KEYWORDS
     assert model.combination == "Python AND AI"
-    assert model.button == Button.SEARCH
+    assert model.button == Button.SURVEY
     assert model.ratio == 25
 
 
@@ -131,7 +131,7 @@ def test_search_params_empty_to_default():
         "pubstage": " ",
         "keywords": KEYWORDS,
         "combination": "Python",
-        "button": Button.SEARCH.value,
+        "button": Button.SURVEY.value,
     }
     model = SearchParams(**raw)
     assert not model.doctype and not model.pubstage
