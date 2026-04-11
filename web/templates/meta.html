@@ -35,7 +35,7 @@
 <meta property="dcterms:source" content="{{repository}}">
 <meta property="dcterms:relation" content="{{documentation}}">
 <meta property="dcterms:softwareVersion" content="{{version}}">
-<meta property="dcterms:identifier" content="{{repository}}/tree/{{version}}">
+<meta property="dcterms:identifier" content="{{repository}}/tree/v{{version}}">
 <meta property="dcterms.isVersionOf" content="{{repository}}">
 <meta property="dcterms:type" content="{{type}}">
 <meta property="dcterms:format" content="{{format}}">
@@ -43,8 +43,8 @@
 <meta property="dcterms:instructionalMethod" content="{{_m('meta.subject')}}" lang="{{lang}}">
 <meta property="dcterms:language" content="{{lang}}">
 <meta property="dcterms:license" content="https://opensource.org/license/mit" lang="{{lang}}">
-<meta property="dcterms:bibliographicCitation" content="{{_m('meta.citation')}}" lang="{{lang}}">
-<meta property="dcterms:isPartOf" content="{{_m('meta.title')}}" lang="{{lang}}">
+<meta property="dcterms:bibliographicCitation" content="{{_m('meta.api.citation')}}" lang="{{lang}}">
+<meta property="dcterms:isPartOf" content="{{_m('meta.thesisTitle')}}" lang="{{lang}}">
 <meta property="dcterms:rights" content="{{_m('meta.copyright')}}" lang="{{lang}}">
 <meta property="dcterms:rightsHolder" content="{{institution}}" lang="pt-BR">
 {#
@@ -81,7 +81,7 @@
 <meta name="DCTERMS.source" content="{{repository}}">
 <meta name="DCTERMS.relation" content="{{documentation}}">
 <meta name="DCTERMS.softwareVersion" content="{{version}}">
-<meta name="DCTERMS.identifier" content="{{repository}}/tree/{{version}}">
+<meta name="DCTERMS.identifier" content="{{repository}}/tree/v{{version}}">
 <meta name="DCTERMS.isVersionOf" content="{{repository}}">
 <meta name="DCTERMS.type" content="{{type}}">
 <meta name="DCTERMS.format" content="{{format}}">
@@ -89,8 +89,8 @@
 <meta name="DCTERMS.instructionalMethod" content="{{_m('meta.subject')}}" lang="{{lang}}">
 <meta name="DCTERMS.language" content="{{lang}}">
 <meta name="DCTERMS.license" content="https://opensource.org/license/mit" lang="{{lang}}">
-<meta name="DCTERMS.bibliographicCitation" content="{{_m('meta.citation')}}" lang="{{lang}}">
-<meta name="DCTERMS.isPartOf" content="{{_m('meta.title')}}" lang="{{lang}}">
+<meta name="DCTERMS.bibliographicCitation" content="{{_m('meta.api.citation')}}" lang="{{lang}}">
+<meta name="DCTERMS.isPartOf" content="{{_m('meta.thesisTitle')}}" lang="{{lang}}">
 <meta name="DCTERMS.rights" content="{{_m('meta.copyright')}}" lang="{{lang}}">
 <meta name="DCTERMS.rightsHolder" content="{{institution}}" lang="pt-BR">
 {#
@@ -140,7 +140,7 @@
 <meta name="eprints.date" content="{{date}}">
 <meta name="eprints.official_url" content="{{repository}}">
 <meta name="eprints.abstract" content="{{_m('meta.description')}}" lang="{{lang}}">
-<meta name="eprints.citation" content="{{_m('meta.citation')}}" lang="{{lang}}">
+<meta name="eprints.citation" content="{{_m('meta.api.citation')}}" lang="{{lang}}">
 <meta name="eprints.format" content="text/html">
 <meta name="eprints.language" content="{{lang}}">
 <meta name="eprints.license" content="mit" lang="{{lang}}">
@@ -175,7 +175,7 @@
   "abstract": "{{_m('meta.description')}}",
   "description": "{{_m('meta.description')}}",
   "keywords": "{{_m('meta.keywords')}}",
-  "url": "{{repository}}/tree/{{version}}",
+  "url": "{{repository}}/tree/v{{version}}",
   "sameAs": "{{documentation}}",
   "datePublished": "{{date}}",
   "dateCreated": "{{created}}",
@@ -183,12 +183,12 @@
   "applicationCategory": "ResearchApplication",
   "operatingSystem": "Web-based",
   "featureList": "{{_m('meta.featureList')}}",
-  "releaseNotes": "{{repository}}/releases/tag/{{version}}",
+  "releaseNotes": "{{repository}}/releases/tag/v{{version}}",
   "runtimePlatform": "Python 3.12",
   "softwareRequirements": "Python, Docker",
   "softwareVersion": "{{version}}",
   "audience": "{{_m('meta.audience')}}",
-  "citation": "{{_m('meta.citation')}}",
+  "citation": "{{_m('meta.api.citation')}}",
   "contributor": {
     "@type": "Person",
     "name": "{{_m('meta.contributor')}}",
@@ -215,7 +215,7 @@
   "educationalUse": "{{_m('meta.subject')}}",
   "inLanguage": "{{lang}}",
   "isAccessibleForFree": "True",
-  "isPartOf": "{{_m('meta.title')}}",
+  "isPartOf": "{{_m('meta.thesisTitle')}}",
   "license": "https://opensource.org/license/mit",
   "provider": {
     "@type": "Organization",
@@ -271,7 +271,7 @@
   title = { {{title}} },
   author = { {{_m('meta.author')}} },
   keywords = { {{_m('meta.keywords')}} },
-  url = { {{repository}}/tree/{{version}} },
+  url = { {{repository}}/tree/v{{version}} },
   year = { {{year}} },
   abstract = { {{_m('meta.description')}} },
   annotation = { {{_m('meta.description')}} },
@@ -291,7 +291,7 @@
 
 <!-- Open Graph -->
 <meta property="og:type" content="website">
-<meta property="og:title" content="{{_m('title')}}">
+<meta property="og:title" content="{{_t('title')}}">
 <meta property="og:description" content="{{_m('meta.description')}}">
 <meta property="og:image" content="{{url_for('images', path='/social-card.png')}}">
 <meta property="og:image:type" content="image/png">
@@ -299,13 +299,13 @@
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="ScopusSurveyAPI logo">
 <meta property="og:url" content="{{url_for('web_form_page', lang=lang)}}">
-<meta property="og:site_name" content="ScopusSurveyAPI">
+<meta property="og:site_name" content="{{title}}">
 <meta property="og:locale" content="{{lang}}">
 <meta property="og:locale:alternate" content="en_US">
 <meta property="og:locale:alternate" content="pt_BR">
 
 <!-- Twitter -->
 <meta property="twitter:card" content="summary_large_image">
-<meta property="twitter:title" content="{{_m('title')}}">
+<meta property="twitter:title" content="{{_t('title')}}">
 <meta property="twitter:description" content="{{_m('meta.description')}}">
 <meta property="twitter:image" content="{{url_for('images', path='/social-card.png')}}">
