@@ -1,9 +1,9 @@
 <article class="container mt-4 pt-0" aria-labelledby="step-3-title" aria-describedby="step-3-desc">
-  {{ partial_steps.step3() }}
+  {{partial_steps.step3()}}
   <hr class="mt-2 mb-5" aria-hidden="true">
 
   <section id="keywords" class="text-group" aria-labelledby="keywords-title" aria-describedby="keywords-desc">
-    {{ partial_fields.keywords() }}
+    {{partial_fields.keywords()}}
     <div class="callout mt-3 d-flex align-items-center" role="note">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16" class="flex-shrink-0"
         aria-hidden="true">
@@ -125,7 +125,7 @@
 
   <section id="combination-table-section" class="text-group mt-5" aria-labelledby="combination-title"
     aria-describedby="combination-desc" hidden>
-    {{ partial_fields.combination() }}
+    {{partial_fields.combination()}}
     <div class="field-container table-responsive-lg">
       <table id="combination-table" class="table table-striped table-hover" aria-describedby="combination-desc">
         {% if lang == 'en-US' %}
