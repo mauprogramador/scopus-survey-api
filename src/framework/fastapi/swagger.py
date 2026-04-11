@@ -73,7 +73,7 @@ RESPONSES = {
 
 HTML_RESPONSE = {
     200: {
-        "description": "Web Page",
+        "description": "Multi-step web form page",
         "content": {
             "text/html": {
                 "example": "<html>...</html>",
@@ -83,7 +83,7 @@ HTML_RESPONSE = {
 }
 JSON_RESPONSE = {
     200: {
-        "description": "JSON response",
+        "description": "Totals of keyword combinations",
         "content": {
             "application/json": {
                 "example": {
@@ -109,7 +109,7 @@ JSON_RESPONSE = {
 }
 CSV_RESPONSE = {
     200: {
-        "description": "CSV file of the articles found",
+        "description": "CSV file of bibliographies",
         "content": {
             "text/csv": {
                 "example": (

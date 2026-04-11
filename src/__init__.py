@@ -23,7 +23,7 @@ _Web API for bibliographic survey of Scopus articles_
 __version__ = "3.2.5"
 __license__ = "MIT"
 __copyright__ = (
-    "Copyright (C) 2024 Maurício da Silva Batista. Produced at Instituto"
+    "Copyright (C) 2024 Maurício da Silva Batista and Instituto"
     "Federal de Educação, Ciência e Tecnologia de Mato Grosso do Sul (IFMS)"
     " - Campus Três Lagoas. MIT License. All rights reserved."
 )

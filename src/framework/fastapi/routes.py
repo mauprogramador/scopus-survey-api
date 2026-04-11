@@ -50,7 +50,7 @@ async def favicon():
     "/web/{lang}/search-articles",
     status_code=HTTPStatus.OK,
     tags=["Web"],
-    summary="Renders the search articles web page",
+    summary="Renders the multi-step web form page",
     responses=HTML_RESPONSE,
     response_class=HTMLResponse,
 )
@@ -80,7 +80,7 @@ async def web_form_page(
     status_code=HTTPStatus.OK,
     tags=["API"],
     dependencies=[Depends(CSRFToken.verify_csrf_token)],
-    summary="",
+    summary="Survey the totals of keyword combinations",
     responses=JSON_RESPONSE,
     response_class=JSONResponse,
 )
@@ -102,7 +102,7 @@ async def survey_total_combinations(
     status_code=HTTPStatus.OK,
     tags=["API"],
     dependencies=[Depends(CSRFToken.verify_csrf_token)],
-    summary="Survey for articles and download the found ones in a CSV file",
+    summary="Survey bibliographies and return the CSV file",
     responses=CSV_RESPONSE,
     response_class=FileResponse,
 )
@@ -124,7 +124,7 @@ async def survey_bibliographic_data(
     status_code=HTTPStatus.OK,
     tags=["API"],
     dependencies=[Depends(CSRFToken.verify_csrf_token)],
-    summary="Download the pre-existing CSV file of the found articles",
+    summary="Download the pre-existing CSV file",
     responses=CSV_RESPONSE,
     response_class=FileResponse,
 )
