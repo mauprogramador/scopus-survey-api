@@ -255,13 +255,10 @@
 @misc{Batista_Scopus_Survey_API_2024,
   title = { {{title}} },
   author = { {{_m('meta.author')}} },
-  keywords = { {{_m('meta.keywords')}} },
-  abstract = { {{_m('meta.description')}} },
-  url = { {{repository}} },
   year = { {{year}} },
-  annote = { {{_m('meta.description')}} },
-  copyright = { {{_m('meta.copyright')}} }
-  note = { {{_m('meta.contributor.prefix')}} {{_m('meta.contributor')}}, {{type}}, {{version}}, {{_m('meta.copyright')}} }
+  howpublished = {\url{ {{repository}} } GitHub },
+  annote = { {{_m('meta.api.bibtex.annote').format(docs=documentation)}} },
+  note = { {{_m('meta.api.bibtex.note').format(version=version)}} }
 }
 </script>
 
@@ -274,18 +271,20 @@
   url = { {{repository}}/tree/v{{version}} },
   year = { {{year}} },
   abstract = { {{_m('meta.description')}} },
-  annotation = { {{_m('meta.description')}} },
   institution = { {{institution}} },
-  organization = { {{institution}} },
-  publisher = { {{institution}} },
+  organization = { {{_m('meta.api.biblatex.org')}} },
+  publisher = { GitHub },
   editor = { {{_m('meta.contributor')}} },
-  editortype = {advisor},
+  editortype = { advisor },
+  related = { {{documentation}} },
+  relatedtype = { documentation },
   language = { {{lang}} },
   date = { {{date}} },
   type = { {{type}} },
   license = { MIT },
   version = { {{version}} },
-  note = { {{_m('meta.copyright')}} }
+  annotation = { {{_m('meta.api.biblatex.annote')}} },
+  note = { {{_m('meta.api.biblatex.note')}} }
 }
 </script>
 
