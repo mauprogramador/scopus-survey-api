@@ -11,13 +11,15 @@ DESCRIPTION = """
 <br>
 **Tecnologia em Análise e Desenvolvimento de Sistemas**
 &nbsp;&#8226;&nbsp;
-[TADS](https://www.ifms.edu.br/campi/campus-tres-lagoas/cursos/graduacao/analise-e-desenvolvimento-de-sistemas)
+[TADS](https://www.ifms.edu.br/campi/campus-tres-lagoas/cursos/graduacao/\
+analise-e-desenvolvimento-de-sistemas)
 
 
 _Federal Institute of Education, Science and Technology of Mato Grosso do Sul_
 <br>_Technology in Systems Analysis and Development_
 
-**© 2024, @mauprogramador, IFMS Campus Três Lagoas. All rights reserved.**<br>
+**© 2024 [@mauprogramador](https://github.com/mauprogramador) and
+[IFMS](https://www.ifms.edu.br). All rights reserved.**<br>
 **Data provided by [Scopus](https://www.scopus.com)®
 &nbsp;&#8226;&nbsp;
 © [Elsevier](https://www.elsevier.com)**<br><br>
@@ -51,7 +53,7 @@ TERMS_OF_SERVICE = (
     "scopus-survey-api/blob/master/TERMS_OF_SERVICE.md"
 )
 CONTACT = {
-    "name": "@mauprogramador",
+    "name": "Maurício da Silva Batista (@mauprogramador)",
     "url": "https://github.com/mauprogramador",
     "email": __contact__,
 }

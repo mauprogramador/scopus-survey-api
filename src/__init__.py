@@ -25,10 +25,10 @@ __license__ = "MIT"
 __copyright__ = (
     "Copyright (C) 2024 Maurício da Silva Batista and Instituto"
     "Federal de Educação, Ciência e Tecnologia de Mato Grosso do Sul (IFMS)"
-    " - Campus Três Lagoas. MIT License. All rights reserved."
+    " - Campus Três Lagoas. All rights reserved."
 )
 
-__author__ = "mauprogramador"
+__author__ = "Maurício da Silva Batista (@mauprogramador)"
 __contact__ = "sir.silvabmauricio@gmail.com"
 
 __status__ = "Development"

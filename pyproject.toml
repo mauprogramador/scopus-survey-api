@@ -1,6 +1,6 @@
 [project]
 authors = [
-  {name = "mauprogramador", email = "sir.silvabmauricio@gmail.com"},
+  {name = "Maurício da Silva Batista (@mauprogramador)", email = "sir.silvabmauricio@gmail.com"},
 ]
 classifiers = [
   "Development Status :: 5 - Production/Stable",
