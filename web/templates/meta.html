@@ -45,7 +45,7 @@
 <meta property="dcterms:isPartOf" content="{{_m('meta.thesisTitle')}}">
 <meta property="dcterms:rights" content="{{_m('meta.copyright')}}">
 <meta property="dcterms:rightsHolder" content="{{institution}}">
-{#
+{#-
 <meta property="dcterms.isReferencedBy" content="">
 #}
 
@@ -89,9 +89,8 @@
 <meta name="DCTERMS.isPartOf" content="{{_m('meta.thesisTitle')}}">
 <meta name="DCTERMS.rights" content="{{_m('meta.copyright')}}">
 <meta name="DCTERMS.rightsHolder" content="{{institution}}">
-{#
-<meta name="dcterms.isReferencedBy" content="">
-#}
+{#-
+<meta name="dcterms.isReferencedBy" content=""> #}
 
 <!-- Highwire Press -->
 <meta name="citation_title" content="{{title}}">
@@ -150,7 +149,7 @@
 <meta name="bepress_citation_date" content="{{date}}">
 <meta name="bepress_citation_publisher" content="{{institution}}">
 
-<!-- JSON-LD -->
+<!-- JSON-LD [Schema.org] -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -296,7 +295,7 @@
 <meta property="og:image:type" content="image/png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="ScopusSurveyAPI logo">
+<meta property="og:image:alt" content="Scopus Survey API logo">
 <meta property="og:url" content="{{url_for('web_form_page', lang=lang)}}">
 <meta property="og:site_name" content="{{title}}">
 <meta property="og:locale" content="{{lang}}">
