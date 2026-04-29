@@ -13,23 +13,22 @@ from src.core.common.error_messages import (
     TOKEN_SIGNATURE_ERROR,
 )
 from src.core.config.config import MAX_AGE
-from src.core.data.enums import Button
 from tests.conftest import assert_error_json
 from tests.mocks.helpers import fqn
 from tests.mocks.raw import (
-    API_KEY,
     CSV_PARAMS,
     HTTP_200,
     HTTP_401,
     SIGNED_TOKEN,
     URL_CSV,
+    URL_WEB,
 )
 
 
 @mark.asyncio
-async def test_ok(client: Client):
-    res = await client.get(URL_CSV, params=CSV_PARAMS)
-    assert res.status_code == HTTP_200
+async def test_set_cookie(client: Client):
+    client.cookies.delete("csrf-token")
+    res = await client.get(URL_WEB)
     assert res.headers.get("set-cookie") is not None
     assert res.status_code == HTTP_200
 
