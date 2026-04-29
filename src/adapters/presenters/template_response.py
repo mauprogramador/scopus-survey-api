@@ -1,16 +1,18 @@
 from datetime import datetime, timezone
 from http import HTTPStatus
+from pathlib import Path
 
 from fastapi import Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
+from jinja2 import Environment, FileSystemLoader
 from starlette.responses import Response
 
 from src import __contact__, __version__
 from src.adapters.presenters.json_response import ErrorJSON
 from src.core.common.error_messages import UNEXPECTED_ERROR
 from src.core.config.config import MAX_AGE, META_INFO, PREFIX
-from src.core.data.enums import Lang, Templates
+from src.core.data.enums import Lang
 from src.core.domain.translations import Translations
 
 
@@ -26,6 +28,39 @@ class TemplateResponse:
     _TEMPLATES = Jinja2Templates(directory="web/templates")
 
     @classmethod
+    def _dummy_url_for(cls, name: str, **path_params) -> str:
+        if path_params:
+            kwargs = [f"{key}='{value}'" for key, value in path_params.items()]
+            return f"{{{{url_for('{name}', {', '.join(kwargs)})}}}}"
+        return f"{{{{url_for('{name}')}}}}"
+
+    @classmethod
+    def build_all(cls) -> None:
+        dist_dir = Path("web/templates/dist")
+        dist_dir.mkdir(exist_ok=True)
+
+        env = Environment(loader=FileSystemLoader("web/templates"))
+        template = env.get_template("index.html")
+
+        for lang in Lang:
+            context = {
+                "version": __version__,
+                "email": __contact__,
+                "prefix": PREFIX,
+                "lang": lang.value,
+                "_t": Translations.WEB[lang].gettext,
+                "_m": Translations.META[lang].gettext,
+                "url_for": cls._dummy_url_for,
+            }
+            context.update(META_INFO)
+
+            shell_html = template.render(**context)
+
+            filename = dist_dir / f"index_{lang.locale}.html"
+            with open(filename, "w", encoding="utf-8") as file:
+                file.write(shell_html)
+
+    @classmethod
     def form_template(
         cls, request: Request, csrf_token: str, lang: Lang
     ) -> HTMLResponse:
@@ -37,22 +72,10 @@ class TemplateResponse:
             "Content-Type": "text/html; charset=utf-8",
         }
 
-        context = {
-            "version": __version__,
-            "email": __contact__,
-            "prefix": PREFIX,
-            "csrf_token": csrf_token,
-            "lang": lang.value,
-            "_t": Translations.WEB[lang].gettext,
-            "_m": Translations.META[lang].gettext,
-            "_e": Translations.ERROR[lang].gettext,
-        }
-        context.update(META_INFO)
-
         return cls._TEMPLATES.TemplateResponse(
             request,
-            Templates.INDEX.value,
-            context,
+            f"dist/index_{lang.locale}.html",
+            {"csrf_token": csrf_token},
             HTTPStatus.OK,
             headers,
         )
@@ -75,7 +98,7 @@ class TemplateResponse:
 
         return cls._TEMPLATES.TemplateResponse(
             request,
-            Templates.ERROR.value,
+            "error.html",
             context,
             response.status_code,
             cls._ERROR_PAGE_HEADERS,

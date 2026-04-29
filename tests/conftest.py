@@ -8,6 +8,7 @@ from pytest_asyncio import fixture as async_fixture
 from uvloop import EventLoopPolicy, install
 
 from src.adapters.presenters.json_response import ErrorJSON, ErrorResponse
+from src.adapters.presenters.template_response import TemplateResponse
 from src.core.common.types import Json
 from src.core.config.config import DIRECTORY, PREFIX, SERVER
 from src.core.domain.http_exceptions import HTTPError
@@ -37,6 +38,7 @@ def lifespan():
     SERVER.set("Pytest/1.2.3")
 
     Translations.load_all()
+    TemplateResponse.build_all()
     csv_file_path = DIRECTORY / CSV_FILE_NAME
 
     DIRECTORY.mkdir(parents=True, exist_ok=True)

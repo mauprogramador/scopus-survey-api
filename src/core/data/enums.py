@@ -28,12 +28,6 @@ class Column:
 
 
 @unique
-class Templates(StrEnum):
-    INDEX = "index.html"
-    ERROR = "error.html"
-
-
-@unique
 class Button(StrEnum):
     PREVIOUS = auto()
     COMBINATION = auto()

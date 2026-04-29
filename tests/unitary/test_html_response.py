@@ -1,4 +1,8 @@
+from pathlib import Path
+import shutil
+
 from fastapi.templating import Jinja2Templates
+from jinja2 import Template
 from pytest_mock import MockerFixture as Mocker
 
 from src.adapters.presenters.json_response import ErrorJSON
@@ -7,6 +11,28 @@ from src.core.common.error_messages import UNEXPECTED_ERROR
 from src.core.config.config import META_INFO
 from src.core.data.enums import Lang
 from tests.mocks.raw import CSRF_TOKEN, HTML_MEDIA, HTTP_200, HTTP_404, REQUEST
+
+
+def test_build_all(mocker: Mocker):
+    dist_dir = Path("web/templates/dist")
+
+    if dist_dir.exists():
+        shutil.rmtree(dist_dir)
+    dist_dir.mkdir()
+
+    spy_jinja = mocker.spy(Template, "render")
+    TemplateResponse.build_all()
+
+    assert dist_dir.exists()
+    assert (dist_dir / "index_en_US.html").exists()
+    assert (dist_dir / "index_pt_BR.html").exists()
+
+    assert spy_jinja.call_count == 2
+    context = spy_jinja.call_args_list[0].kwargs
+    assert context["version"] and context["email"] and context["prefix"]
+    assert context["lang"] == Lang.EN_US
+    assert context["_t"] and context["_m"]
+    assert META_INFO.items() <= context.items()
 
 
 def test_form_template(mocker: Mocker):
@@ -21,11 +47,7 @@ def test_form_template(mocker: Mocker):
     assert res.headers["Content-Type"]
 
     context: dict = spy_jinja.call_args_list[0].args[3]
-    assert context["version"] and context["email"] and context["prefix"]
     assert context["csrf_token"] == CSRF_TOKEN
-    assert context["lang"] == Lang.EN_US
-    assert context["_t"] and context["_m"] and context["_e"]
-    assert META_INFO.items() <= context.items()
 
 
 def test_not_found_template(mocker: Mocker):

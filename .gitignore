@@ -21,3 +21,4 @@ csv/
 cspell.json
 ssh_server
 test.py
+web/templates/dist/
