@@ -8,10 +8,8 @@ from pytest_mock import MockerFixture as Mocker
 from src.core.common.error_messages import (
     EXPIRED_TOKEN,
     INVALID_TOKEN,
-    MISSING_TOKEN,
     TOKEN_COOKIE_ERROR,
     TOKEN_HEADER_ERROR,
-    TOKEN_SESSION_ERROR,
     TOKEN_SIGNATURE_ERROR,
 )
 from src.core.config.config import MAX_AGE
@@ -34,31 +32,7 @@ async def test_ok(client: Client):
     assert res.status_code == HTTP_200
     assert res.cookies.get("session") is not None
     assert res.headers.get("set-cookie") is not None
-
-
-@mark.asyncio
-async def test_missing_token(client: Client):
-    params = {"apiKey": API_KEY, "button": Button.PREVIOUS}
-    res = await client.get(URL_CSV, params=params)
-    assert res.cookies.get("session") is not None
-    assert res.headers.get("set-cookie") is not None
-    errors = assert_error_json(res, HTTP_401, MISSING_TOKEN)
-    assert errors is None
-
-
-@mark.asyncio
-async def test_invalid_token(client: Client):
-    params = {
-        "csrfToken": "any",
-        "apiKey": API_KEY,
-        "button": Button.PREVIOUS,
-    }
-    res = await client.get(URL_CSV, params=params)
-    assert res.cookies.get("session") is not None
-    assert res.headers.get("set-cookie") is not None
-    errors = assert_error_json(res, HTTP_401, INVALID_TOKEN)
-    assert errors[0]["type"] == fqn(ValidationError)
-    assert errors[0]["detail"] and errors[1]
+    assert res.status_code == HTTP_200
 
 
 @mark.asyncio

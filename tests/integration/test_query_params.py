@@ -22,7 +22,6 @@ from tests.mocks.helpers import (
 from tests.mocks.raw import (
     API_KEY,
     COMBINATION_PARAMS,
-    CSRF_TOKEN,
     CSV_PARAMS,
     HTTP_200,
     HTTP_422,
@@ -53,8 +52,7 @@ async def test_csv_params_valid_data(client: Client):
 
 @mark.asyncio
 async def test_csv_params_raise_errors(client: Client):
-    params = {"csrfToken": CSRF_TOKEN}
-    res = await client.get(URL_CSV, params=params)
+    res = await client.get(URL_CSV)
     errors = assert_error_json(res, HTTP_422, "Field required")
     assert len(errors) == 2
 
@@ -72,7 +70,6 @@ async def test_combination_params_overridden_default(
 ):
     mocker.patch(MAKE_COMBINATOR, return_value=SURVEY_COMBINATIONS)
     params = {
-        "csrfToken": CSRF_TOKEN,
         "apiKey": API_KEY,
         "startYear": "2020",
         "endYear": "2021",
@@ -92,8 +89,7 @@ async def test_combination_params_overridden_default(
 
 @mark.asyncio
 async def test_combination_params_raise_errors(client: Client):
-    params = {"csrfToken": CSRF_TOKEN}
-    res = await client.get(URL_COMBINATION, params=params)
+    res = await client.get(URL_COMBINATION)
     errors = assert_error_json(res, HTTP_422, "Field required")
     assert len(errors) == 3
 
@@ -104,7 +100,6 @@ async def test_combination_params_empty_to_default(
 ):
     mocker.patch(MAKE_COMBINATOR, return_value=SURVEY_COMBINATIONS)
     params = {
-        "csrfToken": CSRF_TOKEN,
         "apiKey": API_KEY,
         "docType": "",
         "pubStage": " ",
@@ -119,7 +114,6 @@ async def test_combination_params_empty_to_default(
 async def test_combination_params_keywords(mocker: Mocker, client: Client):
     mocker.patch(MAKE_COMBINATOR, return_value=SURVEY_COMBINATIONS)
     params = {
-        "csrfToken": CSRF_TOKEN,
         "apiKey": API_KEY,
         "keywords": ["any,any"],
         "button": Button.COMBINATION.value,
@@ -150,7 +144,6 @@ async def test_search_params_overridden_default(
 ):
     mocker.patch(MAKE_AGGREGATOR, return_value=RETRIEVE_ARTICLES)
     params = {
-        "csrfToken": CSRF_TOKEN,
         "apiKey": API_KEY,
         "keywords": KEYWORDS,
         "combination": "Python AND Web",
@@ -164,8 +157,7 @@ async def test_search_params_overridden_default(
 @mark.asyncio
 async def test_search_params_raise_errors(mocker: Mocker, client: Client):
     mocker.patch(MAKE_AGGREGATOR, return_value=RETRIEVE_ARTICLES)
-    params = {"csrfToken": CSRF_TOKEN}
-    res = await client.get(URL_SEARCH, params=params)
+    res = await client.get(URL_SEARCH)
     errors = assert_error_json(res, HTTP_422, "Field required")
     assert len(errors) == 4
 
@@ -174,7 +166,6 @@ async def test_search_params_raise_errors(mocker: Mocker, client: Client):
 async def test_search_params_empty_to_default(mocker: Mocker, client: Client):
     mocker.patch(MAKE_AGGREGATOR, return_value=RETRIEVE_ARTICLES)
     params = {
-        "csrfToken": CSRF_TOKEN,
         "apiKey": API_KEY,
         "docType": "",
         "pubStage": " ",

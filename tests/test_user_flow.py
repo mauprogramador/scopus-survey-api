@@ -81,7 +81,6 @@ class TestUserFlowSurveySteps:
     async def test_02_previous_survey_csv(cls, client: Client):
         cls._api_key = token_hex(16)
         csv_params = {
-            "csrfToken": cls._token_header,
             "apiKey": cls._api_key,
             "button": "previous",
         }
@@ -102,7 +101,6 @@ class TestUserFlowSurveySteps:
     @classmethod
     async def test_03_keyword_combination(cls, mocker: Mocker, client: Client):
         combination_params = {
-            "csrfToken": cls._token_header,
             "apiKey": cls._api_key,
             "keywords": ["FastAPI", "API"],
             "button": "combination",
@@ -136,7 +134,6 @@ class TestUserFlowSurveySteps:
     @classmethod
     async def test_04_final_survey(cls, mocker: Mocker, client: Client):
         search_params = {
-            "csrfToken": cls._token_header,
             "apiKey": cls._api_key,
             "keywords": ["FastAPI", "API"],
             "combination": cls._combination,
@@ -203,7 +200,6 @@ class TestUserFlowSurveySteps:
     @classmethod
     async def test_05_csv_download(cls, client: Client):
         csv_params = {
-            "csrfToken": cls._token_header,
             "apiKey": cls._api_key,
             "button": "download",
         }

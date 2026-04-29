@@ -39,18 +39,15 @@ URL_SEARCH = "/api/survey"
 URL_CSV = "/api/csv"
 
 CSV_PARAMS = {
-    "csrfToken": CSRF_TOKEN,
     "apiKey": API_KEY,
     "button": Button.PREVIOUS.value,
 }
 COMBINATION_PARAMS = {
-    "csrfToken": CSRF_TOKEN,
     "apiKey": API_KEY,
     "keywords": KEYWORDS[:2],
     "button": Button.COMBINATION.value,
 }
 SEARCH_PARAMS = {
-    "csrfToken": CSRF_TOKEN,
     "apiKey": API_KEY,
     "keywords": KEYWORDS[:2],
     "combination": KEYWORDS[0],

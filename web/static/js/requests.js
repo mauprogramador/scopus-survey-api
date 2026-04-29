@@ -132,8 +132,6 @@ prevSurveyBtn.button.addEventListener('click', () => {
   prevSurveyBtn.busy();
 
   const url = new URL(prevSurveyBtn.actionUrl);
-  url.searchParams.set('csrfToken', csrfToken);
-
   url.searchParams.set(apiKeyField.name, apiKeyField.value);
   url.searchParams.set(prevSurveyBtn.name, prevSurveyBtn.value);
 
@@ -175,8 +173,6 @@ survCombBtn.button.addEventListener('click', () => {
   survCombDetailsBtn.disable();
 
   const url = new URL(survCombBtn.actionUrl);
-  url.searchParams.set('csrfToken', csrfToken);
-
   combFields.forEach((field) => {
     url.searchParams.set(field.name, field.value);
   });
@@ -225,8 +221,6 @@ survDocsBtn.button.addEventListener('click', () => {
   survDocsDetailsBtn.disable();
 
   const url = new URL(survDocsBtn.actionUrl);
-  url.searchParams.set('csrfToken', csrfToken);
-
   allFields.forEach((field) => {
     url.searchParams.set(field.name, field.value);
   });
@@ -277,8 +271,6 @@ downloadBtn.button.addEventListener('click', () => {
   downloadBtn.busy();
 
   const url = new URL(downloadBtn.actionUrl);
-  url.searchParams.set('csrfToken', csrfToken);
-
   url.searchParams.set(apiKeyField.name, userAPIKey);
   url.searchParams.set(downloadBtn.name, downloadBtn.value);
 
