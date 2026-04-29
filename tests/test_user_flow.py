@@ -48,15 +48,6 @@ class TestUserFlowSurveySteps:
     _combination: str = None
     _file_path: Path = None
 
-    @classmethod
-    def _cookies_and_headers(cls):
-        cookies = {
-            "session": cls._token_session,
-            "csrf-token": cls._token_cookie,
-        }
-        headers = {"X-CSRF-Token": cls._token_header}
-        return cookies, headers
-
     @mark.asyncio
     @classmethod
     async def test_01_web_form_spa(cls, client: Client):
@@ -76,18 +67,20 @@ class TestUserFlowSurveySteps:
     @mark.asyncio
     @classmethod
     async def test_02_previous_survey_csv(cls, client: Client):
+        client.cookies.clear()
+        client.headers.clear()
+
         cls._api_key = token_hex(16)
         csv_params = {
             "apiKey": cls._api_key,
             "button": "previous",
         }
-        cookies, headers = cls._cookies_and_headers()
 
         res = await client.get(
             URL_CSV,
             params=csv_params,
-            headers=headers,
-            cookies=cookies,
+            cookies={"csrf-token": cls._token_cookie},
+            headers={"X-CSRF-Token": cls._token_header}
         )
         assert res.status_code == HTTP_404
         assert res.headers.get("Content-Type") in JSON_CONTENT_TYPE
@@ -96,12 +89,14 @@ class TestUserFlowSurveySteps:
     @mark.asyncio
     @classmethod
     async def test_03_keyword_combination(cls, mocker: Mocker, client: Client):
+        client.cookies.clear()
+        client.headers.clear()
+
         combination_params = {
             "apiKey": cls._api_key,
             "keywords": ["FastAPI", "API"],
             "button": "combination",
         }
-        cookies, headers = cls._cookies_and_headers()
 
         mocks = [response_mock(search_raw(randint(16, 256)))] * 3
         mocker.patch(GET, new=AsyncMock(side_effect=mocks))
@@ -109,8 +104,8 @@ class TestUserFlowSurveySteps:
         res = await client.get(
             URL_COMBINATION,
             params=combination_params,
-            headers=headers,
-            cookies=cookies,
+            cookies={"csrf-token": cls._token_cookie},
+            headers={"X-CSRF-Token": cls._token_header}
         )
         assert res.status_code == HTTP_200
         assert res.headers.get("Content-Type") == JSON_CONTENT_TYPE
@@ -128,13 +123,15 @@ class TestUserFlowSurveySteps:
     @mark.asyncio
     @classmethod
     async def test_04_final_survey(cls, mocker: Mocker, client: Client):
+        client.cookies.clear()
+        client.headers.clear()
+
         search_params = {
             "apiKey": cls._api_key,
             "keywords": ["FastAPI", "API"],
             "combination": cls._combination,
             "button": "survey",
         }
-        cookies, headers = cls._cookies_and_headers()
 
         mocks = [response_mock(RAW_SEARCH_OK), response_mock(RAW_ABSTRACT_OK)]
         mocker.patch(GET, new=AsyncMock(side_effect=mocks))
@@ -142,8 +139,8 @@ class TestUserFlowSurveySteps:
         res = await client.get(
             URL_SEARCH,
             params=search_params,
-            headers=headers,
-            cookies=cookies,
+            cookies={"csrf-token": cls._token_cookie},
+            headers={"X-CSRF-Token": cls._token_header},
         )
         assert res.status_code == HTTP_200
         assert res.headers.get("Content-Type") == CSV_CONTENT_TYPE
@@ -193,17 +190,19 @@ class TestUserFlowSurveySteps:
     @mark.asyncio
     @classmethod
     async def test_05_csv_download(cls, client: Client):
+        client.cookies.clear()
+        client.headers.clear()
+
         csv_params = {
             "apiKey": cls._api_key,
             "button": "download",
         }
-        cookies, headers = cls._cookies_and_headers()
 
         res = await client.get(
             URL_CSV,
             params=csv_params,
-            headers=headers,
-            cookies=cookies,
+            cookies={"csrf-token": cls._token_cookie},
+            headers={"X-CSRF-Token": cls._token_header},
         )
         assert res.status_code == HTTP_200
         assert res.headers.get("Content-Type") == CSV_CONTENT_TYPE
