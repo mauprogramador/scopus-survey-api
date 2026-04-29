@@ -1,15 +1,15 @@
 <meta name="application-name" content="{{title}}">
 <meta name="author" content="Maurício da Silva Batista (@mauprogramador)">
-<meta name="description" content="{{_m('meta.description')}}">
-<meta name="keywords" content="{{_m('meta.keywords')}}">
+<meta name="description" content="{{_m('meta.api.description')}}">
+<meta name="keywords" content="{{_m('meta.api.keywords')}}">
 <meta name="publisher" content="{{institution}}">
 <meta name="data-source" content="{{_m('meta.dataSource')}}">
 
 <!-- RDFa [DC] -->
 <meta property="dc:title" content="{{title}}">
 <meta property="dc:creator" content="{{_m('meta.author')}}">
-<meta property="dc:subject" content="{{_m('meta.keywords')}}">
-<meta property="dc:description" content="{{_m('meta.description')}}">
+<meta property="dc:subject" content="{{_m('meta.api.keywords')}}">
+<meta property="dc:description" content="{{_m('meta.api.description')}}">
 <meta property="dc:publisher" content="{{institution}}">
 <meta property="dc:contributor" content="{{_m('meta.contributor')}}">
 <meta property="dc:date" content="{{date}}">
@@ -24,9 +24,9 @@
 <!-- RDFa [DCTERMS] -->
 <meta property="dcterms:title" content="{{title}}">
 <meta property="dcterms:creator" content="{{_m('meta.author')}}">
-<meta property="dcterms:subject" content="{{_m('meta.keywords')}}">
-<meta property="dcterms:description" content="{{_m('meta.description')}}">
-<meta property="dcterms:abstract" content="{{_m('meta.description')}}">
+<meta property="dcterms:subject" content="{{_m('meta.api.keywords')}}">
+<meta property="dcterms:description" content="{{_m('meta.api.description')}}">
+<meta property="dcterms:abstract" content="{{_m('meta.api.description')}}">
 <meta property="dcterms:publisher" content="{{institution}}">
 <meta property="dcterms:contributor" content="{{_m('meta.contributor')}}">
 <meta property="dcterms:date" content="{{date}}">
@@ -40,7 +40,7 @@
 <meta property="dcterms:type" content="{{type}}">
 <meta property="dcterms:format" content="{{format}}">
 <meta property="dcterms:audience" content="{{_m('meta.audience')}}">
-<meta property="dcterms:instructionalMethod" content="{{_m('meta.subject')}}">
+<meta property="dcterms:instructionalMethod" content="{{_m('meta.api.subject')}}">
 <meta property="dcterms:language" content="{{lang}}">
 <meta property="dcterms:license" content="https://opensource.org/license/mit">
 <meta property="dcterms:bibliographicCitation" content="{{_m('meta.api.citation')}}">
@@ -54,8 +54,8 @@
 <!-- DCMI DC -->
 <meta name="DC.Title" content="{{title}}">
 <meta name="DC.Creator" content="{{_m('meta.author')}}">
-<meta name="DC.Subject" content="{{_m('meta.keywords')}}">
-<meta name="DC.Description" content="{{_m('meta.description')}}">
+<meta name="DC.Subject" content="{{_m('meta.api.keywords')}}">
+<meta name="DC.Description" content="{{_m('meta.api.description')}}">
 <meta name="DC.Publisher" content="{{institution}}">
 <meta name="DC.Contributor" content="{{_m('meta.contributor')}}">
 <meta name="DC.Date" content="{{date}}">
@@ -70,9 +70,9 @@
 <!-- DCMI DCTERMS -->
 <meta name="DCTERMS.title" content="{{title}}">
 <meta name="DCTERMS.creator" content="{{_m('meta.author')}}">
-<meta name="DCTERMS.subject" content="{{_m('meta.keywords')}}">
-<meta name="DCTERMS.description" content="{{_m('meta.description')}}">
-<meta name="DCTERMS.abstract" content="{{_m('meta.description')}}">
+<meta name="DCTERMS.subject" content="{{_m('meta.api.keywords')}}">
+<meta name="DCTERMS.description" content="{{_m('meta.api.description')}}">
+<meta name="DCTERMS.abstract" content="{{_m('meta.api.description')}}">
 <meta name="DCTERMS.publisher" content="{{institution}}">
 <meta name="DCTERMS.contributor" content="{{_m('meta.contributor')}}">
 <meta name="DCTERMS.date" content="{{date}}">
@@ -86,7 +86,7 @@
 <meta name="DCTERMS.type" content="{{type}}">
 <meta name="DCTERMS.format" content="{{format}}">
 <meta name="DCTERMS.audience" content="{{_m('meta.audience')}}">
-<meta name="DCTERMS.instructionalMethod" content="{{_m('meta.subject')}}">
+<meta name="DCTERMS.instructionalMethod" content="{{_m('meta.api.subject')}}">
 <meta name="DCTERMS.language" content="{{lang}}">
 <meta name="DCTERMS.license" content="https://opensource.org/license/mit">
 <meta name="DCTERMS.bibliographicCitation" content="{{_m('meta.api.citation')}}">
@@ -100,7 +100,7 @@
 <!-- Highwire Press -->
 <meta name="citation_title" content="{{title}}">
 <meta name="citation_author" content="{{_m('meta.author')}}">
-<meta name="citation_keywords" content="{{_m('meta.keywords')}}">
+<meta name="citation_keywords" content="{{_m('meta.api.keywords')}}">
 <meta name="citation_author_institution" content="{{institution}}">
 <meta name="citation_author_email" content="{{email}}">
 <meta name="citation_publisher" content="{{institution}}">
@@ -110,15 +110,15 @@
 <meta name="citation_year" content="{{year}}">
 <meta name="citation_public_url" content="{{repository}}">
 <meta name="citation_language" content="{{lang}}">
-<meta name="citation_abstract" content="{{_m('meta.description')}}">
-<meta name="citation_copyright" property="dcterms:rights" content="{{_m('meta.copyright')}}">
+<meta name="citation_abstract" content="{{_m('meta.api.description')}}">
+<meta name="citation_copyright" content="{{_m('meta.copyright')}}">
 <meta name="citation_software_version" content="{{version}}">
 <meta name="citation_programming_language" content="python">
 <meta name="citation_operating_system" content="web">
 
 <!-- PRISM -->
 <meta name="prism.title" content="{{title}}">
-<meta name="prism.keyword" content="{{_m('meta.keywords')}}">
+<meta name="prism.keyword" content="{{_m('meta.api.keywords')}}">
 <meta name="prism.organization" content="{{institution}}">
 <meta name="prism.distributor" content="{{institution}}">
 <meta name="prism.link" content="{{documentation}}">
@@ -129,27 +129,27 @@
 <meta name="prism.url" content="{{repository}}">
 <meta name="prism.language" content="{{lang}}">
 <meta name="prism.contentType" content="{{type}}">
-<meta name="prism.academicField" content="{{_m('meta.subject')}}">
+<meta name="prism.academicField" content="{{_m('meta.api.subject')}}">
 <meta name="prism.versionIdentifier" content="{{version}}">
 
 <!-- Eprints -->
 <meta name="eprints.title" content="{{title}}">
-<meta name="eprints.keywords" content="{{_m('meta.keywords')}}">
+<meta name="eprints.keywords" content="{{_m('meta.api.keywords')}}">
 <meta name="eprints.creators_name" content="{{_m('meta.author')}}">
 <meta name="eprints.publisher" content="{{institution}}">
 <meta name="eprints.date" content="{{date}}">
 <meta name="eprints.official_url" content="{{repository}}">
-<meta name="eprints.abstract" content="{{_m('meta.description')}}">
+<meta name="eprints.abstract" content="{{_m('meta.api.description')}}">
 <meta name="eprints.citation" content="{{_m('meta.api.citation')}}">
-<meta name="eprints.format" content="text/html">
+<meta name="eprints.format" content="{{format}}">
 <meta name="eprints.language" content="{{lang}}">
 <meta name="eprints.license" content="mit">
 
 <!-- BE Press -->
 <meta name="bepress_citation_title" content="{{title}}">
-<meta name="bepress_citation_keywords" content="{{_m('meta.keywords')}}">
+<meta name="bepress_citation_keywords" content="{{_m('meta.api.keywords')}}">
 <meta name="bepress_citation_author" content="{{_m('meta.author')}}">
-<meta name="bepress_citation_abstract" content="{{_m('meta.description')}}">
+<meta name="bepress_citation_abstract" content="{{_m('meta.api.description')}}">
 <meta name="bepress_citation_author_institution" content="{{institution}}">
 <meta name="bepress_citation_date" content="{{date}}">
 <meta name="bepress_citation_publisher" content="{{institution}}">
@@ -163,18 +163,18 @@
   "author": {
     "@type": "Person",
     "name": "{{_m('meta.author')}}",
-    "familyName": "da Silva Batista",
-    "givenName": "Maurício",
+    "familyName": "Batista",
+    "givenName": "Maurício da Silva",
     "email": "{{email}}",
     "affiliation": {
       "@type": "Organization",
       "name": "{{institution}}"
     }
   },
-  "about": "{{_m('meta.keywords')}}",
-  "abstract": "{{_m('meta.description')}}",
-  "description": "{{_m('meta.description')}}",
-  "keywords": "{{_m('meta.keywords')}}",
+  "about": "{{_m('meta.api.keywords')}}",
+  "abstract": "{{_m('meta.api.description')}}",
+  "description": "{{_m('meta.api.description')}}",
+  "keywords": "{{_m('meta.api.keywords')}}",
   "identifier": "{{repository}}/tree/v{{version}}",
   "url": "{{repository}}",
   "sameAs": "{{documentation}}",
@@ -193,8 +193,8 @@
   "contributor": {
     "@type": "Person",
     "name": "{{_m('meta.contributor')}}",
-    "familyName": "Fernando de Araujo",
-    "givenName": "Alex",
+    "familyName": "Araujo",
+    "givenName": "Alex Fernando de",
     "email": "alex.araujo@ifms.edu.br",
     "affiliation": {
       "@type": "Organization",
@@ -215,7 +215,7 @@
   },
   "conditionsOfAccess": "{{_m('meta.conditionsOfAccess')}}",
   "creditText": "{{_m('meta.dataSource')}}",
-  "educationalUse": "{{_m('meta.subject')}}",
+  "educationalUse": "{{_m('meta.api.subject')}}",
   "inLanguage": "{{lang}}",
   "isAccessibleForFree": "True",
   "isPartOf": "{{_m('meta.thesisTitle')}}",
@@ -223,7 +223,7 @@
   "provider": {
     "@type": "Organization",
     "name": "GitHub",
-    "url": "{{repository}}"
+    "url": "https://github.com/"
   },
   "publisher": {
     "@type": "Organization",
@@ -271,12 +271,12 @@
 @software{Batista_Scopus_Survey_API_2024,
   title = { {{title}} },
   author = { {{_m('meta.author')}} },
-  keywords = { {{_m('meta.keywords')}} },
-  url = { {{repository}}/tree/v{{version}} },
+  keywords = { {{_m('meta.api.keywords')}} },
+  url = { {{repository}} },
   year = { {{year}} },
-  abstract = { {{_m('meta.description')}} },
+  abstract = { {{_m('meta.api.description')}} },
   institution = { {{institution}} },
-  organization = { {{_m('meta.api.biblatex.org')}} },
+  organization = { {{_m('meta.biblatex.org')}} },
   publisher = { GitHub },
   editor = { {{_m('meta.contributor')}} },
   editortype = { advisor },
@@ -295,7 +295,7 @@
 <!-- Open Graph -->
 <meta property="og:type" content="website">
 <meta property="og:title" content="{{_t('title')}}">
-<meta property="og:description" content="{{_m('meta.description')}}">
+<meta property="og:description" content="{{_m('meta.api.description')}}">
 <meta property="og:image" content="{{url_for('images', path='/social-card.png')}}">
 <meta property="og:image:type" content="image/png">
 <meta property="og:image:width" content="1200">
@@ -310,5 +310,5 @@
 <!-- Twitter -->
 <meta property="twitter:card" content="summary_large_image">
 <meta property="twitter:title" content="{{_t('title')}}">
-<meta property="twitter:description" content="{{_m('meta.description')}}">
+<meta property="twitter:description" content="{{_m('meta.api.description')}}">
 <meta property="twitter:image" content="{{url_for('images', path='/social-card.png')}}">
