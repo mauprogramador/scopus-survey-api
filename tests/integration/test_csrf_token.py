@@ -30,7 +30,6 @@ from tests.mocks.raw import (
 async def test_ok(client: Client):
     res = await client.get(URL_CSV, params=CSV_PARAMS)
     assert res.status_code == HTTP_200
-    assert res.cookies.get("session") is not None
     assert res.headers.get("set-cookie") is not None
     assert res.status_code == HTTP_200
 
@@ -39,8 +38,6 @@ async def test_ok(client: Client):
 async def test_missing_cookie_token(client: Client):
     client.cookies.delete("csrf-token")
     res = await client.get(URL_CSV, params=CSV_PARAMS)
-    assert res.cookies.get("session") is not None
-    assert res.headers.get("set-cookie") is not None
     errors = assert_error_json(res, HTTP_401, TOKEN_COOKIE_ERROR)
     assert errors is None
 
@@ -49,18 +46,13 @@ async def test_missing_cookie_token(client: Client):
 async def test_missing_header_token(client: Client):
     client.headers.clear()
     res = await client.get(URL_CSV, params=CSV_PARAMS)
-    assert res.cookies.get("session") is not None
-    assert res.headers.get("set-cookie") is not None
     errors = assert_error_json(res, HTTP_401, TOKEN_HEADER_ERROR)
     assert errors is None
 
 
 @mark.asyncio
 async def test_missing_session_token(client: Client):
-    client.cookies.delete("session")
     res = await client.get(URL_CSV, params=CSV_PARAMS)
-    assert res.cookies.get("session") is None
-    assert res.headers.get("set-cookie") is None
     errors = assert_error_json(res, HTTP_401, TOKEN_SESSION_ERROR)
     assert errors is None
 
@@ -73,8 +65,6 @@ async def test_signature_expired(mocker: Mocker, client: Client):
         side_effect=SignatureExpired("any"),
     )
     res = await client.get(URL_CSV, params=CSV_PARAMS)
-    assert res.cookies.get("session") is not None
-    assert res.headers.get("set-cookie") is not None
     mock.assert_called_once_with(SIGNED_TOKEN, MAX_AGE)
     errors = assert_error_json(res, HTTP_401, EXPIRED_TOKEN)
     assert errors[0]["type"] == fqn(SignatureExpired)
@@ -85,8 +75,6 @@ async def test_signature_expired(mocker: Mocker, client: Client):
 async def test_bad_signature(client: Client):
     client.cookies.update({"csrf-token": "any"})
     res = await client.get(URL_CSV, params=CSV_PARAMS)
-    assert res.cookies.get("session") is not None
-    assert res.headers.get("set-cookie") is not None
     errors = assert_error_json(res, HTTP_401, TOKEN_SIGNATURE_ERROR)
     assert errors[0]["type"] == fqn(BadSignature)
     assert errors[0]["detail"]
@@ -98,8 +86,6 @@ async def test_incorrect(mocker: Mocker, client: Client):
         URLSafeTimedSerializer, "loads", return_value="any"
     )
     res = await client.get(URL_CSV, params=CSV_PARAMS)
-    assert res.cookies.get("session") is not None
-    assert res.headers.get("set-cookie") is not None
     mock.assert_called_once_with(SIGNED_TOKEN, MAX_AGE)
     errors = assert_error_json(res, HTTP_401, INVALID_TOKEN)
     assert errors is None

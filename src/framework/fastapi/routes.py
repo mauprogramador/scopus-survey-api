@@ -68,7 +68,6 @@ async def web_form_page(
         }
     )
 
-    request.session["csrf-token"] = csrf_token
     response = TemplateResponse.form_template(request, csrf_token, lang)
     response.set_cookie("csrf-token", signed_token, MAX_AGE, httponly=True)
 

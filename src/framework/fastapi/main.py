@@ -3,11 +3,10 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from starlette.middleware.sessions import SessionMiddleware
 
 from src import __version__
 from src.adapters.presenters.template_response import TemplateResponse
-from src.core.config.config import DIRECTORY, ENV, LIMITER, LOG, SECRET_KEY
+from src.core.config.config import DIRECTORY, ENV, LIMITER, LOG
 from src.core.domain.translations import Translations
 from src.framework.fastapi.routes import favicon_router, router
 from src.framework.fastapi.swagger import (
@@ -56,12 +55,6 @@ app.state.limiter = LIMITER
 
 app.add_middleware(ProxyForwardedHeadersMiddleware)
 app.add_middleware(FlowGuardingMonitorMiddleware)
-
-app.add_middleware(
-    SessionMiddleware,
-    secret_key=SECRET_KEY,
-    max_age=None,
-)
 
 app.add_middleware(
     CORSMiddleware,

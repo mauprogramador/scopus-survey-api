@@ -43,7 +43,6 @@ class TestUserFlowSurveySteps:
     """Complete user survey steps flow"""
 
     _token_header: str = None
-    _token_session: str = None
     _token_cookie: str = None
     _api_key: str = None
     _combination: str = None
@@ -69,11 +68,9 @@ class TestUserFlowSurveySteps:
         assert res.headers.get("Content-Type") == HTML_CONTENT_TYPE
 
         cls._token_header = res.headers.get("X-CSRF-Token")
-        cls._token_session = res.cookies.get("session")
         cls._token_cookie = res.cookies.get("csrf-token")
 
         assert cls._token_header is not None
-        assert cls._token_session is not None
         assert cls._token_cookie is not None
 
     @mark.asyncio
@@ -94,7 +91,6 @@ class TestUserFlowSurveySteps:
         )
         assert res.status_code == HTTP_404
         assert res.headers.get("Content-Type") in JSON_CONTENT_TYPE
-        assert res.cookies.get("session") is not None
         assert_error_json(res, HTTP_404, CSV_NOT_FOUND)
 
     @mark.asyncio
@@ -118,7 +114,6 @@ class TestUserFlowSurveySteps:
         )
         assert res.status_code == HTTP_200
         assert res.headers.get("Content-Type") == JSON_CONTENT_TYPE
-        assert res.cookies.get("session") is not None
         assert res.headers.get("X-API-Key") == cls._api_key
         assert res.headers.get("X-Keywords") == "FastAPI AND API"
         assert res.headers.get("X-Search-Limit") == "20000"
@@ -152,7 +147,6 @@ class TestUserFlowSurveySteps:
         )
         assert res.status_code == HTTP_200
         assert res.headers.get("Content-Type") == CSV_CONTENT_TYPE
-        assert res.cookies.get("session") is not None
         assert res.headers.get("X-API-Key") == cls._api_key
         assert res.headers.get("X-Combination") == cls._combination
         assert res.headers.get("X-Total") == "1"
@@ -213,7 +207,6 @@ class TestUserFlowSurveySteps:
         )
         assert res.status_code == HTTP_200
         assert res.headers.get("Content-Type") == CSV_CONTENT_TYPE
-        assert res.cookies.get("session") is not None
         assert res.headers.get("X-API-Key") == cls._api_key
         assert res.headers.get("X-CSV-Filename") is not None
 

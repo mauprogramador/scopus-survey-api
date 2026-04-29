@@ -14,7 +14,7 @@ from src.core.config.config import DIRECTORY, PREFIX, SERVER
 from src.core.domain.http_exceptions import HTTPError
 from src.core.domain.translations import Translations
 from src.framework.fastapi.main import app
-from tests.mocks.raw import CSRF_TOKEN, CSV_FILE_NAME, SIGNED_TOKEN, URL_WEB
+from tests.mocks.raw import CSRF_TOKEN, CSV_FILE_NAME, SIGNED_TOKEN
 
 install()
 TIMEOUT = 15
@@ -52,23 +52,11 @@ def lifespan():
     print("\033[93mPytest Session Finish\033[m", flush=True)
 
 
-@async_fixture(scope="session", loop_scope="session", name="session_cookie")
-async def load_starlette_session_cookie():
-    async with AsyncClient(
-        timeout=TIMEOUT, base_url=BASE_URL, transport=TRANSPORT
-    ) as client:
-        response = await client.get(URL_WEB)
-        assert response.status_code == HTTPStatus.OK
-        assert "session" in client.cookies
-
-        yield client.cookies.get("session")
-
-
 @async_fixture(name="client")
-async def httpx_async_client(session_cookie: str):
+async def httpx_async_client():
     """HTTPX Async Client with ASGITransport fixture"""
     async with AsyncClient(
-        cookies={"session": session_cookie, "csrf-token": SIGNED_TOKEN},
+        cookies={"csrf-token": SIGNED_TOKEN},
         headers={"X-CSRF-Token": CSRF_TOKEN},
         timeout=TIMEOUT,
         base_url=BASE_URL,

@@ -1,5 +1,3 @@
-from unittest.mock import MagicMock
-
 from itsdangerous import BadSignature, SignatureExpired, URLSafeTimedSerializer
 from pydantic_core import ValidationError
 from pytest import raises
@@ -17,9 +15,8 @@ from src.core.domain.http_exceptions import Unauthorized
 from src.framework.fastapi.csrf_token import CSRFToken
 from tests.conftest import assert_http_error
 from tests.mocks.helpers import fqn
-from tests.mocks.raw import CSRF_TOKEN, HTTP_401, REQUEST, SIGNED_TOKEN
+from tests.mocks.raw import CSRF_TOKEN, HTTP_401, SIGNED_TOKEN
 
-SESSION_TOKEN = MagicMock(session={"csrf-token": CSRF_TOKEN})
 LOADS = fqn(URLSafeTimedSerializer.loads)
 
 

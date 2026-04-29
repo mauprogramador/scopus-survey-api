@@ -43,7 +43,6 @@ async def test_web_search_articles_en_us(client: Client):
     client.headers.clear()
     res = await client.get(URL_WEB)
     assert res.status_code == HTTP_200 and res.text
-    assert res.cookies.get("session") is not None
     assert res.cookies.get("csrf-token") is not None
     assert res.headers.get("Content-Type") == HTML_CONTENT_TYPE
 
@@ -54,7 +53,6 @@ async def test_web_search_articles_pt_br(client: Client):
     client.headers.clear()
     res = await client.get(f"/web/{Lang.PT_BR}/survey-bibliographies")
     assert res.status_code == HTTP_200 and res.text
-    assert res.cookies.get("session") is not None
     assert res.cookies.get("csrf-token") is not None
     assert res.headers.get("Content-Type") == HTML_CONTENT_TYPE
 
@@ -64,7 +62,6 @@ async def test_api_combination(mocker: Mocker, client: Client):
     mocker.patch(GET, new=AsyncMock(side_effect=COMBINATION_RESPONSES))
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
     assert res.status_code == HTTP_200 and res.text
-    assert res.cookies.get("session") is not None
     assert res.headers.get("Content-Type") == JSON_CONTENT_TYPE
 
 
@@ -73,7 +70,6 @@ async def test_api_survey(mocker: Mocker, client: Client):
     mocker.patch(GET, new=AsyncMock(side_effect=SURVEY_RESPONSES))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     assert res.status_code == HTTP_200 and res.text
-    assert res.cookies.get("session") is not None
     assert res.headers.get("Content-Type") == CSV_CONTENT_TYPE
 
 
@@ -81,7 +77,6 @@ async def test_api_survey(mocker: Mocker, client: Client):
 async def test_api_csv_success(client: Client):
     res = await client.get(URL_CSV, params=CSV_PARAMS)
     assert res.status_code == HTTP_200 and res.text
-    assert res.cookies.get("session") is not None
     assert res.headers.get("Content-Type") == CSV_CONTENT_TYPE
 
 
@@ -90,5 +85,4 @@ async def test_api_csv_not_found(client: Client):
     CSV_PARAMS.update({"apiKey": token_hex(16)})
     res = await client.get(URL_CSV, params=CSV_PARAMS)
     assert res.status_code == HTTP_404
-    assert res.cookies.get("session") is not None
     assert res.headers.get("Content-Type") in JSON_CONTENT_TYPE
