@@ -28,6 +28,7 @@ if __name__ == "__main__":
         reload=ENV.reload,
         workers=ENV.workers,
         access_log=False,
+        server_header=False,
         timeout_graceful_shutdown=5,
         use_colors=True,
     )
