@@ -10,6 +10,7 @@
     <link rel="canonical" href="{{url_for('web_form_page', lang=lang)}}">
     <link rel="alternate" hreflang="en-US" href="{{url_for('web_form_page', lang='en-US')}}">
     <link rel="alternate" hreflang="pt-BR" href="{{url_for('web_form_page', lang='pt-BR')}}">
+    <link rel="alternate" hreflang="x-default" href="{{url_for('web_form_page', lang='en-US')}}">
     <link rel="icon" href="/images/favicon.ico" sizes="256x256" type="image/x-icon">
     <link rel="apple-touch-icon" href="/images/apple-icon.png" sizes="180x180" type="image/png">
     <link rel="image_src" href="{{url_for('images', path='/social-card.png')}}" sizes="1200x630" type="image/png">
@@ -90,7 +91,8 @@
         <meta property="abstract" content="{{_m('meta.description')}}">
         <meta property="description" content="{{_m('meta.description')}}">
         <meta property="keywords" content="{{_m('meta.keywords')}}">
-        <meta property="url" content="{{repository}}/tree/v{{version}}">
+        <meta property="identifier" content="{{repository}}/tree/v{{version}}">
+        <meta property="url" content="{{repository}}">
         <meta property="sameAs" content="{{documentation}}">
         <meta property="datePublished" content="{{date}}">
         <meta property="dateCreated" content="{{created}}">
@@ -115,6 +117,8 @@
         </div>
         <div property="copyrightHolder" typeof="Organization">
           <meta property="name" content="{{institution}}">
+          <meta property="alternateName" content="IFMS">
+          <meta property="url" content="https://www.ifms.edu.br/campi/campus-tres-lagoas">
         </div>
         <meta property="copyrightNotice" content="{{_m('meta.copyright')}}">
         <meta property="copyrightYear" content="{{year}}">
@@ -141,6 +145,7 @@
         <div property="owner" typeof="Organization">
           <meta property="name" content="{{institution}}">
         </div>
+        <meta property="thumbnailUrl" content="{{url_for('images', path='/social-card.png')}}">
         <meta property="usageInfo" content="{{documentation}}">
         <meta property="version" content="{{version}}">
         <div property="aggregateRating" typeof="AggregateRating">
@@ -170,7 +175,8 @@
         <meta itemprop="abstract" content="{{_m('meta.description')}}">
         <meta itemprop="description" content="{{_m('meta.description')}}">
         <meta itemprop="keywords" content="{{_m('meta.keywords')}}">
-        <meta itemprop="url" content="{{repository}}/tree/v{{version}}">
+        <meta property="identifier" content="{{repository}}/tree/v{{version}}">
+        <meta itemprop="url" content="{{repository}}">
         <meta itemprop="sameAs" content="{{documentation}}">
         <meta itemprop="datePublished" content="{{date}}">
         <meta itemprop="dateCreated" content="{{created}}">
@@ -195,6 +201,8 @@
         </div>
         <div itemprop="copyrightHolder" itemscope itemtype="https://schema.org/Organization">
           <meta itemprop="name" content="{{institution}}">
+          <meta property="alternateName" content="IFMS">
+          <meta property="url" content="https://www.ifms.edu.br/campi/campus-tres-lagoas">
         </div>
         <meta itemprop="copyrightNotice" content="{{_m('meta.copyright')}}">
         <meta itemprop="copyrightYear" content="{{year}}">
@@ -221,6 +229,7 @@
         <div itemprop="owner" itemscope itemtype="https://schema.org/Organization">
           <meta itemprop="name" content="{{institution}}">
         </div>
+        <meta property="thumbnailUrl" content="{{url_for('images', path='/social-card.png')}}">
         <meta itemprop="usageInfo" content="{{documentation}}">
         <meta itemprop="version" content="{{version}}">
         <div itemprop="aggregateRating" itemscope itemtype="https://schema.org/AggregateRating">

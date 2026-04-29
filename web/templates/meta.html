@@ -15,7 +15,7 @@
 <meta property="dc:date" content="{{date}}">
 <meta property="dc:source" content="{{repository}}">
 <meta property="dc:relation" content="{{documentation}}">
-<meta property="dc:identifier" content="{{repository}}">
+<meta property="dc:identifier" content="{{repository}}/tree/v{{version}}">
 <meta property="dc:type" content="{{type}}">
 <meta property="dc:format" content="{{format}}">
 <meta property="dc:language" content="{{lang}}">
@@ -175,7 +175,8 @@
   "abstract": "{{_m('meta.description')}}",
   "description": "{{_m('meta.description')}}",
   "keywords": "{{_m('meta.keywords')}}",
-  "url": "{{repository}}/tree/v{{version}}",
+  "identifier": "{{repository}}/tree/v{{version}}",
+  "url": "{{repository}}",
   "sameAs": "{{documentation}}",
   "datePublished": "{{date}}",
   "dateCreated": "{{created}}",
@@ -202,7 +203,9 @@
   },
   "copyrightHolder": {
     "@type": "Organization",
-    "name": "{{institution}}"
+    "name": "{{institution}}",
+    "alternateName": "IFMS",
+    "url": "https://www.ifms.edu.br/campi/campus-tres-lagoas"
   },
   "copyrightNotice": "{{_m('meta.copyright')}}",
   "copyrightYear": "{{year}}",
@@ -234,6 +237,7 @@
     "@type": "Organization",
     "name": "{{institution}}"
   },
+  "thumbnailUrl": "{{url_for('images', path='/social-card.png')}}",
   "usageInfo": "{{documentation}}",
   "version": "{{version}}",
   "aggregateRating": {
