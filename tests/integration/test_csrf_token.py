@@ -50,10 +50,12 @@ async def test_missing_header_token(client: Client):
 
 
 @mark.asyncio
-async def test_missing_session_token(client: Client):
+async def test_invalid_token(client: Client):
+    client.headers.update({"X-CSRF-Token": "any"})
     res = await client.get(URL_CSV, params=CSV_PARAMS)
-    errors = assert_error_json(res, HTTP_401, TOKEN_SESSION_ERROR)
-    assert errors is None
+    errors = assert_error_json(res, HTTP_401, INVALID_TOKEN)
+    assert errors[0]["type"] == fqn(ValidationError)
+    assert errors[0]["detail"] and errors[1]
 
 
 @mark.asyncio

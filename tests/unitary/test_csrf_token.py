@@ -39,13 +39,12 @@ def test_missing_header_token():
     assert info.value.errors is None
 
 
-def test_missing_session_token():
+def test_invalid_token():
     with raises(Unauthorized) as info:
-        CSRFToken.verify_csrf_token(
-            REQUEST, CSRF_TOKEN, SIGNED_TOKEN, CSRF_TOKEN
-        )
-    assert_http_error(info, HTTP_401, TOKEN_SESSION_ERROR)
-    assert info.value.errors is None
+        CSRFToken.verify_csrf_token(SIGNED_TOKEN, "any")
+    assert_http_error(info, HTTP_401, INVALID_TOKEN)
+    assert info.value.errors[0]["type"] == fqn(ValidationError)
+    assert info.value.errors[0]["detail"] and info.value.errors[1]
 
 
 def test_signature_expired(mocker: Mocker):
