@@ -25,6 +25,10 @@
 
     {% include "meta.html" %}
 
+    {% raw %}
+    <meta id="csrf-token" name="csrf-token" content="{{csrf_token}}">
+    {% endraw %}
+
     <meta name="color-scheme" content="light">
     <meta name="theme-color" content="#ff6c00">
   </head>
@@ -55,9 +59,6 @@
     </main>
 
     {% include "footer.html" %}
-
-    <div id="context-data" data-lang="{{lang}}" data-csrf-token="{{csrf_token}}" hidden>
-    </div>
 
     <a id="download-link" href="#" rel="alternate" download="docs.csv" type="text/csv" hidden tabindex="-1">&#8203;</a>
 

@@ -3,10 +3,8 @@ import { translationTexts, detailsGroupLabels } from './translations.js';
 
 // Get context data
 const downloadLink = document.getElementById('download-link');
-const contextData = document.getElementById('context-data');
-const lang = contextData.dataset.lang;
-const csrfToken = contextData.dataset.csrfToken;
-contextData.remove();
+const lang = document.documentElement.lang;
+const csrfToken = document.getElementById('csrf-token').getAttribute('content');
 
 // Populate Details
 // - Scopus Search and Abstract Retrieval APIs weekly quota
