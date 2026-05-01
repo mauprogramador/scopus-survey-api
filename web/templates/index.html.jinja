@@ -24,7 +24,7 @@
     <link rel="stylesheet" href="/styles/form.css" type="text/css">
     <link rel="stylesheet" href="/styles/overlays.css" type="text/css">
 
-    {% include "meta.html" %}
+    {% include "meta.html.jinja" %}
 
     {% raw %}
     <meta id="csrf-token" name="csrf-token" content="{{csrf_token}}">
@@ -41,25 +41,25 @@
     <!-- Skip to Content Link -->
     <a id="skip-to-content-link" class="link visually-hidden-focusable" href="#apikey">Skip to main content</a>
 
-    {% include "overlays.html" %}
-    {% include "header.html" %}
+    {% include "overlays.html.jinja" %}
+    {% include "header.html.jinja" %}
 
     <main id="main-content" class="container p-0">
-      {% include "information.html" %}
+      {% include "information.html.jinja" %}
 
       <form id="survey-form" accept-charset="UTF-8" autocomplete="on" method="get" aria-labelledby="form-title">
-        {% import "partials/steps.html" as partial_steps with context %}
-        {% import "partials/fields.html" as partial_fields with context %}
-        {% import "partials/values.html" as partial_values with context %}
+        {% import "partials/steps.html.jinja" as partial_steps with context %}
+        {% import "partials/fields.html.jinja" as partial_fields with context %}
+        {% import "partials/values.html.jinja" as partial_values with context %}
         <h2 id="form-title" hidden>{{_t('form_name')}}</h2>
-        {% include "api_key.html" %}
-        {% include "additional_params.html" %}
-        {% include "keywords_combination.html" %}
-        {% include "survey_documents.html" %}
+        {% include "api_key.html.jinja" %}
+        {% include "additional_params.html.jinja" %}
+        {% include "keywords_combination.html.jinja" %}
+        {% include "survey_documents.html.jinja" %}
       </form>
     </main>
 
-    {% include "footer.html" %}
+    {% include "footer.html.jinja" %}
 
     <a id="download-link" href="#" rel="alternate" download="docs.csv" type="text/csv" hidden tabindex="-1">&#8203;</a>
 
