@@ -46,7 +46,7 @@ async def test_custom_http_error(mocker: Mocker, client: Client):
 async def test_scopus_api_error(mocker: Mocker, client: Client):
     mocker.patch(RETRIEVE, side_effect=SCOPUS_API_ERROR)
     res = await client.get(URL_CSV, params=CSV_PARAMS)
-    errors = assert_error_json(res, HTTP_502, "Scopus API Error")
+    errors = assert_error_json(res, HTTP_502, "any")
     assert errors[0]["els_status"] == "any"
     assert errors[0]["code_error"] == SCOPUS_ERRORS.get(HTTP_500)
     assert errors[1]["any"] == "any"

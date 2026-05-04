@@ -2,7 +2,7 @@ from pydantic_core import ValidationError
 from pytest import raises
 
 from src.adapters.helpers.scopus_response import ScopusResponse
-from src.core.common.error_messages import SCOPUS_API_ERROR, VALIDATE_ERROR
+from src.core.common.error_messages import VALIDATE_ERROR
 from src.core.common.types import ResponseBundle
 from src.core.config.scopus import SCOPUS_ERRORS
 from src.core.data.enums import ScopusCode
@@ -33,7 +33,7 @@ def test_status_error():
     res = ResponseBundle(HTTP_400, RAW_HEADERS_OK, RAW_SEARCH_OK)
     with raises(ScopusAPIError) as info:
         ScopusResponse.validate_search(res)
-    assert_http_error(info, HTTP_502, SCOPUS_API_ERROR)
+    assert_http_error(info, HTTP_502, "INVALID_INPUT")
     assert info.value.errors[0]["els_status"] and info.value.errors[1]
     code_error = SCOPUS_ERRORS.get(HTTP_400)
     assert info.value.errors[0]["code_error"] == code_error
@@ -43,7 +43,7 @@ def test_too_many_requests():
     res = ResponseBundle(HTTP_429, RAW_HEADERS_OK, RAW_SEARCH_OK)
     with raises(ScopusAPIError) as info:
         ScopusResponse.validate_search(res)
-    assert_http_error(info, HTTP_502, SCOPUS_API_ERROR)
+    assert_http_error(info, HTTP_502, "TOO_MANY_REQUESTS")
     assert info.value.errors[0]["els_status"] and info.value.errors[1]
     code_error = SCOPUS_ERRORS.get(HTTP_429)
     assert info.value.errors[0]["code_error"] == code_error
@@ -54,7 +54,7 @@ def test_quota_exceeded():
     res = ResponseBundle(HTTP_429, headers, RAW_SERVICE_ERROR_QUOTA)
     with raises(ScopusAPIError) as info:
         ScopusResponse.validate_search(res)
-    assert_http_error(info, HTTP_502, SCOPUS_API_ERROR)
+    assert_http_error(info, HTTP_502, ScopusCode.QUOTA)
     assert info.value.errors[0]["els_status"] == ScopusCode.QUOTA
     code_error = SCOPUS_ERRORS.get(HTTP_429)
     assert info.value.errors[0]["code_error"] == code_error
@@ -66,7 +66,7 @@ def test_rate_limit_exceeded():
     res = ResponseBundle(HTTP_429, headers, RAW_ERROR_RESPONSE_RATE_LIMIT)
     with raises(ScopusAPIError) as info:
         ScopusResponse.validate_search(res)
-    assert_http_error(info, HTTP_502, SCOPUS_API_ERROR)
+    assert_http_error(info, HTTP_502, ScopusCode.RATE_LIMIT)
     assert info.value.errors[0]["els_status"] == ScopusCode.RATE_LIMIT
     code_error = SCOPUS_ERRORS.get(HTTP_429)
     assert info.value.errors[0]["code_error"] == code_error

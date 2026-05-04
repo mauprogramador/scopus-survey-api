@@ -110,7 +110,7 @@ async def test_content_type_error(mocker: Mocker, client: Client):
         GET, new=AsyncMock(return_value=GET_CONTENT_TYPE_ERROR)
     )
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
-    errors = assert_error_json(res, HTTP_502, SCOPUS_API_ERROR)
+    errors = assert_error_json(res, HTTP_502, INVALID_JSON_ERROR)
     assert errors[0]["els_status"] == INVALID_JSON_ERROR
     assert errors[0]["code_error"] == SCOPUS_API_ERROR
     assert errors[1]["type"] == fqn(ContentTypeError)
@@ -121,7 +121,7 @@ async def test_content_type_error(mocker: Mocker, client: Client):
 async def test_no_data_error(mocker: Mocker, client: Client):
     mock = mocker.patch(GET, new=AsyncMock(return_value=GET_EMPTY_RESPONSE))
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
-    errors = assert_error_json(res, HTTP_502, SCOPUS_API_ERROR)
+    errors = assert_error_json(res, HTTP_502, INVALID_JSON_ERROR)
     assert errors[0]["els_status"] == INVALID_JSON_ERROR
     assert errors[0]["code_error"] == SCOPUS_API_ERROR
     assert errors[1]["type"] == fqn(JSONDecodeError)
@@ -135,7 +135,7 @@ async def test_json_decode_error(mocker: Mocker, client: Client):
         new=AsyncMock(return_value=GET_JSON_DECODE_ERROR),
     )
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
-    errors = assert_error_json(res, HTTP_502, SCOPUS_API_ERROR)
+    errors = assert_error_json(res, HTTP_502, INVALID_JSON_ERROR)
     assert errors[0]["els_status"] == INVALID_JSON_ERROR
     assert errors[0]["code_error"] == SCOPUS_API_ERROR
     assert errors[1]["type"] == fqn(JSONDecodeError)

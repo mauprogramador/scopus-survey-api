@@ -140,7 +140,7 @@ def test_scopus_api_error():
             HTTP_500, RAW_ERROR_RESPONSE_RATE_LIMIT, ScopusCode.RATE_LIMIT
         )
 
-    assert_http_error(info, HTTP_502, "Scopus API Error")
+    assert_http_error(info, HTTP_502, ScopusCode.RATE_LIMIT)
     assert info.value.errors[0]["els_status"] == ScopusCode.RATE_LIMIT
     assert info.value.errors[0]["code_error"] == SCOPUS_ERRORS.get(HTTP_500)
     assert info.value.errors[1] == RAW_ERROR_RESPONSE_RATE_LIMIT

@@ -148,7 +148,7 @@ async def test_content_type_error(mocker: Mocker, client: HTTPClient):
 
     with raises(ScopusAPIError) as info:
         await client.request("any")
-    assert_http_error(info, HTTP_502, SCOPUS_API_ERROR)
+    assert_http_error(info, HTTP_502, INVALID_JSON_ERROR)
     assert info.value.errors[0]["els_status"] == INVALID_JSON_ERROR
     assert info.value.errors[0]["code_error"] == SCOPUS_API_ERROR
     assert info.value.errors[1]["type"] == fqn(ContentTypeError)
@@ -166,7 +166,7 @@ async def test_no_data_error(mocker: Mocker, client: HTTPClient):
 
     with raises(ScopusAPIError) as info:
         await client.request("any")
-    assert_http_error(info, HTTP_502, SCOPUS_API_ERROR)
+    assert_http_error(info, HTTP_502, INVALID_JSON_ERROR)
     assert info.value.errors[0]["els_status"] == INVALID_JSON_ERROR
     assert info.value.errors[0]["code_error"] == SCOPUS_API_ERROR
     assert info.value.errors[1]["type"] == fqn(JSONDecodeError)
@@ -184,7 +184,7 @@ async def test_json_decode_error(mocker: Mocker, client: HTTPClient):
 
     with raises(ScopusAPIError) as info:
         await client.request("any")
-    assert_http_error(info, HTTP_502, SCOPUS_API_ERROR)
+    assert_http_error(info, HTTP_502, INVALID_JSON_ERROR)
     assert info.value.errors[0]["els_status"] == INVALID_JSON_ERROR
     assert info.value.errors[0]["code_error"] == SCOPUS_API_ERROR
     assert info.value.errors[1]["type"] == fqn(JSONDecodeError)

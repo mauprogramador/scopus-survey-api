@@ -8,7 +8,7 @@ from pydantic_core import ValidationError
 from pytest import mark
 from pytest_mock import MockerFixture as Mocker
 
-from src.core.common.error_messages import SCOPUS_API_ERROR, VALIDATE_ERROR
+from src.core.common.error_messages import VALIDATE_ERROR
 from src.core.config.scopus import SCOPUS_ERRORS
 from src.core.data.enums import ScopusCode
 from tests.conftest import assert_error_json
@@ -56,7 +56,7 @@ async def test_status_error(
     RESPONSE_STATUS_ERROR.status = status
     mocker.patch(GET, new=AsyncMock(return_value=RESPONSE_STATUS_ERROR))
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
-    errors = assert_error_json(res, HTTP_502, SCOPUS_API_ERROR)
+    errors = assert_error_json(res, HTTP_502, "ERROR")
     assert errors[0]["els_status"] and errors[1]["error"] == "any"
     assert errors[0]["code_error"] == SCOPUS_ERRORS.get(status)
 
@@ -65,7 +65,7 @@ async def test_status_error(
 async def test_quota_exceeded(mocker: Mocker, client: Client):
     mocker.patch(GET, new=AsyncMock(return_value=RESPONSE_QUOTA_EXCEEDED))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
-    errors = assert_error_json(res, HTTP_502, SCOPUS_API_ERROR)
+    errors = assert_error_json(res, HTTP_502, ScopusCode.QUOTA)
     assert errors[0]["els_status"] == ScopusCode.QUOTA
     assert errors[0]["code_error"] == SCOPUS_ERRORS.get(HTTP_429)
     assert errors[1] == RAW_SERVICE_ERROR_QUOTA
@@ -75,7 +75,7 @@ async def test_quota_exceeded(mocker: Mocker, client: Client):
 async def test_rate_limit_exceeded(mocker: Mocker, client: Client):
     mocker.patch(GET, new=AsyncMock(return_value=RESPONSE_RATE_LIMIT_EXCEEDED))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
-    errors = assert_error_json(res, HTTP_502, SCOPUS_API_ERROR)
+    errors = assert_error_json(res, HTTP_502, ScopusCode.RATE_LIMIT)
     assert errors[0]["els_status"] == ScopusCode.RATE_LIMIT
     assert errors[0]["code_error"] == SCOPUS_ERRORS.get(HTTP_429)
     assert errors[1] == RAW_ERROR_RESPONSE_RATE_LIMIT
