@@ -75,5 +75,6 @@ def test_incorrect(mocker: Mocker):
     mock.assert_called_once_with(SIGNED_TOKEN, MAX_AGE)
 
 
-def test_ok():
-    CSRFToken.verify_csrf_token(SIGNED_TOKEN, CSRF_TOKEN)
+def test_verify():
+    token, signed = CSRFToken.generate_csrf_tokens()
+    CSRFToken.verify_csrf_token(signed, token)
