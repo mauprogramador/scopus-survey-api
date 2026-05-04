@@ -21,8 +21,8 @@ Token: TypeAdapter[str | None] = TypeAdapter(
         str | None,
         Field(
             pattern=TOKEN_PATTERN,
-            min_length=40,
-            max_length=40,
+            min_length=64,
+            max_length=64,
         ),
     ]
 )

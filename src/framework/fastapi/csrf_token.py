@@ -1,4 +1,4 @@
-from hashlib import sha1
+from hashlib import blake2s
 from typing import Annotated
 
 from fastapi import Cookie, Header
@@ -47,7 +47,7 @@ class CSRFToken:
 
     @classmethod
     def generate_csrf_tokens(cls) -> tuple[str, str]:
-        token = sha1(TOKEN.encode(encoding="utf-8")).hexdigest()
+        token = blake2s(TOKEN.encode(encoding="utf-8")).hexdigest()
         signed = cls._SERIALIZER.dumps(token)
         return token, signed
 
