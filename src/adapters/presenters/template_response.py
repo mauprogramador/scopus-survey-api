@@ -5,7 +5,7 @@ from pathlib import Path
 from fastapi import Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
-from jinja2 import Environment, FileSystemLoader
+from jinja2 import Environment, FileSystemLoader, select_autoescape
 from starlette.responses import Response
 
 from src import __contact__, __version__
@@ -39,8 +39,11 @@ class TemplateResponse:
         dist_dir = Path("web/templates/dist")
         dist_dir.mkdir(exist_ok=True)
 
-        env = Environment(loader=FileSystemLoader("web/templates"))
-        template = env.get_template("index.html")
+        env = Environment(
+            autoescape=select_autoescape(disabled_extensions=[".html.jinja"]),
+            loader=FileSystemLoader(cls.TEMPLATES_DIR),
+        )
+        template = env.get_template("index.html.jinja")
 
         for lang in Lang:
             context = {
