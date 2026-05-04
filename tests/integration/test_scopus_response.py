@@ -34,6 +34,7 @@ from tests.mocks.raw import (
     URL_SEARCH,
 )
 
+
 GET = fqn(RetryClient.get)
 
 

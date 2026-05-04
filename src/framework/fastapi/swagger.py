@@ -3,6 +3,7 @@ from http import HTTPStatus
 from src import __contact__, __license__
 from src.adapters.presenters.json_response import ErrorResponse
 
+
 DESCRIPTION = """
 <br>
 **Instituto Federal de Educação, Ciência e Tecnologia de Mato Grosso do Sul**

@@ -20,6 +20,7 @@ from tests.mocks.helpers import (
 )
 from tests.mocks.raw import API_KEY, HTTP_200, KEYWORDS, LOG_QUOTA
 
+
 COMBINATION_FINDER = KeywordCombinationFinder(
     MagicMock(
         spec=URLBuilder,

@@ -38,6 +38,7 @@ from tests.mocks.unitary import (
     GET_SUCCESS,
 )
 
+
 ASYNC_LIMITER_AENTER = fqn(AsyncLimiter.__aenter__)
 ASYNC_LIMITER_AEXIT = fqn(AsyncLimiter.__aexit__)
 SEMAPHORE_AENTER = fqn(Semaphore.__aenter__)

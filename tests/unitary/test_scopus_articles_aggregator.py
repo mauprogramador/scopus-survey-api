@@ -25,6 +25,7 @@ from tests.mocks.unitary import (
     SAME_TITLE_AND_AUTHORS,
 )
 
+
 RETRIEVE_ABSTRACTS = AsyncMock()
 FILTER = Mock(side_effect=mock_filter)
 SET_LOSS = Mock()

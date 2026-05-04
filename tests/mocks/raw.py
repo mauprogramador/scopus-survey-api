@@ -13,6 +13,7 @@ from src.core.data.enums import Button, Lang, ScopusCode
 from src.core.data.serializers import ScopusHeaders
 from src.framework.fastapi.csrf_token import CSRFToken
 
+
 # HTTP Status code
 
 HTTP_200 = HTTPStatus.OK

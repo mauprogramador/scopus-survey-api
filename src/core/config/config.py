@@ -8,6 +8,7 @@ from slowapi.util import get_remote_address
 from src.core.config.env import EnvConfig
 from src.utils.logging import Logging
 
+
 APP = "src.framework.fastapi.main:app"
 PREFIX = "/v2/scopus-survey"
 

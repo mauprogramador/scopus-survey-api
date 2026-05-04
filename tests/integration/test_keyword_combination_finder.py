@@ -20,6 +20,7 @@ from tests.mocks.raw import (
     URL_COMBINATION,
 )
 
+
 STEP = fqn(ProgressBar.step)
 GET = fqn(RetryClient.get)
 

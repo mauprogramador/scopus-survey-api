@@ -19,6 +19,7 @@ from tests.mocks.integration import (
 )
 from tests.mocks.raw import HTTP_200, SEARCH_PARAMS, URL_SEARCH
 
+
 GET = fqn(RetryClient.get)
 
 

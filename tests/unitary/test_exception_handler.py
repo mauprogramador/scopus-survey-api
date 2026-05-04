@@ -26,6 +26,7 @@ from tests.mocks.raw import (
     REQUEST,
 )
 
+
 HANDLER = ExceptionHandler()
 
 

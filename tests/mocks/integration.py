@@ -20,6 +20,7 @@ from tests.mocks.raw import (
     RAW_SERVICE_ERROR_QUOTA,
 )
 
+
 # Routes
 
 COMBINATION_RESPONSES = [response_mock(RAW_SEARCH_OK)] * 3

@@ -31,6 +31,7 @@ from tests.mocks.raw import (
     URL_SEARCH,
 )
 
+
 LOG_QUOTA = fqn(KeywordCombinationFinder, "LOG.quota")
 GET = fqn(RetryClient.get)
 

@@ -18,6 +18,7 @@ from tests.mocks.raw import (
     RAW_SEARCH_OK,
 )
 
+
 # HTTPClient.request
 
 GET_SUCCESS = response_mock(RAW_SEARCH_OK)

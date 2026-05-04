@@ -3,6 +3,7 @@ from http import HTTPStatus
 
 from src.core.data.enums import PageRange
 
+
 CURRENT_YEAR = datetime.now().year
 # Last 3 years: considering rapidly evolving fields of study.
 LAST_THREE_YEARS = CURRENT_YEAR - 3

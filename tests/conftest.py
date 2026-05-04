@@ -16,6 +16,7 @@ from src.core.domain.translations import Translations
 from src.framework.fastapi.main import app
 from tests.mocks.raw import CSRF_TOKEN, CSV_FILE_NAME, SIGNED_TOKEN
 
+
 install()
 TIMEOUT = 15
 BASE_URL = urljoin("http://127.0.0.1:123", PREFIX)

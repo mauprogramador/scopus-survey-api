@@ -12,6 +12,7 @@ from tests.mocks.raw import (
     API_KEY,
 )
 
+
 URL_BUILDER = URLBuilder()
 
 

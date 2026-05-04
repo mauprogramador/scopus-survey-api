@@ -14,6 +14,7 @@ import uvloop
 
 from src.core.config.config import APP, ENV, LOG, SERVER
 
+
 if __name__ == "__main__":
     SERVER.set(f"Uvicorn/{uvicorn.__version__}")
     LOG.info("\033[33mScopus Survey API was initialized 🚀")

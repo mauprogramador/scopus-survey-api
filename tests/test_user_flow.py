@@ -36,6 +36,7 @@ from tests.mocks.raw import (
     URL_WEB,
 )
 
+
 GET = fqn(RetryClient.get)
 
 
@@ -80,7 +81,7 @@ class TestUserFlowSurveySteps:
             URL_CSV,
             params=csv_params,
             cookies={"csrf-token": cls._token_cookie},
-            headers={"X-CSRF-Token": cls._token_header}
+            headers={"X-CSRF-Token": cls._token_header},
         )
         assert res.status_code == HTTP_404
         assert res.headers.get("Content-Type") in JSON_CONTENT_TYPE
@@ -105,7 +106,7 @@ class TestUserFlowSurveySteps:
             URL_COMBINATION,
             params=combination_params,
             cookies={"csrf-token": cls._token_cookie},
-            headers={"X-CSRF-Token": cls._token_header}
+            headers={"X-CSRF-Token": cls._token_header},
         )
         assert res.status_code == HTTP_200
         assert res.headers.get("Content-Type") == JSON_CONTENT_TYPE

@@ -11,6 +11,7 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from src.core.domain.http_exceptions import HTTPError, ScopusAPIError
 
+
 HTTP_ERROR = HTTPError(HTTPStatus.BAD_REQUEST, "any", ValueError("any"))
 
 SCOPUS_API_ERROR = ScopusAPIError(

@@ -27,6 +27,7 @@ from tests.mocks.unitary import (
     ONE_GROUP_TWO_SIMILAR,
 )
 
+
 SIMILARITY_FILTER = ArticlesSimilarityFilter()
 TO_DATETIME = fqn(ArticlesSimilarityFilter, to_datetime)
 LOG_DEBUG = fqn(ArticlesSimilarityFilter, "LOG.debug")

@@ -32,6 +32,7 @@ from tests.mocks.raw import (
     URL_SEARCH,
 )
 
+
 MAKE_COMBINATOR = fqn(survey_bibliographic_data, make_combinator)
 MAKE_AGGREGATOR = fqn(survey_bibliographic_data, make_aggregator)
 SURVEY_COMBINATIONS = AsyncMock(

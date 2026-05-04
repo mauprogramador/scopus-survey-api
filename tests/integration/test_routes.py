@@ -24,6 +24,7 @@ from tests.mocks.raw import (
     URL_WEB,
 )
 
+
 GET = fqn(RetryClient.get)
 
 

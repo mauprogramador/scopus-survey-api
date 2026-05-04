@@ -29,6 +29,7 @@ from tests.mocks.raw import (
     URL_CSV,
 )
 
+
 RETRIEVE = fqn(CSVResponse.retrieve)
 
 

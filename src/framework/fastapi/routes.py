@@ -23,6 +23,7 @@ from src.framework.fastapi.swagger import (
     JSON_RESPONSE,
 )
 
+
 favicon_router = APIRouter()
 router = APIRouter(prefix=PREFIX)
 

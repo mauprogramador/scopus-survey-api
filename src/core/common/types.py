@@ -5,6 +5,7 @@ from pydantic import BaseModel, Field, TypeAdapter
 from src.core.common.patterns import KEYWORD_PATTERN, TOKEN_PATTERN
 from src.core.data.enums import DocType, PageRange, PubStage, SrcType, SubjArea
 
+
 Keyword: TypeAlias = Annotated[
     str, Field(pattern=KEYWORD_PATTERN, min_length=2, max_length=70)
 ]

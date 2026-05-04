@@ -17,6 +17,7 @@ from tests.conftest import assert_http_error
 from tests.mocks.helpers import fqn
 from tests.mocks.raw import CSRF_TOKEN, HTTP_401, SIGNED_TOKEN
 
+
 LOADS = fqn(URLSafeTimedSerializer.loads)
 
 

@@ -16,6 +16,7 @@ from gunicorn.arbiter import Arbiter
 
 from src.core.config.config import APP, ENV, LOG, SERVER
 
+
 SERVER.set(f"Gunicorn/{gunicorn.__version__}")
 
 

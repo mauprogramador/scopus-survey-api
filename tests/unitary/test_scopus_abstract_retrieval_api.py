@@ -31,6 +31,7 @@ from tests.mocks.unitary import (
     ONE_ABSTRACT_FULL,
 )
 
+
 SURVEY_DETAILS = MagicMock(spec=SurveyDetails, abstract_quota=LOG_QUOTA)
 ABSTRACT_API = ScopusAbstractRetrievalAPI(
     AsyncMock(spec=HTTPClient),

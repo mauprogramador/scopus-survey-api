@@ -30,6 +30,7 @@ from tests.mocks.integration import (
 )
 from tests.mocks.raw import HTTP_200, HTTP_503, SEARCH_PARAMS, URL_SEARCH
 
+
 TO_DATETIME = fqn(ArticlesSimilarityFilter, to_datetime)
 LOG_DEBUG = fqn(ArticlesSimilarityFilter, "LOG.debug")
 IDXMAX = fqn(Series.idxmax)

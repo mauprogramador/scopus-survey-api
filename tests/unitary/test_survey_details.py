@@ -10,6 +10,7 @@ from tests.mocks.raw import (
     RESET_DATETIME,
 )
 
+
 SURVEY_DETAIL = SurveyDetails()
 
 

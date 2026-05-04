@@ -33,6 +33,7 @@ from src.core.domain.http_exceptions import (
     ScopusAPIError,
 )
 
+
 # Scopus API Rate Limit: 9 requests per second
 # https://dev.elsevier.com/api_key_settings.html
 
