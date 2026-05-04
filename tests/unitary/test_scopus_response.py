@@ -30,7 +30,8 @@ def test_scopus_response():
 
 
 def test_status_error():
-    res = ResponseBundle(HTTP_400, RAW_HEADERS_OK, RAW_SEARCH_OK)
+    headers = {"X-ELS-Status": "INVALID_INPUT"}
+    res = ResponseBundle(HTTP_400, headers, RAW_SEARCH_OK)
     with raises(ScopusAPIError) as info:
         ScopusResponse.validate_search(res)
     assert_http_error(info, HTTP_502, "INVALID_INPUT")
@@ -40,7 +41,8 @@ def test_status_error():
 
 
 def test_too_many_requests():
-    res = ResponseBundle(HTTP_429, RAW_HEADERS_OK, RAW_SEARCH_OK)
+    headers = {"X-ELS-Status": "TOO_MANY_REQUESTS"}
+    res = ResponseBundle(HTTP_429, headers, RAW_SEARCH_OK)
     with raises(ScopusAPIError) as info:
         ScopusResponse.validate_search(res)
     assert_http_error(info, HTTP_502, "TOO_MANY_REQUESTS")
