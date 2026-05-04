@@ -1,4 +1,3 @@
-from pathlib import Path
 import shutil
 
 from fastapi.templating import Jinja2Templates
@@ -14,18 +13,16 @@ from tests.mocks.raw import CSRF_TOKEN, HTML_MEDIA, HTTP_200, HTTP_404, REQUEST
 
 
 def test_build_all(mocker: Mocker):
-    dist_dir = Path("web/templates/dist")
-
-    if dist_dir.exists():
-        shutil.rmtree(dist_dir)
-    dist_dir.mkdir()
+    if TemplateResponse.DIST_DIR.exists():
+        shutil.rmtree(TemplateResponse.DIST_DIR)
+    TemplateResponse.DIST_DIR.mkdir()
 
     spy_jinja = mocker.spy(Template, "render")
     TemplateResponse.build_all()
 
-    assert dist_dir.exists()
-    assert (dist_dir / "index_en_US.html").exists()
-    assert (dist_dir / "index_pt_BR.html").exists()
+    assert TemplateResponse.DIST_DIR.exists()
+    assert TemplateResponse.INDEX_FILENAMES[Lang.EN_US].exists()
+    assert TemplateResponse.INDEX_FILENAMES[Lang.PT_BR].exists()
 
     assert spy_jinja.call_count == 2
     context = spy_jinja.call_args_list[0].kwargs

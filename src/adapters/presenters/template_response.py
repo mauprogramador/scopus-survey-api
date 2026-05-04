@@ -25,7 +25,21 @@ class TemplateResponse:
         "Expires": "0",
         "Content-Language": Lang.EN_US,
     }
-    _TEMPLATES = Jinja2Templates(directory="web/templates")
+    TEMPLATES_DIR = Path("web/templates")
+    DIST_DIR = Path("web/templates/dist")
+    DIST = Path("dist")
+    INDEX_EN_FILENAME = f"index_{Lang.EN_US.locale}.html.jinja"
+    INDEX_PT_FILENAME = f"index_{Lang.PT_BR.locale}.html.jinja"
+    INDEX_FILENAMES = {
+        Lang.EN_US: (DIST_DIR / INDEX_EN_FILENAME),
+        Lang.PT_BR: (DIST_DIR / INDEX_PT_FILENAME),
+    }
+    INDEX_DIST_FILENAMES = {
+        Lang.EN_US: str(DIST / INDEX_EN_FILENAME),
+        Lang.PT_BR: str(DIST / INDEX_PT_FILENAME),
+    }
+    ERROR_FILENAME = "error.html.jinja"
+    _TEMPLATES = Jinja2Templates(directory=TEMPLATES_DIR)
 
     @classmethod
     def _dummy_url_for(cls, name: str, **path_params) -> str:
@@ -36,8 +50,7 @@ class TemplateResponse:
 
     @classmethod
     def build_all(cls) -> None:
-        dist_dir = Path("web/templates/dist")
-        dist_dir.mkdir(exist_ok=True)
+        cls.DIST_DIR.mkdir(exist_ok=True)
 
         env = Environment(
             autoescape=select_autoescape(disabled_extensions=[".html.jinja"]),
@@ -59,7 +72,7 @@ class TemplateResponse:
 
             shell_html = template.render(**context)
 
-            filename = dist_dir / f"index_{lang.locale}.html"
+            filename = cls.INDEX_FILENAMES[lang]
             with open(filename, "w", encoding="utf-8") as file:
                 file.write(shell_html)
 
@@ -77,7 +90,7 @@ class TemplateResponse:
 
         return cls._TEMPLATES.TemplateResponse(
             request,
-            f"dist/index_{lang.locale}.html",
+            cls.INDEX_DIST_FILENAMES[lang],
             {"csrf_token": csrf_token},
             HTTPStatus.OK,
             headers,
@@ -101,7 +114,7 @@ class TemplateResponse:
 
         return cls._TEMPLATES.TemplateResponse(
             request,
-            "error.html",
+            cls.ERROR_FILENAME,
             context,
             response.status_code,
             cls._ERROR_PAGE_HEADERS,
