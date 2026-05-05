@@ -14,7 +14,7 @@ from src.core.common.error_messages import (
 )
 from src.utils.progress_bar import ProgressBar
 from tests.conftest import assert_error_json
-from tests.mocks.helpers import fqn, load_csv_file_response_dataframe
+from tests.mocks.helpers import fqn, load_csv_from_response
 from tests.mocks.integration import (
     SEARCH_CANCELLED_ERROR,
     SEARCH_MORE_PAGES_FULL_RESULTS,
@@ -108,7 +108,7 @@ async def test_search_one_page_one_result(mocker: Mocker, client: Client):
     )
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     assert res.status_code == HTTP_200 and mock.call_count == 2
-    df = load_csv_file_response_dataframe(res)
+    df = load_csv_from_response(res)
     assert df.shape[0] == 1
 
 
@@ -120,7 +120,7 @@ async def test_search_one_page_full_results(mocker: Mocker, client: Client):
     )
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     assert res.status_code == HTTP_200 and mock.call_count == 26
-    df = load_csv_file_response_dataframe(res)
+    df = load_csv_from_response(res)
     assert df.shape[0] == 1
 
 
@@ -134,7 +134,7 @@ async def test_search_two_pages_partial_results(
     )
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     assert res.status_code == HTTP_200 and mock.call_count == 32
-    df = load_csv_file_response_dataframe(res)
+    df = load_csv_from_response(res)
     assert df.shape[0] == 1
 
 
@@ -146,7 +146,7 @@ async def test_search_two_pages_full_results(mocker: Mocker, client: Client):
     )
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     assert res.status_code == HTTP_200 and mock.call_count == 52
-    df = load_csv_file_response_dataframe(res)
+    df = load_csv_from_response(res)
     assert df.shape[0] == 1
 
 
@@ -160,7 +160,7 @@ async def test_search_more_pages_partial_results(
     )
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     assert res.status_code == HTTP_200 and mock.call_count == 158
-    df = load_csv_file_response_dataframe(res)
+    df = load_csv_from_response(res)
     assert df.shape[0] == 1
 
 
@@ -172,7 +172,7 @@ async def test_search_more_pages_full_results(mocker: Mocker, client: Client):
     )
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     assert res.status_code == HTTP_200 and mock.call_count == 182
-    df = load_csv_file_response_dataframe(res)
+    df = load_csv_from_response(res)
     assert df.shape[0] == 1
 
 
@@ -192,7 +192,7 @@ async def test_search_one_last_quota(mocker: Mocker, client: Client):
     mock = mocker.patch(GET, new=AsyncMock(side_effect=SEARCH_ONE_QUOTA))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     assert res.status_code == HTTP_200 and mock.call_count == 52
-    df = load_csv_file_response_dataframe(res)
+    df = load_csv_from_response(res)
     assert df.shape[0] == 1
 
 
@@ -203,7 +203,7 @@ async def test_search_no_remaining_quota(mocker: Mocker, client: Client):
     )
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     assert res.status_code == HTTP_200 and mock.call_count == 26
-    df = load_csv_file_response_dataframe(res)
+    df = load_csv_from_response(res)
     assert df.shape[0] == 1
 
 

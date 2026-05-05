@@ -70,7 +70,7 @@ def mock_from_iterable(*_) -> tuple[str, ...]:
     return ("Python",)
 
 
-def load_csv_file_response_dataframe(response: Response) -> DataFrame:
+def load_csv_from_response(response: Response) -> DataFrame:
     """Load DataFrame from CSV file response ignoring metadata"""
     buffer_data = StringIO(response.content.decode())
     return read_csv(

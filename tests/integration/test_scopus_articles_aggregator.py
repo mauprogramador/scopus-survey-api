@@ -10,7 +10,7 @@ from src.core.data.survey_details import SurveyDetails
 from src.core.use_cases.articles_similarity_filter import (
     ArticlesSimilarityFilter,
 )
-from tests.mocks.helpers import fqn, load_csv_file_response_dataframe
+from tests.mocks.helpers import fqn, load_csv_from_response
 from tests.mocks.integration import (
     EXACT_DUPLICATES,
     MORE_DIFFERENT_ARTICLES,
@@ -34,7 +34,7 @@ async def test_one_row(mocker: Mocker, client: Client):
     spy_loss = mocker.spy(SurveyDetails, "set_loss")
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
 
-    df = load_csv_file_response_dataframe(res)
+    df = load_csv_from_response(res)
     assert res.status_code == HTTP_200 and mock.call_count == 2
     assert df.shape[0] == 1
     spy_drop.assert_not_called()
@@ -53,7 +53,7 @@ async def test_more_rows(mocker: Mocker, client: Client):
     spy_loss = mocker.spy(SurveyDetails, "set_loss")
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
 
-    df = load_csv_file_response_dataframe(res)
+    df = load_csv_from_response(res)
     assert res.status_code == HTTP_200 and mock.call_count == 8
     assert df.shape[0] == 7
     spy_drop.assert_called()
@@ -73,7 +73,7 @@ async def test_drop_exact_duplicates(mocker: Mocker, client: Client):
     spy_loss = mocker.spy(SurveyDetails, "set_loss")
 
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
-    df = load_csv_file_response_dataframe(res)
+    df = load_csv_from_response(res)
     df_in: DataFrame = spy_drop.call_args_list[0].args[0]
     df_out: DataFrame = spy_reset.call_args_list[0].args[0]
 
@@ -97,7 +97,7 @@ async def test_drop_same_title_and_authors(mocker: Mocker, client: Client):
     spy_loss = mocker.spy(SurveyDetails, "set_loss")
 
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
-    df = load_csv_file_response_dataframe(res)
+    df = load_csv_from_response(res)
     df_in: DataFrame = spy_drop.call_args_list[1].args[0]
     df_out: DataFrame = spy_reset.call_args_list[1].args[0]
 
@@ -119,7 +119,7 @@ async def test_non_ratio(mocker: Mocker, client: Client):
 
     SEARCH_PARAMS.setdefault("threshold", 0)
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
-    df = load_csv_file_response_dataframe(res)
+    df = load_csv_from_response(res)
 
     assert res.status_code == HTTP_200 and mock.call_count == 8
     assert df.shape[0] == 7

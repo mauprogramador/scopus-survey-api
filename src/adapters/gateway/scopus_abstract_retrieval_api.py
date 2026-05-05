@@ -33,15 +33,15 @@ class ScopusAbstractRetrievalAPI:
 
     def __init__(
         self,
-        http_retry: HTTPClient,
+        http_client: HTTPClient,
         url_builder: URLBuilder,
         survey_details: SurveyDetails,
     ) -> None:
         """Retrieves Scopus abstracts via the Scopus Abstract Retrieval API"""
-        self._http_retry = http_retry
+        self._http_client = http_client
         self._url_builder = url_builder
         self._details = survey_details
-        self._results: QuotaResultsHandler = None
+        self._state: QuotaResultsHandler = None
 
         try:
             self._workers = min(2 * len(sched_getaffinity(0)), 32)
@@ -49,11 +49,11 @@ class ScopusAbstractRetrievalAPI:
             self._workers = min(2 * (cpu_count() or 4), 32)
 
     async def _get_abstract(self, index: int) -> ResponseBundle:
-        url = self._url_builder.abstract_url(self._results.entry[index].url)
-        return await self._http_retry.request(url)
+        url = self._url_builder.abstract_url(self._state.entry[index].url)
+        return await self._http_client.request(url)
 
     async def _get_multiple_abstracts(self) -> None:
-        total = self._results.total_abstracts - self._FIRST_ABSTRACT
+        total = self._state.total_abstracts - self._FIRST_ABSTRACT
         max_workers = min(total, self._workers)
         LOG.debug({"max_workers": max_workers})
 
@@ -69,7 +69,7 @@ class ScopusAbstractRetrievalAPI:
 
         with (
             ThreadPoolExecutor(max_workers) as executor,
-            ProgressBar.start(total) as progress_bar,
+            ProgressBar.start(total) as progress,
         ):
             for future in as_completed(all_tasks):
                 remaining_tasks.discard(future)
@@ -84,8 +84,8 @@ class ScopusAbstractRetrievalAPI:
                         response,
                     )
                     abstract_data = abstract.model_dump(by_alias=True)
-                    self._results.abstracts.append(abstract_data)
-                    progress_bar.step()
+                    self._state.abstracts.append(abstract_data)
+                    progress.step()
 
                 except (CancelledError, HTTPError, Exception) as exc:
 
@@ -104,40 +104,39 @@ class ScopusAbstractRetrievalAPI:
         self._details.set_abstract_quota(last_completed)
 
     async def _get_one_abstract(self, index: int) -> None:
-        url = self._results.entry[index].url
+        url = self._state.entry[index].url
         url = self._url_builder.abstract_url(url)
 
-        response = await self._http_retry.request(url)
+        response = await self._http_client.request(url)
         self._details.set_abstract_quota(response)
 
         abstract = ScopusResponse.validate_abstract(response)
         abstract_data = abstract.model_dump(by_alias=True)
-        self._results.abstracts.append(abstract_data)
+        self._state.abstracts.append(abstract_data)
 
     async def retrieve_abstracts(
-        self, api_key: str, results: QuotaResultsHandler
+        self, api_key: str, state: QuotaResultsHandler
     ) -> DataFrame:
-        self._results = results
+        self._state = state
         self._url_builder.set_abstract_query(api_key)
+        self._state.fix_total()
 
         try:
             await self._get_one_abstract(self._ONE_RESULT_INDEX)
 
-            if self._results.total_abstracts > 1:
-                self._results.handle_abstract_quota(
-                    self._details.abstract_quota
-                )
+            if self._state.total_abstracts > 1:
+                self._state.handle_abstract_quota(self._details.abstract_quota)
 
-            if self._results.total_abstracts == 2:
+            if self._state.total_abstracts == 2:
                 await self._get_one_abstract(self._TWO_RESULTS_INDEX)
 
-            if self._results.total_abstracts > 2:
-                await self._http_retry.update_strategy(
-                    self._results.total_abstracts
+            if self._state.total_abstracts > 2:
+                await self._http_client.update_strategy(
+                    self._state.total_abstracts
                 )
                 await self._get_multiple_abstracts()
         finally:
-            await self._http_retry.close()
+            await self._http_client.close()
 
-        self._details.set_results(self._results.total_abstracts)
-        return DataFrame(self._results.abstracts)
+        self._details.set_results(self._state.total_abstracts)
+        return DataFrame(self._state.abstracts)

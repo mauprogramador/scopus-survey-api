@@ -43,7 +43,7 @@ class ScopusSearchAPI:
         self._http_client = http_client
         self._url_builder = url_builder
         self._details = survey_details
-        self._results: QuotaResultsHandler = None
+        self._state: QuotaResultsHandler = None
 
         try:
             self._workers = min(2 * len(sched_getaffinity(0)), 32)
@@ -74,7 +74,7 @@ class ScopusSearchAPI:
 
         with (
             ThreadPoolExecutor(max_workers) as executor,
-            ProgressBar.start(len(bundles_map)) as progress_bar,
+            ProgressBar.start(len(bundles_map)) as progress,
         ):
             for future in as_completed(all_tasks):
                 remaining_tasks.discard(future)
@@ -89,7 +89,7 @@ class ScopusSearchAPI:
                         response,
                     )
                     bundles_map[index].total = search.total_results
-                    progress_bar.step()
+                    progress.step()
 
                 except (CancelledError, HTTPError, Exception) as exc:
 
@@ -113,12 +113,12 @@ class ScopusSearchAPI:
         return [bundle.model_dump() for bundle in bundles_map.values()]
 
     async def _get_by_pagination(self, index: int) -> ResponseBundle:
-        page = index * self._results.items_per_page
+        page = index * self._state.items_per_page
         url = self._url_builder.pagination_url(page)
         return await self._http_client.request(url)
 
     async def _get_multiple_articles_by_pagination(self) -> None:
-        pages_count = self._results.pages_count
+        pages_count = self._state.pages_count
         max_workers = min((pages_count - self._FIRST_SEARCH), self._workers)
         LOG.debug({"max_workers": max_workers})
 
@@ -132,12 +132,12 @@ class ScopusSearchAPI:
         remaining_tasks = all_tasks.copy()
         last_completed: ResponseBundle = None
 
-        total = self._results.total_results
-        step = self._results.items_per_page
+        total = self._state.total_results
+        step = self._state.items_per_page
 
         with (
             ThreadPoolExecutor(max_workers) as executor,
-            ProgressBar.start(total, step, self._FIRST_SEARCH) as progress_bar,
+            ProgressBar.start(total, step, self._FIRST_SEARCH) as progress,
         ):
             for future in as_completed(all_tasks):
                 remaining_tasks.discard(future)
@@ -151,8 +151,8 @@ class ScopusSearchAPI:
                         ScopusResponse.validate_search,
                         response,
                     )
-                    self._results.entry.extend(search.entry)
-                    progress_bar.step()
+                    self._state.entry.extend(search.entry)
+                    progress.step()
 
                 except (CancelledError, HTTPError, Exception) as exc:
 
@@ -186,25 +186,25 @@ class ScopusSearchAPI:
             if self._results.total_results == 0:
                 raise NotFound(ARTICLES_NOT_FOUND)
 
-            if self._results.pages_count > 1:
-                self._results.handle_search_quota(self._details.search_quota)
+            if self._state.pages_count > 1:
+                self._state.handle_search_quota(self._details.search_quota)
 
-            if self._results.pages_count == 2:
+            if self._state.pages_count == 2:
                 response = await self._get_by_pagination(self._PAGE_TWO_INDEX)
                 self._details.set_search_quota(response)
 
                 search_results = ScopusResponse.validate_search(response)
-                self._results.entry.extend(search_results.entry)
+                self._state.entry.extend(search_results.entry)
 
-            elif self._results.pages_count > 2:
+            if self._state.pages_count > 2:
                 await self._http_client.update_strategy(
-                    self._results.total_results
+                    self._state.total_results
                 )
                 await self._get_multiple_articles_by_pagination()
 
-            LOG.info(f"Total Found: \033[33m{self._results.total_results}")
+            LOG.info(f"Total Found: \033[33m{self._state.total_results}")
 
         finally:
             await self._http_client.close()
 
-        return self._results
+        return self._state

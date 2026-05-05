@@ -17,7 +17,7 @@ from src.core.data.enums import Column
 from tests.conftest import assert_error_json
 from tests.mocks.helpers import (
     fqn,
-    load_csv_file_response_dataframe,
+    load_csv_from_response,
     response_mock,
     search_raw,
 )
@@ -163,7 +163,7 @@ class TestUserFlowSurveySteps:
         filename: str | None = res.headers.get("X-CSV-Filename")
         assert filename == f"{cls._api_key}_{cls._combination.lower()}_{FILE}"
 
-        df = load_csv_file_response_dataframe(res)
+        df = load_csv_from_response(res)
         assert df.shape == (1, 11)
         assert df[Column.URL].iloc[0] == URLBuilder.article_page_url(
             "0123456789"
@@ -210,7 +210,7 @@ class TestUserFlowSurveySteps:
         assert res.headers.get("X-API-Key") == cls._api_key
         assert res.headers.get("X-CSV-Filename") is not None
 
-        df = load_csv_file_response_dataframe(res)
+        df = load_csv_from_response(res)
         assert df.shape == (1, 11)
         assert df[Column.URL].iloc[0] == URLBuilder.article_page_url(
             "0123456789"

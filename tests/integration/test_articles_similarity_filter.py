@@ -16,7 +16,7 @@ from src.core.use_cases.articles_similarity_filter import (
     ArticlesSimilarityFilter,
 )
 from tests.conftest import assert_error_json
-from tests.mocks.helpers import fqn, load_csv_file_response_dataframe
+from tests.mocks.helpers import fqn, load_csv_from_response
 from tests.mocks.integration import (
     MORE_GROUPS_MORE_SIMILAR,
     MORE_GROUPS_NO_SIMILAR,
@@ -48,7 +48,7 @@ async def test_one_group_two_similar_titles(mocker: Mocker, client: Client):
     spy.assert_called_once()
 
     assert res.status_code == HTTP_200 and mock.call_count == 3
-    df = load_csv_file_response_dataframe(res)
+    df = load_csv_from_response(res)
     assert df.shape[0] == 1
     assert df[Column.AUTHORS].iloc[0] == "a"
     assert df[Column.DATE].iloc[0] == "2025-06-02"
@@ -65,7 +65,7 @@ async def test_one_group_more_similar_titles(mocker: Mocker, client: Client):
     spy.assert_called_once()
 
     assert res.status_code == HTTP_200 and mock.call_count == 6
-    df = load_csv_file_response_dataframe(res)
+    df = load_csv_from_response(res)
     assert df.shape[0] == 1
     assert df[Column.AUTHORS].iloc[0] == "a"
     assert df[Column.DATE].iloc[0] == "2025-06-05"
@@ -81,7 +81,7 @@ async def test_one_group_no_similar_titles(mocker: Mocker, client: Client):
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     spy.assert_called_once()
     assert res.status_code == HTTP_200 and mock.call_count == 3
-    df = load_csv_file_response_dataframe(res)
+    df = load_csv_from_response(res)
     assert df.shape[0] == 2
 
 
@@ -96,7 +96,7 @@ async def test_more_groups_two_similar_titles(mocker: Mocker, client: Client):
     spy.assert_not_called()
 
     assert res.status_code == HTTP_200 and mock.call_count == 6
-    df = load_csv_file_response_dataframe(res)
+    df = load_csv_from_response(res)
     assert df.shape[0] == 3
     assert df[Column.AUTHORS].tolist() == ["a", "b", "c"]
     recent_dates = ["2025-06-05", "2025-06-05", "2025-06-01"]
@@ -114,7 +114,7 @@ async def test_more_groups_more_similar_titles(mocker: Mocker, client: Client):
     spy.assert_not_called()
 
     assert res.status_code == HTTP_200 and mock.call_count == 10
-    df = load_csv_file_response_dataframe(res)
+    df = load_csv_from_response(res)
     assert df.shape[0] == 3
     assert df[Column.AUTHORS].tolist() == ["a", "b", "c"]
     recent_dates = ["2025-06-04", "2025-06-03", "2025-06-02"]
@@ -132,7 +132,7 @@ async def test_more_groups_no_similar_titles(mocker: Mocker, client: Client):
     spy.assert_not_called()
 
     assert res.status_code == HTTP_200 and mock.call_count == 10
-    df = load_csv_file_response_dataframe(res)
+    df = load_csv_from_response(res)
     assert df.shape[0] == 9
 
 
@@ -155,7 +155,7 @@ async def test_to_datetime_no_left(mocker: Mocker, client: Client):
     spy_dropna.assert_called_once()
 
     assert res.status_code == HTTP_200 and mock.call_count == 3
-    df = load_csv_file_response_dataframe(res)
+    df = load_csv_from_response(res)
     assert df.shape[0] == 2
 
     assert all(isinstance(value, str) for value in df_to_datetime)
@@ -181,7 +181,7 @@ async def test_to_datetime_one_left(mocker: Mocker, client: Client):
     spy_dropna.assert_called_once()
 
     assert res.status_code == HTTP_200 and mock.call_count == 3
-    df = load_csv_file_response_dataframe(res)
+    df = load_csv_from_response(res)
     assert df.shape[0] == 2
 
     assert all(isinstance(value, str) for value in df_to_datetime)
@@ -203,7 +203,7 @@ async def test_no_repeated_authors(mocker: Mocker, client: Client):
     spy_filter.assert_not_called()
 
     assert res.status_code == HTTP_200 and mock.call_count == 3
-    df = load_csv_file_response_dataframe(res)
+    df = load_csv_from_response(res)
     assert df.shape[0] == 2
 
 
@@ -221,7 +221,7 @@ async def test_filter_drop_singles(mocker: Mocker, client: Client):
     df_drop: DataFrame = spy_groupby.call_args_list[1].args[0]
 
     assert res.status_code == HTTP_200 and mock.call_count == 6
-    df = load_csv_file_response_dataframe(res)
+    df = load_csv_from_response(res)
     assert df.shape[0] == 3
     assert df_group.ngroups == 3 and df_drop.shape[0] == 4
 
@@ -234,7 +234,7 @@ async def test_discard_one_older_similar(mocker: Mocker, client: Client):
     )
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     assert res.status_code == HTTP_200 and mock.call_count == 3
-    df = load_csv_file_response_dataframe(res)
+    df = load_csv_from_response(res)
     assert df.shape[0] == 1
     assert df[Column.DATE].iloc[0] == "2025-06-02"
 
@@ -247,7 +247,7 @@ async def test_discard_all_older_similar(mocker: Mocker, client: Client):
     )
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     assert res.status_code == HTTP_200 and mock.call_count == 6
-    df = load_csv_file_response_dataframe(res)
+    df = load_csv_from_response(res)
     assert df.shape[0] == 1
     assert df[Column.DATE].iloc[0] == "2025-06-05"
 
@@ -279,6 +279,6 @@ async def test_drop_similar(mocker: Mocker, client: Client):
     similar_titles: set = spy_drop.call_args_list[0].args[1]
 
     assert res.status_code == HTTP_200 and mock.call_count == 6
-    df = load_csv_file_response_dataframe(res)
+    df = load_csv_from_response(res)
     assert df.shape[0] == 1
     assert len(similar_titles) == 4 and df_in.shape[0] == 5
