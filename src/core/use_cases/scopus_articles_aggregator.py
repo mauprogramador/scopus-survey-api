@@ -38,11 +38,14 @@ class ScopusArticlesAggregator:
 
     async def retrieve_articles(self, params: SearchParams) -> FileResponse:
         self._details.set_combination(params.combination)
-        results = await self._search_api.search_articles(params)
 
-        self._docs = await self._abstract_api.retrieve_abstracts(
-            params.api_key, results
-        )
+        try:
+            results = await self._search_api.search_articles(params)
+            self._docs = await self._abstract_api.retrieve_abstracts(
+                params.api_key, results
+            )
+        finally:
+            await self._search_api.http_client.close()
 
         initial = self._docs.shape[self._ROWS_INDEX]
         rows_out = self._SINGLE_ROW

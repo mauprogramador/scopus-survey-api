@@ -50,6 +50,10 @@ class ScopusSearchAPI:
         except AttributeError:
             self._workers = min(2 * (cpu_count() or 4), 32)
 
+    @property
+    def http_client(self) -> HTTPClient:
+        return self._http_client
+
     async def _task_request(
         self, url: str, index: int
     ) -> tuple[int, ResponseBundle]:
@@ -175,38 +179,32 @@ class ScopusSearchAPI:
     ) -> QuotaResultsHandler:
         url = self._url_builder.search_url(params)
 
-        try:
-            response = await self._http_client.request(url)
-            search_results = ScopusResponse.validate_search(response)
-            self._details.set_search_data(search_results)
-            self._details.set_search_quota(response)
+        response = await self._http_client.request(url)
+        search_results = ScopusResponse.validate_search(response)
+        self._details.set_search_data(search_results)
+        self._details.set_search_quota(response)
 
-            self._results = QuotaResultsHandler(search_results)
+        self._results = QuotaResultsHandler(search_results)
 
-            if self._results.total_results == 0:
-                raise NotFound(ARTICLES_NOT_FOUND)
+        if self._results.total_results == 0:
+            raise NotFound(ARTICLES_NOT_FOUND)
 
-            if self._state.pages_count > 1:
-                self._state.handle_search_quota(self._details.search_quota)
+        if self._state.pages_count > 1:
+            self._state.handle_search_quota(self._details.search_quota)
 
-                if self._state.pages_count == 2:
-                    response = await self._get_by_pagination(
-                        self._PAGE_TWO_INDEX
-                    )
-                    self._details.set_search_quota(response)
+            if self._state.pages_count == 2:
+                response = await self._get_by_pagination(self._PAGE_TWO_INDEX)
+                self._details.set_search_quota(response)
 
-                    search_results = ScopusResponse.validate_search(response)
-                    self._state.entry.extend(search_results.entry)
+                search_results = ScopusResponse.validate_search(response)
+                self._state.entry.extend(search_results.entry)
 
-                elif self._state.pages_count > 2:
-                    await self._http_client.update_strategy(
-                        self._state.total_results
-                    )
-                    await self._get_multiple_articles_by_pagination()
+            elif self._state.pages_count > 2:
+                await self._http_client.update_strategy(
+                    self._state.total_results
+                )
+                await self._get_multiple_articles_by_pagination()
 
-            LOG.info(f"Total Found: \033[33m{self._state.total_results}")
-
-        finally:
-            await self._http_client.close()
+        LOG.info(f"Total Found: \033[33m{self._state.total_results}")
 
         return self._state

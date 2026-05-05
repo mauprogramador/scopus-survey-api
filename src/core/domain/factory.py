@@ -33,15 +33,14 @@ def make_aggregator() -> ScopusArticlesAggregator:
     survey_details = SurveyDetails()
 
     url_builder = URLBuilder()
-    search_http_client = HTTPClient()
-    abstract_http_client = HTTPClient()
+    http_client = HTTPClient()
 
     search_api = ScopusSearchAPI(
-        search_http_client, url_builder, survey_details
+        http_client, url_builder, survey_details
     )
 
     abstract_api = ScopusAbstractRetrievalAPI(
-        abstract_http_client, url_builder, survey_details
+        http_client, url_builder, survey_details
     )
 
     similarity_filter = ArticlesSimilarityFilter()

@@ -100,6 +100,7 @@ class URLBuilder(Protocol):
 
 
 class SearchAPI(Protocol):
+    http_client: HTTPClient
 
     async def survey_totals_found(
         self, bundles_map: dict[int, CombinationBundle]

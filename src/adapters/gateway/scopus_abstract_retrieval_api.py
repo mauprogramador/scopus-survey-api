@@ -121,22 +121,19 @@ class ScopusAbstractRetrievalAPI:
         self._url_builder.set_abstract_query(api_key)
         self._state.fix_total()
 
-        try:
-            await self._get_one_abstract(self._ONE_RESULT_INDEX)
+        await self._get_one_abstract(self._ONE_RESULT_INDEX)
 
-            if self._state.total_abstracts > 1:
-                self._state.handle_abstract_quota(self._details.abstract_quota)
+        if self._state.total_abstracts > 1:
+            self._state.handle_abstract_quota(self._details.abstract_quota)
 
-                if self._state.total_abstracts == 2:
-                    await self._get_one_abstract(self._TWO_RESULTS_INDEX)
+            if self._state.total_abstracts == 2:
+                await self._get_one_abstract(self._TWO_RESULTS_INDEX)
 
-                elif self._state.total_abstracts > 2:
-                    await self._http_client.update_strategy(
-                        self._state.total_abstracts
-                    )
-                    await self._get_multiple_abstracts()
-        finally:
-            await self._http_client.close()
+            elif self._state.total_abstracts > 2:
+                await self._http_client.update_strategy(
+                    self._state.total_abstracts
+                )
+                await self._get_multiple_abstracts()
 
         self._details.set_results(self._state.total_abstracts)
         return DataFrame(self._state.abstracts)
