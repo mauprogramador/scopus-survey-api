@@ -42,7 +42,7 @@ class ScopusResponse:
                             f"{quota.reset_datetime}\033[m"
                         )
 
-                    if error_response.code == ScopusCode.RATE_LIMIT:
+                    elif error_response.code == ScopusCode.RATE_LIMIT:
                         LOG.error(RATE_LIMIT_EXCEEDED)
 
                 raise ScopusAPIError(

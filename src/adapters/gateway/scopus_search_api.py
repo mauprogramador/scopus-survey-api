@@ -189,18 +189,20 @@ class ScopusSearchAPI:
             if self._state.pages_count > 1:
                 self._state.handle_search_quota(self._details.search_quota)
 
-            if self._state.pages_count == 2:
-                response = await self._get_by_pagination(self._PAGE_TWO_INDEX)
-                self._details.set_search_quota(response)
+                if self._state.pages_count == 2:
+                    response = await self._get_by_pagination(
+                        self._PAGE_TWO_INDEX
+                    )
+                    self._details.set_search_quota(response)
 
-                search_results = ScopusResponse.validate_search(response)
-                self._state.entry.extend(search_results.entry)
+                    search_results = ScopusResponse.validate_search(response)
+                    self._state.entry.extend(search_results.entry)
 
-            if self._state.pages_count > 2:
-                await self._http_client.update_strategy(
-                    self._state.total_results
-                )
-                await self._get_multiple_articles_by_pagination()
+                elif self._state.pages_count > 2:
+                    await self._http_client.update_strategy(
+                        self._state.total_results
+                    )
+                    await self._get_multiple_articles_by_pagination()
 
             LOG.info(f"Total Found: \033[33m{self._state.total_results}")
 

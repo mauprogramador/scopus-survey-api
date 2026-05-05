@@ -127,14 +127,14 @@ class ScopusAbstractRetrievalAPI:
             if self._state.total_abstracts > 1:
                 self._state.handle_abstract_quota(self._details.abstract_quota)
 
-            if self._state.total_abstracts == 2:
-                await self._get_one_abstract(self._TWO_RESULTS_INDEX)
+                if self._state.total_abstracts == 2:
+                    await self._get_one_abstract(self._TWO_RESULTS_INDEX)
 
-            if self._state.total_abstracts > 2:
-                await self._http_client.update_strategy(
-                    self._state.total_abstracts
-                )
-                await self._get_multiple_abstracts()
+                elif self._state.total_abstracts > 2:
+                    await self._http_client.update_strategy(
+                        self._state.total_abstracts
+                    )
+                    await self._get_multiple_abstracts()
         finally:
             await self._http_client.close()
 
