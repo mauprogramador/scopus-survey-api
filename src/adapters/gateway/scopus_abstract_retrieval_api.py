@@ -29,19 +29,19 @@ class ScopusAbstractRetrievalAPI:
 
     _ONE_RESULT_INDEX = 0
     _TWO_RESULTS_INDEX = 1
-    _FIRST_ABSTRACT = 1
 
     def __init__(
         self,
         http_client: HTTPClient,
         url_builder: URLBuilder,
         survey_details: SurveyDetails,
+        state: QuotaResultsHandler,
     ) -> None:
         """Retrieves Scopus abstracts via the Scopus Abstract Retrieval API"""
         self._http_client = http_client
         self._url_builder = url_builder
         self._details = survey_details
-        self._state: QuotaResultsHandler = None
+        self._state = state
 
         try:
             self._workers = min(2 * len(sched_getaffinity(0)), 32)
@@ -53,8 +53,7 @@ class ScopusAbstractRetrievalAPI:
         return await self._http_client.request(url)
 
     async def _get_multiple_abstracts(self) -> None:
-        total = self._state.total_abstracts - self._FIRST_ABSTRACT
-        max_workers = min(total, self._workers)
+        max_workers = min(self._state.abstracts_to_fetch, self._workers)
         LOG.debug({"max_workers": max_workers})
 
         all_tasks = {
@@ -62,14 +61,14 @@ class ScopusAbstractRetrievalAPI:
                 self._get_abstract(index),
                 name=f"entry_index:{index}",
             )
-            for index in range(total)
+            for index in self._state.abstracts_to_fetch_range
         }
         remaining_tasks = all_tasks.copy()
         last_completed: ResponseBundle = None
 
         with (
             ThreadPoolExecutor(max_workers) as executor,
-            ProgressBar.start(total) as progress,
+            ProgressBar.start(self._state.abstracts_to_fetch) as progress,
         ):
             for future in as_completed(all_tasks):
                 remaining_tasks.discard(future)
@@ -114,10 +113,7 @@ class ScopusAbstractRetrievalAPI:
         abstract_data = abstract.model_dump(by_alias=True)
         self._state.abstracts.append(abstract_data)
 
-    async def retrieve_abstracts(
-        self, api_key: str, state: QuotaResultsHandler
-    ) -> DataFrame:
-        self._state = state
+    async def retrieve_abstracts(self, api_key: str) -> DataFrame:
         self._url_builder.set_abstract_query(api_key)
         self._state.fix_total()
 

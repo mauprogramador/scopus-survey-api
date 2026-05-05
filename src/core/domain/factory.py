@@ -4,6 +4,7 @@ from src.adapters.gateway.scopus_abstract_retrieval_api import (
 from src.adapters.gateway.scopus_search_api import ScopusSearchAPI
 from src.adapters.helpers.http_client import HTTPClient
 from src.adapters.helpers.url_builder import URLBuilder
+from src.core.data.quota_results_handler import QuotaResultsHandler
 from src.core.data.survey_details import SurveyDetails
 from src.core.use_cases import (
     ArticlesSimilarityFilter,
@@ -20,7 +21,9 @@ def make_combinator() -> KeywordCombinationFinder:
     url_builder = URLBuilder()
     http_client = HTTPClient()
 
-    search_api = ScopusSearchAPI(http_client, url_builder, survey_details)
+    search_api = ScopusSearchAPI(
+        http_client, url_builder, survey_details, None
+    )
 
     combinator_finder = KeywordCombinationFinder(
         url_builder, search_api, survey_details
@@ -31,16 +34,17 @@ def make_combinator() -> KeywordCombinationFinder:
 
 def make_aggregator() -> ScopusArticlesAggregator:
     survey_details = SurveyDetails()
+    state = QuotaResultsHandler()
 
     url_builder = URLBuilder()
     http_client = HTTPClient()
 
     search_api = ScopusSearchAPI(
-        http_client, url_builder, survey_details
+        http_client, url_builder, survey_details, state
     )
 
     abstract_api = ScopusAbstractRetrievalAPI(
-        http_client, url_builder, survey_details
+        http_client, url_builder, survey_details, state
     )
 
     similarity_filter = ArticlesSimilarityFilter()

@@ -9,7 +9,7 @@ from concurrent.futures import ThreadPoolExecutor
 from os import cpu_count, sched_getaffinity
 
 from src.adapters.helpers.scopus_response import ScopusResponse
-from src.core.common.error_messages import ARTICLES_NOT_FOUND, CANCELLED_ERROR
+from src.core.common.error_messages import CANCELLED_ERROR
 from src.core.common.types import (
     CombinationBundle,
     Json,
@@ -17,13 +17,16 @@ from src.core.common.types import (
     SearchParams,
 )
 from src.core.config.config import LOG
-from src.core.data.quota_results_handler import QuotaResultsHandler
 from src.core.domain.http_exceptions import (
     HTTPError,
-    NotFound,
     ServiceUnavailable,
 )
-from src.core.domain.protocols import HTTPClient, SurveyDetails, URLBuilder
+from src.core.domain.protocols import (
+    HTTPClient,
+    QuotaResultsHandler,
+    SurveyDetails,
+    URLBuilder,
+)
 from src.utils.progress_bar import ProgressBar
 
 
@@ -31,19 +34,19 @@ class ScopusSearchAPI:
     """Search and retrieve articles via the Scopus Search API"""
 
     _PAGE_TWO_INDEX = 1
-    _FIRST_SEARCH = 1
 
     def __init__(
         self,
         http_client: HTTPClient,
         url_builder: URLBuilder,
         survey_details: SurveyDetails,
+        state: QuotaResultsHandler,
     ) -> None:
         """Search and retrieve articles via the Scopus Search API"""
         self._http_client = http_client
         self._url_builder = url_builder
         self._details = survey_details
-        self._state: QuotaResultsHandler = None
+        self._state = state
 
         try:
             self._workers = min(2 * len(sched_getaffinity(0)), 32)
@@ -122,8 +125,7 @@ class ScopusSearchAPI:
         return await self._http_client.request(url)
 
     async def _get_multiple_articles_by_pagination(self) -> None:
-        pages_count = self._state.pages_count
-        max_workers = min((pages_count - self._FIRST_SEARCH), self._workers)
+        max_workers = min(self._state.pages_to_fetch, self._workers)
         LOG.debug({"max_workers": max_workers})
 
         all_tasks = {
@@ -131,17 +133,15 @@ class ScopusSearchAPI:
                 self._get_by_pagination(start),
                 name=f"pagination_start:{start}",
             )
-            for start in range(self._FIRST_SEARCH, pages_count)
+            for start in self._state.pages_to_fetch_range
         }
         remaining_tasks = all_tasks.copy()
         last_completed: ResponseBundle = None
-
-        total = self._state.total_results
-        step = self._state.items_per_page
+        progress_args = self._state.pages_to_fetch_progress
 
         with (
             ThreadPoolExecutor(max_workers) as executor,
-            ProgressBar.start(total, step, self._FIRST_SEARCH) as progress,
+            ProgressBar.start(*progress_args) as progress,
         ):
             for future in as_completed(all_tasks):
                 remaining_tasks.discard(future)
@@ -174,20 +174,16 @@ class ScopusSearchAPI:
 
         self._details.set_search_quota(last_completed)
 
-    async def search_articles(
-        self, params: SearchParams
-    ) -> QuotaResultsHandler:
+    async def search_articles(self, params: SearchParams) -> None:
         url = self._url_builder.search_url(params)
 
         response = await self._http_client.request(url)
         search_results = ScopusResponse.validate_search(response)
+
         self._details.set_search_data(search_results)
         self._details.set_search_quota(response)
 
-        self._results = QuotaResultsHandler(search_results)
-
-        if self._results.total_results == 0:
-            raise NotFound(ARTICLES_NOT_FOUND)
+        self._state.set_first_search(search_results)
 
         if self._state.pages_count > 1:
             self._state.handle_search_quota(self._details.search_quota)
@@ -207,4 +203,4 @@ class ScopusSearchAPI:
 
         LOG.info(f"Total Found: \033[33m{self._state.total_results}")
 
-        return self._state
+        self._state.validate_integrity()

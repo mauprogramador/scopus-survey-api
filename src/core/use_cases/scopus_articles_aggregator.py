@@ -40,9 +40,9 @@ class ScopusArticlesAggregator:
         self._details.set_combination(params.combination)
 
         try:
-            results = await self._search_api.search_articles(params)
+            await self._search_api.search_articles(params)
             self._docs = await self._abstract_api.retrieve_abstracts(
-                params.api_key, results
+                params.api_key
             )
         finally:
             await self._search_api.http_client.close()

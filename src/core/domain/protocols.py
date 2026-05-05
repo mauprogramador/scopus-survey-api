@@ -107,17 +107,13 @@ class SearchAPI(Protocol):
     ) -> list[Json]:
         pass
 
-    async def search_articles(
-        self, params: SearchParams
-    ) -> QuotaResultsHandler:
+    async def search_articles(self, params: SearchParams) -> None:
         pass
 
 
 class AbstractAPI(Protocol):
 
-    async def retrieve_abstracts(
-        self, api_key: str, results: QuotaResultsHandler
-    ) -> DataFrame:
+    async def retrieve_abstracts(self, api_key: str) -> DataFrame:
         pass
 
 
