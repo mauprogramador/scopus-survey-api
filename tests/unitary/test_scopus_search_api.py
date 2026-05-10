@@ -47,114 +47,115 @@ from tests.mocks.unitary import (
     TWO_PAGES_PARTIAL_RESULTS,
 )
 
-SURVEY_DETAILS = MagicMock(spec=SurveyDetails, search_quota=LOG_QUOTA)
-SEARCH_API = ScopusSearchAPI(
-    AsyncMock(spec=HTTPClient),
-    MagicMock(spec=URLBuilder),
-    SURVEY_DETAILS,
-)
-VALIDATE_SEARCH = fqn(ScopusResponse.validate_search)
+
 STEP = fqn(ProgressBar.step)
 
 
 @mark.asyncio
-async def test_survey_two_keywords(mocker: Mocker):
-    mock = mocker.patch(VALIDATE_SEARCH, side_effect=SURVEY_RESULTS[:3])
-    results = await SEARCH_API.survey_totals_found(TWO_KEYWORDS)
-    assert len(results) == 3 and mock.call_count == 3
+async def test_survey_two_keywords():
+    fix = search_fix(SURVEY_RESULTS[:3])
+    results = await fix.api.survey_totals_found(TWO_KEYWORDS)
+    assert len(results) == 3 and fix.req.call_count == 3
     assert sum(item["total"] for item in results) != 0
 
     for item in results:
-        assert SURVEY_MAP[item["index"]].total_results == item["total"]
+        search_results = SURVEY_MAP[item["index"]].data["search-results"]
+        assert search_results["opensearch:totalResults"] == str(item["total"])
 
 
 @mark.asyncio
-async def test_survey_four_keywords(mocker: Mocker):
-    mock = mocker.patch(VALIDATE_SEARCH, side_effect=SURVEY_RESULTS)
-    results = await SEARCH_API.survey_totals_found(FOUR_KEYWORDS)
-    assert len(results) == 15 and mock.call_count == 15
+async def test_survey_four_keywords():
+    fix = search_fix(SURVEY_RESULTS)
+    results = await fix.api.survey_totals_found(FOUR_KEYWORDS)
+    assert len(results) == 15 and fix.req.call_count == 15
     assert sum(item["total"] for item in results) != 0
 
     for item in results:
-        assert SURVEY_MAP[item["index"]].total_results == item["total"]
+        search_results = SURVEY_MAP[item["index"]].data["search-results"]
+        assert search_results["opensearch:totalResults"] == str(item["total"])
 
 
 @mark.asyncio
-async def test_survey_not_found(mocker: Mocker):
-    mock = mocker.patch(
-        VALIDATE_SEARCH,
-        side_effect=[ScopusSearch(**RAW_SEARCH_NOT_FOUND)] * 3,
-    )
-    results = await SEARCH_API.survey_totals_found(TWO_KEYWORDS)
-    assert len(results) == 3 and mock.call_count == 3
+async def test_survey_not_found():
+    fix = search_fix(SURVEY_NOT_FOUND)
+    results = await fix.api.survey_totals_found(TWO_KEYWORDS)
+    assert len(results) == 3 and fix.req.call_count == 3
     assert sum(item["total"] for item in results) == 0
 
 
 @mark.asyncio
 async def test_survey_cancelled_error(mocker: Mocker):
-    mocker.patch(STEP, side_effect=[None, None, CancelledError("any")])
-    mock = mocker.patch(VALIDATE_SEARCH, side_effect=SURVEY_RESULTS)
+    spy = mocker.spy(ScopusResponse, "validate_search")
+    fix = search_fix(SURVEY_RESULTS)
+    mocker.patch(**STEP(MORE_CANCELLED))
     with raises(ServiceUnavailable) as info:
-        await SEARCH_API.survey_totals_found(FOUR_KEYWORDS)
-    assert mock.call_count == 3
+        await fix.api.survey_totals_found(FOUR_KEYWORDS)
     assert_http_error(info, HTTP_503, CANCELLED_ERROR)
+    assert fix.req.call_count == 15 and spy.call_count == 3
     assert info.value.errors[0]["type"] == fqn(CancelledError)
     assert info.value.errors[0]["detail"] == "any"
 
 
 @mark.asyncio
-async def test_search_one_page_one_result(mocker: Mocker):
-    mock = mocker.patch(VALIDATE_SEARCH, return_value=ONE_PAGE_ONE_RESULT)
-    result = await SEARCH_API.search_articles(None)
-    assert len(result.entry) == 1 and mock.call_count == 1
+async def test_search_one_page_one_result():
+    fix = search_fix(ONE_PAGE_ONE_RESULT)
+    await fix.api.search_articles(None)
+    assert len(fix.state.entry) == 1 and fix.req.call_count == 1
+    assert fix.state.total_results == 1 and fix.state.items_per_page == 1
+    assert fix.state.pages_count == 1
 
 
 @mark.asyncio
-async def test_search_one_page_full_results(mocker: Mocker):
-    mock = mocker.patch(VALIDATE_SEARCH, return_value=ONE_PAGE_FULL_RESULTS)
-    result = await SEARCH_API.search_articles(None)
-    assert len(result.entry) == 25 and mock.call_count == 1
+async def test_search_one_page_full_results():
+    fix = search_fix(ONE_PAGE_FULL_RESULTS)
+    await fix.api.search_articles(None)
+    assert len(fix.state.entry) == 1 and fix.req.call_count == 1
+    assert fix.state.total_results == 25 and fix.state.items_per_page == 25
+    assert fix.state.pages_count == 1
 
 
 @mark.asyncio
-async def test_search_two_pages_partial_results(mocker: Mocker):
-    mock = mocker.patch(VALIDATE_SEARCH, side_effect=TWO_PAGES_PARTIAL_RESULTS)
-    result = await SEARCH_API.search_articles(None)
-    assert len(result.entry) == 30 and mock.call_count == 2
+async def test_search_two_pages_partial_results():
+    fix = search_fix(TWO_PAGES_PARTIAL_RESULTS)
+    await fix.api.search_articles(None)
+    assert len(fix.state.entry) == 2 and fix.req.call_count == 2
+    assert fix.state.total_results == 30 and fix.state.items_per_page == 25
+    assert fix.state.pages_count == 2
 
 
 @mark.asyncio
-async def test_search_two_pages_full_results(mocker: Mocker):
-    mock = mocker.patch(VALIDATE_SEARCH, side_effect=TWO_PAGES_FULL_RESULTS)
-    result = await SEARCH_API.search_articles(None)
-    assert len(result.entry) == 50 and mock.call_count == 2
+async def test_search_two_pages_full_results():
+    fix = search_fix(TWO_PAGES_FULL_RESULTS)
+    await fix.api.search_articles(None)
+    assert len(fix.state.entry) == 2 and fix.req.call_count == 2
+    assert fix.state.total_results == 50 and fix.state.items_per_page == 25
+    assert fix.state.pages_count == 2
 
 
 @mark.asyncio
-async def test_search_more_pages_partial_results(mocker: Mocker):
-    mock = mocker.patch(
-        VALIDATE_SEARCH, side_effect=MORE_PAGES_PARTIAL_RESULTS
-    )
-    result = await SEARCH_API.search_articles(None)
-    assert len(result.entry) == 151 and mock.call_count == 7
+async def test_search_more_pages_partial_results():
+    fix = search_fix(MORE_PAGES_PARTIAL_RESULTS)
+    await fix.api.search_articles(None)
+    assert len(fix.state.entry) == 7 and fix.req.call_count == 7
+    assert fix.state.total_results == 151 and fix.state.items_per_page == 25
+    assert fix.state.pages_count == 7
 
 
 @mark.asyncio
-async def test_search_more_pages_full_results(mocker: Mocker):
-    mock = mocker.patch(VALIDATE_SEARCH, side_effect=MORE_PAGES_FULL_RESULTS)
-    result = await SEARCH_API.search_articles(None)
-    assert len(result.entry) == 175 and mock.call_count == 7
+async def test_search_more_pages_full_results():
+    fix = search_fix(MORE_PAGES_FULL_RESULTS)
+    await fix.api.search_articles(None)
+    assert len(fix.state.entry) == 7 and fix.req.call_count == 7
+    assert fix.state.total_results == 175 and fix.state.items_per_page == 25
+    assert fix.state.pages_count == 7
 
 
 @mark.asyncio
-async def test_search_not_found(mocker: Mocker):
-    mock = mocker.patch(
-        VALIDATE_SEARCH,
-        return_value=ScopusSearch(**RAW_SEARCH_NOT_FOUND),
-    )
+async def test_search_not_found():
+    fix = search_fix(SEARCH_NOT_FOUND)
     with raises(NotFound) as info:
-        await SEARCH_API.search_articles(None)
-    assert info.value.status_code == HTTP_404 and mock.call_count == 1
+        await fix.api.search_articles(None)
+    assert info.value.status_code == HTTP_404 and fix.req.call_count == 1
     assert info.value.message == ARTICLES_NOT_FOUND
 
 
@@ -175,26 +176,22 @@ async def test_search_no_remaining_quota(mocker: Mocker):
 
 
 @mark.asyncio
-async def test_search_quota_exceeded(mocker: Mocker):
-    SURVEY_DETAILS.search_quota = LOG_NO_QUOTA
-    mock = mocker.patch(VALIDATE_SEARCH, side_effect=MORE_PAGES_NO_QUOTA)
-    with raises(TooManyRequests) as info:
-        await SEARCH_API.search_articles(None)
-    assert_http_error(info, HTTP_429, QUOTA_EXCEEDED)
-    assert mock.call_count == 1
+async def test_search_quota_exceeded():
+    fix = search_fix(SEARCH_QUOTA_EXCEEDED)
+    with raises(ScopusAPIError) as info:
+        await fix.api.search_articles(None)
+    assert_http_error(info, HTTP_502, ScopusCode.QUOTA)
+    assert fix.req.call_count == 1
 
 
 @mark.asyncio
 async def test_search_cancelled_error(mocker: Mocker):
-    SURVEY_DETAILS.search_quota = LOG_QUOTA
-    mocker.patch(STEP, side_effect=[None, None, CancelledError("any")])
-    mock = mocker.patch(
-        VALIDATE_SEARCH,
-        side_effect=MORE_PAGES_PARTIAL_RESULTS,
-    )
+    spy = mocker.spy(ScopusResponse, "validate_search")
+    fix = search_fix(MORE_PAGES_PARTIAL_RESULTS)
+    mocker.patch(**STEP(MORE_CANCELLED))
     with raises(ServiceUnavailable) as info:
-        await SEARCH_API.search_articles(None)
+        await fix.api.search_articles(None)
     assert_http_error(info, HTTP_503, CANCELLED_ERROR)
-    assert mock.call_count == 4
+    assert fix.req.call_count == 7 and spy.call_count == 4
     assert info.value.errors[0]["type"] == fqn(CancelledError)
     assert info.value.errors[0]["detail"] == "any"
