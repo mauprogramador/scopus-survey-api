@@ -49,9 +49,23 @@ class QuotaResultsHandler(Protocol):
     total_results: int
     items_per_page: int
     entry: list[ScopusEntry]
-    abstracts: list[Json]
-    total_abstracts: int
     pages_count: int
+    total_abstracts: int
+    abstracts: list[Json]
+    pages_to_fetch: int
+    pages_to_fetch_range: range
+    pages_to_fetch_progress: tuple[int, int, int]
+    abstracts_to_fetch: int
+    abstracts_to_fetch_range: range
+
+    def set_first_search(self, first_search: ScopusSearch) -> None:
+        pass
+
+    def validate_integrity(self) -> None:
+        pass
+
+    def fix_total(self) -> None:
+        pass
 
     def handle_search_quota(self, quota: tuple[Quota, int]) -> None:
         pass

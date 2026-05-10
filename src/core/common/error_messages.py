@@ -16,6 +16,7 @@ RATE_LIMIT_EXCEEDED = "Request rate limit per second exceeded"
 VALIDATE_ERROR = "Error in validate response from Scopus API"
 INVALID_JSON_ERROR = "Invalid JSON response from Scopus API"
 SCOPUS_API_ERROR = "Scopus API error"
+DATA_MISMATCH_ERROR = "Data sum mismatch in response"
 
 # Application errors
 CANCELLED_ERROR = "Unexpected cancellation of the tasks"

@@ -1,51 +1,74 @@
 from math import ceil
 
-from src.core.common.error_messages import QUOTA_EXCEEDED
+from src.core.common.error_messages import (
+    ARTICLES_NOT_FOUND,
+    DATA_MISMATCH_ERROR,
+)
 from src.core.common.types import Json, Quota
-from src.core.data.serializers import ScopusSearch
-from src.core.domain.http_exceptions import TooManyRequests
+from src.core.data.serializers import ScopusEntry, ScopusSearch
+from src.core.domain.http_exceptions import BadGateway, NotFound
 
 
 class QuotaResultsHandler:
     """Gathers the Scopus data while managing the quotas"""
 
-    _FIRST_ABSTRACT = 1
+    _FIRST_RESULT = 1
+    _RANGE_OFFSET = 1
 
-    def __init__(self, first_search: ScopusSearch) -> None:
+    def __init__(self) -> None:
         """Gathers the Scopus data while managing the quotas"""
+        self.total_results: int = None
+        self.items_per_page: int = None
+        self.entry: list[ScopusEntry] = None
+        self.pages_count: int = None
+        self.total_abstracts: int = None
+        self.abstracts: list[Json] = None
+
+    @property
+    def pages_to_fetch(self) -> int:
+        return self.pages_count - self._FIRST_RESULT
+
+    @property
+    def pages_to_fetch_range(self) -> range:
+        return range(self._FIRST_RESULT, self.pages_count)
+
+    @property
+    def pages_to_fetch_progress(self) -> tuple[int, int, int]:
+        return self.total_results, self.items_per_page, self._FIRST_RESULT
+
+    @property
+    def abstracts_to_fetch(self) -> int:
+        return self.total_abstracts - self._FIRST_RESULT
+
+    @property
+    def abstracts_to_fetch_range(self) -> range:
+        return range(self._FIRST_RESULT, self.total_abstracts)
+
+    def set_first_search(self, first_search: ScopusSearch) -> None:
         self.total_results = first_search.total_results
         self.items_per_page = first_search.items_per_page
         self.entry = [*first_search.entry]
-        self.abstracts: list[Json] = []
-        self.total_abstracts = first_search.total_results
 
         if self.total_results == 0:
-            self.pages_count = 0
-        else:
-            self.pages_count = ceil(self.total_results / self.items_per_page)
+            raise NotFound(ARTICLES_NOT_FOUND)
 
-    def _check_quota(self, quota: tuple[Quota, int]) -> int:
-        remaining_quota = quota[0].remaining
+        self.pages_count = ceil(self.total_results / self.items_per_page)
 
-        if remaining_quota == 0:
-            raise TooManyRequests(QUOTA_EXCEEDED)
+    def validate_integrity(self) -> None:
+        if self.total_results != len(self.entry):
+            raise BadGateway(DATA_MISMATCH_ERROR)
 
-        return remaining_quota
+    def fix_total(self) -> None:
+        self.total_abstracts = len(self.entry)
+        self.abstracts = []
 
     def handle_search_quota(self, quota: tuple[Quota, int]) -> None:
-        remaining_quota = self._check_quota(quota)
-        possible_searches = remaining_quota * self.items_per_page
+        possible_searches = quota[0].remaining * self.items_per_page
 
         if self.total_results > possible_searches:
             self.total_results = possible_searches + len(self.entry)
-            self.total_abstracts = self.total_results
             self.pages_count = ceil(self.total_results / self.items_per_page)
 
     def handle_abstract_quota(self, quota: tuple[Quota, int]) -> None:
-        remaining_quota = self._check_quota(quota)
-
-        if self.total_abstracts > remaining_quota:
-            self.total_abstracts = remaining_quota + self._FIRST_ABSTRACT
-
-        if self.total_abstracts > 2:
-            self.entry = self.entry[1 : self.total_abstracts + 1]
+        if self.total_abstracts > quota[0].remaining:
+            self.total_abstracts = quota[0].remaining + self._FIRST_RESULT
