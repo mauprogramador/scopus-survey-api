@@ -125,6 +125,16 @@ def abstract_raw(
     }
 
 
+def headers_raw(remaining: int) -> dict[str, str]:
+    """Build a raw response headers"""
+    return {
+        "X-RateLimit-Limit": "20000",
+        "X-RateLimit-Remaining": str(remaining),
+        "X-RateLimit-Reset": str(RESET),
+        "X-ELS-Status": "OK",
+    }
+
+
 def response_mock(
     value: Json | None | Exception,
     status: HTTPStatus | None = None,
