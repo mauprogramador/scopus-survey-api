@@ -1,9 +1,7 @@
 from pathlib import Path
 from random import randint
 from secrets import token_hex
-from unittest.mock import AsyncMock
 
-from aiohttp_retry import RetryClient
 from httpx import AsyncClient as Client
 from pytest import mark
 from pytest_mock import MockerFixture as Mocker
@@ -16,7 +14,7 @@ from src.core.config.scopus import DATA_SOURCE_NOTE
 from src.core.data.enums import Column
 from tests.conftest import assert_error_json
 from tests.mocks.helpers import (
-    fqn,
+    get_patch,
     load_csv_from_response,
     response_mock,
     search_raw,
@@ -37,12 +35,14 @@ from tests.mocks.raw import (
 )
 
 
-GET = fqn(RetryClient.get)
-
-
 class TestUserFlowSurveySteps:
     """Complete user survey steps flow"""
 
+    _THREE_COMBINATIONS = [response_mock(search_raw(randint(16, 256)))] * 3
+    _ONE_RESULT = [
+        response_mock(RAW_SEARCH_OK),
+        response_mock(RAW_ABSTRACT_OK),
+    ]
     _token_header: str = None
     _token_cookie: str = None
     _api_key: str = None
@@ -98,9 +98,7 @@ class TestUserFlowSurveySteps:
             "keywords": ["FastAPI", "API"],
             "button": "combination",
         }
-
-        mocks = [response_mock(search_raw(randint(16, 256)))] * 3
-        mocker.patch(GET, new=AsyncMock(side_effect=mocks))
+        mocker.patch(*get_patch(cls._THREE_COMBINATIONS))
 
         res = await client.get(
             URL_COMBINATION,
@@ -133,9 +131,7 @@ class TestUserFlowSurveySteps:
             "combination": cls._combination,
             "button": "survey",
         }
-
-        mocks = [response_mock(RAW_SEARCH_OK), response_mock(RAW_ABSTRACT_OK)]
-        mocker.patch(GET, new=AsyncMock(side_effect=mocks))
+        mocker.patch(*get_patch(cls._ONE_RESULT))
 
         res = await client.get(
             URL_SEARCH,
