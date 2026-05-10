@@ -31,7 +31,7 @@ from tests.mocks.unitary import (
 )
 
 
-STEP = fqn(ProgressBar.step)
+STEP = Patch(ScopusAbstractRetrievalAPI, ProgressBar(0).step)
 
 
 @mark.asyncio

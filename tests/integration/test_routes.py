@@ -1,13 +1,11 @@
 from secrets import token_hex
-from unittest.mock import AsyncMock
 
-from aiohttp_retry import RetryClient
 from httpx import AsyncClient as Client
 from pytest import mark
 from pytest_mock import MockerFixture as Mocker
 
 from src.core.data.enums import Lang
-from tests.mocks.helpers import fqn
+from tests.mocks.helpers import get_patch
 from tests.mocks.integration import COMBINATION_RESPONSES, SURVEY_RESPONSES
 from tests.mocks.raw import (
     COMBINATION_PARAMS,
@@ -23,9 +21,6 @@ from tests.mocks.raw import (
     URL_SEARCH,
     URL_WEB,
 )
-
-
-GET = fqn(RetryClient.get)
 
 
 @mark.asyncio
@@ -60,7 +55,7 @@ async def test_web_search_articles_pt_br(client: Client):
 
 @mark.asyncio
 async def test_api_combination(mocker: Mocker, client: Client):
-    mocker.patch(GET, new=AsyncMock(side_effect=COMBINATION_RESPONSES))
+    mocker.patch(*get_patch(COMBINATION_RESPONSES))
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
     assert res.status_code == HTTP_200 and res.text
     assert res.headers.get("Content-Type") == JSON_CONTENT_TYPE
@@ -68,7 +63,7 @@ async def test_api_combination(mocker: Mocker, client: Client):
 
 @mark.asyncio
 async def test_api_survey(mocker: Mocker, client: Client):
-    mocker.patch(GET, new=AsyncMock(side_effect=SURVEY_RESPONSES))
+    mocker.patch(*get_patch(SURVEY_RESPONSES))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     assert res.status_code == HTTP_200 and res.text
     assert res.headers.get("Content-Type") == CSV_CONTENT_TYPE

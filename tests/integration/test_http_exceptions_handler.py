@@ -5,6 +5,7 @@ from pytest_mock import MockerFixture as Mocker
 
 from src.adapters.presenters.csv_response import CSVResponse
 from src.core.config.scopus import SCOPUS_ERRORS
+from src.framework.fastapi.routes import favicon
 from tests.conftest import assert_error_json
 from tests.mocks.errors import (
     FASTAPI_HTTP_EXCEPTION,
@@ -18,7 +19,7 @@ from tests.mocks.errors import (
     SCOPUS_API_ERROR,
     STARLETTE_HTTP_EXCEPTION,
 )
-from tests.mocks.helpers import fqn
+from tests.mocks.helpers import Patch, fqn
 from tests.mocks.raw import (
     CSV_PARAMS,
     HTTP_400,
@@ -30,12 +31,12 @@ from tests.mocks.raw import (
 )
 
 
-RETRIEVE = fqn(CSVResponse.retrieve)
+RETRIEVE = Patch(CSVResponse.retrieve).classmethod(favicon)
 
 
 @mark.asyncio
 async def test_custom_http_error(mocker: Mocker, client: Client):
-    mocker.patch(RETRIEVE, side_effect=HTTP_ERROR)
+    mocker.patch(**RETRIEVE(HTTP_ERROR))
     res = await client.get(URL_CSV, params=CSV_PARAMS)
     errors = assert_error_json(res, HTTP_400, "any")
     assert errors[0]["type"] == fqn(ValueError)
@@ -44,7 +45,7 @@ async def test_custom_http_error(mocker: Mocker, client: Client):
 
 @mark.asyncio
 async def test_scopus_api_error(mocker: Mocker, client: Client):
-    mocker.patch(RETRIEVE, side_effect=SCOPUS_API_ERROR)
+    mocker.patch(**RETRIEVE(SCOPUS_API_ERROR))
     res = await client.get(URL_CSV, params=CSV_PARAMS)
     errors = assert_error_json(res, HTTP_502, "any")
     assert errors[0]["els_status"] == "any"
@@ -54,7 +55,7 @@ async def test_scopus_api_error(mocker: Mocker, client: Client):
 
 @mark.asyncio
 async def test_starlette_http_exception(mocker: Mocker, client: Client):
-    mocker.patch(RETRIEVE, side_effect=STARLETTE_HTTP_EXCEPTION)
+    mocker.patch(**RETRIEVE(STARLETTE_HTTP_EXCEPTION))
     res = await client.get(URL_CSV, params=CSV_PARAMS)
     errors = assert_error_json(res, HTTP_500, "any")
     assert errors is None
@@ -62,7 +63,7 @@ async def test_starlette_http_exception(mocker: Mocker, client: Client):
 
 @mark.asyncio
 async def test_fastapi_http_exception(mocker: Mocker, client: Client):
-    mocker.patch(RETRIEVE, side_effect=FASTAPI_HTTP_EXCEPTION)
+    mocker.patch(**RETRIEVE(FASTAPI_HTTP_EXCEPTION))
     res = await client.get(URL_CSV, params=CSV_PARAMS)
     errors = assert_error_json(res, HTTP_500, "any")
     assert errors is None
@@ -72,7 +73,7 @@ async def test_fastapi_http_exception(mocker: Mocker, client: Client):
 async def test_fastapi_request_validation_error(
     mocker: Mocker, client: Client
 ):
-    mocker.patch(RETRIEVE, side_effect=REQUEST_VALIDATION_ERROR)
+    mocker.patch(**RETRIEVE(REQUEST_VALIDATION_ERROR))
     res = await client.get(URL_CSV, params=CSV_PARAMS)
     errors = assert_error_json(res, HTTP_422, "any")
     assert errors[0]["msg"] == "any"
@@ -82,7 +83,7 @@ async def test_fastapi_request_validation_error(
 async def test_fastapi_response_validation_error(
     mocker: Mocker, client: Client
 ):
-    mocker.patch(RETRIEVE, side_effect=RESPONSE_VALIDATION_ERROR)
+    mocker.patch(**RETRIEVE(RESPONSE_VALIDATION_ERROR))
     res = await client.get(URL_CSV, params=CSV_PARAMS)
     errors = assert_error_json(res, HTTP_422, "any")
     assert errors[0]["msg"] == "any"
@@ -92,7 +93,7 @@ async def test_fastapi_response_validation_error(
 async def test_fastapi_response_validation_error_filter(
     mocker: Mocker, client: Client
 ):
-    mocker.patch(RETRIEVE, side_effect=RESPONSE_VALIDATION_EXCEPTION_ERROR)
+    mocker.patch(**RETRIEVE(RESPONSE_VALIDATION_EXCEPTION_ERROR))
     res = await client.get(URL_CSV, params=CSV_PARAMS)
     errors = assert_error_json(res, HTTP_422, "any")
     assert errors[0]["msg"] == "any"
@@ -101,7 +102,7 @@ async def test_fastapi_response_validation_error_filter(
 
 @mark.asyncio
 async def test_pydantic_validation_error(mocker: Mocker, client: Client):
-    mocker.patch(RETRIEVE, side_effect=PYDANTIC_VALIDATION_ERROR)
+    mocker.patch(**RETRIEVE(PYDANTIC_VALIDATION_ERROR))
     res = await client.get(URL_CSV, params=CSV_PARAMS)
     errors = assert_error_json(res, HTTP_500, "Field required")
     assert errors[0]["type"] == "missing"
@@ -111,7 +112,7 @@ async def test_pydantic_validation_error(mocker: Mocker, client: Client):
 
 @mark.asyncio
 async def test_pydantic_validation_undefined(mocker: Mocker, client: Client):
-    mocker.patch(RETRIEVE, side_effect=PYDANTIC_UNDEFINED_ERROR)
+    mocker.patch(**RETRIEVE(PYDANTIC_UNDEFINED_ERROR))
     res = await client.get(URL_CSV, params=CSV_PARAMS)
     errors = assert_error_json(res, HTTP_500, "Field required")
     assert errors[0]["type"] == "missing"
@@ -121,7 +122,7 @@ async def test_pydantic_validation_undefined(mocker: Mocker, client: Client):
 
 @mark.asyncio
 async def test_rate_limit_error(mocker: Mocker, client: Client):
-    mocker.patch(RETRIEVE, side_effect=RATE_LIMIT_ERROR)
+    mocker.patch(**RETRIEVE(RATE_LIMIT_ERROR))
     res = await client.get(URL_CSV, params=CSV_PARAMS)
     message = f"Request rate limit of {RATE_LIMIT_ERROR.detail} exceeded"
     errors = assert_error_json(res, HTTP_429, message)

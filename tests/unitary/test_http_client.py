@@ -4,10 +4,14 @@ from asyncio import gather, sleep
 from json import JSONDecodeError
 from unittest.mock import AsyncMock
 
-from aiohttp import ClientConnectionError, ClientSession, ContentTypeError
-from aiohttp_retry import RetryClient
+from aiohttp import (
+    ClientConnectionError,
+    ClientResponse,
+    ClientSession,
+    ContentTypeError,
+)
 from aiolimiter import AsyncLimiter
-from pytest import mark, raises
+from pytest import fixture, mark, raises
 from pytest_asyncio import fixture as async_fixture
 from pytest_mock import MockerFixture as Mocker
 
@@ -27,8 +31,8 @@ from src.core.domain.http_exceptions import (
     ScopusAPIError,
 )
 from tests.conftest import assert_http_error
-from tests.mocks.helpers import fqn
-from tests.mocks.raw import HTTP_200, HTTP_502, HTTP_504
+from tests.mocks.helpers import fqn, get_patch, http_patch
+from tests.mocks.raw import HTTP_200, HTTP_502, HTTP_504, LOG_MOCK
 from tests.mocks.unitary import (
     GET_CONTENT_TYPE_ERROR,
     GET_EMPTY_RESPONSE,
@@ -41,7 +45,6 @@ from tests.mocks.unitary import (
 LOG_STRATEGY = fqn(HTTPClient, LOG_MOCK.strategy)
 REQUEST = fqn(ClientSession.request)
 SLEEP = fqn(HTTPClient, sleep)
-GET = fqn(RetryClient.get)
 
 
 @async_fixture(scope="module", loop_scope="module", name="client")
@@ -61,7 +64,7 @@ def mock_telemetry(mocker: Mocker):
 
 @mark.asyncio(loop_scope="module")
 async def test_success(mocker: Mocker, client: HTTPClient):
-    mock = mocker.patch(GET, new=AsyncMock(return_value=GET_SUCCESS))
+    mock = mocker.patch(*get_patch(GET_SUCCESS))
     bundle = await client.request("any")
     assert bundle.code == HTTP_200
     assert bundle.data is not None and bundle.headers is not None
@@ -70,7 +73,7 @@ async def test_success(mocker: Mocker, client: HTTPClient):
 
 @mark.asyncio(loop_scope="module")
 async def test_cancelled_error(mocker: Mocker, client: HTTPClient):
-    mock = mocker.patch(GET, new=AsyncMock(side_effect=CancelledError("any")))
+    mock = mocker.patch(*get_patch(CancelledError("any")))
     with raises(CancelledError) as info:
         await client.request("any")
     assert info.value.args[0] == "any"
@@ -79,9 +82,7 @@ async def test_cancelled_error(mocker: Mocker, client: HTTPClient):
 
 @mark.asyncio(loop_scope="module")
 async def test_timeout_error(mocker: Mocker, client: HTTPClient):
-    mock = mocker.patch(
-        GET, new=AsyncMock(side_effect=AsyncTimeoutError("any"))
-    )
+    mock = mocker.patch(*get_patch(AsyncTimeoutError("any")))
     with raises(GatewayTimeout) as info:
         await client.request("any")
     assert_http_error(info, HTTP_504, CONNECTION_TIMEOUT)
@@ -92,9 +93,7 @@ async def test_timeout_error(mocker: Mocker, client: HTTPClient):
 
 @mark.asyncio(loop_scope="module")
 async def test_client_connection_error(mocker: Mocker, client: HTTPClient):
-    mock = mocker.patch(
-        GET, new=AsyncMock(side_effect=ClientConnectionError("any"))
-    )
+    mock = mocker.patch(*get_patch(ClientConnectionError("any")))
     with raises(BadGateway) as info:
         await client.request("any")
     assert_http_error(info, HTTP_502, CONNECTION_ERROR)
@@ -105,7 +104,7 @@ async def test_client_connection_error(mocker: Mocker, client: HTTPClient):
 
 @mark.asyncio(loop_scope="module")
 async def test_uncaught_exception(mocker: Mocker, client: HTTPClient):
-    mock = mocker.patch(GET, new=AsyncMock(side_effect=RuntimeError("any")))
+    mock = mocker.patch(*get_patch(RuntimeError("any")))
     with raises(BadGateway) as info:
         await client.request("any")
     assert_http_error(info, HTTP_502, REQUEST_EXCEPTION)
@@ -116,9 +115,7 @@ async def test_uncaught_exception(mocker: Mocker, client: HTTPClient):
 
 @mark.asyncio(loop_scope="module")
 async def test_content_type_error(mocker: Mocker, client: HTTPClient):
-    mock = mocker.patch(
-        GET, new=AsyncMock(return_value=GET_CONTENT_TYPE_ERROR)
-    )
+    mock = mocker.patch(*get_patch(GET_CONTENT_TYPE_ERROR))
     with raises(ScopusAPIError) as info:
         await client.request("any")
     assert_http_error(info, HTTP_502, INVALID_JSON_ERROR)
@@ -131,7 +128,7 @@ async def test_content_type_error(mocker: Mocker, client: HTTPClient):
 
 @mark.asyncio(loop_scope="module")
 async def test_no_data_error(mocker: Mocker, client: HTTPClient):
-    mock = mocker.patch(GET, new=AsyncMock(return_value=GET_EMPTY_RESPONSE))
+    mock = mocker.patch(*get_patch(GET_EMPTY_RESPONSE))
     with raises(ScopusAPIError) as info:
         await client.request("any")
     assert_http_error(info, HTTP_502, INVALID_JSON_ERROR)
@@ -144,7 +141,7 @@ async def test_no_data_error(mocker: Mocker, client: HTTPClient):
 
 @mark.asyncio(loop_scope="module")
 async def test_json_decode_error(mocker: Mocker, client: HTTPClient):
-    mock = mocker.patch(GET, new=AsyncMock(return_value=GET_JSON_DECODE_ERROR))
+    mock = mocker.patch(*get_patch(GET_JSON_DECODE_ERROR))
     with raises(ScopusAPIError) as info:
         await client.request("any")
     assert_http_error(info, HTTP_502, INVALID_JSON_ERROR)
@@ -158,7 +155,7 @@ async def test_json_decode_error(mocker: Mocker, client: HTTPClient):
 @mark.asyncio(loop_scope="module")
 async def test_request_retry(mocker: Mocker, client: HTTPClient):
     new_request = AsyncMock(ClientResponse, side_effect=GET_RETRY)
-    mock = mocker.patch(REQUEST, new=AsyncMock(side_effect=GET_RETRY))
+    mock = mocker.patch(REQUEST, new_request)
     bundle = await client.request("any")
     assert bundle.code == HTTP_200 and mock.call_count == len(GET_RETRY)
     assert bundle.data is not None and bundle.headers is not None
@@ -167,7 +164,7 @@ async def test_request_retry(mocker: Mocker, client: HTTPClient):
 @mark.asyncio(loop_scope="module")
 async def test_retry_on_rate_limit(mocker: Mocker, client: HTTPClient):
     spy = mocker.patch(SLEEP, wraps=sleep)
-    mock = mocker.patch(GET, new=AsyncMock(side_effect=GET_RATE_LIMIT))
+    mock = mocker.patch(*get_patch(GET_RATE_LIMIT))
     bundle = await client.request("any")
     assert spy.call_args_list[0].args[0] == 2
     assert bundle.code == HTTP_200 and mock.call_count == 2
@@ -188,7 +185,7 @@ async def test_update_strategy(mocker: Mocker, client: HTTPClient):
 @mark.asyncio(loop_scope="module")
 async def test_additional_sleep(mocker: Mocker, client: HTTPClient):
     spy = mocker.patch(SLEEP, wraps=sleep)
-    mock = mocker.patch(GET, new=AsyncMock(return_value=GET_SUCCESS))
+    mock = mocker.patch(*get_patch(GET_SUCCESS))
     await client.update_strategy(2000)
     tasks = [client.request("any") for _ in range(5)]
     await gather(*tasks)

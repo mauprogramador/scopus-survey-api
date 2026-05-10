@@ -30,16 +30,15 @@ from tests.mocks.raw import (
     URL_SEARCH,
 )
 
-STEP = fqn(ProgressBar.step)
-GET = fqn(RetryClient.get)
+
+STATE = fqn(make_aggregator, QuotaResultsHandler)
+STEP = Patch(ScopusAbstractRetrievalAPI, ProgressBar(0).step)
 
 
 @mark.asyncio
 async def test_retrieve_one_partial_abstract(mocker: Mocker, client: Client):
-    mock = mocker.patch(
-        GET,
-        new=AsyncMock(side_effect=RETRIEVE_ONE_PARTIAL_ABSTRACT),
-    )
+    state = mocker.patch(STATE, MockState())
+    mock = mocker.patch(*get_patch(RETRIEVE_ONE_PARTIAL_ABSTRACT))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     assert res.status_code == HTTP_200 and mock.call_count == 2
     df = load_csv_from_response(res)
@@ -49,10 +48,8 @@ async def test_retrieve_one_partial_abstract(mocker: Mocker, client: Client):
 
 @mark.asyncio
 async def test_retrieve_one_abstract_authors(mocker: Mocker, client: Client):
-    mock = mocker.patch(
-        GET,
-        new=AsyncMock(side_effect=RETRIEVE_ONE_ABSTRACT_AUTHORS),
-    )
+    state = mocker.patch(STATE, MockState())
+    mock = mocker.patch(*get_patch(RETRIEVE_ONE_ABSTRACT_AUTHORS))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     assert res.status_code == HTTP_200 and mock.call_count == 2
     df = load_csv_from_response(res)
@@ -62,10 +59,8 @@ async def test_retrieve_one_abstract_authors(mocker: Mocker, client: Client):
 
 @mark.asyncio
 async def test_retrieve_one_abstract_full(mocker: Mocker, client: Client):
-    mock = mocker.patch(
-        GET,
-        new=AsyncMock(side_effect=RETRIEVE_ONE_ABSTRACT_FULL),
-    )
+    state = mocker.patch(STATE, MockState())
+    mock = mocker.patch(*get_patch(RETRIEVE_ONE_ABSTRACT_FULL))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     assert res.status_code == HTTP_200 and mock.call_count == 2
     df = load_csv_from_response(res)
@@ -75,10 +70,8 @@ async def test_retrieve_one_abstract_full(mocker: Mocker, client: Client):
 
 @mark.asyncio
 async def test_retrieve_two_abstracts(mocker: Mocker, client: Client):
-    mock = mocker.patch(
-        GET,
-        new=AsyncMock(side_effect=RETRIEVE_TWO_ABSTRACTS),
-    )
+    state = mocker.patch(STATE, MockState())
+    mock = mocker.patch(*get_patch(RETRIEVE_TWO_ABSTRACTS))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     assert res.status_code == HTTP_200 and mock.call_count == 3
     df = load_csv_from_response(res)
@@ -87,10 +80,8 @@ async def test_retrieve_two_abstracts(mocker: Mocker, client: Client):
 
 @mark.asyncio
 async def test_retrieve_more_abstracts(mocker: Mocker, client: Client):
-    mock = mocker.patch(
-        GET,
-        new=AsyncMock(side_effect=RETRIEVE_MORE_ABSTRACTS),
-    )
+    state = mocker.patch(STATE, MockState())
+    mock = mocker.patch(*get_patch(RETRIEVE_MORE_ABSTRACTS))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     assert res.status_code == HTTP_200 and mock.call_count == 26
     df = load_csv_from_response(res)

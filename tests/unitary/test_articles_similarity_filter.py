@@ -13,8 +13,8 @@ from src.core.use_cases.articles_similarity_filter import (
     ArticlesSimilarityFilter,
 )
 from tests.conftest import assert_http_error
-from tests.mocks.helpers import fqn
-from tests.mocks.raw import HTTP_503
+from tests.mocks.helpers import Patch, fqn
+from tests.mocks.raw import HTTP_503, LOG_MOCK
 from tests.mocks.unitary import (
     MORE_GROUPS_MORE_SIMILAR,
     MORE_GROUPS_NO_SIMILAR,
@@ -30,8 +30,8 @@ from tests.mocks.unitary import (
 
 SIMILARITY_FILTER = ArticlesSimilarityFilter()
 TO_DATETIME = fqn(ArticlesSimilarityFilter, to_datetime)
-LOG_DEBUG = fqn(ArticlesSimilarityFilter, "LOG.debug")
-RESULT = fqn(Future.result)
+LOG_DEBUG = Patch(ArticlesSimilarityFilter, LOG_MOCK.debug)
+CANCELLED = Patch(Future.result, [None, CancelledError("any")])
 RATIO = 80
 
 
@@ -90,7 +90,7 @@ def test_more_groups_no_similar_titles(mocker: Mocker):
 def test_to_datetime_no_left(mocker: Mocker):
     spy_to_datetime = mocker.patch(TO_DATETIME, wraps=to_datetime)
     spy_dropna = mocker.spy(DataFrame, "dropna")
-    spy_log_debug = mocker.patch(LOG_DEBUG)
+    spy_log_debug = mocker.patch(**LOG_DEBUG)
 
     result = SIMILARITY_FILTER.filter(NO_DATETIME_LEFT, RATIO)
     df_to_datetime: Series = spy_to_datetime.call_args_list[0].args[0]
@@ -108,7 +108,7 @@ def test_to_datetime_no_left(mocker: Mocker):
 def test_to_datetime_one_left(mocker: Mocker):
     spy_to_datetime = mocker.patch(TO_DATETIME, wraps=to_datetime)
     spy_dropna = mocker.spy(DataFrame, "dropna")
-    spy_log_debug = mocker.patch(LOG_DEBUG)
+    spy_log_debug = mocker.patch(**LOG_DEBUG)
 
     result = SIMILARITY_FILTER.filter(ONE_DATETIME_LEFT, RATIO)
     df_to_datetime: DataFrame = spy_to_datetime.call_args_list[0].args[0]
@@ -158,7 +158,7 @@ def test_discard_all_older_similar():
 
 
 def test_cancelled_error(mocker: Mocker):
-    mocker.patch(RESULT, side_effect=[None, CancelledError("any")])
+    mocker.patch(**CANCELLED)
     with raises(ServiceUnavailable) as info:
         SIMILARITY_FILTER.filter(MORE_GROUPS_TWO_SIMILAR, RATIO)
     assert_http_error(info, HTTP_503, CANCELLED_ERROR)

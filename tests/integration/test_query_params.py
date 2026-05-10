@@ -1,4 +1,4 @@
-from unittest.mock import AsyncMock
+from unittest.mock import AsyncMock, MagicMock
 
 from httpx import AsyncClient as Client
 from pytest import mark
@@ -15,7 +15,7 @@ from src.core.use_cases.scopus_articles_aggregator import (
 from src.framework.fastapi.routes import survey_bibliographic_data
 from tests.conftest import assert_error_json
 from tests.mocks.helpers import (
-    fqn,
+    Patch,
     mock_retrieve_articles,
     mock_survey_combinations,
 )
@@ -33,15 +33,21 @@ from tests.mocks.raw import (
 )
 
 
-MAKE_COMBINATOR = fqn(survey_bibliographic_data, make_combinator)
-MAKE_AGGREGATOR = fqn(survey_bibliographic_data, make_aggregator)
-SURVEY_COMBINATIONS = AsyncMock(
-    spec=KeywordCombinationFinder,
-    survey_combinations=AsyncMock(side_effect=mock_survey_combinations),
+MAKE_COMBINATOR = Patch(survey_bibliographic_data, make_combinator)
+MAKE_AGGREGATOR = Patch(survey_bibliographic_data, make_aggregator)
+SURVEY_COMBINATIONS = MagicMock(
+    KeywordCombinationFinder,
+    survey_combinations=AsyncMock(
+        KeywordCombinationFinder.survey_combinations,
+        side_effect=mock_survey_combinations,
+    ),
 )
-RETRIEVE_ARTICLES = AsyncMock(
-    spec=ScopusArticlesAggregator,
-    retrieve_articles=AsyncMock(side_effect=mock_retrieve_articles),
+RETRIEVE_ARTICLES = MagicMock(
+    ScopusArticlesAggregator,
+    retrieve_articles=AsyncMock(
+        ScopusArticlesAggregator.retrieve_articles,
+        side_effect=mock_retrieve_articles,
+    ),
 )
 
 
@@ -60,7 +66,7 @@ async def test_csv_params_raise_errors(client: Client):
 
 @mark.asyncio
 async def test_combination_params_valid_data(mocker: Mocker, client: Client):
-    mocker.patch(MAKE_COMBINATOR, return_value=SURVEY_COMBINATIONS)
+    mocker.patch(**MAKE_COMBINATOR(SURVEY_COMBINATIONS))
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
     assert res.status_code == HTTP_200
 
@@ -69,7 +75,7 @@ async def test_combination_params_valid_data(mocker: Mocker, client: Client):
 async def test_combination_params_overridden_default(
     mocker: Mocker, client: Client
 ):
-    mocker.patch(MAKE_COMBINATOR, return_value=SURVEY_COMBINATIONS)
+    mocker.patch(**MAKE_COMBINATOR(SURVEY_COMBINATIONS))
     params = {
         "apiKey": API_KEY,
         "startYear": "2020",
@@ -99,7 +105,7 @@ async def test_combination_params_raise_errors(client: Client):
 async def test_combination_params_empty_to_default(
     mocker: Mocker, client: Client
 ):
-    mocker.patch(MAKE_COMBINATOR, return_value=SURVEY_COMBINATIONS)
+    mocker.patch(**MAKE_COMBINATOR(SURVEY_COMBINATIONS))
     params = {
         "apiKey": API_KEY,
         "docType": "",
@@ -113,7 +119,7 @@ async def test_combination_params_empty_to_default(
 
 @mark.asyncio
 async def test_combination_params_keywords(mocker: Mocker, client: Client):
-    mocker.patch(MAKE_COMBINATOR, return_value=SURVEY_COMBINATIONS)
+    mocker.patch(**MAKE_COMBINATOR(SURVEY_COMBINATIONS))
     params = {
         "apiKey": API_KEY,
         "keywords": ["any,any"],
@@ -134,7 +140,7 @@ async def test_combination_params_keywords(mocker: Mocker, client: Client):
 
 @mark.asyncio
 async def test_search_params_valid_data(mocker: Mocker, client: Client):
-    mocker.patch(MAKE_AGGREGATOR, return_value=RETRIEVE_ARTICLES)
+    mocker.patch(**MAKE_AGGREGATOR(RETRIEVE_ARTICLES))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     assert res.status_code == HTTP_200
 
@@ -143,7 +149,7 @@ async def test_search_params_valid_data(mocker: Mocker, client: Client):
 async def test_search_params_overridden_default(
     mocker: Mocker, client: Client
 ):
-    mocker.patch(MAKE_AGGREGATOR, return_value=RETRIEVE_ARTICLES)
+    mocker.patch(**MAKE_AGGREGATOR(RETRIEVE_ARTICLES))
     params = {
         "apiKey": API_KEY,
         "keywords": KEYWORDS,
@@ -157,7 +163,7 @@ async def test_search_params_overridden_default(
 
 @mark.asyncio
 async def test_search_params_raise_errors(mocker: Mocker, client: Client):
-    mocker.patch(MAKE_AGGREGATOR, return_value=RETRIEVE_ARTICLES)
+    mocker.patch(**MAKE_AGGREGATOR(RETRIEVE_ARTICLES))
     res = await client.get(URL_SEARCH)
     errors = assert_error_json(res, HTTP_422, "Field required")
     assert len(errors) == 4
@@ -165,7 +171,7 @@ async def test_search_params_raise_errors(mocker: Mocker, client: Client):
 
 @mark.asyncio
 async def test_search_params_empty_to_default(mocker: Mocker, client: Client):
-    mocker.patch(MAKE_AGGREGATOR, return_value=RETRIEVE_ARTICLES)
+    mocker.patch(**MAKE_AGGREGATOR(RETRIEVE_ARTICLES))
     params = {
         "apiKey": API_KEY,
         "docType": "",

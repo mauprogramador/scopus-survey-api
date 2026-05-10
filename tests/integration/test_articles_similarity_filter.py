@@ -1,9 +1,7 @@
 # mypy: disable-error-code="index"
 from concurrent.futures import CancelledError
 from datetime import datetime
-from unittest.mock import AsyncMock
 
-from aiohttp_retry import RetryClient
 from httpx import AsyncClient as Client
 from pandas import DataFrame, Series, isna, to_datetime
 from pandas.api.typing import DataFrameGroupBy
@@ -16,7 +14,7 @@ from src.core.use_cases.articles_similarity_filter import (
     ArticlesSimilarityFilter,
 )
 from tests.conftest import assert_error_json
-from tests.mocks.helpers import fqn, load_csv_from_response
+from tests.mocks.helpers import Patch, fqn, get_patch, load_csv_from_response
 from tests.mocks.integration import (
     MORE_GROUPS_MORE_SIMILAR,
     MORE_GROUPS_NO_SIMILAR,
@@ -28,21 +26,23 @@ from tests.mocks.integration import (
     ONE_GROUP_NO_SIMILAR,
     ONE_GROUP_TWO_SIMILAR,
 )
-from tests.mocks.raw import HTTP_200, HTTP_503, SEARCH_PARAMS, URL_SEARCH
+from tests.mocks.raw import (
+    HTTP_200,
+    HTTP_503,
+    LOG_MOCK,
+    SEARCH_PARAMS,
+    URL_SEARCH,
+)
 
 
 TO_DATETIME = fqn(ArticlesSimilarityFilter, to_datetime)
-LOG_DEBUG = fqn(ArticlesSimilarityFilter, "LOG.debug")
-IDXMAX = fqn(Series.idxmax)
-GET = fqn(RetryClient.get)
+LOG_DEBUG = Patch(ArticlesSimilarityFilter, LOG_MOCK.debug)
+IDXMAX = Patch(Series.idxmax)
 
 
 @mark.asyncio
 async def test_one_group_two_similar_titles(mocker: Mocker, client: Client):
-    mock = mocker.patch(
-        GET,
-        new=AsyncMock(side_effect=ONE_GROUP_TWO_SIMILAR),
-    )
+    mock = mocker.patch(*get_patch(ONE_GROUP_TWO_SIMILAR))
     spy = mocker.spy(ArticlesSimilarityFilter, "_get_single_group_index")
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     spy.assert_called_once()
@@ -56,10 +56,7 @@ async def test_one_group_two_similar_titles(mocker: Mocker, client: Client):
 
 @mark.asyncio
 async def test_one_group_more_similar_titles(mocker: Mocker, client: Client):
-    mock = mocker.patch(
-        GET,
-        new=AsyncMock(side_effect=ONE_GROUP_MORE_SIMILAR),
-    )
+    mock = mocker.patch(*get_patch(ONE_GROUP_MORE_SIMILAR))
     spy = mocker.spy(ArticlesSimilarityFilter, "_get_single_group_index")
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     spy.assert_called_once()
@@ -73,10 +70,7 @@ async def test_one_group_more_similar_titles(mocker: Mocker, client: Client):
 
 @mark.asyncio
 async def test_one_group_no_similar_titles(mocker: Mocker, client: Client):
-    mock = mocker.patch(
-        GET,
-        new=AsyncMock(side_effect=ONE_GROUP_NO_SIMILAR),
-    )
+    mock = mocker.patch(*get_patch(ONE_GROUP_NO_SIMILAR))
     spy = mocker.spy(ArticlesSimilarityFilter, "_get_single_group_index")
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     spy.assert_called_once()
@@ -87,10 +81,7 @@ async def test_one_group_no_similar_titles(mocker: Mocker, client: Client):
 
 @mark.asyncio
 async def test_more_groups_two_similar_titles(mocker: Mocker, client: Client):
-    mock = mocker.patch(
-        GET,
-        new=AsyncMock(side_effect=MORE_GROUPS_TWO_SIMILAR),
-    )
+    mock = mocker.patch(*get_patch(MORE_GROUPS_TWO_SIMILAR))
     spy = mocker.spy(ArticlesSimilarityFilter, "_get_single_group_index")
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     spy.assert_not_called()
@@ -105,10 +96,7 @@ async def test_more_groups_two_similar_titles(mocker: Mocker, client: Client):
 
 @mark.asyncio
 async def test_more_groups_more_similar_titles(mocker: Mocker, client: Client):
-    mock = mocker.patch(
-        GET,
-        new=AsyncMock(side_effect=MORE_GROUPS_MORE_SIMILAR),
-    )
+    mock = mocker.patch(*get_patch(MORE_GROUPS_MORE_SIMILAR))
     spy = mocker.spy(ArticlesSimilarityFilter, "_get_single_group_index")
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     spy.assert_not_called()
@@ -123,10 +111,7 @@ async def test_more_groups_more_similar_titles(mocker: Mocker, client: Client):
 
 @mark.asyncio
 async def test_more_groups_no_similar_titles(mocker: Mocker, client: Client):
-    mock = mocker.patch(
-        GET,
-        new=AsyncMock(side_effect=MORE_GROUPS_NO_SIMILAR),
-    )
+    mock = mocker.patch(*get_patch(MORE_GROUPS_NO_SIMILAR))
     spy = mocker.spy(ArticlesSimilarityFilter, "_get_single_group_index")
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     spy.assert_not_called()
@@ -138,13 +123,10 @@ async def test_more_groups_no_similar_titles(mocker: Mocker, client: Client):
 
 @mark.asyncio
 async def test_to_datetime_no_left(mocker: Mocker, client: Client):
-    mock = mocker.patch(
-        GET,
-        new=AsyncMock(side_effect=NO_DATETIME_LEFT),
-    )
+    mock = mocker.patch(*get_patch(NO_DATETIME_LEFT))
     spy_to_datetime = mocker.patch(TO_DATETIME, wraps=to_datetime)
     spy_dropna = mocker.spy(DataFrame, "dropna")
-    spy_log_debug = mocker.patch(LOG_DEBUG)
+    spy_log_debug = mocker.patch(**LOG_DEBUG)
 
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     df_to_datetime: Series = spy_to_datetime.call_args_list[0].args[0]
@@ -164,13 +146,10 @@ async def test_to_datetime_no_left(mocker: Mocker, client: Client):
 
 @mark.asyncio
 async def test_to_datetime_one_left(mocker: Mocker, client: Client):
-    mock = mocker.patch(
-        GET,
-        new=AsyncMock(side_effect=ONE_DATETIME_LEFT),
-    )
+    mock = mocker.patch(*get_patch(ONE_DATETIME_LEFT))
     spy_to_datetime = mocker.patch(TO_DATETIME, wraps=to_datetime)
     spy_dropna = mocker.spy(DataFrame, "dropna")
-    spy_log_debug = mocker.patch(LOG_DEBUG)
+    spy_log_debug = mocker.patch(**LOG_DEBUG)
 
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     df_to_datetime: DataFrame = spy_to_datetime.call_args_list[0].args[0]
@@ -191,10 +170,7 @@ async def test_to_datetime_one_left(mocker: Mocker, client: Client):
 
 @mark.asyncio
 async def test_no_repeated_authors(mocker: Mocker, client: Client):
-    mock = mocker.patch(
-        GET,
-        new=AsyncMock(side_effect=NO_REPEATED_AUTHORS),
-    )
+    mock = mocker.patch(*get_patch(NO_REPEATED_AUTHORS))
     spy_dropna = mocker.spy(DataFrame, "dropna")
     spy_filter = mocker.spy(DataFrameGroupBy, "filter")
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
@@ -209,10 +185,7 @@ async def test_no_repeated_authors(mocker: Mocker, client: Client):
 
 @mark.asyncio
 async def test_filter_drop_singles(mocker: Mocker, client: Client):
-    mock = mocker.patch(
-        GET,
-        new=AsyncMock(side_effect=MORE_GROUPS_TWO_SIMILAR),
-    )
+    mock = mocker.patch(*get_patch(MORE_GROUPS_TWO_SIMILAR))
     spy_filter = mocker.spy(DataFrameGroupBy, "filter")
     spy_groupby = mocker.spy(DataFrame, "groupby")
 
@@ -228,10 +201,7 @@ async def test_filter_drop_singles(mocker: Mocker, client: Client):
 
 @mark.asyncio
 async def test_discard_one_older_similar(mocker: Mocker, client: Client):
-    mock = mocker.patch(
-        GET,
-        new=AsyncMock(side_effect=ONE_GROUP_TWO_SIMILAR),
-    )
+    mock = mocker.patch(*get_patch(ONE_GROUP_TWO_SIMILAR))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     assert res.status_code == HTTP_200 and mock.call_count == 3
     df = load_csv_from_response(res)
@@ -241,10 +211,7 @@ async def test_discard_one_older_similar(mocker: Mocker, client: Client):
 
 @mark.asyncio
 async def test_discard_all_older_similar(mocker: Mocker, client: Client):
-    mock = mocker.patch(
-        GET,
-        new=AsyncMock(side_effect=ONE_GROUP_MORE_SIMILAR),
-    )
+    mock = mocker.patch(*get_patch(ONE_GROUP_MORE_SIMILAR))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     assert res.status_code == HTTP_200 and mock.call_count == 6
     df = load_csv_from_response(res)
@@ -254,11 +221,8 @@ async def test_discard_all_older_similar(mocker: Mocker, client: Client):
 
 @mark.asyncio
 async def test_cancelled_error(mocker: Mocker, client: Client):
-    mock = mocker.patch(
-        GET,
-        new=AsyncMock(side_effect=MORE_GROUPS_MORE_SIMILAR),
-    )
-    mocker.patch(IDXMAX, side_effect=[1, CancelledError("any")])
+    mock = mocker.patch(*get_patch(MORE_GROUPS_MORE_SIMILAR))
+    mocker.patch(**IDXMAX([1, CancelledError("any")]))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     assert mock.call_count == 10
     errors = assert_error_json(res, HTTP_503, CANCELLED_ERROR)
@@ -268,10 +232,7 @@ async def test_cancelled_error(mocker: Mocker, client: Client):
 
 @mark.asyncio
 async def test_drop_similar(mocker: Mocker, client: Client):
-    mock = mocker.patch(
-        GET,
-        new=AsyncMock(side_effect=ONE_GROUP_MORE_SIMILAR),
-    )
+    mock = mocker.patch(*get_patch(ONE_GROUP_MORE_SIMILAR))
     spy_drop = mocker.spy(DataFrame, "drop")
 
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)

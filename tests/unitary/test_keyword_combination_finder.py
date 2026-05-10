@@ -1,4 +1,5 @@
 from json import loads
+from random import Random
 from unittest.mock import AsyncMock, MagicMock, Mock
 
 from pytest import mark
@@ -14,7 +15,7 @@ from src.core.use_cases.keyword_combination_finder import (
     KeywordCombinationFinder,
 )
 from tests.mocks.helpers import (
-    fqn,
+    Patch,
     mock_combination_url,
     mock_survey_totals_found,
 )
@@ -23,16 +24,22 @@ from tests.mocks.raw import API_KEY, HTTP_200, KEYWORDS, LOG_QUOTA
 
 COMBINATION_FINDER = KeywordCombinationFinder(
     MagicMock(
-        spec=URLBuilder,
-        combination_url=Mock(side_effect=mock_combination_url),
+        URLBuilder,
+        combination_url=Mock(
+            URLBuilder.combination_url,
+            side_effect=mock_combination_url,
+        ),
     ),
     AsyncMock(
-        spec=ScopusSearchAPI,
-        survey_totals_found=AsyncMock(side_effect=mock_survey_totals_found),
+        ScopusSearchAPI,
+        survey_totals_found=AsyncMock(
+            ScopusSearchAPI.survey_totals_found,
+            side_effect=mock_survey_totals_found,
+        ),
     ),
-    MagicMock(spec=SurveyDetails, search_quota=LOG_QUOTA, headers={}),
+    MagicMock(SurveyDetails, search_quota=LOG_QUOTA, headers={}),
 )
-RANDINT = fqn(mock_survey_totals_found, "randint")
+RANDINT = Patch(mock_survey_totals_found, Random.randint)
 
 
 @mark.asyncio
@@ -88,7 +95,7 @@ async def test_survey_four_keywords():
 
 @mark.asyncio
 async def test_survey_not_found(mocker: Mocker):
-    mocker.patch(RANDINT, return_value=0)
+    mocker.patch(**RANDINT(0))
     raw = {
         "api_key": API_KEY,
         "keywords": KEYWORDS[:2],

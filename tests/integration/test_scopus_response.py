@@ -1,8 +1,6 @@
 # mypy: disable-error-code="index"
 from http import HTTPStatus
-from unittest.mock import AsyncMock
 
-from aiohttp_retry import RetryClient
 from httpx import AsyncClient as Client
 from pydantic_core import ValidationError
 from pytest import mark
@@ -12,7 +10,7 @@ from src.core.common.error_messages import VALIDATE_ERROR
 from src.core.config.scopus import SCOPUS_ERRORS
 from src.core.data.enums import ScopusCode
 from tests.conftest import assert_error_json
-from tests.mocks.helpers import fqn
+from tests.mocks.helpers import fqn, get_patch
 from tests.mocks.integration import (
     RESPONSE_JSON_ERROR,
     RESPONSE_KEY_ERROR,
@@ -35,15 +33,9 @@ from tests.mocks.raw import (
 )
 
 
-GET = fqn(RetryClient.get)
-
-
 @mark.asyncio
 async def test_scopus_response(mocker: Mocker, client: Client):
-    mocker.patch(
-        GET,
-        new=AsyncMock(side_effect=SEARCH_ONE_PAGE_ONE_RESULT),
-    )
+    mocker.patch(*get_patch(SEARCH_ONE_PAGE_ONE_RESULT))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     assert res.status_code == HTTP_200
 
@@ -53,8 +45,8 @@ async def test_scopus_response(mocker: Mocker, client: Client):
 async def test_status_error(
     mocker: Mocker, client: Client, status: HTTPStatus
 ):
-    RESPONSE_STATUS_ERROR.status = status
-    mocker.patch(GET, new=AsyncMock(return_value=RESPONSE_STATUS_ERROR))
+    RESPONSE_STATUS_ERROR.configure_mock(status=status)
+    mocker.patch(*get_patch(RESPONSE_STATUS_ERROR))
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
     errors = assert_error_json(res, HTTP_502, "ERROR")
     assert errors[0]["els_status"] and errors[1]["error"] == "any"
@@ -63,7 +55,7 @@ async def test_status_error(
 
 @mark.asyncio
 async def test_quota_exceeded(mocker: Mocker, client: Client):
-    mocker.patch(GET, new=AsyncMock(return_value=RESPONSE_QUOTA_EXCEEDED))
+    mocker.patch(*get_patch(RESPONSE_QUOTA_EXCEEDED))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     errors = assert_error_json(res, HTTP_502, ScopusCode.QUOTA)
     assert errors[0]["els_status"] == ScopusCode.QUOTA
@@ -73,7 +65,7 @@ async def test_quota_exceeded(mocker: Mocker, client: Client):
 
 @mark.asyncio
 async def test_rate_limit_exceeded(mocker: Mocker, client: Client):
-    mocker.patch(GET, new=AsyncMock(return_value=RESPONSE_RATE_LIMIT_EXCEEDED))
+    mocker.patch(*get_patch(RESPONSE_RATE_LIMIT_EXCEEDED))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     errors = assert_error_json(res, HTTP_502, ScopusCode.RATE_LIMIT)
     assert errors[0]["els_status"] == ScopusCode.RATE_LIMIT
@@ -83,7 +75,7 @@ async def test_rate_limit_exceeded(mocker: Mocker, client: Client):
 
 @mark.asyncio
 async def test_json_validation_error(mocker: Mocker, client: Client):
-    mocker.patch(GET, new=AsyncMock(return_value=RESPONSE_JSON_ERROR))
+    mocker.patch(*get_patch(RESPONSE_JSON_ERROR))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     errors = assert_error_json(res, HTTP_500, VALIDATE_ERROR)
     assert errors[0]["type"] == fqn(ValidationError)
@@ -94,7 +86,7 @@ async def test_json_validation_error(mocker: Mocker, client: Client):
 
 @mark.asyncio
 async def test_json_key_error(mocker: Mocker, client: Client):
-    mocker.patch(GET, new=AsyncMock(return_value=RESPONSE_KEY_ERROR))
+    mocker.patch(*get_patch(RESPONSE_KEY_ERROR))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     errors = assert_error_json(res, HTTP_500, VALIDATE_ERROR)
     assert errors[0]["type"] == fqn(KeyError)

@@ -49,16 +49,17 @@ from tests.mocks.raw import (
     URL_SEARCH,
 )
 
+
+STATE = fqn(make_aggregator, QuotaResultsHandler)
 CHAIN = fqn(KeywordCombinationFinder, chain)
-LOG_STRATEGY = fqn(HTTPClient, "LOG.strategy")
+LOG_STRATEGY = fqn(HTTPClient, LOG_MOCK.strategy)
 REQUEST = fqn(ClientSession.request)
 SLEEP = fqn(HTTPClient, sleep)
-GET = fqn(RetryClient.get)
 
 
 @mark.asyncio
 async def test_success(mocker: Mocker, client: Client):
-    mock = mocker.patch(GET, new=AsyncMock(side_effect=GET_SUCCESS))
+    mock = mocker.patch(*get_patch(GET_SUCCESS))
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
     assert res.status_code == HTTP_200 and mock.call_count == 3
     assert len(res.json()["data"]["combinations"]) == 3
@@ -66,7 +67,7 @@ async def test_success(mocker: Mocker, client: Client):
 
 @mark.asyncio
 async def test_cancelled_error(mocker: Mocker, client: Client):
-    mock = mocker.patch(GET, new=AsyncMock(side_effect=CancelledError("any")))
+    mock = mocker.patch(*get_patch(CancelledError("any")))
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
     errors = assert_error_json(res, HTTP_503, CANCELLED_ERROR)
     assert errors[0]["type"] == fqn(CancelledError)
@@ -75,9 +76,7 @@ async def test_cancelled_error(mocker: Mocker, client: Client):
 
 @mark.asyncio
 async def test_timeout_error(mocker: Mocker, client: Client):
-    mock = mocker.patch(
-        GET, new=AsyncMock(side_effect=AsyncTimeoutError("any"))
-    )
+    mock = mocker.patch(*get_patch(AsyncTimeoutError("any")))
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
     errors = assert_error_json(res, HTTP_504, CONNECTION_TIMEOUT)
     assert errors[0]["type"] == fqn(AsyncTimeoutError)
@@ -86,9 +85,7 @@ async def test_timeout_error(mocker: Mocker, client: Client):
 
 @mark.asyncio
 async def test_client_connection_error(mocker: Mocker, client: Client):
-    mock = mocker.patch(
-        GET, new=AsyncMock(side_effect=ClientConnectionError("any"))
-    )
+    mock = mocker.patch(*get_patch(ClientConnectionError("any")))
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
     errors = assert_error_json(res, HTTP_502, CONNECTION_ERROR)
     assert errors[0]["type"] == fqn(ClientConnectionError)
@@ -97,7 +94,7 @@ async def test_client_connection_error(mocker: Mocker, client: Client):
 
 @mark.asyncio
 async def test_uncaught_exception(mocker: Mocker, client: Client):
-    mock = mocker.patch(GET, new=AsyncMock(side_effect=RuntimeError("any")))
+    mock = mocker.patch(*get_patch(RuntimeError("any")))
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
     errors = assert_error_json(res, HTTP_502, REQUEST_EXCEPTION)
     assert errors[0]["type"] == fqn(RuntimeError)
@@ -106,9 +103,7 @@ async def test_uncaught_exception(mocker: Mocker, client: Client):
 
 @mark.asyncio
 async def test_content_type_error(mocker: Mocker, client: Client):
-    mock = mocker.patch(
-        GET, new=AsyncMock(return_value=GET_CONTENT_TYPE_ERROR)
-    )
+    mock = mocker.patch(*get_patch(GET_CONTENT_TYPE_ERROR))
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
     errors = assert_error_json(res, HTTP_502, INVALID_JSON_ERROR)
     assert errors[0]["els_status"] == INVALID_JSON_ERROR
@@ -119,7 +114,7 @@ async def test_content_type_error(mocker: Mocker, client: Client):
 
 @mark.asyncio
 async def test_no_data_error(mocker: Mocker, client: Client):
-    mock = mocker.patch(GET, new=AsyncMock(return_value=GET_EMPTY_RESPONSE))
+    mock = mocker.patch(*get_patch(GET_EMPTY_RESPONSE))
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
     errors = assert_error_json(res, HTTP_502, INVALID_JSON_ERROR)
     assert errors[0]["els_status"] == INVALID_JSON_ERROR
@@ -130,10 +125,7 @@ async def test_no_data_error(mocker: Mocker, client: Client):
 
 @mark.asyncio
 async def test_json_decode_error(mocker: Mocker, client: Client):
-    mock = mocker.patch(
-        GET,
-        new=AsyncMock(return_value=GET_JSON_DECODE_ERROR),
-    )
+    mock = mocker.patch(*get_patch(GET_JSON_DECODE_ERROR))
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
     errors = assert_error_json(res, HTTP_502, INVALID_JSON_ERROR)
     assert errors[0]["els_status"] == INVALID_JSON_ERROR
@@ -164,7 +156,7 @@ async def test_request_retry(mocker: Mocker, client: Client):
 @mark.asyncio
 async def test_retry_on_rate_limit(mocker: Mocker, client: Client):
     spy = mocker.patch(SLEEP, wraps=sleep)
-    mock = mocker.patch(GET, new=AsyncMock(side_effect=GET_RATE_LIMIT))
+    mock = mocker.patch(*get_patch(GET_RATE_LIMIT))
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
     assert spy.call_args_list[0].args[0] == 2
     assert spy.call_count == 2  # +1 close
@@ -178,9 +170,11 @@ async def test_retry_on_rate_limit(mocker: Mocker, client: Client):
 async def test_update_strategy_and_additional_sleep(
     mocker: Mocker, client: Client
 ):
+    state = mocker.patch(STATE, MockState(5, 113))
     spy_sleep = mocker.patch(SLEEP, wraps=sleep)
     spy_log = mocker.patch(LOG_STRATEGY, wraps=LOG.strategy)
-    mock = mocker.patch(GET, new=AsyncMock(side_effect=GET_STRATEGY))
+    mock = mocker.patch(*get_patch(GET_STRATEGY))
+
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     strategy: RateStrategy = spy_log.call_args_list[2].args[0]
     assert res.status_code == HTTP_200 and mock.call_count == 118

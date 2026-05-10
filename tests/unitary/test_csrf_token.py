@@ -14,11 +14,11 @@ from src.core.config.config import MAX_AGE
 from src.core.domain.http_exceptions import Unauthorized
 from src.framework.fastapi.csrf_token import CSRFToken
 from tests.conftest import assert_http_error
-from tests.mocks.helpers import fqn
+from tests.mocks.helpers import Patch, fqn
 from tests.mocks.raw import CSRF_TOKEN, HTTP_401, SIGNED_TOKEN
 
 
-LOADS = fqn(URLSafeTimedSerializer.loads)
+LOADS = Patch(URLSafeTimedSerializer.loads)
 
 
 def test_generate_tokens():
@@ -49,7 +49,7 @@ def test_invalid_token():
 
 
 def test_signature_expired(mocker: Mocker):
-    mock = mocker.patch(LOADS, side_effect=SignatureExpired("any"))
+    mock = mocker.patch(**LOADS(SignatureExpired("any")))
     with raises(Unauthorized) as info:
         CSRFToken.verify_csrf_token(SIGNED_TOKEN, CSRF_TOKEN)
     assert_http_error(info, HTTP_401, EXPIRED_TOKEN)
@@ -67,7 +67,7 @@ def test_bad_signature():
 
 
 def test_incorrect(mocker: Mocker):
-    mock = mocker.patch(LOADS, return_value="any")
+    mock = mocker.patch(**LOADS("any"))
     with raises(Unauthorized) as info:
         CSRFToken.verify_csrf_token(SIGNED_TOKEN, CSRF_TOKEN)
     assert_http_error(info, HTTP_401, INVALID_TOKEN)

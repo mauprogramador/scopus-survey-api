@@ -1,7 +1,4 @@
 # mypy: disable-error-code="index"
-from unittest.mock import AsyncMock
-
-from aiohttp_retry import RetryClient
 from httpx import AsyncClient as Client
 from pytest import mark
 from pytest_mock import MockerFixture as Mocker
@@ -14,7 +11,7 @@ from src.core.data.survey_details import SurveyDetails
 from src.core.use_cases.keyword_combination_finder import (
     KeywordCombinationFinder,
 )
-from tests.mocks.helpers import fqn
+from tests.mocks.helpers import Patch, get_patch
 from tests.mocks.integration import (
     COMBINATION_DETAILS,
     HEADERS,
@@ -26,21 +23,21 @@ from tests.mocks.raw import (
     COMBINATION_PARAMS,
     HTTP_200,
     KEYWORDS,
+    LOG_MOCK,
     SEARCH_PARAMS,
     URL_COMBINATION,
     URL_SEARCH,
 )
 
 
-LOG_QUOTA = fqn(KeywordCombinationFinder, "LOG.quota")
-GET = fqn(RetryClient.get)
+LOG_QUOTA = Patch(KeywordCombinationFinder, LOG_MOCK.quota)
 
 
 @mark.asyncio
 async def test_combination_details(mocker: Mocker, client: Client):
     spy_quota = mocker.spy(SurveyDetails, "set_search_quota")
-    spy_log = mocker.patch(LOG_QUOTA)
-    mocker.patch(GET, new=AsyncMock(side_effect=COMBINATION_DETAILS))
+    spy_log = mocker.patch(**LOG_QUOTA)
+    mocker.patch(*get_patch(COMBINATION_DETAILS))
 
     COMBINATION_PARAMS.update({"keywords": KEYWORDS[:2]})
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
@@ -68,8 +65,8 @@ async def test_search_details_one_result(mocker: Mocker, client: Client):
     spy_abstract_quota = mocker.spy(SurveyDetails, "set_abstract_quota")
     spy_loss = mocker.spy(SurveyDetails, "set_loss")
     spy_write = mocker.spy(CSVBuilder, "write")
-    spy_log = mocker.patch(LOG_QUOTA)
-    mocker.patch(GET, new=AsyncMock(side_effect=SEARCH_DETAILS_ONE_RESULT))
+    spy_log = mocker.patch(**LOG_QUOTA)
+    mocker.patch(*get_patch(SEARCH_DETAILS_ONE_RESULT))
 
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     search_bundle: ResponseBundle = spy_search_quota.call_args_list[0].args[1]
@@ -119,8 +116,8 @@ async def test_search_details_more_results(mocker: Mocker, client: Client):
     spy_abstract_quota = mocker.spy(SurveyDetails, "set_abstract_quota")
     spy_loss = mocker.spy(SurveyDetails, "set_loss")
     spy_write = mocker.spy(CSVBuilder, "write")
-    spy_log = mocker.patch(LOG_QUOTA)
-    mocker.patch(GET, new=AsyncMock(side_effect=SEARCH_DETAILS_MORE_RESULTS))
+    spy_log = mocker.patch(**LOG_QUOTA)
+    mocker.patch(*get_patch(SEARCH_DETAILS_MORE_RESULTS))
 
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     search_bundle: ResponseBundle = spy_search_quota.call_args_list[0].args[1]

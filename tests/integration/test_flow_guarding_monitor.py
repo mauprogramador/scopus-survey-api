@@ -9,8 +9,9 @@ from src.adapters.presenters.json_response import ErrorJSON
 from src.adapters.presenters.template_response import TemplateResponse
 from src.core.config.config import HEADERS, RATELIMIT_POLICY, SERVER
 from src.framework.fastapi.csrf_token import CSRFToken
+from src.framework.fastapi.routes import favicon
 from tests.conftest import assert_error_json
-from tests.mocks.helpers import fqn
+from tests.mocks.helpers import Patch, fqn
 from tests.mocks.raw import (
     CSV_PARAMS,
     HTML_CONTENT_TYPE,
@@ -22,8 +23,8 @@ from tests.mocks.raw import (
 )
 
 
-RETRIEVE = fqn(CSVResponse.retrieve)
-GENERATE_TOKEN = fqn(CSRFToken.generate_csrf_tokens)
+RETRIEVE = Patch(CSVResponse.retrieve).classmethod(favicon)
+GENERATE = Patch(CSRFToken.generate_csrf_tokens).classmethod(favicon)
 
 
 @mark.asyncio
@@ -42,7 +43,7 @@ async def test_success_headers(client: Client):
 
 @mark.asyncio
 async def test_uncaught_exception(mocker: Mocker, client: Client):
-    mocker.patch(RETRIEVE, side_effect=RuntimeError("any"))
+    mocker.patch(**RETRIEVE(RuntimeError("any")))
     res = await client.get(URL_CSV, params=CSV_PARAMS)
     errors = assert_error_json(res, HTTP_500, "any")
     assert errors[0]["type"] == fqn(RuntimeError)
@@ -64,7 +65,7 @@ async def test_routing_error(mocker: Mocker, client: Client):
 async def test_internal_error(mocker: Mocker, client: Client):
     client.cookies.clear()
     client.headers.clear()
-    mocker.patch(GENERATE_TOKEN, side_effect=RuntimeError("any"))
+    mocker.patch(**GENERATE(RuntimeError("any")))
     spy = mocker.spy(TemplateResponse, "not_found_template")
     res = await client.get(URL_WEB)
     assert res.status_code == HTTP_500 and res.text
