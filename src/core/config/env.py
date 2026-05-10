@@ -1,6 +1,6 @@
-from typing import Self, Tuple, Type
+from typing import Any, Self, Tuple, Type
 
-from pydantic import Field, model_validator
+from pydantic import Field, field_validator, model_validator
 from pydantic_settings import (
     BaseSettings,
     PydanticBaseSettingsSource,
@@ -21,6 +21,14 @@ class EnvConfig(BaseSettings):
         env_ignore_empty=True,
     )
 
+    secret_key: str = Field(
+        default=None,
+        exclude=True,
+        frozen=True,
+        repr=False,
+        min_length=32,
+        max_length=128,
+    )
     host: str = Field(
         default="127.0.0.1",
         pattern=HOST_PATTERN,
@@ -53,6 +61,21 @@ class EnvConfig(BaseSettings):
                 " use reload together with multiple workers\033[m"
             )
         return self
+
+    @field_validator("secret_key", mode="before")
+    @classmethod
+    def validate_secret_key(cls, value: Any) -> str:
+        if (
+            value is None
+            or not isinstance(value, str)
+            or value.strip() == ""
+            or 128 < len(value) < 32
+        ):
+            raise ValueError(
+                "\033[33mSecret Key error:\033[31m You must set a valid "
+                "SECRET_KEY in .env with 32-128 characters\033[m"
+            )
+        return value
 
     @property
     def log_params(self) -> LogParams:

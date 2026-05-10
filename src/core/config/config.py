@@ -1,6 +1,5 @@
 from contextvars import ContextVar
 from pathlib import Path
-from secrets import token_hex, token_urlsafe
 
 from slowapi import Limiter
 from slowapi.util import get_remote_address
@@ -17,9 +16,6 @@ SERVER: ContextVar[str] = ContextVar("server")
 
 DIRECTORY = Path("csv")
 FILE = "docs.csv"
-
-TOKEN = token_hex(nbytes=20)
-SECRET_KEY = token_urlsafe(nbytes=20)
 
 SALT = "scopus-survey-csrf-token"
 MAX_AGE = 3600  # 1 hour

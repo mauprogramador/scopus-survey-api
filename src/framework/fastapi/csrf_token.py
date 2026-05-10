@@ -1,4 +1,4 @@
-from hashlib import blake2s
+from secrets import token_urlsafe
 from typing import Annotated
 
 from fastapi import Cookie, Header
@@ -19,12 +19,12 @@ from src.core.common.error_messages import (
     TOKEN_SIGNATURE_ERROR,
 )
 from src.core.common.types import Token
-from src.core.config.config import MAX_AGE, SALT, SECRET_KEY, TOKEN
+from src.core.config.config import ENV, MAX_AGE, SALT
 from src.core.domain.http_exceptions import Unauthorized
 
 
 class CSRFToken:
-    _SERIALIZER = URLSafeTimedSerializer(SECRET_KEY, SALT)
+    _SERIALIZER = URLSafeTimedSerializer(ENV.secret_key, SALT)
     _OPENAPI_EXAMPLE = {
         "CSRF Token": Example(
             summary="CSRF Token",
@@ -47,7 +47,7 @@ class CSRFToken:
 
     @classmethod
     def generate_csrf_tokens(cls) -> tuple[str, str]:
-        token = blake2s(TOKEN.encode(encoding="utf-8")).hexdigest()
+        token = token_urlsafe(nbytes=48)
         signed = cls._SERIALIZER.dumps(token)
         return token, signed
 
