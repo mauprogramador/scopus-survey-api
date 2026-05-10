@@ -188,23 +188,58 @@ async def test_search_not_found(mocker: Mocker, client: Client):
 
 
 @mark.asyncio
-async def test_search_one_last_quota(mocker: Mocker, client: Client):
-    mock = mocker.patch(GET, new=AsyncMock(side_effect=SEARCH_ONE_QUOTA))
+@mark.parametrize(
+    "response,count,total,per_page",
+    [
+        (SEARCH_EXACT_QUOTA_ONE_RESULT, 1, 1, 1),
+        (SEARCH_EXACT_QUOTA_TWO_RESULTS, 2, 26, 25),
+        (SEARCH_EXACT_QUOTA_MORE_RESULTS, 7, 151, 25),
+    ],
+    ids=["One result", "Two results", "More results"],
+)
+async def test_search_exact_quota_limit(
+    mocker: Mocker,
+    client: Client,
+    response: list[MagicMock],
+    count: int,
+    total: int,
+    per_page: int,
+):
+    state = mocker.patch(STATE, MockState(count, total))
+    mock = mocker.patch(*get_patch(response))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
-    assert res.status_code == HTTP_200 and mock.call_count == 52
-    df = load_csv_from_response(res)
-    assert df.shape[0] == 1
+
+    assert res.status_code == HTTP_200 and mock.call_count == count * 2
+    assert load_csv_from_response(res).shape[0] == 1
+    assert len(state.entry) == count and state.total_results == total
+    assert state.items_per_page == per_page and state.pages_count == count
 
 
 @mark.asyncio
-async def test_search_no_remaining_quota(mocker: Mocker, client: Client):
-    mock = mocker.patch(
-        GET, new=AsyncMock(side_effect=SEARCH_ONE_PAGE_FULL_RESULTS)
-    )
+@mark.parametrize(
+    "response,count,total,per_page",
+    [
+        (SEARCH_NO_QUOTA_TWO_RESULTS, 1, 1, 25),
+        (SEARCH_NO_QUOTA_MORE_RESULTS, 4, 76, 25),
+    ],
+    ids=["Two results", "More results"],
+)
+async def test_search_insufficient_quota(
+    mocker: Mocker,
+    client: Client,
+    response: list[MagicMock],
+    count: int,
+    total: int,
+    per_page: int,
+):
+    state = mocker.patch(STATE, MockState(count, total))
+    mock = mocker.patch(*get_patch(response))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
-    assert res.status_code == HTTP_200 and mock.call_count == 26
-    df = load_csv_from_response(res)
-    assert df.shape[0] == 1
+
+    assert res.status_code == HTTP_200 and mock.call_count == count * 2
+    assert load_csv_from_response(res).shape[0] == 1
+    assert len(state.entry) == count and state.total_results == total
+    assert state.items_per_page == per_page and state.pages_count == count
 
 
 @mark.asyncio

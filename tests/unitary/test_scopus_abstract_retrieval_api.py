@@ -83,19 +83,45 @@ async def test_retrieve_more_abstracts():
 
 
 @mark.asyncio
-async def test_retrieve_one_last_quota(mocker: Mocker):
-    SURVEY_DETAILS.abstract_quota = LOG_ONE_QUOTA
-    mock = mocker.patch(VALIDATE_ABSTRACT, return_value=ONE_ABSTRACT)
-    result = await ABSTRACT_API.retrieve_abstracts(API_KEY, results_mock(7))
-    assert result.shape == (2, 11) and mock.call_count == 2
+@mark.parametrize(
+    "response,total",
+    [
+        (ABSTRACT_EXACT_QUOTA_ONE_RESULT, 1),
+        (ABSTRACT_EXACT_QUOTA_TWO_RESULTS, 2),
+        (ABSTRACT_EXACT_QUOTA_MORE_RESULTS, 7),
+    ],
+    ids=["One result", "Two results", "More results"],
+)
+async def test_retrieve_exact_quota_limit(
+    response: list[ResponseBundle], total: int
+):
+    fix = abstract_fix(response, search_raw(total))
+    result = await fix.api.retrieve_abstracts(API_KEY)
+    assert result.shape == (total, 11) and fix.req.call_count == total
+    assert len(fix.state.entry) == total and fix.state.total_results == total
+    assert fix.state.total_abstracts == len(fix.state.abstracts) == total
+    assert fix.details.abstract_quota[0].remaining == 0
 
 
 @mark.asyncio
-async def test_retrieve_no_remaining_quota(mocker: Mocker):
-    SURVEY_DETAILS.abstract_quota = LOG_NO_QUOTA
-    mock = mocker.patch(VALIDATE_ABSTRACT, return_value=ONE_ABSTRACT)
-    result = await ABSTRACT_API.retrieve_abstracts(API_KEY, results_mock(1))
-    assert result.shape == (1, 11) and mock.call_count == 1
+@mark.parametrize(
+    "response,count,total",
+    [
+        (ABSTRACT_NO_QUOTA_TWO_RESULTS, 1, 26),
+        (ABSTRACT_NO_QUOTA_MORE_RESULTS, 4, 151),
+    ],
+    ids=["Two results", "More results"],
+)
+async def test_retrieve_insufficient_quota(
+    response: list[ResponseBundle], count: int, total: int
+):
+    fix = abstract_fix(response, search_raw(total, count), count)
+    result = await fix.api.retrieve_abstracts(API_KEY)
+    assert result.shape == (count, 11)
+    assert fix.req.call_count == count
+    assert len(fix.state.entry) == count and fix.state.total_results == total
+    assert fix.state.total_abstracts == len(fix.state.abstracts) == count
+    assert fix.details.abstract_quota[0].remaining == 0
 
 
 @mark.asyncio

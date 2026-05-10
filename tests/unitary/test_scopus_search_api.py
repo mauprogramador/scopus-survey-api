@@ -160,19 +160,52 @@ async def test_search_not_found():
 
 
 @mark.asyncio
-async def test_search_one_last_quota(mocker: Mocker):
-    SURVEY_DETAILS.search_quota = LOG_ONE_QUOTA
-    mock = mocker.patch(VALIDATE_SEARCH, side_effect=MORE_PAGES_ONE_QUOTA)
-    result = await SEARCH_API.search_articles(None)
-    assert len(result.entry) == 50 and mock.call_count == 2
+@mark.parametrize(
+    "response,count,total,per_page",
+    [
+        (SEARCH_EXACT_QUOTA_ONE_RESULT, 1, 1, 1),
+        (SEARCH_EXACT_QUOTA_TWO_RESULTS, 2, 26, 25),
+        (SEARCH_EXACT_QUOTA_MORE_RESULTS, 7, 151, 25),
+    ],
+    ids=["One result", "Two results", "More results"],
+)
+async def test_search_exact_quota_limit(
+    response: list[ResponseBundle],
+    count: int,
+    total: int,
+    per_page: int,
+):
+    fix = search_fix(response)
+    await fix.api.search_articles(None)
+    assert len(fix.state.entry) == count and fix.req.call_count == count
+    assert fix.state.total_results == total
+    assert fix.state.items_per_page == per_page
+    assert fix.state.pages_count == count
+    assert fix.details.search_quota[0].remaining == 0
 
 
 @mark.asyncio
-async def test_search_no_remaining_quota(mocker: Mocker):
-    SURVEY_DETAILS.search_quota = LOG_NO_QUOTA
-    mock = mocker.patch(VALIDATE_SEARCH, return_value=ONE_PAGE_FULL_RESULTS)
-    result = await SEARCH_API.search_articles(None)
-    assert len(result.entry) == 25 and mock.call_count == 1
+@mark.parametrize(
+    "response,count,total,per_page",
+    [
+        (SEARCH_NO_QUOTA_TWO_RESULTS, 1, 1, 25),
+        (SEARCH_NO_QUOTA_MORE_RESULTS, 4, 76, 25),
+    ],
+    ids=["Two results", "More results"],
+)
+async def test_search_insufficient_quota(
+    response: list[ResponseBundle],
+    count: int,
+    total: int,
+    per_page: int,
+):
+    fix = search_fix(response)
+    await fix.api.search_articles(None)
+    assert len(fix.state.entry) == count and fix.req.call_count == count
+    assert fix.state.total_results == total
+    assert fix.state.items_per_page == per_page
+    assert fix.state.pages_count == count
+    assert fix.details.search_quota[0].remaining == 0
 
 
 @mark.asyncio

@@ -98,24 +98,50 @@ async def test_retrieve_more_abstracts(mocker: Mocker, client: Client):
 
 
 @mark.asyncio
-async def test_retrieve_one_last_quota(mocker: Mocker, client: Client):
-    mock = mocker.patch(GET, new=AsyncMock(side_effect=RETRIEVE_ONE_QUOTA))
+@mark.parametrize(
+    "response,total",
+    [
+        (ABSTRACT_EXACT_QUOTA_ONE_RESULT, 1),
+        (ABSTRACT_EXACT_QUOTA_TWO_RESULTS, 2),
+        (ABSTRACT_EXACT_QUOTA_MORE_RESULTS, 7),
+    ],
+    ids=["One result", "Two results", "More results"],
+)
+async def test_retrieve_exact_quota_limit(
+    mocker: Mocker, client: Client, response: list[MagicMock], total: int
+):
+    state = mocker.patch(STATE, MockState())
+    mock = mocker.patch(*get_patch(response))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
-    assert res.status_code == HTTP_200 and mock.call_count == 3
-    df = load_csv_from_response(res)
-    assert df.shape[0] == 1
+    assert res.status_code == HTTP_200 and mock.call_count == total + 1
+    assert load_csv_from_response(res).shape[0] == 1
+    assert len(state.entry) == state.total_results == total
+    assert state.total_abstracts == len(state.abstracts) == total
 
 
 @mark.asyncio
-async def test_retrieve_no_remaining_quota(mocker: Mocker, client: Client):
-    mock = mocker.patch(
-        GET,
-        new=AsyncMock(side_effect=RETRIEVE_ONE_PARTIAL_ABSTRACT),
-    )
+@mark.parametrize(
+    "response,count,total",
+    [
+        (ABSTRACT_NO_QUOTA_TWO_RESULTS, 1, 2),
+        (ABSTRACT_NO_QUOTA_MORE_RESULTS, 4, 7),
+    ],
+    ids=["Two results", "More results"],
+)
+async def test_retrieve_insufficient_quota(
+    mocker: Mocker,
+    client: Client,
+    response: list[MagicMock],
+    count: int,
+    total: int,
+):
+    state = mocker.patch(STATE, MockState())
+    mock = mocker.patch(*get_patch(response))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
-    assert res.status_code == HTTP_200 and mock.call_count == 2
-    df = load_csv_from_response(res)
-    assert df.shape[0] == 1
+    assert res.status_code == HTTP_200 and mock.call_count == (count + 1)
+    assert load_csv_from_response(res).shape[0] == 1
+    assert len(state.entry) == total and state.total_results == total
+    assert state.total_abstracts == len(state.abstracts) == count
 
 
 @mark.asyncio
