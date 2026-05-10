@@ -7,11 +7,13 @@ from unittest.mock import Mock
 from fastapi import Request
 from fastapi.datastructures import URL, Headers, QueryParams
 
+from src.core.common.types import LogParams
 from src.core.config.config import FILE, MAX_AGE
 from src.core.config.scopus import EMPTY_RESULT
 from src.core.data.enums import Button, Lang, ScopusCode
 from src.core.data.serializers import ScopusHeaders
 from src.framework.fastapi.csrf_token import CSRFToken
+from src.utils.logging import Logging
 
 
 # HTTP Status code
@@ -83,7 +85,7 @@ RAW_HEADERS_NO_QUOTA = {
     "X-RateLimit-Limit": "20000",
     "X-RateLimit-Remaining": "0",
     "X-RateLimit-Reset": str(RESET),
-    "X-ELS-Status": "OK",
+    "X-ELS-Status": ScopusCode.QUOTA.value,
 }
 RAW_ENTRY = {
     "@_fa": "true",
@@ -144,10 +146,10 @@ RAW_ABSTRACT_FULL = {
     }
 }
 RAW_SERVICE_ERROR_QUOTA = {
-    "service-error": {"status": {"statusCode": ScopusCode.QUOTA}}
+    "service-error": {"status": {"statusCode": ScopusCode.QUOTA.value}}
 }
 RAW_ERROR_RESPONSE_RATE_LIMIT = {
-    "error-response": {"error-code": ScopusCode.RATE_LIMIT}
+    "error-response": {"error-code": ScopusCode.RATE_LIMIT.value}
 }
 LOG_QUOTA = (ScopusHeaders(**RAW_HEADERS_OK), HTTPStatus.OK.value)
 LOG_ONE_QUOTA = (ScopusHeaders(**RAW_HEADERS_ONE_QUOTA), HTTPStatus.OK.value)
@@ -212,3 +214,9 @@ REQUEST = Mock(
     query_params=QueryParams({}),
     client=None,
 )
+
+
+class LOG(Logging): ...
+
+
+LOG_MOCK = LOG(Mock(LogParams))

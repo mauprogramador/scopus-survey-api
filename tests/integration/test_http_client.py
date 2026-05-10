@@ -7,8 +7,12 @@ from itertools import chain
 from json import JSONDecodeError
 from unittest.mock import AsyncMock, MagicMock, Mock
 
-from aiohttp import ClientConnectionError, ClientSession, ContentTypeError
-from aiohttp_retry import RetryClient
+from aiohttp import (
+    ClientConnectionError,
+    ClientResponse,
+    ClientSession,
+    ContentTypeError,
+)
 from httpx import AsyncClient as Client
 from pytest import mark
 from pytest_mock import MockerFixture as Mocker
@@ -24,11 +28,18 @@ from src.core.common.error_messages import (
 )
 from src.core.common.types import RateStrategy
 from src.core.config.config import LOG
+from src.core.data.quota_results_handler import QuotaResultsHandler
+from src.core.domain.factory import make_aggregator
 from src.core.use_cases.keyword_combination_finder import (
     KeywordCombinationFinder,
 )
 from tests.conftest import assert_error_json
-from tests.mocks.helpers import fqn, mock_from_iterable
+from tests.mocks.helpers import (
+    MockState,
+    fqn,
+    get_patch,
+    mock_from_iterable,
+)
 from tests.mocks.integration import (
     GET_CONTENT_TYPE_ERROR,
     GET_EMPTY_RESPONSE,
@@ -44,6 +55,7 @@ from tests.mocks.raw import (
     HTTP_502,
     HTTP_503,
     HTTP_504,
+    LOG_MOCK,
     SEARCH_PARAMS,
     URL_COMBINATION,
     URL_SEARCH,
@@ -136,11 +148,10 @@ async def test_json_decode_error(mocker: Mocker, client: Client):
 
 @mark.asyncio
 async def test_request_retry(mocker: Mocker, client: Client):
-    mocker.patch(
-        CHAIN,
-        new=MagicMock(from_iterable=Mock(side_effect=mock_from_iterable)),
-    )
-    mock = mocker.patch(REQUEST, new=AsyncMock(side_effect=GET_RETRY))
+    from_iterable = Mock(chain.from_iterable, side_effect=mock_from_iterable)
+    mocker.patch(CHAIN, MagicMock(chain, from_iterable=from_iterable))
+    new_request = AsyncMock(ClientResponse, side_effect=GET_RETRY)
+    mock = mocker.patch(REQUEST, new_request)
     await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
     assert mock.call_count == 3
     mock.assert_called()
@@ -176,10 +187,14 @@ async def test_update_strategy_and_additional_sleep(
     mock = mocker.patch(*get_patch(GET_STRATEGY))
 
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
-    strategy: RateStrategy = spy_log.call_args_list[2].args[0]
-    assert res.status_code == HTTP_200 and mock.call_count == 118
+    assert res.status_code == HTTP_200 and mock.call_count == 10
+    strategy: RateStrategy = spy_log.call_args_list[1].args[0]
     assert strategy.rate == 7.5 and strategy.backoff == 2.2
-    assert spy_sleep.call_count == 4  # +1 close
+    assert spy_sleep.call_count == 2  # +1 close
+
     spy_sleep.assert_awaited()
     spy_log.assert_called()
     mock.assert_awaited()
+
+    assert len(state.entry) == 5 and state.total_results == 113
+    assert state.items_per_page == 25 and state.pages_count == 5

@@ -1,46 +1,40 @@
 from asyncio import CancelledError
-from unittest.mock import AsyncMock, MagicMock
 
 from pytest import mark, raises
 from pytest_mock import MockerFixture as Mocker
 
-from src.adapters.gateway.scopus_search_api import ScopusSearchAPI
-from src.adapters.helpers.http_client import HTTPClient
-from src.adapters.helpers.scopus_response import ScopusResponse
-from src.adapters.helpers.url_builder import URLBuilder
-from src.core.common.error_messages import (
-    ARTICLES_NOT_FOUND,
-    CANCELLED_ERROR,
-    QUOTA_EXCEEDED,
+from src.adapters.gateway.scopus_search_api import (
+    ProgressBar,
+    ScopusResponse,
+    ScopusSearchAPI,
 )
-from src.core.data.serializers import ScopusSearch
-from src.core.data.survey_details import SurveyDetails
+from src.core.common.error_messages import ARTICLES_NOT_FOUND, CANCELLED_ERROR
+from src.core.common.types import ResponseBundle
+from src.core.data.enums import ScopusCode
 from src.core.domain.http_exceptions import (
     NotFound,
+    ScopusAPIError,
     ServiceUnavailable,
-    TooManyRequests,
 )
-from src.utils.progress_bar import ProgressBar
 from tests.conftest import assert_http_error
-from tests.mocks.helpers import fqn
-from tests.mocks.raw import (
-    HTTP_404,
-    HTTP_429,
-    HTTP_503,
-    LOG_NO_QUOTA,
-    LOG_ONE_QUOTA,
-    LOG_QUOTA,
-    RAW_SEARCH_NOT_FOUND,
-)
+from tests.mocks.errors import MORE_CANCELLED
+from tests.mocks.helpers import Patch, fqn, search_fix
+from tests.mocks.raw import HTTP_404, HTTP_502, HTTP_503
 from tests.mocks.unitary import (
     FOUR_KEYWORDS,
     MORE_PAGES_FULL_RESULTS,
-    MORE_PAGES_NO_QUOTA,
-    MORE_PAGES_ONE_QUOTA,
     MORE_PAGES_PARTIAL_RESULTS,
     ONE_PAGE_FULL_RESULTS,
     ONE_PAGE_ONE_RESULT,
+    SEARCH_EXACT_QUOTA_MORE_RESULTS,
+    SEARCH_EXACT_QUOTA_ONE_RESULT,
+    SEARCH_EXACT_QUOTA_TWO_RESULTS,
+    SEARCH_NO_QUOTA_MORE_RESULTS,
+    SEARCH_NO_QUOTA_TWO_RESULTS,
+    SEARCH_NOT_FOUND,
+    SEARCH_QUOTA_EXCEEDED,
     SURVEY_MAP,
+    SURVEY_NOT_FOUND,
     SURVEY_RESULTS,
     TWO_KEYWORDS,
     TWO_PAGES_FULL_RESULTS,

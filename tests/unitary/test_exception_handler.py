@@ -1,6 +1,8 @@
 # mypy: disable-error-code="index"
+from pydantic_core import PydanticUndefined
 from pytest import mark
 
+from src.core.common.error_messages import SLOWAPI_RATE_ERROR
 from src.core.config.scopus import SCOPUS_ERRORS
 from src.framework.middleware.exception_handler import ExceptionHandler
 from tests.conftest import assert_error_json
@@ -85,7 +87,7 @@ async def test_fastapi_response_validation_filter():
     res = await HANDLER.fastapi_validation_error(REQUEST, error)
     errors = assert_error_json(res, HTTP_422, "any")
     assert errors[0]["msg"] == "any"
-    assert errors[0]["ctx"]["error"] == "ValueError"
+    assert errors[0]["ctx"]["error"] == ValueError.__name__
 
 
 @mark.asyncio
@@ -105,12 +107,12 @@ async def test_pydantic_validation_undefined():
     errors = assert_error_json(res, HTTP_500, "Field required")
     assert errors[0]["type"] == "missing"
     assert errors[0]["msg"] == "Field required"
-    assert errors[0]["input"] == "PydanticUndefined"
+    assert errors[0]["input"] == str(PydanticUndefined)
 
 
 @mark.asyncio
 async def test_rate_limit_error():
     res = await HANDLER.rate_limit_error(REQUEST, RATE_LIMIT_ERROR)
-    message = f"Request rate limit of {RATE_LIMIT_ERROR.detail} exceeded"
+    message = SLOWAPI_RATE_ERROR.format(rate=RATE_LIMIT_ERROR.detail)
     errors = assert_error_json(res, HTTP_429, message)
     assert errors is None

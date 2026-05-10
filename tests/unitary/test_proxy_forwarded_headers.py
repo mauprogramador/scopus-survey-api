@@ -3,6 +3,7 @@ from unittest.mock import AsyncMock
 
 import fastapi
 from pytest import fixture, mark
+from starlette.middleware.base import RequestResponseEndpoint
 from starlette.testclient import TestClient
 from starlette.types import Scope
 
@@ -27,7 +28,7 @@ async def test_success_headers():
     }
 
     request = fastapi.Request(scope)
-    call_next = AsyncMock()
+    call_next = AsyncMock(RequestResponseEndpoint)
     middleware = ProxyForwardedHeadersMiddleware(None)
 
     await middleware.dispatch(request, call_next)

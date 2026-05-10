@@ -4,27 +4,25 @@ from pytest import mark, raises
 from pytest_mock import MockerFixture as Mocker
 
 from src.adapters.gateway.scopus_abstract_retrieval_api import (
+    ProgressBar,
     ScopusAbstractRetrievalAPI,
+    ScopusResponse,
 )
-from src.adapters.helpers.http_client import HTTPClient
-from src.adapters.helpers.scopus_response import ScopusResponse
-from src.adapters.helpers.url_builder import URLBuilder
-from src.core.common.error_messages import CANCELLED_ERROR, QUOTA_EXCEEDED
-from src.core.data.enums import Column
-from src.core.data.survey_details import SurveyDetails
-from src.core.domain.http_exceptions import ServiceUnavailable, TooManyRequests
-from src.utils.progress_bar import ProgressBar
+from src.core.common.error_messages import CANCELLED_ERROR
+from src.core.common.types import ResponseBundle
+from src.core.data.enums import Column, ScopusCode
+from src.core.domain.http_exceptions import ScopusAPIError, ServiceUnavailable
 from tests.conftest import assert_http_error
-from tests.mocks.helpers import fqn, results_mock
-from tests.mocks.raw import (
-    API_KEY,
-    HTTP_429,
-    HTTP_503,
-    LOG_NO_QUOTA,
-    LOG_ONE_QUOTA,
-    LOG_QUOTA,
-)
+from tests.mocks.errors import MORE_CANCELLED
+from tests.mocks.helpers import Patch, abstract_fix, fqn, search_raw
+from tests.mocks.raw import API_KEY, HTTP_502, HTTP_503
 from tests.mocks.unitary import (
+    ABSTRACT_EXACT_QUOTA_MORE_RESULTS,
+    ABSTRACT_EXACT_QUOTA_ONE_RESULT,
+    ABSTRACT_EXACT_QUOTA_TWO_RESULTS,
+    ABSTRACT_NO_QUOTA_MORE_RESULTS,
+    ABSTRACT_NO_QUOTA_TWO_RESULTS,
+    ABSTRACT_QUOTA_EXCEEDED,
     ONE_ABSTRACT,
     ONE_ABSTRACT_AUTHORS,
     ONE_ABSTRACT_FULL,

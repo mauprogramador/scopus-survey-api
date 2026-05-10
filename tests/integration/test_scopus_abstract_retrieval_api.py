@@ -1,30 +1,45 @@
 # mypy: disable-error-code="index"
 from asyncio import CancelledError
-from unittest.mock import AsyncMock
+from unittest.mock import MagicMock
 
-from aiohttp_retry import RetryClient
 from httpx import AsyncClient as Client
 from pytest import mark
 from pytest_mock import MockerFixture as Mocker
 
-from src.core.common.error_messages import CANCELLED_ERROR, QUOTA_EXCEEDED
-from src.core.data.enums import Column
+from src.adapters.gateway.scopus_abstract_retrieval_api import (
+    ScopusAbstractRetrievalAPI,
+)
+from src.adapters.helpers.scopus_response import ScopusResponse
+from src.core.common.error_messages import CANCELLED_ERROR
+from src.core.data.enums import Column, ScopusCode
+from src.core.data.quota_results_handler import QuotaResultsHandler
+from src.core.domain.factory import make_aggregator
 from src.utils.progress_bar import ProgressBar
 from tests.conftest import assert_error_json
-from tests.mocks.helpers import fqn, load_csv_from_response
+from tests.mocks.errors import MORE_CANCELLED
+from tests.mocks.helpers import (
+    MockState,
+    Patch,
+    fqn,
+    get_patch,
+    load_csv_from_response,
+)
 from tests.mocks.integration import (
-    RETRIEVE_CANCELLED_ERROR,
+    ABSTRACT_EXACT_QUOTA_MORE_RESULTS,
+    ABSTRACT_EXACT_QUOTA_ONE_RESULT,
+    ABSTRACT_EXACT_QUOTA_TWO_RESULTS,
+    ABSTRACT_NO_QUOTA_MORE_RESULTS,
+    ABSTRACT_NO_QUOTA_TWO_RESULTS,
+    ABSTRACT_QUOTA_EXCEEDED,
     RETRIEVE_MORE_ABSTRACTS,
-    RETRIEVE_NO_QUOTA,
     RETRIEVE_ONE_ABSTRACT_AUTHORS,
     RETRIEVE_ONE_ABSTRACT_FULL,
     RETRIEVE_ONE_PARTIAL_ABSTRACT,
-    RETRIEVE_ONE_QUOTA,
     RETRIEVE_TWO_ABSTRACTS,
 )
 from tests.mocks.raw import (
     HTTP_200,
-    HTTP_429,
+    HTTP_502,
     HTTP_503,
     SEARCH_PARAMS,
     URL_SEARCH,
@@ -44,6 +59,8 @@ async def test_retrieve_one_partial_abstract(mocker: Mocker, client: Client):
     df = load_csv_from_response(res)
     assert df.shape[0] == 1
     assert df[Column.AUTHORS].iloc[0] == "any_author"
+    assert len(state.entry) == state.total_results == 1
+    assert state.total_abstracts == len(state.abstracts) == 1
 
 
 @mark.asyncio
@@ -55,6 +72,8 @@ async def test_retrieve_one_abstract_authors(mocker: Mocker, client: Client):
     df = load_csv_from_response(res)
     assert df.shape[0] == 1
     assert df[Column.AUTHORS].iloc[0] == "any_author_1, any_author_2"
+    assert len(state.entry) == state.total_results == 1
+    assert state.total_abstracts == len(state.abstracts) == 1
 
 
 @mark.asyncio
@@ -66,6 +85,8 @@ async def test_retrieve_one_abstract_full(mocker: Mocker, client: Client):
     df = load_csv_from_response(res)
     assert df.shape[0] == 1
     assert df["Abstract"].iloc[0] == "any_abstract"
+    assert len(state.entry) == state.total_results == 1
+    assert state.total_abstracts == len(state.abstracts) == 1
 
 
 @mark.asyncio
@@ -74,8 +95,9 @@ async def test_retrieve_two_abstracts(mocker: Mocker, client: Client):
     mock = mocker.patch(*get_patch(RETRIEVE_TWO_ABSTRACTS))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     assert res.status_code == HTTP_200 and mock.call_count == 3
-    df = load_csv_from_response(res)
-    assert df.shape[0] == 1
+    assert load_csv_from_response(res).shape[0] == 1
+    assert len(state.entry) == state.total_results == 2
+    assert state.total_abstracts == len(state.abstracts) == 2
 
 
 @mark.asyncio
@@ -83,9 +105,10 @@ async def test_retrieve_more_abstracts(mocker: Mocker, client: Client):
     state = mocker.patch(STATE, MockState())
     mock = mocker.patch(*get_patch(RETRIEVE_MORE_ABSTRACTS))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
-    assert res.status_code == HTTP_200 and mock.call_count == 26
-    df = load_csv_from_response(res)
-    assert df.shape[0] == 1
+    assert res.status_code == HTTP_200 and mock.call_count == 8
+    assert load_csv_from_response(res).shape[0] == 1
+    assert len(state.entry) == 7 and state.total_results == 7
+    assert state.total_abstracts == len(state.abstracts) == 7
 
 
 @mark.asyncio
@@ -137,20 +160,21 @@ async def test_retrieve_insufficient_quota(
 
 @mark.asyncio
 async def test_retrieve_quota_exceed(mocker: Mocker, client: Client):
-    mock = mocker.patch(GET, new=AsyncMock(side_effect=RETRIEVE_NO_QUOTA))
+    mock = mocker.patch(*get_patch(ABSTRACT_QUOTA_EXCEEDED))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
-    errors = assert_error_json(res, HTTP_429, QUOTA_EXCEEDED)
-    assert errors is None and mock.call_count == 2
+    errors = assert_error_json(res, HTTP_502, ScopusCode.QUOTA)
+    assert errors is not None and mock.call_count == 3
+    assert errors[0]["els_status"] == ScopusCode.QUOTA
 
 
 @mark.asyncio
 async def test_retrieve_cancelled_error(mocker: Mocker, client: Client):
-    mocker.patch(STEP, side_effect=[None, None, None, CancelledError("any")])
-    mock = mocker.patch(
-        GET,
-        new=AsyncMock(side_effect=RETRIEVE_CANCELLED_ERROR),
-    )
+    spy = mocker.spy(ScopusResponse, "validate_abstract")
+    mocker.patch(**STEP(MORE_CANCELLED))
+    mock = mocker.patch(*get_patch(RETRIEVE_MORE_ABSTRACTS))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     errors = assert_error_json(res, HTTP_503, CANCELLED_ERROR)
+
+    assert mock.call_count == 8 and spy.call_count == 4
     assert errors[0]["type"] == fqn(CancelledError)
-    assert errors[0]["detail"] == "any" and mock.call_count == 8
+    assert errors[0]["detail"] == "any"

@@ -1,29 +1,39 @@
 # mypy: disable-error-code="index"
 from asyncio import CancelledError
-from unittest.mock import AsyncMock
+from unittest.mock import MagicMock
 
-from aiohttp_retry import RetryClient
 from httpx import AsyncClient as Client
 from pytest import mark
 from pytest_mock import MockerFixture as Mocker
 
-from src.core.common.error_messages import (
-    ARTICLES_NOT_FOUND,
-    CANCELLED_ERROR,
-    QUOTA_EXCEEDED,
-)
+from src.adapters.gateway.scopus_search_api import ScopusSearchAPI
+from src.adapters.helpers.scopus_response import ScopusResponse
+from src.core.common.error_messages import ARTICLES_NOT_FOUND, CANCELLED_ERROR
+from src.core.data.enums import ScopusCode
+from src.core.data.quota_results_handler import QuotaResultsHandler
+from src.core.domain.factory import make_aggregator
 from src.utils.progress_bar import ProgressBar
 from tests.conftest import assert_error_json
-from tests.mocks.helpers import fqn, load_csv_from_response
+from tests.mocks.errors import MORE_CANCELLED
+from tests.mocks.helpers import (
+    MockState,
+    Patch,
+    fqn,
+    get_patch,
+    load_csv_from_response,
+)
 from tests.mocks.integration import (
-    SEARCH_CANCELLED_ERROR,
+    SEARCH_EXACT_QUOTA_MORE_RESULTS,
+    SEARCH_EXACT_QUOTA_ONE_RESULT,
+    SEARCH_EXACT_QUOTA_TWO_RESULTS,
     SEARCH_MORE_PAGES_FULL_RESULTS,
     SEARCH_MORE_PAGES_PARTIAL_RESULTS,
-    SEARCH_NO_QUOTA,
+    SEARCH_NO_QUOTA_MORE_RESULTS,
+    SEARCH_NO_QUOTA_TWO_RESULTS,
     SEARCH_NOT_FOUND,
     SEARCH_ONE_PAGE_FULL_RESULTS,
     SEARCH_ONE_PAGE_ONE_RESULT,
-    SEARCH_ONE_QUOTA,
+    SEARCH_QUOTA_EXCEEDED,
     SEARCH_TWO_PAGES_FULL_RESULTS,
     SEARCH_TWO_PAGES_PARTIAL_RESULTS,
     SURVEY_CANCELLED_ERROR,
@@ -35,7 +45,7 @@ from tests.mocks.raw import (
     COMBINATION_PARAMS,
     HTTP_200,
     HTTP_404,
-    HTTP_429,
+    HTTP_502,
     HTTP_503,
     KEYWORDS,
     SEARCH_PARAMS,
@@ -94,9 +104,11 @@ async def test_search_one_page_one_result(mocker: Mocker, client: Client):
     state = mocker.patch(STATE, MockState())
     mock = mocker.patch(*get_patch(SEARCH_ONE_PAGE_ONE_RESULT))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
+
     assert res.status_code == HTTP_200 and mock.call_count == 2
-    df = load_csv_from_response(res)
-    assert df.shape[0] == 1
+    assert load_csv_from_response(res).shape[0] == 1
+    assert len(state.entry) == 1 and state.total_results == 1
+    assert state.items_per_page == 1 and state.pages_count == 1
 
 
 @mark.asyncio
@@ -104,9 +116,11 @@ async def test_search_one_page_full_results(mocker: Mocker, client: Client):
     state = mocker.patch(STATE, MockState())
     mock = mocker.patch(*get_patch(SEARCH_ONE_PAGE_FULL_RESULTS))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
-    assert res.status_code == HTTP_200 and mock.call_count == 26
-    df = load_csv_from_response(res)
-    assert df.shape[0] == 1
+
+    assert res.status_code == HTTP_200 and mock.call_count == 2
+    assert load_csv_from_response(res).shape[0] == 1
+    assert len(state.entry) == 1 and state.total_results == 25
+    assert state.items_per_page == 25 and state.pages_count == 1
 
 
 @mark.asyncio
@@ -116,9 +130,11 @@ async def test_search_two_pages_partial_results(
     state = mocker.patch(STATE, MockState())
     mock = mocker.patch(*get_patch(SEARCH_TWO_PAGES_PARTIAL_RESULTS))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
-    assert res.status_code == HTTP_200 and mock.call_count == 32
-    df = load_csv_from_response(res)
-    assert df.shape[0] == 1
+
+    assert res.status_code == HTTP_200 and mock.call_count == 4
+    assert load_csv_from_response(res).shape[0] == 1
+    assert len(state.entry) == 2 and state.total_results == 30
+    assert state.items_per_page == 25 and state.pages_count == 2
 
 
 @mark.asyncio
@@ -126,9 +142,11 @@ async def test_search_two_pages_full_results(mocker: Mocker, client: Client):
     state = mocker.patch(STATE, MockState())
     mock = mocker.patch(*get_patch(SEARCH_TWO_PAGES_FULL_RESULTS))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
-    assert res.status_code == HTTP_200 and mock.call_count == 52
-    df = load_csv_from_response(res)
-    assert df.shape[0] == 1
+
+    assert res.status_code == HTTP_200 and mock.call_count == 4
+    assert load_csv_from_response(res).shape[0] == 1
+    assert len(state.entry) == 2 and state.total_results == 50
+    assert state.items_per_page == 25 and state.pages_count == 2
 
 
 @mark.asyncio
@@ -138,9 +156,11 @@ async def test_search_more_pages_partial_results(
     state = mocker.patch(STATE, MockState(7, 151))
     mock = mocker.patch(*get_patch(SEARCH_MORE_PAGES_PARTIAL_RESULTS))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
-    assert res.status_code == HTTP_200 and mock.call_count == 158
-    df = load_csv_from_response(res)
-    assert df.shape[0] == 1
+
+    assert res.status_code == HTTP_200 and mock.call_count == 14
+    assert load_csv_from_response(res).shape[0] == 1
+    assert len(state.entry) == 7 and state.total_results == 151
+    assert state.items_per_page == 25 and state.pages_count == 7
 
 
 @mark.asyncio
@@ -148,9 +168,11 @@ async def test_search_more_pages_full_results(mocker: Mocker, client: Client):
     state = mocker.patch(STATE, MockState(7, 175))
     mock = mocker.patch(*get_patch(SEARCH_MORE_PAGES_FULL_RESULTS))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
-    assert res.status_code == HTTP_200 and mock.call_count == 182
-    df = load_csv_from_response(res)
-    assert df.shape[0] == 1
+
+    assert res.status_code == HTTP_200 and mock.call_count == 14
+    assert load_csv_from_response(res).shape[0] == 1
+    assert len(state.entry) == 7 and state.total_results == 175
+    assert state.items_per_page == 25 and state.pages_count == 7
 
 
 @mark.asyncio
@@ -220,8 +242,9 @@ async def test_search_insufficient_quota(
 async def test_search_quota_exceeded(mocker: Mocker, client: Client):
     mock = mocker.patch(*get_patch(SEARCH_QUOTA_EXCEEDED))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
-    errors = assert_error_json(res, HTTP_429, QUOTA_EXCEEDED)
-    assert errors is None and mock.call_count == 1
+    errors = assert_error_json(res, HTTP_502, ScopusCode.QUOTA)
+    assert errors is not None and mock.call_count == 2
+    assert errors[0]["els_status"] == ScopusCode.QUOTA
 
 
 @mark.asyncio
@@ -231,5 +254,7 @@ async def test_search_cancelled_error(mocker: Mocker, client: Client):
     mock = mocker.patch(*get_patch(SEARCH_MORE_PAGES_PARTIAL_RESULTS))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     errors = assert_error_json(res, HTTP_503, CANCELLED_ERROR)
+
+    assert mock.call_count == 7 and spy.call_count == 4
     assert errors[0]["type"] == fqn(CancelledError)
-    assert errors[0]["detail"] == "any" and mock.call_count == 5
+    assert errors[0]["detail"] == "any"
