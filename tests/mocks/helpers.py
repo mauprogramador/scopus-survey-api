@@ -25,15 +25,26 @@ from tests.mocks.raw import (
 )
 
 
-def fqn(
-    target: MethodType | Type[Any], method_name: MethodType | str = None
-) -> str:
+Target: TypeAlias = Type | MethodType | FunctionType | Callable
+
+
+def fqn(target: Target, method: Target = None) -> str:
     """Gets the Fully Qualified Name"""
-    if not method_name:
+    if method is None:
         return f"{target.__module__}.{target.__qualname__}"
-    if isinstance(method_name, str):
-        return f"{target.__module__}.{method_name}"
-    return f"{target.__module__}.{method_name.__qualname__}"
+
+    if isinstance(method, MethodType):
+        class_name = method.__self__.__class__.__name__
+        method_name = method.__name__
+        return f"{target.__module__}.{class_name}.{method_name}"
+
+    if isinstance(method, (Type, FunctionType, Callable)):
+        return f"{target.__module__}.{method.__name__}"
+
+    if hasattr(method, "__name__"):
+        return f"{target.__module__}.{method.__name__}"
+
+    return f"{target.__module__}.{method.__class__.__name__}"
 
 
 def mock_combination_url(*_) -> CombinationBundle:
