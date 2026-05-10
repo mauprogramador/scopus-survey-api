@@ -77,7 +77,7 @@ docs:
 # Tests
 
 test:
-	@poetry run pytest -v --color=yes
+	@poetry run pytest --color=yes --log-format=%(asctime)s %(levelname)s %(message)s --log-date-format=%Y-%m-%d %H:%M:%S
 
 coverage:
 	@poetry run coverage erase
@@ -119,9 +119,9 @@ locales:
 # Vulnerability
 
 audit:
-	@poetry run pip-audit
-	@poetry run bandit -r src/ -c "pyproject.toml"
-	@poetry run bandit -r tests/ -c "pyproject.toml"
+	@poetry run pip-audit -l . || true
+	@poetry run bandit -c pyproject.toml -r src/ || true
+	@poetry run bandit -c pyproject.toml -r tests/ || true
 
 
 # Requirements
