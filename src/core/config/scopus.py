@@ -70,6 +70,9 @@ SCOPUS_HEADERS = {
     "Connection": "keep-alive",
 }
 
+# Scopus APIs error responses descriptions from docs
+# https://dev.elsevier.com/documentation/ScopusSearchAPI.wadl
+
 SCOPUS_ERRORS = {
     HTTPStatus.BAD_REQUEST: "Invalid Request: invalid information submitted",
     HTTPStatus.UNAUTHORIZED: (
