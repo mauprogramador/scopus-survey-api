@@ -24,6 +24,8 @@ help:
 	@echo "          lint  Runs the code linters"
 	@echo "    lint-tests  Runs the code linters on tests"
 	@echo "       locales  Compiles the translation files"
+	@echo "       measure  Measures code complexity and maintainability"
+	@echo " measure-tests  Measures code complexity and maintainability on tests"
 	@echo "         audit  Runs vulnerability audits"
 	@echo "           req  Compiles Prod requirements"
 	@echo "       req-dev  Compiles Dev requirements"
@@ -96,14 +98,12 @@ lint:
 	@poetry run black src/ --check
 	@poetry run pylint src/
 	@poetry run mypy src/
-	@poetry run radon cc src/ -a -nc
 
 lint-tests:
 	@poetry run isort tests/ --check
 	@poetry run black tests/ --check
 	@poetry run pylint tests/
 	@poetry run mypy tests/
-	@poetry run radon cc tests/ -a -nc
 
 
 # Compile Locales
@@ -114,6 +114,17 @@ locales:
 
 	@msgfmt locales/pt_BR/LC_MESSAGES/web.po -o locales/pt_BR/LC_MESSAGES/web.mo
 	@msgfmt locales/pt_BR/LC_MESSAGES/error.po -o locales/pt_BR/LC_MESSAGES/error.mo
+
+
+# Metrics
+
+measure:
+	@poetry run radon cc src/
+	@poetry run radon mi src/
+
+measure-tests:
+	@poetry run radon cc tests/
+	@poetry run radon mi tests/
 
 
 # Vulnerability
