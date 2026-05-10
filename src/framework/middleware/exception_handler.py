@@ -8,7 +8,7 @@ from slowapi.errors import RateLimitExceeded
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from src.adapters.presenters.json_response import ErrorJSON
-from src.core.common.error_messages import INTERNAL_ERROR
+from src.core.common.error_messages import INTERNAL_ERROR, SLOWAPI_RATE_ERROR
 from src.core.common.types import Json
 from src.core.config.config import LOG
 from src.core.domain.http_exceptions import HTTPError, ScopusAPIError
@@ -117,7 +117,7 @@ class ExceptionHandler:
     async def rate_limit_error(
         self, request: Request, exc: RateLimitExceeded
     ) -> ErrorJSON:
-        message = f"Request rate limit of {exc.detail} exceeded"
+        message = SLOWAPI_RATE_ERROR.format(rate=exc.detail)
         LOG.error(message)
         LOG.exception(exc)
         return ErrorJSON(
