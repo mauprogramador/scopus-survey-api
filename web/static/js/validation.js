@@ -158,6 +158,7 @@ function showErrorFeedback(field, feedback = '') {
 
 // Check validity and toggle buttons
 function toggleValidity(field) {
+  field.setCustomValidity('');
   let feedback = '';
 
   if (field.matches('#apikey')) {
