@@ -2,7 +2,7 @@
 
 **Scopus Survey API** - _API da Web para levantamento bibliográfico de artigos da Scopus_
 
-> _Última atualização: 30 de Novembro de 2025_
+> _Última atualização: 13 de Maio de 2026_
 
 Instituto Federal de Educação, Ciência e Tecnologia de Mato Grosso do Sul - [IFMS Campus Três Lagoas](https://www.ifms.edu.br/campi/campus-tres-lagoas)<br>
 Tecnologia em Análise e Desenvolvimento de Sistemas - [TADS](https://www.ifms.edu.br/campi/campus-tres-lagoas/cursos/graduacao/analise-e-desenvolvimento-de-sistemas)<br>
@@ -19,9 +19,9 @@ Este contrato (**"Termos de Serviço"**) define as condições sob as quais voc�
 
 ## 1. Visão Geral
 
-Esta **API da web** foi projetada para, dentro de suas limitações, realizar **levantamentos bibliográficos sistemáticos utilizando dados da [base de dados Scopus](https://www.elsevier.com/pt-br/products/scopus)**, promovendo o acesso a fontes bibliográficas relevantes e de alta qualidade por meio de uma interface simples e bem documentada, reduzindo assim a barreira inicial de entrada para **estudantes** e acadêmicos.
+Esta **API da web** foi projetada para, dentro de suas limitações, realizar **levantamentos bibliográficos sistemáticos utilizando dados da [base de dados Scopus](https://www.elsevier.com/pt-br/products/scopus)**[^1], promovendo o acesso a fontes bibliográficas relevantes e de alta qualidade por meio de uma interface simples e bem documentada, reduzindo assim a barreira inicial de entrada para **estudantes** e acadêmicos.
 
-Como uma ferramenta [gratuita e não comercial de automação acadêmica](https://dev.elsevier.com/academic_research_scopus.html), a aplicação integra **múltiplos critérios de seleção**, incluindo múltiplos parâmetros de consulta, combinações de palavras-chave e [busca Booleana](https://dev.elsevier.com/sc_search_tips.html), com **mecanismos** para recuperação, validação, serialização e filtragem personalizadas de **grandes volumes de dados** das [APIs da Scopus](https://dev.elsevier.com/sc_apis.html).
+Como uma ferramenta [gratuita e não comercial de automação acadêmica](https://dev.elsevier.com/academic_research_scopus.html)[^2][^3][^4], a aplicação integra **múltiplos critérios de seleção**, incluindo múltiplos parâmetros de consulta, combinações de palavras-chave e [busca Booleana](https://dev.elsevier.com/sc_search_tips.html)[^5], com **mecanismos** para recuperação, validação, serialização e filtragem personalizadas de **grandes volumes de dados**[^4] das [APIs da Scopus](https://dev.elsevier.com/sc_apis.html).
 
 Dessa forma, apenas os **dados mais relevantes e recentes** serão mantidos e retornados em um **arquivo CSV**, sendo adequados para estudos e levantamentos bibliométricos, pesquisas, [revisões sistemáticas](https://pt.wikipedia.org/wiki/Revis%C3%A3o_sistem%C3%A1tica), etc., permitindo que os alunos reúnam rapidamente um conjunto de fontes de literatura revisadas por pares para uma tese ou projeto.
 
@@ -29,7 +29,7 @@ Dessa forma, apenas os **dados mais relevantes e recentes** serão mantidos e re
 
 ## 2. Aceitação
 
-> _Data de vigência: 07 de Dezembro de 2025_
+> _Data de vigência: 20 de Maio de 2026_
 
 - Ao acessar ou usar o Serviço, você concorda integralmente com estes Termos de Serviço e com nossa [Política de Privacidade](./PRIVACY_POLICY.md).
 - Estes termos constituem um acordo juridicamente vinculativo, se você não concordar com estes Termos, você **NÃO DEVE** acessar ou usar o Serviço.
@@ -41,7 +41,7 @@ Dessa forma, apenas os **dados mais relevantes e recentes** serão mantidos e re
 
 ### 3.1. Uso Permitido
 
-Você concorda em usar o Serviço exclusivamente para a finalidade pretendida, conforme descrito na [Seção 1](#1-visão-geral), utilizando o Serviço apenas para **pesquisa e uso não comercial**.
+Você concorda em usar o Serviço exclusivamente para a finalidade pretendida, conforme descrito na [Seção 1](#1-visão-geral), utilizando o Serviço apenas para **pesquisa e uso não comercial**[^2][^3][^4].
 
 ### 3.2. Responsabilidades Gerais
 
@@ -51,10 +51,10 @@ Você concorda em usar o Serviço exclusivamente para a finalidade pretendida, c
 - Respeitar os direitos de propriedade intelectual.
 - Utilizar o Serviço de maneira que não viole os direitos legais.
 - Cumprir todas as regulamentações e políticas do mantenedor:
-  - O [Acordo de Serviço de API da Elsevier](https://dev.elsevier.com/policy/API-service-agreement.pdf).
-  - As [Políticas de Uso da Elsevier](https://dev.elsevier.com/policy.html).
-  - A [Política para Pesquisa Acadêmica da Elsevier](https://dev.elsevier.com/academic_research_scopus.html).
-  - Os [Casos de Uso Não Comercial](https://dev.elsevier.com/use_cases.html).
+  - O [Acordo de Serviço de API da Elsevier](https://dev.elsevier.com/policy/API-service-agreement.pdf)[^6].
+  - As [Políticas de Uso da Elsevier](https://dev.elsevier.com/policy.html)[^2].
+  - A [Política para Mineração de Texto e Dados](https://dev.elsevier.com/academic_research_scopus.html)[^4].
+  - Os [Casos de Uso Não Comercial](https://dev.elsevier.com/use_cases.html)[^3].
 
 ### 3.3. Usos Proibidos
 
@@ -72,11 +72,13 @@ Você concorda em usar o Serviço exclusivamente para a finalidade pretendida, c
 - Tentar obter acesso não autorizado para interferir, danificar ou interromper qualquer parte do Serviço, incluindo o servidor em que o Serviço está sendo executado.
 - Atacar o Serviço por meio de um ataque [_Denial-of-service_ (DoS)](https://www.cloudflare.com/pt-br/learning/ddos/glossary/denial-of-service/) ou um ataque distribuído de DoS.
 
+Consulte os [Termos e Condições da Scopus](https://www.elsevier.com/legal/elsevier-website-terms-and-conditions)[^7].
+
 ### 3.4. Em Relação aos Dados da Scopus
 
-**É estritamente proibido o uso indevido ou a tentativa de uso indevido de dados obtidos das APIs da Scopus em violação ao [Contrato de Serviço de API da Elsevier](https://dev.elsevier.com/policy/API-service-agreement.pdf).** Isso inclui, entre outros, a reprodução, redistribuição, revenda ou exploração comercial não autorizadas de dados da Scopus além do escopo permitido pelas [Políticas de Uso da Elsevier](https://dev.elsevier.com/policy.html) e quaisquer acordos específicos entre você e a [Elsevier](https://www.elsevier.com).
+**É estritamente proibido o uso indevido ou a tentativa de uso indevido de dados obtidos das APIs da Scopus em violação ao [Contrato de Serviço de API da Elsevier](https://dev.elsevier.com/policy/API-service-agreement.pdf).**[^6] Isso inclui, entre outros, a reprodução, redistribuição, revenda ou exploração comercial não autorizadas de dados da Scopus[^7] além do escopo permitido pelas [Políticas de Uso da Elsevier](https://dev.elsevier.com/policy.html)[^2] e quaisquer acordos específicos entre você e a [Elsevier](https://www.elsevier.com).
 
-Também é proibido o download em massa, a coleta sistemática ou a extração de dados do conteúdo da Scopus além do uso acadêmico ou de pesquisa individual razoável, bem como a apresentação de dados da Scopus como seus ou a remoção de quaisquer avisos de direitos autorais ou de propriedade associados aos dados.
+Também é proibido o download em massa, a coleta sistemática ou a extração de dados do conteúdo da Scopus além do uso acadêmico ou de pesquisa individual razoável[^4][^7], bem como a apresentação de dados da Scopus como seus ou a remoção de quaisquer avisos de direitos autorais ou de propriedade associados aos dados[^8].
 
 <br>
 
@@ -88,7 +90,7 @@ O Serviço e seu conteúdo original (excluindo conteúdo fornecido por framework
 
 ### 4.2. Dados de Terceiros (Scopus)
 
-Todos os direitos de propriedade intelectual relativos aos dados fornecidos pela [API de Busca da Scopus](https://dev.elsevier.com/documentation/SCOPUSSearchAPI.wadl) (_Scopus Search API_) e pela [API de Recuperação de Resumos da Scopus](https://dev.elsevier.com/documentation/AbstractRetrievalAPI.wadl) (_Scopus Abstract Retrieval API_), incluindo, entre outros, títulos de artigos, resumos, informações sobre autores, detalhes de publicação e dados de citação, pertencem à **Elsevier B.V.** e/ou seus licenciadores. O uso desses dados por meio do nosso Serviço é regido por estes Termos, nossa [Política de Privacidade](./PRIVACY_POLICY.md) e está expressamente sujeito ao [Contrato de Serviço de API da Elsevier](https://dev.elsevier.com/policy/API-service-agreement.pdf). Você **DEVE** reconhecer que não adquire quaisquer direitos de propriedade sobre os dados da Scopus ao usar o Serviço.
+Todos os direitos de propriedade intelectual relativos aos dados fornecidos pela [API de Busca da Scopus](https://dev.elsevier.com/documentation/SCOPUSSearchAPI.wadl) (_Scopus Search API_)[^9] e pela [API de Recuperação de Resumos da Scopus](https://dev.elsevier.com/documentation/AbstractRetrievalAPI.wadl) (_Scopus Abstract Retrieval API_)[^10], incluindo, entre outros, títulos de artigos, resumos, informações sobre autores, detalhes de publicação e dados de citação[^4], pertencem à **Elsevier B.V.** e/ou seus licenciadores. O uso desses dados por meio do nosso Serviço é regido por estes Termos, nossa [Política de Privacidade](./PRIVACY_POLICY.md) e está expressamente sujeito ao [Contrato de Serviço de API da Elsevier](https://dev.elsevier.com/policy/API-service-agreement.pdf)[^6]. Você **DEVE** reconhecer que não adquire quaisquer direitos de propriedade sobre os dados da Scopus ao usar o Serviço[^8].
 
 <br>
 
@@ -111,7 +113,7 @@ Nosso uso de dados da Scopus não implica endosso ou afiliação com a [Elsevier
 
 ### 6.1. Sua Chave de API da Scopus
 
-Você precisa obter uma **Chave de API** para usar as [APIs da Scopus](<(https://dev.elsevier.com/sc_apis.html)>). Ela pode ser obtida acessando o [Portal do Desenvolvedor da Elsevier](https://dev.elsevier.com/), clicando no botão **`I want an API Key`** e se cadastrando.
+Você precisa obter uma **Chave de API**[^11] para usar as [APIs da Scopus](<(https://dev.elsevier.com/sc_apis.html)>). Ela pode ser obtida acessando o [Portal do Desenvolvedor da Elsevier](https://dev.elsevier.com/), clicando no botão **`I want an API Key`** e se cadastrando.
 
 Se você faz parte de uma instituição de ensino, pode tentar confirmar se sua instituição está cadastrada na [Elsevier](https://www.elsevier.com) para fazer login por meio da sua organização, ou você também pode tentar se cadastrar com seu e-mail acadêmico.
 
@@ -121,7 +123,7 @@ Ao se cadastrar na Elsevier para utilizar nosso Serviço, você concorda com o s
 
 - A [Política de Privacidade da Elsevier](https://www.elsevier.com/pt-br/legal/privacy-policy).
 - Fornecer informações precisas durante o processo de cadastro, especialmente em relação à sua instituição de ensino.
-- Manter a confidencialidade de sua senha e **Chave de API**, e nos notificar imediatamente sobre qualquer uso não autorizado ou outra violação de segurança.
+- Manter a confidencialidade de sua senha e **Chave de API**[^11], e nos notificar imediatamente sobre qualquer uso não autorizado ou outra violação de segurança.
 - Ser o único responsável por todas as atividades que ocorrerem em sua conta, independentemente de você tê-las autorizado ou não.
 - Não criar uma conta para outra pessoa sem a devida autorização.
 - Não criar múltiplas contas ou transferir sua conta para outra pessoa.
@@ -130,21 +132,21 @@ Ao se cadastrar na Elsevier para utilizar nosso Serviço, você concorda com o s
 
 ### 6.3. Rede Institucional
 
-Observe que a **Chave de API** só será autenticada corretamente se você a enviar usando a **rede da sua instituição acadêmica**, que deve estar **registrada na Elsevier**. Isso **não inclui** acesso por VPN ou proxy. Portanto, se você estiver **totalmente remoto** e **fora do campus**, alguns dados podem **não ser retornados**.
+Observe que a **Chave de API**[^11] só será autenticada corretamente se você a enviar usando a **rede da sua instituição acadêmica**, que deve estar **registrada na Elsevier**. Isso **não inclui** acesso por VPN ou proxy. Portanto, se você estiver **totalmente remoto** e **fora do campus**, alguns dados podem **não ser retornados**.
 
 <br>
 
 ## 7. Dados da Scopus
 
-Como o Serviço utiliza dados obtidos do banco de dados Scopus por meio da [API de Busca da Scopus](https://dev.elsevier.com/documentation/SCOPUSSearchAPI.wadl) e da [API de Recuperação de Resumos da Scopus](https://dev.elsevier.com/documentation/AbstractRetrievalAPI.wadl), mantidas pela [Elsevier](https://www.elsevier.com), cumprimos e reconhecemos solenemente que todo o uso das [APIs da Scopus](https://dev.elsevier.com/sc_apis.html) e dos dados está sujeito à [Política de Pesquisa Acadêmica](https://dev.elsevier.com/academic_research_scopus.html).
+Como o Serviço utiliza dados obtidos do banco de dados Scopus por meio da [API de Busca da Scopus](https://dev.elsevier.com/documentation/SCOPUSSearchAPI.wadl)[^9] e da [API de Recuperação de Resumos da Scopus](https://dev.elsevier.com/documentation/AbstractRetrievalAPI.wadl)[^10], mantidas pela [Elsevier](https://www.elsevier.com), cumprimos e reconhecemos solenemente que todo o uso das [APIs da Scopus](https://dev.elsevier.com/sc_apis.html) e dos dados está sujeito à [Política de Pesquisa Acadêmica](https://dev.elsevier.com/academic_research_scopus.html)[^4].
 
 Também cumprimos as condições de uso predefinidas:
 
-- A pesquisa destina-se **EXCLUSIVAMENTE** a fins acadêmicos e **não comerciais**.
-- A pesquisa **NÃO DEVE** ser realizada por terceiros ou consultores.
-- A extração de dados de todo o conjunto de dados da Scopus é **proibida**.
-- A retenção dos dados originais limita-se ao arquivamento e à reprodução dos resultados da pesquisa.
-- A Scopus **DEVE** ser identificado como a fonte dos dados.
+- A pesquisa destina-se **EXCLUSIVAMENTE** a fins acadêmicos e **não comerciais**[^2][^3][^4].
+- A pesquisa **NÃO DEVE** ser realizada por terceiros ou consultores[^4].
+- A extração de dados de todo o conjunto de dados da Scopus é **proibida**[^4].
+- A retenção dos dados originais limita-se ao arquivamento e à reprodução dos resultados da pesquisa[^4].
+- A Scopus **DEVE** ser identificado como a fonte dos dados[^8].
 
 ### 7.1. Manipulação de Dados
 
@@ -167,7 +169,7 @@ Finalmente, os documentos serão **filtrados e removidos** na seguinte ordem:
 
 ### 7.2. Especificação das APIs
 
-Sobre o que usamos na [API de Busca da Scopus](https://dev.elsevier.com/documentation/SCOPUSSearchAPI.wadl) e na [API de Recuperação de Resumos da Scopus](https://dev.elsevier.com/documentation/AbstractRetrievalAPI.wadl):
+Sobre o que usamos na [API de Busca da Scopus](https://dev.elsevier.com/documentation/SCOPUSSearchAPI.wadl)[^9] e na [API de Recuperação de Resumos da Scopus](https://dev.elsevier.com/documentation/AbstractRetrievalAPI.wadl)[^10]:
 
 **Parâmetros de Consulta:**
 
@@ -187,11 +189,11 @@ TITLE-ABS-KEY, AND, OR, AND NOT, DOCTYPE, PUBSTAGE, LANGUAGE, OPENACCESS, SRCTYP
 prism:url, dc:identifier, eid, dc:title, dc:description, prism:publicationName, quotedby-count, prism:volume, prism:coverDate, prism:doi, dc:creator, authors
 ```
 
-Consulte o [Guia de Busca da Scopus](https://dev.elsevier.com/sc_search_tips.html) e as [Visualizações de Busca da Scopus](https://dev.elsevier.com/sc_search_views.html) na documentação.
+Consulte o [Guia de Busca da Scopus](https://dev.elsevier.com/sc_search_tips.html)[^5] e as [Visualizações de Busca da Scopus](https://dev.elsevier.com/sc_search_views.html)[^12] na documentação.
 
 ### 7.3. Citação da Fonte
 
-Como o resultado da pesquisa do Serviço é um arquivo CSV, que é essencialmente um conjunto de dados obtido das APIs da Scopus, devemos, seguindo o [Guia de Atribuição da Scopus](https://dev.elsevier.com/tecdoc_attribution_scopus.html), reconhecer tanto a **Scopus** quanto a **Elsevier** como fontes de dados, incluindo links para seus sites e descrevendo a data de acesso.
+Como o resultado da pesquisa do Serviço é um arquivo CSV, que é essencialmente um conjunto de dados obtido das APIs da Scopus, devemos, seguindo o [Guia de Atribuição da Scopus](https://dev.elsevier.com/tecdoc_attribution_scopus.html)[^8], reconhecer tanto a **Scopus** quanto a **Elsevier** como fontes de dados, incluindo links para seus sites e descrevendo a data de acesso.
 
 Adicionamos alguns **metadados** (como comentário) no início do arquivo CSV, indicando a data em que os dados foram obtidos.
 
@@ -235,21 +237,32 @@ Reservamo-nos o direito de restringir, suspender ou encerrar seu acesso ao Servi
 
 <br>
 
-## 11. Referência
-
-- [**Termos e Condições da Elsevier**](https://www.elsevier.com/legal/elsevier-website-terms-and-conditions)
-- [**Acordo de Serviço de API da Elsevier**](https://dev.elsevier.com/policy/API-service-agreement.pdf)
-- [**Políticas de Uso da Elsevier**](https://dev.elsevier.com/policy.html)
-- [**Guia de Atribuição da Scopus**](https://dev.elsevier.com/tecdoc_attribution_scopus.html)
-- [**Documentação da API de Busca da Scopus**](https://dev.elsevier.com/documentation/ScopusSearchAPI.wadl)
-- [**Documentação da API de Recuperação de Resumos da Scopus**](https://dev.elsevier.com/documentation/AbstractRetrievalAPI.wadl)
-- [**Configurações da Chave de API**](https://dev.elsevier.com/api_key_settings.html)
-- [**Casos de Uso da Elsevier**](https://dev.elsevier.com/use_cases.html)
-- [**Guia de Busca da Scopus**](https://dev.elsevier.com/sc_search_tips.html)
-- [**Visualizações de Busca da Scopus**](https://dev.elsevier.com/sc_search_views.html)
-
-<br>
-
-## 12. Contato
+---
 
 Para dúvidas ou preocupações sobre estes Termos, entre em contato conosco pelo endereço <sir.silvabmauricio@gmail.com>.
+
+Referências
+
+[^1]: ELSEVIER. **Scopus**, ©2026. [_Scopus: A comprehensive abstract and citation database for impact makers_ ↗](https://www.elsevier.com/pt-br/products/scopus)
+
+[^2]: ELSEVIER. **Elsevier Developer Portal**, ©2026. [en-US]. [_Use Policies_ ↗](https://dev.elsevier.com/policy.html)
+
+[^3]: ELSEVIER. **Elsevier Developer Portal**, ©2026. [en-US]. [_Use Cases_ ↗](https://dev.elsevier.com/use_cases.html)
+
+[^4]: ELSEVIER. **Elsevier Developer Portal**, 2026. [en-US]. [_Text and Data Mining_ ↗](https://dev.elsevier.com/academic_research_scopus.html)
+
+[^5]: ELSEVIER. **Elsevier Developer Portal**, ©2026. [en-US]. [_Scopus Search Guide_ ↗](https://dev.elsevier.com/sc_search_tips.html)
+
+[^6]: ELSEVIER. **Elsevier Developer Portal**, 2016. [PDF]. [en-US]. [_API Service Agreement_ ↗](https://dev.elsevier.com/policy/API-service-agreement.pdf)
+
+[^7]: ELSEVIER. **Elsevier Legal**, 2026. [en-US]. [_Terms and Conditions_ ↗](https://www.elsevier.com/pt-br/legal/elsevier-website-terms-and-conditions)
+
+[^8]: ELSEVIER. **Elsevier Developer Portal**, ©2026. [en-US]. [_Scopus Attribution Guide_ ↗](https://dev.elsevier.com/tecdoc_attribution_scopus.html)
+
+[^9]: ELSEVIER. **Elsevier Developer Portal**, ©2024. [en-US]. [_Scopus Search API_ ↗](https://dev.elsevier.com/documentation/ScopusSearchAPI.wadl)
+
+[^10]: ELSEVIER. **Elsevier Developer Portal**, ©2024. [en-US]. [_Abstract Retrieval API_ ↗](https://dev.elsevier.com/documentation/AbstractRetrievalAPI.wadl)
+
+[^11]: ELSEVIER. **Elsevier Developer Portal**, ©2026. [en-US]. [_How much data can I retrieve with my APIKey?_ ↗](https://dev.elsevier.com/api_key_settings.html)
+
+[^12]: ELSEVIER. **Elsevier Developer Portal**, ©2026. [en-US]. [_Scopus Search Views_ ↗](https://dev.elsevier.com/sc_search_views.html)

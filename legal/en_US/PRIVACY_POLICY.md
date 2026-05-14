@@ -2,7 +2,7 @@
 
 **Scopus Survey API** - _Web API for bibliographic survey of Scopus articles_
 
-> _Last updated: November 30, 2025_
+> _Last updated: May 13, 2026_
 
 Instituto Federal de Educação, Ciência e Tecnologia de Mato Grosso do Sul - [IFMS Campus Três Lagoas](https://www.ifms.edu.br/campi/campus-tres-lagoas)<br>
 Tecnologia em Análise e Desenvolvimento de Sistemas - [TADS](https://www.ifms.edu.br/campi/campus-tres-lagoas/cursos/graduacao/analise-e-desenvolvimento-de-sistemas)<br>
@@ -22,7 +22,7 @@ This agreement (**"Privacy Policy"**) defines the conditions under which the Sco
 
 ### 1.1. Information You Provide to Us
 
-- Your Scopus **API Key**.
+- Your Scopus **API Key**[^1].
 - All parameters you submit in the web form.
 - If you contact us directly (e.g. via email), we collect the content of your communication and your contact information.
 
@@ -31,24 +31,23 @@ This agreement (**"Privacy Policy"**) defines the conditions under which the Sco
 When you access and use the Service, we automatically collect certain information that your browser or device sends, including:
 
 - **Usage Data:** This may include your IP address, browser info, the pages of our Service that you visit, the time and date of your visit, the time spent on those pages, and other diagnostic data.
-- **Session Cookie:** We use [Starlette's SessionMiddleware](https://www.starlette.io/middleware/#sessionmiddleware) to add a signed cookie-based HTTP sessions to track and control the **Session** time.
-- **Token Cookie:** This is strictly necessary for authentication and protection against **CSRF** (Cross-Site Request Forgery) attacks. Your **CSRF Token** is automatically managed through HTTP headers, cookies, query parameters, and session, and is essential for maintaining secure interactions within the Service.
-- **Tracking Technologies:** Since we use [Slowapi's Limiter](https://slowapi.readthedocs.io/en/latest/) to control the Service rate limit, it will obtain and store your IP address by default.
+- **Token Cookie:** This is strictly necessary for authentication and protection against **CSRF** (Cross-Site Request Forgery[^2][^3]) attacks. Your **CSRF Token** is automatically managed through HTTP headers and cookies, and is essential for maintaining secure interactions within the Service.
+- **Tracking Technologies:** Since we use [Slowapi's Limiter](https://slowapi.readthedocs.io/en/latest/)[^4] to control the Service rate limit, it will obtain and store your IP address by default.
 
 ### 1.3. Information from Third-Party Sources (Scopus Data)
 
-Our Service queries and accesses the Scopus® database through the [Scopus Search API](https://dev.elsevier.com/documentation/SCOPUSSearchAPI.wadl) and [Scopus Abstract Retrieval API](https://dev.elsevier.com/documentation/AbstractRetrievalAPI.wadl). However, what is retrieved primarily consists of academic publication information, such as article titles, abstracts, author details, citations, and keywords, which are public or academically licensed content.
+Our Service queries and accesses the Scopus® database through the [Scopus Search API](https://dev.elsevier.com/documentation/SCOPUSSearchAPI.wadl)[^5] and [Scopus Abstract Retrieval API](https://dev.elsevier.com/documentation/AbstractRetrievalAPI.wadl)[^6]. However, what is retrieved primarily consists of academic publication information[^7], such as article titles, abstracts, author details, citations, and keywords, which are public or academically licensed content[^8].
 
-We would like to clarify that **we do not collect or process any user information from the Scopus APIs, nor do we process any of your account information**. The only Scopus data we use is your **API Key**, which is not directly linked to your personal information, nor does it allow us to access it.
+We would like to clarify that **we do not collect or process any user information from the Scopus APIs, nor do we process any of your account information**[^9]. The only Scopus data we use is your **API Key**, which is not directly linked to your personal information, nor does it allow us to access it.
 
-The Service only uses your **API Key** to systematically retrieve, validate, and filter the survey data for you, and return it in an organized manner.
+The Service only uses your **API Key**[^1] to systematically retrieve, validate, and filter the survey data for you, and return it in an organized manner.
 
 <br>
 
 ## 2. How We Use Your Information
 
 - **Provide and Maintain our Service:** Ensuring its proper functioning and compliance with its intended purpose.
-- **Security and Fraud Prevention:** Managing **Session and CSRF Tokens**, detecting and preventing unauthorized access or malicious activity.
+- **Security and Fraud Prevention:** Managing **CSRF Tokens**, detecting and preventing unauthorized access or malicious activity.
 - **Improve our Service:** Understanding how users interact with it, identifying areas for optimization, and developing new features.
 
 <br>
@@ -69,7 +68,7 @@ We DO NOT sell your personal information. We may share it only in the following 
 
 We will retain your personal information only for as long as necessary for the purposes set out in this Privacy Policy and to the extent necessary to comply with our legal obligations (for example, if we are required to retain your data to comply with applicable laws), resolve disputes, and enforce our legal agreements and policies.
 
-On the other hand, we will typically not retain any of your information beyond the CSV file generated as a result of the survey, which will remain stored on the server on which the Service is running.
+On the other hand, we will typically not retain any of your information beyond the CSV file generated as a result of the survey[^8], which will remain stored on the server on which the Service is running.
 
 <br>
 
@@ -81,7 +80,7 @@ The security of your data is important to us. We implement generally accepted in
 
 ## 6. Your Data Rights (LGPD Compliance)
 
-Under the **Brazilian General Data Protection Law (LGPD)**, you have specific rights regarding your data:
+Under the **Brazilian General Data Protection Law (LGPD)**[^10][^11], you have specific rights regarding your data:
 
 - **Access:** Request confirmation and details on personal data processing.
 - **Correction:** Request the correction of incomplete, inaccurate, or outdated data.
@@ -104,18 +103,30 @@ We reserve the right to update these Terms at any time. We will notify users of 
 
 <br>
 
-## 8. Reference
-
-- [**Elsevier Privacy Policy**](https://www.elsevier.com/legal/privacy-policy)
-- [**Elsevier Use Policies**](https://dev.elsevier.com/policy.html)
-- [**Brazilian Data Protection Law (LGPD)**](https://www.gov.br/anpd/pt-br/centrais-de-conteudo/outros-documentos-e-publicacoes-institucionais/lgpd-en-lei-no-13-709-capa.pdf) **`PDF`**
-- [**Lei Geral de Proteção de Dados Pessoais (LGPD)**](https://www.gov.br/esporte/pt-br/acesso-a-informacao/lgpd) **`pt-BR`**
-- [**Scopus Search API Documentation**](https://dev.elsevier.com/documentation/ScopusSearchAPI.wadl)
-- [**Abstract Retrieval API Documentation**](https://dev.elsevier.com/documentation/AbstractRetrievalAPI.wadl)
-- [**API Key Settings**](https://dev.elsevier.com/api_key_settings.html)
-
-<br>
-
-## 9. Contact
+---
 
 For questions or concerns about these Policies, please contact us at <sir.silvabmauricio@gmail.com>.
+
+References
+
+[^1]: Elsevier \(©2026). **Elsevier Developer Portal**. [_How much data can I retrieve with my APIKey?_ ↗](https://dev.elsevier.com/api_key_settings.html)
+
+[^2]: MDN Contributors \(2026). **MDN Web Docs**. [_Cross-site request forgery (CSRF)_ ↗](https://developer.mozilla.org/en-US/docs/Web/Security/Attacks/CSRF)
+
+[^3]: Cloudflare \(©2026). **Cloudflare Security**. [_What is cross-site request forgery?_ ↗](https://www.cloudflare.com/learning/security/threats/cross-site-request-forgery/)
+
+[^4]: Savaete, L. \(2024). **SlowAPI Documentation**. [_API Reference: Limiter_ ↗](https://slowapi.readthedocs.io/en/latest/api/)
+
+[^5]: Elsevier \(©2024). **Elsevier Developer Portal**. [_Scopus Search API_ ↗](https://dev.elsevier.com/documentation/ScopusSearchAPI.wadl)
+
+[^6]: Elsevier \(©2024). **Elsevier Developer Portal**. [_Abstract Retrieval API_ ↗](https://dev.elsevier.com/documentation/AbstractRetrievalAPI.wadl)
+
+[^7]: Elsevier \(©2026). **Elsevier Developer Portal**. [_Use Policies_ ↗](https://dev.elsevier.com/policy.html)
+
+[^8]: Elsevier \(©2026). **Elsevier Developer Portal**. [_Text and Data Mining_ ↗](https://dev.elsevier.com/academic_research_scopus.html)
+
+[^9]: Elsevier \(2026). **Elsevier Legal**. [_Privacy Policy_ ↗](https://www.elsevier.com/legal/privacy-policy)
+
+[^10]: National Data Protection Authority (ANPD) (2025). **GOV.BR Portal**. [PDF]. [_Brazilian Data Protection Law (LGPD)_ ↗](https://www.gov.br/anpd/pt-br/centrais-de-conteudo/outros-documentos-e-publicacoes-institucionais/lgpd-en-lei-no-13-709-capa.pdf)
+
+[^11]: Ministério do Esporte (n.d.). **GOV.BR Portal**. [pt-BR]. [_Lei Geral de Proteção de Dados Pessoais (LGPD)_ ↗](https://www.gov.br/esporte/pt-br/acesso-a-informacao/lgpd)
