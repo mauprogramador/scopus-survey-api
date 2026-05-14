@@ -2,7 +2,7 @@
 
 **Scopus Survey API** - _Web API for bibliographic survey of Scopus articles_
 
-> _Last updated: November 28, 2025_
+> _Last updated: May 13, 2026_
 
 Instituto Federal de Educação, Ciência e Tecnologia de Mato Grosso do Sul - [IFMS Campus Três Lagoas](https://www.ifms.edu.br/campi/campus-tres-lagoas)<br>
 Tecnologia em Análise e Desenvolvimento de Sistemas - [TADS](https://www.ifms.edu.br/campi/campus-tres-lagoas/cursos/graduacao/analise-e-desenvolvimento-de-sistemas)<br>
@@ -156,7 +156,23 @@ Application Dependencies
 - [Python-Levenshtein `v0.27.1`](https://pypi.org/project/python-Levenshtein/)
 - [tqdm `v4.67.5`](https://pypi.org/project/tqdm)
 
-Web Libraries
+Application Sub-Dependencies
+
+- [Uvicorn `v0.38.0`](https://uvicorn.dev/) - FastAPI
+- [Jinja2 `v3.1.6`](https://jinja.palletsprojects.com/en/stable/) - FastAPI
+- [Starlette `v0.46.2`](https://www.starlette.dev/) - FastAPI
+
+Application Built-in Dependencies
+
+- [Asyncio `py v3.12`](https://docs.python.org/3.12/library/asyncio.html)
+- [Concurrent.futures `py v3.12`](https://docs.python.org/3.12/library/concurrent.futures.html)
+- [Urllib `py v3.12`](https://docs.python.org/3.12/library/urllib.html)
+- [Typing `py v3.12`](https://docs.python.org/3.12/library/typing.html)
+- [Gettext `py v3.12`](https://docs.python.org/3.12/library/gettext.html)
+- [Itertools `py v3.12`](https://docs.python.org/3.12/library/itertools.html)
+- [Logging `py v3.12`](https://docs.python.org/3.12/library/logging.html)
+
+Web Dependencies
 
 - [Bootstrap `v5.3.7`](https://getbootstrap.com/docs/5.3/getting-started/introduction/)
 - [JSON View `v1.0.0`](https://github.com/pgrabovets/json-view)
@@ -185,5 +201,5 @@ Documentation Dependencies
 
 - [MkDocs `v1.6.1`](https://www.mkdocs.org/)
 - [MkDocs-Material `v9.6.16`](https://squidfunk.github.io/mkdocs-material/)
-- [MkDocs static i18n plugin `v1.3.0`](https://pypi.org/project//mkdocs-static-i18n/)
-- [MKDocs markdown extra data plugin `v0.2.6`](https://pypi.org/project/mkdocs-markdownextradata-plugin/)
+- [MkDocs Static I18n Plugin `v1.3.0`](https://pypi.org/project/mkdocs-static-i18n/)
+- [MKDocs Markdown Extra Data Plugin `v0.2.6`](https://pypi.org/project/mkdocs-markdownextradata-plugin/)
