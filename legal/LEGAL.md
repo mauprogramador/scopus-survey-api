@@ -55,7 +55,7 @@ Tecnologia em Análise e Desenvolvimento de Sistemas - [TADS](https://www.ifms.e
 - 📅 **Latest Updates:** _May 12-13, 2026_
 - 📅 **Effective Date:** _May 20, 2026_
 - ⊶ **Commits:**
-  > [#a6c31ce](https://github.com/mauprogramador/scopus-survey-api/commit/a6c31ceb53b5d4bb7b71ef7487ac68ae2379c9da), [#f62a0d2](https://github.com/mauprogramador/scopus-survey-api/commit/f62a0d2170b73518a542bf282849a4ec9a631482), [#de45140](https://github.com/mauprogramador/scopus-survey-api/commit/de4514024cc6bb67f277f991746231cdb1695717)
+  > [#a6c31ce](https://github.com/mauprogramador/scopus-survey-api/commit/a6c31ceb53b5d4bb7b71ef7487ac68ae2379c9da), [#f62a0d2](https://github.com/mauprogramador/scopus-survey-api/commit/f62a0d2170b73518a542bf282849a4ec9a631482), [#de45140](https://github.com/mauprogramador/scopus-survey-api/commit/de4514024cc6bb67f277f991746231cdb1695717), [#e2d667e](https://github.com/mauprogramador/scopus-survey-api/commit/e2d667e7b8859227f3b40ca022327d18e6b89137)
 - 🔍 **Main Changes:**
   - Remove all references to the use of the **session cookie**, which has been removed from the application.
   - The CSRF token is now passed only through HTTP headers and cookies (no longer through the session and query params).
