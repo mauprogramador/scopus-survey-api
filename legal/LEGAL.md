@@ -23,6 +23,8 @@ Tecnologia em Análise e Desenvolvimento de Sistemas - [TADS](https://www.ifms.e
 
 ## Changes History
 
+<br>
+
 ### 1st Version (2025-08-10)
 
 - 📅 **Latest Updates:** _August 10, 2025_
@@ -30,6 +32,8 @@ Tecnologia em Análise e Desenvolvimento de Sistemas - [TADS](https://www.ifms.e
 - ⊶ **Commits:**
   > [#ef99240](https://github.com/mauprogramador/scopus-survey-api/commit/ef9924020177b684d8de197362c7b8cb758c48ef), [#6c94baf](https://github.com/mauprogramador/scopus-survey-api/commit/6c94bafb03bc814eadbee2e87cbb482cef8de9e5), [#1831305](https://github.com/mauprogramador/scopus-survey-api/commit/183130533e92a86200da06f9ed174659fd5ae42b), [#4c1401b](https://github.com/mauprogramador/scopus-survey-api/commit/4c1401b9368d5092fa14c48c965f26e90cf9f7f6), [#8b3242f](https://github.com/mauprogramador/scopus-survey-api/commit/8b3242fa724caa1cb02c3610575ed93634f334e2), [#17c1971](https://github.com/mauprogramador/scopus-survey-api/commit/17c197120875a125688bfe6919642bfeb5724fa0)
 - 🔍 **Main Change:** Finalize and Add all Legal Docs
+
+<br>
 
 ### 2nd Version (2025-11-30)
 
@@ -43,6 +47,22 @@ Tecnologia em Análise e Desenvolvimento de Sistemas - [TADS](https://www.ifms.e
   - Update the translation of specific terms (APIs names)
   - Update overview description and add DoS attack and legal info file links
   - Remove translations from legal docs
+
+<br>
+
+### 3rd Version (2026-05-13)
+
+- 📅 **Latest Updates:** _May 12-13, 2026_
+- 📅 **Effective Date:** _May 20, 2026_
+- ⊶ **Commits:**
+  > [#a6c31ce](https://github.com/mauprogramador/scopus-survey-api/commit/a6c31ceb53b5d4bb7b71ef7487ac68ae2379c9da), [#f62a0d2](https://github.com/mauprogramador/scopus-survey-api/commit/f62a0d2170b73518a542bf282849a4ec9a631482)
+- 🔍 **Main Changes:**
+  - Remove all references to the use of the **session cookie**, which has been removed from the application.
+  - The CSRF token is now passed only through HTTP headers and cookies (no longer through the session and query params).
+  - We now use **Markdown footnotes** for references, which we have also updated the format of.
+  - We updated the footer by combining the contact with the references.
+
+<br>
 
 ---
 
