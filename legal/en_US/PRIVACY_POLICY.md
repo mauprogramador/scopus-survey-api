@@ -109,24 +109,24 @@ For questions or concerns about these Policies, please contact us at <sir.silvab
 
 References
 
-[^1]: Elsevier \(©2026). **Elsevier Developer Portal**. [_How much data can I retrieve with my APIKey?_ ↗](https://dev.elsevier.com/api_key_settings.html)
+[^1]: Elsevier \(©2026). [_"How much data can I retrieve with my APIKey?"_ ↗](https://dev.elsevier.com/api_key_settings.html). **Elsevier Developer Portal**.
 
-[^2]: MDN Contributors \(2026). **MDN Web Docs**. [_Cross-site request forgery (CSRF)_ ↗](https://developer.mozilla.org/en-US/docs/Web/Security/Attacks/CSRF)
+[^2]: MDN Contributors \(2026). [_"Cross-site request forgery (CSRF)"_ ↗](https://developer.mozilla.org/en-US/docs/Web/Security/Attacks/CSRF). **MDN Web Docs**.
 
-[^3]: Cloudflare \(©2026). **Cloudflare Security**. [_What is cross-site request forgery?_ ↗](https://www.cloudflare.com/learning/security/threats/cross-site-request-forgery/)
+[^3]: Cloudflare \(©2026). [_"What is cross-site request forgery?"_ ↗](https://www.cloudflare.com/learning/security/threats/cross-site-request-forgery/). **Cloudflare Security**.
 
-[^4]: Savaete, L. \(2024). **SlowAPI Documentation**. [_API Reference: Limiter_ ↗](https://slowapi.readthedocs.io/en/latest/api/)
+[^4]: Savaete, L. \(2024). [_"API Reference: Limiter"_ ↗](https://slowapi.readthedocs.io/en/latest/api/). **SlowAPI Documentation**.
 
-[^5]: Elsevier \(©2024). **Elsevier Developer Portal**. [_Scopus Search API_ ↗](https://dev.elsevier.com/documentation/ScopusSearchAPI.wadl)
+[^5]: Elsevier \(©2024). [_"Scopus Search API"_ ↗](https://dev.elsevier.com/documentation/ScopusSearchAPI.wadl). **Elsevier Developer Portal**.
 
-[^6]: Elsevier \(©2024). **Elsevier Developer Portal**. [_Abstract Retrieval API_ ↗](https://dev.elsevier.com/documentation/AbstractRetrievalAPI.wadl)
+[^6]: Elsevier \(©2024). [_"Abstract Retrieval API"_ ↗](https://dev.elsevier.com/documentation/AbstractRetrievalAPI.wadl). **Elsevier Developer Portal**.
 
-[^7]: Elsevier \(©2026). **Elsevier Developer Portal**. [_Use Policies_ ↗](https://dev.elsevier.com/policy.html)
+[^7]: Elsevier \(©2026). [_"Use Policies"_ ↗](https://dev.elsevier.com/policy.html). **Elsevier Developer Portal**.
 
-[^8]: Elsevier \(©2026). **Elsevier Developer Portal**. [_Text and Data Mining_ ↗](https://dev.elsevier.com/academic_research_scopus.html)
+[^8]: Elsevier \(©2026). [_"Text and Data Mining"_ ↗](https://dev.elsevier.com/academic_research_scopus.html). **Elsevier Developer Portal**.
 
-[^9]: Elsevier \(2026). **Elsevier Legal**. [_Privacy Policy_ ↗](https://www.elsevier.com/legal/privacy-policy)
+[^9]: Elsevier \(2026). [_"Privacy Policy"_ ↗](https://www.elsevier.com/legal/privacy-policy). **Elsevier Legal**.
 
-[^10]: National Data Protection Authority (ANPD) (2025). **GOV.BR Portal**. [PDF]. [_Brazilian Data Protection Law (LGPD)_ ↗](https://www.gov.br/anpd/pt-br/centrais-de-conteudo/outros-documentos-e-publicacoes-institucionais/lgpd-en-lei-no-13-709-capa.pdf)
+[^10]: National Data Protection Authority (ANPD) (2025). [_"Brazilian Data Protection Law (LGPD)"_ ↗](https://www.gov.br/anpd/pt-br/centrais-de-conteudo/outros-documentos-e-publicacoes-institucionais/lgpd-en-lei-no-13-709-capa.pdf). [PDF]. **GOV.BR Portal**.
 
-[^11]: Ministério do Esporte (n.d.). **GOV.BR Portal**. [pt-BR]. [_Lei Geral de Proteção de Dados Pessoais (LGPD)_ ↗](https://www.gov.br/esporte/pt-br/acesso-a-informacao/lgpd)
+[^11]: Ministério do Esporte (n.d.). [_"Lei Geral de Proteção de Dados Pessoais (LGPD)"_ ↗](https://www.gov.br/esporte/pt-br/acesso-a-informacao/lgpd). [pt-BR]. **GOV.BR Portal**.

@@ -108,22 +108,22 @@ Para dúvidas ou preocupações sobre estas Políticas, entre em contato conosco
 
 Referências
 
-[^1]: ELSEVIER. **Elsevier Developer Portal**, ©2026. [en-US]. [_How much data can I retrieve with my APIKey?_ ↗](https://dev.elsevier.com/api_key_settings.html)
+[^1]: ELSEVIER. [_"How much data can I retrieve with my APIKey?"_ ↗](https://dev.elsevier.com/api_key_settings.html). [en-US]. **Elsevier Developer Portal**, ©2026.
 
-[^2]: MDN CONTRIBUTORS. **MDN Web Docs**, 2026. [en-US]. [_Cross-site request forgery (CSRF)_ ↗](https://developer.mozilla.org/en-US/docs/Web/Security/Attacks/CSRF)
+[^2]: MDN CONTRIBUTORS. [_"Cross-site request forgery (CSRF)"_ ↗](https://developer.mozilla.org/en-US/docs/Web/Security/Attacks/CSRF). [en-US]. **MDN Web Docs**, 2026.
 
-[^3]: CLOUDFLARE. **Cloudflare Security**, ©2026. [_O que é falsificação de solicitação entre sites?_ ↗](https://www.cloudflare.com/pt-br/learning/security/threats/cross-site-request-forgery/)
+[^3]: CLOUDFLARE. [_"O que é falsificação de solicitação entre sites?"_ ↗](https://www.cloudflare.com/pt-br/learning/security/threats/cross-site-request-forgery/). **Cloudflare Security**, ©2026.
 
-[^4]: SAVAETE, L. **SlowAPI Documentation**, 2024. [en-US]. [_API Reference: Limiter_ ↗](https://slowapi.readthedocs.io/en/latest/api/)
+[^4]: SAVAETE, L. [_"API Reference: Limiter"_ ↗](https://slowapi.readthedocs.io/en/latest/api/). [en-US]. **SlowAPI Documentation**, 2024.
 
-[^5]: ELSEVIER. **Elsevier Developer Portal**, ©2024. [en-US]. [_Scopus Search API_ ↗](https://dev.elsevier.com/documentation/ScopusSearchAPI.wadl)
+[^5]: ELSEVIER. [_"Scopus Search API"_ ↗](https://dev.elsevier.com/documentation/ScopusSearchAPI.wadl). [en-US]. **Elsevier Developer Portal**, ©2024.
 
-[^6]: ELSEVIER. **Elsevier Developer Portal**, ©2024. [en-US]. [_Abstract Retrieval API_ ↗](https://dev.elsevier.com/documentation/AbstractRetrievalAPI.wadl)
+[^6]: ELSEVIER. [_"Abstract Retrieval API"_ ↗](https://dev.elsevier.com/documentation/AbstractRetrievalAPI.wadl). [en-US]. **Elsevier Developer Portal**, ©2024.
 
-[^7]: ELSEVIER. **Elsevier Developer Portal**, ©2026. [en-US]. [_Use Policies_ ↗](https://dev.elsevier.com/policy.html)
+[^7]: ELSEVIER. [_"Use Policies"_ ↗](https://dev.elsevier.com/policy.html). [en-US]. **Elsevier Developer Portal**, ©2026.
 
-[^8]: ELSEVIER. **Elsevier Developer Portal**, ©2026. [en-US]. [_Text and Data Mining_ ↗](https://dev.elsevier.com/academic_research_scopus.html)
+[^8]: ELSEVIER. [_"Text and Data Mining"_ ↗](https://dev.elsevier.com/academic_research_scopus.html). [en-US]. **Elsevier Developer Portal**, ©2026.
 
-[^9]: ELSEVIER. **Elsevier Legal**, 2026. [_Política de Privacidade_ ↗](https://www.elsevier.com/pt-br/legal/privacy-policy)
+[^9]: ELSEVIER. [_"Política de Privacidade"_ ↗](https://www.elsevier.com/pt-br/legal/privacy-policy). **Elsevier Legal**, 2026.
 
-[^10]: Ministério do Esporte. **GOV.BR Portal**, [s.d.]. [_Lei Geral de Proteção de Dados Pessoais (LGPD)_ ↗](https://www.gov.br/esporte/pt-br/acesso-a-informacao/lgpd)
+[^10]: MINISTÉRIO DO ESPORTE. [_"Lei Geral de Proteção de Dados Pessoais (LGPD)"_ ↗](https://www.gov.br/esporte/pt-br/acesso-a-informacao/lgpd). **Portal GOV.BR**, [s.d.].

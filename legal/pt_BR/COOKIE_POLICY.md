@@ -64,12 +64,12 @@ Para dúvidas ou preocupações sobre a estas Políticas, entre em contato conos
 
 Referências
 
-[^1]: MDN CONTRIBUTORS. **MDN Web Docs**, 2025. [_Cookies HTTP_ ↗](https://developer.mozilla.org/pt-BR/docs/Web/HTTP/Guides/Cookies)
+[^1]: MDN CONTRIBUTORS. [_"Cookies HTTP"_ ↗](https://developer.mozilla.org/pt-BR/docs/Web/HTTP/Guides/Cookies). **MDN Web Docs**, 2025.
 
-[^2]: CLOUDFLARE. **Cloudflare Learning**, ©2026. [_O que são cookies? | Definição de cookies_](https://www.cloudflare.com/pt-br/learning/privacy/what-are-cookies/)
+[^2]: CLOUDFLARE. [_"O que são cookies? | Definição de cookies"_ ↗](https://www.cloudflare.com/pt-br/learning/privacy/what-are-cookies/). **Cloudflare Learning**, ©2026.
 
-[^3]: MDN CONTRIBUTORS. **MDN Web Docs**, 2026. [en-US]. [_Cross-site request forgery (CSRF)_ ↗](https://developer.mozilla.org/en-US/docs/Web/Security/Attacks/CSRF)
+[^3]: MDN CONTRIBUTORS. [_"Cross-site request forgery (CSRF)"_ ↗](https://developer.mozilla.org/en-US/docs/Web/Security/Attacks/CSRF). [en-US]. **MDN Web Docs**, 2026.
 
-[^4]: CLOUDFLARE. **Cloudflare Security**, ©2026. [_O que é falsificação de solicitação entre sites?_ ↗](https://www.cloudflare.com/pt-br/learning/security/threats/cross-site-request-forgery/)
+[^4]: CLOUDFLARE. [_"O que é falsificação de solicitação entre sites?"_ ↗](https://www.cloudflare.com/pt-br/learning/security/threats/cross-site-request-forgery/). **Cloudflare Security**, ©2026.
 
-[^5]: PALLETS. **ItsDangerous Documentation**, ©2011. [en-US]. [_URL Safe Serialization_ ↗](https://itsdangerous.palletsprojects.com/en/stable/url_safe/)
+[^5]: PALLETS. [_"URL Safe Serialization"_ ↗](https://itsdangerous.palletsprojects.com/en/stable/url_safe/). [en-US]. **ItsDangerous Documentation**, ©2011.

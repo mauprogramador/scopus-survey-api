@@ -65,12 +65,12 @@ For questions or concerns about these Policies, please contact us at <sir.silvab
 
 References
 
-[^1]: MDN Contributors \(2025). **MDN Web Docs**. [_Using HTTP cookies_ ↗](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Cookies)
+[^1]: MDN Contributors \(2025). [_"Using HTTP cookies"_ ↗](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Cookies). **MDN Web Docs**.
 
-[^2]: Cloudflare \(©2026). **Cloudflare Learning**. [_What are cookies?_ ↗](https://www.cloudflare.com/learning/privacy/what-are-cookies/)
+[^2]: Cloudflare \(©2026). [_"What are cookies?"_ ↗](https://www.cloudflare.com/learning/privacy/what-are-cookies/). **Cloudflare Learning**.
 
-[^3]: MDN Contributors \(2026). **MDN Web Docs**. [_Cross-site request forgery (CSRF)_ ↗](https://developer.mozilla.org/en-US/docs/Web/Security/Attacks/CSRF)
+[^3]: MDN Contributors \(2026). [_"Cross-site request forgery (CSRF)"_ ↗](https://developer.mozilla.org/en-US/docs/Web/Security/Attacks/CSRF). **MDN Web Docs**.
 
-[^4]: Cloudflare \(©2026). **Cloudflare Security**. [_What is cross-site request forgery?_ ↗](https://www.cloudflare.com/learning/security/threats/cross-site-request-forgery/)
+[^4]: Cloudflare \(©2026). [_"What is cross-site request forgery?"_ ↗](https://www.cloudflare.com/learning/security/threats/cross-site-request-forgery/). **Cloudflare Security**.
 
-[^5]: Pallets. \(©2011). **ItsDangerous Documentation**. [_URL Safe Serialization_ ↗](https://itsdangerous.palletsprojects.com/en/stable/url_safe/)
+[^5]: Pallets. \(©2011). [_"URL Safe Serialization"_ ↗](https://itsdangerous.palletsprojects.com/en/stable/url_safe/). **ItsDangerous Documentation**.

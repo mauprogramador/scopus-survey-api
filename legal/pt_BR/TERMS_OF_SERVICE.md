@@ -243,26 +243,26 @@ Para dúvidas ou preocupações sobre estes Termos, entre em contato conosco pel
 
 Referências
 
-[^1]: ELSEVIER. **Scopus**, ©2026. [_Scopus: A comprehensive abstract and citation database for impact makers_ ↗](https://www.elsevier.com/pt-br/products/scopus)
+[^1]: ELSEVIER. [_"Scopus: A comprehensive abstract and citation database for impact makers"_ ↗](https://www.elsevier.com/pt-br/products/scopus). **Scopus**, ©2026.
 
-[^2]: ELSEVIER. **Elsevier Developer Portal**, ©2026. [en-US]. [_Use Policies_ ↗](https://dev.elsevier.com/policy.html)
+[^2]: ELSEVIER. [_"Use Policies"_ ↗](https://dev.elsevier.com/policy.html). [en-US]. **Elsevier Developer Portal**, ©2026.
 
-[^3]: ELSEVIER. **Elsevier Developer Portal**, ©2026. [en-US]. [_Use Cases_ ↗](https://dev.elsevier.com/use_cases.html)
+[^3]: ELSEVIER. [_"Use Cases"_ ↗](https://dev.elsevier.com/use_cases.html). [en-US]. **Elsevier Developer Portal**, ©2026.
 
-[^4]: ELSEVIER. **Elsevier Developer Portal**, 2026. [en-US]. [_Text and Data Mining_ ↗](https://dev.elsevier.com/academic_research_scopus.html)
+[^4]: ELSEVIER. [_"Text and Data Mining"_ ↗](https://dev.elsevier.com/academic_research_scopus.html). [en-US]. **Elsevier Developer Portal**, 2026.
 
-[^5]: ELSEVIER. **Elsevier Developer Portal**, ©2026. [en-US]. [_Scopus Search Guide_ ↗](https://dev.elsevier.com/sc_search_tips.html)
+[^5]: ELSEVIER. [_"Scopus Search Guide"_ ↗](https://dev.elsevier.com/sc_search_tips.html). [en-US]. **Elsevier Developer Portal**, ©2026.
 
-[^6]: ELSEVIER. **Elsevier Developer Portal**, 2016. [PDF]. [en-US]. [_API Service Agreement_ ↗](https://dev.elsevier.com/policy/API-service-agreement.pdf)
+[^6]: ELSEVIER. [_"API Service Agreement"_ ↗](https://dev.elsevier.com/policy/API-service-agreement.pdf). [PDF]. [en-US]. **Elsevier Developer Portal**, 2016.
 
-[^7]: ELSEVIER. **Elsevier Legal**, 2026. [en-US]. [_Terms and Conditions_ ↗](https://www.elsevier.com/pt-br/legal/elsevier-website-terms-and-conditions)
+[^7]: ELSEVIER. [_"Terms and Conditions"_ ↗](https://www.elsevier.com/pt-br/legal/elsevier-website-terms-and-conditions). [en-US]. **Elsevier Legal**, 2026.
 
-[^8]: ELSEVIER. **Elsevier Developer Portal**, ©2026. [en-US]. [_Scopus Attribution Guide_ ↗](https://dev.elsevier.com/tecdoc_attribution_scopus.html)
+[^8]: ELSEVIER. [_"Scopus Attribution Guide"_ ↗](https://dev.elsevier.com/tecdoc_attribution_scopus.html). [en-US]. **Elsevier Developer Portal**, ©2026.
 
-[^9]: ELSEVIER. **Elsevier Developer Portal**, ©2024. [en-US]. [_Scopus Search API_ ↗](https://dev.elsevier.com/documentation/ScopusSearchAPI.wadl)
+[^9]: ELSEVIER. [_"Scopus Search API"_ ↗](https://dev.elsevier.com/documentation/ScopusSearchAPI.wadl). [en-US]. **Elsevier Developer Portal**, ©2024.
 
-[^10]: ELSEVIER. **Elsevier Developer Portal**, ©2024. [en-US]. [_Abstract Retrieval API_ ↗](https://dev.elsevier.com/documentation/AbstractRetrievalAPI.wadl)
+[^10]: ELSEVIER. [_"Abstract Retrieval API"_ ↗](https://dev.elsevier.com/documentation/AbstractRetrievalAPI.wadl). [en-US]. **Elsevier Developer Portal**, ©2024.
 
-[^11]: ELSEVIER. **Elsevier Developer Portal**, ©2026. [en-US]. [_How much data can I retrieve with my APIKey?_ ↗](https://dev.elsevier.com/api_key_settings.html)
+[^11]: ELSEVIER. [_"How much data can I retrieve with my APIKey?"_ ↗](https://dev.elsevier.com/api_key_settings.html). [en-US]. **Elsevier Developer Portal**, ©2026.
 
-[^12]: ELSEVIER. **Elsevier Developer Portal**, ©2026. [en-US]. [_Scopus Search Views_ ↗](https://dev.elsevier.com/sc_search_views.html)
+[^12]: ELSEVIER. [_"Scopus Search Views"_ ↗](https://dev.elsevier.com/sc_search_views.html). [en-US]. **Elsevier Developer Portal**, ©2026.
