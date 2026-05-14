@@ -1,7 +1,7 @@
-from functools import lru_cache
-from gettext import GNUTranslations, translation
+from gettext import translation
 from pathlib import Path
 
+from src.core.common.types import Trans
 from src.core.config.config import LOG
 from src.core.data.enums import Lang
 
@@ -14,20 +14,20 @@ class Translations:
     _META_DOMAIN = "meta"
     _WEB_DOMAIN = "web"
 
-    ERROR: dict[Lang, GNUTranslations] = {}
-    META: dict[Lang, GNUTranslations] = {}
-    WEB: dict[Lang, GNUTranslations] = {}
+    ERROR: Trans = {}
 
     @classmethod
-    @lru_cache(maxsize=10)
-    def load_all(cls) -> None:
+    def load_all(cls) -> tuple[Trans, Trans]:
+        meta: Trans = {}
+        web: Trans = {}
+
         try:
-            cls.WEB[Lang.EN_US] = translation(
+            web[Lang.EN_US] = translation(
                 domain=cls._WEB_DOMAIN,
                 localedir=cls._LOCALEDIR,
                 languages=[Lang.EN_US.locale],
             )
-            cls.META[Lang.EN_US] = translation(
+            meta[Lang.EN_US] = translation(
                 domain=cls._META_DOMAIN,
                 localedir=cls._LOCALEDIR,
                 languages=[Lang.EN_US.locale],
@@ -38,12 +38,12 @@ class Translations:
                 languages=[Lang.EN_US.locale],
             )
 
-            cls.WEB[Lang.PT_BR] = translation(
+            web[Lang.PT_BR] = translation(
                 domain=cls._WEB_DOMAIN,
                 localedir=cls._LOCALEDIR,
                 languages=[Lang.PT_BR.locale],
             )
-            cls.META[Lang.PT_BR] = translation(
+            meta[Lang.PT_BR] = translation(
                 domain=cls._META_DOMAIN,
                 localedir=cls._LOCALEDIR,
                 languages=[Lang.PT_BR.locale],
@@ -53,6 +53,8 @@ class Translations:
                 localedir=cls._LOCALEDIR,
                 languages=[Lang.PT_BR.locale],
             )
+
+            return web, meta
 
         except (FileNotFoundError, OSError) as exc:
             LOG.error("Error loading translations")

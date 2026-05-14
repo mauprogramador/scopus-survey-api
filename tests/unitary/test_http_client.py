@@ -42,6 +42,7 @@ from tests.mocks.unitary import (
     GET_SUCCESS,
 )
 
+
 LOG_STRATEGY = fqn(HTTPClient, LOG_MOCK.strategy)
 REQUEST = fqn(ClientSession.request)
 SLEEP = fqn(HTTPClient, sleep)

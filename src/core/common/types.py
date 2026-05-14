@@ -1,9 +1,17 @@
+from gettext import GNUTranslations
 from typing import Annotated, Any, NamedTuple, Protocol, TypeAlias, TypeVar
 
 from pydantic import BaseModel, Field, TypeAdapter
 
 from src.core.common.patterns import KEYWORD_PATTERN, TOKEN_PATTERN
-from src.core.data.enums import DocType, PageRange, PubStage, SrcType, SubjArea
+from src.core.data.enums import (
+    DocType,
+    Lang,
+    PageRange,
+    PubStage,
+    SrcType,
+    SubjArea,
+)
 
 
 Keyword: TypeAlias = Annotated[
@@ -13,6 +21,8 @@ Keyword: TypeAlias = Annotated[
 Json: TypeAlias = dict[str, Any]
 
 Articles: TypeAlias = list[dict[str, str]]
+
+Trans: TypeAlias = dict[Lang, GNUTranslations]
 
 ScopusModel = TypeVar("ScopusModel", bound=BaseModel)
 

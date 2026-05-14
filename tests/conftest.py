@@ -38,8 +38,8 @@ def event_loop_policy():
 def lifespan():
     SERVER.set("Pytest/1.2.3")
 
-    Translations.load_all()
-    TemplateResponse.build_all()
+    translations = Translations.load_all()
+    TemplateResponse.build_all(*translations)
     csv_file_path = DIRECTORY / CSV_FILE_NAME
 
     DIRECTORY.mkdir(parents=True, exist_ok=True)

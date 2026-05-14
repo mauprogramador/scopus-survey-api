@@ -9,6 +9,7 @@ from src.adapters.presenters.template_response import TemplateResponse
 from src.core.common.error_messages import UNEXPECTED_ERROR
 from src.core.config.config import META_INFO
 from src.core.data.enums import Lang
+from src.core.domain.translations import Translations
 from tests.mocks.raw import CSRF_TOKEN, HTML_MEDIA, HTTP_200, HTTP_404, REQUEST
 
 
@@ -18,7 +19,8 @@ def test_build_all(mocker: Mocker):
     TemplateResponse.DIST_DIR.mkdir()
 
     spy_jinja = mocker.spy(Template, "render")
-    TemplateResponse.build_all()
+    translations = Translations.load_all()
+    TemplateResponse.build_all(*translations)
 
     assert TemplateResponse.DIST_DIR.exists()
     assert TemplateResponse.INDEX_FILENAMES[Lang.EN_US].exists()
