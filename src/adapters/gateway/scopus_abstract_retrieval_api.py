@@ -89,7 +89,9 @@ class ScopusAbstractRetrievalAPI:
                 except (CancelledError, HTTPError, Exception) as exc:
 
                     for task in remaining_tasks:
-                        if not task.done():
+                        if task.done() and not isinstance(exc, CancelledError):
+                            task.exception()  # Retrieve task exception
+                        else:
                             task.cancel()
 
                     if isinstance(exc, HTTPError):
