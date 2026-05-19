@@ -83,7 +83,10 @@ class Logging:
         "Backoff: \033[33m{backoff:.1f}\033[m. Sleep: \033[33m{sleep:.1f}s"
         "\033[m. Concurrent: \033[33m{concurrent}\033[m"
     )
-    _EXCEPTION = "{module}.{qualname}: {filepath}, line {line}, col {col}"
+    _EXCEPTION = (
+        'File "{filepath}", line {line}, col {col}, '
+        "from {module}.{qualname}"
+    )
     _UVICORN_FMT = "%(asctime)s %(levelprefix)s %(message)s"
     _FRAME = FrameSummary(__file__, 1, "<logging>", colno=0)
     _STATUS_COLOR = {2: "32", 3: "33", 4: "31", 5: "31"}
