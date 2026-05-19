@@ -4,6 +4,7 @@ from pytest import mark
 from pytest_mock import MockerFixture as Mocker
 
 from src.adapters.presenters.csv_response import CSVResponse
+from src.core.common.error_messages import SLOWAPI_RATE_ERROR
 from src.core.config.scopus import SCOPUS_ERRORS
 from src.framework.fastapi.routes import favicon
 from tests.conftest import assert_error_json
@@ -124,6 +125,5 @@ async def test_pydantic_validation_undefined(mocker: Mocker, client: Client):
 async def test_rate_limit_error(mocker: Mocker, client: Client):
     mocker.patch(**RETRIEVE(RATE_LIMIT_ERROR))
     res = await client.get(URL_CSV, params=CSV_PARAMS)
-    message = f"Request rate limit of {RATE_LIMIT_ERROR.detail} exceeded"
-    errors = assert_error_json(res, HTTP_429, message)
-    assert errors is None
+    errors = assert_error_json(res, HTTP_429, SLOWAPI_RATE_ERROR)
+    assert errors and errors[0]["rate"] is not None

@@ -35,7 +35,7 @@ class ExceptionHandler:
 
     def _undefined_filter(self, item: Json) -> Json:
         if "input" in item and item["input"] is PydanticUndefined:
-            item["input"] = "PydanticUndefined"
+            item["input"] = str(PydanticUndefined)
         return item
 
     def _exception_filter(self, item: Json) -> Json:
@@ -117,11 +117,11 @@ class ExceptionHandler:
     async def rate_limit_error(
         self, request: Request, exc: RateLimitExceeded
     ) -> ErrorJSON:
-        message = SLOWAPI_RATE_ERROR.format(rate=exc.detail)
-        LOG.error(message)
+        LOG.error(SLOWAPI_RATE_ERROR)
         LOG.exception(exc)
         return ErrorJSON(
             request,
             HTTPStatus.TOO_MANY_REQUESTS,
-            message,
+            SLOWAPI_RATE_ERROR,
+            {"rate": exc.detail},
         )

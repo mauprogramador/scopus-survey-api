@@ -113,6 +113,5 @@ async def test_pydantic_validation_undefined():
 @mark.asyncio
 async def test_rate_limit_error():
     res = await HANDLER.rate_limit_error(REQUEST, RATE_LIMIT_ERROR)
-    message = SLOWAPI_RATE_ERROR.format(rate=RATE_LIMIT_ERROR.detail)
-    errors = assert_error_json(res, HTTP_429, message)
-    assert errors is None
+    errors = assert_error_json(res, HTTP_429, SLOWAPI_RATE_ERROR)
+    assert errors[0]["rate"] == RATE_LIMIT_ERROR.detail
