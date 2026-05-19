@@ -28,9 +28,8 @@ from src.core.config.config import LOG
 from src.core.config.scopus import SCOPUS_HEADERS
 from src.core.domain.http_exceptions import (
     BadGateway,
+    BadGatewayContent,
     GatewayTimeout,
-    HTTPError,
-    ScopusAPIError,
 )
 
 
@@ -178,11 +177,8 @@ class HTTPClient:
                     raise self._JSON_ERROR
 
             except (ContentTypeError, JSONDecodeError) as exc:
-                raise ScopusAPIError(
-                    HTTPStatus.BAD_GATEWAY,
-                    HTTPError.get_error_details(exc)[0],
-                    INVALID_JSON_ERROR,
-                ) from exc
+                body = await response.text()
+                raise BadGatewayContent(INVALID_JSON_ERROR, exc, body) from exc
 
             return ResponseBundle(response.status, response.headers, data)
 

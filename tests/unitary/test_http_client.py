@@ -21,14 +21,13 @@ from src.core.common.error_messages import (
     CONNECTION_TIMEOUT,
     INVALID_JSON_ERROR,
     REQUEST_EXCEPTION,
-    SCOPUS_API_ERROR,
 )
 from src.core.common.types import RateStrategy
 from src.core.config.config import LOG
 from src.core.domain.http_exceptions import (
     BadGateway,
+    BadGatewayContent,
     GatewayTimeout,
-    ScopusAPIError,
 )
 from tests.conftest import assert_http_error
 from tests.mocks.helpers import fqn, get_patch, http_patch
@@ -117,39 +116,37 @@ async def test_uncaught_exception(mocker: Mocker, client: HTTPClient):
 @mark.asyncio(loop_scope="module")
 async def test_content_type_error(mocker: Mocker, client: HTTPClient):
     mock = mocker.patch(*get_patch(GET_CONTENT_TYPE_ERROR))
-    with raises(ScopusAPIError) as info:
+    with raises(BadGatewayContent) as info:
         await client.request("any")
     assert_http_error(info, HTTP_502, INVALID_JSON_ERROR)
-    assert info.value.errors[0]["els_status"] == INVALID_JSON_ERROR
-    assert info.value.errors[0]["code_error"] == SCOPUS_API_ERROR
-    assert info.value.errors[1]["type"] == fqn(ContentTypeError)
-    assert info.value.errors[1]["detail"] == "any"
+    assert len(info.value.errors) == 2
+    assert info.value.errors[0]["type"] == fqn(ContentTypeError)
+    assert info.value.errors[0]["detail"] == "any"
+    assert info.value.errors[1]["body"] is not None
     mock.assert_awaited_once()
 
 
 @mark.asyncio(loop_scope="module")
 async def test_no_data_error(mocker: Mocker, client: HTTPClient):
     mock = mocker.patch(*get_patch(GET_EMPTY_RESPONSE))
-    with raises(ScopusAPIError) as info:
+    with raises(BadGatewayContent) as info:
         await client.request("any")
     assert_http_error(info, HTTP_502, INVALID_JSON_ERROR)
-    assert info.value.errors[0]["els_status"] == INVALID_JSON_ERROR
-    assert info.value.errors[0]["code_error"] == SCOPUS_API_ERROR
-    assert info.value.errors[1]["type"] == fqn(JSONDecodeError)
-    assert info.value.errors[1]["detail"]
+    assert info.value.errors[0]["type"] == fqn(JSONDecodeError)
+    assert info.value.errors[0]["detail"] is not None
+    assert info.value.errors[1]["body"] is not None
     mock.assert_awaited_once()
 
 
 @mark.asyncio(loop_scope="module")
 async def test_json_decode_error(mocker: Mocker, client: HTTPClient):
     mock = mocker.patch(*get_patch(GET_JSON_DECODE_ERROR))
-    with raises(ScopusAPIError) as info:
+    with raises(BadGatewayContent) as info:
         await client.request("any")
     assert_http_error(info, HTTP_502, INVALID_JSON_ERROR)
-    assert info.value.errors[0]["els_status"] == INVALID_JSON_ERROR
-    assert info.value.errors[0]["code_error"] == SCOPUS_API_ERROR
-    assert info.value.errors[1]["type"] == fqn(JSONDecodeError)
-    assert info.value.errors[1]["detail"]
+    assert info.value.errors[0]["type"] == fqn(JSONDecodeError)
+    assert info.value.errors[0]["detail"] is not None
+    assert info.value.errors[1]["body"] is not None
     mock.assert_awaited_once()
 
 

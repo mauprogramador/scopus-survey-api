@@ -24,7 +24,6 @@ from src.core.common.error_messages import (
     CONNECTION_TIMEOUT,
     INVALID_JSON_ERROR,
     REQUEST_EXCEPTION,
-    SCOPUS_API_ERROR,
 )
 from src.core.common.types import RateStrategy
 from src.core.config.config import LOG
@@ -118,10 +117,9 @@ async def test_content_type_error(mocker: Mocker, client: Client):
     mock = mocker.patch(*get_patch(GET_CONTENT_TYPE_ERROR))
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
     errors = assert_error_json(res, HTTP_502, INVALID_JSON_ERROR)
-    assert errors[0]["els_status"] == INVALID_JSON_ERROR
-    assert errors[0]["code_error"] == SCOPUS_API_ERROR
-    assert errors[1]["type"] == fqn(ContentTypeError)
-    assert errors[1]["detail"] == "any" and mock.call_count == 3
+    assert len(errors) == 2 and mock.call_count == 3
+    assert errors[0]["type"] == fqn(ContentTypeError)
+    assert errors[0]["detail"] and errors[1]["body"] is not None
 
 
 @mark.asyncio
@@ -129,10 +127,9 @@ async def test_no_data_error(mocker: Mocker, client: Client):
     mock = mocker.patch(*get_patch(GET_EMPTY_RESPONSE))
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
     errors = assert_error_json(res, HTTP_502, INVALID_JSON_ERROR)
-    assert errors[0]["els_status"] == INVALID_JSON_ERROR
-    assert errors[0]["code_error"] == SCOPUS_API_ERROR
-    assert errors[1]["type"] == fqn(JSONDecodeError)
-    assert errors[1]["detail"] and mock.call_count == 3
+    assert len(errors) == 2 and mock.call_count == 3
+    assert errors[0]["type"] == fqn(JSONDecodeError)
+    assert errors[0]["detail"] and errors[1]["body"] is not None
 
 
 @mark.asyncio
@@ -140,10 +137,9 @@ async def test_json_decode_error(mocker: Mocker, client: Client):
     mock = mocker.patch(*get_patch(GET_JSON_DECODE_ERROR))
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
     errors = assert_error_json(res, HTTP_502, INVALID_JSON_ERROR)
-    assert errors[0]["els_status"] == INVALID_JSON_ERROR
-    assert errors[0]["code_error"] == SCOPUS_API_ERROR
-    assert errors[1]["type"] == fqn(JSONDecodeError)
-    assert errors[1]["detail"] and mock.call_count == 3
+    assert len(errors) == 2 and mock.call_count == 3
+    assert errors[0]["type"] == fqn(JSONDecodeError)
+    assert errors[0]["detail"] and errors[1]["body"] is not None
 
 
 @mark.asyncio

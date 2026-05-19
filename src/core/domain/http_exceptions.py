@@ -126,6 +126,15 @@ class GatewayTimeout(HTTPError):
         super().__init__(HTTPStatus.GATEWAY_TIMEOUT, message, error)
 
 
+class BadGatewayContent(HTTPError):
+    """HTTP error status code 502"""
+
+    def __init__(self, message: str, error: Exception, body: str) -> None:
+        """HTTP error status code 502"""
+        super().__init__(HTTPStatus.BAD_GATEWAY, message, error)
+        self.errors.append({"body": body})
+
+
 class ScopusAPIError(HTTPError):
     """Scopus API HTTP status error 502 exception"""
 

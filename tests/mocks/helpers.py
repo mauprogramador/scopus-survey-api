@@ -167,6 +167,7 @@ def response_mock(
         method=HTTPMethod.GET,
         headers=headers if headers else RAW_HEADERS_OK,
         json=json,
+        text=AsyncMock(return_value=str(value)),
     )
 
 
