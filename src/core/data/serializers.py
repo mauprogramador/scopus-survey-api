@@ -7,6 +7,7 @@ from pydantic import (
     BaseModel,
     ConfigDict,
     Field,
+    computed_field,
     field_validator,
     model_validator,
 )
@@ -153,17 +154,21 @@ class ScopusHeaders(BaseModel):
 
     model_config = ConfigDict(str_strip_whitespace=True)
 
-    limit: int = Field(default=NULL, validation_alias="X-RateLimit-Limit")
+    limit: int = Field(default=None, validation_alias="X-RateLimit-Limit")
     remaining: int = Field(
-        default=NULL, validation_alias="X-RateLimit-Remaining"
+        default=None, validation_alias="X-RateLimit-Remaining"
     )
-    reset: int = Field(default=NULL, validation_alias="X-RateLimit-Reset")
-    status: str = Field(default=NULL, validation_alias="X-ELS-Status")
+    reset: int = Field(default=None, validation_alias="X-RateLimit-Reset")
+    status: str = Field(default=None, validation_alias="X-ELS-Status")
 
+    @computed_field(  # type: ignore[prop-decorator]
+        description="Datetime the Quota is reset",
+        examples=["2026-05-18 06:09:22"],
+    )
     @property
     def reset_datetime(self) -> str:
-        if self.reset == NULL:
-            return NULL
+        if self.reset is None:
+            return None
         epoch = datetime.fromtimestamp(self.reset)
         return epoch.strftime("%Y-%m-%d %H:%M:%S")
 

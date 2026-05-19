@@ -132,9 +132,9 @@ def test_scopus_abstract_authors():
 
 def test_scopus_headers_valid_data():
     model = ScopusHeaders(**{})
-    assert model.limit == NULL and model.remaining == NULL
-    assert model.reset == NULL and model.status == NULL
-    assert model.reset_datetime == NULL
+    assert model.limit is None and model.remaining is None
+    assert model.reset is None and model.status is None
+    assert model.reset_datetime is None
 
 
 def test_scopus_headers_overridden_default():
