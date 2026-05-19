@@ -35,9 +35,10 @@ def test_status_error():
     with raises(ScopusAPIError) as info:
         ScopusResponse.validate_search(res)
     assert_http_error(info, HTTP_502, "INVALID_INPUT")
-    assert info.value.errors[0]["els_status"] and info.value.errors[1]
-    code_error = SCOPUS_ERRORS.get(HTTP_400)
-    assert info.value.errors[0]["code_error"] == code_error
+    assert len(info.value.errors) == 2 and info.value.errors[1]
+    assert info.value.errors[0]["status"] == "INVALID_INPUT"
+    assert info.value.errors[0]["els_status"] == "INVALID_INPUT"
+    assert info.value.errors[0]["code_error"] == SCOPUS_ERRORS.get(HTTP_400)
 
 
 def test_too_many_requests():
@@ -46,9 +47,10 @@ def test_too_many_requests():
     with raises(ScopusAPIError) as info:
         ScopusResponse.validate_search(res)
     assert_http_error(info, HTTP_502, "TOO_MANY_REQUESTS")
-    assert info.value.errors[0]["els_status"] and info.value.errors[1]
-    code_error = SCOPUS_ERRORS.get(HTTP_429)
-    assert info.value.errors[0]["code_error"] == code_error
+    assert len(info.value.errors) and info.value.errors[1]
+    assert info.value.errors[0]["status"] == "TOO_MANY_REQUESTS"
+    assert info.value.errors[0]["els_status"] == "TOO_MANY_REQUESTS"
+    assert info.value.errors[0]["code_error"] == SCOPUS_ERRORS.get(HTTP_429)
 
 
 def test_quota_exceeded():
@@ -57,10 +59,10 @@ def test_quota_exceeded():
     with raises(ScopusAPIError) as info:
         ScopusResponse.validate_search(res)
     assert_http_error(info, HTTP_502, ScopusCode.QUOTA)
+    assert len(info.value.errors) and info.value.errors[1]
+    assert info.value.errors[0]["status"] == ScopusCode.QUOTA
     assert info.value.errors[0]["els_status"] == ScopusCode.QUOTA
-    code_error = SCOPUS_ERRORS.get(HTTP_429)
-    assert info.value.errors[0]["code_error"] == code_error
-    assert info.value.errors[1] == RAW_SERVICE_ERROR_QUOTA
+    assert info.value.errors[0]["code_error"] == SCOPUS_ERRORS.get(HTTP_429)
 
 
 def test_rate_limit_exceeded():
@@ -69,10 +71,10 @@ def test_rate_limit_exceeded():
     with raises(ScopusAPIError) as info:
         ScopusResponse.validate_search(res)
     assert_http_error(info, HTTP_502, ScopusCode.RATE_LIMIT)
+    assert len(info.value.errors) and info.value.errors[1]
+    assert info.value.errors[0]["status"] == ScopusCode.RATE_LIMIT
     assert info.value.errors[0]["els_status"] == ScopusCode.RATE_LIMIT
-    code_error = SCOPUS_ERRORS.get(HTTP_429)
-    assert info.value.errors[0]["code_error"] == code_error
-    assert info.value.errors[1] == RAW_ERROR_RESPONSE_RATE_LIMIT
+    assert info.value.errors[0]["code_error"] == SCOPUS_ERRORS.get(HTTP_429)
 
 
 def test_json_validation_error():

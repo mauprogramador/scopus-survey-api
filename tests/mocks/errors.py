@@ -17,7 +17,7 @@ from src.core.domain.http_exceptions import HTTPError, ScopusAPIError
 HTTP_ERROR = HTTPError(HTTPStatus.BAD_REQUEST, "any", ValueError("any"))
 
 SCOPUS_API_ERROR = ScopusAPIError(
-    HTTPStatus.INTERNAL_SERVER_ERROR, {"any": "any"}, "any"
+    "any", HTTPStatus.INTERNAL_SERVER_ERROR, {"any": "any"}, {"any": "any"}
 )
 
 STARLETTE_HTTP_EXCEPTION = StarletteHTTPException(

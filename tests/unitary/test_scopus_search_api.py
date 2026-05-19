@@ -10,6 +10,7 @@ from src.adapters.gateway.scopus_search_api import (
 )
 from src.core.common.error_messages import ARTICLES_NOT_FOUND, CANCELLED_ERROR
 from src.core.common.types import ResponseBundle
+from src.core.config.scopus import SCOPUS_ERRORS
 from src.core.data.enums import ScopusCode
 from src.core.domain.http_exceptions import (
     NotFound,
@@ -19,7 +20,7 @@ from src.core.domain.http_exceptions import (
 from tests.conftest import assert_http_error
 from tests.mocks.errors import MORE_CANCELLED
 from tests.mocks.helpers import Patch, fqn, search_fix
-from tests.mocks.raw import HTTP_404, HTTP_502, HTTP_503
+from tests.mocks.raw import HTTP_404, HTTP_429, HTTP_502, HTTP_503
 from tests.mocks.unitary import (
     FOUR_KEYWORDS,
     MORE_PAGES_FULL_RESULTS,
@@ -208,7 +209,9 @@ async def test_search_quota_exceeded():
     with raises(ScopusAPIError) as info:
         await fix.api.search_articles(None)
     assert_http_error(info, HTTP_502, ScopusCode.QUOTA)
-    assert fix.req.call_count == 1
+    assert len(info.value.errors) == 2 and fix.req.call_count == 1
+    assert info.value.errors[0]["els_status"] == ScopusCode.QUOTA
+    assert info.value.errors[0]["code_error"] == SCOPUS_ERRORS.get(HTTP_429)
 
 
 @mark.asyncio

@@ -10,12 +10,13 @@ from src.adapters.gateway.scopus_abstract_retrieval_api import (
 )
 from src.core.common.error_messages import CANCELLED_ERROR
 from src.core.common.types import ResponseBundle
+from src.core.config.scopus import SCOPUS_ERRORS
 from src.core.data.enums import Column, ScopusCode
 from src.core.domain.http_exceptions import ScopusAPIError, ServiceUnavailable
 from tests.conftest import assert_http_error
 from tests.mocks.errors import MORE_CANCELLED
 from tests.mocks.helpers import Patch, abstract_fix, fqn, search_raw
-from tests.mocks.raw import API_KEY, HTTP_502, HTTP_503
+from tests.mocks.raw import API_KEY, HTTP_429, HTTP_502, HTTP_503
 from tests.mocks.unitary import (
     ABSTRACT_EXACT_QUOTA_MORE_RESULTS,
     ABSTRACT_EXACT_QUOTA_ONE_RESULT,
@@ -128,7 +129,9 @@ async def test_retrieve_quota_exceeded():
     with raises(ScopusAPIError) as info:
         await fix.api.retrieve_abstracts(API_KEY)
     assert_http_error(info, HTTP_502, ScopusCode.QUOTA)
-    assert fix.req.call_count == 1
+    assert len(info.value.errors) == 2 and fix.req.call_count == 1
+    assert info.value.errors[0]["els_status"] == ScopusCode.QUOTA
+    assert info.value.errors[0]["code_error"] == SCOPUS_ERRORS.get(HTTP_429)
 
 
 @mark.asyncio

@@ -138,16 +138,19 @@ class BadGatewayContent(HTTPError):
 class ScopusAPIError(HTTPError):
     """Scopus API HTTP status error 502 exception"""
 
-    def __init__(self, code: int, json: Json, els_status: str) -> None:
+    def __init__(
+        self, message: str, code: int, body: Json, headers: Json
+    ) -> None:
         """Scopus API HTTP status error 502 exception"""
-        super().__init__(HTTPStatus.BAD_GATEWAY, els_status)
+        super().__init__(HTTPStatus.BAD_GATEWAY, message)
 
         code_error = SCOPUS_ERRORS.get(HTTPStatus(code), SCOPUS_API_ERROR)
         self.errors: list[Json] = [
             {
-                "els_status": els_status,
+                **headers,
+                "els_status": message,
                 "code_error": code_error,
                 "docs": SCOPUS_DOCS,
             },
-            json,
+            body,
         ]

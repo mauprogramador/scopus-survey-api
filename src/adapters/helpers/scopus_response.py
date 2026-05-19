@@ -46,7 +46,10 @@ class ScopusResponse:
                         LOG.error(RATE_LIMIT_EXCEEDED)
 
                 raise ScopusAPIError(
-                    response.code, response.data, quota.status
+                    quota.status,
+                    response.code,
+                    response.data,
+                    quota.model_dump(),
                 )
 
             return model.model_validate(response.data)
