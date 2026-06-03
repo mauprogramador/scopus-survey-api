@@ -9,7 +9,7 @@ from itsdangerous import (
     SignatureExpired,
     URLSafeTimedSerializer,
 )
-from pydantic import ValidationError
+from pydantic import TypeAdapter, ValidationError
 
 from src.core.common.types import Token
 from src.core.config.config import ENV, MAX_AGE, SALT
@@ -19,6 +19,7 @@ from src.core.domain.http_exceptions import Unauthorized
 
 class CSRFToken:
     _SERIALIZER = URLSafeTimedSerializer(ENV.secret_key, SALT)
+    _TOKEN_ADAPTER = TypeAdapter(Token)
     _OPENAPI_EXAMPLE = {
         "CSRF Token": Example(
             summary="CSRF Token",
@@ -59,7 +60,7 @@ class CSRFToken:
             raise Unauthorized(ExcMsg.TOKEN_HEADER_ERROR)
 
         try:
-            Token.validate_strings(header_token, strict=True)
+            cls._TOKEN_ADAPTER.validate_strings(header_token, strict=True)
         except ValidationError as exc:
             raise Unauthorized(ExcMsg.INVALID_TOKEN, exc) from exc
 

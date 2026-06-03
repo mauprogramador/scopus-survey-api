@@ -1,7 +1,8 @@
 from gettext import GNUTranslations
 from typing import Annotated, Any, NamedTuple, Protocol, TypeAlias, TypeVar
 
-from pydantic import BaseModel, Field, TypeAdapter
+from pandas import DataFrame
+from pydantic import BaseModel, Field
 
 from src.core.common.patterns import KEYWORD_PATTERN, TOKEN_PATTERN
 from src.core.data.enums import (
@@ -33,18 +34,9 @@ Trans: TypeAlias = dict[Lang, GNUTranslations]
 
 ScopusModel = TypeVar("ScopusModel", bound=BaseModel)
 
-Token: TypeAdapter[str | None] = TypeAdapter(
-    Annotated[
-        str | None,
-        Field(
-            pattern=_TOKEN_PATTERN,
-            min_length=64,
-            max_length=64,
-        ),
-    ]
-)
-
-
+Token: TypeAlias = Annotated[
+    str, Field(pattern=_TOKEN_PATTERN, min_length=64, max_length=64)
+]
 class LogParams(NamedTuple):
     host: str
     port: int
