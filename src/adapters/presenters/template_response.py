@@ -10,8 +10,7 @@ from starlette.responses import Response
 
 from src import __contact__, __version__
 from src.adapters.presenters.json_response import ErrorJSON
-from src.core.common.error_messages import UNEXPECTED_ERROR
-from src.core.common.types import Trans
+from src.core.common.types import Translations
 from src.core.config.config import MAX_AGE, META_INFO, PREFIX
 from src.core.data.enums import ExcMsg, Lang
 
@@ -49,7 +48,7 @@ class TemplateResponse:
         return f"{{{{url_for('{name}')}}}}"
 
     @classmethod
-    def build_all(cls, web: Trans, meta: Trans) -> None:
+    def build_all(cls, web: Translations, meta: Translations) -> None:
         cls.DIST_DIR.mkdir(exist_ok=True)
 
         env = Environment(

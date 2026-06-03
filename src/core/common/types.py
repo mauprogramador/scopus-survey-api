@@ -30,7 +30,7 @@ Json: TypeAlias = dict[str, Any]
 
 Articles: TypeAlias = list[dict[str, str]]
 
-Trans: TypeAlias = dict[Lang, GNUTranslations]
+Translations: TypeAlias = dict[Lang, GNUTranslations]
 
 ScopusModel = TypeVar("ScopusModel", bound=BaseModel)
 
