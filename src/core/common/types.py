@@ -23,7 +23,7 @@ _TOKEN_PATTERN = r"^[a-zA-Z0-9\-\_]{64}$"
 
 
 Keyword: TypeAlias = Annotated[
-    str, Field(pattern=_KEYWORD_PATTERN, min_length=2, max_length=70)
+    str, Field(pattern=_KEYWORD_PATTERN, min_length=2, max_length=120)
 ]
 
 Json: TypeAlias = dict[str, Any]

@@ -108,7 +108,7 @@ class CombinationParams(CSVParams):
         examples=["english"],
         pattern=_LANGUAGE_PATTERN,
         min_length=3,
-        max_length=30,
+        max_length=50,
     )
     open_access: Literal["0", "1"] = Field(
         default=None,
@@ -214,7 +214,7 @@ class SearchParams(CombinationParams):
         exclude=True,
         pattern=_KEYWORD_COMBINATION_PATTERN,
         min_length=2,
-        max_length=215,
+        max_length=510,
     )
     ratio: int = Field(
         default=80,
