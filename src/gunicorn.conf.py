@@ -13,6 +13,7 @@ import uvicorn  # pylint: disable=w0611 # noqa: F401
 import uvicorn_worker  # pylint: disable=w0611 # noqa: F401
 import uvloop  # pylint: disable=w0611 # noqa: F401
 from gunicorn.arbiter import Arbiter
+from uvicorn_worker import UvicornWorker
 
 from src.core.config.config import APP, ENV, SERVER
 from src.utils import logger
@@ -35,13 +36,13 @@ wsgi_app = APP
 reload = False
 bind = f"0.0.0.0:{ENV.port}"
 workers = 4
-worker_class = "uvicorn_worker.UvicornWorker"
+worker_class = f"{UvicornWorker.__module__}.{UvicornWorker.__qualname__}"
 timeout = 120
 keepalive = 5
 accesslog = "-"
 errorlog = "-"
 loglevel = "info"
 access_log_format = None
-logger_class = "src.utils.logging._CustomGunicornLogger"
+logger_class = logger.ProdLogger.fqn
 raw_env = ["PROGRESS_BAR=False"]
 when_ready = when_ready_hook
