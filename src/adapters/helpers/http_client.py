@@ -18,7 +18,6 @@ from aiohttp_retry import JitterRetry, RetryClient
 from aiolimiter import AsyncLimiter
 
 from src.core.common.types import Json, RateStrategy, ResponseBundle
-from src.core.config.config import LOG
 from src.core.config.scopus import SCOPUS_HEADERS
 from src.core.data.enums import ExcMsg
 from src.core.domain.http_exceptions import (
@@ -26,6 +25,7 @@ from src.core.domain.http_exceptions import (
     BadGatewayContent,
     GatewayTimeout,
 )
+from src.utils import logger
 
 
 # Scopus API Rate Limit: 9 requests per second
@@ -103,7 +103,7 @@ class HTTPClient:
             client_session=self._session,
             retry_options=self._retry_options,
         )
-        LOG.strategy(self._strategy, self._RATE_PERIOD)
+        logger.strategy(self._strategy, self._RATE_PERIOD)
 
     async def update_strategy(self, total_requests: int) -> None:
         if (total_requests - self._LEEWAY) <= self._BASE_STRATEGY:
@@ -152,7 +152,7 @@ class HTTPClient:
                 )
                 process_time = perf_counter() - start_time
 
-                LOG.api_call(url, response.status, process_time)
+                logger.api_call(url, response.status, process_time)
 
             except CancelledError as exc:
                 raise exc

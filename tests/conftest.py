@@ -1,9 +1,10 @@
+import logging
 from http import HTTPStatus
 from json import loads
 from urllib.parse import urljoin
 
 from httpx import ASGITransport, AsyncClient, Response
-from pytest import ExceptionInfo, fixture
+from pytest import ExceptionInfo, LogCaptureFixture, fixture
 from pytest_asyncio import fixture as async_fixture
 from uvloop import EventLoopPolicy, install
 
@@ -14,6 +15,7 @@ from src.core.config.config import DIRECTORY, PREFIX, SERVER
 from src.core.domain.http_exceptions import HTTPError
 from src.core.domain.translations import Translations
 from src.framework.fastapi.main import app
+from src.utils.logger import TEST_FORMATTER
 from tests.mocks.raw import CSRF_TOKEN, CSV_FILE_NAME, SIGNED_TOKEN
 
 
@@ -32,6 +34,15 @@ def session_data():
 @fixture(scope="session")
 def event_loop_policy():
     return EventLoopPolicy()
+
+
+@fixture(autouse=True, scope="function")
+def apply_custom_logging_formatter_to_pytest(caplog: LogCaptureFixture):
+    caplog.handler.setFormatter(TEST_FORMATTER)
+    # LogCaptureHandler of caplog and report handlers
+    logging.getLogger().handlers[-1].setFormatter(TEST_FORMATTER)
+    logging.getLogger().handlers[-2].setFormatter(TEST_FORMATTER)
+    yield
 
 
 @fixture(scope="session", autouse=True)

@@ -8,9 +8,10 @@ from fastapi.responses import JSONResponse
 from pydantic import BaseModel, field_validator
 
 from src.core.common.types import Json
-from src.core.config.config import ENV, LOG
+from src.core.config.config import ENV
 from src.core.data.enums import ExcMsg
 from src.core.domain.http_exceptions import HTTPError
+from src.utils import logger
 
 
 class BaseResponse(BaseModel):
@@ -68,8 +69,8 @@ class ErrorJSON(JSONResponse):
             try:
                 dumps(errors)
             except (TypeError, ValueError) as exc:
-                LOG.error(message, exc)
-                LOG.exception(exc)
+                logger.error(exc=exc)
+                logger.exception(exc)
 
                 message = ExcMsg.SERIALIZE_ERROR
                 errors: list[Json] = jsonable_encoder(errors)

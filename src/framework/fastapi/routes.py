@@ -8,7 +8,7 @@ from fastapi.routing import APIRouter
 
 from src.adapters.presenters.csv_response import CSVResponse
 from src.adapters.presenters.template_response import TemplateResponse
-from src.core.config.config import LIMIT, LIMITER, LOG, MAX_AGE, PREFIX
+from src.core.config.config import LIMIT, LIMITER, MAX_AGE, PREFIX
 from src.core.data.enums import Lang
 from src.core.data.query_params import (
     CombinationParams,
@@ -22,6 +22,7 @@ from src.framework.fastapi.swagger import (
     HTML_RESPONSE,
     JSON_RESPONSE,
 )
+from src.utils import logger
 
 
 favicon_router = APIRouter()
@@ -61,7 +62,7 @@ async def web_form_page(
 ) -> HTMLResponse:
 
     csrf_token, signed_token = CSRFToken.generate_csrf_tokens()
-    LOG.debug(
+    logger.debug(
         {
             "search_page_lang": lang,
             "csrf_token": csrf_token,
@@ -89,7 +90,7 @@ async def survey_total_combinations(
     request: Request,  # pylint: disable=W0613
     params: Annotated[CombinationParams, Query()],
 ) -> JSONResponse:
-    LOG.debug(params.model_dump())
+    logger.debug(params.model_dump())
 
     use_case = make_combinator()
     response = await use_case.survey_combinations(params)
@@ -111,7 +112,7 @@ async def survey_bibliographic_data(
     request: Request,  # pylint: disable=W0613
     params: Annotated[SearchParams, Query()],
 ) -> FileResponse:
-    LOG.debug(params.model_dump())
+    logger.debug(params.model_dump())
 
     use_case = make_aggregator()
     response = await use_case.retrieve_articles(params)
@@ -133,7 +134,7 @@ async def download_csv(
     request: Request,  # pylint: disable=W0613
     params: Annotated[CSVParams, Query()],
 ) -> FileResponse:
-    LOG.debug(params.model_dump())
+    logger.debug(params.model_dump())
 
     response = CSVResponse.retrieve(params.api_key)
 

@@ -23,14 +23,14 @@ from tests.mocks.raw import (
     COMBINATION_PARAMS,
     HTTP_200,
     KEYWORDS,
-    LOG_MOCK,
+    LOGGER_MOCK,
     SEARCH_PARAMS,
     URL_COMBINATION,
     URL_SEARCH,
 )
 
 
-LOG_QUOTA = Patch(KeywordCombinationFinder, LOG_MOCK.quota)
+LOG_QUOTA = Patch(KeywordCombinationFinder, LOGGER_MOCK.quota)
 
 
 @mark.asyncio

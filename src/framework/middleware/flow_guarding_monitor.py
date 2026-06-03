@@ -16,12 +16,12 @@ from src.adapters.presenters.json_response import ErrorJSON
 from src.adapters.presenters.template_response import TemplateResponse
 from src.core.config.config import (
     HEADERS,
-    LOG,
     RATELIMIT_POLICY,
     SERVER,
     TRACE_ID_CTX,
 )
 from src.core.domain.http_exceptions import HTTPError
+from src.utils import logger
 
 
 # e.g. /v2/scopus-survey/api
@@ -75,7 +75,7 @@ class FlowGuardingMonitorMiddleware(BaseHTTPMiddleware):
         else:
             duration = f"{process_time:.2f}s"
 
-        LOG.trace(request, response.status_code, duration)
+        logger.trace(request, response.status_code, duration)
 
         response.headers[self._TRACE_ID] = trace_id
         response.headers[self._PROCESS_TIME] = duration

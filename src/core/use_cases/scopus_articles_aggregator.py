@@ -2,7 +2,6 @@ from fastapi.responses import FileResponse
 from pandas import DataFrame
 
 from src.adapters.presenters.csv_response import CSVResponse
-from src.core.config.config import LOG
 from src.core.data.csv_builder import CSVBuilder
 from src.core.data.enums import Column
 from src.core.common.types import (
@@ -12,6 +11,7 @@ from src.core.common.types import (
     SimilarityFilter,
     SurveyDetails,
 )
+from src.utils import logger
 
 
 class ScopusArticlesAggregator:
@@ -67,9 +67,9 @@ class ScopusArticlesAggregator:
         loss = 0.0 if final == 0 else (final / initial) * self._PERCENT
         self._details.set_loss(final, loss)
 
-        LOG.loss(initial, final, loss)
-        LOG.quota(*self._details.search_quota)
-        LOG.quota(*self._details.abstract_quota)
+        logger.loss(initial, final, loss)
+        logger.quota(*self._details.search_quota)
+        logger.quota(*self._details.abstract_quota)
 
         filename = CSVBuilder.write(self._docs, params, self._details.metadata)
 

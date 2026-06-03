@@ -20,12 +20,12 @@ from pytest_mock import MockerFixture as Mocker
 from src.adapters.helpers.http_client import HTTPClient
 from src.core.common.types import RateStrategy
 from src.core.data.enums import ExcMsg
-from src.core.config.config import LOG
 from src.core.data.quota_results_handler import QuotaResultsHandler
 from src.core.domain.factory import make_aggregator
 from src.core.use_cases.keyword_combination_finder import (
     KeywordCombinationFinder,
 )
+from src.utils import logger
 from tests.conftest import assert_error_json
 from tests.mocks.helpers import (
     MockState,
@@ -48,7 +48,7 @@ from tests.mocks.raw import (
     HTTP_502,
     HTTP_503,
     HTTP_504,
-    LOG_MOCK,
+    LOGGER_MOCK,
     SEARCH_PARAMS,
     URL_COMBINATION,
     URL_SEARCH,
@@ -57,7 +57,7 @@ from tests.mocks.raw import (
 
 STATE = fqn(make_aggregator, QuotaResultsHandler)
 CHAIN = fqn(KeywordCombinationFinder, chain)
-LOG_STRATEGY = fqn(HTTPClient, LOG_MOCK.strategy)
+LOG_STRATEGY = fqn(HTTPClient, LOGGER_MOCK.strategy)
 REQUEST = fqn(ClientSession.request)
 SLEEP = fqn(HTTPClient, sleep)
 
@@ -173,7 +173,7 @@ async def test_update_strategy_and_additional_sleep(
 ):
     state = mocker.patch(STATE, MockState(5, 113))
     spy_sleep = mocker.patch(SLEEP, wraps=sleep)
-    spy_log = mocker.patch(LOG_STRATEGY, wraps=LOG.strategy)
+    spy_log = mocker.patch(LOG_STRATEGY, wraps=logger.strategy)
     mock = mocker.patch(*get_patch(GET_STRATEGY))
 
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)

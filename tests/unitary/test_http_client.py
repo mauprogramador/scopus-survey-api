@@ -18,15 +18,15 @@ from pytest_mock import MockerFixture as Mocker
 from src.adapters.helpers.http_client import HTTPClient
 from src.core.common.types import RateStrategy
 from src.core.data.enums import ExcMsg
-from src.core.config.config import LOG
 from src.core.domain.http_exceptions import (
     BadGateway,
     BadGatewayContent,
     GatewayTimeout,
 )
+from src.utils import logger
 from tests.conftest import assert_http_error
 from tests.mocks.helpers import fqn, get_patch, http_patch
-from tests.mocks.raw import HTTP_200, HTTP_502, HTTP_504, LOG_MOCK
+from tests.mocks.raw import HTTP_200, HTTP_502, HTTP_504, LOGGER_MOCK
 from tests.mocks.unitary import (
     GET_CONTENT_TYPE_ERROR,
     GET_EMPTY_RESPONSE,
@@ -37,7 +37,7 @@ from tests.mocks.unitary import (
 )
 
 
-LOG_STRATEGY = fqn(HTTPClient, LOG_MOCK.strategy)
+LOG_STRATEGY = fqn(HTTPClient, LOGGER_MOCK.strategy)
 REQUEST = fqn(ClientSession.request)
 SLEEP = fqn(HTTPClient, sleep)
 
@@ -168,7 +168,7 @@ async def test_retry_on_rate_limit(mocker: Mocker, client: HTTPClient):
 
 @mark.asyncio(loop_scope="module")
 async def test_update_strategy(mocker: Mocker, client: HTTPClient):
-    spy = mocker.patch(LOG_STRATEGY, wraps=LOG.strategy)
+    spy = mocker.patch(LOG_STRATEGY, wraps=logger.strategy)
     await client.update_strategy(411)
     strategy: RateStrategy = spy.call_args_list[0].args[0]
     assert strategy.rate == 6.0 and strategy.backoff == 3.0

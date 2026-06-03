@@ -19,12 +19,12 @@ from src.core.common.types import (
     SurveyDetails,
     URLBuilder,
 )
-from src.core.config.config import LOG
 from src.core.data.enums import ExcMsg
 from src.core.domain.http_exceptions import (
     HTTPError,
     ServiceUnavailable,
 )
+from src.utils import logger
 from src.utils.progress_bar import ProgressBar
 
 
@@ -65,7 +65,7 @@ class ScopusSearchAPI:
         self, bundles_map: dict[int, CombinationBundle]
     ) -> list[Json]:
         max_workers = min(len(bundles_map), self._workers)
-        LOG.debug({"max_workers": max_workers})
+        logger.debug({"max_workers": max_workers})
 
         all_tasks = {
             create_task(
@@ -128,7 +128,7 @@ class ScopusSearchAPI:
 
     async def _get_multiple_articles_by_pagination(self) -> None:
         max_workers = min(self._state.pages_to_fetch, self._workers)
-        LOG.debug({"max_workers": max_workers})
+        logger.debug({"max_workers": max_workers})
 
         all_tasks = {
             create_task(
@@ -207,6 +207,6 @@ class ScopusSearchAPI:
                 )
                 await self._get_multiple_articles_by_pagination()
 
-        LOG.info(f"Total Found: \033[33m{self._state.total_results}")
+        logger.info(f"Total Found: \033[33m{self._state.total_results}")
 
         self._state.validate_integrity()

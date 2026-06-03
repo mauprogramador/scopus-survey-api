@@ -4,7 +4,8 @@ from typing import Self
 from tqdm import tqdm
 from tqdm.contrib.logging import logging_redirect_tqdm
 
-from src.core.config.config import ENV, LOG
+from src.core.config.config import ENV
+from src.utils import logger
 
 
 class _DisabledProgressBar:
@@ -59,7 +60,7 @@ class ProgressBar:
         self._progress_bar.update(step)
 
     def __enter__(self) -> Self:
-        self._stack.enter_context(logging_redirect_tqdm(LOG.logger))
+        self._stack.enter_context(logging_redirect_tqdm([logger.LOGGER]))
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):

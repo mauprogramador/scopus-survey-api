@@ -4,7 +4,6 @@ from typing import Type
 from pydantic import ValidationError
 
 from src.core.common.types import ResponseBundle, ScopusModel
-from src.core.config.config import LOG
 from src.core.config.scopus import QUOTA_ERROR_CODE, RATE_LIMIT_ERROR_CODE
 from src.core.data.enums import ExcMsg
 from src.core.data.serializers import (
@@ -14,6 +13,7 @@ from src.core.data.serializers import (
     ScopusSearch,
 )
 from src.core.domain.http_exceptions import InternalError, ScopusAPIError
+from src.utils import logger
 
 
 class ScopusResponse:
@@ -26,20 +26,18 @@ class ScopusResponse:
         try:
             if response.code >= HTTPStatus.BAD_REQUEST:
                 quota = ScopusHeaders.model_validate(response.headers)
-                LOG.quota(quota, response.code)
+                logger.quota(quota, response.code)
+
 
                 if response.code == HTTPStatus.TOO_MANY_REQUESTS:
                     error_response = ScopusError.model_validate(response.data)
 
                     if error_response.code == QUOTA_ERROR_CODE:
-                        LOG.error(ExcMsg.QUOTA_EXCEEDED)
-                        LOG.info(
-                            "Please try again on \033[33m"
-                            f"{quota.reset_datetime}\033[m"
-                        )
+                        logger.error(ExcMsg.QUOTA_EXCEEDED)
+                        logger.try_again(quota.reset_datetime)
 
                     elif error_response.code == RATE_LIMIT_ERROR_CODE:
-                        LOG.error(ExcMsg.RATE_LIMIT_EXCEEDED)
+                        logger.error(ExcMsg.RATE_LIMIT_EXCEEDED)
 
                 raise ScopusAPIError(
                     quota.status,

@@ -17,7 +17,6 @@ from src.core.config.scopus import (
 from src.core.data.enums import Button, Lang
 from src.core.data.serializers import ScopusHeaders
 from src.framework.fastapi.csrf_token import CSRFToken
-from src.utils.logging import Logging
 
 
 # HTTP Status code
@@ -220,7 +219,14 @@ REQUEST = Mock(
 )
 
 
-class LOG(Logging): ...
+class MockLogger:
+
+    def strategy(self): ...
+
+    def debug(self): ...
+
+    def quota(self): ...
 
 
-LOG_MOCK = LOG(Mock(LogParams))
+MockLogger.__name__ = "logger"
+LOGGER_MOCK = MockLogger()

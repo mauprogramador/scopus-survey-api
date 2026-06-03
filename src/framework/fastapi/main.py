@@ -6,7 +6,7 @@ from fastapi.staticfiles import StaticFiles
 
 from src import __version__
 from src.adapters.presenters.template_response import TemplateResponse
-from src.core.config.config import DIRECTORY, ENV, LIMITER, LOG
+from src.core.config.config import DIRECTORY, ENV, LIMITER
 from src.core.domain.translations import Translations
 from src.framework.fastapi.routes import favicon_router, router
 from src.framework.fastapi.swagger import (
@@ -21,6 +21,7 @@ from src.framework.middleware import (
     FlowGuardingMonitorMiddleware,
     ProxyForwardedHeadersMiddleware,
 )
+from src.utils import logger
 
 
 @asynccontextmanager
@@ -30,7 +31,7 @@ async def lifespan(app: FastAPI):  # pylint: disable=W0621,W0613
     TemplateResponse.build_all(*translations)
 
     if ENV.host == "0.0.0.0":
-        LOG.info(f"Please access at \033[37;1mhttp://localhost:{ENV.port}")
+        logger.info(f"Please access at \033[37;1mhttp://localhost:{ENV.port}")
 
     yield
 

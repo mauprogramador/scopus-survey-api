@@ -9,9 +9,9 @@ from os import cpu_count, sched_getaffinity
 from pandas import DataFrame, to_datetime
 from thefuzz.fuzz import ratio  # type: ignore
 
-from src.core.config.config import LOG
 from src.core.data.enums import Column, ExcMsg
 from src.core.domain.http_exceptions import ServiceUnavailable
+from src.utils import logger
 
 
 class ArticlesSimilarityFilter:
@@ -86,7 +86,7 @@ class ArticlesSimilarityFilter:
             return self._get_single_group_index(single_group)
 
         max_workers = min(self._filtered_df.shape[0], self._workers)
-        LOG.debug({"max_workers": max_workers})
+        logger.debug({"max_workers": max_workers})
 
         with ProcessPoolExecutor(max_workers) as executor:
             all_tasks = {
@@ -144,14 +144,14 @@ class ArticlesSimilarityFilter:
         )
 
         self._filtered_df = df_subset.dropna(subset=[Column.DATE])
-        LOG.debug({"invalids_datetime": self._filtered_df.shape[0]})
+        logger.debug({"invalids_datetime": self._filtered_df.shape[0]})
 
         if self._filtered_df.shape[0] <= self._SINGLE_ROW:
             return dataframe
 
         grouped_df = self._filtered_df.groupby(Column.AUTHORS)
 
-        LOG.debug({"same_authors_count": grouped_df.ngroups})
+        logger.debug({"same_authors_count": grouped_df.ngroups})
         if grouped_df.ngroups == dataframe.shape[0]:
             return dataframe
 
@@ -161,7 +161,7 @@ class ArticlesSimilarityFilter:
         if not similar_titles:
             return dataframe
 
-        LOG.debug({"similar_titles": similar_titles})
+        logger.debug({"similar_titles": similar_titles})
 
         dataframe = dataframe.drop(list(similar_titles))
         dataframe = dataframe.reset_index(drop=True)

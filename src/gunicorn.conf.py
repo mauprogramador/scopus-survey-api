@@ -14,16 +14,17 @@ import uvicorn_worker  # pylint: disable=w0611 # noqa: F401
 import uvloop  # pylint: disable=w0611 # noqa: F401
 from gunicorn.arbiter import Arbiter
 
-from src.core.config.config import APP, ENV, LOG, SERVER
+from src.core.config.config import APP, ENV, SERVER
+from src.utils import logger
 
 
 SERVER.set(f"Gunicorn/{gunicorn.__version__}")
 
 
 def when_ready_hook(_: Arbiter) -> None:
-    LOG.info("\033[33mScopus Survey API was initialized 🚀")
-    LOG.debug(ENV.model_dump())
-    LOG.info(
+    logger.info("\033[33mScopus Survey API was initialized 🚀")
+    logger.debug(ENV.model_dump())
+    logger.info(
         f"Gunicorn running at\033[37;1m http://localhost:{ENV.port}"
         "\033[m (Press CTRL+C to quit)"
     )

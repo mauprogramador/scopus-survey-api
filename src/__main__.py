@@ -12,13 +12,14 @@ import tqdm  # pylint: disable=w0611 # noqa: F401
 import uvicorn
 import uvloop
 
-from src.core.config.config import APP, ENV, LOG, SERVER
+from src.core.config.config import APP, ENV, SERVER
+from src.utils import logger
 
 
 if __name__ == "__main__":
     SERVER.set(f"Uvicorn/{uvicorn.__version__}")
-    LOG.info("\033[33mScopus Survey API was initialized 🚀")
-    LOG.debug(ENV.model_dump())
+    logger.info("\033[33mScopus Survey API was initialized 🚀")
+    logger.debug(ENV.model_dump())
 
     uvloop.install()
     uvicorn.run(
@@ -28,6 +29,7 @@ if __name__ == "__main__":
         loop="uvloop",
         reload=ENV.reload,
         workers=ENV.workers,
+        log_config=logger.UVICORN_LOGGING_CONFIG,
         access_log=False,
         server_header=False,
         timeout_graceful_shutdown=5,

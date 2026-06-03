@@ -11,7 +11,6 @@ from os import cpu_count, sched_getaffinity
 from pandas import DataFrame
 
 from src.adapters.helpers.scopus_response import ScopusResponse
-from src.core.config.config import LOG
 from src.core.domain.http_exceptions import HTTPError, ServiceUnavailable
 from src.core.common.types import (
     HTTPClient,
@@ -21,6 +20,7 @@ from src.core.common.types import (
     URLBuilder,
 )
 from src.core.data.enums import ExcMsg
+from src.utils import logger
 from src.utils.progress_bar import ProgressBar
 
 
@@ -54,7 +54,7 @@ class ScopusAbstractRetrievalAPI:
 
     async def _get_multiple_abstracts(self) -> None:
         max_workers = min(self._state.abstracts_to_fetch, self._workers)
-        LOG.debug({"max_workers": max_workers})
+        logger.debug({"max_workers": max_workers})
 
         all_tasks = {
             create_task(

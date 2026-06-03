@@ -1,0 +1,376 @@
+# pylint: disable=W0621
+import logging
+import os
+import re
+import sys
+from datetime import datetime
+from enum import IntEnum
+from http import HTTPStatus
+from logging.config import dictConfig
+from logging.handlers import RotatingFileHandler
+from pathlib import Path
+from sys import exc_info
+from traceback import FrameSummary, extract_tb
+
+from fastapi import Request
+from gunicorn.glogging import Logger as GunicornLogger
+from pydantic_core import to_jsonable_python
+from starlette.types import Scope
+
+from src.core.common.types import Json, Quota, RateStrategy
+from src.core.config.config import ENV
+from src.core.config.scopus import MAX_SEARCH_QUOTA, NO_RESULTS, SEARCH_API_URL
+from src.core.domain.http_exceptions import get_error_message
+
+
+# e.g. \033[35;1m, \033[m
+_ANSI_ESCAPE_PATTERN = re.compile(r"\x1b\[[0-9\;]*m")
+
+# e.g. apiKey=6bd9327547a3cf4c56586324df4b7d92  (Random Hash)
+_API_KEY_PARAM_PATTERN = re.compile(r"apiKey\=[a-zA-Z0-9]{32}")
+
+
+def _filename(count: int) -> str:
+    return f"log_{count}_{datetime.now().strftime("%Y%m%d_%H%M%S")}.log"
+
+
+_CHROME_DEVTOOLS_URL = ".well-known/appspecific/com.chrome.devtools.json"
+_LIVERELOAD_ROUTE = "/livereload"
+
+
+def excluded_routes(path: str) -> bool:
+    is_devtools = path.endswith(_CHROME_DEVTOOLS_URL)
+    is_livereload = path.count(_LIVERELOAD_ROUTE)
+    return is_devtools and is_livereload
+
+
+class _Level(IntEnum):
+    TRACE = 21
+    DEBUG = 10
+    INFO = 20
+    QUOTA = 22
+    ERROR = 40
+    EXCEPTION = 41
+    SEARCH = 23
+    ABSTRACT = 24
+
+
+class _ANSIFormatter(logging.Formatter):
+
+    _LEVEL_COLOR = {
+        _Level.TRACE: "34",
+        _Level.DEBUG: "35",
+        _Level.INFO: "32",
+        _Level.QUOTA: "35",
+        _Level.ERROR: "31",
+        _Level.EXCEPTION: "31",
+        _Level.SEARCH: "36",
+        _Level.ABSTRACT: "36",
+    }
+
+    def __init__(self, fmt: str, datefmt: str, strip_ansi: bool):
+        super().__init__(fmt, datefmt)
+        self._strip_ansi = strip_ansi
+
+        if os.environ.get("PYTEST_VERSION") is None:
+            self._color_supported = sys.stdout.isatty()
+        else:
+            self._color_supported = True
+
+    def format(self, record: logging.LogRecord) -> str:
+        record.message = record.getMessage()
+
+        if not self._color_supported or self._strip_ansi:
+            log_message = super().format(record)
+            return _ANSI_ESCAPE_PATTERN.sub("", log_message)
+
+        levelname, message = record.levelname, record.message
+
+        try:
+            color = self._LEVEL_COLOR[_Level[levelname]]
+            record.levelname = f"\033[{color}m{levelname}\033[m:"
+            record.message = f"\033[m{message}\033[m"
+
+            return super().format(record)
+        finally:
+            record.levelname = levelname
+            record.message = message
+
+
+class _FileHandler(RotatingFileHandler):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.namer = self._namer
+
+    def _namer(self, path: str) -> str:
+        count = int(Path(path).suffixes[1].removeprefix("."))
+        return Path(path).with_name(_filename(count)).as_posix()
+
+
+_METHOD_COLOR = {"GET": "94", "POST": "92", "PUT": "93", "DELETE": "91"}
+_QUOTA = (
+    "Scopus API: \033[32m%(api)s\033[m. Limit: \033[33m%(limit)s\033[m. "
+    "Remaining: \033[33m%(remaining)s\033[m. Reset: \033[33m%(reset)s"
+    "\033[m. ELS-Status: \033[%(color)sm%(status)s\033[m"
+)
+_TRACE = (
+    "[\033[36m%(host)s\033[m:\033[36m%(port)d\033[m] \033[%(method_color)sm"
+    "%(method)s \033[37;1m%(url)s\033[m \033[%(status_color)sm%(code)d "
+    "%(status_phrase)s \033[m%(time)s\033[m"
+)
+_COMBINATIONS = (
+    "Keywords: \033[33m%(keywords)d\033[m. Combinations: \033[33m"
+    "%(combinations)d\033[m. Total-Sum: \033[33m%(total)s\033[m. "
+    "Average-Found: \033[33m~%(average)s\033[m"
+)
+_LOSS = (
+    "Initial: \033[33m%(initial)d\033[m. Final: \033[33m%(final)d"
+    "\033[m. Loss: \033[33m%(loss_amount)ddoc \033[m/ \033[33m"
+    "%(loss_percent).2f%%\033[m"
+)
+_STRATEGY = (
+    "RateLimit: \033[33m%(rate).1freq\033[m/\033[33m%(time).1fs\033[m. "
+    "Backoff: \033[33m%(backoff).1f\033[m. Sleep: \033[33m%(sleep).1f"
+    "s\033[m. Concurrent: \033[33m%(concurrent)d\033[m"
+)
+_EXCEPTION = (
+    '\033[31m%(qualname)s\033[m: File "%(filepath)s", line %(line)d, col '
+    "%(col)d, from \033[31m%(module)s.%(qualname)s\033[m"
+)
+_TRY_AGAIN = "Please try again on \033[37;1m%s\033[m"
+_UVICORN_FMT = "%(asctime)s %(levelprefix)-19s %(message)s"
+_FRAME = FrameSummary(__file__, 1, "<logging>", colno=0)
+_STATUS_COLOR = {2: "32", 3: "33", 4: "31", 5: "31"}
+_FMT = "%(asctime)s %(levelname)-18s %(message)s"
+_FILENAME = Path(f".logs/{_filename(0)}")
+_LOGGER_NAME = "scopus.survey.api"
+_DATEFMT = "%Y-%m-%d %H:%M:%S"
+_HIDE_API_KEY = "apiKey=..."
+
+TEST_FORMATTER = _ANSIFormatter(fmt=_FMT, datefmt=_DATEFMT, strip_ansi=False)
+
+_FILE_HANDLER: Json = {
+    "()": _FileHandler,
+    "formatter": "ansi_cleaner",
+    "filename": _FILENAME,
+    "mode": "a",
+    "maxBytes": 10485760,  # 10MB
+    "backupCount": 15,
+    "encoding": "utf-8",
+}
+_LOGGING_CONFIG: Json = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "default": {
+            "()": _ANSIFormatter,
+            "format": _FMT,
+            "datefmt": _DATEFMT,
+            "strip_ansi": False,
+        },
+        "ansi_cleaner": {
+            "()": _ANSIFormatter,
+            "fmt": _FMT,
+            "datefmt": _DATEFMT,
+            "strip_ansi": True,
+        },
+    },
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "default",
+            "stream": "ext://sys.stdout",
+        },
+    },
+    "loggers": {
+        _LOGGER_NAME: {
+            "handlers": ["console"],
+            "level": logging.DEBUG if ENV.debug else logging.INFO,
+        }
+    },
+}
+UVICORN_LOGGING_CONFIG: Json = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "default": {
+            "()": "uvicorn.logging.DefaultFormatter",
+            "fmt": _UVICORN_FMT,
+            "datefmt": _DATEFMT,
+            "use_colors": True,
+        },
+        "access": {},
+    },
+    "handlers": {
+        "default": {
+            "formatter": "default",
+            "class": "logging.StreamHandler",
+            "stream": "ext://sys.stderr",
+        },
+    },
+    "loggers": {
+        "uvicorn": {
+            "handlers": ["default"],
+            "level": "INFO",
+            "propagate": False,
+        },
+        "uvicorn.error": {"level": "INFO"},
+    },
+}
+
+if ENV.logging_file:
+    _FILENAME.parent.mkdir(exist_ok=True)
+    _LOGGING_CONFIG["handlers"].setdefault("file", _FILE_HANDLER)
+    _LOGGING_CONFIG["root"]["handlers"].append("file")
+    UVICORN_LOGGING_CONFIG["handlers"].setdefault("file", _FILE_HANDLER)
+    UVICORN_LOGGING_CONFIG["loggers"]["uvicorn"]["handlers"].append("file")
+
+logging.addLevelName(_Level.TRACE, _Level.TRACE.name)
+logging.addLevelName(_Level.QUOTA, _Level.QUOTA.name)
+logging.addLevelName(_Level.SEARCH, _Level.SEARCH.name)
+logging.addLevelName(_Level.ABSTRACT, _Level.ABSTRACT.name)
+logging.addLevelName(_Level.EXCEPTION, _Level.EXCEPTION.name)
+
+dictConfig(_LOGGING_CONFIG)
+LOGGER = logging.getLogger(_LOGGER_NAME)
+
+
+def info(message: str) -> None:
+    LOGGER.info("%s\033[m", message, stacklevel=2)
+
+
+def loss(initial: int, final: int, loss: float) -> None:
+    args = {
+        "initial": initial,
+        "final": (initial - final),
+        "loss_amount": final,
+        "loss_percent": loss,
+    }
+    LOGGER.info(_LOSS, args, stacklevel=2)
+
+
+def combinations(nkeywords: int, totals: list[int], average: int) -> None:
+    args = {
+        "keywords": nkeywords,
+        "combinations": len(totals),
+        "total": f"{sum(totals):,}",
+        "average": f"{average:,}",
+    }
+    LOGGER.info(_COMBINATIONS, args, stacklevel=2)
+
+
+def strategy(strategy: RateStrategy, time: float) -> None:
+    args = {
+        "rate": strategy.rate,
+        "time": time,
+        "backoff": strategy.backoff,
+        "sleep": strategy.sleep,
+        "concurrent": strategy.concurrent,
+    }
+    LOGGER.info(_STRATEGY, args, stacklevel=2)
+
+
+def quota(quota: Quota, code: int) -> None:
+    api = "Search" if quota.limit == MAX_SEARCH_QUOTA else "Abstract"
+
+    if quota.status.startswith(NO_RESULTS):
+        code = HTTPStatus.NOT_FOUND.value
+
+    args = {
+        "api": api,
+        "limit": quota.limit,
+        "remaining": quota.remaining,
+        "reset": quota.reset_datetime,
+        "color": _STATUS_COLOR[(code // 100)],
+        "status": quota.status,
+    }
+    LOGGER.log(_Level.QUOTA, _QUOTA, args, stacklevel=2)
+
+
+def try_again(reset: str) -> None:
+    LOGGER.info(_TRY_AGAIN, reset, stacklevel=2)
+
+
+def error(message: str = None, exc: Exception = None) -> None:
+    if exc is not None:
+        message = get_error_message(exc)
+    LOGGER.error("\033[31m%s\033[m", message, stacklevel=2)
+
+
+def debug(data: Json) -> None:
+    LOGGER.debug(
+        "\033[33mJSON:\033[m %s\033[m",
+        to_jsonable_python(data, fallback=repr),
+        stacklevel=2,
+    )
+
+
+def exception(exception: Exception) -> None:
+    traceback = exc_info()[2]
+    frame = extract_tb(traceback)[-1] if traceback else _FRAME
+
+    args = {
+        "module": type(exception).__module__,
+        "qualname": type(exception).__qualname__,
+        "filepath": frame.filename,
+        "line": frame.lineno if frame.lineno else 1,
+        "col": frame.colno if frame.colno else 1,
+    }
+    LOGGER.log(_Level.EXCEPTION, _EXCEPTION, args, exc_info=True, stacklevel=2)
+
+
+def _trace(
+    prefix: _Level,
+    request: Request,
+    code: int,
+    time: str,
+) -> None:
+    if request.client is None:
+        host, port = ENV.host, ENV.port
+    else:
+        host, port = request.client.host, request.client.port
+
+    args = {
+        "host": host,
+        "port": port,
+        "method_color": _METHOD_COLOR.get(request.method, "90"),
+        "method": request.method,
+        "url": _API_KEY_PARAM_PATTERN.sub(_HIDE_API_KEY, str(request.url)),
+        "status_color": _STATUS_COLOR[(code // 100)],
+        "code": code,
+        "status_phrase": HTTPStatus(code).phrase,
+        "time": time,
+    }
+    LOGGER.log(prefix, _TRACE, args, stacklevel=3)
+
+
+def trace(request: Request, code: int, time: str) -> None:
+    _trace(_Level.TRACE, request, code, time)
+
+
+def api_call(url: str, code: int, time: float) -> None:
+    if url.startswith(SEARCH_API_URL):
+        prefix = _Level.SEARCH
+    else:
+        prefix = _Level.ABSTRACT
+
+    scope: Scope = {  # type: ignore
+        "type": "http",
+        "method": "GET",
+        "path": url,
+        "headers": {},
+    }
+    _trace(prefix, Request(scope), code, f"{time:.2f}s")
+
+
+class ProdLogger(GunicornLogger):
+    """Custom logger for Gunicorn log messages"""
+
+    fqn = f"{__module__}.{__qualname__}"
+    error_fmt = r"%(asctime)s %(levelname)s: %(message)s"
+    datefmt = r"%Y-%m-%d %H:%M:%S"
+    access_fmt = ""
+
+    def access(self, resp, req, environ, request_time):
+        pass

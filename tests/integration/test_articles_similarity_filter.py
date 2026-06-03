@@ -28,14 +28,14 @@ from tests.mocks.integration import (
 from tests.mocks.raw import (
     HTTP_200,
     HTTP_503,
-    LOG_MOCK,
+    LOGGER_MOCK,
     SEARCH_PARAMS,
     URL_SEARCH,
 )
 
 
 TO_DATETIME = fqn(ArticlesSimilarityFilter, to_datetime)
-LOG_DEBUG = Patch(ArticlesSimilarityFilter, LOG_MOCK.debug)
+LOG_DEBUG = Patch(ArticlesSimilarityFilter, LOGGER_MOCK.debug)
 IDXMAX = Patch(Series.idxmax)
 
 

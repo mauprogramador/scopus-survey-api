@@ -13,7 +13,7 @@ from src.core.use_cases.articles_similarity_filter import (
 )
 from tests.conftest import assert_http_error
 from tests.mocks.helpers import Patch, fqn
-from tests.mocks.raw import HTTP_503, LOG_MOCK
+from tests.mocks.raw import HTTP_503, LOGGER_MOCK
 from tests.mocks.unitary import (
     MORE_GROUPS_MORE_SIMILAR,
     MORE_GROUPS_NO_SIMILAR,
@@ -29,7 +29,7 @@ from tests.mocks.unitary import (
 
 SIMILARITY_FILTER = ArticlesSimilarityFilter()
 TO_DATETIME = fqn(ArticlesSimilarityFilter, to_datetime)
-LOG_DEBUG = Patch(ArticlesSimilarityFilter, LOG_MOCK.debug)
+LOG_DEBUG = Patch(ArticlesSimilarityFilter, LOGGER_MOCK.debug)
 CANCELLED = Patch(Future.result, [None, CancelledError("any")])
 RATIO = 80
 
