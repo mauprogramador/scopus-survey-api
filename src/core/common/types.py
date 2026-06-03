@@ -4,7 +4,6 @@ from typing import Annotated, Any, NamedTuple, Protocol, TypeAlias, TypeVar
 from pandas import DataFrame
 from pydantic import BaseModel, Field
 
-from src.core.common.patterns import KEYWORD_PATTERN, TOKEN_PATTERN
 from src.core.data.enums import (
     DocType,
     Lang,

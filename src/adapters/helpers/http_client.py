@@ -43,6 +43,11 @@ class HTTPClient:
     _MAX_TIMEOUT = 15.0
     _TIMEOUT = ClientTimeout(total=15.0)
     _JSON_ERROR = JSONDecodeError("Expecting value", "Scopus JSON", 0)
+    # Strategy:
+    # - Rate (req/sec)
+    # - Backoff factor
+    # - Additional sleep (sec)
+    # - Concurrent requests
     _STRATEGIES = {
         100: RateStrategy(8.0, 2.0, 0.0, 10),
         200: RateStrategy(7.5, 2.2, 0.0, 10),

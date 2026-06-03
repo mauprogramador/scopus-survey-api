@@ -2,8 +2,6 @@ from fastapi.responses import FileResponse
 from pandas import DataFrame
 
 from src.adapters.presenters.csv_response import CSVResponse
-from src.core.data.csv_builder import CSVBuilder
-from src.core.data.enums import Column
 from src.core.common.types import (
     AbstractAPI,
     SearchAPI,
@@ -11,6 +9,8 @@ from src.core.common.types import (
     SimilarityFilter,
     SurveyDetails,
 )
+from src.core.data.csv_builder import CSVBuilder
+from src.core.data.enums import Column
 from src.utils import logger
 
 
