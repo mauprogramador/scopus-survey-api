@@ -20,7 +20,9 @@ from src.core.config.config import (
     SERVER,
     TRACE_ID_CTX,
 )
-from src.core.domain.http_exceptions import HTTPError
+from src.core.data.enums import ExcMsg
+from src.core.domain.http_exceptions import InternalError
+from src.framework.middleware.exception_handler import custom_http_error
 from src.utils import logger
 
 
@@ -53,17 +55,8 @@ class FlowGuardingMonitorMiddleware(BaseHTTPMiddleware):
 
         except Exception as exc:  # pylint: disable=W0718
             trace_id = TRACE_ID_CTX.get()
-            message = LOG.error_message(exc)
-
-            LOG.error(message)
-            LOG.exception(exc)
-
-            response = ErrorJSON(
-                request,
-                HTTPStatus.INTERNAL_SERVER_ERROR,
-                message,
-                HTTPError.get_error_details(exc),
-            )
+            exc = InternalError(ExcMsg.UNEXPECTED_ERROR, exc)
+            response = await custom_http_error(request, exc)
 
         finally:
             TRACE_ID_CTX.reset(token)
