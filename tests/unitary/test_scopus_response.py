@@ -3,11 +3,7 @@ from pytest import raises
 
 from src.adapters.helpers.scopus_response import ScopusResponse
 from src.core.common.types import ResponseBundle
-from src.core.config.scopus import (
-    QUOTA_ERROR_CODE,
-    RATE_LIMIT_ERROR_CODE,
-    SCOPUS_ERRORS,
-)
+from src.core.config.scopus import QUOTA_ERROR_CODE, RATE_LIMIT_ERROR_CODE
 from src.core.data.enums import ExcMsg
 from src.core.domain.http_exceptions import InternalError, ScopusAPIError
 from tests.conftest import assert_http_error
@@ -21,6 +17,7 @@ from tests.mocks.raw import (
     RAW_ERROR_RESPONSE_RATE_LIMIT,
     RAW_HEADERS_OK,
     RAW_SEARCH_OK,
+    RAW_SERVICE_ERROR_INVALID_INPUT,
     RAW_SERVICE_ERROR_QUOTA,
 )
 
@@ -34,26 +31,13 @@ def test_scopus_response():
 
 def test_status_error():
     headers = {"X-ELS-Status": "INVALID_INPUT"}
-    res = ResponseBundle(HTTP_400, headers, RAW_SEARCH_OK)
+    res = ResponseBundle(HTTP_400, headers, RAW_SERVICE_ERROR_INVALID_INPUT)
     with raises(ScopusAPIError) as info:
         ScopusResponse.validate_search(res)
-    assert_http_error(info, HTTP_502, "INVALID_INPUT")
+    assert_http_error(info, HTTP_502, "any")
     assert len(info.value.errors) == 2 and info.value.errors[1]
-    assert info.value.errors[0]["status"] == "INVALID_INPUT"
-    assert info.value.errors[0]["els_status"] == "INVALID_INPUT"
-    assert info.value.errors[0]["code_error"] == SCOPUS_ERRORS.get(HTTP_400)
-
-
-def test_too_many_requests():
-    headers = {"X-ELS-Status": "TOO_MANY_REQUESTS"}
-    res = ResponseBundle(HTTP_429, headers, RAW_SEARCH_OK)
-    with raises(ScopusAPIError) as info:
-        ScopusResponse.validate_search(res)
-    assert_http_error(info, HTTP_502, "TOO_MANY_REQUESTS")
-    assert len(info.value.errors) and info.value.errors[1]
-    assert info.value.errors[0]["status"] == "TOO_MANY_REQUESTS"
-    assert info.value.errors[0]["els_status"] == "TOO_MANY_REQUESTS"
-    assert info.value.errors[0]["code_error"] == SCOPUS_ERRORS.get(HTTP_429)
+    assert info.value.errors[0]["error_code"] == "INVALID_INPUT"
+    assert info.value.errors[0]["status_code"] == HTTP_400
 
 
 def test_quota_exceeded():

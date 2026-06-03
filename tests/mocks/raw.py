@@ -149,10 +149,26 @@ RAW_ABSTRACT_FULL = {
     }
 }
 RAW_SERVICE_ERROR_QUOTA = {
-    "service-error": {"status": {"statusCode": QUOTA_ERROR_CODE}}
+    "service-error": {
+        "status": {
+            "statusCode": QUOTA_ERROR_CODE,
+            "statusText": "any",
+        }
+    }
 }
 RAW_ERROR_RESPONSE_RATE_LIMIT = {
-    "error-response": {"error-code": RATE_LIMIT_ERROR_CODE}
+    "error-response": {
+        "error-code": RATE_LIMIT_ERROR_CODE,
+        "error-message": "any",
+    }
+}
+RAW_SERVICE_ERROR_INVALID_INPUT = {
+    "service-error": {
+        "status": {
+            "statusCode": "INVALID_INPUT",
+            "statusText": "any",
+        }
+    }
 }
 LOG_QUOTA = (ScopusHeaders(**RAW_HEADERS_OK), HTTPStatus.OK.value)
 LOG_ONE_QUOTA = (ScopusHeaders(**RAW_HEADERS_ONE_QUOTA), HTTPStatus.OK.value)

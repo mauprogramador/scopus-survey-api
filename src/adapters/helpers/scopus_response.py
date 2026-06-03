@@ -28,9 +28,9 @@ class ScopusResponse:
                 quota = ScopusHeaders.model_validate(response.headers)
                 logger.quota(quota, response.code)
 
+                error_response = ScopusError.model_validate(response.data)
 
                 if response.code == HTTPStatus.TOO_MANY_REQUESTS:
-                    error_response = ScopusError.model_validate(response.data)
 
                     if error_response.code == QUOTA_ERROR_CODE:
                         logger.error(ExcMsg.QUOTA_EXCEEDED)
@@ -40,10 +40,10 @@ class ScopusResponse:
                         logger.error(ExcMsg.RATE_LIMIT_EXCEEDED)
 
                 raise ScopusAPIError(
-                    quota.status,
                     response.code,
-                    response.data,
                     quota.model_dump(),
+                    error_response.model_dump(),
+                    response.data,
                 )
 
             return model.model_validate(response.data)

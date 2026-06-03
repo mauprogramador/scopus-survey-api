@@ -11,6 +11,7 @@ from pydantic_core import InitErrorDetails, PydanticUndefined, ValidationError
 from slowapi.errors import Limit, RateLimitExceeded
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
+from src.core.config.scopus import QUOTA_ERROR_CODE, RATE_LIMIT_ERROR_CODE
 from src.core.data.enums import ExcMsg
 from src.core.domain.http_exceptions import HTTPError, ScopusAPIError
 
@@ -20,7 +21,22 @@ HTTP_ERROR = HTTPError(
 )
 
 SCOPUS_API_ERROR = ScopusAPIError(
-    "any", HTTPStatus.INTERNAL_SERVER_ERROR, {"any": "any"}, {"any": "any"}
+    HTTPStatus.INTERNAL_SERVER_ERROR,
+    {"status": "any"},
+    {"code": "ANY", "text": "any"},
+    {"any": "any"},
+)
+SCOPUS_API_QUOTA_ERROR = ScopusAPIError(
+    HTTPStatus.TOO_MANY_REQUESTS,
+    {"status": "any"},
+    {"code": QUOTA_ERROR_CODE, "text": "any"},
+    {"any": "any"},
+)
+SCOPUS_API_RATE_ERROR = ScopusAPIError(
+    HTTPStatus.TOO_MANY_REQUESTS,
+    {"status": "any"},
+    {"code": RATE_LIMIT_ERROR_CODE, "text": "any"},
+    {"any": "any"},
 )
 
 STARLETTE_HTTP_EXCEPTION = StarletteHTTPException(

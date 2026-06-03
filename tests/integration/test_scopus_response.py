@@ -6,16 +6,12 @@ from pydantic_core import ValidationError
 from pytest import mark
 from pytest_mock import MockerFixture as Mocker
 
-from src.core.common.error_messages import VALIDATE_ERROR
-from src.core.config.scopus import (
-    QUOTA_ERROR_CODE,
-    RATE_LIMIT_ERROR_CODE,
-    SCOPUS_ERRORS,
-)
+from src.core.config.scopus import QUOTA_ERROR_CODE, RATE_LIMIT_ERROR_CODE
 from src.core.data.enums import ExcMsg
 from src.core.domain.http_exceptions import ScopusAPIError
 from tests.conftest import assert_error_json
-from tests.mocks.helpers import fqn, get_patch
+from tests.mocks.errors import SCOPUS_API_QUOTA_ERROR, SCOPUS_API_RATE_ERROR
+from tests.mocks.helpers import fqn, get_patch, trans
 from tests.mocks.integration import (
     RESPONSE_JSON_ERROR,
     RESPONSE_KEY_ERROR,
@@ -46,16 +42,32 @@ async def test_scopus_response(mocker: Mocker, client: Client):
 
 
 @mark.asyncio
-@mark.parametrize("status", SCOPUS_ERRORS.keys())
+@mark.parametrize(
+    "status",
+    [
+        HTTPStatus.BAD_REQUEST,
+        HTTPStatus.UNAUTHORIZED,
+        HTTPStatus.FORBIDDEN,
+        HTTPStatus.NOT_FOUND,
+        HTTPStatus.TOO_MANY_REQUESTS,
+        HTTPStatus.INTERNAL_SERVER_ERROR,
+    ],
+)
 async def test_status_error(
     mocker: Mocker, client: Client, status: HTTPStatus
 ):
     RESPONSE_STATUS_ERROR.configure_mock(status=status)
     mocker.patch(*get_patch(RESPONSE_STATUS_ERROR))
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
-    errors = assert_error_json(res, HTTP_502, "ERROR")
-    assert errors[0]["els_status"] and errors[1]["error"] == "any"
-    assert errors[0]["code_error"] == SCOPUS_ERRORS.get(status)
+    exc = ScopusAPIError(
+        HTTPStatus(status),
+        {"status": "any"},
+        {"code": "ANY", "text": "any"},
+        {"any": "any"},
+    )
+    errors = assert_error_json(res, HTTP_502, trans(exc))
+    assert errors[0]["status"] and errors[1]["error"] == "any"
+    assert errors[0]["status_code"] == status
 
 
 @mark.asyncio
