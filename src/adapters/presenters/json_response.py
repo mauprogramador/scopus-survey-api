@@ -1,16 +1,15 @@
 from datetime import datetime, timezone
 from http import HTTPStatus
-from json import dumps
 
 from fastapi import Request
-from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, field_validator
+from pydantic_core import PydanticSerializationError, to_jsonable_python
 
 from src.core.common.types import Json
 from src.core.config.config import ENV
 from src.core.data.enums import ExcMsg
-from src.core.domain.http_exceptions import HTTPError
+from src.core.domain.http_exceptions import get_error_details
 from src.utils import logger
 
 
@@ -35,7 +34,7 @@ class ErrorResponse(BaseResponse):
     def get_request_data(cls, data: Request | Json) -> Json:
         if isinstance(data, Request):
             return {
-                "url": data.url.path,
+                "url": str(data.url),
                 "host": data.client.host if data.client else ENV.host,
                 "port": data.client.port if data.client else ENV.port,
                 "method": data.method,
@@ -67,16 +66,17 @@ class ErrorJSON(JSONResponse):
                 errors = [errors]
 
             try:
-                dumps(errors)
-            except (TypeError, ValueError) as exc:
+                errors = to_jsonable_python(errors, fallback=repr)
+            except (TypeError, ValueError, PydanticSerializationError) as exc:
                 logger.error(exc=exc)
                 logger.exception(exc)
 
-                message = ExcMsg.SERIALIZE_ERROR
-                errors: list[Json] = jsonable_encoder(errors)
-
-                error = HTTPError.get_error_details(exc)[0]
-                errors.append(error)
+                errors = get_error_details(exc)
+                serialize_error = {
+                    "desc": ExcMsg.SERIALIZE_ERROR,
+                    "raw_repr": repr(errors),
+                }
+                errors.append(serialize_error)
 
         error_response = ErrorResponse(
             success=False,

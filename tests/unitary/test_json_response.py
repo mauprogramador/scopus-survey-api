@@ -1,6 +1,7 @@
 from json import loads
 
-from pydantic_core import PydanticUndefined
+from pydantic_core import PydanticUndefined, to_jsonable_python
+from pytest_mock import MockerFixture as Mocker
 
 from src.adapters.presenters.json_response import (
     ErrorJSON,
@@ -8,10 +9,13 @@ from src.adapters.presenters.json_response import (
     SuccessJSON,
     SuccessResponse,
 )
-from src.core.common.error_messages import SERIALIZE_ERROR
 from src.core.common.types import Json
+from src.core.data.enums import ExcMsg
 from tests.mocks.helpers import fqn
 from tests.mocks.raw import HTTP_200, HTTP_500, REQUEST
+
+
+JSONABLE = fqn(ErrorJSON, to_jsonable_python)
 
 
 def test_error_response():
@@ -66,20 +70,32 @@ def test_error_json_dict_errors():
     assert isinstance(raw["errors"], list) and raw["errors"][0]["type"]
 
 
-def test_error_json_serialize_error():
+def test_error_json_serialize_fallback():
     model = ErrorJSON(
         REQUEST,
         HTTP_500,
         "any",
-        [{"type": PydanticUndefined}],
+        [{"type": PydanticUndefined}, {"exc": RuntimeError}],
     )
     raw: Json = loads(model.body.decode())  # type: ignore
 
-    assert not raw["success"] and raw["message"] == SERIALIZE_ERROR
+    assert not raw["success"] and raw["message"] == "any"
     assert raw["status_code"] == HTTP_500
-    assert raw["errors"][0]["type"] is None
-    assert raw["errors"][1]["type"] == fqn(TypeError)
-    assert raw["errors"][1]["detail"].endswith("not JSON serializable")
+    assert raw["errors"][0]["type"] == repr(PydanticUndefined)
+    assert raw["errors"][1]["exc"] == repr(RuntimeError)
+
+
+def test_error_json_serialize_error(mocker: Mocker):
+    mocker.patch(JSONABLE, side_effect=ValueError("any"))
+    model = ErrorJSON(REQUEST, HTTP_500, "any", [{"any": "any"}])
+    raw: Json = loads(model.body.decode())  # type: ignore
+
+    assert not raw["success"] and raw["message"] == "any"
+    assert raw["status_code"] == HTTP_500
+    assert raw["errors"][0]["type"] == fqn(ValueError)
+    assert raw["errors"][0]["message"] == "any"
+    assert raw["errors"][1]["desc"] == ExcMsg.SERIALIZE_ERROR
+    assert raw["errors"][1]["raw_repr"]
 
 
 def test_success_response():
