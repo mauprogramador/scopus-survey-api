@@ -7,7 +7,7 @@ from fastapi.staticfiles import StaticFiles
 from src import __version__
 from src.adapters.presenters.template_response import TemplateResponse
 from src.core.config.config import DIRECTORY, ENV, LIMITER
-from src.core.domain.translations import Translations
+from src.core.domain.translations import load_translations
 from src.framework.fastapi.routes import favicon_router, router
 from src.framework.fastapi.swagger import (
     CONTACT,
@@ -27,7 +27,7 @@ from src.utils import logger
 @asynccontextmanager
 async def lifespan(app: FastAPI):  # pylint: disable=W0621,W0613
     DIRECTORY.mkdir(parents=True, exist_ok=True)
-    translations = Translations.load_all()
+    translations = load_translations()
     TemplateResponse.build_all(*translations)
 
     if ENV.host == "0.0.0.0":

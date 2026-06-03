@@ -16,13 +16,14 @@ from src.core.data.quota_results_handler import QuotaResultsHandler
 from src.core.domain.factory import make_aggregator
 from src.utils.progress_bar import ProgressBar
 from tests.conftest import assert_error_json
-from tests.mocks.errors import MORE_CANCELLED
+from tests.mocks.errors import MORE_CANCELLED, SCOPUS_API_QUOTA_ERROR
 from tests.mocks.helpers import (
     MockState,
     Patch,
     fqn,
     get_patch,
     load_csv_from_response,
+    trans,
 )
 from tests.mocks.integration import (
     ABSTRACT_EXACT_QUOTA_MORE_RESULTS,
@@ -162,7 +163,7 @@ async def test_retrieve_insufficient_quota(
 async def test_retrieve_quota_exceed(mocker: Mocker, client: Client):
     mock = mocker.patch(*get_patch(ABSTRACT_QUOTA_EXCEEDED))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
-    errors = assert_error_json(res, HTTP_502, ScopusCode.QUOTA)
+    errors = assert_error_json(res, HTTP_502, trans(SCOPUS_API_QUOTA_ERROR))
     assert errors is not None and mock.call_count == 3
     assert errors[0]["els_status"] == QUOTA_ERROR_CODE
 

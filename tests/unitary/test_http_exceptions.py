@@ -11,7 +11,7 @@ from src.core.common.types import Token
 from src.core.config.scopus import SCOPUS_ERRORS, RATE_LIMIT_ERROR_CODE
 from src.core.domain.http_exceptions import HTTPError, ScopusAPIError
 from tests.conftest import assert_http_error
-from tests.mocks.helpers import fqn
+from tests.mocks.helpers import fqn, trans
 from tests.mocks.raw import (
     HTTP_400,
     HTTP_500,
@@ -27,7 +27,7 @@ def test_common_exception():
         except ValueError as exc:
             raise HTTPError(HTTP_500, "any", exc) from exc
 
-    assert_http_error(info, HTTP_500, "any")
+    assert_http_error(info, HTTP_500, trans(info.value))
     assert info.value.errors[0]["type"] == fqn(ValueError)
     assert info.value.errors[0]["file"] and info.value.errors[0]["line"]
     assert info.value.errors[0]["detail"] == "any"
@@ -40,7 +40,7 @@ def test_http_exception():
         except HTTPException as exc:
             raise HTTPError(HTTP_500, "any", exc) from exc
 
-    assert_http_error(info, HTTP_500, "any")
+    assert_http_error(info, HTTP_401, trans(info.value))
     assert info.value.errors[0]["type"] == fqn(HTTPException)
     assert info.value.errors[0]["file"] and info.value.errors[0]["line"]
     assert info.value.errors[0]["detail"] == "any"
@@ -81,7 +81,7 @@ def test_async_timeout_error():
         except AsyncTimeoutError as exc:
             raise HTTPError(HTTP_500, "any", exc) from exc
 
-    assert_http_error(info, HTTP_500, "any")
+    assert_http_error(info, HTTP_504, trans(info.value))
     assert info.value.errors[0]["type"] == fqn(AsyncTimeoutError)
     assert info.value.errors[0]["detail"] == "any"
     assert info.value.errors[0]["file"] and info.value.errors[0]["line"]
@@ -96,7 +96,7 @@ def test_client_error():
         except ClientError as exc:
             raise HTTPError(HTTP_500, "any", exc) from exc
 
-    assert_http_error(info, HTTP_500, "any")
+    assert_http_error(info, HTTP_502, trans(info.value))
     assert info.value.errors[0]["type"] == fqn(ClientError)
     assert info.value.errors[0]["detail"] == "any"
     assert info.value.errors[0]["file"] and info.value.errors[0]["line"]

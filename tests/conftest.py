@@ -13,7 +13,7 @@ from src.adapters.presenters.template_response import TemplateResponse
 from src.core.common.types import Json
 from src.core.config.config import DIRECTORY, PREFIX, SERVER
 from src.core.domain.http_exceptions import HTTPError
-from src.core.domain.translations import Translations
+from src.core.domain.translations import load_translations
 from src.framework.fastapi.main import app
 from src.utils.logger import TEST_FORMATTER
 from tests.mocks.raw import CSRF_TOKEN, CSV_FILE_NAME, SIGNED_TOKEN
@@ -49,7 +49,7 @@ def apply_custom_logging_formatter_to_pytest(caplog: LogCaptureFixture):
 def lifespan():
     SERVER.set("Pytest/1.2.3")
 
-    translations = Translations.load_all()
+    translations = load_translations()
     TemplateResponse.build_all(*translations)
     csv_file_path = DIRECTORY / CSV_FILE_NAME
 

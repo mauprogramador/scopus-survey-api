@@ -23,6 +23,7 @@ from src.core.config.scopus import MAX_ITEMS_PER_PAGE
 from src.core.data.quota_results_handler import QuotaResultsHandler
 from src.core.data.serializers import ScopusSearch
 from src.core.data.survey_details import SurveyDetails
+from src.core.domain.translations import translate_error
 from src.core.use_cases.articles_similarity_filter import (
     ArticlesSimilarityFilter,
 )
@@ -35,6 +36,7 @@ from tests.mocks.raw import (
     LOG_QUOTA,
     RAW_ENTRY,
     RAW_HEADERS_OK,
+    REQUEST,
     RESET,
     SCOPUS_ID,
     SKIPROWS,
@@ -61,6 +63,10 @@ def fqn(target: Target, method: Target = None) -> str:
         return f"{target.__module__}.{method.__name__}"
 
     return f"{target.__module__}.{method.__class__.__name__}"
+
+
+def trans(exc: Exception) -> str:
+    return translate_error(REQUEST, exc)
 
 
 def mock_combination_url(*_) -> CombinationBundle:

@@ -14,10 +14,12 @@ from src.core.use_cases.scopus_articles_aggregator import (
 )
 from src.framework.fastapi.routes import survey_bibliographic_data
 from tests.conftest import assert_error_json
+from tests.mocks.errors import REQUEST_VALIDATION_ERROR
 from tests.mocks.helpers import (
     Patch,
     mock_retrieve_articles,
     mock_survey_combinations,
+    trans,
 )
 from tests.mocks.raw import (
     API_KEY,
@@ -60,7 +62,7 @@ async def test_csv_params_valid_data(client: Client):
 @mark.asyncio
 async def test_csv_params_raise_errors(client: Client):
     res = await client.get(URL_CSV)
-    errors = assert_error_json(res, HTTP_422, "Field required")
+    errors = assert_error_json(res, HTTP_422, trans(REQUEST_VALIDATION_ERROR))
     assert len(errors) == 2
 
 
@@ -97,7 +99,7 @@ async def test_combination_params_overridden_default(
 @mark.asyncio
 async def test_combination_params_raise_errors(client: Client):
     res = await client.get(URL_COMBINATION)
-    errors = assert_error_json(res, HTTP_422, "Field required")
+    errors = assert_error_json(res, HTTP_422, trans(REQUEST_VALIDATION_ERROR))
     assert len(errors) == 3
 
 
@@ -165,7 +167,7 @@ async def test_search_params_overridden_default(
 async def test_search_params_raise_errors(mocker: Mocker, client: Client):
     mocker.patch(**MAKE_AGGREGATOR(RETRIEVE_ARTICLES))
     res = await client.get(URL_SEARCH)
-    errors = assert_error_json(res, HTTP_422, "Field required")
+    errors = assert_error_json(res, HTTP_422, trans(REQUEST_VALIDATION_ERROR))
     assert len(errors) == 4
 
 
