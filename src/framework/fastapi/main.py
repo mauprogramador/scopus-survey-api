@@ -17,7 +17,7 @@ from src.framework.fastapi.swagger import (
     TERMS_OF_SERVICE,
 )
 from src.framework.middleware import (
-    ExceptionHandler,
+    HANDLERS,
     FlowGuardingMonitorMiddleware,
     ProxyForwardedHeadersMiddleware,
 )
@@ -43,7 +43,7 @@ app = FastAPI(
     description=DESCRIPTION,
     version=f"v{__version__}",
     docs_url="/",
-    exception_handlers=ExceptionHandler().handlers,
+    exception_handlers=HANDLERS,
     lifespan=lifespan,
     terms_of_service=TERMS_OF_SERVICE,
     contact=CONTACT,
