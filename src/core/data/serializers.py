@@ -191,6 +191,10 @@ class ScopusError(BaseModel):
         default=NULL,
         validation_alias=AliasChoices("error-code", "statusCode"),
     )
+    text: str = Field(
+        default=NULL,
+        validation_alias=AliasChoices("error-message", "statusText"),
+    )
 
     @model_validator(mode="before")
     @classmethod
