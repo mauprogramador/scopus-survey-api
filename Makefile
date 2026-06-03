@@ -13,6 +13,7 @@ help:
 	@echo "   install-dev  Installs all dependencies for Dev"
 	@echo "  install-prod  Installs only Prod dependencies"
 	@echo "         clean  Removes Venv, logs, and caches"
+	@echo "        secret  Generates a new secret key (URL-safe)"
 	@echo "       run-dev  Runs in Dev environment"
 	@echo "      run-prod  Runs in Prod environment"
 	@echo "        docker  Builds and runs in Docker Container"
@@ -42,6 +43,9 @@ install-dev:
 
 install-prod:
 	@pip install --no-deps -r requirements.txt
+
+secret:
+	@openssl rand -base64 64 | tr -d '\n=' | tr '/+' '_-'; echo ""
 
 clean:
 	@deactivate
