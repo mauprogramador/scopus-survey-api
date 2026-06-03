@@ -11,21 +11,19 @@ from os import cpu_count, sched_getaffinity
 from src.adapters.helpers.scopus_response import ScopusResponse
 from src.core.common.types import (
     CombinationBundle,
+    HTTPClient,
     Json,
+    QuotaResultsHandler,
     ResponseBundle,
     SearchParams,
+    SurveyDetails,
+    URLBuilder,
 )
 from src.core.config.config import LOG
 from src.core.data.enums import ExcMsg
 from src.core.domain.http_exceptions import (
     HTTPError,
     ServiceUnavailable,
-)
-from src.core.domain.protocols import (
-    HTTPClient,
-    QuotaResultsHandler,
-    SurveyDetails,
-    URLBuilder,
 )
 from src.utils.progress_bar import ProgressBar
 

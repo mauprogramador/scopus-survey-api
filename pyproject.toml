@@ -127,7 +127,6 @@ testpaths = ["tests"]
 omit = [
   "src/core/common/*",
   "src/core/config/*",
-  "src/core/domain/protocols.py",
   "src/framework/fastapi/main.py ",
   "src/framework/fastapi/swagger.py ",
   "src/utils/*",

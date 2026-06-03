@@ -2,13 +2,13 @@ from fastapi.responses import FileResponse
 from pandas import DataFrame
 
 from src.adapters.presenters.csv_response import CSVResponse
-from src.core.common.types import SearchParams
 from src.core.config.config import LOG
 from src.core.data.csv_builder import CSVBuilder
 from src.core.data.enums import Column
-from src.core.domain.protocols import (
+from src.core.common.types import (
     AbstractAPI,
     SearchAPI,
+    SearchParams,
     SimilarityFilter,
     SurveyDetails,
 )

@@ -11,12 +11,12 @@ from os import cpu_count, sched_getaffinity
 from pandas import DataFrame
 
 from src.adapters.helpers.scopus_response import ScopusResponse
-from src.core.common.types import ResponseBundle
 from src.core.config.config import LOG
 from src.core.domain.http_exceptions import HTTPError, ServiceUnavailable
-from src.core.domain.protocols import (
+from src.core.common.types import (
     HTTPClient,
     QuotaResultsHandler,
+    ResponseBundle,
     SurveyDetails,
     URLBuilder,
 )

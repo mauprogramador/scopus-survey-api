@@ -3,11 +3,10 @@ from itertools import chain, combinations
 from fastapi.responses import JSONResponse
 
 from src.adapters.presenters.json_response import SuccessJSON
-from src.core.common.types import CombinationBundle
+from src.core.common.types import CombinationBundle, SearchAPI, URLBuilder
 from src.core.config.config import LOG
 from src.core.data.query_params import CombinationParams
 from src.core.data.survey_details import SurveyDetails
-from src.core.domain.protocols import SearchAPI, URLBuilder
 
 
 class KeywordCombinationFinder:
