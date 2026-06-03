@@ -1,5 +1,4 @@
 from datetime import datetime
-from http import HTTPStatus
 
 from src.core.data.enums import PageRange
 
@@ -71,30 +70,4 @@ SCOPUS_HEADERS = {
     "User-Agent": "Mozilla/5.0",
     "Cache-Control": "no-cache",
     "Connection": "keep-alive",
-}
-
-# Scopus APIs error responses descriptions from docs
-# https://dev.elsevier.com/documentation/ScopusSearchAPI.wadl
-
-SCOPUS_ERRORS = {
-    HTTPStatus.BAD_REQUEST: "Invalid Request: invalid information submitted",
-    HTTPStatus.UNAUTHORIZED: (
-        "Authentication Error: user cannot be authenticated due to missing"
-        "/invalid credentials"
-    ),
-    HTTPStatus.FORBIDDEN: (
-        "Authorization/Entitlements Error: User cannot be authenticated or "
-        "entitlements cannot be validated"
-    ),
-    HTTPStatus.NOT_FOUND: (
-        "Resource Not Found Error: This is an error that occurs when the "
-        "requested resource cannot be found"
-    ),
-    HTTPStatus.TOO_MANY_REQUESTS: (
-        "Quota Exceeded: the requester has exceeded the quota limits "
-        "associated with their API Key"
-    ),
-    HTTPStatus.INTERNAL_SERVER_ERROR: (
-        "Generic Error: Scopus API back-end processing errors"
-    ),
 }
