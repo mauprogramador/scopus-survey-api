@@ -13,9 +13,18 @@ from pydantic import (
 )
 
 from src.adapters.helpers.url_builder import URLBuilder
-from src.core.common.patterns import ABSTRACT_URL_PATTERN, SCOPUS_ID_PATTERN
 from src.core.common.types import Json
 from src.core.config.scopus import EMPTY_RESULT, NULL
+
+
+# e.g. http://api.elsevier.com/content/abstract/scopus_id/0123456789
+_ABSTRACT_URL_PATTERN = (
+    r"^https\:\/\/api\.elsevier\.com\/content\/abstract"
+    r"\/scopus_id\/[0-9]{10,}$"
+)
+
+# e.g. SCOPUS_ID:0123456789
+_SCOPUS_ID_PATTERN = r"^SCOPUS_ID\:[0-9]{10,}$"
 
 
 class ScopusEntry(BaseModel):
@@ -29,13 +38,13 @@ class ScopusEntry(BaseModel):
     )
     url: str = Field(
         validation_alias="prism:url",
-        pattern=ABSTRACT_URL_PATTERN,
+        pattern=_ABSTRACT_URL_PATTERN,
         min_length=61,
         max_length=70,
     )
     scopus_id: str = Field(
         validation_alias="dc:identifier",
-        pattern=SCOPUS_ID_PATTERN,
+        pattern=_SCOPUS_ID_PATTERN,
         min_length=20,
         max_length=29,
     )
@@ -81,7 +90,7 @@ class ScopusAbstract(BaseModel):
     scopus_id: str = Field(
         validation_alias="dc:identifier",
         serialization_alias="Scopus ID",
-        pattern=SCOPUS_ID_PATTERN,
+        pattern=_SCOPUS_ID_PATTERN,
         min_length=20,
         max_length=29,
     )

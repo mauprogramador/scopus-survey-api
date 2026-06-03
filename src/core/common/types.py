@@ -14,8 +14,15 @@ from src.core.data.enums import (
 )
 
 
+# e.g. Python, "Data Science", COVID-19, H2O2
+_KEYWORD_PATTERN = r"^[a-zA-Z0-9\{\}\?\"\*\-\_ ]{2,120}$"
+
+# e.g. 989a5e2a50389ae6a5faf4c271d8bfb30cbbd88c  (Random Hash)
+_TOKEN_PATTERN = r"^[a-zA-Z0-9\-\_]{64}$"
+
+
 Keyword: TypeAlias = Annotated[
-    str, Field(pattern=KEYWORD_PATTERN, min_length=2, max_length=70)
+    str, Field(pattern=_KEYWORD_PATTERN, min_length=2, max_length=70)
 ]
 
 Json: TypeAlias = dict[str, Any]
@@ -30,7 +37,7 @@ Token: TypeAdapter[str | None] = TypeAdapter(
     Annotated[
         str | None,
         Field(
-            pattern=TOKEN_PATTERN,
+            pattern=_TOKEN_PATTERN,
             min_length=64,
             max_length=64,
         ),

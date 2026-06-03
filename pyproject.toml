@@ -97,7 +97,6 @@ py-version = 312
 [tool.bandit]
 exclude_dirs = [
   "src/core/common/error_messages.py",
-  "src/core/common/patterns.py",
   "src/core/config/scopus.py",
   "src/framework/fastapi/swagger.py ",
 ]

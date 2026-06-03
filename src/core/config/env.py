@@ -7,8 +7,11 @@ from pydantic_settings import (
     SettingsConfigDict,
 )
 
-from src.core.common.patterns import HOST_PATTERN
 from src.core.common.types import LogParams
+
+
+# e.g. 127.0.0.1, 0.0.0.0
+_HOST_PATTERN = r"^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$"
 
 
 class EnvConfig(BaseSettings):
@@ -31,7 +34,7 @@ class EnvConfig(BaseSettings):
     )
     host: str = Field(
         default="127.0.0.1",
-        pattern=HOST_PATTERN,
+        pattern=_HOST_PATTERN,
         min_length=7,
         max_length=15,
     )

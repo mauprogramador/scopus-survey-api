@@ -12,11 +12,6 @@ from pydantic import (
 )
 from pydantic_core import InitErrorDetails, PydanticUseDefault
 
-from src.core.common.patterns import (
-    API_KEY_PATTERN,
-    COMBINATION_PATTERN,
-    LANGUAGE_PATTERN,
-)
 from src.core.common.types import Keyword
 from src.core.config.scopus import (
     CURRENT_YEAR,
@@ -34,6 +29,16 @@ from src.core.data.enums import (
 )
 
 
+# e.g. 6bd9327547a3cf4c56586324df4b7d92  (Random Hash)
+_API_KEY_PATTERN = r"^[a-zA-Z0-9]{32}$"
+
+# e.g. english, portuguese
+_LANGUAGE_PATTERN = r"^[a-z\-\' ]{3,50}$"
+
+# e.g. Python AND "Data Science", COVID-19 OR H2O2
+_KEYWORD_COMBINATION_PATTERN = r"^[a-zA-Z0-9\{\}\?\"\*\-\_ ]{2,510}$"
+
+
 class CSVParams(BaseModel):
     """Validate query params for downloading CSV"""
 
@@ -44,7 +49,7 @@ class CSVParams(BaseModel):
         validation_alias="api_key",
         description="Your Scopus API Key",
         examples=["439f55d263cj..."],
-        pattern=API_KEY_PATTERN,
+        pattern=_API_KEY_PATTERN,
         min_length=32,
         max_length=32,
     )
@@ -101,7 +106,7 @@ class CombinationParams(CSVParams):
         serialization_alias="LANGUAGE",
         description="The Language in which the document was written",
         examples=["english"],
-        pattern=LANGUAGE_PATTERN,
+        pattern=_LANGUAGE_PATTERN,
         min_length=3,
         max_length=30,
     )
@@ -207,7 +212,7 @@ class SearchParams(CombinationParams):
         description="The chosen keywords combination",
         examples=["Python AND Machine Learning"],
         exclude=True,
-        pattern=COMBINATION_PATTERN,
+        pattern=_KEYWORD_COMBINATION_PATTERN,
         min_length=2,
         max_length=215,
     )

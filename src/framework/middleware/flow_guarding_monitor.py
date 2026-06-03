@@ -14,7 +14,6 @@ from starlette.responses import Response
 
 from src.adapters.presenters.json_response import ErrorJSON
 from src.adapters.presenters.template_response import TemplateResponse
-from src.core.common.patterns import API_ROUTES_PATTERN
 from src.core.config.config import (
     HEADERS,
     LOG,
@@ -23,6 +22,10 @@ from src.core.config.config import (
     TRACE_ID_CTX,
 )
 from src.core.domain.http_exceptions import HTTPError
+
+
+# e.g. /v2/scopus-survey/api
+_API_ROUTES_PATTERN = r"^\/v2\/scopus-survey\/api\/(combination|survey|csv)"
 
 
 class FlowGuardingMonitorMiddleware(BaseHTTPMiddleware):
@@ -82,7 +85,7 @@ class FlowGuardingMonitorMiddleware(BaseHTTPMiddleware):
         response.headers.update(self._server)
 
         is_error = response.status_code >= HTTPStatus.BAD_REQUEST
-        if is_error and not match(API_ROUTES_PATTERN, request.url.path):
+        if is_error and not match(_API_ROUTES_PATTERN, request.url.path):
 
             if isinstance(response, _StreamingResponse):
                 chunks = [chunk async for chunk in response.body_iterator]
