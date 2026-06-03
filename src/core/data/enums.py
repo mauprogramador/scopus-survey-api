@@ -11,12 +11,6 @@ class Lang(StrEnum):
         return self.value.replace("-", "_")
 
 
-@unique
-class ScopusCode(StrEnum):
-    QUOTA = "QUOTA_EXCEEDED"
-    RATE_LIMIT = "RATE_LIMIT_EXCEEDED"
-
-
 class Column:
     URL = "Article Preview Page URL"
     AUTHORS = "Authors"

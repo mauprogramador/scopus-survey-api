@@ -10,7 +10,7 @@ from src.core.common.error_messages import (
 )
 from src.core.common.types import ResponseBundle, ScopusModel
 from src.core.config.config import LOG
-from src.core.data.enums import ScopusCode
+from src.core.config.scopus import QUOTA_ERROR_CODE, RATE_LIMIT_ERROR_CODE
 from src.core.data.serializers import (
     ScopusAbstract,
     ScopusError,
@@ -35,14 +35,14 @@ class ScopusResponse:
                 if response.code == HTTPStatus.TOO_MANY_REQUESTS:
                     error_response = ScopusError.model_validate(response.data)
 
-                    if error_response.code == ScopusCode.QUOTA:
+                    if error_response.code == QUOTA_ERROR_CODE:
                         LOG.error(QUOTA_EXCEEDED)
                         LOG.info(
                             "Please try again on \033[33m"
                             f"{quota.reset_datetime}\033[m"
                         )
 
-                    elif error_response.code == ScopusCode.RATE_LIMIT:
+                    elif error_response.code == RATE_LIMIT_ERROR_CODE:
                         LOG.error(RATE_LIMIT_EXCEEDED)
 
                 raise ScopusAPIError(

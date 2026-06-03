@@ -8,8 +8,7 @@ from pydantic import ValidationError
 from pytest import raises
 
 from src.core.common.types import Token
-from src.core.config.scopus import SCOPUS_ERRORS
-from src.core.data.enums import ScopusCode
+from src.core.config.scopus import SCOPUS_ERRORS, RATE_LIMIT_ERROR_CODE
 from src.core.domain.http_exceptions import HTTPError, ScopusAPIError
 from tests.conftest import assert_http_error
 from tests.mocks.helpers import fqn
@@ -137,17 +136,17 @@ def test_client_response_error():
 def test_scopus_api_error():
     with raises(ScopusAPIError) as info:
         raise ScopusAPIError(
-            ScopusCode.RATE_LIMIT,
             HTTP_500,
             RAW_ERROR_RESPONSE_RATE_LIMIT,
             {
                 "limit": 20000,
                 "remaining": 0,
                 "reset": 1779148473,
-                "status": ScopusCode.RATE_LIMIT,
+                "status": RATE_LIMIT_ERROR_CODE,
                 "reset_datetime": "2026-05-18 19:54:33",
-                "els_status": ScopusCode.RATE_LIMIT,
+                "els_status": RATE_LIMIT_ERROR_CODE,
             },
+            {"code": RATE_LIMIT_ERROR_CODE, "text": "any"},
         )
 
     assert_http_error(info, HTTP_502, ScopusCode.RATE_LIMIT)
@@ -155,8 +154,8 @@ def test_scopus_api_error():
     assert info.value.errors[0]["limit"] == 20000
     assert info.value.errors[0]["remaining"] == 0
     assert info.value.errors[0]["reset"] == 1779148473
-    assert info.value.errors[0]["status"] == ScopusCode.RATE_LIMIT
+    assert info.value.errors[0]["status"] == RATE_LIMIT_ERROR_CODE
     assert info.value.errors[0]["reset_datetime"] == "2026-05-18 19:54:33"
-    assert info.value.errors[0]["els_status"] == ScopusCode.RATE_LIMIT
+    assert info.value.errors[0]["els_status"] == RATE_LIMIT_ERROR_CODE
     assert info.value.errors[0]["code_error"] == SCOPUS_ERRORS.get(HTTP_500)
     assert info.value.errors[1] == RAW_ERROR_RESPONSE_RATE_LIMIT

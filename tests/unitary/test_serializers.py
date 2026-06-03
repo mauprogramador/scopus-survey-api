@@ -2,8 +2,11 @@ from pydantic import ValidationError
 from pytest import raises
 
 from src.adapters.helpers.url_builder import URLBuilder
-from src.core.config.scopus import NULL
-from src.core.data.enums import ScopusCode
+from src.core.config.scopus import (
+    NULL,
+    QUOTA_ERROR_CODE,
+    RATE_LIMIT_ERROR_CODE,
+)
 from src.core.data.serializers import (
     ScopusAbstract,
     ScopusEntry,
@@ -151,10 +154,10 @@ def test_scopus_error_valid_data():
 
 def test_scopus_error_overridden_default():
     model = ScopusError(**RAW_SERVICE_ERROR_QUOTA)
-    assert model.code == ScopusCode.QUOTA
+    assert model.code == QUOTA_ERROR_CODE and model.text
 
     model = ScopusError(**RAW_ERROR_RESPONSE_RATE_LIMIT)
-    assert model.code == ScopusCode.RATE_LIMIT
+    assert model.code == RATE_LIMIT_ERROR_CODE and model.text
 
 
 def test_scopus_error_key_error():

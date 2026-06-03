@@ -9,7 +9,7 @@ from pytest_mock import MockerFixture as Mocker
 from src.adapters.gateway.scopus_search_api import ScopusSearchAPI
 from src.adapters.helpers.scopus_response import ScopusResponse
 from src.core.common.error_messages import ARTICLES_NOT_FOUND, CANCELLED_ERROR
-from src.core.data.enums import ScopusCode
+from src.core.config.scopus import QUOTA_ERROR_CODE
 from src.core.data.quota_results_handler import QuotaResultsHandler
 from src.core.domain.factory import make_aggregator
 from src.utils.progress_bar import ProgressBar
@@ -244,7 +244,7 @@ async def test_search_quota_exceeded(mocker: Mocker, client: Client):
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     errors = assert_error_json(res, HTTP_502, ScopusCode.QUOTA)
     assert errors is not None and mock.call_count == 2
-    assert errors[0]["els_status"] == ScopusCode.QUOTA
+    assert errors[0]["els_status"] == QUOTA_ERROR_CODE
 
 
 @mark.asyncio

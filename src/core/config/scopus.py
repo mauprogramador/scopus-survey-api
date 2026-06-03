@@ -19,6 +19,9 @@ MAX_SEARCH_QUOTA = 20000
 NO_RESULTS = "NO_SEARCH_RESULTS"
 EMPTY_RESULT = "Result set was empty"
 
+QUOTA_ERROR_CODE = "QUOTA_EXCEEDED"
+RATE_LIMIT_ERROR_CODE = "RATE_LIMIT_EXCEEDED"
+
 SEARCH_API_URL = "https://api.elsevier.com/content/search/scopus"
 ARTICLE_PAGE_URL = "https://www.scopus.com/inward/record.uri"
 

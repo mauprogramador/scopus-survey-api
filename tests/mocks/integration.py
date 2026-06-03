@@ -3,7 +3,7 @@ from itertools import batched  # type: ignore
 from string import ascii_lowercase
 from time import time
 
-from src.core.data.enums import ScopusCode
+from src.core.config.scopus import QUOTA_ERROR_CODE, RATE_LIMIT_ERROR_CODE
 from tests.mocks.errors import CONTENT_TYPE_ERROR, JSON_DECODE_ERROR
 from tests.mocks.helpers import (
     abstract_raw,
@@ -194,12 +194,12 @@ RESPONSE_STATUS_ERROR = response_mock(
     {"error": "any"}, headers={"X-ELS-Status": "ERROR"}
 )
 RESPONSE_QUOTA_EXCEEDED = response_mock(
-    RAW_SERVICE_ERROR_QUOTA, HTTP_429, {"X-ELS-Status": ScopusCode.QUOTA}
+    RAW_SERVICE_ERROR_QUOTA, HTTP_429, {"X-ELS-Status": QUOTA_ERROR_CODE}
 )
 RESPONSE_RATE_LIMIT_EXCEEDED = response_mock(
     RAW_ERROR_RESPONSE_RATE_LIMIT,
     HTTP_429,
-    {"X-ELS-Status": ScopusCode.RATE_LIMIT},
+    {"X-ELS-Status": RATE_LIMIT_ERROR_CODE},
 )
 RESPONSE_JSON_ERROR = response_mock({"search-results": ""})
 RESPONSE_KEY_ERROR = response_mock({"any": "any"})

@@ -11,7 +11,8 @@ from src.adapters.gateway.scopus_abstract_retrieval_api import (
 )
 from src.adapters.helpers.scopus_response import ScopusResponse
 from src.core.common.error_messages import CANCELLED_ERROR
-from src.core.data.enums import Column, ScopusCode
+from src.core.config.scopus import QUOTA_ERROR_CODE
+from src.core.data.enums import Column
 from src.core.data.quota_results_handler import QuotaResultsHandler
 from src.core.domain.factory import make_aggregator
 from src.utils.progress_bar import ProgressBar
@@ -164,7 +165,7 @@ async def test_retrieve_quota_exceed(mocker: Mocker, client: Client):
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     errors = assert_error_json(res, HTTP_502, ScopusCode.QUOTA)
     assert errors is not None and mock.call_count == 3
-    assert errors[0]["els_status"] == ScopusCode.QUOTA
+    assert errors[0]["els_status"] == QUOTA_ERROR_CODE
 
 
 @mark.asyncio

@@ -4,8 +4,11 @@ from pytest import raises
 from src.adapters.helpers.scopus_response import ScopusResponse
 from src.core.common.error_messages import VALIDATE_ERROR
 from src.core.common.types import ResponseBundle
-from src.core.config.scopus import SCOPUS_ERRORS
-from src.core.data.enums import ScopusCode
+from src.core.config.scopus import (
+    QUOTA_ERROR_CODE,
+    RATE_LIMIT_ERROR_CODE,
+    SCOPUS_ERRORS,
+)
 from src.core.domain.http_exceptions import InternalError, ScopusAPIError
 from tests.conftest import assert_http_error
 from tests.mocks.helpers import fqn
@@ -54,26 +57,26 @@ def test_too_many_requests():
 
 
 def test_quota_exceeded():
-    headers = {"X-ELS-Status": ScopusCode.QUOTA}
+    headers = {"X-ELS-Status": QUOTA_ERROR_CODE}
     res = ResponseBundle(HTTP_429, headers, RAW_SERVICE_ERROR_QUOTA)
     with raises(ScopusAPIError) as info:
         ScopusResponse.validate_search(res)
     assert_http_error(info, HTTP_502, ScopusCode.QUOTA)
     assert len(info.value.errors) and info.value.errors[1]
-    assert info.value.errors[0]["status"] == ScopusCode.QUOTA
-    assert info.value.errors[0]["els_status"] == ScopusCode.QUOTA
+    assert info.value.errors[0]["status"] == QUOTA_ERROR_CODE
+    assert info.value.errors[0]["els_status"] == QUOTA_ERROR_CODE
     assert info.value.errors[0]["code_error"] == SCOPUS_ERRORS.get(HTTP_429)
 
 
 def test_rate_limit_exceeded():
-    headers = {"X-ELS-Status": ScopusCode.RATE_LIMIT}
+    headers = {"X-ELS-Status": RATE_LIMIT_ERROR_CODE}
     res = ResponseBundle(HTTP_429, headers, RAW_ERROR_RESPONSE_RATE_LIMIT)
     with raises(ScopusAPIError) as info:
         ScopusResponse.validate_search(res)
     assert_http_error(info, HTTP_502, ScopusCode.RATE_LIMIT)
     assert len(info.value.errors) and info.value.errors[1]
-    assert info.value.errors[0]["status"] == ScopusCode.RATE_LIMIT
-    assert info.value.errors[0]["els_status"] == ScopusCode.RATE_LIMIT
+    assert info.value.errors[0]["status"] == RATE_LIMIT_ERROR_CODE
+    assert info.value.errors[0]["els_status"] == RATE_LIMIT_ERROR_CODE
     assert info.value.errors[0]["code_error"] == SCOPUS_ERRORS.get(HTTP_429)
 
 

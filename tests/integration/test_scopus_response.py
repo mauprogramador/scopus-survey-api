@@ -7,8 +7,11 @@ from pytest import mark
 from pytest_mock import MockerFixture as Mocker
 
 from src.core.common.error_messages import VALIDATE_ERROR
-from src.core.config.scopus import SCOPUS_ERRORS
-from src.core.data.enums import ScopusCode
+from src.core.config.scopus import (
+    QUOTA_ERROR_CODE,
+    RATE_LIMIT_ERROR_CODE,
+    SCOPUS_ERRORS,
+)
 from tests.conftest import assert_error_json
 from tests.mocks.helpers import fqn, get_patch
 from tests.mocks.integration import (
@@ -58,7 +61,7 @@ async def test_quota_exceeded(mocker: Mocker, client: Client):
     mocker.patch(*get_patch(RESPONSE_QUOTA_EXCEEDED))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     errors = assert_error_json(res, HTTP_502, ScopusCode.QUOTA)
-    assert errors[0]["els_status"] == ScopusCode.QUOTA
+    assert errors[0]["els_status"] == QUOTA_ERROR_CODE
     assert errors[0]["code_error"] == SCOPUS_ERRORS.get(HTTP_429)
     assert errors[1] == RAW_SERVICE_ERROR_QUOTA
 
@@ -68,7 +71,7 @@ async def test_rate_limit_exceeded(mocker: Mocker, client: Client):
     mocker.patch(*get_patch(RESPONSE_RATE_LIMIT_EXCEEDED))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     errors = assert_error_json(res, HTTP_502, ScopusCode.RATE_LIMIT)
-    assert errors[0]["els_status"] == ScopusCode.RATE_LIMIT
+    assert errors[0]["els_status"] == RATE_LIMIT_ERROR_CODE
     assert errors[0]["code_error"] == SCOPUS_ERRORS.get(HTTP_429)
     assert errors[1] == RAW_ERROR_RESPONSE_RATE_LIMIT
 
