@@ -6,8 +6,7 @@ from pandas.api.typing import DataFrameGroupBy
 from pytest import raises
 from pytest_mock import MockerFixture as Mocker
 
-from src.core.common.error_messages import CANCELLED_ERROR
-from src.core.data.enums import Column
+from src.core.data.enums import Column, ExcMsg
 from src.core.domain.http_exceptions import ServiceUnavailable
 from src.core.use_cases.articles_similarity_filter import (
     ArticlesSimilarityFilter,
@@ -161,7 +160,7 @@ def test_cancelled_error(mocker: Mocker):
     mocker.patch(**CANCELLED)
     with raises(ServiceUnavailable) as info:
         SIMILARITY_FILTER.filter(MORE_GROUPS_TWO_SIMILAR, RATIO)
-    assert_http_error(info, HTTP_503, CANCELLED_ERROR)
+    assert_http_error(info, HTTP_503, ExcMsg.CANCELLED_ERROR)
     assert info.value.errors[0]["type"] == fqn(CancelledError)
     assert info.value.errors[0]["detail"] == "any"
 

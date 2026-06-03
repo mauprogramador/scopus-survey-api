@@ -11,7 +11,6 @@ from os import cpu_count, sched_getaffinity
 from pandas import DataFrame
 
 from src.adapters.helpers.scopus_response import ScopusResponse
-from src.core.common.error_messages import CANCELLED_ERROR
 from src.core.common.types import ResponseBundle
 from src.core.config.config import LOG
 from src.core.domain.http_exceptions import HTTPError, ServiceUnavailable
@@ -21,6 +20,7 @@ from src.core.domain.protocols import (
     SurveyDetails,
     URLBuilder,
 )
+from src.core.data.enums import ExcMsg
 from src.utils.progress_bar import ProgressBar
 
 
@@ -97,7 +97,9 @@ class ScopusAbstractRetrievalAPI:
                     if isinstance(exc, HTTPError):
                         raise exc
 
-                    raise ServiceUnavailable(CANCELLED_ERROR, exc) from exc
+                    raise ServiceUnavailable(
+                        ExcMsg.CANCELLED_ERROR, exc
+                    ) from exc
 
         if remaining_tasks:
             await gather(*remaining_tasks, return_exceptions=True)

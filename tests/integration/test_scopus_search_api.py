@@ -8,8 +8,8 @@ from pytest_mock import MockerFixture as Mocker
 
 from src.adapters.gateway.scopus_search_api import ScopusSearchAPI
 from src.adapters.helpers.scopus_response import ScopusResponse
-from src.core.common.error_messages import ARTICLES_NOT_FOUND, CANCELLED_ERROR
 from src.core.config.scopus import QUOTA_ERROR_CODE
+from src.core.data.enums import ExcMsg
 from src.core.data.quota_results_handler import QuotaResultsHandler
 from src.core.domain.factory import make_aggregator
 from src.utils.progress_bar import ProgressBar
@@ -94,7 +94,7 @@ async def test_survey_cancelled_error(mocker: Mocker, client: Client):
     mocker.patch(**STEP(MORE_CANCELLED))
     COMBINATION_PARAMS.update({"keywords": KEYWORDS})
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
-    errors = assert_error_json(res, HTTP_503, CANCELLED_ERROR)
+    errors = assert_error_json(res, HTTP_503, ExcMsg.CANCELLED_ERROR)
     assert errors[0]["type"] == fqn(CancelledError)
     assert errors[0]["detail"] == "any" and mock.call_count == 8
 
@@ -179,7 +179,7 @@ async def test_search_more_pages_full_results(mocker: Mocker, client: Client):
 async def test_search_not_found(mocker: Mocker, client: Client):
     mock = mocker.patch(*get_patch(SEARCH_NOT_FOUND))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
-    errors = assert_error_json(res, HTTP_404, ARTICLES_NOT_FOUND)
+    errors = assert_error_json(res, HTTP_404, ExcMsg.ARTICLES_NOT_FOUND)
     assert errors is None and mock.call_count == 1
 
 
@@ -253,7 +253,7 @@ async def test_search_cancelled_error(mocker: Mocker, client: Client):
     mocker.patch(**STEP(MORE_CANCELLED))
     mock = mocker.patch(*get_patch(SEARCH_MORE_PAGES_PARTIAL_RESULTS))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
-    errors = assert_error_json(res, HTTP_503, CANCELLED_ERROR)
+    errors = assert_error_json(res, HTTP_503, ExcMsg.CANCELLED_ERROR)
 
     assert mock.call_count == 7 and spy.call_count == 4
     assert errors[0]["type"] == fqn(CancelledError)

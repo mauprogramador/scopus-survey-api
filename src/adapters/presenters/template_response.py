@@ -13,7 +13,7 @@ from src.adapters.presenters.json_response import ErrorJSON
 from src.core.common.error_messages import UNEXPECTED_ERROR
 from src.core.common.types import Trans
 from src.core.config.config import MAX_AGE, META_INFO, PREFIX
-from src.core.data.enums import Lang
+from src.core.data.enums import ExcMsg, Lang
 
 
 class TemplateResponse:
@@ -103,7 +103,7 @@ class TemplateResponse:
 
         context = {
             "prefix": PREFIX,
-            "message": UNEXPECTED_ERROR,
+            "message": ExcMsg.UNEXPECTED_ERROR,
             "status_code": response.status_code,
             "status": HTTPStatus(response.status_code).phrase,
             "timestamp": datetime.now(timezone.utc).isoformat(

@@ -2,13 +2,13 @@ from pydantic_core import ValidationError
 from pytest import raises
 
 from src.adapters.helpers.scopus_response import ScopusResponse
-from src.core.common.error_messages import VALIDATE_ERROR
 from src.core.common.types import ResponseBundle
 from src.core.config.scopus import (
     QUOTA_ERROR_CODE,
     RATE_LIMIT_ERROR_CODE,
     SCOPUS_ERRORS,
 )
+from src.core.data.enums import ExcMsg
 from src.core.domain.http_exceptions import InternalError, ScopusAPIError
 from tests.conftest import assert_http_error
 from tests.mocks.helpers import fqn
@@ -84,7 +84,7 @@ def test_json_validation_error():
     res = ResponseBundle(HTTP_200, RAW_HEADERS_OK, {"search-results": ""})
     with raises(InternalError) as info:
         ScopusResponse.validate_search(res)
-    assert_http_error(info, HTTP_500, VALIDATE_ERROR)
+    assert_http_error(info, HTTP_500, ExcMsg.VALIDATE_ERROR)
     assert info.value.errors[0]["type"] == fqn(ValidationError)
     assert info.value.errors[0]["file"] and info.value.errors[0]["line"]
     assert info.value.errors[0]["detail"]
@@ -95,7 +95,7 @@ def test_json_key_error():
     res = ResponseBundle(HTTP_200, RAW_HEADERS_OK, {"any": "any"})
     with raises(InternalError) as info:
         ScopusResponse.validate_search(res)
-    assert_http_error(info, HTTP_500, VALIDATE_ERROR)
+    assert_http_error(info, HTTP_500, ExcMsg.VALIDATE_ERROR)
     assert info.value.errors[0]["type"] == fqn(KeyError)
     assert info.value.errors[0]["file"] and info.value.errors[0]["line"]
     assert info.value.errors[0]["detail"]

@@ -3,8 +3,8 @@ from pathlib import Path
 from pytest import fixture, raises
 
 from src.adapters.presenters.csv_response import CSVResponse
-from src.core.common.error_messages import CSV_NOT_FOUND
 from src.core.config.config import DIRECTORY, FILE
+from src.core.data.enums import ExcMsg
 from src.core.domain.http_exceptions import NotFound
 from tests.conftest import assert_http_error
 from tests.mocks.raw import CSV_MEDIA, HTTP_200, HTTP_404
@@ -51,5 +51,5 @@ def test_retrieve_csv(file: tuple[Path, str]):
 def test_csv_not_found():
     with raises(NotFound) as info:
         CSVResponse.retrieve("any")
-    assert_http_error(info, HTTP_404, CSV_NOT_FOUND)
+    assert_http_error(info, HTTP_404, ExcMsg.CSV_NOT_FOUND)
     assert info.value.errors is None

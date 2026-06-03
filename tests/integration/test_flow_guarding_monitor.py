@@ -8,6 +8,7 @@ from src.adapters.presenters.csv_response import CSVResponse
 from src.adapters.presenters.json_response import ErrorJSON
 from src.adapters.presenters.template_response import TemplateResponse
 from src.core.config.config import HEADERS, RATELIMIT_POLICY, SERVER
+from src.core.data.enums import ExcMsg
 from src.framework.fastapi.csrf_token import CSRFToken
 from src.framework.fastapi.routes import favicon
 from tests.conftest import assert_error_json
@@ -45,7 +46,7 @@ async def test_success_headers(client: Client):
 async def test_uncaught_exception(mocker: Mocker, client: Client):
     mocker.patch(**RETRIEVE(RuntimeError("any")))
     res = await client.get(URL_CSV, params=CSV_PARAMS)
-    errors = assert_error_json(res, HTTP_500, "any")
+    errors = assert_error_json(res, HTTP_500, ExcMsg.UNEXPECTED_ERROR)
     assert errors[0]["type"] == fqn(RuntimeError)
     assert errors[0]["detail"] == "any"
 

@@ -6,9 +6,8 @@ from pytest_mock import MockerFixture as Mocker
 
 from src.adapters.presenters.json_response import ErrorJSON
 from src.adapters.presenters.template_response import TemplateResponse
-from src.core.common.error_messages import UNEXPECTED_ERROR
 from src.core.config.config import META_INFO
-from src.core.data.enums import Lang
+from src.core.data.enums import ExcMsg, Lang
 from src.core.domain.translations import Translations
 from tests.mocks.raw import CSRF_TOKEN, HTML_MEDIA, HTTP_200, HTTP_404, REQUEST
 
@@ -64,5 +63,5 @@ def test_not_found_template(mocker: Mocker):
     context: dict = spy_jinja.call_args_list[0].args[3]
     assert context["status"] and context["prefix"] and context["timestamp"]
     assert context["status_code"] == HTTP_404
-    assert context["message"] == UNEXPECTED_ERROR
+    assert context["message"] == ExcMsg.UNEXPECTED_ERROR
     assert context["error_json"]

@@ -17,15 +17,10 @@ from aiohttp import (
 from aiohttp_retry import JitterRetry, RetryClient
 from aiolimiter import AsyncLimiter
 
-from src.core.common.error_messages import (
-    CONNECTION_ERROR,
-    CONNECTION_TIMEOUT,
-    INVALID_JSON_ERROR,
-    REQUEST_EXCEPTION,
-)
 from src.core.common.types import Json, RateStrategy, ResponseBundle
 from src.core.config.config import LOG
 from src.core.config.scopus import SCOPUS_HEADERS
+from src.core.data.enums import ExcMsg
 from src.core.domain.http_exceptions import (
     BadGateway,
     BadGatewayContent,
@@ -163,13 +158,13 @@ class HTTPClient:
                 raise exc
 
             except AsyncTimeoutError as exc:
-                raise GatewayTimeout(CONNECTION_TIMEOUT, exc) from exc
+                raise GatewayTimeout(ExcMsg.CONNECTION_TIMEOUT, exc) from exc
 
             except ClientConnectionError as exc:
-                raise BadGateway(CONNECTION_ERROR, exc) from exc
+                raise BadGateway(ExcMsg.CONNECTION_ERROR, exc) from exc
 
             except Exception as exc:
-                raise BadGateway(REQUEST_EXCEPTION, exc) from exc
+                raise BadGateway(ExcMsg.REQUEST_EXCEPTION, exc) from exc
 
             try:
                 data: Json | None = await response.json()
@@ -178,7 +173,9 @@ class HTTPClient:
 
             except (ContentTypeError, JSONDecodeError) as exc:
                 body = await response.text()
-                raise BadGatewayContent(INVALID_JSON_ERROR, exc, body) from exc
+                raise BadGatewayContent(
+                    ExcMsg.INVALID_JSON_ERROR, exc, body
+                ) from exc
 
             return ResponseBundle(response.status, response.headers, data)
 

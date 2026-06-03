@@ -8,10 +8,9 @@ from pytest_mock import MockerFixture as Mocker
 from thefuzz.fuzz import partial_ratio
 
 from src.adapters.helpers.url_builder import URLBuilder
-from src.core.common.error_messages import CSV_NOT_FOUND
 from src.core.config.config import DIRECTORY, FILE
 from src.core.config.scopus import DATA_SOURCE_NOTE
-from src.core.data.enums import Column
+from src.core.data.enums import Column, ExcMsg
 from tests.conftest import assert_error_json
 from tests.mocks.helpers import (
     get_patch,
@@ -85,7 +84,7 @@ class TestUserFlowSurveySteps:
         )
         assert res.status_code == HTTP_404
         assert res.headers.get("Content-Type") in JSON_CONTENT_TYPE
-        assert_error_json(res, HTTP_404, CSV_NOT_FOUND)
+        assert_error_json(res, HTTP_404, ExcMsg.CSV_NOT_FOUND)
 
     @mark.asyncio
     @classmethod

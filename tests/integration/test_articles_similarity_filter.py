@@ -8,8 +8,7 @@ from pandas.api.typing import DataFrameGroupBy
 from pytest import mark
 from pytest_mock import MockerFixture as Mocker
 
-from src.core.common.error_messages import CANCELLED_ERROR
-from src.core.data.enums import Column
+from src.core.data.enums import Column, ExcMsg
 from src.core.use_cases.articles_similarity_filter import (
     ArticlesSimilarityFilter,
 )
@@ -225,7 +224,7 @@ async def test_cancelled_error(mocker: Mocker, client: Client):
     mocker.patch(**IDXMAX([1, CancelledError("any")]))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     assert mock.call_count == 10
-    errors = assert_error_json(res, HTTP_503, CANCELLED_ERROR)
+    errors = assert_error_json(res, HTTP_503, ExcMsg.CANCELLED_ERROR)
     assert errors[0]["type"] == fqn(CancelledError)
     assert errors[0]["detail"] == "any"
 

@@ -5,14 +5,8 @@ from pydantic_core import ValidationError
 from pytest import mark
 from pytest_mock import MockerFixture as Mocker
 
-from src.core.common.error_messages import (
-    EXPIRED_TOKEN,
-    INVALID_TOKEN,
-    TOKEN_COOKIE_ERROR,
-    TOKEN_HEADER_ERROR,
-    TOKEN_SIGNATURE_ERROR,
-)
 from src.core.config.config import MAX_AGE
+from src.core.data.enums import ExcMsg
 from tests.conftest import assert_error_json
 from tests.mocks.helpers import fqn
 from tests.mocks.raw import (
@@ -37,7 +31,7 @@ async def test_set_cookie(client: Client):
 async def test_missing_cookie_token(client: Client):
     client.cookies.delete("csrf-token")
     res = await client.get(URL_CSV, params=CSV_PARAMS)
-    errors = assert_error_json(res, HTTP_401, TOKEN_COOKIE_ERROR)
+    errors = assert_error_json(res, HTTP_401, ExcMsg.TOKEN_COOKIE_ERROR)
     assert errors is None
 
 
@@ -45,7 +39,7 @@ async def test_missing_cookie_token(client: Client):
 async def test_missing_header_token(client: Client):
     client.headers.clear()
     res = await client.get(URL_CSV, params=CSV_PARAMS)
-    errors = assert_error_json(res, HTTP_401, TOKEN_HEADER_ERROR)
+    errors = assert_error_json(res, HTTP_401, ExcMsg.TOKEN_HEADER_ERROR)
     assert errors is None
 
 
@@ -53,7 +47,7 @@ async def test_missing_header_token(client: Client):
 async def test_invalid_token(client: Client):
     client.headers.update({"X-CSRF-Token": "any"})
     res = await client.get(URL_CSV, params=CSV_PARAMS)
-    errors = assert_error_json(res, HTTP_401, INVALID_TOKEN)
+    errors = assert_error_json(res, HTTP_401, ExcMsg.INVALID_TOKEN)
     assert errors[0]["type"] == fqn(ValidationError)
     assert errors[0]["detail"] and errors[1]
 
@@ -67,7 +61,7 @@ async def test_signature_expired(mocker: Mocker, client: Client):
     )
     res = await client.get(URL_CSV, params=CSV_PARAMS)
     mock.assert_called_once_with(SIGNED_TOKEN, MAX_AGE)
-    errors = assert_error_json(res, HTTP_401, EXPIRED_TOKEN)
+    errors = assert_error_json(res, HTTP_401, ExcMsg.EXPIRED_TOKEN)
     assert errors[0]["type"] == fqn(SignatureExpired)
     assert errors[0]["detail"] == "any"
 
@@ -76,7 +70,7 @@ async def test_signature_expired(mocker: Mocker, client: Client):
 async def test_bad_signature(client: Client):
     client.cookies.update({"csrf-token": "any"})
     res = await client.get(URL_CSV, params=CSV_PARAMS)
-    errors = assert_error_json(res, HTTP_401, TOKEN_SIGNATURE_ERROR)
+    errors = assert_error_json(res, HTTP_401, ExcMsg.TOKEN_SIGNATURE_ERROR)
     assert errors[0]["type"] == fqn(BadSignature)
     assert errors[0]["detail"]
 
@@ -88,7 +82,7 @@ async def test_incorrect(mocker: Mocker, client: Client):
     )
     res = await client.get(URL_CSV, params=CSV_PARAMS)
     mock.assert_called_once_with(SIGNED_TOKEN, MAX_AGE)
-    errors = assert_error_json(res, HTTP_401, INVALID_TOKEN)
+    errors = assert_error_json(res, HTTP_401, ExcMsg.INVALID_TOKEN)
     assert errors is None
 
 

@@ -8,10 +8,9 @@ from src.adapters.gateway.scopus_abstract_retrieval_api import (
     ScopusAbstractRetrievalAPI,
     ScopusResponse,
 )
-from src.core.common.error_messages import CANCELLED_ERROR
 from src.core.common.types import ResponseBundle
 from src.core.config.scopus import SCOPUS_ERRORS
-from src.core.data.enums import Column, ScopusCode
+from src.core.data.enums import Column, ScopusCode, ExcMsg
 from src.core.domain.http_exceptions import ScopusAPIError, ServiceUnavailable
 from tests.conftest import assert_http_error
 from tests.mocks.errors import MORE_CANCELLED
@@ -141,7 +140,7 @@ async def test_retrieve_cancelled_error(mocker: Mocker):
     mocker.patch(**STEP(MORE_CANCELLED))
     with raises(ServiceUnavailable) as info:
         await fix.api.retrieve_abstracts(API_KEY)
-    assert_http_error(info, HTTP_503, CANCELLED_ERROR)
+    assert_http_error(info, HTTP_503, ExcMsg.CANCELLED_ERROR)
     assert fix.req.call_count == 7 and spy.call_count == 4
     assert info.value.errors[0]["type"] == fqn(CancelledError)
     assert info.value.errors[0]["detail"] == "any"

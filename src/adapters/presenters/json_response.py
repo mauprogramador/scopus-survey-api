@@ -7,9 +7,9 @@ from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, field_validator
 
-from src.core.common.error_messages import SERIALIZE_ERROR
 from src.core.common.types import Json
 from src.core.config.config import ENV, LOG
+from src.core.data.enums import ExcMsg
 from src.core.domain.http_exceptions import HTTPError
 
 
@@ -71,7 +71,7 @@ class ErrorJSON(JSONResponse):
                 LOG.error(message, exc)
                 LOG.exception(exc)
 
-                message = SERIALIZE_ERROR
+                message = ExcMsg.SERIALIZE_ERROR
                 errors: list[Json] = jsonable_encoder(errors)
 
                 error = HTTPError.get_error_details(exc)[0]

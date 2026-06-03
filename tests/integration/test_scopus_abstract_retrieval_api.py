@@ -10,9 +10,8 @@ from src.adapters.gateway.scopus_abstract_retrieval_api import (
     ScopusAbstractRetrievalAPI,
 )
 from src.adapters.helpers.scopus_response import ScopusResponse
-from src.core.common.error_messages import CANCELLED_ERROR
 from src.core.config.scopus import QUOTA_ERROR_CODE
-from src.core.data.enums import Column
+from src.core.data.enums import Column, ExcMsg
 from src.core.data.quota_results_handler import QuotaResultsHandler
 from src.core.domain.factory import make_aggregator
 from src.utils.progress_bar import ProgressBar
@@ -174,7 +173,7 @@ async def test_retrieve_cancelled_error(mocker: Mocker, client: Client):
     mocker.patch(**STEP(MORE_CANCELLED))
     mock = mocker.patch(*get_patch(RETRIEVE_MORE_ABSTRACTS))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
-    errors = assert_error_json(res, HTTP_503, CANCELLED_ERROR)
+    errors = assert_error_json(res, HTTP_503, ExcMsg.CANCELLED_ERROR)
 
     assert mock.call_count == 8 and spy.call_count == 4
     assert errors[0]["type"] == fqn(CancelledError)

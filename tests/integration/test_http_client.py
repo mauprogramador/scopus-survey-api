@@ -18,14 +18,8 @@ from pytest import mark
 from pytest_mock import MockerFixture as Mocker
 
 from src.adapters.helpers.http_client import HTTPClient
-from src.core.common.error_messages import (
-    CANCELLED_ERROR,
-    CONNECTION_ERROR,
-    CONNECTION_TIMEOUT,
-    INVALID_JSON_ERROR,
-    REQUEST_EXCEPTION,
-)
 from src.core.common.types import RateStrategy
+from src.core.data.enums import ExcMsg
 from src.core.config.config import LOG
 from src.core.data.quota_results_handler import QuotaResultsHandler
 from src.core.domain.factory import make_aggregator
@@ -80,7 +74,7 @@ async def test_success(mocker: Mocker, client: Client):
 async def test_cancelled_error(mocker: Mocker, client: Client):
     mock = mocker.patch(*get_patch(CancelledError("any")))
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
-    errors = assert_error_json(res, HTTP_503, CANCELLED_ERROR)
+    errors = assert_error_json(res, HTTP_503, ExcMsg.CANCELLED_ERROR)
     assert errors[0]["type"] == fqn(CancelledError)
     assert errors[0]["detail"] == "any" and mock.call_count == 3
 
@@ -89,7 +83,7 @@ async def test_cancelled_error(mocker: Mocker, client: Client):
 async def test_timeout_error(mocker: Mocker, client: Client):
     mock = mocker.patch(*get_patch(AsyncTimeoutError("any")))
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
-    errors = assert_error_json(res, HTTP_504, CONNECTION_TIMEOUT)
+    errors = assert_error_json(res, HTTP_504, ExcMsg.CONNECTION_TIMEOUT)
     assert errors[0]["type"] == fqn(AsyncTimeoutError)
     assert errors[0]["detail"] == "any" and mock.call_count == 3
 
@@ -98,7 +92,7 @@ async def test_timeout_error(mocker: Mocker, client: Client):
 async def test_client_connection_error(mocker: Mocker, client: Client):
     mock = mocker.patch(*get_patch(ClientConnectionError("any")))
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
-    errors = assert_error_json(res, HTTP_502, CONNECTION_ERROR)
+    errors = assert_error_json(res, HTTP_502, ExcMsg.CONNECTION_ERROR)
     assert errors[0]["type"] == fqn(ClientConnectionError)
     assert errors[0]["detail"] == "any" and mock.call_count == 3
 
@@ -107,7 +101,7 @@ async def test_client_connection_error(mocker: Mocker, client: Client):
 async def test_uncaught_exception(mocker: Mocker, client: Client):
     mock = mocker.patch(*get_patch(RuntimeError("any")))
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
-    errors = assert_error_json(res, HTTP_502, REQUEST_EXCEPTION)
+    errors = assert_error_json(res, HTTP_502, ExcMsg.REQUEST_EXCEPTION)
     assert errors[0]["type"] == fqn(RuntimeError)
     assert errors[0]["detail"] == "any" and mock.call_count == 3
 
@@ -116,7 +110,7 @@ async def test_uncaught_exception(mocker: Mocker, client: Client):
 async def test_content_type_error(mocker: Mocker, client: Client):
     mock = mocker.patch(*get_patch(GET_CONTENT_TYPE_ERROR))
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
-    errors = assert_error_json(res, HTTP_502, INVALID_JSON_ERROR)
+    errors = assert_error_json(res, HTTP_502, ExcMsg.INVALID_JSON_ERROR)
     assert len(errors) == 2 and mock.call_count == 3
     assert errors[0]["type"] == fqn(ContentTypeError)
     assert errors[0]["detail"] and errors[1]["body"] is not None
@@ -126,7 +120,7 @@ async def test_content_type_error(mocker: Mocker, client: Client):
 async def test_no_data_error(mocker: Mocker, client: Client):
     mock = mocker.patch(*get_patch(GET_EMPTY_RESPONSE))
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
-    errors = assert_error_json(res, HTTP_502, INVALID_JSON_ERROR)
+    errors = assert_error_json(res, HTTP_502, ExcMsg.INVALID_JSON_ERROR)
     assert len(errors) == 2 and mock.call_count == 3
     assert errors[0]["type"] == fqn(JSONDecodeError)
     assert errors[0]["detail"] and errors[1]["body"] is not None
@@ -136,7 +130,7 @@ async def test_no_data_error(mocker: Mocker, client: Client):
 async def test_json_decode_error(mocker: Mocker, client: Client):
     mock = mocker.patch(*get_patch(GET_JSON_DECODE_ERROR))
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
-    errors = assert_error_json(res, HTTP_502, INVALID_JSON_ERROR)
+    errors = assert_error_json(res, HTTP_502, ExcMsg.INVALID_JSON_ERROR)
     assert len(errors) == 2 and mock.call_count == 3
     assert errors[0]["type"] == fqn(JSONDecodeError)
     assert errors[0]["detail"] and errors[1]["body"] is not None

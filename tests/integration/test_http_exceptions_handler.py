@@ -4,7 +4,7 @@ from pytest import mark
 from pytest_mock import MockerFixture as Mocker
 
 from src.adapters.presenters.csv_response import CSVResponse
-from src.core.common.error_messages import SLOWAPI_RATE_ERROR
+from src.core.data.enums import ExcMsg
 from src.core.config.scopus import SCOPUS_ERRORS
 from src.framework.fastapi.routes import favicon
 from tests.conftest import assert_error_json
@@ -39,7 +39,7 @@ RETRIEVE = Patch(CSVResponse.retrieve).classmethod(favicon)
 async def test_custom_http_error(mocker: Mocker, client: Client):
     mocker.patch(**RETRIEVE(HTTP_ERROR))
     res = await client.get(URL_CSV, params=CSV_PARAMS)
-    errors = assert_error_json(res, HTTP_400, "any")
+    errors = assert_error_json(res, HTTP_400, ExcMsg.UNEXPECTED_ERROR)
     assert errors[0]["type"] == fqn(ValueError)
     assert errors[0]["detail"] == "any"
 

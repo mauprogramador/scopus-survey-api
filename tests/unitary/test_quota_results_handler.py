@@ -1,9 +1,6 @@
 from pytest import raises
 
-from src.core.common.error_messages import (
-    ARTICLES_NOT_FOUND,
-    DATA_MISMATCH_ERROR,
-)
+from src.core.data.enums import ExcMsg
 from src.core.data.quota_results_handler import QuotaResultsHandler
 from src.core.data.serializers import ScopusSearch
 from src.core.domain.http_exceptions import (
@@ -38,7 +35,7 @@ def test_search_not_found():
     first_search = ScopusSearch(**RAW_SEARCH_NOT_FOUND)
     with raises(NotFound) as info:
         STATE.set_first_search(first_search)
-    assert_http_error(info, HTTP_404, ARTICLES_NOT_FOUND)
+    assert_http_error(info, HTTP_404, ExcMsg.ARTICLES_NOT_FOUND)
 
 
 def test_validate_integrity():
@@ -52,7 +49,7 @@ def test_validate_integrity_error():
     STATE.set_first_search(first_search)
     with raises(BadGateway) as info:
         STATE.validate_integrity()
-    assert_http_error(info, HTTP_502, DATA_MISMATCH_ERROR)
+    assert_http_error(info, HTTP_502, ExcMsg.DATA_MISMATCH_ERROR)
 
 
 def test_fix_total():

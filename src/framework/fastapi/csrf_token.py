@@ -11,15 +11,9 @@ from itsdangerous import (
 )
 from pydantic import ValidationError
 
-from src.core.common.error_messages import (
-    EXPIRED_TOKEN,
-    INVALID_TOKEN,
-    TOKEN_COOKIE_ERROR,
-    TOKEN_HEADER_ERROR,
-    TOKEN_SIGNATURE_ERROR,
-)
 from src.core.common.types import Token
 from src.core.config.config import ENV, MAX_AGE, SALT
+from src.core.data.enums import ExcMsg
 from src.core.domain.http_exceptions import Unauthorized
 
 
@@ -59,24 +53,24 @@ class CSRFToken:
     ) -> None:
 
         if signed_token is None:
-            raise Unauthorized(TOKEN_COOKIE_ERROR)
+            raise Unauthorized(ExcMsg.TOKEN_COOKIE_ERROR)
 
         if header_token is None:
-            raise Unauthorized(TOKEN_HEADER_ERROR)
+            raise Unauthorized(ExcMsg.TOKEN_HEADER_ERROR)
 
         try:
             Token.validate_strings(header_token, strict=True)
         except ValidationError as exc:
-            raise Unauthorized(INVALID_TOKEN, exc) from exc
+            raise Unauthorized(ExcMsg.INVALID_TOKEN, exc) from exc
 
         try:
             cookie_token: str = cls._SERIALIZER.loads(signed_token, MAX_AGE)
 
         except SignatureExpired as exc:
-            raise Unauthorized(EXPIRED_TOKEN, exc) from exc
+            raise Unauthorized(ExcMsg.EXPIRED_TOKEN, exc) from exc
 
         except (BadSignature, BadData) as exc:
-            raise Unauthorized(TOKEN_SIGNATURE_ERROR, exc) from exc
+            raise Unauthorized(ExcMsg.TOKEN_SIGNATURE_ERROR, exc) from exc
 
         if header_token != cookie_token:
-            raise Unauthorized(INVALID_TOKEN)
+            raise Unauthorized(ExcMsg.INVALID_TOKEN)

@@ -9,7 +9,6 @@ from concurrent.futures import ThreadPoolExecutor
 from os import cpu_count, sched_getaffinity
 
 from src.adapters.helpers.scopus_response import ScopusResponse
-from src.core.common.error_messages import CANCELLED_ERROR
 from src.core.common.types import (
     CombinationBundle,
     Json,
@@ -17,6 +16,7 @@ from src.core.common.types import (
     SearchParams,
 )
 from src.core.config.config import LOG
+from src.core.data.enums import ExcMsg
 from src.core.domain.http_exceptions import (
     HTTPError,
     ServiceUnavailable,
@@ -111,7 +111,9 @@ class ScopusSearchAPI:
                     if isinstance(exc, HTTPError):
                         raise exc
 
-                    raise ServiceUnavailable(CANCELLED_ERROR, exc) from exc
+                    raise ServiceUnavailable(
+                        ExcMsg.CANCELLED_ERROR, exc
+                    ) from exc
 
         if remaining_tasks:
             await gather(*remaining_tasks, return_exceptions=True)
@@ -171,7 +173,9 @@ class ScopusSearchAPI:
                     if isinstance(exc, HTTPError):
                         raise exc
 
-                    raise ServiceUnavailable(CANCELLED_ERROR, exc) from exc
+                    raise ServiceUnavailable(
+                        ExcMsg.CANCELLED_ERROR, exc
+                    ) from exc
 
         if remaining_tasks:
             await gather(*remaining_tasks, return_exceptions=True)

@@ -1,10 +1,7 @@
 from math import ceil
 
-from src.core.common.error_messages import (
-    ARTICLES_NOT_FOUND,
-    DATA_MISMATCH_ERROR,
-)
 from src.core.common.types import Json, Quota
+from src.core.data.enums import ExcMsg
 from src.core.data.serializers import ScopusEntry, ScopusSearch
 from src.core.domain.http_exceptions import BadGateway, NotFound
 
@@ -50,13 +47,13 @@ class QuotaResultsHandler:
         self.entry = [*first_search.entry]
 
         if self.total_results == 0:
-            raise NotFound(ARTICLES_NOT_FOUND)
+            raise NotFound(ExcMsg.ARTICLES_NOT_FOUND)
 
         self.pages_count = ceil(self.total_results / self.items_per_page)
 
     def validate_integrity(self) -> None:
         if self.total_results != len(self.entry):
-            raise BadGateway(DATA_MISMATCH_ERROR)
+            raise BadGateway(ExcMsg.DATA_MISMATCH_ERROR)
 
     def fix_total(self) -> None:
         self.total_abstracts = len(self.entry)

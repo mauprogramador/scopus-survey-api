@@ -2,8 +2,8 @@ from http import HTTPStatus
 
 from fastapi.responses import FileResponse
 
-from src.core.common.error_messages import CSV_NOT_FOUND
 from src.core.config.config import DIRECTORY, FILE
+from src.core.data.enums import ExcMsg
 from src.core.domain.http_exceptions import NotFound
 
 
@@ -40,7 +40,7 @@ class CSVResponse:
         file_path = DIRECTORY / filename
 
         if not file_path.exists():
-            raise NotFound(CSV_NOT_FOUND)
+            raise NotFound(ExcMsg.CSV_NOT_FOUND)
 
         headers = {
             "Content-Disposition": f"attachment; filename={filename}",

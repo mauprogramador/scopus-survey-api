@@ -9,9 +9,8 @@ from os import cpu_count, sched_getaffinity
 from pandas import DataFrame, to_datetime
 from thefuzz.fuzz import ratio  # type: ignore
 
-from src.core.common.error_messages import CANCELLED_ERROR
 from src.core.config.config import LOG
-from src.core.data.enums import Column
+from src.core.data.enums import Column, ExcMsg
 from src.core.domain.http_exceptions import ServiceUnavailable
 
 
@@ -127,7 +126,9 @@ class ArticlesSimilarityFilter:
                         if not task.done():
                             task.cancel()
 
-                    raise ServiceUnavailable(CANCELLED_ERROR, exc) from exc
+                    raise ServiceUnavailable(
+                        ExcMsg.CANCELLED_ERROR, exc
+                    ) from exc
 
         return similar_titles
 

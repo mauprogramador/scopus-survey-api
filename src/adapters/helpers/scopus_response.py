@@ -3,14 +3,10 @@ from typing import Type
 
 from pydantic import ValidationError
 
-from src.core.common.error_messages import (
-    QUOTA_EXCEEDED,
-    RATE_LIMIT_EXCEEDED,
-    VALIDATE_ERROR,
-)
 from src.core.common.types import ResponseBundle, ScopusModel
 from src.core.config.config import LOG
 from src.core.config.scopus import QUOTA_ERROR_CODE, RATE_LIMIT_ERROR_CODE
+from src.core.data.enums import ExcMsg
 from src.core.data.serializers import (
     ScopusAbstract,
     ScopusError,
@@ -36,14 +32,14 @@ class ScopusResponse:
                     error_response = ScopusError.model_validate(response.data)
 
                     if error_response.code == QUOTA_ERROR_CODE:
-                        LOG.error(QUOTA_EXCEEDED)
+                        LOG.error(ExcMsg.QUOTA_EXCEEDED)
                         LOG.info(
                             "Please try again on \033[33m"
                             f"{quota.reset_datetime}\033[m"
                         )
 
                     elif error_response.code == RATE_LIMIT_ERROR_CODE:
-                        LOG.error(RATE_LIMIT_EXCEEDED)
+                        LOG.error(ExcMsg.RATE_LIMIT_EXCEEDED)
 
                 raise ScopusAPIError(
                     quota.status,
@@ -55,7 +51,7 @@ class ScopusResponse:
             return model.model_validate(response.data)
 
         except (ValidationError, KeyError) as exc:
-            raise InternalError(VALIDATE_ERROR, exc) from exc
+            raise InternalError(ExcMsg.VALIDATE_ERROR, exc) from exc
 
     @classmethod
     def validate_search(cls, response: ResponseBundle) -> ScopusSearch:

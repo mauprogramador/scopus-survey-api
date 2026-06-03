@@ -8,10 +8,10 @@ from fastapi import HTTPException
 from itsdangerous import BadData
 from pydantic import ValidationError
 
-from src.core.common.error_messages import SCOPUS_API_ERROR, UNEXPECTED_ERROR
 from src.core.common.types import Json
 from src.core.config.config import LOG
 from src.core.config.scopus import SCOPUS_DOCS, SCOPUS_ERRORS
+from src.core.data.enums import ExcMsg
 
 
 class HTTPError(HTTPException):
@@ -21,7 +21,7 @@ class HTTPError(HTTPException):
     _ROOT_PATH = "/scopus-survey-api"
 
     def __init__(
-        self, status: HTTPStatus, message: str, error: Exception = None
+        self, status: HTTPStatus, message: ExcMsg, error: Exception = None
     ) -> None:
         """Detailed HTTP errors"""
         self.status = status
@@ -73,7 +73,7 @@ class HTTPError(HTTPException):
 class Unauthorized(HTTPError):
     """HTTP error status code 401"""
 
-    def __init__(self, message: str, error: Exception = None) -> None:
+    def __init__(self, message: ExcMsg, error: Exception = None) -> None:
         """HTTP error status code 401"""
         super().__init__(HTTPStatus.UNAUTHORIZED, message, error)
 
@@ -81,7 +81,7 @@ class Unauthorized(HTTPError):
 class NotFound(HTTPError):
     """HTTP error status code 404"""
 
-    def __init__(self, message: str, error: Exception = None) -> None:
+    def __init__(self, message: ExcMsg) -> None:
         """HTTP error status code 404"""
         super().__init__(HTTPStatus.NOT_FOUND, message, error)
 
@@ -97,7 +97,7 @@ class UnprocessableContent(HTTPError):
 class InternalError(HTTPError):
     """HTTP error status code 500"""
 
-    def __init__(self, message: str, error: Exception = None) -> None:
+    def __init__(self, message: ExcMsg, error: Exception = None) -> None:
         """HTTP error status code 500"""
         super().__init__(HTTPStatus.INTERNAL_SERVER_ERROR, message, error)
 
@@ -105,7 +105,7 @@ class InternalError(HTTPError):
 class BadGateway(HTTPError):
     """HTTP error status code 502"""
 
-    def __init__(self, message: str, error: Exception = None) -> None:
+    def __init__(self, message: ExcMsg, error: Exception = None) -> None:
         """HTTP error status code 502"""
         super().__init__(HTTPStatus.BAD_GATEWAY, message, error)
 
@@ -113,7 +113,7 @@ class BadGateway(HTTPError):
 class ServiceUnavailable(HTTPError):
     """HTTP error status code 503"""
 
-    def __init__(self, message: str, error: Exception = None) -> None:
+    def __init__(self, message: ExcMsg, error: Exception = None) -> None:
         """HTTP error status code 503"""
         super().__init__(HTTPStatus.SERVICE_UNAVAILABLE, message, error)
 
@@ -121,7 +121,7 @@ class ServiceUnavailable(HTTPError):
 class GatewayTimeout(HTTPError):
     """HTTP error status code 504"""
 
-    def __init__(self, message: str, error: Exception = None) -> None:
+    def __init__(self, message: ExcMsg, error: Exception = None) -> None:
         """HTTP error status code 504"""
         super().__init__(HTTPStatus.GATEWAY_TIMEOUT, message, error)
 
@@ -129,7 +129,7 @@ class GatewayTimeout(HTTPError):
 class BadGatewayContent(HTTPError):
     """HTTP error status code 502"""
 
-    def __init__(self, message: str, error: Exception, body: str) -> None:
+    def __init__(self, message: ExcMsg, error: Exception, body: str) -> None:
         """HTTP error status code 502"""
         super().__init__(HTTPStatus.BAD_GATEWAY, message, error)
         self.errors.append({"body": body})
@@ -142,7 +142,8 @@ class ScopusAPIError(HTTPError):
         self, message: str, code: int, body: Json, headers: Json
     ) -> None:
         """Scopus API HTTP status error 502 exception"""
-        super().__init__(HTTPStatus.BAD_GATEWAY, message)
+        # Use ExcMsg as a mock replacement only
+        super().__init__(HTTPStatus.BAD_GATEWAY, ExcMsg.SCOPUS_API_ERROR)
 
         code_error = SCOPUS_ERRORS.get(HTTPStatus(code), SCOPUS_API_ERROR)
         self.errors: list[Json] = [

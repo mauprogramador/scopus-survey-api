@@ -12,6 +12,7 @@ from src.core.config.scopus import (
     RATE_LIMIT_ERROR_CODE,
     SCOPUS_ERRORS,
 )
+from src.core.data.enums import ExcMsg
 from tests.conftest import assert_error_json
 from tests.mocks.helpers import fqn, get_patch
 from tests.mocks.integration import (
@@ -80,7 +81,7 @@ async def test_rate_limit_exceeded(mocker: Mocker, client: Client):
 async def test_json_validation_error(mocker: Mocker, client: Client):
     mocker.patch(*get_patch(RESPONSE_JSON_ERROR))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
-    errors = assert_error_json(res, HTTP_500, VALIDATE_ERROR)
+    errors = assert_error_json(res, HTTP_500, ExcMsg.VALIDATE_ERROR)
     assert errors[0]["type"] == fqn(ValidationError)
     assert errors[0]["file"] and errors[0]["line"]
     assert errors[0]["detail"]
@@ -91,7 +92,7 @@ async def test_json_validation_error(mocker: Mocker, client: Client):
 async def test_json_key_error(mocker: Mocker, client: Client):
     mocker.patch(*get_patch(RESPONSE_KEY_ERROR))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
-    errors = assert_error_json(res, HTTP_500, VALIDATE_ERROR)
+    errors = assert_error_json(res, HTTP_500, ExcMsg.VALIDATE_ERROR)
     assert errors[0]["type"] == fqn(KeyError)
     assert errors[0]["file"] and errors[0]["line"]
     assert errors[0]["detail"]
