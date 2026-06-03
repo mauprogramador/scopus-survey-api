@@ -37,11 +37,6 @@ ScopusModel = TypeVar("ScopusModel", bound=BaseModel)
 Token: TypeAlias = Annotated[
     str, Field(pattern=_TOKEN_PATTERN, min_length=64, max_length=64)
 ]
-class LogParams(NamedTuple):
-    host: str
-    port: int
-    logging_file: bool
-    debug: bool
 
 
 class Quota(Protocol):

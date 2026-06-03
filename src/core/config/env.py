@@ -7,8 +7,6 @@ from pydantic_settings import (
     SettingsConfigDict,
 )
 
-from src.core.common.types import LogParams
-
 
 # e.g. 127.0.0.1, 0.0.0.0
 _HOST_PATTERN = r"^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$"
@@ -79,7 +77,3 @@ class EnvConfig(BaseSettings):
                 "SECRET_KEY in .env with 32-128 characters\033[m"
             )
         return value
-
-    @property
-    def log_params(self) -> LogParams:
-        return LogParams(self.host, self.port, self.logging_file, self.debug)
