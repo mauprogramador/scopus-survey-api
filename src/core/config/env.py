@@ -17,6 +17,7 @@ class EnvConfig(BaseSettings):
 
     model_config = SettingsConfigDict(
         str_strip_whitespace=True,
+        extra="ignore",
         env_file=".env",
         env_file_encoding="utf-8",
         env_ignore_empty=True,
