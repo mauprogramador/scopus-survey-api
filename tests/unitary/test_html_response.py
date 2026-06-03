@@ -8,7 +8,7 @@ from src.adapters.presenters.json_response import ErrorJSON
 from src.adapters.presenters.template_response import TemplateResponse
 from src.core.config.config import META_INFO
 from src.core.data.enums import ExcMsg, Lang
-from src.core.domain.translations import Translations
+from src.core.domain.translations import load_translations
 from tests.mocks.raw import CSRF_TOKEN, HTML_MEDIA, HTTP_200, HTTP_404, REQUEST
 
 
@@ -18,7 +18,7 @@ def test_build_all(mocker: Mocker):
     TemplateResponse.DIST_DIR.mkdir()
 
     spy_jinja = mocker.spy(Template, "render")
-    translations = Translations.load_all()
+    translations = load_translations()
     TemplateResponse.build_all(*translations)
 
     assert TemplateResponse.DIST_DIR.exists()

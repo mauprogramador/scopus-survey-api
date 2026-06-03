@@ -131,7 +131,7 @@ async def test_to_datetime_no_left(mocker: Mocker, client: Client):
     df_to_datetime: Series = spy_to_datetime.call_args_list[0].args[0]
     df_dropna: DataFrame = spy_dropna.call_args_list[0].args[0]
 
-    spy_log_debug.assert_called_with({"invalids_datetime": 0})
+    assert spy_log_debug.call_args_list[1].args[0]["invalids_datetime"] == 0
     spy_to_datetime.assert_called_once()
     spy_dropna.assert_called_once()
 
@@ -154,7 +154,7 @@ async def test_to_datetime_one_left(mocker: Mocker, client: Client):
     df_to_datetime: DataFrame = spy_to_datetime.call_args_list[0].args[0]
     df_dropna: DataFrame = spy_dropna.call_args_list[0].args[0]
 
-    spy_log_debug.assert_called_with({"invalids_datetime": 1})
+    assert spy_log_debug.call_args_list[1].args[0]["invalids_datetime"] == 1
     spy_to_datetime.assert_called_once()
     spy_dropna.assert_called_once()
 

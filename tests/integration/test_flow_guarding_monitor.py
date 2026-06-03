@@ -48,7 +48,7 @@ async def test_uncaught_exception(mocker: Mocker, client: Client):
     res = await client.get(URL_CSV, params=CSV_PARAMS)
     errors = assert_error_json(res, HTTP_500, ExcMsg.UNEXPECTED_ERROR)
     assert errors[0]["type"] == fqn(RuntimeError)
-    assert errors[0]["detail"] == "any"
+    assert errors[0]["message"] == "any"
 
 
 @mark.asyncio

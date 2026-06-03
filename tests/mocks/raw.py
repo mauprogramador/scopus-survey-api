@@ -7,7 +7,6 @@ from unittest.mock import Mock
 from fastapi import Request
 from fastapi.datastructures import URL, Headers, QueryParams
 
-from src.core.common.types import LogParams
 from src.core.config.config import FILE, MAX_AGE
 from src.core.config.scopus import (
     EMPTY_RESULT,
