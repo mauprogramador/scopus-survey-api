@@ -13,6 +13,7 @@ from src.core.config.scopus import (
     SCOPUS_ERRORS,
 )
 from src.core.data.enums import ExcMsg
+from src.core.domain.http_exceptions import ScopusAPIError
 from tests.conftest import assert_error_json
 from tests.mocks.helpers import fqn, get_patch
 from tests.mocks.integration import (
@@ -61,9 +62,9 @@ async def test_status_error(
 async def test_quota_exceeded(mocker: Mocker, client: Client):
     mocker.patch(*get_patch(RESPONSE_QUOTA_EXCEEDED))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
-    errors = assert_error_json(res, HTTP_502, ScopusCode.QUOTA)
-    assert errors[0]["els_status"] == QUOTA_ERROR_CODE
-    assert errors[0]["code_error"] == SCOPUS_ERRORS.get(HTTP_429)
+    errors = assert_error_json(res, HTTP_502, trans(SCOPUS_API_QUOTA_ERROR))
+    assert errors[0]["error_code"] == QUOTA_ERROR_CODE
+    assert errors[0]["status_code"] == HTTP_429
     assert errors[1] == RAW_SERVICE_ERROR_QUOTA
 
 
@@ -71,9 +72,9 @@ async def test_quota_exceeded(mocker: Mocker, client: Client):
 async def test_rate_limit_exceeded(mocker: Mocker, client: Client):
     mocker.patch(*get_patch(RESPONSE_RATE_LIMIT_EXCEEDED))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
-    errors = assert_error_json(res, HTTP_502, ScopusCode.RATE_LIMIT)
-    assert errors[0]["els_status"] == RATE_LIMIT_ERROR_CODE
-    assert errors[0]["code_error"] == SCOPUS_ERRORS.get(HTTP_429)
+    errors = assert_error_json(res, HTTP_502, trans(SCOPUS_API_RATE_ERROR))
+    assert errors[0]["error_code"] == RATE_LIMIT_ERROR_CODE
+    assert errors[0]["status_code"] == HTTP_429
     assert errors[1] == RAW_ERROR_RESPONSE_RATE_LIMIT
 
 
@@ -84,7 +85,7 @@ async def test_json_validation_error(mocker: Mocker, client: Client):
     errors = assert_error_json(res, HTTP_500, ExcMsg.VALIDATE_ERROR)
     assert errors[0]["type"] == fqn(ValidationError)
     assert errors[0]["file"] and errors[0]["line"]
-    assert errors[0]["detail"]
+    assert errors[0]["message"]
     assert errors[1]["type"] == "model_type"
 
 
@@ -95,4 +96,4 @@ async def test_json_key_error(mocker: Mocker, client: Client):
     errors = assert_error_json(res, HTTP_500, ExcMsg.VALIDATE_ERROR)
     assert errors[0]["type"] == fqn(KeyError)
     assert errors[0]["file"] and errors[0]["line"]
-    assert errors[0]["detail"]
+    assert errors[0]["message"]

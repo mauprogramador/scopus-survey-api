@@ -1,24 +1,59 @@
 from asyncio import TimeoutError as AsyncTimeoutError
 from http import HTTPStatus
+from json import JSONDecodeError
 from sys import exc_info
 from traceback import FrameSummary, extract_tb
 
-from aiohttp import ClientResponseError
-from fastapi import HTTPException
-from itsdangerous import BadData
+from aiohttp import ContentTypeError
+from fastapi.exceptions import HTTPException as FastAPIHTTPException
+from itsdangerous import BadData, BadSignature, SignatureExpired
 from pydantic import ValidationError
 
 from src.core.common.types import Json
-from src.core.config.config import LOG
-from src.core.config.scopus import SCOPUS_DOCS, SCOPUS_ERRORS
+from src.core.config.scopus import SCOPUS_DOCS
 from src.core.data.enums import ExcMsg
 
 
-class HTTPError(HTTPException):
-    """Detailed HTTP errors"""
+_FRAME = FrameSummary(__file__, 1, "<http_exceptions>")
+_ROOT_PATH = "/scopus-survey-api"
 
-    _FRAME = FrameSummary(__file__, 1, "<http_exceptions>")
-    _ROOT_PATH = "/scopus-survey-api"
+
+def get_error_message(exc: Exception) -> str:
+    if exc.args and exc.args[0] and isinstance(exc.args[0], str):
+        return exc.args[0]
+    if getattr(exc, "message", None) is not None:
+        return getattr(exc, "message")
+    if getattr(exc, "detail", None) is not None:
+        return getattr(exc, "detail")
+    return repr(exc)
+
+
+def get_error_details(error: Exception) -> list[Json]:
+    traceback = exc_info()[2]
+    frame = extract_tb(traceback)[-1] if traceback else _FRAME
+
+    file = frame.filename
+    if file.count(_ROOT_PATH):
+        file = file[file.index(_ROOT_PATH) :]
+
+    base_error = {
+        "type": f"{type(error).__module__}.{type(error).__qualname__}",
+        "message": get_error_message(error),
+        "file": file,
+        "line": frame.lineno,
+    }
+    errors = [base_error]
+
+    if isinstance(error, ValidationError):
+        pydantic_errors = error.errors(include_url=False)
+        errors[0]["message"] = pydantic_errors[0].get("msg", error.title)
+        errors.extend(pydantic_errors)
+
+    return errors
+
+
+class HTTPError(FastAPIHTTPException):
+    """Detailed HTTP errors"""
 
     def __init__(
         self, status: HTTPStatus, message: ExcMsg, error: Exception = None
@@ -28,46 +63,11 @@ class HTTPError(HTTPException):
         self.message = message
 
         if error is not None:
-            self.errors = self.get_error_details(error)
+            self.errors = get_error_details(error)
         else:
             self.errors = None
 
         super().__init__(status, message)
-
-    @classmethod
-    def get_error_details(cls, error: Exception) -> list[Json]:
-        traceback = exc_info()[2]
-        frame = extract_tb(traceback)[-1] if traceback else cls._FRAME
-
-        file = frame.filename
-        if file.count(cls._ROOT_PATH):
-            file = file[file.index(cls._ROOT_PATH) :]
-
-        base_error = {
-            "type": f"{type(error).__module__}.{type(error).__qualname__}",
-            "detail": LOG.error_message(error, UNEXPECTED_ERROR),
-            "file": file,
-            "line": frame.lineno,
-        }
-        errors = [base_error]
-
-        if isinstance(error, HTTPException):
-            errors[0]["detail"] = error.detail
-            errors[0]["status_code"] = error.status_code
-
-        elif isinstance(error, ValidationError):
-            pydantic_errors = error.errors(include_url=False)
-            errors[0]["detail"] = pydantic_errors[0].get("msg", error.title)
-            errors.extend(pydantic_errors)
-
-        elif isinstance(error, AsyncTimeoutError):
-            errors[0]["strerror"] = error.strerror
-            errors[0]["errno"] = error.errno
-
-        elif isinstance(error, (BadData, ClientResponseError)):
-            errors[0]["detail"] = error.message
-
-        return errors
 
 
 class Unauthorized(HTTPError):
@@ -77,21 +77,24 @@ class Unauthorized(HTTPError):
         """HTTP error status code 401"""
         super().__init__(HTTPStatus.UNAUTHORIZED, message, error)
 
+        if isinstance(error, (SignatureExpired, BadSignature, BadData)):
+            self.errors[0]["message"] = error.message
+
+            if isinstance(error, (SignatureExpired, BadSignature)):
+                signature_details = {"payload": error.payload}
+
+                if isinstance(error, SignatureExpired):
+                    signature_details["date_signed"] = error.date_signed
+
+                self.errors.append(signature_details)
+
 
 class NotFound(HTTPError):
     """HTTP error status code 404"""
 
     def __init__(self, message: ExcMsg) -> None:
         """HTTP error status code 404"""
-        super().__init__(HTTPStatus.NOT_FOUND, message, error)
-
-
-class UnprocessableContent(HTTPError):
-    """HTTP error status code 422"""
-
-    def __init__(self, message: str, error: Exception = None) -> None:
-        """HTTP error status code 422"""
-        super().__init__(HTTPStatus.UNPROCESSABLE_ENTITY, message, error)
+        super().__init__(HTTPStatus.NOT_FOUND, message)
 
 
 class InternalError(HTTPError):
@@ -125,6 +128,10 @@ class GatewayTimeout(HTTPError):
         """HTTP error status code 504"""
         super().__init__(HTTPStatus.GATEWAY_TIMEOUT, message, error)
 
+        if isinstance(error, AsyncTimeoutError):
+            details = {"strerror": error.strerror, "errno": error.errno}
+            self.errors.append(details)
+
 
 class BadGatewayContent(HTTPError):
     """HTTP error status code 502"""
@@ -132,26 +139,52 @@ class BadGatewayContent(HTTPError):
     def __init__(self, message: ExcMsg, error: Exception, body: str) -> None:
         """HTTP error status code 502"""
         super().__init__(HTTPStatus.BAD_GATEWAY, message, error)
-        self.errors.append({"body": body})
+        details: Json = {"raw_body": body}
+
+        if isinstance(error, ContentTypeError):
+            content_details: Json = {
+                "message": error.message,
+                "status_code": error.status,
+                "url": str(error.request_info.url),
+                "headers": (error.headers.items() if error.headers else None),
+            }
+            details.update(content_details)
+
+        elif isinstance(error, JSONDecodeError):
+            json_details: Json = {
+                "message": error.msg,
+                "doc": error.doc,
+                "pos": error.pos,
+                "lineno": error.lineno,
+                "colno": error.colno,
+            }
+            details.update(json_details)
+
+        self.errors.append(details)
 
 
 class ScopusAPIError(HTTPError):
     """Scopus API HTTP status error 502 exception"""
 
     def __init__(
-        self, message: str, code: int, body: Json, headers: Json
+        self,
+        code: int,
+        headers: Json,
+        scopus_error: Json,
+        body: Json,
     ) -> None:
         """Scopus API HTTP status error 502 exception"""
         # Use ExcMsg as a mock replacement only
         super().__init__(HTTPStatus.BAD_GATEWAY, ExcMsg.SCOPUS_API_ERROR)
+        self.message = scopus_error["text"]
+        self.detail = scopus_error["text"]
 
-        code_error = SCOPUS_ERRORS.get(HTTPStatus(code), SCOPUS_API_ERROR)
-        self.errors: list[Json] = [
-            {
-                **headers,
-                "els_status": message,
-                "code_error": code_error,
-                "docs": SCOPUS_DOCS,
-            },
-            body,
-        ]
+        error = {
+            **headers,
+            "status_code": code,
+            "status": HTTPStatus(code).phrase,
+            "error_code": scopus_error["code"],
+            "error_text": scopus_error["text"],
+            "docs": SCOPUS_DOCS,
+        }
+        self.errors: list[Json] = [error, body]

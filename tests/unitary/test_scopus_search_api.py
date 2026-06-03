@@ -9,8 +9,7 @@ from src.adapters.gateway.scopus_search_api import (
     ScopusSearchAPI,
 )
 from src.core.common.types import ResponseBundle
-from src.core.config.scopus import SCOPUS_ERRORS
-from src.core.data.enums import ScopusCode, ExcMsg
+from src.core.data.enums import ExcMsg
 from src.core.domain.http_exceptions import (
     NotFound,
     ScopusAPIError,
@@ -87,7 +86,7 @@ async def test_survey_cancelled_error(mocker: Mocker):
     assert_http_error(info, HTTP_503, ExcMsg.CANCELLED_ERROR)
     assert fix.req.call_count == 15 and spy.call_count == 3
     assert info.value.errors[0]["type"] == fqn(CancelledError)
-    assert info.value.errors[0]["detail"] == "any"
+    assert info.value.errors[0]["message"] == "any"
 
 
 @mark.asyncio
@@ -207,10 +206,10 @@ async def test_search_quota_exceeded():
     fix = search_fix(SEARCH_QUOTA_EXCEEDED)
     with raises(ScopusAPIError) as info:
         await fix.api.search_articles(None)
-    assert_http_error(info, HTTP_502, ScopusCode.QUOTA)
+    assert_http_error(info, HTTP_502, "any")
     assert len(info.value.errors) == 2 and fix.req.call_count == 1
-    assert info.value.errors[0]["els_status"] == ScopusCode.QUOTA
-    assert info.value.errors[0]["code_error"] == SCOPUS_ERRORS.get(HTTP_429)
+    assert info.value.errors[0]["status"] == HTTP_429.phrase
+    assert info.value.errors[0]["status_code"] == HTTP_429
 
 
 @mark.asyncio
@@ -223,4 +222,4 @@ async def test_search_cancelled_error(mocker: Mocker):
     assert_http_error(info, HTTP_503, ExcMsg.CANCELLED_ERROR)
     assert fix.req.call_count == 7 and spy.call_count == 4
     assert info.value.errors[0]["type"] == fqn(CancelledError)
-    assert info.value.errors[0]["detail"] == "any"
+    assert info.value.errors[0]["message"] == "any"

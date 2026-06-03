@@ -162,7 +162,7 @@ def test_cancelled_error(mocker: Mocker):
         SIMILARITY_FILTER.filter(MORE_GROUPS_TWO_SIMILAR, RATIO)
     assert_http_error(info, HTTP_503, ExcMsg.CANCELLED_ERROR)
     assert info.value.errors[0]["type"] == fqn(CancelledError)
-    assert info.value.errors[0]["detail"] == "any"
+    assert info.value.errors[0]["message"] == "any"
 
 
 def test_drop_similar(mocker: Mocker):

@@ -76,7 +76,7 @@ async def test_cancelled_error(mocker: Mocker, client: Client):
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
     errors = assert_error_json(res, HTTP_503, ExcMsg.CANCELLED_ERROR)
     assert errors[0]["type"] == fqn(CancelledError)
-    assert errors[0]["detail"] == "any" and mock.call_count == 3
+    assert errors[0]["message"] == "any" and mock.call_count == 3
 
 
 @mark.asyncio
@@ -85,7 +85,7 @@ async def test_timeout_error(mocker: Mocker, client: Client):
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
     errors = assert_error_json(res, HTTP_504, ExcMsg.CONNECTION_TIMEOUT)
     assert errors[0]["type"] == fqn(AsyncTimeoutError)
-    assert errors[0]["detail"] == "any" and mock.call_count == 3
+    assert errors[0]["message"] == "any" and mock.call_count == 3
 
 
 @mark.asyncio
@@ -94,7 +94,7 @@ async def test_client_connection_error(mocker: Mocker, client: Client):
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
     errors = assert_error_json(res, HTTP_502, ExcMsg.CONNECTION_ERROR)
     assert errors[0]["type"] == fqn(ClientConnectionError)
-    assert errors[0]["detail"] == "any" and mock.call_count == 3
+    assert errors[0]["message"] == "any" and mock.call_count == 3
 
 
 @mark.asyncio
@@ -103,7 +103,7 @@ async def test_uncaught_exception(mocker: Mocker, client: Client):
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
     errors = assert_error_json(res, HTTP_502, ExcMsg.REQUEST_EXCEPTION)
     assert errors[0]["type"] == fqn(RuntimeError)
-    assert errors[0]["detail"] == "any" and mock.call_count == 3
+    assert errors[0]["message"] == "any" and mock.call_count == 3
 
 
 @mark.asyncio
@@ -113,7 +113,7 @@ async def test_content_type_error(mocker: Mocker, client: Client):
     errors = assert_error_json(res, HTTP_502, ExcMsg.INVALID_JSON_ERROR)
     assert len(errors) == 2 and mock.call_count == 3
     assert errors[0]["type"] == fqn(ContentTypeError)
-    assert errors[0]["detail"] and errors[1]["body"] is not None
+    assert errors[0]["message"] and errors[1]["raw_body"] is not None
 
 
 @mark.asyncio
@@ -123,7 +123,7 @@ async def test_no_data_error(mocker: Mocker, client: Client):
     errors = assert_error_json(res, HTTP_502, ExcMsg.INVALID_JSON_ERROR)
     assert len(errors) == 2 and mock.call_count == 3
     assert errors[0]["type"] == fqn(JSONDecodeError)
-    assert errors[0]["detail"] and errors[1]["body"] is not None
+    assert errors[0]["message"] and errors[1]["raw_body"] is not None
 
 
 @mark.asyncio
@@ -133,7 +133,7 @@ async def test_json_decode_error(mocker: Mocker, client: Client):
     errors = assert_error_json(res, HTTP_502, ExcMsg.INVALID_JSON_ERROR)
     assert len(errors) == 2 and mock.call_count == 3
     assert errors[0]["type"] == fqn(JSONDecodeError)
-    assert errors[0]["detail"] and errors[1]["body"] is not None
+    assert errors[0]["message"] and errors[1]["raw_body"] is not None
 
 
 @mark.asyncio

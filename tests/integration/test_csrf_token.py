@@ -49,7 +49,7 @@ async def test_invalid_token(client: Client):
     res = await client.get(URL_CSV, params=CSV_PARAMS)
     errors = assert_error_json(res, HTTP_401, ExcMsg.INVALID_TOKEN)
     assert errors[0]["type"] == fqn(ValidationError)
-    assert errors[0]["detail"] and errors[1]
+    assert errors[0]["message"] and errors[1]
 
 
 @mark.asyncio
@@ -63,7 +63,7 @@ async def test_signature_expired(mocker: Mocker, client: Client):
     mock.assert_called_once_with(SIGNED_TOKEN, MAX_AGE)
     errors = assert_error_json(res, HTTP_401, ExcMsg.EXPIRED_TOKEN)
     assert errors[0]["type"] == fqn(SignatureExpired)
-    assert errors[0]["detail"] == "any"
+    assert errors[0]["message"] == "any"
 
 
 @mark.asyncio
@@ -72,7 +72,7 @@ async def test_bad_signature(client: Client):
     res = await client.get(URL_CSV, params=CSV_PARAMS)
     errors = assert_error_json(res, HTTP_401, ExcMsg.TOKEN_SIGNATURE_ERROR)
     assert errors[0]["type"] == fqn(BadSignature)
-    assert errors[0]["detail"]
+    assert errors[0]["message"]
 
 
 @mark.asyncio

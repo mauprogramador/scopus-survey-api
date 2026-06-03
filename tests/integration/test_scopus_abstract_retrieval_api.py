@@ -165,7 +165,7 @@ async def test_retrieve_quota_exceed(mocker: Mocker, client: Client):
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     errors = assert_error_json(res, HTTP_502, trans(SCOPUS_API_QUOTA_ERROR))
     assert errors is not None and mock.call_count == 3
-    assert errors[0]["els_status"] == QUOTA_ERROR_CODE
+    assert errors[0]["error_code"] == QUOTA_ERROR_CODE
 
 
 @mark.asyncio
@@ -178,4 +178,4 @@ async def test_retrieve_cancelled_error(mocker: Mocker, client: Client):
 
     assert mock.call_count == 8 and spy.call_count == 4
     assert errors[0]["type"] == fqn(CancelledError)
-    assert errors[0]["detail"] == "any"
+    assert errors[0]["message"] == "any"

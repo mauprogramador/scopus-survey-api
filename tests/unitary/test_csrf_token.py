@@ -39,7 +39,7 @@ def test_invalid_token():
         CSRFToken.verify_csrf_token(SIGNED_TOKEN, "any")
     assert_http_error(info, HTTP_401, ExcMsg.INVALID_TOKEN)
     assert info.value.errors[0]["type"] == fqn(ValidationError)
-    assert info.value.errors[0]["detail"] and info.value.errors[1]
+    assert info.value.errors[0]["message"] and info.value.errors[1]
 
 
 def test_signature_expired(mocker: Mocker):
@@ -49,7 +49,7 @@ def test_signature_expired(mocker: Mocker):
     assert_http_error(info, HTTP_401, ExcMsg.EXPIRED_TOKEN)
     mock.assert_called_once_with(SIGNED_TOKEN, MAX_AGE)
     assert info.value.errors[0]["type"] == fqn(SignatureExpired)
-    assert info.value.errors[0]["detail"] == "any"
+    assert info.value.errors[0]["message"] == "any"
 
 
 def test_bad_signature():
@@ -57,7 +57,7 @@ def test_bad_signature():
         CSRFToken.verify_csrf_token("any", CSRF_TOKEN)
     assert_http_error(info, HTTP_401, ExcMsg.TOKEN_SIGNATURE_ERROR)
     assert info.value.errors[0]["type"] == fqn(BadSignature)
-    assert info.value.errors[0]["detail"]
+    assert info.value.errors[0]["message"]
 
 
 def test_incorrect(mocker: Mocker):

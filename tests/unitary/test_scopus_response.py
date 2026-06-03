@@ -61,11 +61,10 @@ def test_quota_exceeded():
     res = ResponseBundle(HTTP_429, headers, RAW_SERVICE_ERROR_QUOTA)
     with raises(ScopusAPIError) as info:
         ScopusResponse.validate_search(res)
-    assert_http_error(info, HTTP_502, ScopusCode.QUOTA)
+    assert_http_error(info, HTTP_502, "any")
     assert len(info.value.errors) and info.value.errors[1]
-    assert info.value.errors[0]["status"] == QUOTA_ERROR_CODE
-    assert info.value.errors[0]["els_status"] == QUOTA_ERROR_CODE
-    assert info.value.errors[0]["code_error"] == SCOPUS_ERRORS.get(HTTP_429)
+    assert info.value.errors[0]["error_code"] == QUOTA_ERROR_CODE
+    assert info.value.errors[0]["status_code"] == HTTP_429
 
 
 def test_rate_limit_exceeded():
@@ -73,11 +72,10 @@ def test_rate_limit_exceeded():
     res = ResponseBundle(HTTP_429, headers, RAW_ERROR_RESPONSE_RATE_LIMIT)
     with raises(ScopusAPIError) as info:
         ScopusResponse.validate_search(res)
-    assert_http_error(info, HTTP_502, ScopusCode.RATE_LIMIT)
+    assert_http_error(info, HTTP_502, "any")
     assert len(info.value.errors) and info.value.errors[1]
-    assert info.value.errors[0]["status"] == RATE_LIMIT_ERROR_CODE
-    assert info.value.errors[0]["els_status"] == RATE_LIMIT_ERROR_CODE
-    assert info.value.errors[0]["code_error"] == SCOPUS_ERRORS.get(HTTP_429)
+    assert info.value.errors[0]["error_code"] == RATE_LIMIT_ERROR_CODE
+    assert info.value.errors[0]["status_code"] == HTTP_429
 
 
 def test_json_validation_error():
@@ -87,7 +85,7 @@ def test_json_validation_error():
     assert_http_error(info, HTTP_500, ExcMsg.VALIDATE_ERROR)
     assert info.value.errors[0]["type"] == fqn(ValidationError)
     assert info.value.errors[0]["file"] and info.value.errors[0]["line"]
-    assert info.value.errors[0]["detail"]
+    assert info.value.errors[0]["message"]
     assert info.value.errors[1]["type"] == "model_type"
 
 
@@ -98,4 +96,4 @@ def test_json_key_error():
     assert_http_error(info, HTTP_500, ExcMsg.VALIDATE_ERROR)
     assert info.value.errors[0]["type"] == fqn(KeyError)
     assert info.value.errors[0]["file"] and info.value.errors[0]["line"]
-    assert info.value.errors[0]["detail"]
+    assert info.value.errors[0]["message"]

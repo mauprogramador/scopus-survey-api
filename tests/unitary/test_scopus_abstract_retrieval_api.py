@@ -9,8 +9,7 @@ from src.adapters.gateway.scopus_abstract_retrieval_api import (
     ScopusResponse,
 )
 from src.core.common.types import ResponseBundle
-from src.core.config.scopus import SCOPUS_ERRORS
-from src.core.data.enums import Column, ScopusCode, ExcMsg
+from src.core.data.enums import Column, ExcMsg
 from src.core.domain.http_exceptions import ScopusAPIError, ServiceUnavailable
 from tests.conftest import assert_http_error
 from tests.mocks.errors import MORE_CANCELLED
@@ -127,10 +126,10 @@ async def test_retrieve_quota_exceeded():
     fix = abstract_fix(ABSTRACT_QUOTA_EXCEEDED, search_raw(1))
     with raises(ScopusAPIError) as info:
         await fix.api.retrieve_abstracts(API_KEY)
-    assert_http_error(info, HTTP_502, ScopusCode.QUOTA)
+    assert_http_error(info, HTTP_502, "any")
     assert len(info.value.errors) == 2 and fix.req.call_count == 1
-    assert info.value.errors[0]["els_status"] == ScopusCode.QUOTA
-    assert info.value.errors[0]["code_error"] == SCOPUS_ERRORS.get(HTTP_429)
+    assert info.value.errors[0]["status"] == HTTP_429.phrase
+    assert info.value.errors[0]["status_code"] == HTTP_429
 
 
 @mark.asyncio
@@ -143,4 +142,4 @@ async def test_retrieve_cancelled_error(mocker: Mocker):
     assert_http_error(info, HTTP_503, ExcMsg.CANCELLED_ERROR)
     assert fix.req.call_count == 7 and spy.call_count == 4
     assert info.value.errors[0]["type"] == fqn(CancelledError)
-    assert info.value.errors[0]["detail"] == "any"
+    assert info.value.errors[0]["message"] == "any"
