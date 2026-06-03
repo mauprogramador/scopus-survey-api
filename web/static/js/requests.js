@@ -31,6 +31,7 @@ import { fieldsValidity, noRadios } from './validation.js';
 // Headers
 const headers = {
   Accept: 'text/csv',
+  'Accept-Language': lang,
   'Content-Type': 'text/csv; charset=utf-8',
   'Access-Control-Allow-Origin': '*',
   'X-CSRF-Token': csrfToken,
