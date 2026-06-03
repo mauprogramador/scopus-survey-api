@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ScopusSurveyAPI v3.2.5\n"
 "POT-Creation-Date: 2025-08-11 01:42-0400\n"
-"PO-Revision-Date: 2026-04-09 17:45-0400\n"
+"PO-Revision-Date: 2026-06-03 03:05-0400\n"
 "Last-Translator: mauprogramador <sir.silvabmauricio@gmail.com>\n"
 "Language-Team: mauprogramador sir.silvabmauricio@gmail.com\n"
 "Language: en\n"
@@ -19,65 +19,113 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: error.po\n"
 
-msgid "connection_error"
+msgid "api.connection_error"
 msgstr "Connection error in request"
 
-msgid "connection_timeout"
+msgid "api.connection_timeout"
 msgstr "Request connection timeout"
 
-msgid "request_exception"
+msgid "api.request_exception"
 msgstr "Unexpected error from request"
 
-msgid "missing_token"
-msgstr "Missing CSRF Token"
-
-msgid "invalid_token"
+msgid "api.invalid_token"
 msgstr "Invalid CSRF Token"
 
-msgid "token_cookie_error"
+msgid "api.token_cookie_error"
 msgstr "Missing CSRF Token Cookie"
 
-msgid "token_header_error"
-msgstr "Missing or invalid CSRF Token Header"
+msgid "api.token_header_error"
+msgstr "Missing CSRF Token Header"
 
-msgid "token_session_error"
-msgstr "Missing or invalid CSRF Token Session"
-
-msgid "token_signature_error"
+msgid "api.token_signature_error"
 msgstr "CSRF Token signatures do not match"
 
-msgid "expired_token"
+msgid "api.expired_token"
 msgstr "CSRF token has expired"
 
-msgid "quota_exceeded"
-msgstr "API Key has exceeded the request quota"
-
-msgid "rate_limit_exceeded"
-msgstr "Request rate limit per second exceeded"
-
-msgid "validate_error"
+msgid "api.validate_error"
 msgstr "Error in validate response from Scopus API"
 
-msgid "invalid_json_error"
+msgid "api.invalid_json_error"
 msgstr "Invalid JSON response from Scopus API"
 
-msgid "scopus_api_error"
-msgstr "Scopus API Error"
+msgid "api.data_mismatch_error"
+msgstr "Mismatch in total results retrieved"
 
-msgid "cancelled_error"
-msgstr "Unexpected cancellation of the tasks"
+msgid "api.cancelled_error"
+msgstr "Unexpected cancellation of requests"
 
-msgid "internal_error"
-msgstr "Unexpected internal error occurred"
-
-msgid "serialize_error"
-msgstr "Error serializing error details"
-
-msgid "articles_not_found"
+msgid "api.articles_not_found"
 msgstr "No articles found"
 
-msgid "csv_not_found"
+msgid "api.csv_not_found"
 msgstr "No CSV file found"
 
-msgid "unexpected_error"
+msgid "api.unexpected_error"
 msgstr "An unexpected error occurred"
+
+msgid "scopus.400.invalid_input"
+msgstr "Invalid information or query submitted"
+
+msgid "scopus.401.authorization_error"
+msgstr "Invalid API Key submitted"
+
+msgid "scopus.401.apikey_invalid"
+msgstr "Invalid API Key submitted"
+
+msgid "scopus.404.resource_not_found"
+msgstr "Resource not found"
+
+msgid "scopus.429.quota_exceeded"
+msgstr "API Key has exceeded the request quota"
+
+msgid "scopus.429.rate_limit_exceeded"
+msgstr "Request rate limit per second exceeded"
+
+msgid "scopus.500.system_error"
+msgstr "Internal server processing failure"
+
+msgid "scopus.400"
+msgstr "Invalid information or query submitted"
+
+msgid "scopus.401"
+msgstr "Missing or invalid authentication credentials"
+
+msgid "scopus.403"
+msgstr "Authentication or entitlements validation failure"
+
+msgid "scopus.404"
+msgstr "Resource not found"
+
+msgid "scopus.429"
+msgstr "Quota or Rate Limit exceeded"
+
+msgid "scopus.500"
+msgstr "Internal server processing failure"
+
+msgid "scopus.default"
+msgstr "Unexpected error from Scopus API"
+
+msgid "starlette.unexpected_error"
+msgstr "Unexpected HTTP error occurred"
+
+msgid "fastapi.internal_error"
+msgstr "Unexpected internal error occurred"
+
+msgid "fastapi.request_validation_error"
+msgstr "Validation error in request data"
+
+msgid "fastapi.response_validation_error"
+msgstr "Validation error in response data"
+
+msgid "fastapi.default"
+msgstr "Unexpected error from FastAPI"
+
+msgid "pydantic.validation_error"
+msgstr "Internal data validation failure"
+
+msgid "slowapi.slowapi_rate_error"
+msgstr "Request rate limit exceeded"
+
+msgid "slowapi.default"
+msgstr "Unexpected error from SlowAPI"

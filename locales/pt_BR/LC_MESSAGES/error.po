@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ScopusSurveyAPI v3.2.5\n"
 "POT-Creation-Date: 2025-08-11 01:42-0400\n"
-"PO-Revision-Date: 2026-04-09 17:46-0400\n"
+"PO-Revision-Date: 2026-06-03 03:06-0400\n"
 "Last-Translator: mauprogramador <sir.silvabmauricio@gmail.com>\n"
 "Language-Team: mauprogramador sir.silvabmauricio@gmail.com\n"
 "Language: pt_BR\n"
@@ -19,65 +19,113 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: error.po\n"
 
-msgid "connection_error"
+msgid "api.connection_error"
 msgstr "Erro de conexão na solicitação"
 
-msgid "connection_timeout"
-msgstr "Tempo limite de conexão da solicitação"
+msgid "api.connection_timeout"
+msgstr "Tempo de conexão da solicitação esgotado"
 
-msgid "request_exception"
-msgstr "Erro inesperado da solicitação"
+msgid "api.request_exception"
+msgstr "Erro inesperado na solicitação"
 
-msgid "missing_token"
-msgstr "Token CSRF ausente"
-
-msgid "invalid_token"
+msgid "api.invalid_token"
 msgstr "Token CSRF inválido"
 
-msgid "token_cookie_error"
+msgid "api.token_cookie_error"
 msgstr "Cookie do Token CSRF ausente"
 
-msgid "token_header_error"
-msgstr "Cabeçalho do Token CSRF ausente ou inválido"
+msgid "api.token_header_error"
+msgstr "Cabeçalho do Token CSRF ausente"
 
-msgid "token_session_error"
-msgstr "Sessão do Token CSRF ausente ou inválida"
+msgid "api.token_signature_error"
+msgstr "Assinaturas do Token CSRF não correspondem"
 
-msgid "token_signature_error"
-msgstr "As assinaturas do Token CSRF não correspondem"
+msgid "api.expired_token"
+msgstr "Token CSRF expirou"
 
-msgid "expired_token"
-msgstr "O Token CSRF expirou"
+msgid "api.validate_error"
+msgstr "Erro ao validar resposta da API da Scopus"
 
-msgid "quota_exceeded"
-msgstr "A chave da API excedeu a cota de solicitações"
+msgid "api.invalid_json_error"
+msgstr "Resposta JSON inválida da API da Scopus"
 
-msgid "rate_limit_exceeded"
-msgstr "Limite de taxa de solicitação por segundo excedido"
+msgid "api.data_mismatch_error"
+msgstr "Incompatibilidade no total de resultados obtidos"
 
-msgid "validate_error"
-msgstr "Erro na resposta de validação da API do Scopus"
+msgid "api.cancelled_error"
+msgstr "Cancelamento inesperado das solicitações"
 
-msgid "invalid_json_error"
-msgstr "Resposta JSON inválida da API do Scopus"
-
-msgid "scopus_api_error"
-msgstr "Erro da API do Scopus"
-
-msgid "cancelled_error"
-msgstr "Cancelamento inesperado das tarefas"
-
-msgid "internal_error"
-msgstr "Ocorreu um erro interno inesperado"
-
-msgid "serialize_error"
-msgstr "Erro ao serializar os detalhes do erro"
-
-msgid "articles_not_found"
+msgid "api.articles_not_found"
 msgstr "Nenhum artigo encontrado"
 
-msgid "csv_not_found"
+msgid "api.csv_not_found"
 msgstr "Nenhum arquivo CSV encontrado"
 
-msgid "unexpected_error"
+msgid "api.unexpected_error"
 msgstr "Ocorreu um erro inesperado"
+
+msgid "scopus.400.invalid_input"
+msgstr "Informações ou consultas submetidas inválidas"
+
+msgid "scopus.401.authorization_error"
+msgstr "Chave de API submetida inválida"
+
+msgid "scopus.401.apikey_invalid"
+msgstr "Chave de API submetida inválida"
+
+msgid "scopus.404.resource_not_found"
+msgstr "Recurso não encontrado"
+
+msgid "scopus.429.quota_exceeded"
+msgstr "Chave de API excedeu a cota de solicitações"
+
+msgid "scopus.429.rate_limit_exceeded"
+msgstr "Limite de taxa de solicitação por segundo excedido"
+
+msgid "scopus.500.system_error"
+msgstr "Falha no processamento interno do servidor"
+
+msgid "scopus.400"
+msgstr "Informações ou consultas submetidas inválidas"
+
+msgid "scopus.401"
+msgstr "Credenciais de autenticação ausentes ou inválidas"
+
+msgid "scopus.403"
+msgstr "Falha de autenticação ou na validação de direitos"
+
+msgid "scopus.404"
+msgstr "Recurso não encontrado"
+
+msgid "scopus.429"
+msgstr "Cota ou Limite de taxa excedidos"
+
+msgid "scopus.500"
+msgstr "Falha no processamento interno do servidor"
+
+msgid "scopus.default"
+msgstr "Erro inesperado da API da Scopus"
+
+msgid "starlette.unexpected_error"
+msgstr "Ocorreu um erro HTTP inesperado"
+
+msgid "fastapi.internal_error"
+msgstr "Ocorreu um erro interno inesperado"
+
+msgid "fastapi.request_validation_error"
+msgstr "Erro de validação nos dados da solicitação"
+
+msgid "fastapi.response_validation_error"
+msgstr "Erro de validação nos dados de resposta"
+
+msgid "fastapi.default"
+msgstr "Erro inesperado do FastAPI"
+
+msgid "pydantic.validation_error"
+msgstr "Falha na validação interna dos dados"
+
+msgid "slowapi.slowapi_rate_error"
+msgstr "Limite de taxa de solicitação excedido"
+
+msgid "slowapi.default"
+msgstr "Erro inesperado da SlowAPI"
