@@ -1,4 +1,4 @@
-from gettext import GNUTranslations, translation
+import gettext
 from unittest.mock import MagicMock
 
 from pytest import fixture, mark, raises
@@ -19,7 +19,7 @@ from tests.mocks.helpers import Patch
 from tests.mocks.raw import REQUEST
 
 
-TRANSLATIONS = Patch(load_translations, translation)
+TRANSLATIONS = Patch(load_translations, gettext.translation)
 _TRANSLATIONS = {
     "starlette.unexpected_error": "any",
     "starlette.default": "any",
@@ -54,7 +54,9 @@ def translate_error_fixture():
     def _mock_gettext(key: str) -> str:
         return _TRANSLATIONS[key]
 
-    _ERRORS[Lang.EN_US] = MagicMock(GNUTranslations, gettext=_mock_gettext)
+    _ERRORS[Lang.EN_US] = MagicMock(
+        gettext.GNUTranslations, gettext=_mock_gettext
+    )
     yield
 
 

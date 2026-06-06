@@ -1,7 +1,8 @@
-from concurrent.futures import CancelledError, Future
+import concurrent.futures as concurrent
 from datetime import datetime
 
-from pandas import DataFrame, Series, isna, to_datetime
+import pandas as pd
+from pandas import DataFrame, Series
 from pandas.api.typing import DataFrameGroupBy
 from pytest import raises
 from pytest_mock import MockerFixture as Mocker
@@ -28,9 +29,9 @@ from tests.mocks.unitary import (
 
 
 SIMILARITY_FILTER = ArticlesSimilarityFilter()
-TO_DATETIME = fqn(ArticlesSimilarityFilter, to_datetime)
+TO_DATETIME = fqn(ArticlesSimilarityFilter, pd.to_datetime)
 LOG_DEBUG = Patch(ArticlesSimilarityFilter, LOGGER_MOCK.debug)
-CANCELLED = Patch(Future.result, [None, CancelledError("any")])
+CANCELLED = Patch(concurrent.Future.result, [None, CancelledError("any")])
 RATIO = 80
 
 
@@ -87,7 +88,7 @@ def test_more_groups_no_similar_titles(mocker: Mocker):
 
 
 def test_to_datetime_no_left(mocker: Mocker):
-    spy_to_datetime = mocker.patch(TO_DATETIME, wraps=to_datetime)
+    spy_to_datetime = mocker.patch(TO_DATETIME, wraps=pd.to_datetime)
     spy_dropna = mocker.spy(DataFrame, "dropna")
     spy_log_debug = mocker.patch(**LOG_DEBUG)
 
@@ -100,12 +101,12 @@ def test_to_datetime_no_left(mocker: Mocker):
     spy_dropna.assert_called_once()
 
     assert all(isinstance(value, str) for value in df_to_datetime)
-    assert all(isna(value) for value in df_dropna[Column.DATE])
+    assert all(pd.isna(value) for value in df_dropna[Column.DATE])
     assert result.equals(NO_DATETIME_LEFT)
 
 
 def test_to_datetime_one_left(mocker: Mocker):
-    spy_to_datetime = mocker.patch(TO_DATETIME, wraps=to_datetime)
+    spy_to_datetime = mocker.patch(TO_DATETIME, wraps=pd.to_datetime)
     spy_dropna = mocker.spy(DataFrame, "dropna")
     spy_log_debug = mocker.patch(**LOG_DEBUG)
 
@@ -119,7 +120,7 @@ def test_to_datetime_one_left(mocker: Mocker):
 
     assert all(isinstance(value, str) for value in df_to_datetime)
     assert isinstance(df_dropna[Column.DATE].iloc[0], datetime)
-    assert isna(df_dropna[Column.DATE].iloc[1])
+    assert pd.isna(df_dropna[Column.DATE].iloc[1])
     assert result.equals(ONE_DATETIME_LEFT)
 
 
@@ -157,11 +158,11 @@ def test_discard_all_older_similar():
 
 
 def test_cancelled_error(mocker: Mocker):
-    mocker.patch(**CANCELLED)
+    mocker.patch(**CANCELLED([None, concurrent.CancelledError("any")]))
     with raises(ServiceUnavailable) as info:
         SIMILARITY_FILTER.filter(MORE_GROUPS_TWO_SIMILAR, RATIO)
     assert_http_error(info, HTTP_503, ExcMsg.CANCELLED_ERROR)
-    assert info.value.errors[0]["type"] == fqn(CancelledError)
+    assert info.value.errors[0]["type"] == fqn(concurrent.CancelledError)
     assert info.value.errors[0]["message"] == "any"
 
 

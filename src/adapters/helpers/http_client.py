@@ -1,21 +1,12 @@
-from asyncio import CancelledError, Semaphore
-from asyncio import TimeoutError as AsyncTimeoutError
-from asyncio import get_event_loop, sleep
-from bisect import bisect_left
+import asyncio
+import bisect
+import time
 from http import HTTPStatus
 from json import JSONDecodeError
-from time import perf_counter
 
-from aiohttp import (
-    ClientConnectionError,
-    ClientPayloadError,
-    ClientSession,
-    ClientTimeout,
-    ContentTypeError,
-    TCPConnector,
-)
-from aiohttp_retry import JitterRetry, RetryClient
-from aiolimiter import AsyncLimiter
+import aiohttp
+import aiohttp_retry as aioretry
+import aiolimiter
 
 from src.core.common.types import Json, RateStrategy, ResponseBundle
 from src.core.config.scopus import SCOPUS_HEADERS
@@ -41,7 +32,7 @@ class HTTPClient:
     _BASE_STRATEGY = 100
     _START_TIMEOUT = 0.5
     _MAX_TIMEOUT = 15.0
-    _TIMEOUT = ClientTimeout(total=15.0)
+    _TIMEOUT = aiohttp.ClientTimeout(total=15.0)
     _JSON_ERROR = JSONDecodeError("Expecting value", "Scopus JSON", 0)
     # Strategy:
     # - Rate (req/sec)
@@ -67,9 +58,9 @@ class HTTPClient:
         HTTPStatus.GATEWAY_TIMEOUT.value,
     }
     _RETRYABLE_EXCEPTIONS = (
-        AsyncTimeoutError,
-        ClientConnectionError,
-        ClientPayloadError,
+        asyncio.TimeoutError,
+        aiohttp.ClientConnectionError,
+        aiohttp.ClientPayloadError,
     )
     _KEYS = sorted(_STRATEGIES.keys())
 
@@ -77,26 +68,26 @@ class HTTPClient:
         """Make HTTP requests with throttling and retry mechanisms"""
         self._strategy: RateStrategy = self._STRATEGIES[self._BASE_STRATEGY]
         self._last_request_time: int = 0
-        self._rate_limiter: AsyncLimiter = None
-        self._semaphore: Semaphore = None
-        self._session: ClientSession = None
-        self._retry_options: JitterRetry = None
-        self._retry_client: RetryClient = None
+        self._rate_limiter: aiolimiter.AsyncLimiter = None
+        self._semaphore: asyncio.Semaphore = None
+        self._session: aiohttp.ClientSession = None
+        self._retry_options: aioretry.JitterRetry = None
+        self._retry_client: aioretry.RetryClient = None
         self._mount()
 
     def _mount(self) -> None:
-        self._rate_limiter = AsyncLimiter(
+        self._rate_limiter = aiolimiter.AsyncLimiter(
             max_rate=self._strategy.rate, time_period=self._RATE_PERIOD
         )
-        self._semaphore = Semaphore(self._strategy.concurrent)
-        connector = TCPConnector(limit=self._strategy.concurrent)
+        self._semaphore = asyncio.Semaphore(self._strategy.concurrent)
+        connector = aiohttp.TCPConnector(limit=self._strategy.concurrent)
 
-        self._session = ClientSession(
+        self._session = aiohttp.ClientSession(
             connector=connector,
             headers=SCOPUS_HEADERS,
             timeout=self._TIMEOUT,
         )
-        self._retry_options = JitterRetry(
+        self._retry_options = aioretry.JitterRetry(
             attempts=self._ATTEMPTS,
             start_timeout=self._START_TIMEOUT,
             max_timeout=self._MAX_TIMEOUT,
@@ -104,7 +95,7 @@ class HTTPClient:
             statuses=self._RETRYABLE_STATUS_CODES,
             exceptions=self._RETRYABLE_EXCEPTIONS,
         )
-        self._retry_client = RetryClient(
+        self._retry_client = aioretry.RetryClient(
             client_session=self._session,
             retry_options=self._retry_options,
         )
@@ -114,7 +105,7 @@ class HTTPClient:
         if (total_requests - self._LEEWAY) <= self._BASE_STRATEGY:
             return None
 
-        index = bisect_left(self._KEYS, (total_requests - self._LEEWAY))
+        index = bisect.bisect_left(self._KEYS, (total_requests - self._LEEWAY))
         key = self._KEYS[index] if index < len(self._KEYS) else self._KEYS[-1]
 
         if self._STRATEGIES[key] != self._strategy:
@@ -125,12 +116,12 @@ class HTTPClient:
         return None
 
     async def _additional_sleep(self) -> None:
-        current_time = get_event_loop().time()
+        current_time = asyncio.get_event_loop().time()
         elapsed = current_time - self._last_request_time
 
         if elapsed < self._strategy.sleep:
-            await sleep(self._strategy.sleep - elapsed)
-        self._last_request_time = get_event_loop().time()
+            await asyncio.sleep(self._strategy.sleep - elapsed)
+        self._last_request_time = asyncio.get_event_loop().time()
 
     async def request(self, url: str) -> ResponseBundle:
         response = await self._send(url)
@@ -139,7 +130,7 @@ class HTTPClient:
             response.code == HTTPStatus.TOO_MANY_REQUESTS
             and response.headers.get("X-RateLimit-Remaining") == "0"
         ):
-            await sleep(2)  # Wait 2 secs
+            await asyncio.sleep(2)  # Wait 2 secs
             response = await self._send(url)
 
         return response
@@ -151,21 +142,21 @@ class HTTPClient:
                 await self._additional_sleep()
 
             try:
-                start_time = perf_counter()
+                start_time = time.perf_counter()
                 response = await self._retry_client.get(
                     url, raise_for_status=False
                 )
-                process_time = perf_counter() - start_time
+                process_time = time.perf_counter() - start_time
 
                 logger.api_call(url, response.status, process_time)
 
-            except CancelledError as exc:
+            except asyncio.CancelledError as exc:
                 raise exc
 
-            except AsyncTimeoutError as exc:
+            except asyncio.TimeoutError as exc:
                 raise GatewayTimeout(ExcMsg.CONNECTION_TIMEOUT, exc) from exc
 
-            except ClientConnectionError as exc:
+            except aiohttp.ClientConnectionError as exc:
                 raise BadGateway(ExcMsg.CONNECTION_ERROR, exc) from exc
 
             except Exception as exc:
@@ -176,7 +167,7 @@ class HTTPClient:
                 if data is None:
                     raise self._JSON_ERROR
 
-            except (ContentTypeError, JSONDecodeError) as exc:
+            except (aiohttp.ContentTypeError, JSONDecodeError) as exc:
                 body = await response.text()
                 raise BadGatewayContent(
                     ExcMsg.INVALID_JSON_ERROR, exc, body
@@ -185,6 +176,6 @@ class HTTPClient:
             return ResponseBundle(response.status, response.headers, data)
 
     async def close(self) -> None:
-        await sleep(0)
+        await asyncio.sleep(0)
         await self._retry_client.close()
         await self._session.close()

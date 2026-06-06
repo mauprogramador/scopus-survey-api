@@ -2,7 +2,8 @@ from http import HTTPStatus
 from pathlib import Path
 from typing import Annotated
 
-from fastapi import Depends, Query, Request
+import fastapi
+from fastapi.requests import Request as FastAPIRequest
 from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
 from fastapi.routing import APIRouter
 
@@ -57,7 +58,7 @@ async def favicon():
     response_class=HTMLResponse,
 )
 async def web_form_page(
-    request: Request,
+    request: FastAPIRequest,
     lang: Lang,
 ) -> HTMLResponse:
 
@@ -80,15 +81,15 @@ async def web_form_page(
     "/api/combination",
     status_code=HTTPStatus.OK,
     tags=["API"],
-    dependencies=[Depends(CSRFToken.verify_csrf_token)],
+    dependencies=[fastapi.Depends(CSRFToken.verify_csrf_token)],
     summary="Survey the totals of keyword combinations",
     responses=JSON_RESPONSE,
     response_class=JSONResponse,
 )
 @LIMITER.limit(LIMIT)
 async def survey_total_combinations(
-    request: Request,  # pylint: disable=W0613
-    params: Annotated[CombinationParams, Query()],
+    request: FastAPIRequest,  # pylint: disable=W0613
+    params: Annotated[CombinationParams, fastapi.Query()],
 ) -> JSONResponse:
     logger.debug(params.model_dump())
 
@@ -102,15 +103,15 @@ async def survey_total_combinations(
     "/api/survey",
     status_code=HTTPStatus.OK,
     tags=["API"],
-    dependencies=[Depends(CSRFToken.verify_csrf_token)],
+    dependencies=[fastapi.Depends(CSRFToken.verify_csrf_token)],
     summary="Survey bibliographies and return the CSV file",
     responses=CSV_RESPONSE,
     response_class=FileResponse,
 )
 @LIMITER.limit(LIMIT)
 async def survey_bibliographic_data(
-    request: Request,  # pylint: disable=W0613
-    params: Annotated[SearchParams, Query()],
+    request: FastAPIRequest,  # pylint: disable=W0613
+    params: Annotated[SearchParams, fastapi.Query()],
 ) -> FileResponse:
     logger.debug(params.model_dump())
 
@@ -124,15 +125,15 @@ async def survey_bibliographic_data(
     "/api/csv",
     status_code=HTTPStatus.OK,
     tags=["API"],
-    dependencies=[Depends(CSRFToken.verify_csrf_token)],
+    dependencies=[fastapi.Depends(CSRFToken.verify_csrf_token)],
     summary="Download the pre-existing CSV file",
     responses=CSV_RESPONSE,
     response_class=FileResponse,
 )
 @LIMITER.limit(LIMIT)
 async def download_csv(
-    request: Request,  # pylint: disable=W0613
-    params: Annotated[CSVParams, Query()],
+    request: FastAPIRequest,  # pylint: disable=W0613
+    params: Annotated[CSVParams, fastapi.Query()],
 ) -> FileResponse:
     logger.debug(params.model_dump())
 

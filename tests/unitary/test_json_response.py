@@ -1,4 +1,4 @@
-from json import loads
+import json
 
 from pydantic_core import PydanticUndefined, to_jsonable_python
 from pytest_mock import MockerFixture as Mocker
@@ -42,7 +42,7 @@ def test_error_json():
         "any",
         [{"type": "any", "loc": "any"}],
     )
-    raw: Json = loads(model.body.decode())  # type: ignore
+    raw: Json = json.loads(model.body.decode())  # type: ignore
 
     assert not raw["success"] and raw["timestamp"] is not None
     assert raw["status"] == HTTP_500.phrase
@@ -63,7 +63,7 @@ def test_error_json_dict_errors():
         "any",
         {"type": "any"},
     )
-    raw: Json = loads(model.body.decode())  # type: ignore
+    raw: Json = json.loads(model.body.decode())  # type: ignore
 
     assert not raw["success"] and raw["message"] == "any"
     assert raw["status_code"] == HTTP_500
@@ -77,7 +77,7 @@ def test_error_json_serialize_fallback():
         "any",
         [{"type": PydanticUndefined}, {"exc": RuntimeError}],
     )
-    raw: Json = loads(model.body.decode())  # type: ignore
+    raw: Json = json.loads(model.body.decode())  # type: ignore
 
     assert not raw["success"] and raw["message"] == "any"
     assert raw["status_code"] == HTTP_500
@@ -88,7 +88,7 @@ def test_error_json_serialize_fallback():
 def test_error_json_serialize_error(mocker: Mocker):
     mocker.patch(JSONABLE, side_effect=ValueError("any"))
     model = ErrorJSON(REQUEST, HTTP_500, "any", [{"any": "any"}])
-    raw: Json = loads(model.body.decode())  # type: ignore
+    raw: Json = json.loads(model.body.decode())  # type: ignore
 
     assert not raw["success"] and raw["message"] == "any"
     assert raw["status_code"] == HTTP_500
@@ -118,7 +118,7 @@ def test_success_json():
         "any",
         {"any": "any"},
     )
-    raw: Json = loads(model.body.decode())  # type: ignore
+    raw: Json = json.loads(model.body.decode())  # type: ignore
 
     assert raw["success"] and raw["timestamp"] is not None
     assert raw["status"] == HTTP_200.phrase

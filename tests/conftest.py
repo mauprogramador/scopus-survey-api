@@ -1,12 +1,12 @@
+import json
 import logging
 from http import HTTPStatus
-from json import loads
 from urllib.parse import urljoin
 
-from httpx import ASGITransport, AsyncClient, Response
+import httpx
+import uvloop
 from pytest import ExceptionInfo, LogCaptureFixture, fixture
 from pytest_asyncio import fixture as async_fixture
-from uvloop import EventLoopPolicy, install
 
 from src.adapters.presenters.json_response import ErrorJSON, ErrorResponse
 from src.adapters.presenters.template_response import TemplateResponse
@@ -19,10 +19,10 @@ from src.utils.logger import TEST_FORMATTER
 from tests.mocks.raw import CSRF_TOKEN, CSV_FILE_NAME, SIGNED_TOKEN
 
 
-install()
+uvloop.install()
 TIMEOUT = 15
 BASE_URL = urljoin("http://127.0.0.1:123", PREFIX)
-TRANSPORT = ASGITransport(app=app, client=("127.0.0.1", 123))
+TRANSPORT = httpx.ASGITransport(app=app, client=("127.0.0.1", 123))
 
 
 @fixture(scope="session")
@@ -33,7 +33,7 @@ def session_data():
 
 @fixture(scope="session")
 def event_loop_policy():
-    return EventLoopPolicy()
+    return uvloop.EventLoopPolicy()
 
 
 @fixture(autouse=True, scope="function")
@@ -67,7 +67,7 @@ def lifespan():
 @async_fixture(name="client")
 async def httpx_async_client():
     """HTTPX Async Client with ASGITransport fixture"""
-    async with AsyncClient(
+    async with httpx.AsyncClient(
         cookies={"csrf-token": SIGNED_TOKEN},
         headers={"X-CSRF-Token": CSRF_TOKEN},
         timeout=TIMEOUT,
@@ -88,13 +88,13 @@ def assert_http_error(
 
 
 def assert_error_json(
-    response: ErrorJSON | Response,
+    response: ErrorJSON | httpx.Response,
     code: HTTPStatus,
     message: str,
 ) -> list[Json] | None:
     """Asserts ErrorJson and HTTPX Response data"""
     if isinstance(response, ErrorJSON):
-        data: Json = loads(response.body.decode())  # type: ignore
+        data: Json = json.loads(response.body.decode())  # type: ignore
     else:
         data: Json = response.json()
 

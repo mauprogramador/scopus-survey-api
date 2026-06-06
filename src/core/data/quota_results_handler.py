@@ -1,4 +1,4 @@
-from math import ceil
+import math
 
 from src.core.common.types import Json, Quota
 from src.core.data.enums import ExcMsg
@@ -49,7 +49,7 @@ class QuotaResultsHandler:
         if self.total_results == 0:
             raise NotFound(ExcMsg.ARTICLES_NOT_FOUND)
 
-        self.pages_count = ceil(self.total_results / self.items_per_page)
+        self.pages_count = math.ceil(self.total_results / self.items_per_page)
 
     def validate_integrity(self) -> None:
         if self.total_results != len(self.entry):
@@ -64,7 +64,9 @@ class QuotaResultsHandler:
 
         if self.total_results > possible_searches:
             self.total_results = possible_searches + len(self.entry)
-            self.pages_count = ceil(self.total_results / self.items_per_page)
+            self.pages_count = math.ceil(
+                self.total_results / self.items_per_page
+            )
 
     def handle_abstract_quota(self, quota: tuple[Quota, int]) -> None:
         if self.total_abstracts > quota[0].remaining:

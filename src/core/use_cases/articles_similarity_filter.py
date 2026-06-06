@@ -1,13 +1,10 @@
-from concurrent.futures import (
-    CancelledError,
-    ProcessPoolExecutor,
-    as_completed,
-)
-from itertools import combinations
-from os import cpu_count, sched_getaffinity
+import concurrent.futures as concurrent
+import itertools
+import os
 
-from pandas import DataFrame, to_datetime
-from thefuzz.fuzz import ratio  # type: ignore
+import pandas as pd
+from pandas import DataFrame
+from thefuzz.fuzz import ratio as fuzz_ratio  # type: ignore
 
 from src.core.data.enums import Column, ExcMsg
 from src.core.domain.http_exceptions import ServiceUnavailable
@@ -26,9 +23,9 @@ class ArticlesSimilarityFilter:
         self._filtered_df: DataFrame = None
         self._ratio: int = None
         try:
-            self._workers = min(len(sched_getaffinity(0)) - 1, 4)
+            self._workers = min(len(os.sched_getaffinity(0)) - 1, 4)
         except AttributeError:
-            cpu_cores = cpu_count()
+            cpu_cores = os.cpu_count()
             self._workers = cpu_cores - 1 if cpu_cores else 4
 
     def _drop_singles(self, group: DataFrame) -> bool:
@@ -41,17 +38,17 @@ class ArticlesSimilarityFilter:
         title = group[Column.TITLE]
 
         if title.shape[0] == 2:
-            if ratio(title.iloc[0], title.iloc[1]) > similarity_ratio:
+            if fuzz_ratio(title.iloc[0], title.iloc[1]) > similarity_ratio:
                 return int(group[Column.DATE].idxmin())
 
             return None
 
         rows_indexes: set[int] = set()
 
-        for indexes in combinations(range(group.shape[0]), size):
+        for indexes in itertools.combinations(range(group.shape[0]), size):
             titles = title.iloc[indexes[0]], title.iloc[indexes[1]]
 
-            if ratio(titles[0], titles[1]) > similarity_ratio:
+            if fuzz_ratio(titles[0], titles[1]) > similarity_ratio:
                 rows_indexes.add(group.index[indexes[0]])
                 rows_indexes.add(group.index[indexes[1]])
 
@@ -88,7 +85,7 @@ class ArticlesSimilarityFilter:
         max_workers = min(self._filtered_df.shape[0], self._workers)
         logger.debug({"max_workers": max_workers})
 
-        with ProcessPoolExecutor(max_workers) as executor:
+        with concurrent.ProcessPoolExecutor(max_workers) as executor:
             all_tasks = {
                 executor.submit(
                     ArticlesSimilarityFilter._get_similar_title_indexes,
@@ -100,7 +97,7 @@ class ArticlesSimilarityFilter:
             }
             remaining_tasks = all_tasks.copy()
 
-            for future in as_completed(all_tasks):
+            for future in concurrent.as_completed(all_tasks):
                 remaining_tasks.discard(future)
 
                 try:
@@ -120,7 +117,7 @@ class ArticlesSimilarityFilter:
                     rows_indexes.discard(latest_index)
                     similar_titles.update(rows_indexes)
 
-                except (CancelledError, Exception) as exc:
+                except (concurrent.CancelledError, Exception) as exc:
 
                     for task in remaining_tasks:
                         if not task.done():
@@ -136,7 +133,7 @@ class ArticlesSimilarityFilter:
         df_subset = dataframe.loc[:, Column.FILTER].copy()
         self._ratio = similarity_ratio
 
-        df_subset[Column.DATE] = to_datetime(
+        df_subset[Column.DATE] = pd.to_datetime(
             df_subset[Column.DATE],
             yearfirst=True,
             format=self._DATEFMT,

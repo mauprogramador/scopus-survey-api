@@ -1,18 +1,11 @@
 # mypy: disable-error-code="index"
-from asyncio import CancelledError
-from asyncio import TimeoutError as AsyncTimeoutError
-from asyncio import sleep
-from collections import defaultdict
-from itertools import chain
+import asyncio
+import collections
+import itertools
 from json import JSONDecodeError
 from unittest.mock import AsyncMock, MagicMock, Mock
 
-from aiohttp import (
-    ClientConnectionError,
-    ClientResponse,
-    ClientSession,
-    ContentTypeError,
-)
+import aiohttp
 from httpx import AsyncClient as Client
 from pytest import mark
 from pytest_mock import MockerFixture as Mocker
@@ -56,10 +49,10 @@ from tests.mocks.raw import (
 
 
 STATE = fqn(make_aggregator, QuotaResultsHandler)
-CHAIN = fqn(KeywordCombinationFinder, chain)
+CHAIN = fqn(KeywordCombinationFinder, itertools.chain)
 LOG_STRATEGY = fqn(HTTPClient, LOGGER_MOCK.strategy)
-REQUEST = fqn(ClientSession.request)
-SLEEP = fqn(HTTPClient, sleep)
+REQUEST = fqn(aiohttp.ClientSession.request)
+SLEEP = fqn(HTTPClient, asyncio.sleep)
 
 
 @mark.asyncio
@@ -72,28 +65,28 @@ async def test_success(mocker: Mocker, client: Client):
 
 @mark.asyncio
 async def test_cancelled_error(mocker: Mocker, client: Client):
-    mock = mocker.patch(*get_patch(CancelledError("any")))
+    mock = mocker.patch(*get_patch(asyncio.CancelledError("any")))
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
     errors = assert_error_json(res, HTTP_503, ExcMsg.CANCELLED_ERROR)
-    assert errors[0]["type"] == fqn(CancelledError)
+    assert errors[0]["type"] == fqn(asyncio.CancelledError)
     assert errors[0]["message"] == "any" and mock.call_count == 3
 
 
 @mark.asyncio
 async def test_timeout_error(mocker: Mocker, client: Client):
-    mock = mocker.patch(*get_patch(AsyncTimeoutError("any")))
+    mock = mocker.patch(*get_patch(asyncio.TimeoutError("any")))
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
     errors = assert_error_json(res, HTTP_504, ExcMsg.CONNECTION_TIMEOUT)
-    assert errors[0]["type"] == fqn(AsyncTimeoutError)
+    assert errors[0]["type"] == fqn(asyncio.TimeoutError)
     assert errors[0]["message"] == "any" and mock.call_count == 3
 
 
 @mark.asyncio
 async def test_client_connection_error(mocker: Mocker, client: Client):
-    mock = mocker.patch(*get_patch(ClientConnectionError("any")))
+    mock = mocker.patch(*get_patch(aiohttp.ClientConnectionError("any")))
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
     errors = assert_error_json(res, HTTP_502, ExcMsg.CONNECTION_ERROR)
-    assert errors[0]["type"] == fqn(ClientConnectionError)
+    assert errors[0]["type"] == fqn(aiohttp.ClientConnectionError)
     assert errors[0]["message"] == "any" and mock.call_count == 3
 
 
@@ -112,7 +105,7 @@ async def test_content_type_error(mocker: Mocker, client: Client):
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
     errors = assert_error_json(res, HTTP_502, ExcMsg.INVALID_JSON_ERROR)
     assert len(errors) == 2 and mock.call_count == 3
-    assert errors[0]["type"] == fqn(ContentTypeError)
+    assert errors[0]["type"] == fqn(aiohttp.ContentTypeError)
     assert errors[0]["message"] and errors[1]["raw_body"] is not None
 
 
@@ -138,15 +131,19 @@ async def test_json_decode_error(mocker: Mocker, client: Client):
 
 @mark.asyncio
 async def test_request_retry(mocker: Mocker, client: Client):
-    from_iterable = Mock(chain.from_iterable, side_effect=mock_from_iterable)
-    mocker.patch(CHAIN, MagicMock(chain, from_iterable=from_iterable))
-    new_request = AsyncMock(ClientResponse, side_effect=GET_RETRY)
+    from_iterable = Mock(
+        itertools.chain.from_iterable, side_effect=mock_from_iterable
+    )
+    mocker.patch(
+        CHAIN, MagicMock(itertools.chain, from_iterable=from_iterable)
+    )
+    new_request = AsyncMock(aiohttp.ClientResponse, side_effect=GET_RETRY)
     mock = mocker.patch(REQUEST, new_request)
     await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
     assert mock.call_count == 3
     mock.assert_called()
 
-    group_call = defaultdict(list)
+    group_call = collections.defaultdict(list)
     for call in mock.call_args_list:
         attempt = call.kwargs["trace_request_ctx"]["current_attempt"]
         group_call[call.args[1]].append(attempt)
@@ -156,7 +153,7 @@ async def test_request_retry(mocker: Mocker, client: Client):
 
 @mark.asyncio
 async def test_retry_on_rate_limit(mocker: Mocker, client: Client):
-    spy = mocker.patch(SLEEP, wraps=sleep)
+    spy = mocker.patch(SLEEP, wraps=asyncio.sleep)
     mock = mocker.patch(*get_patch(GET_RATE_LIMIT))
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
     assert spy.call_args_list[0].args[0] == 2
@@ -172,7 +169,7 @@ async def test_update_strategy_and_additional_sleep(
     mocker: Mocker, client: Client
 ):
     state = mocker.patch(STATE, MockState(5, 113))
-    spy_sleep = mocker.patch(SLEEP, wraps=sleep)
+    spy_sleep = mocker.patch(SLEEP, wraps=asyncio.sleep)
     spy_log = mocker.patch(LOG_STRATEGY, wraps=logger.strategy)
     mock = mocker.patch(*get_patch(GET_STRATEGY))
 

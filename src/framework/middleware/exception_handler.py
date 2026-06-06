@@ -1,8 +1,8 @@
 from http import HTTPStatus
 
-from fastapi import Request
 from fastapi.exceptions import HTTPException as FastAPIHTTPException
 from fastapi.exceptions import RequestValidationError, ResponseValidationError
+from fastapi.requests import Request as FastAPIRequest
 from pydantic_core import ValidationError
 from slowapi.errors import RateLimitExceeded
 from starlette.exceptions import HTTPException as StarletteHTTPException
@@ -19,7 +19,9 @@ from src.core.domain.translations import translate_error
 from src.utils import logger
 
 
-async def custom_http_error(request: Request, exc: HTTPError) -> ErrorJSON:
+async def custom_http_error(
+    request: FastAPIRequest, exc: HTTPError
+) -> ErrorJSON:
     logger.error(exc.detail)
     logger.exception(exc)
 
@@ -31,7 +33,9 @@ async def custom_http_error(request: Request, exc: HTTPError) -> ErrorJSON:
     )
 
 
-async def scopus_api_error(request: Request, exc: ScopusAPIError) -> ErrorJSON:
+async def scopus_api_error(
+    request: FastAPIRequest, exc: ScopusAPIError
+) -> ErrorJSON:
     logger.error(exc.message)
     logger.exception(exc)
 
@@ -44,7 +48,7 @@ async def scopus_api_error(request: Request, exc: ScopusAPIError) -> ErrorJSON:
 
 
 async def starlette_http_exception(
-    request: Request,
+    request: FastAPIRequest,
     exc: StarletteHTTPException | FastAPIHTTPException,
 ) -> ErrorJSON:
     errors = get_error_details(exc)
@@ -63,7 +67,7 @@ async def starlette_http_exception(
 
 
 async def fastapi_validation_error(
-    request: Request,
+    request: FastAPIRequest,
     exc: RequestValidationError | ResponseValidationError,
 ) -> ErrorJSON:
     errors = get_error_details(exc)
@@ -91,7 +95,7 @@ async def fastapi_validation_error(
 
 
 async def pydantic_validation_error(
-    request: Request, exc: ValidationError
+    request: FastAPIRequest, exc: ValidationError
 ) -> ErrorJSON:
     errors = get_error_details(exc)
 
@@ -107,7 +111,7 @@ async def pydantic_validation_error(
 
 
 async def rate_limit_error(
-    request: Request, exc: RateLimitExceeded
+    request: FastAPIRequest, exc: RateLimitExceeded
 ) -> ErrorJSON:
     errors = get_error_details(exc)
     details = {

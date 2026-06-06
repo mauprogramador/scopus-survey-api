@@ -1,7 +1,7 @@
 from datetime import datetime, timezone
 from http import HTTPStatus
 
-from fastapi import Request
+from fastapi.requests import Request as FastAPIRequest
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, field_validator
 from pydantic_core import PydanticSerializationError, to_jsonable_python
@@ -31,8 +31,8 @@ class ErrorResponse(BaseResponse):
 
     @field_validator("request", mode="before")
     @classmethod
-    def get_request_data(cls, data: Request | Json) -> Json:
-        if isinstance(data, Request):
+    def get_request_data(cls, data: FastAPIRequest | Json) -> Json:
+        if isinstance(data, FastAPIRequest):
             return {
                 "url": str(data.url),
                 "host": data.client.host if data.client else ENV.host,
@@ -54,7 +54,7 @@ class ErrorJSON(JSONResponse):
 
     def __init__(
         self,
-        request: Request,
+        request: FastAPIRequest,
         status_code: int,
         message: str,
         errors: list[Json] | Json | None = None,

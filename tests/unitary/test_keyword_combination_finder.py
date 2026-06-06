@@ -1,4 +1,4 @@
-from json import loads
+import json
 from random import Random
 from unittest.mock import AsyncMock, MagicMock, Mock
 
@@ -52,7 +52,7 @@ async def test_survey_two_keywords():
     params = CombinationParams(**raw)
 
     result = await COMBINATION_FINDER.survey_combinations(params)
-    data: Json = loads(result.body.decode())["data"]  # type: ignore
+    data: Json = json.loads(result.body.decode())["data"]  # type: ignore
 
     assert result.status_code == HTTP_200
     assert len(data["combinations"]) == 3
@@ -69,7 +69,7 @@ async def test_survey_three_keywords():
     params = CombinationParams(**raw)
 
     result = await COMBINATION_FINDER.survey_combinations(params)
-    data: Json = loads(result.body.decode())["data"]  # type: ignore
+    data: Json = json.loads(result.body.decode())["data"]  # type: ignore
 
     assert result.status_code == HTTP_200
     assert len(data["combinations"]) == 7
@@ -86,7 +86,7 @@ async def test_survey_four_keywords():
     params = CombinationParams(**raw)
 
     result = await COMBINATION_FINDER.survey_combinations(params)
-    data: Json = loads(result.body.decode())["data"]  # type: ignore
+    data: Json = json.loads(result.body.decode())["data"]  # type: ignore
 
     assert result.status_code == HTTP_200
     assert len(data["combinations"]) == 15
@@ -104,7 +104,7 @@ async def test_survey_not_found(mocker: Mocker):
     params = CombinationParams(**raw)
 
     result = await COMBINATION_FINDER.survey_combinations(params)
-    data: Json = loads(result.body.decode())["data"]  # type: ignore
+    data: Json = json.loads(result.body.decode())["data"]  # type: ignore
 
     assert result.status_code == HTTP_200
     assert len(data["combinations"]) == 3

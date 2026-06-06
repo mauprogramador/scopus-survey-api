@@ -3,19 +3,18 @@ import logging
 import os
 import re
 import sys
+import traceback
 from datetime import datetime
 from enum import IntEnum
 from http import HTTPStatus
 from logging.config import dictConfig
 from logging.handlers import RotatingFileHandler
 from pathlib import Path
-from sys import exc_info
-from traceback import FrameSummary, extract_tb
 
-from fastapi import Request
-from gunicorn.glogging import Logger as GunicornLogger
+import gunicorn.glogging
+from fastapi.requests import Request as FastAPIRequest
 from pydantic_core import to_jsonable_python
-from starlette.types import Scope
+from starlette.types import Scope as StarletteScope
 
 from src.core.common.types import Json, Quota, RateStrategy
 from src.core.config.config import ENV
@@ -140,7 +139,7 @@ _EXCEPTION = (
 )
 _TRY_AGAIN = "Please try again on \033[37;1m%s\033[m"
 _UVICORN_FMT = "%(asctime)s %(levelprefix)-19s %(message)s"
-_FRAME = FrameSummary(__file__, 1, "<logging>", colno=0)
+_FRAME = traceback.FrameSummary(__file__, 1, "<logging>", colno=0)
 _STATUS_COLOR = {2: "32", 3: "33", 4: "31", 5: "31"}
 _FMT = "%(asctime)s %(levelname)-18s %(message)s"
 _FILENAME = Path(f".logs/{_filename(0)}")
@@ -307,8 +306,8 @@ def debug(data: Json) -> None:
 
 
 def exception(exception: Exception) -> None:
-    traceback = exc_info()[2]
-    frame = extract_tb(traceback)[-1] if traceback else _FRAME
+    exc_trace = sys.exc_info()[2]
+    frame = traceback.extract_tb(exc_trace)[-1] if exc_trace else _FRAME
 
     args = {
         "module": type(exception).__module__,
@@ -322,7 +321,7 @@ def exception(exception: Exception) -> None:
 
 def _trace(
     prefix: _Level,
-    request: Request,
+    request: FastAPIRequest,
     code: int,
     time: str,
 ) -> None:
@@ -345,7 +344,7 @@ def _trace(
     LOGGER.log(prefix, _TRACE, args, stacklevel=3)
 
 
-def trace(request: Request, code: int, time: str) -> None:
+def trace(request: FastAPIRequest, code: int, time: str) -> None:
     _trace(_Level.TRACE, request, code, time)
 
 
@@ -355,16 +354,16 @@ def api_call(url: str, code: int, time: float) -> None:
     else:
         prefix = _Level.ABSTRACT
 
-    scope: Scope = {  # type: ignore
+    scope: StarletteScope = {  # type: ignore
         "type": "http",
         "method": "GET",
         "path": url,
         "headers": {},
     }
-    _trace(prefix, Request(scope), code, f"{time:.2f}s")
+    _trace(prefix, FastAPIRequest(scope), code, f"{time:.2f}s")
 
 
-class ProdLogger(GunicornLogger):
+class ProdLogger(gunicorn.glogging.Logger):
     """Custom logger for Gunicorn log messages"""
 
     fqn = f"{__module__}.{__qualname__}"

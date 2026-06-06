@@ -1,4 +1,5 @@
-import fastapi
+from fastapi import FastAPI
+from fastapi.requests import Request as FastAPIRequest
 from starlette.middleware.base import (
     BaseHTTPMiddleware,
     RequestResponseEndpoint,
@@ -12,12 +13,12 @@ class ProxyForwardedHeadersMiddleware(BaseHTTPMiddleware):
     _FORWARDED_PROTO = "x-forwarded-proto"
     _FORWARDED_HOST = "x-forwarded-host"
 
-    def __init__(self, app: fastapi.FastAPI):
+    def __init__(self, app: FastAPI):
         """Middleware for mapping the scheme and host when forwarded."""
         super().__init__(app)
 
     async def dispatch(
-        self, request: fastapi.Request, call_next: RequestResponseEndpoint
+        self, request: FastAPIRequest, call_next: RequestResponseEndpoint
     ) -> StarletteResponse:
 
         proto = request.headers.get(self._FORWARDED_PROTO)

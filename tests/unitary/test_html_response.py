@@ -1,7 +1,7 @@
 import shutil
 
+import jinja2
 from fastapi.templating import Jinja2Templates
-from jinja2 import Template
 from pytest_mock import MockerFixture as Mocker
 
 from src.adapters.presenters.json_response import ErrorJSON
@@ -17,7 +17,7 @@ def test_build_all(mocker: Mocker):
         shutil.rmtree(TemplateResponse.DIST_DIR)
     TemplateResponse.DIST_DIR.mkdir()
 
-    spy_jinja = mocker.spy(Template, "render")
+    spy_jinja = mocker.spy(jinja2.Template, "render")
     translations = load_translations()
     TemplateResponse.build_all(*translations)
 

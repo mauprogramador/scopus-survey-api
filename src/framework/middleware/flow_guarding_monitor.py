@@ -1,16 +1,17 @@
+import re
+import time
+import uuid
 from http import HTTPStatus
-from re import match
-from time import perf_counter
-from uuid import uuid4
 
-from fastapi import FastAPI, Request
+from fastapi import FastAPI
+from fastapi.requests import Request as FastAPIRequest
 from fastapi.responses import HTMLResponse
 from starlette.middleware.base import (
     BaseHTTPMiddleware,
     RequestResponseEndpoint,
     _StreamingResponse,
 )
-from starlette.responses import Response
+from starlette.responses import Response as StarletteResponse
 
 from src.adapters.presenters.json_response import ErrorJSON
 from src.adapters.presenters.template_response import TemplateResponse
@@ -27,7 +28,9 @@ from src.utils import logger
 
 
 # e.g. /v2/scopus-survey/api
-_API_ROUTES_PATTERN = r"^\/v2\/scopus-survey\/api\/(combination|survey|csv)"
+_API_ROUTES_PATTERN = re.compile(
+    r"^\/v2\/scopus-survey\/api\/(combination|survey|csv)"
+)
 
 
 class FlowGuardingMonitorMiddleware(BaseHTTPMiddleware):
@@ -44,10 +47,10 @@ class FlowGuardingMonitorMiddleware(BaseHTTPMiddleware):
         super().__init__(app)
 
     async def dispatch(
-        self, request: Request, call_next: RequestResponseEndpoint
-    ) -> Response | ErrorJSON | HTMLResponse:
-        token = TRACE_ID_CTX.set(str(uuid4()))
-        start_time = perf_counter()
+        self, request: FastAPIRequest, call_next: RequestResponseEndpoint
+    ) -> StarletteResponse | ErrorJSON | HTMLResponse:
+        token = TRACE_ID_CTX.set(str(uuid.uuid4()))
+        start_time = time.perf_counter()
 
         try:
             response = await call_next(request)
@@ -61,7 +64,7 @@ class FlowGuardingMonitorMiddleware(BaseHTTPMiddleware):
         finally:
             TRACE_ID_CTX.reset(token)
 
-        process_time = perf_counter() - start_time
+        process_time = time.perf_counter() - start_time
         if process_time > self._ONE_MINUTE:
             minutes = process_time / self._ONE_MINUTE
             duration = f"{process_time:.2f}s ({minutes:.2f}m)"
@@ -78,7 +81,7 @@ class FlowGuardingMonitorMiddleware(BaseHTTPMiddleware):
         response.headers.update(self._server)
 
         is_error = response.status_code >= HTTPStatus.BAD_REQUEST
-        if is_error and not match(_API_ROUTES_PATTERN, request.url.path):
+        if is_error and not _API_ROUTES_PATTERN.match(request.url.path):
 
             if isinstance(response, _StreamingResponse):
                 chunks = [chunk async for chunk in response.body_iterator]

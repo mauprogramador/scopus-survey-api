@@ -1,4 +1,4 @@
-from asyncio import CancelledError
+import asyncio
 
 from pytest import mark, raises
 from pytest_mock import MockerFixture as Mocker
@@ -141,5 +141,5 @@ async def test_retrieve_cancelled_error(mocker: Mocker):
         await fix.api.retrieve_abstracts(API_KEY)
     assert_http_error(info, HTTP_503, ExcMsg.CANCELLED_ERROR)
     assert fix.req.call_count == 7 and spy.call_count == 4
-    assert info.value.errors[0]["type"] == fqn(CancelledError)
+    assert info.value.errors[0]["type"] == fqn(asyncio.CancelledError)
     assert info.value.errors[0]["message"] == "any"

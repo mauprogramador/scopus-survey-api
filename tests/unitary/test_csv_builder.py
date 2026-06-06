@@ -1,5 +1,5 @@
 from pandas import DataFrame
-from thefuzz.fuzz import partial_ratio
+from thefuzz.fuzz import partial_ratio as fuzz_partial_ratio
 
 from src.core.config.config import DIRECTORY, FILE
 from src.core.config.scopus import DATA_SOURCE_NOTE
@@ -34,7 +34,7 @@ def test_write_csv_with_metadata():
         assert lines[1].count(API_KEY) == 1
         assert lines[1].count("Python AND AI") == 1
         assert lines[2].count("any") == 2
-        assert partial_ratio(lines[3], DATA_SOURCE_NOTE) > 80
+        assert fuzz_partial_ratio(lines[3], DATA_SOURCE_NOTE) > 80
 
 
 def test_csv_with_more_metadata():
@@ -61,4 +61,4 @@ def test_csv_with_more_metadata():
         assert lines[1].count("doctype=ar") == 1
         assert lines[1].count("pages=0-4") == 1
         assert lines[2].count("any") == 2
-        assert partial_ratio(lines[3], DATA_SOURCE_NOTE) > 80
+        assert fuzz_partial_ratio(lines[3], DATA_SOURCE_NOTE) > 80

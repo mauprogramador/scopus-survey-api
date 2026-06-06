@@ -1,12 +1,6 @@
-from asyncio import (
-    CancelledError,
-    as_completed,
-    create_task,
-    gather,
-    get_running_loop,
-)
+import asyncio
+import os
 from concurrent.futures import ThreadPoolExecutor
-from os import cpu_count, sched_getaffinity
 
 from pandas import DataFrame
 
@@ -44,9 +38,9 @@ class ScopusAbstractRetrievalAPI:
         self._state = state
 
         try:
-            self._workers = min(2 * len(sched_getaffinity(0)), 32)
+            self._workers = min(2 * len(os.sched_getaffinity(0)), 32)
         except AttributeError:
-            self._workers = min(2 * (cpu_count() or 4), 32)
+            self._workers = min(2 * (os.cpu_count() or 4), 32)
 
     async def _get_abstract(self, index: int) -> ResponseBundle:
         url = self._url_builder.abstract_url(self._state.entry[index].url)
@@ -57,7 +51,7 @@ class ScopusAbstractRetrievalAPI:
         logger.debug({"max_workers": max_workers})
 
         all_tasks = {
-            create_task(
+            asyncio.create_task(
                 self._get_abstract(index),
                 name=f"entry_index:{index}",
             )
@@ -70,26 +64,30 @@ class ScopusAbstractRetrievalAPI:
             ThreadPoolExecutor(max_workers) as executor,
             ProgressBar.start(self._state.abstracts_to_fetch) as progress,
         ):
-            for future in as_completed(all_tasks):
+            for future in asyncio.as_completed(all_tasks):
                 remaining_tasks.discard(future)
 
                 try:
                     response = await future
                     last_completed = response
 
-                    abstract = await get_running_loop().run_in_executor(
-                        executor,
-                        ScopusResponse.validate_abstract,
-                        response,
+                    abstract = (
+                        await asyncio.get_running_loop().run_in_executor(
+                            executor,
+                            ScopusResponse.validate_abstract,
+                            response,
+                        )
                     )
                     abstract_data = abstract.model_dump(by_alias=True)
                     self._state.abstracts.append(abstract_data)
                     progress.step()
 
-                except (CancelledError, HTTPError, Exception) as exc:
+                except (asyncio.CancelledError, HTTPError, Exception) as exc:
 
                     for task in remaining_tasks:
-                        if task.done() and not isinstance(exc, CancelledError):
+                        if task.done() and not isinstance(
+                            exc, asyncio.CancelledError
+                        ):
                             task.exception()  # Retrieve task exception
                         else:
                             task.cancel()
@@ -102,7 +100,7 @@ class ScopusAbstractRetrievalAPI:
                     ) from exc
 
         if remaining_tasks:
-            await gather(*remaining_tasks, return_exceptions=True)
+            await asyncio.gather(*remaining_tasks, return_exceptions=True)
 
         self._details.set_abstract_quota(last_completed)
 

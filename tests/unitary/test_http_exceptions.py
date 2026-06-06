@@ -1,9 +1,9 @@
-from asyncio import TimeoutError as AsyncTimeoutError
+import asyncio
 from datetime import datetime
 from json import JSONDecodeError
 
-from aiohttp import ContentTypeError
-from fastapi import HTTPException
+import aiohttp
+from fastapi.exceptions import HTTPException as FastAPIHTTPException
 from itsdangerous import SignatureExpired
 from pydantic import ValidationError
 from pytest import mark, raises
@@ -42,7 +42,7 @@ from tests.mocks.raw import (
     [
         (ValueError("any"), "any"),
         (CONTENT_TYPE_ERROR, "any"),
-        (HTTPException(HTTP_500, "any"), "any"),
+        (FastAPIHTTPException(HTTP_500, "any"), "any"),
         (REQUEST_VALIDATION_ERROR, repr(REQUEST_VALIDATION_ERROR)),
     ],
     ids=["args", "message", "detail", "repr"],
@@ -92,11 +92,11 @@ def test_signature_error():
 
 def test_async_timeout_error():
     with raises(HTTPError) as info:
-        exc = AsyncTimeoutError("any")
+        exc = asyncio.TimeoutError("any")
         raise GatewayTimeout(ExcMsg.CONNECTION_TIMEOUT, exc)
 
     assert_http_error(info, HTTP_504, trans(info.value))
-    assert info.value.errors[0]["type"] == fqn(AsyncTimeoutError)
+    assert info.value.errors[0]["type"] == fqn(asyncio.TimeoutError)
     assert info.value.errors[0]["file"] and info.value.errors[0]["line"]
     assert info.value.errors[0]["message"] == "any"
     assert not info.value.errors[1]["strerror"]
@@ -109,7 +109,7 @@ def test_content_type_error():
         raise BadGatewayContent(ExcMsg.INVALID_JSON_ERROR, exc, "any")
 
     assert_http_error(info, HTTP_502, trans(info.value))
-    assert info.value.errors[0]["type"] == fqn(ContentTypeError)
+    assert info.value.errors[0]["type"] == fqn(aiohttp.ContentTypeError)
     assert info.value.errors[0]["file"] and info.value.errors[0]["line"]
     assert info.value.errors[0]["message"] == "any"
 

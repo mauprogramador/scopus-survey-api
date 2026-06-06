@@ -1,16 +1,9 @@
-from asyncio import CancelledError, Semaphore
-from asyncio import TimeoutError as AsyncTimeoutError
-from asyncio import gather, sleep
+import asyncio
 from json import JSONDecodeError
 from unittest.mock import AsyncMock
 
-from aiohttp import (
-    ClientConnectionError,
-    ClientResponse,
-    ClientSession,
-    ContentTypeError,
-)
-from aiolimiter import AsyncLimiter
+import aiohttp
+import aiolimiter
 from pytest import fixture, mark, raises
 from pytest_asyncio import fixture as async_fixture
 from pytest_mock import MockerFixture as Mocker
@@ -38,8 +31,8 @@ from tests.mocks.unitary import (
 
 
 LOG_STRATEGY = fqn(HTTPClient, LOGGER_MOCK.strategy)
-REQUEST = fqn(ClientSession.request)
-SLEEP = fqn(HTTPClient, sleep)
+REQUEST = fqn(aiohttp.ClientSession.request)
+SLEEP = fqn(HTTPClient, asyncio.sleep)
 
 
 @async_fixture(scope="module", loop_scope="module", name="client")
@@ -51,10 +44,10 @@ async def http_client_instance():
 
 @fixture(autouse=True)
 def mock_telemetry(mocker: Mocker):
-    mocker.patch(*http_patch(AsyncLimiter.__aenter__))
-    mocker.patch(*http_patch(AsyncLimiter.__aexit__))
-    mocker.patch(*http_patch(Semaphore.__aenter__))
-    mocker.patch(*http_patch(Semaphore.__aexit__))
+    mocker.patch(*http_patch(aiolimiter.AsyncLimiter.__aenter__))
+    mocker.patch(*http_patch(aiolimiter.AsyncLimiter.__aexit__))
+    mocker.patch(*http_patch(asyncio.Semaphore.__aenter__))
+    mocker.patch(*http_patch(asyncio.Semaphore.__aexit__))
 
 
 @mark.asyncio(loop_scope="module")
@@ -68,8 +61,8 @@ async def test_success(mocker: Mocker, client: HTTPClient):
 
 @mark.asyncio(loop_scope="module")
 async def test_cancelled_error(mocker: Mocker, client: HTTPClient):
-    mock = mocker.patch(*get_patch(CancelledError("any")))
-    with raises(CancelledError) as info:
+    mock = mocker.patch(*get_patch(asyncio.CancelledError("any")))
+    with raises(asyncio.CancelledError) as info:
         await client.request("any")
     assert info.value.args[0] == "any"
     mock.assert_awaited_once()
@@ -77,22 +70,22 @@ async def test_cancelled_error(mocker: Mocker, client: HTTPClient):
 
 @mark.asyncio(loop_scope="module")
 async def test_timeout_error(mocker: Mocker, client: HTTPClient):
-    mock = mocker.patch(*get_patch(AsyncTimeoutError("any")))
+    mock = mocker.patch(*get_patch(asyncio.TimeoutError("any")))
     with raises(GatewayTimeout) as info:
         await client.request("any")
     assert_http_error(info, HTTP_504, ExcMsg.CONNECTION_TIMEOUT)
-    assert info.value.errors[0]["type"] == fqn(AsyncTimeoutError)
+    assert info.value.errors[0]["type"] == fqn(asyncio.TimeoutError)
     assert info.value.errors[0]["message"] == "any"
     mock.assert_awaited_once()
 
 
 @mark.asyncio(loop_scope="module")
 async def test_client_connection_error(mocker: Mocker, client: HTTPClient):
-    mock = mocker.patch(*get_patch(ClientConnectionError("any")))
+    mock = mocker.patch(*get_patch(aiohttp.ClientConnectionError("any")))
     with raises(BadGateway) as info:
         await client.request("any")
     assert_http_error(info, HTTP_502, ExcMsg.CONNECTION_ERROR)
-    assert info.value.errors[0]["type"] == fqn(ClientConnectionError)
+    assert info.value.errors[0]["type"] == fqn(aiohttp.ClientConnectionError)
     assert info.value.errors[0]["message"] == "any"
     mock.assert_awaited_once()
 
@@ -115,7 +108,7 @@ async def test_content_type_error(mocker: Mocker, client: HTTPClient):
         await client.request("any")
     assert_http_error(info, HTTP_502, ExcMsg.INVALID_JSON_ERROR)
     assert len(info.value.errors) == 2
-    assert info.value.errors[0]["type"] == fqn(ContentTypeError)
+    assert info.value.errors[0]["type"] == fqn(aiohttp.ContentTypeError)
     assert info.value.errors[0]["message"] == "any"
     assert info.value.errors[1]["raw_body"] is not None
     assert info.value.errors[1]["message"] == "any"
@@ -153,7 +146,7 @@ async def test_json_decode_error(mocker: Mocker, client: HTTPClient):
 
 @mark.asyncio(loop_scope="module")
 async def test_request_retry(mocker: Mocker, client: HTTPClient):
-    new_request = AsyncMock(ClientResponse, side_effect=GET_RETRY)
+    new_request = AsyncMock(aiohttp.ClientResponse, side_effect=GET_RETRY)
     mock = mocker.patch(REQUEST, new_request)
     bundle = await client.request("any")
     assert bundle.code == HTTP_200 and mock.call_count == len(GET_RETRY)
@@ -162,7 +155,7 @@ async def test_request_retry(mocker: Mocker, client: HTTPClient):
 
 @mark.asyncio(loop_scope="module")
 async def test_retry_on_rate_limit(mocker: Mocker, client: HTTPClient):
-    spy = mocker.patch(SLEEP, wraps=sleep)
+    spy = mocker.patch(SLEEP, wraps=asyncio.sleep)
     mock = mocker.patch(*get_patch(GET_RATE_LIMIT))
     bundle = await client.request("any")
     assert spy.call_args_list[0].args[0] == 2
@@ -183,11 +176,11 @@ async def test_update_strategy(mocker: Mocker, client: HTTPClient):
 
 @mark.asyncio(loop_scope="module")
 async def test_additional_sleep(mocker: Mocker, client: HTTPClient):
-    spy = mocker.patch(SLEEP, wraps=sleep)
+    spy = mocker.patch(SLEEP, wraps=asyncio.sleep)
     mock = mocker.patch(*get_patch(GET_SUCCESS))
     await client.update_strategy(2000)
     tasks = [client.request("any") for _ in range(5)]
-    await gather(*tasks)
+    await asyncio.gather(*tasks)
     assert spy.call_count == 5 and mock.call_count == 5
     spy.assert_awaited()
     mock.assert_awaited()

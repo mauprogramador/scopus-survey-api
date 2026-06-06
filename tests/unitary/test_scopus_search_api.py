@@ -1,4 +1,4 @@
-from asyncio import CancelledError
+import asyncio
 
 from pytest import mark, raises
 from pytest_mock import MockerFixture as Mocker
@@ -85,7 +85,7 @@ async def test_survey_cancelled_error(mocker: Mocker):
         await fix.api.survey_totals_found(FOUR_KEYWORDS)
     assert_http_error(info, HTTP_503, ExcMsg.CANCELLED_ERROR)
     assert fix.req.call_count == 15 and spy.call_count == 3
-    assert info.value.errors[0]["type"] == fqn(CancelledError)
+    assert info.value.errors[0]["type"] == fqn(asyncio.CancelledError)
     assert info.value.errors[0]["message"] == "any"
 
 
@@ -221,5 +221,5 @@ async def test_search_cancelled_error(mocker: Mocker):
         await fix.api.search_articles(None)
     assert_http_error(info, HTTP_503, ExcMsg.CANCELLED_ERROR)
     assert fix.req.call_count == 7 and spy.call_count == 4
-    assert info.value.errors[0]["type"] == fqn(CancelledError)
+    assert info.value.errors[0]["type"] == fqn(asyncio.CancelledError)
     assert info.value.errors[0]["message"] == "any"

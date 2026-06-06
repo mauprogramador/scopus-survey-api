@@ -1,4 +1,4 @@
-from contextlib import ExitStack, nullcontext
+import contextlib
 from typing import Self
 
 from tqdm import tqdm
@@ -31,7 +31,7 @@ class ProgressBar:
         self, total: int, step: int = None, start: int = None
     ) -> None:
         """Display a progress bar for running tasks"""
-        self._stack = ExitStack()
+        self._stack = contextlib.ExitStack()
         self._total = total
         self._step = 1 if step is None else step
 
@@ -51,7 +51,7 @@ class ProgressBar:
     def start(total: int, step: int = None, start: int = None):
         if ENV.progress_bar:
             return ProgressBar(total, step, start)
-        return nullcontext(ProgressBar._DISABLED)
+        return contextlib.nullcontext(ProgressBar._DISABLED)
 
     def step(self) -> None:
         progress = int(self._progress_bar.n)

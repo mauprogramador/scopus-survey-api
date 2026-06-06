@@ -5,7 +5,7 @@ import fastapi
 from pytest import fixture, mark
 from starlette.middleware.base import RequestResponseEndpoint
 from starlette.testclient import TestClient
-from starlette.types import Scope
+from starlette.types import Scope as StarletteScope
 
 from src.framework.middleware.proxy_forwarded_headers import (
     ProxyForwardedHeadersMiddleware,
@@ -15,7 +15,7 @@ from tests.mocks.raw import HTTP_200
 
 @mark.asyncio
 async def test_success_headers():
-    scope: Scope = {  # type: ignore
+    scope: StarletteScope = {  # type: ignore
         "type": "http",
         "method": "GET",
         "scheme": "http",

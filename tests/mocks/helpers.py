@@ -1,15 +1,16 @@
+import io
+import random
 from http import HTTPMethod, HTTPStatus
-from io import StringIO
-from random import randint
-from types import FunctionType, MethodType
+from types import FunctionType
 from typing import Any, Callable, Self, Type, TypeAlias
 from unittest.mock import AsyncMock, MagicMock, Mock
 
-from aiohttp import ClientResponse
-from aiohttp_retry import RetryClient
+import aiohttp
+import aiohttp_retry as aioretry
+import httpx
+import pandas as pd
 from fastapi.responses import FileResponse, JSONResponse
-from httpx import Response
-from pandas import DataFrame, read_csv
+from pandas import DataFrame
 
 from src.adapters.gateway.scopus_abstract_retrieval_api import (
     ScopusAbstractRetrievalAPI,
@@ -43,7 +44,7 @@ from tests.mocks.raw import (
 )
 
 
-Target: TypeAlias = Type | MethodType | FunctionType | Callable
+Target: TypeAlias = Type | FunctionType | Callable
 
 
 def fqn(target: Target, method: Target = None) -> str:
@@ -79,7 +80,7 @@ async def mock_survey_totals_found(
 ) -> list[Json]:
     """Mock ScopusSearchAPI.survey_totals_found"""
     for index in bundles_map.keys():
-        bundles_map[index].total = randint(16, 256)
+        bundles_map[index].total = random.randint(16, 256)
     return [bundle.model_dump() for bundle in bundles_map.values()]
 
 
@@ -103,10 +104,10 @@ def mock_from_iterable(*_) -> tuple[str, ...]:
     return ("Python",)
 
 
-def load_csv_from_response(response: Response) -> DataFrame:
+def load_csv_from_response(response: httpx.Response) -> DataFrame:
     """Load DataFrame from CSV file response ignoring metadata"""
-    buffer_data = StringIO(response.content.decode())
-    return read_csv(
+    buffer_data = io.StringIO(response.content.decode())
+    return pd.read_csv(
         buffer_data, sep=";", skiprows=SKIPROWS, keep_default_na=False
     )
 
@@ -135,7 +136,7 @@ def abstract_raw(
             "coredata": {
                 "dc:identifier": SCOPUS_ID,
                 "dc:title": title if title else "any_title",
-                "prism:doi": f"10.{randint(1111, 9999)}0/any",
+                "prism:doi": f"10.{random.randint(1111, 9999)}0/any",
                 "prism:coverDate": date if date else "any_date",
                 "dc:creator": {
                     "author": [
@@ -168,7 +169,7 @@ def response_mock(
     else:
         json = AsyncMock(type(value).__qualname__, side_effect=value)
     return MagicMock(
-        spec=ClientResponse,
+        spec=aiohttp.ClientResponse,
         status=status if status else HTTP_200,
         method=HTTPMethod.GET,
         headers=headers if headers else RAW_HEADERS_OK,
@@ -193,10 +194,10 @@ def bundle_mock(
 def get_patch(value: Any | Exception) -> tuple[str, AsyncMock]:
     """Patch AIOHTTP Retry.get"""
     if isinstance(value, (list, BaseException)):
-        new = AsyncMock(ClientResponse, side_effect=value)
+        new = AsyncMock(aiohttp.ClientResponse, side_effect=value)
     else:
-        new = AsyncMock(ClientResponse, return_value=value)
-    return fqn(RetryClient.get), new
+        new = AsyncMock(aiohttp.ClientResponse, return_value=value)
+    return fqn(aioretry.RetryClient.get), new
 
 
 def http_patch(target: Target) -> tuple[str, AsyncMock]:

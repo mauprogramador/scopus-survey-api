@@ -1,5 +1,5 @@
 # mypy: disable-error-code="index"
-from asyncio import CancelledError
+import asyncio
 from unittest.mock import MagicMock
 
 from httpx import AsyncClient as Client
@@ -177,5 +177,5 @@ async def test_retrieve_cancelled_error(mocker: Mocker, client: Client):
     errors = assert_error_json(res, HTTP_503, ExcMsg.CANCELLED_ERROR)
 
     assert mock.call_count == 8 and spy.call_count == 4
-    assert errors[0]["type"] == fqn(CancelledError)
+    assert errors[0]["type"] == fqn(asyncio.CancelledError)
     assert errors[0]["message"] == "any"

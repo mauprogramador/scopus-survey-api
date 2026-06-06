@@ -1,4 +1,4 @@
-from itertools import chain, combinations
+import itertools
 
 from fastapi.responses import JSONResponse
 
@@ -36,11 +36,11 @@ class KeywordCombinationFinder:
         bundles_map: dict[int, CombinationBundle] = {}
 
         arrangements = (
-            combinations(params.keywords, size)
+            itertools.combinations(params.keywords, size)
             for size in range(self._START, max_size)
         )
 
-        pairs = chain.from_iterable(arrangements)
+        pairs = itertools.chain.from_iterable(arrangements)
         for index, arrangement in enumerate(pairs, self._START):
             bundle = self._url_builder.combination_url(arrangement)
 

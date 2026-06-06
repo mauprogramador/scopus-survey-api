@@ -1,7 +1,7 @@
+import itertools
+import string
+import time
 from datetime import datetime
-from itertools import batched  # type: ignore
-from string import ascii_lowercase
-from time import time
 
 from src.core.config.scopus import QUOTA_ERROR_CODE, RATE_LIMIT_ERROR_CODE
 from tests.mocks.errors import CONTENT_TYPE_ERROR, JSON_DECODE_ERROR
@@ -206,7 +206,7 @@ RESPONSE_KEY_ERROR = response_mock({"any": "any"})
 
 # SurveyDetails.set_
 
-RESET = int(time() + 60)
+RESET = int(time.time() + 60)
 RESET_DATETIME = datetime.fromtimestamp(RESET).strftime("%Y-%m-%d %H:%M:%S")
 HEADERS = {
     "X-RateLimit-Limit": "20000",
@@ -274,11 +274,11 @@ MORE_GROUPS_NO_SIMILAR = [
     response_mock(search_raw(9)),
     *[
         response_mock(abstract_raw("".join(item), "a", "2025-06-01"))
-        for item in batched(ascii_lowercase[:12], 3)
+        for item in itertools.batched(string.ascii_lowercase[:12], 3)
     ],
     *[
         response_mock(abstract_raw("".join(item), "b", "2025-06-01"))
-        for item in batched(ascii_lowercase[:9], 3)
+        for item in itertools.batched(string.ascii_lowercase[:9], 3)
     ],
     response_mock(abstract_raw("abc", "c", "2025-06-01")),
     response_mock(abstract_raw("def", "c", "2025-06-02")),

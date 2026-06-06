@@ -1,11 +1,11 @@
+import random
+import secrets
 from pathlib import Path
-from random import randint
-from secrets import token_hex
 
 from httpx import AsyncClient as Client
 from pytest import mark
 from pytest_mock import MockerFixture as Mocker
-from thefuzz.fuzz import partial_ratio
+from thefuzz.fuzz import partial_ratio as fuzz_partial_ratio
 
 from src.adapters.helpers.url_builder import URLBuilder
 from src.core.config.config import DIRECTORY, FILE
@@ -37,7 +37,9 @@ from tests.mocks.raw import (
 class TestUserFlowSurveySteps:
     """Complete user survey steps flow"""
 
-    _THREE_COMBINATIONS = [response_mock(search_raw(randint(16, 256)))] * 3
+    _THREE_COMBINATIONS = [
+        response_mock(search_raw(random.randint(16, 256)))
+    ] * 3
     _ONE_RESULT = [
         response_mock(RAW_SEARCH_OK),
         response_mock(RAW_ABSTRACT_OK),
@@ -70,7 +72,7 @@ class TestUserFlowSurveySteps:
         client.cookies.clear()
         client.headers.clear()
 
-        cls._api_key = token_hex(16)
+        cls._api_key = secrets.token_hex(16)
         csv_params = {
             "apiKey": cls._api_key,
             "button": "previous",
@@ -181,7 +183,7 @@ class TestUserFlowSurveySteps:
             assert lines[1].count(cls._api_key) == 1
             assert lines[1].count(cls._api_key) == 1
             assert lines[2].count("total=1") == 1
-            assert partial_ratio(lines[3], DATA_SOURCE_NOTE) > 80
+            assert fuzz_partial_ratio(lines[3], DATA_SOURCE_NOTE) > 80
 
     @mark.asyncio
     @classmethod

@@ -1,6 +1,6 @@
-from itertools import batched  # type: ignore
-from random import randint
-from string import ascii_lowercase
+import itertools
+import random
+import string
 
 from pandas import DataFrame
 
@@ -55,7 +55,7 @@ TWO_KEYWORDS = dict(_COMBINATIONS[0:3])
 FOUR_KEYWORDS = dict(_COMBINATIONS)
 
 SURVEY_MAP = {
-    index: bundle_mock(search_raw(randint(16, 256), 1))
+    index: bundle_mock(search_raw(random.randint(16, 256), 1))
     for index in range(1, 16)
 }
 SURVEY_RESULTS = list(SURVEY_MAP.values())
@@ -188,8 +188,8 @@ MORE_GROUPS_NO_SIMILAR = DataFrame(
     {
         Column.AUTHORS: [*["a"] * 4, *["b"] * 3, "c", "c"],
         Column.TITLE: [
-            *map("".join, batched(ascii_lowercase[:12], 3)),
-            *map("".join, batched(ascii_lowercase[:9], 3)),
+            *map("".join, itertools.batched(string.ascii_lowercase[:12], 3)),
+            *map("".join, itertools.batched(string.ascii_lowercase[:9], 3)),
             "abc",
             "def",
         ],

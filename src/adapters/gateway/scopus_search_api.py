@@ -1,12 +1,6 @@
-from asyncio import (
-    CancelledError,
-    as_completed,
-    create_task,
-    gather,
-    get_running_loop,
-)
+import asyncio
+import os
 from concurrent.futures import ThreadPoolExecutor
-from os import cpu_count, sched_getaffinity
 
 from src.adapters.helpers.scopus_response import ScopusResponse
 from src.core.common.types import (
@@ -47,9 +41,9 @@ class ScopusSearchAPI:
         self._state = state
 
         try:
-            self._workers = min(2 * len(sched_getaffinity(0)), 32)
+            self._workers = min(2 * len(os.sched_getaffinity(0)), 32)
         except AttributeError:
-            self._workers = min(2 * (cpu_count() or 4), 32)
+            self._workers = min(2 * (os.cpu_count() or 4), 32)
 
     @property
     def http_client(self) -> HTTPClient:
@@ -68,7 +62,7 @@ class ScopusSearchAPI:
         logger.debug({"max_workers": max_workers})
 
         all_tasks = {
-            create_task(
+            asyncio.create_task(
                 self._task_request(bundle.url, index),
                 name=f"combination_index:{index}",
             )
@@ -81,14 +75,14 @@ class ScopusSearchAPI:
             ThreadPoolExecutor(max_workers) as executor,
             ProgressBar.start(len(bundles_map)) as progress,
         ):
-            for future in as_completed(all_tasks):
+            for future in asyncio.as_completed(all_tasks):
                 remaining_tasks.discard(future)
 
                 try:
                     index, response = await future
                     last_completed = response
 
-                    search = await get_running_loop().run_in_executor(
+                    search = await asyncio.get_running_loop().run_in_executor(
                         executor,
                         ScopusResponse.validate_search,
                         response,
@@ -96,10 +90,12 @@ class ScopusSearchAPI:
                     bundles_map[index].total = search.total_results
                     progress.step()
 
-                except (CancelledError, HTTPError, Exception) as exc:
+                except (asyncio.CancelledError, HTTPError, Exception) as exc:
 
                     for task in remaining_tasks:
-                        if task.done() and not isinstance(exc, CancelledError):
+                        if task.done() and not isinstance(
+                            exc, asyncio.CancelledError
+                        ):
                             task.exception()  # Retrieve task exception
                         else:
                             task.cancel()
@@ -114,7 +110,7 @@ class ScopusSearchAPI:
                     ) from exc
 
         if remaining_tasks:
-            await gather(*remaining_tasks, return_exceptions=True)
+            await asyncio.gather(*remaining_tasks, return_exceptions=True)
 
         await self._http_client.close()
         self._details.set_search_quota(last_completed)
@@ -131,7 +127,7 @@ class ScopusSearchAPI:
         logger.debug({"max_workers": max_workers})
 
         all_tasks = {
-            create_task(
+            asyncio.create_task(
                 self._get_by_pagination(start),
                 name=f"pagination_start:{start}",
             )
@@ -145,14 +141,14 @@ class ScopusSearchAPI:
             ThreadPoolExecutor(max_workers) as executor,
             ProgressBar.start(*progress_args) as progress,
         ):
-            for future in as_completed(all_tasks):
+            for future in asyncio.as_completed(all_tasks):
                 remaining_tasks.discard(future)
 
                 try:
                     response = await future
                     last_completed = response
 
-                    search = await get_running_loop().run_in_executor(
+                    search = await asyncio.get_running_loop().run_in_executor(
                         executor,
                         ScopusResponse.validate_search,
                         response,
@@ -160,10 +156,12 @@ class ScopusSearchAPI:
                     self._state.entry.extend(search.entry)
                     progress.step()
 
-                except (CancelledError, HTTPError, Exception) as exc:
+                except (asyncio.CancelledError, HTTPError, Exception) as exc:
 
                     for task in remaining_tasks:
-                        if task.done() and not isinstance(exc, CancelledError):
+                        if task.done() and not isinstance(
+                            exc, asyncio.CancelledError
+                        ):
                             task.exception()  # Retrieve task exception
                         else:
                             task.cancel()
@@ -176,7 +174,7 @@ class ScopusSearchAPI:
                     ) from exc
 
         if remaining_tasks:
-            await gather(*remaining_tasks, return_exceptions=True)
+            await asyncio.gather(*remaining_tasks, return_exceptions=True)
 
         self._details.set_search_quota(last_completed)
 

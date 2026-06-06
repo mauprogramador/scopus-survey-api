@@ -1,9 +1,10 @@
 # mypy: disable-error-code="index"
-from concurrent.futures import CancelledError
+import concurrent.futures as concurrent
 from datetime import datetime
 
+import pandas as pd
 from httpx import AsyncClient as Client
-from pandas import DataFrame, Series, isna, to_datetime
+from pandas import DataFrame, Series
 from pandas.api.typing import DataFrameGroupBy
 from pytest import mark
 from pytest_mock import MockerFixture as Mocker
@@ -33,8 +34,7 @@ from tests.mocks.raw import (
     URL_SEARCH,
 )
 
-
-TO_DATETIME = fqn(ArticlesSimilarityFilter, to_datetime)
+TO_DATETIME = fqn(ArticlesSimilarityFilter, pd.to_datetime)
 LOG_DEBUG = Patch(ArticlesSimilarityFilter, LOGGER_MOCK.debug)
 IDXMAX = Patch(Series.idxmax)
 
@@ -123,7 +123,7 @@ async def test_more_groups_no_similar_titles(mocker: Mocker, client: Client):
 @mark.asyncio
 async def test_to_datetime_no_left(mocker: Mocker, client: Client):
     mock = mocker.patch(*get_patch(NO_DATETIME_LEFT))
-    spy_to_datetime = mocker.patch(TO_DATETIME, wraps=to_datetime)
+    spy_to_datetime = mocker.patch(TO_DATETIME, wraps=pd.to_datetime)
     spy_dropna = mocker.spy(DataFrame, "dropna")
     spy_log_debug = mocker.patch(**LOG_DEBUG)
 
@@ -140,13 +140,13 @@ async def test_to_datetime_no_left(mocker: Mocker, client: Client):
     assert df.shape[0] == 2
 
     assert all(isinstance(value, str) for value in df_to_datetime)
-    assert all(isna(value) for value in df_dropna[Column.DATE])
+    assert all(pd.isna(value) for value in df_dropna[Column.DATE])
 
 
 @mark.asyncio
 async def test_to_datetime_one_left(mocker: Mocker, client: Client):
     mock = mocker.patch(*get_patch(ONE_DATETIME_LEFT))
-    spy_to_datetime = mocker.patch(TO_DATETIME, wraps=to_datetime)
+    spy_to_datetime = mocker.patch(TO_DATETIME, wraps=pd.to_datetime)
     spy_dropna = mocker.spy(DataFrame, "dropna")
     spy_log_debug = mocker.patch(**LOG_DEBUG)
 
@@ -164,7 +164,7 @@ async def test_to_datetime_one_left(mocker: Mocker, client: Client):
 
     assert all(isinstance(value, str) for value in df_to_datetime)
     assert isinstance(df_dropna[Column.DATE].iloc[0], datetime)
-    assert isna(df_dropna[Column.DATE].iloc[1])
+    assert pd.isna(df_dropna[Column.DATE].iloc[1])
 
 
 @mark.asyncio
@@ -221,11 +221,11 @@ async def test_discard_all_older_similar(mocker: Mocker, client: Client):
 @mark.asyncio
 async def test_cancelled_error(mocker: Mocker, client: Client):
     mock = mocker.patch(*get_patch(MORE_GROUPS_MORE_SIMILAR))
-    mocker.patch(**IDXMAX([1, CancelledError("any")]))
+    mocker.patch(**IDXMAX([1, concurrent.CancelledError("any")]))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     assert mock.call_count == 10
     errors = assert_error_json(res, HTTP_503, ExcMsg.CANCELLED_ERROR)
-    assert errors[0]["type"] == fqn(CancelledError)
+    assert errors[0]["type"] == fqn(concurrent.CancelledError)
     assert errors[0]["message"] == "any"
 
 

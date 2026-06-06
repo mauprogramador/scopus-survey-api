@@ -1,9 +1,9 @@
-from gettext import translation
+import gettext
 from pathlib import Path
 
-from fastapi import Request
 from fastapi.exceptions import HTTPException as FastAPIHTTPException
 from fastapi.exceptions import RequestValidationError, ResponseValidationError
+from fastapi.requests import Request as FastAPIRequest
 from pydantic_core import ValidationError
 from slowapi.errors import RateLimitExceeded
 from starlette.exceptions import HTTPException as StarletteHTTPException
@@ -28,33 +28,33 @@ def load_translations() -> tuple[Translations, Translations]:
     web: Translations = {}
 
     try:
-        web[Lang.EN_US] = translation(
+        web[Lang.EN_US] = gettext.translation(
             domain=_WEB_DOMAIN,
             localedir=_LOCALEDIR,
             languages=[Lang.EN_US.locale],
         )
-        meta[Lang.EN_US] = translation(
+        meta[Lang.EN_US] = gettext.translation(
             domain=_META_DOMAIN,
             localedir=_LOCALEDIR,
             languages=[Lang.EN_US.locale],
         )
-        _ERRORS[Lang.EN_US] = translation(
+        _ERRORS[Lang.EN_US] = gettext.translation(
             domain=_ERROR_DOMAIN,
             localedir=_LOCALEDIR,
             languages=[Lang.EN_US.locale],
         )
 
-        web[Lang.PT_BR] = translation(
+        web[Lang.PT_BR] = gettext.translation(
             domain=_WEB_DOMAIN,
             localedir=_LOCALEDIR,
             languages=[Lang.PT_BR.locale],
         )
-        meta[Lang.PT_BR] = translation(
+        meta[Lang.PT_BR] = gettext.translation(
             domain=_META_DOMAIN,
             localedir=_LOCALEDIR,
             languages=[Lang.PT_BR.locale],
         )
-        _ERRORS[Lang.PT_BR] = translation(
+        _ERRORS[Lang.PT_BR] = gettext.translation(
             domain=_ERROR_DOMAIN,
             localedir=_LOCALEDIR,
             languages=[Lang.PT_BR.locale],
@@ -79,7 +79,7 @@ _PREFIXES = {
 }
 
 
-def translate_error(req: Request, exc: Exception) -> str:
+def translate_error(req: FastAPIRequest, exc: Exception) -> str:
     if type(exc) in _PREFIXES:
         prefix, suffix = _PREFIXES[type(exc)]
         suffixes = (suffix, "default")

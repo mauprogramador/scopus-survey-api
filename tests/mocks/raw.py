@@ -1,11 +1,11 @@
+import secrets
+import time
 from datetime import datetime
 from http import HTTPMethod, HTTPStatus
-from secrets import token_hex
-from time import time
 from unittest.mock import Mock
 
-from fastapi import Request
 from fastapi.datastructures import URL, Headers, QueryParams
+from fastapi.requests import Request as FastAPIRequest
 
 from src.core.config.config import FILE, MAX_AGE
 from src.core.config.scopus import (
@@ -33,7 +33,7 @@ HTTP_504 = HTTPStatus.GATEWAY_TIMEOUT
 
 # Client params
 
-API_KEY = token_hex(16)
+API_KEY = secrets.token_hex(16)
 CSRF_TOKEN, SIGNED_TOKEN = CSRFToken.generate_csrf_tokens()
 KEYWORDS = ["Python", "AI", "Automation", "Web"]
 CSV_FILE_NAME = f"{API_KEY}_{FILE}"
@@ -69,7 +69,7 @@ JSON_CONTENT_TYPE = "application/json; charset=utf-8"
 
 ABSTRACT_URL = "https://api.elsevier.com/content/abstract/scopus_id/0123456789"
 SCOPUS_ID = "SCOPUS_ID:0123456789"
-RESET = int(time()) + MAX_AGE
+RESET = int(time.time()) + MAX_AGE
 RESET_DATETIME = datetime.fromtimestamp(RESET).strftime("%Y-%m-%d %H:%M:%S")
 RAW_HEADERS_OK = {
     "X-RateLimit-Limit": "20000",
@@ -222,7 +222,7 @@ ALIAS_SEARCH_PARAMS_FULL = {
 
 SKIPROWS = (0, 1, 2, 3)  # CSV metadata rows
 REQUEST = Mock(
-    spec=Request,
+    spec=FastAPIRequest,
     url=URL("http://any.com/mock"),
     method=HTTPMethod.GET,
     headers=Headers({"any": "any"}),

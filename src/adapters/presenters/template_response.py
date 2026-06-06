@@ -2,11 +2,11 @@ from datetime import datetime, timezone
 from http import HTTPStatus
 from pathlib import Path
 
-from fastapi import Request
+import jinja2
+from fastapi.requests import Request as FastAPIRequest
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
-from jinja2 import Environment, FileSystemLoader, select_autoescape
-from starlette.responses import Response
+from starlette.responses import Response as StarletteResponse
 
 from src import __contact__, __version__
 from src.adapters.presenters.json_response import ErrorJSON
@@ -51,9 +51,11 @@ class TemplateResponse:
     def build_all(cls, web: Translations, meta: Translations) -> None:
         cls.DIST_DIR.mkdir(exist_ok=True)
 
-        env = Environment(
-            autoescape=select_autoescape(disabled_extensions=[".html.jinja"]),
-            loader=FileSystemLoader(cls.TEMPLATES_DIR),
+        env = jinja2.Environment(
+            autoescape=jinja2.select_autoescape(
+                disabled_extensions=[".html.jinja"]
+            ),
+            loader=jinja2.FileSystemLoader(cls.TEMPLATES_DIR),
         )
         template = env.get_template("index.html.jinja")
 
@@ -77,7 +79,7 @@ class TemplateResponse:
 
     @classmethod
     def form_template(
-        cls, request: Request, csrf_token: str, lang: Lang
+        cls, request: FastAPIRequest, csrf_token: str, lang: Lang
     ) -> HTMLResponse:
 
         headers = {
@@ -97,7 +99,7 @@ class TemplateResponse:
 
     @classmethod
     def not_found_template(
-        cls, request: Request, response: Response | ErrorJSON
+        cls, request: FastAPIRequest, response: StarletteResponse | ErrorJSON
     ) -> HTMLResponse:
 
         context = {

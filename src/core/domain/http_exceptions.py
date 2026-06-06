@@ -1,10 +1,10 @@
-from asyncio import TimeoutError as AsyncTimeoutError
+import asyncio
+import sys
+import traceback
 from http import HTTPStatus
 from json import JSONDecodeError
-from sys import exc_info
-from traceback import FrameSummary, extract_tb
 
-from aiohttp import ContentTypeError
+import aiohttp
 from fastapi.exceptions import HTTPException as FastAPIHTTPException
 from itsdangerous import BadData, BadSignature, SignatureExpired
 from pydantic import ValidationError
@@ -14,7 +14,7 @@ from src.core.config.scopus import SCOPUS_DOCS
 from src.core.data.enums import ExcMsg
 
 
-_FRAME = FrameSummary(__file__, 1, "<http_exceptions>")
+_FRAME = traceback.FrameSummary(__file__, 1, "<http_exceptions>")
 _ROOT_PATH = "/scopus-survey-api"
 
 
@@ -29,8 +29,8 @@ def get_error_message(exc: Exception) -> str:
 
 
 def get_error_details(error: Exception) -> list[Json]:
-    traceback = exc_info()[2]
-    frame = extract_tb(traceback)[-1] if traceback else _FRAME
+    exc_trace = sys.exc_info()[2]
+    frame = traceback.extract_tb(exc_trace)[-1] if exc_trace else _FRAME
 
     file = frame.filename
     if file.count(_ROOT_PATH):
@@ -128,7 +128,7 @@ class GatewayTimeout(HTTPError):
         """HTTP error status code 504"""
         super().__init__(HTTPStatus.GATEWAY_TIMEOUT, message, error)
 
-        if isinstance(error, AsyncTimeoutError):
+        if isinstance(error, asyncio.TimeoutError):
             details = {"strerror": error.strerror, "errno": error.errno}
             self.errors.append(details)
 
@@ -141,7 +141,7 @@ class BadGatewayContent(HTTPError):
         super().__init__(HTTPStatus.BAD_GATEWAY, message, error)
         details: Json = {"raw_body": body}
 
-        if isinstance(error, ContentTypeError):
+        if isinstance(error, aiohttp.ContentTypeError):
             content_details: Json = {
                 "message": error.message,
                 "status_code": error.status,

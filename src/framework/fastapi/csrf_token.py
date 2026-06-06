@@ -1,8 +1,7 @@
-from secrets import token_urlsafe
+import secrets
 from typing import Annotated
 
-from fastapi import Cookie, Header
-from fastapi.openapi.models import Example
+import fastapi
 from itsdangerous import (
     BadData,
     BadSignature,
@@ -27,13 +26,13 @@ class CSRFToken:
             value="c1d0cf66f682...",
         )
     }
-    _COOKIE = Cookie(
+    _COOKIE = fastapi.Cookie(
         alias="csrf-token",
         validation_alias="signed_token",
         description="Cookies CSRF Token",
         openapi_examples=_OPENAPI_EXAMPLE,
     )
-    _HEADER = Header(
+    _HEADER = fastapi.Header(
         alias="X-CSRF-Token",
         validation_alias="header_token",
         description="Header CSRF Token",
@@ -42,7 +41,7 @@ class CSRFToken:
 
     @classmethod
     def generate_csrf_tokens(cls) -> tuple[str, str]:
-        token = token_urlsafe(nbytes=48)
+        token = secrets.token_urlsafe(nbytes=48)
         signed = cls._SERIALIZER.dumps(token)
         return token, signed
 

@@ -1,10 +1,10 @@
-from asyncio import CancelledError
+import asyncio
 from http import HTTPStatus
 from json import JSONDecodeError
 from typing import Tuple
 from unittest.mock import MagicMock, Mock
 
-from aiohttp import ClientResponse, ContentTypeError, RequestInfo
+import aiohttp
 from fastapi.exceptions import HTTPException as FastAPIHTTPException
 from fastapi.exceptions import RequestValidationError, ResponseValidationError
 from pydantic_core import InitErrorDetails, PydanticUndefined, ValidationError
@@ -64,11 +64,11 @@ RATE_LIMIT_ERROR = RateLimitExceeded(Mock(Limit, error_message="any"))
 
 JSON_DECODE_ERROR = JSONDecodeError("any", "any", 0)
 
-CONTENT_TYPE_ERROR = ContentTypeError(
-    MagicMock(RequestInfo),
-    MagicMock(Tuple[ClientResponse, ...]),
+CONTENT_TYPE_ERROR = aiohttp.ContentTypeError(
+    MagicMock(aiohttp.RequestInfo),
+    MagicMock(Tuple[aiohttp.ClientResponse, ...]),
     status=HTTPStatus.BAD_REQUEST,
     message="any",
 )
 
-MORE_CANCELLED = [None, None, CancelledError("any")]
+MORE_CANCELLED = [None, None, asyncio.CancelledError("any")]

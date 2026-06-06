@@ -1,5 +1,5 @@
+import math
 from datetime import datetime
-from math import ceil
 from typing import Literal, Self
 
 from pydantic import (
@@ -75,7 +75,7 @@ class ScopusSearch(BaseModel):
     def pages_count(self) -> int:
         if self.total_results == 0:
             return 0
-        return ceil(self.total_results / self.items_per_page)
+        return math.ceil(self.total_results / self.items_per_page)
 
 
 class ScopusAbstract(BaseModel):
