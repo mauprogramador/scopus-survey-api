@@ -16,6 +16,12 @@ SERVER: ContextVar[str] = ContextVar("server")
 DIRECTORY = Path("csv")
 FILE = "docs.csv"
 
+FAVICON_PATH = Path("web/static/img/favicon.ico")
+FAVICON_HEADERS = {
+    "Cache-Control": "public, max-age=86400",
+    "Content-Disposition": 'inline; filename="favicon.ico"',
+}
+
 SALT = "scopus-survey-csrf-token"
 MAX_AGE = 3600  # 1 hour
 

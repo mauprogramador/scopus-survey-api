@@ -1,5 +1,4 @@
 from http import HTTPStatus
-from pathlib import Path
 from typing import Annotated
 
 import fastapi
@@ -9,7 +8,14 @@ from fastapi.routing import APIRouter
 
 from src.adapters.presenters.csv_response import CSVResponse
 from src.adapters.presenters.template_response import TemplateResponse
-from src.core.config.config import LIMIT, LIMITER, MAX_AGE, PREFIX
+from src.core.config.config import (
+    FAVICON_HEADERS,
+    FAVICON_PATH,
+    LIMIT,
+    LIMITER,
+    MAX_AGE,
+    PREFIX,
+)
 from src.core.data.enums import Lang
 from src.core.data.query_params import (
     CombinationParams,
@@ -38,12 +44,9 @@ router = APIRouter(prefix=PREFIX)
 )
 async def favicon():
     return FileResponse(
-        path=Path("web/static/img/favicon.ico"),
+        path=FAVICON_PATH,
         status_code=HTTPStatus.OK,
-        headers={
-            "Cache-Control": "public, max-age=86400",
-            "Content-Disposition": 'inline; filename="favicon.ico"',
-        },
+        headers=FAVICON_HEADERS,
         media_type="image/x-icon",
         filename="favicon.ico",
     )
