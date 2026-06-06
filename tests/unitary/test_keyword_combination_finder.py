@@ -39,7 +39,7 @@ COMBINATION_FINDER = KeywordCombinationFinder(
     ),
     MagicMock(SurveyDetails, search_quota=LOG_QUOTA, headers={}),
 )
-RANDINT = Patch(mock_survey_totals_found, Random.randint)
+RANDINT = Patch(mock_survey_totals_found, Random.randint, "random")
 
 
 @mark.asyncio

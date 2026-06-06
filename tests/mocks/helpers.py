@@ -11,6 +11,7 @@ import httpx
 import pandas as pd
 from fastapi.responses import FileResponse, JSONResponse
 from pandas import DataFrame
+from typing_extensions import deprecated
 
 from src.adapters.gateway.scopus_abstract_retrieval_api import (
     ScopusAbstractRetrievalAPI,
@@ -47,23 +48,22 @@ from tests.mocks.raw import (
 Target: TypeAlias = Type | FunctionType | Callable
 
 
-def fqn(target: Target, method: Target = None) -> str:
-    """Gets the Fully Qualified Name"""
+def fqn(target: Target, method: Target = None, altname: str = None) -> str:
+    """Gets the Fully Qualified Name for mocker.patch target"""
     if method is None:
         return f"{target.__module__}.{target.__qualname__}"
 
-    if isinstance(method, MethodType):
-        class_name = method.__self__.__class__.__name__
-        method_name = method.__name__
-        return f"{target.__module__}.{class_name}.{method_name}"
+    if altname is not None:
+        return f"{target.__module__}.{altname}.{method.__name__}"
 
-    if isinstance(method, (Type, FunctionType, Callable)):
-        return f"{target.__module__}.{method.__name__}"
+    return f"{target.__module__}.{method.__name__}"
 
-    if hasattr(method, "__name__"):
-        return f"{target.__module__}.{method.__name__}"
 
-    return f"{target.__module__}.{method.__class__.__name__}"
+def spec(target: Target, method: Target = None, altname: str = None) -> Json:
+    """Gets F.Q.N. for mocker.patch target and spec"""
+    if method is None:
+        return {"target": fqn(target), "spec": target}
+    return {"target": fqn(target, method, altname), "spec": method}
 
 
 def trans(exc: Exception) -> str:
@@ -210,7 +210,8 @@ def http_patch(target: Target) -> tuple[str, AsyncMock]:
 class Patch:
     """Context for mocker.patch params
     Args:
-        method: Type | MethodType | FunctionType | Callable
+        method: Type | FunctionType | Callable
+        altname: str
         value: Exception | Any
     """
 
@@ -219,34 +220,34 @@ class Patch:
     def __init__(self, target: Target, *args: Any) -> None:
         """Context for mocker.patch params
         Args:
-            method: Type | MethodType | FunctionType | Callable
+            method: Type | FunctionType | Callable
+            altname: str
             value: Exception | Any
         """
+
         self._keys = ["target", "spec"]
         self.target: str = None
         self.spec: Target = None
         self.side_effect: Any = None
         self.return_value: Any = None
 
-        method: Target = None
+        method: Target | None = None
         value: Exception | Any = None
+        altname: str | None = None
 
         for arg in args:
             if isinstance(arg, Target):
                 method = arg
+            elif isinstance(arg, str):
+                altname = arg
             else:
                 value = arg
 
-        if method is None:
-            self.target = fqn(target)
-            self.spec = target
-
-        else:
-            self.target = fqn(target, method)
-            self.spec = method
-
+        self.target = fqn(target, method, altname)
+        self.spec = target if method is None else method
         self._handle_value(value)
 
+    @deprecated("⚠️ Will be removed after converting classes to modules")
     def classmethod(self, target: Target) -> Self:
         class_method = self.target.split(".")[-2:]
         target_path = fqn(target).split(".")[:-1]

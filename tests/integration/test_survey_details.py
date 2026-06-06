@@ -11,7 +11,8 @@ from src.core.data.survey_details import SurveyDetails
 from src.core.use_cases.keyword_combination_finder import (
     KeywordCombinationFinder,
 )
-from tests.mocks.helpers import Patch, get_patch
+from src.utils import logger
+from tests.mocks.helpers import get_patch, spec
 from tests.mocks.integration import (
     COMBINATION_DETAILS,
     HEADERS,
@@ -23,14 +24,13 @@ from tests.mocks.raw import (
     COMBINATION_PARAMS,
     HTTP_200,
     KEYWORDS,
-    LOGGER_MOCK,
     SEARCH_PARAMS,
     URL_COMBINATION,
     URL_SEARCH,
 )
 
 
-LOG_QUOTA = Patch(KeywordCombinationFinder, LOGGER_MOCK.quota)
+LOG_QUOTA = spec(KeywordCombinationFinder, logger.quota, "logger")
 
 
 @mark.asyncio

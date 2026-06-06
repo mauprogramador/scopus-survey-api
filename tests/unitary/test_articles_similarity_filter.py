@@ -12,9 +12,10 @@ from src.core.domain.http_exceptions import ServiceUnavailable
 from src.core.use_cases.articles_similarity_filter import (
     ArticlesSimilarityFilter,
 )
+from src.utils import logger
 from tests.conftest import assert_http_error
-from tests.mocks.helpers import Patch, fqn
-from tests.mocks.raw import HTTP_503, LOGGER_MOCK
+from tests.mocks.helpers import Patch, fqn, spec
+from tests.mocks.raw import HTTP_503
 from tests.mocks.unitary import (
     MORE_GROUPS_MORE_SIMILAR,
     MORE_GROUPS_NO_SIMILAR,
@@ -29,9 +30,9 @@ from tests.mocks.unitary import (
 
 
 SIMILARITY_FILTER = ArticlesSimilarityFilter()
-TO_DATETIME = fqn(ArticlesSimilarityFilter, pd.to_datetime)
-LOG_DEBUG = Patch(ArticlesSimilarityFilter, LOGGER_MOCK.debug)
-CANCELLED = Patch(concurrent.Future.result, [None, CancelledError("any")])
+TO_DATETIME = fqn(ArticlesSimilarityFilter, pd.to_datetime, "pd")
+LOG_DEBUG = spec(ArticlesSimilarityFilter, logger.debug, "logger")
+CANCELLED = Patch(concurrent.Future.result)
 RATIO = 80
 
 

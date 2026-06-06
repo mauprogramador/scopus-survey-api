@@ -56,7 +56,7 @@ from tests.mocks.raw import (
 
 
 STATE = fqn(make_aggregator, QuotaResultsHandler)
-STEP = Patch(ScopusSearchAPI, ProgressBar(0).step)
+STEP = Patch(ScopusSearchAPI, ProgressBar.step, "ProgressBar")
 
 
 @mark.asyncio

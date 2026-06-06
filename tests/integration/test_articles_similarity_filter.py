@@ -13,8 +13,15 @@ from src.core.data.enums import Column, ExcMsg
 from src.core.use_cases.articles_similarity_filter import (
     ArticlesSimilarityFilter,
 )
+from src.utils import logger
 from tests.conftest import assert_error_json
-from tests.mocks.helpers import Patch, fqn, get_patch, load_csv_from_response
+from tests.mocks.helpers import (
+    Patch,
+    fqn,
+    get_patch,
+    load_csv_from_response,
+    spec,
+)
 from tests.mocks.integration import (
     MORE_GROUPS_MORE_SIMILAR,
     MORE_GROUPS_NO_SIMILAR,
@@ -29,13 +36,13 @@ from tests.mocks.integration import (
 from tests.mocks.raw import (
     HTTP_200,
     HTTP_503,
-    LOGGER_MOCK,
     SEARCH_PARAMS,
     URL_SEARCH,
 )
 
-TO_DATETIME = fqn(ArticlesSimilarityFilter, pd.to_datetime)
-LOG_DEBUG = Patch(ArticlesSimilarityFilter, LOGGER_MOCK.debug)
+
+TO_DATETIME = fqn(ArticlesSimilarityFilter, pd.to_datetime, "pd")
+LOG_DEBUG = spec(ArticlesSimilarityFilter, logger.debug, "logger")
 IDXMAX = Patch(Series.idxmax)
 
 

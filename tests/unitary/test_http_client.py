@@ -19,7 +19,7 @@ from src.core.domain.http_exceptions import (
 from src.utils import logger
 from tests.conftest import assert_http_error
 from tests.mocks.helpers import fqn, get_patch, http_patch
-from tests.mocks.raw import HTTP_200, HTTP_502, HTTP_504, LOGGER_MOCK
+from tests.mocks.raw import HTTP_200, HTTP_502, HTTP_504
 from tests.mocks.unitary import (
     GET_CONTENT_TYPE_ERROR,
     GET_EMPTY_RESPONSE,
@@ -30,9 +30,9 @@ from tests.mocks.unitary import (
 )
 
 
-LOG_STRATEGY = fqn(HTTPClient, LOGGER_MOCK.strategy)
+LOG_STRATEGY = fqn(HTTPClient, logger.strategy, "logger")
 REQUEST = fqn(aiohttp.ClientSession.request)
-SLEEP = fqn(HTTPClient, asyncio.sleep)
+SLEEP = fqn(HTTPClient, asyncio.sleep, "asyncio")
 
 
 @async_fixture(scope="module", loop_scope="module", name="client")

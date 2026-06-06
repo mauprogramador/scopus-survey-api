@@ -232,16 +232,3 @@ REQUEST = Mock(
     query_params=QueryParams({}),
     client=None,
 )
-
-
-class MockLogger:
-
-    def strategy(self): ...
-
-    def debug(self): ...
-
-    def quota(self): ...
-
-
-MockLogger.__name__ = "logger"
-LOGGER_MOCK = MockLogger()

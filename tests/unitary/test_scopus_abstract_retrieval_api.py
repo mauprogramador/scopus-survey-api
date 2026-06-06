@@ -28,7 +28,7 @@ from tests.mocks.unitary import (
 )
 
 
-STEP = Patch(ScopusAbstractRetrievalAPI, ProgressBar(0).step)
+STEP = Patch(ScopusAbstractRetrievalAPI, ProgressBar.step, "ProgressBar")
 
 
 @mark.asyncio

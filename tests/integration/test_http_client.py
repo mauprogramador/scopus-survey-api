@@ -41,7 +41,6 @@ from tests.mocks.raw import (
     HTTP_502,
     HTTP_503,
     HTTP_504,
-    LOGGER_MOCK,
     SEARCH_PARAMS,
     URL_COMBINATION,
     URL_SEARCH,
@@ -49,10 +48,10 @@ from tests.mocks.raw import (
 
 
 STATE = fqn(make_aggregator, QuotaResultsHandler)
-CHAIN = fqn(KeywordCombinationFinder, itertools.chain)
-LOG_STRATEGY = fqn(HTTPClient, LOGGER_MOCK.strategy)
+CHAIN = fqn(KeywordCombinationFinder, itertools.chain, "itertools")
+LOG_STRATEGY = fqn(HTTPClient, logger.strategy, "logger")
 REQUEST = fqn(aiohttp.ClientSession.request)
-SLEEP = fqn(HTTPClient, asyncio.sleep)
+SLEEP = fqn(HTTPClient, asyncio.sleep, "asyncio")
 
 
 @mark.asyncio
