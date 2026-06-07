@@ -68,7 +68,6 @@ def test_json_validation_error():
         ScopusResponse.validate_search(res)
     assert_http_error(info, HTTP_500, ExcMsg.VALIDATE_ERROR)
     assert info.value.errors[0]["type"] == fqn(ValidationError)
-    assert info.value.errors[0]["file"] and info.value.errors[0]["line"]
     assert info.value.errors[0]["message"]
     assert info.value.errors[1]["type"] == "model_type"
 
@@ -79,5 +78,4 @@ def test_json_key_error():
         ScopusResponse.validate_search(res)
     assert_http_error(info, HTTP_500, ExcMsg.VALIDATE_ERROR)
     assert info.value.errors[0]["type"] == fqn(KeyError)
-    assert info.value.errors[0]["file"] and info.value.errors[0]["line"]
     assert info.value.errors[0]["message"]

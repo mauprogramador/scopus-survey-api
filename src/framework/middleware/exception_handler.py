@@ -116,7 +116,6 @@ async def rate_limit_error(
     errors = get_error_details(exc)
     details = {
         "status_code": exc.status_code,
-        "headers": exc.headers.items() if exc.headers else None,
         "limit": repr(exc.limit),
         "rate": exc.detail,
     }

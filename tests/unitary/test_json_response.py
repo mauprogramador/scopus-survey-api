@@ -24,15 +24,13 @@ def test_error_response():
         status_code=HTTP_500,
         status="any",
         message="any",
-        request=REQUEST,
+        request={"any": "any"},
     )
     assert not model.success and model.timestamp
     assert model.status_code == HTTP_500
     assert model.status == "any" and model.message == "any"
     assert model.errors is None and model.request is not None
-    assert model.request["url"] and model.request["host"]
-    assert model.request["port"] and model.request["method"]
-    assert model.request["headers"]
+    assert model.request["any"] == "any"
 
 
 def test_error_json():
@@ -51,8 +49,7 @@ def test_error_json():
 
     req, errors = raw["request"], raw["errors"]
     assert req is not None and errors is not None
-    assert req["url"] and req["host"] and req["port"]
-    assert req["method"] and req["headers"]
+    assert req["path"] and req["method"]
     assert errors[0]["type"] == "any" and errors[0]["loc"] == "any"
 
 

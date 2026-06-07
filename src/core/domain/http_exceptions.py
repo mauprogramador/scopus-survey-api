@@ -1,6 +1,4 @@
 import asyncio
-import sys
-import traceback
 from http import HTTPStatus
 from json import JSONDecodeError
 
@@ -14,10 +12,6 @@ from src.core.config.scopus import SCOPUS_DOCS
 from src.core.data.enums import ExcMsg
 
 
-_FRAME = traceback.FrameSummary(__file__, 1, "<http_exceptions>")
-_ROOT_PATH = "/scopus-survey-api"
-
-
 def get_error_message(exc: Exception) -> str:
     if exc.args and exc.args[0] and isinstance(exc.args[0], str):
         return exc.args[0]
@@ -29,18 +23,9 @@ def get_error_message(exc: Exception) -> str:
 
 
 def get_error_details(error: Exception) -> list[Json]:
-    exc_trace = sys.exc_info()[2]
-    frame = traceback.extract_tb(exc_trace)[-1] if exc_trace else _FRAME
-
-    file = frame.filename
-    if file.count(_ROOT_PATH):
-        file = file[file.index(_ROOT_PATH) :]
-
     base_error = {
         "type": f"{type(error).__module__}.{type(error).__qualname__}",
         "message": get_error_message(error),
-        "file": file,
-        "line": frame.lineno,
     }
     errors = [base_error]
 
@@ -145,8 +130,7 @@ class BadGatewayContent(HTTPError):
             content_details: Json = {
                 "message": error.message,
                 "status_code": error.status,
-                "url": str(error.request_info.url),
-                "headers": (error.headers.items() if error.headers else None),
+                "path": error.request_info.url.path,
             }
             details.update(content_details)
 

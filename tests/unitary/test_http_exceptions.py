@@ -54,12 +54,10 @@ def test_get_error_message(exc: Exception, msg: str):
 def test_get_error_details():
     errors = get_error_details(ValueError("any"))
     assert errors[0]["type"] == fqn(ValueError) and len(errors) == 1
-    assert errors[0]["file"] and errors[0]["line"]
     assert errors[0]["message"] == "any"
 
     errors = get_error_details(PYDANTIC_VALIDATION_ERROR)
     assert errors[0]["type"] == fqn(ValidationError) and len(errors) == 2
-    assert errors[0]["file"] and errors[0]["line"]
     assert errors[0]["message"] == "Field required"
     assert errors[1]["type"] == "missing" and errors[1]["input"] == "any"
     assert errors[1]["msg"] == "Field required" and "loc" in errors[1]
@@ -72,7 +70,6 @@ def test_http_error():
 
     assert_http_error(info, HTTP_500, trans(info.value))
     assert info.value.errors[0]["type"] == fqn(ValueError)
-    assert info.value.errors[0]["file"] and info.value.errors[0]["line"]
     assert info.value.errors[0]["message"] == "any"
 
 
@@ -84,7 +81,6 @@ def test_signature_error():
 
     assert_http_error(info, HTTP_401, trans(info.value))
     assert info.value.errors[0]["type"] == fqn(SignatureExpired)
-    assert info.value.errors[0]["file"] and info.value.errors[0]["line"]
     assert info.value.errors[0]["message"] == "any"
     assert info.value.errors[1]["payload"] == "any"
     assert info.value.errors[1]["date_signed"] == date_signed
@@ -97,7 +93,6 @@ def test_async_timeout_error():
 
     assert_http_error(info, HTTP_504, trans(info.value))
     assert info.value.errors[0]["type"] == fqn(asyncio.TimeoutError)
-    assert info.value.errors[0]["file"] and info.value.errors[0]["line"]
     assert info.value.errors[0]["message"] == "any"
     assert not info.value.errors[1]["strerror"]
     assert not info.value.errors[1]["errno"]
@@ -110,14 +105,12 @@ def test_content_type_error():
 
     assert_http_error(info, HTTP_502, trans(info.value))
     assert info.value.errors[0]["type"] == fqn(aiohttp.ContentTypeError)
-    assert info.value.errors[0]["file"] and info.value.errors[0]["line"]
     assert info.value.errors[0]["message"] == "any"
 
     assert info.value.errors[1]["raw_body"] == "any"
     assert info.value.errors[1]["message"] == "any"
     assert info.value.errors[1]["status_code"] == 400
-    assert info.value.errors[1]["url"] is not None
-    assert info.value.errors[1]["headers"] is None
+    assert info.value.errors[1]["path"] is not None
 
 
 def test_json_decode_error():
@@ -127,7 +120,6 @@ def test_json_decode_error():
 
     assert_http_error(info, HTTP_502, trans(info.value))
     assert info.value.errors[0]["type"] == fqn(JSONDecodeError)
-    assert info.value.errors[0]["file"] and info.value.errors[0]["line"]
     assert info.value.errors[0]["message"] == JSON_DECODE_ERROR.args[0]
 
     assert info.value.errors[1]["raw_body"] == "any"

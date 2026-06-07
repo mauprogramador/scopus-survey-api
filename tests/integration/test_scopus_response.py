@@ -96,7 +96,6 @@ async def test_json_validation_error(mocker: Mocker, client: Client):
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     errors = assert_error_json(res, HTTP_500, ExcMsg.VALIDATE_ERROR)
     assert errors[0]["type"] == fqn(ValidationError)
-    assert errors[0]["file"] and errors[0]["line"]
     assert errors[0]["message"]
     assert errors[1]["type"] == "model_type"
 
@@ -107,5 +106,4 @@ async def test_json_key_error(mocker: Mocker, client: Client):
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     errors = assert_error_json(res, HTTP_500, ExcMsg.VALIDATE_ERROR)
     assert errors[0]["type"] == fqn(KeyError)
-    assert errors[0]["file"] and errors[0]["line"]
     assert errors[0]["message"]

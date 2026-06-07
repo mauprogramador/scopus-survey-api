@@ -7,7 +7,6 @@ from pydantic import BaseModel, field_validator
 from pydantic_core import PydanticSerializationError, to_jsonable_python
 
 from src.core.common.types import Json
-from src.core.config.config import ENV
 from src.core.data.enums import ExcMsg
 from src.core.domain.http_exceptions import get_error_details
 from src.utils import logger
@@ -26,21 +25,8 @@ class BaseResponse(BaseModel):
 class ErrorResponse(BaseResponse):
     """Error JSON response"""
 
-    request: Json
+    request: dict[str, str]
     errors: list[Json] | None = None
-
-    @field_validator("request", mode="before")
-    @classmethod
-    def get_request_data(cls, data: FastAPIRequest | Json) -> Json:
-        if isinstance(data, FastAPIRequest):
-            return {
-                "url": str(data.url),
-                "host": data.client.host if data.client else ENV.host,
-                "port": data.client.port if data.client else ENV.port,
-                "method": data.method,
-                "headers": data.headers.items(),
-            }
-        return data
 
 
 class SuccessResponse(BaseResponse):
@@ -83,7 +69,10 @@ class ErrorJSON(JSONResponse):
             status_code=status_code,
             status=HTTPStatus(status_code).phrase,
             message=message,
-            request=request,
+            request={
+                "path": request.url.path,
+                "method": request.method,
+            },
             errors=errors,
         )
 
