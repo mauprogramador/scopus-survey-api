@@ -26,6 +26,7 @@ class ErrorResponse(BaseResponse):
     """Error JSON response"""
 
     request: dict[str, str]
+    tracking_id: str
     errors: list[Json] | None = None
 
 
@@ -43,6 +44,7 @@ class ErrorJSON(JSONResponse):
         request: FastAPIRequest,
         status_code: int,
         message: str,
+        tracking_id: str,
         errors: list[Json] | Json | None = None,
     ) -> None:
         """Error JSON representation response"""
@@ -54,7 +56,7 @@ class ErrorJSON(JSONResponse):
             try:
                 errors = to_jsonable_python(errors, fallback=repr)
             except (TypeError, ValueError, PydanticSerializationError) as exc:
-                logger.error(exc=exc)
+                logger.error(ExcMsg.SERIALIZE_ERROR)
                 logger.exception(exc)
 
                 errors = get_error_details(exc)
@@ -73,6 +75,7 @@ class ErrorJSON(JSONResponse):
                 "path": request.url.path,
                 "method": request.method,
             },
+            tracking_id=tracking_id,
             errors=errors,
         )
 

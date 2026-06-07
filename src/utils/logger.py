@@ -19,7 +19,6 @@ from starlette.types import Scope as StarletteScope
 from src.core.common.types import Json, Quota, RateStrategy
 from src.core.config.config import ENV
 from src.core.config.scopus import MAX_SEARCH_QUOTA, NO_RESULTS, SEARCH_API_URL
-from src.core.domain.http_exceptions import get_error_message
 
 
 # e.g. \033[35;1m, \033[m
@@ -291,10 +290,13 @@ def try_again(reset: str) -> None:
     LOGGER.info(_TRY_AGAIN, reset, stacklevel=2)
 
 
-def error(message: str = None, exc: Exception = None) -> None:
-    if exc is not None:
-        message = get_error_message(exc)
-    LOGGER.error("\033[31m%s\033[m", message, stacklevel=2)
+def error(message: str, tracking_id: str = None) -> None:
+    LOGGER.error(
+        "\033[31m%s\033[m [ID:\033[36m%s\033[m]",
+        message,
+        tracking_id if tracking_id else "ERR_None_None",
+        stacklevel=2,
+    )
 
 
 def debug(data: Json) -> None:

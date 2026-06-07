@@ -24,6 +24,7 @@ def test_error_response():
         status_code=HTTP_500,
         status="any",
         message="any",
+        tracking_id="any",
         request={"any": "any"},
     )
     assert not model.success and model.timestamp
@@ -37,6 +38,7 @@ def test_error_json():
     model = ErrorJSON(
         REQUEST,
         HTTP_500,
+        "any",
         "any",
         [{"type": "any", "loc": "any"}],
     )
@@ -58,6 +60,7 @@ def test_error_json_dict_errors():
         REQUEST,
         HTTP_500,
         "any",
+        "any",
         {"type": "any"},
     )
     raw: Json = json.loads(model.body.decode())  # type: ignore
@@ -72,6 +75,7 @@ def test_error_json_serialize_fallback():
         REQUEST,
         HTTP_500,
         "any",
+        "any",
         [{"type": PydanticUndefined}, {"exc": RuntimeError}],
     )
     raw: Json = json.loads(model.body.decode())  # type: ignore
@@ -84,7 +88,7 @@ def test_error_json_serialize_fallback():
 
 def test_error_json_serialize_error(mocker: Mocker):
     mocker.patch(JSONABLE, side_effect=ValueError("any"))
-    model = ErrorJSON(REQUEST, HTTP_500, "any", [{"any": "any"}])
+    model = ErrorJSON(REQUEST, HTTP_500, "any", "any", [{"any": "any"}])
     raw: Json = json.loads(model.body.decode())  # type: ignore
 
     assert not raw["success"] and raw["message"] == "any"

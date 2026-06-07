@@ -50,7 +50,7 @@ def test_form_template(mocker: Mocker):
 
 def test_not_found_template(mocker: Mocker):
     spy_jinja = mocker.spy(Jinja2Templates, "TemplateResponse")
-    error_json = ErrorJSON(REQUEST, HTTP_404, "any")
+    error_json = ErrorJSON(REQUEST, HTTP_404, "any", "any")
     res = TemplateResponse.not_found_template(REQUEST, error_json)
 
     assert res.status_code == HTTP_404
