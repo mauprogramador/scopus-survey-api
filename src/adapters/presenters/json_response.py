@@ -13,8 +13,6 @@ from src.utils import logger
 
 
 class BaseResponse(BaseModel):
-    """Base JSON response"""
-
     success: bool
     status_code: int
     status: str
@@ -23,21 +21,17 @@ class BaseResponse(BaseModel):
 
 
 class ErrorResponse(BaseResponse):
-    """Error JSON response"""
-
     request: dict[str, str]
     tracking_id: str
     errors: list[Json] | None = None
 
 
 class SuccessResponse(BaseResponse):
-    """Success JSON response"""
-
     data: Json
 
 
 class ErrorJSON(JSONResponse):
-    """Error JSON representation response"""
+    """Builds JSON error response and validates errors"""
 
     def __init__(
         self,
@@ -47,7 +41,7 @@ class ErrorJSON(JSONResponse):
         tracking_id: str,
         errors: list[Json] | Json | None = None,
     ) -> None:
-        """Error JSON representation response"""
+        """Builds JSON error response and validates errors"""
 
         if errors is not None:
             if isinstance(errors, dict):
@@ -83,12 +77,12 @@ class ErrorJSON(JSONResponse):
 
 
 class SuccessJSON(JSONResponse):
-    """Success JSON representation response"""
+    """Builds JSON success response"""
 
     def __init__(
         self, data: Json, message: str, headers: dict[str, str]
     ) -> None:
-        """Success JSON representation response"""
+        """Builds JSON success response"""
 
         success_response = SuccessResponse(
             success=True,

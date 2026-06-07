@@ -10,7 +10,7 @@ from src.utils import logger
 
 
 class KeywordCombinationFinder:
-    """Gathers, filters and compiles data from Scopus articles"""
+    """Map all keyword combination and survey their total in Scopus"""
 
     _MAX_SIZE = 5
     _START = 1
@@ -21,7 +21,7 @@ class KeywordCombinationFinder:
         search_api: SearchAPI,
         survey_details: SurveyDetails,
     ) -> None:
-        """Gathers, filters and compiles data from Scopus articles"""
+        """Map all keyword combination and survey their total in Scopus"""
         self._url_builder = url_builder
         self._search_api = search_api
         self._details = survey_details

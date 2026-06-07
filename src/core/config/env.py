@@ -13,8 +13,6 @@ _HOST_PATTERN = r"^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$"
 
 
 class EnvConfig(BaseSettings):
-    """Loads and retrieves dotenv configuration data"""
-
     model_config = SettingsConfigDict(
         str_strip_whitespace=True,
         extra="ignore",

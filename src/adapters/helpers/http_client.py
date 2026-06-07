@@ -24,7 +24,10 @@ from src.utils import logger
 
 
 class HTTPClient:
-    """Make HTTP requests with throttling and retry mechanisms"""
+    """Make async HTTP requests with throttling and retry mechanisms
+
+    **Note:** This client must be initialized within an async **event loop**
+    """
 
     _LEEWAY = 10
     _ATTEMPTS = 3
@@ -65,7 +68,7 @@ class HTTPClient:
     _KEYS = sorted(_STRATEGIES.keys())
 
     def __init__(self) -> None:
-        """Make HTTP requests with throttling and retry mechanisms"""
+        """Make async HTTP requests with throttling and retry mechanisms"""
         self._strategy: RateStrategy = self._STRATEGIES[self._BASE_STRATEGY]
         self._last_request_time: int = 0
         self._rate_limiter: aiolimiter.AsyncLimiter = None
