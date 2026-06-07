@@ -19,7 +19,7 @@ from tests.mocks.helpers import Patch
 from tests.mocks.raw import REQUEST
 
 
-TRANSLATIONS = Patch(load_translations, gettext.translation)
+TRANSLATIONS = Patch(load_translations, gettext.translation, "gettext")
 _TRANSLATIONS = {
     "starlette.unexpected_error": "any",
     "starlette.default": "any",
@@ -31,7 +31,7 @@ _TRANSLATIONS = {
 }
 
 
-def test_load_translationss():
+def test_load_translations():
     _ERRORS.clear()
     assert not _ERRORS
     web, meta = load_translations()
@@ -41,7 +41,7 @@ def test_load_translationss():
     assert meta[Lang.EN_US] and meta[Lang.PT_BR]
 
 
-def test_error_load_translationss(mocker: Mocker):
+def test_error_load_translations(mocker: Mocker):
     mocker.patch(**TRANSLATIONS(FileNotFoundError("any")))
     with raises(FileNotFoundError) as info:
         load_translations()
