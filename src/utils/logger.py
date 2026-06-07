@@ -12,6 +12,7 @@ from logging.handlers import RotatingFileHandler
 from pathlib import Path
 
 import gunicorn.glogging
+import uvicorn.logging
 from fastapi.requests import Request as FastAPIRequest
 from pydantic_core import to_jsonable_python
 from starlette.types import Scope as StarletteScope
@@ -176,7 +177,7 @@ _LOGGING_CONFIG: Json = {
     },
     "handlers": {
         "console": {
-            "class": "logging.StreamHandler",
+            "class": logging.StreamHandler,
             "formatter": "default",
             "stream": "ext://sys.stdout",
         },
@@ -193,7 +194,7 @@ UVICORN_LOGGING_CONFIG: Json = {
     "disable_existing_loggers": False,
     "formatters": {
         "default": {
-            "()": "uvicorn.logging.DefaultFormatter",
+            "()": uvicorn.logging.DefaultFormatter,
             "fmt": _UVICORN_FMT,
             "datefmt": _DATEFMT,
             "use_colors": True,
@@ -203,7 +204,7 @@ UVICORN_LOGGING_CONFIG: Json = {
     "handlers": {
         "default": {
             "formatter": "default",
-            "class": "logging.StreamHandler",
+            "class": logging.StreamHandler,
             "stream": "ext://sys.stderr",
         },
     },
@@ -366,10 +367,7 @@ def api_call(url: str, code: int, time: float) -> None:
 
 
 class ProdLogger(gunicorn.glogging.Logger):
-    """Custom logger for Gunicorn log messages"""
-
-    fqn = f"{__module__}.{__qualname__}"
-    error_fmt = r"%(asctime)s %(levelname)s: %(message)s"
+    error_fmt = r"%(asctime)s %(levelname)-10s %(message)s"
     datefmt = r"%Y-%m-%d %H:%M:%S"
     access_fmt = ""
 

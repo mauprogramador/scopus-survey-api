@@ -43,6 +43,8 @@ accesslog = "-"
 errorlog = "-"
 loglevel = "info"
 access_log_format = None
-logger_class = logger.ProdLogger.fqn
+logger_class = (
+    f"{logger.ProdLogger.__module__}.{logger.ProdLogger.__qualname__}"
+)
 raw_env = ["PROGRESS_BAR=False"]
 when_ready = when_ready_hook
