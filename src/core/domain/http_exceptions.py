@@ -1,4 +1,5 @@
 import asyncio
+from datetime import datetime, timezone
 from http import HTTPStatus
 from json import JSONDecodeError
 
@@ -64,14 +65,18 @@ class Unauthorized(HTTPError):
 
         if isinstance(error, (SignatureExpired, BadSignature, BadData)):
             self.errors[0]["message"] = error.message
+            date_signed = getattr(error, "date_signed", None)
 
-            if isinstance(error, (SignatureExpired, BadSignature)):
-                signature_details = {"payload": error.payload}
+            if isinstance(date_signed, datetime):
+                date_signed = date_signed.replace(
+                    tzinfo=timezone.utc
+                ).isoformat(timespec="seconds")
 
-                if isinstance(error, SignatureExpired):
-                    signature_details["date_signed"] = error.date_signed
-
-                self.errors.append(signature_details)
+            signature_details = {
+                "payload": getattr(error, "payload", None),
+                "date_signed": date_signed,
+            }
+            self.errors.append(signature_details)
 
 
 class NotFound(HTTPError):

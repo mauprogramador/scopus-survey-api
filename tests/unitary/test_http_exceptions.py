@@ -1,5 +1,5 @@
 import asyncio
-from datetime import datetime
+from datetime import datetime, timezone
 from json import JSONDecodeError
 
 import aiohttp
@@ -83,7 +83,9 @@ def test_signature_error():
     assert info.value.errors[0]["type"] == fqn(SignatureExpired)
     assert info.value.errors[0]["message"] == "any"
     assert info.value.errors[1]["payload"] == "any"
-    assert info.value.errors[1]["date_signed"] == date_signed
+    assert info.value.errors[1]["date_signed"] == date_signed.replace(
+        tzinfo=timezone.utc
+    ).isoformat(timespec="seconds")
 
 
 def test_async_timeout_error():
