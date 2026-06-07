@@ -10,8 +10,8 @@ from src.core.config.config import DIRECTORY, ENV, LIMITER
 from src.core.domain.translations import load_translations
 from src.framework.fastapi.routes import favicon_router, router
 from src.framework.fastapi.swagger import (
+    APP_DESCRIPTION,
     CONTACT,
-    DESCRIPTION,
     LICENSE,
     RESPONSES,
     TERMS_OF_SERVICE,
@@ -40,7 +40,7 @@ app = FastAPI(
     debug=ENV.debug,
     title="Scopus Survey API",
     summary="Web API for bibliographic survey of Scopus articles",
-    description=DESCRIPTION,
+    description=APP_DESCRIPTION,
     version=f"v{__version__}",
     docs_url="/",
     exception_handlers=HANDLERS,

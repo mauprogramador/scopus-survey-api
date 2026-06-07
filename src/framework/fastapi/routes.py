@@ -25,9 +25,11 @@ from src.core.data.query_params import (
 from src.core.domain.factory import make_aggregator, make_combinator
 from src.framework.fastapi.csrf_token import CSRFToken
 from src.framework.fastapi.swagger import (
-    CSV_RESPONSE,
-    HTML_RESPONSE,
-    JSON_RESPONSE,
+    CSV_RESPONSES,
+    JSON_RESPONSES,
+    OPENAPI_EXTRA,
+    ROUTE_DESCRIPTION,
+    WEB_FORM_RESPONSES,
 )
 from src.utils import logger
 
@@ -57,7 +59,7 @@ async def favicon():
     status_code=HTTPStatus.OK,
     tags=["Web"],
     summary="Renders the multi-step web form page",
-    responses=HTML_RESPONSE,
+    responses=WEB_FORM_RESPONSES,
     response_class=HTMLResponse,
 )
 async def web_form_page(
@@ -86,8 +88,10 @@ async def web_form_page(
     tags=["API"],
     dependencies=[fastapi.Depends(CSRFToken.verify_csrf_token)],
     summary="Survey the totals of keyword combinations",
-    responses=JSON_RESPONSE,
+    description=ROUTE_DESCRIPTION,
+    responses=JSON_RESPONSES,
     response_class=JSONResponse,
+    openapi_extra=OPENAPI_EXTRA,
 )
 @LIMITER.limit(LIMIT)
 async def survey_total_combinations(
@@ -108,8 +112,10 @@ async def survey_total_combinations(
     tags=["API"],
     dependencies=[fastapi.Depends(CSRFToken.verify_csrf_token)],
     summary="Survey bibliographies and return the CSV file",
-    responses=CSV_RESPONSE,
+    description=ROUTE_DESCRIPTION,
+    responses=CSV_RESPONSES,
     response_class=FileResponse,
+    openapi_extra=OPENAPI_EXTRA,
 )
 @LIMITER.limit(LIMIT)
 async def survey_bibliographic_data(
@@ -130,8 +136,10 @@ async def survey_bibliographic_data(
     tags=["API"],
     dependencies=[fastapi.Depends(CSRFToken.verify_csrf_token)],
     summary="Download the pre-existing CSV file",
-    responses=CSV_RESPONSE,
+    description=ROUTE_DESCRIPTION,
+    responses=CSV_RESPONSES,
     response_class=FileResponse,
+    openapi_extra=OPENAPI_EXTRA,
 )
 @LIMITER.limit(LIMIT)
 async def download_csv(

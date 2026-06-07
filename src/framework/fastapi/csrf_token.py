@@ -19,24 +19,15 @@ from src.core.domain.http_exceptions import Unauthorized
 class CSRFToken:
     _SERIALIZER = URLSafeTimedSerializer(ENV.secret_key, SALT)
     _TOKEN_ADAPTER = TypeAdapter(Token)
-    _OPENAPI_EXAMPLE = {
-        "CSRF Token": Example(
-            summary="CSRF Token",
-            description="Automatically managed by the client-side",
-            value="c1d0cf66f682...",
-        )
-    }
     _COOKIE = fastapi.Cookie(
         alias="csrf-token",
         validation_alias="signed_token",
-        description="Cookies CSRF Token",
-        openapi_examples=_OPENAPI_EXAMPLE,
+        include_in_schema=False,
     )
     _HEADER = fastapi.Header(
         alias="X-CSRF-Token",
         validation_alias="header_token",
-        description="Header CSRF Token",
-        openapi_examples=_OPENAPI_EXAMPLE,
+        include_in_schema=False,
     )
 
     @classmethod

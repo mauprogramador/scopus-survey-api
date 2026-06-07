@@ -170,10 +170,7 @@ class ScopusHeaders(BaseModel):
     reset: int = Field(default=None, validation_alias="X-RateLimit-Reset")
     status: str = Field(default=None, validation_alias="X-ELS-Status")
 
-    @computed_field(  # type: ignore[prop-decorator]
-        description="Datetime the Quota is reset",
-        examples=["2026-05-18 06:09:22"],
-    )
+    @computed_field(return_type=str)  # type: ignore[prop-decorator]
     @property
     def reset_datetime(self) -> str:
         if self.reset is None:

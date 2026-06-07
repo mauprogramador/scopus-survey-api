@@ -47,14 +47,14 @@ class CSVParams(BaseModel):
     api_key: str = Field(
         alias="apiKey",
         validation_alias="api_key",
-        description="Your Scopus API Key",
+        description="The Scopus API Key issued by Elsevier",
         examples=["439f55d263cj..."],
         pattern=_API_KEY_PATTERN,
         min_length=32,
         max_length=32,
     )
     button: Literal[Button.PREVIOUS, Button.DOWNLOAD] = Field(
-        description="The HTML button value",
+        description="The Button-step Action extra context",
         examples=[Button.PREVIOUS],
         exclude=True,
     )
@@ -69,7 +69,7 @@ class CombinationParams(CSVParams):
         default=LAST_THREE_YEARS,
         alias="startYear",
         validation_alias="start_year",
-        description="Date range start year",
+        description="The Start Year of the Date Range",
         examples=[LAST_THREE_YEARS],
         exclude=True,
         ge=MAX_RECENT_PUBLICATIONS,
@@ -79,7 +79,7 @@ class CombinationParams(CSVParams):
         default=CURRENT_YEAR,
         alias="endYear",
         validation_alias="end_year",
-        description="Date range end year",
+        description="The End Year of the Date Range",
         examples=[CURRENT_YEAR],
         exclude=True,
         ge=(MAX_RECENT_PUBLICATIONS + 1),
@@ -137,18 +137,18 @@ class CombinationParams(CSVParams):
     pages: PageRange = Field(
         default=None,
         serialization_alias="PAGES",
-        description="The page number range to filter documents",
+        description="The documents' size by Page Count",
         examples=[PageRange.SHORT.name],
     )
     keywords: list[Keyword] = Field(
-        description="The Keywords to search for in the documents fields",
-        examples=["Python,Machine Learning"],
+        description="The Keywords in the documents you are searching for",
+        examples=["Python", "Scopus", "Web API", "Bibliographic Survey"],
         exclude=True,
         min_length=1,
         max_length=4,
     )
     button: Literal[Button.COMBINATION] = Field(
-        description="The HTML button value",
+        description="The Button-step Action extra context",
         examples=[Button.COMBINATION],
         exclude=True,
     )
@@ -194,10 +194,7 @@ class CombinationParams(CSVParams):
     def serialize_page_range(self, value: PageRange | None) -> str | None:
         return None if value is None else PAGE_RANGE[value]
 
-    @computed_field(  # type: ignore[prop-decorator]
-        description="Date range by years",
-        examples=[f"{LAST_THREE_YEARS}-{CURRENT_YEAR}"],
-    )
+    @computed_field(return_type=str)  # type: ignore[prop-decorator]
     @property
     def date(self) -> str:
         return f"{self.start_year}-{self.end_year}"
@@ -209,7 +206,7 @@ class SearchParams(CombinationParams):
     model_config = ConfigDict(extra="forbid", str_strip_whitespace=True)
 
     combination: str = Field(
-        description="The chosen keywords combination",
+        description="The chosen Keyword Combination to refine the survey",
         examples=["Python AND Machine Learning"],
         exclude=True,
         pattern=_KEYWORD_COMBINATION_PATTERN,
@@ -220,14 +217,14 @@ class SearchParams(CombinationParams):
         default=80,
         alias="threshold",
         validation_alias="ratio",
-        description="Filter ratio to remove similar documents",
+        description="The Filter Ratio used to remove similar documents",
         examples=[80],
         exclude=True,
         ge=0,
         le=100,
     )
     button: Literal[Button.SURVEY] = Field(
-        description="The HTML button value",
+        description="The Button-step Action extra context",
         examples=[Button.SURVEY],
         exclude=True,
     )

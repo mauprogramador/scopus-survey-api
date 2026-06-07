@@ -1,11 +1,12 @@
 from http import HTTPStatus
 
 from src import __contact__, __license__
-from src.adapters.presenters.json_response import ErrorResponse
 
 
-DESCRIPTION = """
+APP_DESCRIPTION = """
 <br>
+[**`GET STARTED`**](/v2/scopus-survey/web/en-US/survey-bibliographies) **➡**
+<br><br><br>
 **Instituto Federal de Educação, Ciência e Tecnologia de Mato Grosso do Sul**
 &nbsp;&#8226;&nbsp;
 [IFMS Campus Três Lagoas](https://www.ifms.edu.br/campi/campus-tres-lagoas)
@@ -14,7 +15,6 @@ DESCRIPTION = """
 &nbsp;&#8226;&nbsp;
 [TADS](https://www.ifms.edu.br/campi/campus-tres-lagoas/cursos/graduacao/\
 analise-e-desenvolvimento-de-sistemas)
-
 
 _Federal Institute of Education, Science and Technology of Mato Grosso do Sul_
 <br>_Technology in Systems Analysis and Development_
@@ -63,30 +63,99 @@ LICENSE = {
     "identifier": __license__,
     "url": "https://opensource.org/license/mit",
 }
-RESPONSES = {
-    HTTPStatus.BAD_REQUEST: {
-        "model": ErrorResponse,
-        "description": "JSON error response",
-    },
-    HTTPStatus.UNPROCESSABLE_ENTITY: {
-        "model": ErrorResponse,
-        "description": "JSON error response",
+OPENAPI_EXTRA = {
+    "security": [
+        {
+            "type": "apiKey",
+            "in": "header",
+            "name": "X-CSRF-Token",
+        },
+        {
+            "type": "apiKey",
+            "in": "cookie",
+            "name": "csrf-token",
+        },
+    ]
+}
+ROUTE_DESCRIPTION = (
+    "We implemented the Double-Submit Cookie method (stateless CSRF protection"
+    " standard) with automatic client-side CSRF token validation for security."
+)
+JSON_ERROR_RESPONSE = {
+    "description": "Error",
+    "content": {
+        "application/json": {
+            "example": {
+                "success": False,
+                "status_code": 401,
+                "status": "Unauthorized",
+                "message": "CSRF token has expired",
+                "timestamp": "2026-01-01T00:00:00Z",
+                "request": {
+                    "path": "/v2/scopus-survey/api/csv",
+                    "method": "GET",
+                },
+                "tracking_id": "ERR_SignatureExpired_d51vk8e1Vd8c",
+                "errors": [
+                    {
+                        "type": "itsdangerous.exc.SignatureExpired",
+                        "message": "Signature age 3800 > 3600 seconds",
+                    },
+                ],
+            }
+        }
     },
 }
-
-HTML_RESPONSE = {
-    200: {
-        "description": "Multi-step web form page",
+HTML_SUCCESS_EXAMPLE = """
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Survey Bibliographies - ScopusSurveyAPI</title>
+    </head>
+    <body>...</body>
+</html>
+"""
+HTML_ERROR_EXAMPLE = """
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Error - ScopusSurveyAPI</title>
+    </head>
+    <body>...</body>
+</html>
+"""
+RESPONSES = {
+    HTTPStatus.UNPROCESSABLE_ENTITY: JSON_ERROR_RESPONSE,
+}
+WEB_FORM_RESPONSES = {
+    HTTPStatus.OK: {
+        "description": "Success: Web Form Page",
         "content": {
             "text/html": {
-                "example": "<html>...</html>",
+                "example": HTML_SUCCESS_EXAMPLE,
             }
         },
-    }
+    },
+    HTTPStatus.BAD_REQUEST: {
+        "description": "Error: Error Page",
+        "content": {
+            "text/html": {
+                "example": HTML_ERROR_EXAMPLE,
+            }
+        },
+    },
+    HTTPStatus.UNPROCESSABLE_ENTITY: {
+        "description": "Error: Error Page",
+        "content": {
+            "text/html": {
+                "example": HTML_ERROR_EXAMPLE,
+            }
+        },
+    },
 }
-JSON_RESPONSE = {
-    200: {
-        "description": "Totals of keyword combinations",
+JSON_RESPONSES = {
+    HTTPStatus.OK: {
+        "description": "Success: Totals of keyword combinations",
         "content": {
             "application/json": {
                 "example": {
@@ -94,7 +163,7 @@ JSON_RESPONSE = {
                     "status_code": 200,
                     "status": "OK",
                     "message": "Combination totals survey successfully",
-                    "timestamp": "2025-01-01T00:00:00Z",
+                    "timestamp": "2026-01-01T00:00:00Z",
                     "data": [
                         {
                             "combination": "Python AND Georeference",
@@ -109,10 +178,12 @@ JSON_RESPONSE = {
             }
         },
     },
+    HTTPStatus.BAD_REQUEST: JSON_ERROR_RESPONSE,
+    HTTPStatus.UNPROCESSABLE_ENTITY: JSON_ERROR_RESPONSE,
 }
-CSV_RESPONSE = {
-    200: {
-        "description": "CSV file of bibliographies",
+CSV_RESPONSES = {
+    HTTPStatus.OK: {
+        "description": "Success: CSV file of bibliographies",
         "content": {
             "text/csv": {
                 "example": (
@@ -129,4 +200,6 @@ CSV_RESPONSE = {
             }
         },
     },
+    HTTPStatus.BAD_REQUEST: JSON_ERROR_RESPONSE,
+    HTTPStatus.UNPROCESSABLE_ENTITY: JSON_ERROR_RESPONSE,
 }
