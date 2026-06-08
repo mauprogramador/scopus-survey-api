@@ -68,14 +68,14 @@ class ScopusAbstractRetrievalAPI:
                 remaining_tasks.discard(future)
 
                 try:
-                    response = await future
-                    last_completed = response
+                    res = await future
+                    last_completed = res
 
                     abstract = (
                         await asyncio.get_running_loop().run_in_executor(
                             executor,
                             ScopusResponse.validate_abstract,
-                            response,
+                            res,
                         )
                     )
                     abstract_data = abstract.model_dump(by_alias=True)
@@ -108,10 +108,10 @@ class ScopusAbstractRetrievalAPI:
         url = self._state.entry[index].url
         url = self._url_builder.abstract_url(url)
 
-        response = await self._http_client.request(url)
-        self._details.set_abstract_quota(response)
+        res = await self._http_client.request(url)
+        self._details.set_abstract_quota(res)
 
-        abstract = ScopusResponse.validate_abstract(response)
+        abstract = ScopusResponse.validate_abstract(res)
         abstract_data = abstract.model_dump(by_alias=True)
         self._state.abstracts.append(abstract_data)
 

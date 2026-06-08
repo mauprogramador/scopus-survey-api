@@ -31,25 +31,25 @@ async def test_set_cookie(client: Client):
 async def test_missing_cookie_token(client: Client):
     client.cookies.delete("csrf-token")
     res = await client.get(URL_CSV, params=CSV_PARAMS)
-    errors = assert_error_json(res, HTTP_401, ExcMsg.TOKEN_COOKIE_ERROR)
-    assert errors is None
+    details = assert_error_json(res, HTTP_401, ExcMsg.TOKEN_COOKIE_ERROR)
+    assert details is None
 
 
 @mark.asyncio
 async def test_missing_header_token(client: Client):
     client.headers.clear()
     res = await client.get(URL_CSV, params=CSV_PARAMS)
-    errors = assert_error_json(res, HTTP_401, ExcMsg.TOKEN_HEADER_ERROR)
-    assert errors is None
+    details = assert_error_json(res, HTTP_401, ExcMsg.TOKEN_HEADER_ERROR)
+    assert details is None
 
 
 @mark.asyncio
 async def test_invalid_token(client: Client):
     client.headers.update({"X-CSRF-Token": "any"})
     res = await client.get(URL_CSV, params=CSV_PARAMS)
-    errors = assert_error_json(res, HTTP_401, ExcMsg.INVALID_TOKEN)
-    assert errors[0]["type"] == fqn(ValidationError)
-    assert errors[0]["message"] and errors[1]
+    details = assert_error_json(res, HTTP_401, ExcMsg.INVALID_TOKEN)
+    assert details[0]["type"] == fqn(ValidationError)
+    assert details[0]["message"] and details[1]
 
 
 @mark.asyncio
@@ -61,18 +61,18 @@ async def test_signature_expired(mocker: Mocker, client: Client):
     )
     res = await client.get(URL_CSV, params=CSV_PARAMS)
     mock.assert_called_once_with(SIGNED_TOKEN, MAX_AGE)
-    errors = assert_error_json(res, HTTP_401, ExcMsg.EXPIRED_TOKEN)
-    assert errors[0]["type"] == fqn(SignatureExpired)
-    assert errors[0]["message"] == "any"
+    details = assert_error_json(res, HTTP_401, ExcMsg.EXPIRED_TOKEN)
+    assert details[0]["type"] == fqn(SignatureExpired)
+    assert details[0]["message"] == "any"
 
 
 @mark.asyncio
 async def test_bad_signature(client: Client):
     client.cookies.update({"csrf-token": "any"})
     res = await client.get(URL_CSV, params=CSV_PARAMS)
-    errors = assert_error_json(res, HTTP_401, ExcMsg.TOKEN_SIGNATURE_ERROR)
-    assert errors[0]["type"] == fqn(BadSignature)
-    assert errors[0]["message"]
+    details = assert_error_json(res, HTTP_401, ExcMsg.TOKEN_SIGNATURE_ERROR)
+    assert details[0]["type"] == fqn(BadSignature)
+    assert details[0]["message"]
 
 
 @mark.asyncio
@@ -82,8 +82,8 @@ async def test_incorrect(mocker: Mocker, client: Client):
     )
     res = await client.get(URL_CSV, params=CSV_PARAMS)
     mock.assert_called_once_with(SIGNED_TOKEN, MAX_AGE)
-    errors = assert_error_json(res, HTTP_401, ExcMsg.INVALID_TOKEN)
-    assert errors is None
+    details = assert_error_json(res, HTTP_401, ExcMsg.INVALID_TOKEN)
+    assert details is None
 
 
 @mark.asyncio

@@ -121,10 +121,10 @@ class SurveyDetails(Protocol):
     def set_search_data(self, scopus_search: ScopusSearch) -> None:
         pass
 
-    def set_search_quota(self, response: ResponseBundle) -> None:
+    def set_search_quota(self, res: ResponseBundle) -> None:
         pass
 
-    def set_abstract_quota(self, response: ResponseBundle) -> None:
+    def set_abstract_quota(self, res: ResponseBundle) -> None:
         pass
 
     def set_results(self, retrieved: int) -> None:

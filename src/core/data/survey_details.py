@@ -39,9 +39,9 @@ class SurveyDetails:
             ]
         )
 
-    def set_search_quota(self, response: ResponseBundle) -> None:
-        quota = ScopusHeaders.model_validate(response.headers)
-        self.search_quota = (quota, response.code)
+    def set_search_quota(self, res: ResponseBundle) -> None:
+        quota = ScopusHeaders.model_validate(res.headers)
+        self.search_quota = (quota, res.code)
         self.headers.update(
             {
                 "X-Search-Limit": str(quota.limit),
@@ -51,9 +51,9 @@ class SurveyDetails:
             }
         )
 
-    def set_abstract_quota(self, response: ResponseBundle) -> None:
-        quota = ScopusHeaders.model_validate(response.headers)
-        self.abstract_quota = (quota, response.code)
+    def set_abstract_quota(self, res: ResponseBundle) -> None:
+        quota = ScopusHeaders.model_validate(res.headers)
+        self.abstract_quota = (quota, res.code)
         self.headers.update(
             {
                 "X-Abstract-Limit": str(quota.limit),

@@ -52,15 +52,15 @@ def test_get_error_message(exc: Exception, msg: str):
 
 
 def test_get_error_details():
-    errors = get_error_details(ValueError("any"))
-    assert errors[0]["type"] == fqn(ValueError) and len(errors) == 1
-    assert errors[0]["message"] == "any"
+    details = get_error_details(ValueError("any"))
+    assert details[0]["type"] == fqn(ValueError) and len(details) == 1
+    assert details[0]["message"] == "any"
 
-    errors = get_error_details(PYDANTIC_VALIDATION_ERROR)
-    assert errors[0]["type"] == fqn(ValidationError) and len(errors) == 2
-    assert errors[0]["message"] == "Field required"
-    assert errors[1]["type"] == "missing" and errors[1]["input"] == "any"
-    assert errors[1]["msg"] == "Field required" and "loc" in errors[1]
+    details = get_error_details(PYDANTIC_VALIDATION_ERROR)
+    assert details[0]["type"] == fqn(ValidationError) and len(details) == 2
+    assert details[0]["message"] == "Field required"
+    assert details[1]["type"] == "missing" and details[1]["input"] == "any"
+    assert details[1]["msg"] == "Field required" and "loc" in details[1]
 
 
 def test_http_error():
@@ -69,8 +69,8 @@ def test_http_error():
         raise HTTPError(HTTP_500, ExcMsg.UNEXPECTED_ERROR, exc)
 
     assert_http_error(info, HTTP_500, trans(info.value))
-    assert info.value.errors[0]["type"] == fqn(ValueError)
-    assert info.value.errors[0]["message"] == "any"
+    assert info.value.details[0]["type"] == fqn(ValueError)
+    assert info.value.details[0]["message"] == "any"
 
 
 def test_signature_error():
@@ -80,10 +80,10 @@ def test_signature_error():
         raise Unauthorized(ExcMsg.INVALID_TOKEN, exc)
 
     assert_http_error(info, HTTP_401, trans(info.value))
-    assert info.value.errors[0]["type"] == fqn(SignatureExpired)
-    assert info.value.errors[0]["message"] == "any"
-    assert info.value.errors[1]["payload"] == "any"
-    assert info.value.errors[1]["date_signed"] == date_signed.replace(
+    assert info.value.details[0]["type"] == fqn(SignatureExpired)
+    assert info.value.details[0]["message"] == "any"
+    assert info.value.details[1]["payload"] == "any"
+    assert info.value.details[1]["date_signed"] == date_signed.replace(
         tzinfo=timezone.utc
     ).isoformat(timespec="seconds")
 
@@ -94,10 +94,10 @@ def test_async_timeout_error():
         raise GatewayTimeout(ExcMsg.CONNECTION_TIMEOUT, exc)
 
     assert_http_error(info, HTTP_504, trans(info.value))
-    assert info.value.errors[0]["type"] == fqn(asyncio.TimeoutError)
-    assert info.value.errors[0]["message"] == "any"
-    assert not info.value.errors[1]["strerror"]
-    assert not info.value.errors[1]["errno"]
+    assert info.value.details[0]["type"] == fqn(asyncio.TimeoutError)
+    assert info.value.details[0]["message"] == "any"
+    assert not info.value.details[1]["strerror"]
+    assert not info.value.details[1]["errno"]
 
 
 def test_content_type_error():
@@ -106,13 +106,13 @@ def test_content_type_error():
         raise BadGatewayContent(ExcMsg.INVALID_JSON_ERROR, exc, "any")
 
     assert_http_error(info, HTTP_502, trans(info.value))
-    assert info.value.errors[0]["type"] == fqn(aiohttp.ContentTypeError)
-    assert info.value.errors[0]["message"] == "any"
+    assert info.value.details[0]["type"] == fqn(aiohttp.ContentTypeError)
+    assert info.value.details[0]["message"] == "any"
 
-    assert info.value.errors[1]["raw_body"] == "any"
-    assert info.value.errors[1]["message"] == "any"
-    assert info.value.errors[1]["status_code"] == 400
-    assert info.value.errors[1]["path"] is not None
+    assert info.value.details[1]["raw_body"] == "any"
+    assert info.value.details[1]["message"] == "any"
+    assert info.value.details[1]["status_code"] == 400
+    assert info.value.details[1]["path"] is not None
 
 
 def test_json_decode_error():
@@ -121,15 +121,15 @@ def test_json_decode_error():
         raise BadGatewayContent(ExcMsg.INVALID_JSON_ERROR, exc, "any")
 
     assert_http_error(info, HTTP_502, trans(info.value))
-    assert info.value.errors[0]["type"] == fqn(JSONDecodeError)
-    assert info.value.errors[0]["message"] == JSON_DECODE_ERROR.args[0]
+    assert info.value.details[0]["type"] == fqn(JSONDecodeError)
+    assert info.value.details[0]["message"] == JSON_DECODE_ERROR.args[0]
 
-    assert info.value.errors[1]["raw_body"] == "any"
-    assert info.value.errors[1]["message"] == "any"
-    assert info.value.errors[1]["doc"] == "any"
-    assert info.value.errors[1]["pos"] is not None
-    assert info.value.errors[1]["lineno"] == 1
-    assert info.value.errors[1]["colno"] == 1
+    assert info.value.details[1]["raw_body"] == "any"
+    assert info.value.details[1]["message"] == "any"
+    assert info.value.details[1]["doc"] == "any"
+    assert info.value.details[1]["pos"] is not None
+    assert info.value.details[1]["lineno"] == 1
+    assert info.value.details[1]["colno"] == 1
 
 
 def test_scopus_api_error():
@@ -147,13 +147,13 @@ def test_scopus_api_error():
         )
 
     assert_http_error(info, HTTP_502, "any")
-    assert len(info.value.errors) == 2
-    assert info.value.errors[0]["limit"] == 20000
-    assert info.value.errors[0]["remaining"] == 0
-    assert info.value.errors[0]["reset"] == 1779148473
-    assert info.value.errors[0]["status_code"] == HTTP_429
-    assert info.value.errors[0]["status"] == HTTP_429.phrase
-    assert info.value.errors[0]["error_code"] == RATE_LIMIT_ERROR_CODE
-    assert info.value.errors[0]["error_text"] == "any"
-    assert info.value.errors[0]["docs"]
-    assert info.value.errors[1] == RAW_ERROR_RESPONSE_RATE_LIMIT
+    assert len(info.value.details) == 2
+    assert info.value.details[0]["limit"] == 20000
+    assert info.value.details[0]["remaining"] == 0
+    assert info.value.details[0]["reset"] == 1779148473
+    assert info.value.details[0]["status_code"] == HTTP_429
+    assert info.value.details[0]["status"] == HTTP_429.phrase
+    assert info.value.details[0]["error_code"] == RATE_LIMIT_ERROR_CODE
+    assert info.value.details[0]["error_text"] == "any"
+    assert info.value.details[0]["docs"]
+    assert info.value.details[1] == RAW_ERROR_RESPONSE_RATE_LIMIT

@@ -65,7 +65,7 @@ async def test_survey_two_keywords(mocker: Mocker, client: Client):
     COMBINATION_PARAMS.update({"keywords": KEYWORDS[:2]})
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
     assert res.status_code == HTTP_200 and mock.call_count == 3
-    combs = res.json()["data"]["combinations"]
+    combs = res.json()["result"]["combinations"]
     assert len(combs) == 3 and sum(item["total"] for item in combs) == 3
 
 
@@ -75,7 +75,7 @@ async def test_survey_four_keywords(mocker: Mocker, client: Client):
     COMBINATION_PARAMS.update({"keywords": KEYWORDS})
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
     assert res.status_code == HTTP_200 and mock.call_count == 15
-    combs = res.json()["data"]["combinations"]
+    combs = res.json()["result"]["combinations"]
     assert len(combs) == 15 and sum(item["total"] for item in combs) == 15
 
 
@@ -85,7 +85,7 @@ async def test_survey_not_found(mocker: Mocker, client: Client):
     COMBINATION_PARAMS.update({"keywords": KEYWORDS[:2]})
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
     assert res.status_code == HTTP_200 and mock.call_count == 3
-    combs = res.json()["data"]["combinations"]
+    combs = res.json()["result"]["combinations"]
     assert len(combs) == 3 and sum(item["total"] for item in combs) == 0
 
 
@@ -95,9 +95,9 @@ async def test_survey_cancelled_error(mocker: Mocker, client: Client):
     mocker.patch(**STEP(MORE_CANCELLED))
     COMBINATION_PARAMS.update({"keywords": KEYWORDS})
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
-    errors = assert_error_json(res, HTTP_503, ExcMsg.CANCELLED_ERROR)
-    assert errors[0]["type"] == fqn(asyncio.CancelledError)
-    assert errors[0]["message"] == "any" and mock.call_count == 8
+    details = assert_error_json(res, HTTP_503, ExcMsg.CANCELLED_ERROR)
+    assert details[0]["type"] == fqn(asyncio.CancelledError)
+    assert details[0]["message"] == "any" and mock.call_count == 8
 
 
 @mark.asyncio
@@ -180,13 +180,13 @@ async def test_search_more_pages_full_results(mocker: Mocker, client: Client):
 async def test_search_not_found(mocker: Mocker, client: Client):
     mock = mocker.patch(*get_patch(SEARCH_NOT_FOUND))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
-    errors = assert_error_json(res, HTTP_404, ExcMsg.ARTICLES_NOT_FOUND)
-    assert errors is None and mock.call_count == 1
+    details = assert_error_json(res, HTTP_404, ExcMsg.ARTICLES_NOT_FOUND)
+    assert details is None and mock.call_count == 1
 
 
 @mark.asyncio
 @mark.parametrize(
-    "response,count,total,per_page",
+    "res_mock,count,total,per_page",
     [
         (SEARCH_EXACT_QUOTA_ONE_RESULT, 1, 1, 1),
         (SEARCH_EXACT_QUOTA_TWO_RESULTS, 2, 26, 25),
@@ -197,13 +197,13 @@ async def test_search_not_found(mocker: Mocker, client: Client):
 async def test_search_exact_quota_limit(
     mocker: Mocker,
     client: Client,
-    response: list[MagicMock],
+    res_mock: list[MagicMock],
     count: int,
     total: int,
     per_page: int,
 ):
     state = mocker.patch(STATE, MockState(count, total))
-    mock = mocker.patch(*get_patch(response))
+    mock = mocker.patch(*get_patch(res_mock))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
 
     assert res.status_code == HTTP_200 and mock.call_count == count * 2
@@ -214,7 +214,7 @@ async def test_search_exact_quota_limit(
 
 @mark.asyncio
 @mark.parametrize(
-    "response,count,total,per_page",
+    "re_mock,count,total,per_page",
     [
         (SEARCH_NO_QUOTA_TWO_RESULTS, 1, 1, 25),
         (SEARCH_NO_QUOTA_MORE_RESULTS, 4, 76, 25),
@@ -224,13 +224,13 @@ async def test_search_exact_quota_limit(
 async def test_search_insufficient_quota(
     mocker: Mocker,
     client: Client,
-    response: list[MagicMock],
+    re_mock: list[MagicMock],
     count: int,
     total: int,
     per_page: int,
 ):
     state = mocker.patch(STATE, MockState(count, total))
-    mock = mocker.patch(*get_patch(response))
+    mock = mocker.patch(*get_patch(re_mock))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
 
     assert res.status_code == HTTP_200 and mock.call_count == count * 2
@@ -243,9 +243,9 @@ async def test_search_insufficient_quota(
 async def test_search_quota_exceeded(mocker: Mocker, client: Client):
     mock = mocker.patch(*get_patch(SEARCH_QUOTA_EXCEEDED))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
-    errors = assert_error_json(res, HTTP_502, trans(SCOPUS_API_QUOTA_ERROR))
-    assert errors is not None and mock.call_count == 2
-    assert errors[0]["error_code"] == QUOTA_ERROR_CODE
+    details = assert_error_json(res, HTTP_502, trans(SCOPUS_API_QUOTA_ERROR))
+    assert details is not None and mock.call_count == 2
+    assert details[0]["error_code"] == QUOTA_ERROR_CODE
 
 
 @mark.asyncio
@@ -254,8 +254,8 @@ async def test_search_cancelled_error(mocker: Mocker, client: Client):
     mocker.patch(**STEP(MORE_CANCELLED))
     mock = mocker.patch(*get_patch(SEARCH_MORE_PAGES_PARTIAL_RESULTS))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
-    errors = assert_error_json(res, HTTP_503, ExcMsg.CANCELLED_ERROR)
+    details = assert_error_json(res, HTTP_503, ExcMsg.CANCELLED_ERROR)
 
     assert mock.call_count == 7 and spy.call_count == 4
-    assert errors[0]["type"] == fqn(asyncio.CancelledError)
-    assert errors[0]["message"] == "any"
+    assert details[0]["type"] == fqn(asyncio.CancelledError)
+    assert details[0]["message"] == "any"

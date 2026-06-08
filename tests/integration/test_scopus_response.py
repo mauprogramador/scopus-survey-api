@@ -65,45 +65,45 @@ async def test_status_error(
         {"code": "ANY", "text": "any"},
         {"any": "any"},
     )
-    errors = assert_error_json(res, HTTP_502, trans(exc))
-    assert errors[0]["status"] and errors[1]["error"] == "any"
-    assert errors[0]["status_code"] == status
+    details = assert_error_json(res, HTTP_502, trans(exc))
+    assert details[0]["status"] and details[1]["error"] == "any"
+    assert details[0]["status_code"] == status
 
 
 @mark.asyncio
 async def test_quota_exceeded(mocker: Mocker, client: Client):
     mocker.patch(*get_patch(RESPONSE_QUOTA_EXCEEDED))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
-    errors = assert_error_json(res, HTTP_502, trans(SCOPUS_API_QUOTA_ERROR))
-    assert errors[0]["error_code"] == QUOTA_ERROR_CODE
-    assert errors[0]["status_code"] == HTTP_429
-    assert errors[1] == RAW_SERVICE_ERROR_QUOTA
+    details = assert_error_json(res, HTTP_502, trans(SCOPUS_API_QUOTA_ERROR))
+    assert details[0]["error_code"] == QUOTA_ERROR_CODE
+    assert details[0]["status_code"] == HTTP_429
+    assert details[1] == RAW_SERVICE_ERROR_QUOTA
 
 
 @mark.asyncio
 async def test_rate_limit_exceeded(mocker: Mocker, client: Client):
     mocker.patch(*get_patch(RESPONSE_RATE_LIMIT_EXCEEDED))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
-    errors = assert_error_json(res, HTTP_502, trans(SCOPUS_API_RATE_ERROR))
-    assert errors[0]["error_code"] == RATE_LIMIT_ERROR_CODE
-    assert errors[0]["status_code"] == HTTP_429
-    assert errors[1] == RAW_ERROR_RESPONSE_RATE_LIMIT
+    details = assert_error_json(res, HTTP_502, trans(SCOPUS_API_RATE_ERROR))
+    assert details[0]["error_code"] == RATE_LIMIT_ERROR_CODE
+    assert details[0]["status_code"] == HTTP_429
+    assert details[1] == RAW_ERROR_RESPONSE_RATE_LIMIT
 
 
 @mark.asyncio
 async def test_json_validation_error(mocker: Mocker, client: Client):
     mocker.patch(*get_patch(RESPONSE_JSON_ERROR))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
-    errors = assert_error_json(res, HTTP_500, ExcMsg.VALIDATE_ERROR)
-    assert errors[0]["type"] == fqn(ValidationError)
-    assert errors[0]["message"]
-    assert errors[1]["type"] == "model_type"
+    details = assert_error_json(res, HTTP_500, ExcMsg.VALIDATE_ERROR)
+    assert details[0]["type"] == fqn(ValidationError)
+    assert details[0]["message"]
+    assert details[1]["type"] == "model_type"
 
 
 @mark.asyncio
 async def test_json_key_error(mocker: Mocker, client: Client):
     mocker.patch(*get_patch(RESPONSE_KEY_ERROR))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
-    errors = assert_error_json(res, HTTP_500, ExcMsg.VALIDATE_ERROR)
-    assert errors[0]["type"] == fqn(KeyError)
-    assert errors[0]["message"]
+    details = assert_error_json(res, HTTP_500, ExcMsg.VALIDATE_ERROR)
+    assert details[0]["type"] == fqn(KeyError)
+    assert details[0]["message"]

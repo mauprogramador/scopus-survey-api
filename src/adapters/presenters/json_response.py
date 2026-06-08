@@ -3,7 +3,7 @@ from http import HTTPStatus
 
 from fastapi.requests import Request as FastAPIRequest
 from fastapi.responses import JSONResponse
-from pydantic import BaseModel, field_validator
+from pydantic import BaseModel, ConfigDict
 from pydantic_core import PydanticSerializationError, to_jsonable_python
 
 from src.core.common.types import Json
@@ -13,6 +13,8 @@ from src.utils import logger
 
 
 class BaseResponse(BaseModel):
+    model_config = ConfigDict(str_strip_whitespace=True)
+
     success: bool
     status_code: int
     status: str
@@ -23,15 +25,15 @@ class BaseResponse(BaseModel):
 class ErrorResponse(BaseResponse):
     request: dict[str, str]
     tracking_id: str
-    errors: list[Json] | None = None
+    details: list[Json] | None = None
 
 
 class SuccessResponse(BaseResponse):
-    data: Json
+    result: Json
 
 
 class ErrorJSON(JSONResponse):
-    """Builds JSON error response and validates errors"""
+    """Builds JSON error response and validates details"""
 
     def __init__(
         self,
@@ -39,26 +41,26 @@ class ErrorJSON(JSONResponse):
         status_code: int,
         message: str,
         tracking_id: str,
-        errors: list[Json] | Json | None = None,
+        details: list[Json] | Json | None = None,
     ) -> None:
-        """Builds JSON error response and validates errors"""
+        """Builds JSON error response and validates details"""
 
-        if errors is not None:
-            if isinstance(errors, dict):
-                errors = [errors]
+        if details is not None:
+            if isinstance(details, dict):
+                details = [details]
 
             try:
-                errors = to_jsonable_python(errors, fallback=repr)
+                details = to_jsonable_python(details, fallback=repr)
             except (TypeError, ValueError, PydanticSerializationError) as exc:
                 logger.error(ExcMsg.SERIALIZE_ERROR)
                 logger.exception(exc)
 
-                errors = get_error_details(exc)
-                serialize_error = {
+                details = get_error_details(exc)
+                serialize_detail = {
                     "desc": ExcMsg.SERIALIZE_ERROR,
-                    "raw_repr": repr(errors),
+                    "raw_repr": repr(details),
                 }
-                errors.append(serialize_error)
+                details.append(serialize_detail)
 
         error_response = ErrorResponse(
             success=False,
@@ -70,7 +72,7 @@ class ErrorJSON(JSONResponse):
                 "method": request.method,
             },
             tracking_id=tracking_id,
-            errors=errors,
+            details=details,
         )
 
         super().__init__(error_response.model_dump(), status_code)
@@ -80,7 +82,7 @@ class SuccessJSON(JSONResponse):
     """Builds JSON success response"""
 
     def __init__(
-        self, data: Json, message: str, headers: dict[str, str]
+        self, result: Json, message: str, headers: dict[str, str]
     ) -> None:
         """Builds JSON success response"""
 
@@ -89,6 +91,6 @@ class SuccessJSON(JSONResponse):
             status_code=HTTPStatus.OK,
             status=HTTPStatus.OK.phrase,
             message=message,
-            data=data,
+            result=result,
         )
         super().__init__(success_response.model_dump(), HTTPStatus.OK, headers)

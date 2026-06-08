@@ -308,13 +308,13 @@ def debug(data: Json) -> None:
     )
 
 
-def exception(exception: Exception) -> None:
+def exception(exc: Exception) -> None:
     exc_trace = sys.exc_info()[2]
     frame = traceback.extract_tb(exc_trace)[-1] if exc_trace else _FRAME
 
     args = {
-        "module": type(exception).__module__,
-        "qualname": type(exception).__qualname__,
+        "module": type(exc).__module__,
+        "qualname": type(exc).__qualname__,
         "filepath": frame.filename,
         "line": frame.lineno if frame.lineno else 1,
         "col": frame.colno if frame.colno else 1,
@@ -324,21 +324,21 @@ def exception(exception: Exception) -> None:
 
 def _trace(
     prefix: _Level,
-    request: FastAPIRequest,
+    req: FastAPIRequest,
     code: int,
     time: str,
 ) -> None:
-    if request.client is None:
+    if req.client is None:
         host, port = ENV.host, ENV.port
     else:
-        host, port = request.client.host, request.client.port
+        host, port = req.client.host, req.client.port
 
     args = {
         "host": host,
         "port": port,
-        "method_color": _METHOD_COLOR.get(request.method, "90"),
-        "method": request.method,
-        "url": _API_KEY_PARAM_PATTERN.sub(_HIDE_API_KEY, str(request.url)),
+        "method_color": _METHOD_COLOR.get(req.method, "90"),
+        "method": req.method,
+        "url": _API_KEY_PARAM_PATTERN.sub(_HIDE_API_KEY, str(req.url)),
         "status_color": _STATUS_COLOR[(code // 100)],
         "code": code,
         "status_phrase": HTTPStatus(code).phrase,
@@ -347,8 +347,8 @@ def _trace(
     LOGGER.log(prefix, _TRACE, args, stacklevel=3)
 
 
-def trace(request: FastAPIRequest, code: int, time: str) -> None:
-    _trace(_Level.TRACE, request, code, time)
+def trace(req: FastAPIRequest, code: int, time: str) -> None:
+    _trace(_Level.TRACE, req, code, time)
 
 
 def api_call(url: str, code: int, time: float) -> None:

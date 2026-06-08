@@ -66,7 +66,7 @@ class KeywordCombinationFinder:
         headers.update({"Content-Type": "application/json; charset=utf-8"})
 
         return SuccessJSON(
-            data={"combinations": survey_list},
+            result={"combinations": survey_list},
             message="Combination totals survey successfully",
             headers=headers,
         )

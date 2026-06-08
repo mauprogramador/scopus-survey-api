@@ -99,24 +99,24 @@ class TemplateResponse:
 
     @classmethod
     def not_found_template(
-        cls, request: FastAPIRequest, response: StarletteResponse | ErrorJSON
+        cls, request: FastAPIRequest, res: StarletteResponse | ErrorJSON
     ) -> HTMLResponse:
 
         context = {
             "prefix": PREFIX,
             "message": ExcMsg.UNEXPECTED_ERROR,
-            "status_code": response.status_code,
-            "status": HTTPStatus(response.status_code).phrase,
+            "status_code": res.status_code,
+            "status": HTTPStatus(res.status_code).phrase,
             "timestamp": datetime.now(timezone.utc).isoformat(
                 timespec="seconds"
             ),
-            "error_json": response.body.decode(),  # type: ignore
+            "error_json": res.body.decode(),  # type: ignore
         }
 
         return cls._TEMPLATES.TemplateResponse(
             request,
             cls.ERROR_FILENAME,
             context,
-            response.status_code,
+            res.status_code,
             cls._ERROR_PAGE_HEADERS,
         )

@@ -30,7 +30,7 @@ def test_error_response():
     assert not model.success and model.timestamp
     assert model.status_code == HTTP_500
     assert model.status == "any" and model.message == "any"
-    assert model.errors is None and model.request is not None
+    assert model.details is None and model.request is not None
     assert model.request["any"] == "any"
 
 
@@ -49,10 +49,10 @@ def test_error_json():
     assert raw["status_code"] == HTTP_500
     assert raw["message"] == "any"
 
-    req, errors = raw["request"], raw["errors"]
-    assert req is not None and errors is not None
+    req, details = raw["request"], raw["details"]
+    assert req is not None and details is not None
     assert req["path"] and req["method"]
-    assert errors[0]["type"] == "any" and errors[0]["loc"] == "any"
+    assert details[0]["type"] == "any" and details[0]["loc"] == "any"
 
 
 def test_error_json_dict_errors():
@@ -67,7 +67,7 @@ def test_error_json_dict_errors():
 
     assert not raw["success"] and raw["message"] == "any"
     assert raw["status_code"] == HTTP_500
-    assert isinstance(raw["errors"], list) and raw["errors"][0]["type"]
+    assert isinstance(raw["details"], list) and raw["details"][0]["type"]
 
 
 def test_error_json_serialize_fallback():
@@ -82,8 +82,8 @@ def test_error_json_serialize_fallback():
 
     assert not raw["success"] and raw["message"] == "any"
     assert raw["status_code"] == HTTP_500
-    assert raw["errors"][0]["type"] == repr(PydanticUndefined)
-    assert raw["errors"][1]["exc"] == repr(RuntimeError)
+    assert raw["details"][0]["type"] == repr(PydanticUndefined)
+    assert raw["details"][1]["exc"] == repr(RuntimeError)
 
 
 def test_error_json_serialize_error(mocker: Mocker):
@@ -93,10 +93,10 @@ def test_error_json_serialize_error(mocker: Mocker):
 
     assert not raw["success"] and raw["message"] == "any"
     assert raw["status_code"] == HTTP_500
-    assert raw["errors"][0]["type"] == fqn(ValueError)
-    assert raw["errors"][0]["message"] == "any"
-    assert raw["errors"][1]["desc"] == ExcMsg.SERIALIZE_ERROR
-    assert raw["errors"][1]["raw_repr"]
+    assert raw["details"][0]["type"] == fqn(ValueError)
+    assert raw["details"][0]["message"] == "any"
+    assert raw["details"][1]["desc"] == ExcMsg.SERIALIZE_ERROR
+    assert raw["details"][1]["raw_repr"]
 
 
 def test_success_response():
@@ -105,12 +105,12 @@ def test_success_response():
         status_code=HTTP_200,
         status="any",
         message="any",
-        data={"any": "any"},
+        result={"any": "any"},
     )
     assert model.success and model.timestamp
     assert model.status_code == HTTP_200
     assert model.status == "any" and model.message == "any"
-    assert model.data is not None
+    assert model.result is not None
 
 
 def test_success_json():
@@ -124,4 +124,4 @@ def test_success_json():
     assert raw["success"] and raw["timestamp"] is not None
     assert raw["status"] == HTTP_200.phrase
     assert raw["status_code"] == HTTP_200
-    assert raw["message"] == "any" and raw["data"] is not None
+    assert raw["message"] == "any" and raw["result"] is not None

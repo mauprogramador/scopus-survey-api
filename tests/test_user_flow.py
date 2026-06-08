@@ -116,9 +116,11 @@ class TestUserFlowSurveySteps:
         assert res.headers.get("X-Search-Reset") == RESET_DATETIME
         assert res.headers.get("X-Search-ELS-Status") == "OK"
         assert res.headers.get("X-Average-Found")
-        assert len(res.json()["data"]["combinations"]) == 3
+        assert len(res.json()["result"]["combinations"]) == 3
 
-        cls._combination = res.json()["data"]["combinations"][0]["combination"]
+        cls._combination = res.json()["result"]["combinations"][0][
+            "combination"
+        ]
 
     @mark.asyncio
     @classmethod

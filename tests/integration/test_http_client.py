@@ -59,73 +59,73 @@ async def test_success(mocker: Mocker, client: Client):
     mock = mocker.patch(*get_patch(GET_SUCCESS))
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
     assert res.status_code == HTTP_200 and mock.call_count == 3
-    assert len(res.json()["data"]["combinations"]) == 3
+    assert len(res.json()["result"]["combinations"]) == 3
 
 
 @mark.asyncio
 async def test_cancelled_error(mocker: Mocker, client: Client):
     mock = mocker.patch(*get_patch(asyncio.CancelledError("any")))
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
-    errors = assert_error_json(res, HTTP_503, ExcMsg.CANCELLED_ERROR)
-    assert errors[0]["type"] == fqn(asyncio.CancelledError)
-    assert errors[0]["message"] == "any" and mock.call_count == 3
+    details = assert_error_json(res, HTTP_503, ExcMsg.CANCELLED_ERROR)
+    assert details[0]["type"] == fqn(asyncio.CancelledError)
+    assert details[0]["message"] == "any" and mock.call_count == 3
 
 
 @mark.asyncio
 async def test_timeout_error(mocker: Mocker, client: Client):
     mock = mocker.patch(*get_patch(asyncio.TimeoutError("any")))
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
-    errors = assert_error_json(res, HTTP_504, ExcMsg.CONNECTION_TIMEOUT)
-    assert errors[0]["type"] == fqn(asyncio.TimeoutError)
-    assert errors[0]["message"] == "any" and mock.call_count == 3
+    details = assert_error_json(res, HTTP_504, ExcMsg.CONNECTION_TIMEOUT)
+    assert details[0]["type"] == fqn(asyncio.TimeoutError)
+    assert details[0]["message"] == "any" and mock.call_count == 3
 
 
 @mark.asyncio
 async def test_client_connection_error(mocker: Mocker, client: Client):
     mock = mocker.patch(*get_patch(aiohttp.ClientConnectionError("any")))
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
-    errors = assert_error_json(res, HTTP_502, ExcMsg.CONNECTION_ERROR)
-    assert errors[0]["type"] == fqn(aiohttp.ClientConnectionError)
-    assert errors[0]["message"] == "any" and mock.call_count == 3
+    details = assert_error_json(res, HTTP_502, ExcMsg.CONNECTION_ERROR)
+    assert details[0]["type"] == fqn(aiohttp.ClientConnectionError)
+    assert details[0]["message"] == "any" and mock.call_count == 3
 
 
 @mark.asyncio
 async def test_uncaught_exception(mocker: Mocker, client: Client):
     mock = mocker.patch(*get_patch(RuntimeError("any")))
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
-    errors = assert_error_json(res, HTTP_502, ExcMsg.REQUEST_EXCEPTION)
-    assert errors[0]["type"] == fqn(RuntimeError)
-    assert errors[0]["message"] == "any" and mock.call_count == 3
+    details = assert_error_json(res, HTTP_502, ExcMsg.REQUEST_EXCEPTION)
+    assert details[0]["type"] == fqn(RuntimeError)
+    assert details[0]["message"] == "any" and mock.call_count == 3
 
 
 @mark.asyncio
 async def test_content_type_error(mocker: Mocker, client: Client):
     mock = mocker.patch(*get_patch(GET_CONTENT_TYPE_ERROR))
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
-    errors = assert_error_json(res, HTTP_502, ExcMsg.INVALID_JSON_ERROR)
-    assert len(errors) == 2 and mock.call_count == 3
-    assert errors[0]["type"] == fqn(aiohttp.ContentTypeError)
-    assert errors[0]["message"] and errors[1]["raw_body"] is not None
+    details = assert_error_json(res, HTTP_502, ExcMsg.INVALID_JSON_ERROR)
+    assert len(details) == 2 and mock.call_count == 3
+    assert details[0]["type"] == fqn(aiohttp.ContentTypeError)
+    assert details[0]["message"] and details[1]["raw_body"] is not None
 
 
 @mark.asyncio
 async def test_no_data_error(mocker: Mocker, client: Client):
     mock = mocker.patch(*get_patch(GET_EMPTY_RESPONSE))
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
-    errors = assert_error_json(res, HTTP_502, ExcMsg.INVALID_JSON_ERROR)
-    assert len(errors) == 2 and mock.call_count == 3
-    assert errors[0]["type"] == fqn(JSONDecodeError)
-    assert errors[0]["message"] and errors[1]["raw_body"] is not None
+    details = assert_error_json(res, HTTP_502, ExcMsg.INVALID_JSON_ERROR)
+    assert len(details) == 2 and mock.call_count == 3
+    assert details[0]["type"] == fqn(JSONDecodeError)
+    assert details[0]["message"] and details[1]["raw_body"] is not None
 
 
 @mark.asyncio
 async def test_json_decode_error(mocker: Mocker, client: Client):
     mock = mocker.patch(*get_patch(GET_JSON_DECODE_ERROR))
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
-    errors = assert_error_json(res, HTTP_502, ExcMsg.INVALID_JSON_ERROR)
-    assert len(errors) == 2 and mock.call_count == 3
-    assert errors[0]["type"] == fqn(JSONDecodeError)
-    assert errors[0]["message"] and errors[1]["raw_body"] is not None
+    details = assert_error_json(res, HTTP_502, ExcMsg.INVALID_JSON_ERROR)
+    assert len(details) == 2 and mock.call_count == 3
+    assert details[0]["type"] == fqn(JSONDecodeError)
+    assert details[0]["message"] and details[1]["raw_body"] is not None
 
 
 @mark.asyncio
@@ -152,13 +152,13 @@ async def test_request_retry(mocker: Mocker, client: Client):
 
 @mark.asyncio
 async def test_retry_on_rate_limit(mocker: Mocker, client: Client):
-    spy = mocker.patch(SLEEP, wraps=asyncio.sleep)
+    spy = mocker.patch(SLEEP, new_callable=AsyncMock, wraps=asyncio.sleep)
     mock = mocker.patch(*get_patch(GET_RATE_LIMIT))
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
     assert spy.call_args_list[0].args[0] == 2
     assert spy.call_count == 2  # +1 close
     assert res.status_code == HTTP_200 and mock.call_count == 4
-    assert len(res.json()["data"]["combinations"]) == 3
+    assert len(res.json()["result"]["combinations"]) == 3
     spy.assert_awaited()
     mock.assert_awaited()
 

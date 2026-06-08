@@ -26,11 +26,11 @@ def test_build_all(mocker: Mocker):
     assert TemplateResponse.INDEX_FILENAMES[Lang.PT_BR].exists()
 
     assert spy_jinja.call_count == 2
-    context = spy_jinja.call_args_list[0].kwargs
-    assert context["version"] and context["email"] and context["prefix"]
-    assert context["lang"] == Lang.EN_US
-    assert context["_t"] and context["_m"]
-    assert META_INFO.items() <= context.items()
+    ctx = spy_jinja.call_args_list[0].kwargs
+    assert ctx["version"] and ctx["email"] and ctx["prefix"]
+    assert ctx["lang"] == Lang.EN_US
+    assert ctx["_t"] and ctx["_m"]
+    assert META_INFO.items() <= ctx.items()
 
 
 def test_form_template(mocker: Mocker):
@@ -44,8 +44,8 @@ def test_form_template(mocker: Mocker):
     assert res.headers["Cache-Control"]
     assert res.headers["Content-Type"]
 
-    context: dict = spy_jinja.call_args_list[0].args[3]
-    assert context["csrf_token"] == CSRF_TOKEN
+    ctx: dict = spy_jinja.call_args_list[0].args[3]
+    assert ctx["csrf_token"] == CSRF_TOKEN
 
 
 def test_not_found_template(mocker: Mocker):
@@ -60,8 +60,8 @@ def test_not_found_template(mocker: Mocker):
     assert res.headers["Pragma"] == "no-cache"
     assert res.headers["Expires"] == "0"
 
-    context: dict = spy_jinja.call_args_list[0].args[3]
-    assert context["status"] and context["prefix"] and context["timestamp"]
-    assert context["status_code"] == HTTP_404
-    assert context["message"] == ExcMsg.UNEXPECTED_ERROR
-    assert context["error_json"]
+    ctx: dict = spy_jinja.call_args_list[0].args[3]
+    assert ctx["status"] and ctx["prefix"] and ctx["timestamp"]
+    assert ctx["status_code"] == HTTP_404
+    assert ctx["message"] == ExcMsg.UNEXPECTED_ERROR
+    assert ctx["error_json"]

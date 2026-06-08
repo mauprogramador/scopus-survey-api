@@ -85,8 +85,8 @@ async def test_survey_cancelled_error(mocker: Mocker):
         await fix.api.survey_totals_found(FOUR_KEYWORDS)
     assert_http_error(info, HTTP_503, ExcMsg.CANCELLED_ERROR)
     assert fix.req.call_count == 15 and spy.call_count == 3
-    assert info.value.errors[0]["type"] == fqn(asyncio.CancelledError)
-    assert info.value.errors[0]["message"] == "any"
+    assert info.value.details[0]["type"] == fqn(asyncio.CancelledError)
+    assert info.value.details[0]["message"] == "any"
 
 
 @mark.asyncio
@@ -154,7 +154,7 @@ async def test_search_not_found():
 
 @mark.asyncio
 @mark.parametrize(
-    "response,count,total,per_page",
+    "res_mock,count,total,per_page",
     [
         (SEARCH_EXACT_QUOTA_ONE_RESULT, 1, 1, 1),
         (SEARCH_EXACT_QUOTA_TWO_RESULTS, 2, 26, 25),
@@ -163,12 +163,12 @@ async def test_search_not_found():
     ids=["One result", "Two results", "More results"],
 )
 async def test_search_exact_quota_limit(
-    response: list[ResponseBundle],
+    res_mock: list[ResponseBundle],
     count: int,
     total: int,
     per_page: int,
 ):
-    fix = search_fix(response)
+    fix = search_fix(res_mock)
     await fix.api.search_articles(None)
     assert len(fix.state.entry) == count and fix.req.call_count == count
     assert fix.state.total_results == total
@@ -179,7 +179,7 @@ async def test_search_exact_quota_limit(
 
 @mark.asyncio
 @mark.parametrize(
-    "response,count,total,per_page",
+    "res_mock,count,total,per_page",
     [
         (SEARCH_NO_QUOTA_TWO_RESULTS, 1, 1, 25),
         (SEARCH_NO_QUOTA_MORE_RESULTS, 4, 76, 25),
@@ -187,12 +187,12 @@ async def test_search_exact_quota_limit(
     ids=["Two results", "More results"],
 )
 async def test_search_insufficient_quota(
-    response: list[ResponseBundle],
+    res_mock: list[ResponseBundle],
     count: int,
     total: int,
     per_page: int,
 ):
-    fix = search_fix(response)
+    fix = search_fix(res_mock)
     await fix.api.search_articles(None)
     assert len(fix.state.entry) == count and fix.req.call_count == count
     assert fix.state.total_results == total
@@ -207,9 +207,9 @@ async def test_search_quota_exceeded():
     with raises(ScopusAPIError) as info:
         await fix.api.search_articles(None)
     assert_http_error(info, HTTP_502, "any")
-    assert len(info.value.errors) == 2 and fix.req.call_count == 1
-    assert info.value.errors[0]["status"] == HTTP_429.phrase
-    assert info.value.errors[0]["status_code"] == HTTP_429
+    assert len(info.value.details) == 2 and fix.req.call_count == 1
+    assert info.value.details[0]["status"] == HTTP_429.phrase
+    assert info.value.details[0]["status_code"] == HTTP_429
 
 
 @mark.asyncio
@@ -221,5 +221,5 @@ async def test_search_cancelled_error(mocker: Mocker):
         await fix.api.search_articles(None)
     assert_http_error(info, HTTP_503, ExcMsg.CANCELLED_ERROR)
     assert fix.req.call_count == 7 and spy.call_count == 4
-    assert info.value.errors[0]["type"] == fqn(asyncio.CancelledError)
-    assert info.value.errors[0]["message"] == "any"
+    assert info.value.details[0]["type"] == fqn(asyncio.CancelledError)
+    assert info.value.details[0]["message"] == "any"

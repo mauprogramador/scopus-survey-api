@@ -39,5 +39,5 @@ class ProxyForwardedHeadersMiddleware(BaseHTTPMiddleware):
             request.scope["server"] = server
             request.scope["headers"] = headers
 
-        response = await call_next(request)
-        return response
+        res = await call_next(request)
+        return res

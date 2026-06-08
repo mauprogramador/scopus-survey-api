@@ -35,9 +35,9 @@ def test_status_error():
     with raises(ScopusAPIError) as info:
         ScopusResponse.validate_search(res)
     assert_http_error(info, HTTP_502, "any")
-    assert len(info.value.errors) == 2 and info.value.errors[1]
-    assert info.value.errors[0]["error_code"] == "INVALID_INPUT"
-    assert info.value.errors[0]["status_code"] == HTTP_400
+    assert len(info.value.details) == 2 and info.value.details[1]
+    assert info.value.details[0]["error_code"] == "INVALID_INPUT"
+    assert info.value.details[0]["status_code"] == HTTP_400
 
 
 def test_quota_exceeded():
@@ -46,9 +46,9 @@ def test_quota_exceeded():
     with raises(ScopusAPIError) as info:
         ScopusResponse.validate_search(res)
     assert_http_error(info, HTTP_502, "any")
-    assert len(info.value.errors) and info.value.errors[1]
-    assert info.value.errors[0]["error_code"] == QUOTA_ERROR_CODE
-    assert info.value.errors[0]["status_code"] == HTTP_429
+    assert len(info.value.details) and info.value.details[1]
+    assert info.value.details[0]["error_code"] == QUOTA_ERROR_CODE
+    assert info.value.details[0]["status_code"] == HTTP_429
 
 
 def test_rate_limit_exceeded():
@@ -57,9 +57,9 @@ def test_rate_limit_exceeded():
     with raises(ScopusAPIError) as info:
         ScopusResponse.validate_search(res)
     assert_http_error(info, HTTP_502, "any")
-    assert len(info.value.errors) and info.value.errors[1]
-    assert info.value.errors[0]["error_code"] == RATE_LIMIT_ERROR_CODE
-    assert info.value.errors[0]["status_code"] == HTTP_429
+    assert len(info.value.details) and info.value.details[1]
+    assert info.value.details[0]["error_code"] == RATE_LIMIT_ERROR_CODE
+    assert info.value.details[0]["status_code"] == HTTP_429
 
 
 def test_json_validation_error():
@@ -67,9 +67,9 @@ def test_json_validation_error():
     with raises(InternalError) as info:
         ScopusResponse.validate_search(res)
     assert_http_error(info, HTTP_500, ExcMsg.VALIDATE_ERROR)
-    assert info.value.errors[0]["type"] == fqn(ValidationError)
-    assert info.value.errors[0]["message"]
-    assert info.value.errors[1]["type"] == "model_type"
+    assert info.value.details[0]["type"] == fqn(ValidationError)
+    assert info.value.details[0]["message"]
+    assert info.value.details[1]["type"] == "model_type"
 
 
 def test_json_key_error():
@@ -77,5 +77,5 @@ def test_json_key_error():
     with raises(InternalError) as info:
         ScopusResponse.validate_search(res)
     assert_http_error(info, HTTP_500, ExcMsg.VALIDATE_ERROR)
-    assert info.value.errors[0]["type"] == fqn(KeyError)
-    assert info.value.errors[0]["message"]
+    assert info.value.details[0]["type"] == fqn(KeyError)
+    assert info.value.details[0]["message"]

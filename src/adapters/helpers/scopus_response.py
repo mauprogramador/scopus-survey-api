@@ -21,40 +21,40 @@ class ScopusResponse:
 
     @classmethod
     def _validate(
-        cls, model: Type[ScopusModel], response: ResponseBundle
+        cls, model: Type[ScopusModel], res: ResponseBundle
     ) -> ScopusModel:
         try:
-            if response.code >= HTTPStatus.BAD_REQUEST:
-                quota = ScopusHeaders.model_validate(response.headers)
-                logger.quota(quota, response.code)
+            if res.code >= HTTPStatus.BAD_REQUEST:
+                quota = ScopusHeaders.model_validate(res.headers)
+                logger.quota(quota, res.code)
 
-                error_response = ScopusError.model_validate(response.data)
+                error_res = ScopusError.model_validate(res.data)
 
-                if response.code == HTTPStatus.TOO_MANY_REQUESTS:
+                if res.code == HTTPStatus.TOO_MANY_REQUESTS:
 
-                    if error_response.code == QUOTA_ERROR_CODE:
+                    if error_res.code == QUOTA_ERROR_CODE:
                         logger.error(ExcMsg.QUOTA_EXCEEDED)
                         logger.try_again(quota.reset_datetime)
 
-                    elif error_response.code == RATE_LIMIT_ERROR_CODE:
+                    elif error_res.code == RATE_LIMIT_ERROR_CODE:
                         logger.error(ExcMsg.RATE_LIMIT_EXCEEDED)
 
                 raise ScopusAPIError(
-                    response.code,
+                    res.code,
                     quota.model_dump(),
-                    error_response.model_dump(),
-                    response.data,
+                    error_res.model_dump(),
+                    res.data,
                 )
 
-            return model.model_validate(response.data)
+            return model.model_validate(res.data)
 
         except (ValidationError, KeyError) as exc:
             raise InternalError(ExcMsg.VALIDATE_ERROR, exc) from exc
 
     @classmethod
-    def validate_search(cls, response: ResponseBundle) -> ScopusSearch:
-        return cls._validate(ScopusSearch, response)
+    def validate_search(cls, res: ResponseBundle) -> ScopusSearch:
+        return cls._validate(ScopusSearch, res)
 
     @classmethod
-    def validate_abstract(cls, response: ResponseBundle) -> ScopusAbstract:
-        return cls._validate(ScopusAbstract, response)
+    def validate_abstract(cls, res: ResponseBundle) -> ScopusAbstract:
+        return cls._validate(ScopusAbstract, res)

@@ -62,8 +62,8 @@ async def test_csv_params_valid_data(client: Client):
 @mark.asyncio
 async def test_csv_params_raise_errors(client: Client):
     res = await client.get(URL_CSV)
-    errors = assert_error_json(res, HTTP_422, trans(REQUEST_VALIDATION_ERROR))
-    assert len(errors) == 3
+    details = assert_error_json(res, HTTP_422, trans(REQUEST_VALIDATION_ERROR))
+    assert len(details) == 3
 
 
 @mark.asyncio
@@ -99,8 +99,8 @@ async def test_combination_params_overridden_default(
 @mark.asyncio
 async def test_combination_params_raise_errors(client: Client):
     res = await client.get(URL_COMBINATION)
-    errors = assert_error_json(res, HTTP_422, trans(REQUEST_VALIDATION_ERROR))
-    assert len(errors) == 4
+    details = assert_error_json(res, HTTP_422, trans(REQUEST_VALIDATION_ERROR))
+    assert len(details) == 4
 
 
 @mark.asyncio
@@ -167,8 +167,8 @@ async def test_search_params_overridden_default(
 async def test_search_params_raise_errors(mocker: Mocker, client: Client):
     mocker.patch(**MAKE_AGGREGATOR(RETRIEVE_ARTICLES))
     res = await client.get(URL_SEARCH)
-    errors = assert_error_json(res, HTTP_422, trans(REQUEST_VALIDATION_ERROR))
-    assert len(errors) == 5
+    details = assert_error_json(res, HTTP_422, trans(REQUEST_VALIDATION_ERROR))
+    assert len(details) == 5
 
 
 @mark.asyncio

@@ -231,9 +231,9 @@ async def test_cancelled_error(mocker: Mocker, client: Client):
     mocker.patch(**IDXMAX([1, concurrent.CancelledError("any")]))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     assert mock.call_count == 10
-    errors = assert_error_json(res, HTTP_503, ExcMsg.CANCELLED_ERROR)
-    assert errors[0]["type"] == fqn(concurrent.CancelledError)
-    assert errors[0]["message"] == "any"
+    details = assert_error_json(res, HTTP_503, ExcMsg.CANCELLED_ERROR)
+    assert details[0]["type"] == fqn(concurrent.CancelledError)
+    assert details[0]["message"] == "any"
 
 
 @mark.asyncio

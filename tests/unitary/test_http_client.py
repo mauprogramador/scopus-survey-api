@@ -74,8 +74,8 @@ async def test_timeout_error(mocker: Mocker, client: HTTPClient):
     with raises(GatewayTimeout) as info:
         await client.request("any")
     assert_http_error(info, HTTP_504, ExcMsg.CONNECTION_TIMEOUT)
-    assert info.value.errors[0]["type"] == fqn(asyncio.TimeoutError)
-    assert info.value.errors[0]["message"] == "any"
+    assert info.value.details[0]["type"] == fqn(asyncio.TimeoutError)
+    assert info.value.details[0]["message"] == "any"
     mock.assert_awaited_once()
 
 
@@ -85,8 +85,8 @@ async def test_client_connection_error(mocker: Mocker, client: HTTPClient):
     with raises(BadGateway) as info:
         await client.request("any")
     assert_http_error(info, HTTP_502, ExcMsg.CONNECTION_ERROR)
-    assert info.value.errors[0]["type"] == fqn(aiohttp.ClientConnectionError)
-    assert info.value.errors[0]["message"] == "any"
+    assert info.value.details[0]["type"] == fqn(aiohttp.ClientConnectionError)
+    assert info.value.details[0]["message"] == "any"
     mock.assert_awaited_once()
 
 
@@ -96,8 +96,8 @@ async def test_uncaught_exception(mocker: Mocker, client: HTTPClient):
     with raises(BadGateway) as info:
         await client.request("any")
     assert_http_error(info, HTTP_502, ExcMsg.REQUEST_EXCEPTION)
-    assert info.value.errors[0]["type"] == fqn(RuntimeError)
-    assert info.value.errors[0]["message"] == "any"
+    assert info.value.details[0]["type"] == fqn(RuntimeError)
+    assert info.value.details[0]["message"] == "any"
     mock.assert_awaited_once()
 
 
@@ -107,12 +107,12 @@ async def test_content_type_error(mocker: Mocker, client: HTTPClient):
     with raises(BadGatewayContent) as info:
         await client.request("any")
     assert_http_error(info, HTTP_502, ExcMsg.INVALID_JSON_ERROR)
-    assert len(info.value.errors) == 2
-    assert info.value.errors[0]["type"] == fqn(aiohttp.ContentTypeError)
-    assert info.value.errors[0]["message"] == "any"
-    assert info.value.errors[1]["raw_body"] is not None
-    assert info.value.errors[1]["message"] == "any"
-    assert info.value.errors[1]["status_code"] == 400
+    assert len(info.value.details) == 2
+    assert info.value.details[0]["type"] == fqn(aiohttp.ContentTypeError)
+    assert info.value.details[0]["message"] == "any"
+    assert info.value.details[1]["raw_body"] is not None
+    assert info.value.details[1]["message"] == "any"
+    assert info.value.details[1]["status_code"] == 400
     mock.assert_awaited_once()
 
 
@@ -122,11 +122,11 @@ async def test_no_data_error(mocker: Mocker, client: HTTPClient):
     with raises(BadGatewayContent) as info:
         await client.request("any")
     assert_http_error(info, HTTP_502, ExcMsg.INVALID_JSON_ERROR)
-    assert info.value.errors[0]["type"] == fqn(JSONDecodeError)
-    assert info.value.errors[0]["message"] is not None
-    assert info.value.errors[1]["raw_body"] is not None
-    assert info.value.errors[1]["message"] == "Expecting value"
-    assert info.value.errors[1]["doc"] == "Scopus JSON"
+    assert info.value.details[0]["type"] == fqn(JSONDecodeError)
+    assert info.value.details[0]["message"] is not None
+    assert info.value.details[1]["raw_body"] is not None
+    assert info.value.details[1]["message"] == "Expecting value"
+    assert info.value.details[1]["doc"] == "Scopus JSON"
     mock.assert_awaited_once()
 
 
@@ -136,11 +136,11 @@ async def test_json_decode_error(mocker: Mocker, client: HTTPClient):
     with raises(BadGatewayContent) as info:
         await client.request("any")
     assert_http_error(info, HTTP_502, ExcMsg.INVALID_JSON_ERROR)
-    assert info.value.errors[0]["type"] == fqn(JSONDecodeError)
-    assert info.value.errors[0]["message"] is not None
-    assert info.value.errors[1]["raw_body"] is not None
-    assert info.value.errors[1]["message"] == "any"
-    assert info.value.errors[1]["doc"] == "any"
+    assert info.value.details[0]["type"] == fqn(JSONDecodeError)
+    assert info.value.details[0]["message"] is not None
+    assert info.value.details[1]["raw_body"] is not None
+    assert info.value.details[1]["message"] == "any"
+    assert info.value.details[1]["doc"] == "any"
     mock.assert_awaited_once()
 
 

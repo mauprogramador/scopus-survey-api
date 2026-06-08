@@ -53,13 +53,13 @@ class FlowGuardingMonitorMiddleware(BaseHTTPMiddleware):
         start_time = time.perf_counter()
 
         try:
-            response = await call_next(request)
+            res = await call_next(request)
             trace_id = TRACE_ID_CTX.get()
 
         except Exception as exc:  # pylint: disable=W0718
             trace_id = TRACE_ID_CTX.get()
             exc = InternalError(ExcMsg.UNEXPECTED_ERROR, exc)
-            response = await custom_http_error(request, exc)
+            res = await custom_http_error(request, exc)
 
         finally:
             TRACE_ID_CTX.reset(token)
@@ -71,22 +71,22 @@ class FlowGuardingMonitorMiddleware(BaseHTTPMiddleware):
         else:
             duration = f"{process_time:.2f}s"
 
-        logger.trace(request, response.status_code, duration)
+        logger.trace(request, res.status_code, duration)
 
-        response.headers[self._TRACE_ID] = trace_id
-        response.headers[self._PROCESS_TIME] = duration
+        res.headers[self._TRACE_ID] = trace_id
+        res.headers[self._PROCESS_TIME] = duration
 
-        response.headers.update(HEADERS)
-        response.headers[self._RATELIMIT_POLICY] = RATELIMIT_POLICY
-        response.headers.update(self._server)
+        res.headers.update(HEADERS)
+        res.headers[self._RATELIMIT_POLICY] = RATELIMIT_POLICY
+        res.headers.update(self._server)
 
-        is_error = response.status_code >= HTTPStatus.BAD_REQUEST
+        is_error = res.status_code >= HTTPStatus.BAD_REQUEST
         if is_error and not _API_ROUTES_PATTERN.match(request.url.path):
 
-            if isinstance(response, _StreamingResponse):
-                chunks = [chunk async for chunk in response.body_iterator]
-                setattr(response, "body", b"".join(chunks))
+            if isinstance(res, _StreamingResponse):
+                chunks = [chunk async for chunk in res.body_iterator]
+                setattr(res, "body", b"".join(chunks))
 
-            return TemplateResponse.not_found_template(request, response)
+            return TemplateResponse.not_found_template(request, res)
 
-        return response
+        return res

@@ -23,35 +23,35 @@ def get_error_message(exc: Exception) -> str:
     return repr(exc)
 
 
-def get_error_details(error: Exception) -> list[Json]:
+def get_error_details(exc: Exception) -> list[Json]:
     base_error = {
-        "type": f"{type(error).__module__}.{type(error).__qualname__}",
-        "message": get_error_message(error),
+        "type": f"{type(exc).__module__}.{type(exc).__qualname__}",
+        "message": get_error_message(exc),
     }
-    errors = [base_error]
+    details = [base_error]
 
-    if isinstance(error, ValidationError):
-        pydantic_errors = error.errors(include_url=False)
-        errors[0]["message"] = pydantic_errors[0].get("msg", error.title)
-        errors.extend(pydantic_errors)
+    if isinstance(exc, ValidationError):
+        pydantic_errors = exc.errors(include_url=False)
+        details[0]["message"] = pydantic_errors[0].get("msg", exc.title)
+        details.extend(pydantic_errors)
 
-    return errors
+    return details
 
 
 class HTTPError(FastAPIHTTPException):
     """Detailed HTTP errors"""
 
     def __init__(
-        self, status: HTTPStatus, message: ExcMsg, error: Exception = None
+        self, status: HTTPStatus, message: ExcMsg, exc: Exception = None
     ) -> None:
         """Detailed HTTP errors"""
         self.status = status
         self.message = message
 
-        if error is not None:
-            self.errors = get_error_details(error)
+        if exc is not None:
+            self.details = get_error_details(exc)
         else:
-            self.errors = None
+            self.details = None
 
         super().__init__(status, message)
 
@@ -59,24 +59,24 @@ class HTTPError(FastAPIHTTPException):
 class Unauthorized(HTTPError):
     """HTTP error status code 401"""
 
-    def __init__(self, message: ExcMsg, error: Exception = None) -> None:
+    def __init__(self, message: ExcMsg, exc: Exception = None) -> None:
         """HTTP error status code 401"""
-        super().__init__(HTTPStatus.UNAUTHORIZED, message, error)
+        super().__init__(HTTPStatus.UNAUTHORIZED, message, exc)
 
-        if isinstance(error, (SignatureExpired, BadSignature, BadData)):
-            self.errors[0]["message"] = error.message
-            date_signed = getattr(error, "date_signed", None)
+        if isinstance(exc, (SignatureExpired, BadSignature, BadData)):
+            self.details[0]["message"] = exc.message
+            date_signed = getattr(exc, "date_signed", None)
 
             if isinstance(date_signed, datetime):
                 date_signed = date_signed.replace(
                     tzinfo=timezone.utc
                 ).isoformat(timespec="seconds")
 
-            signature_details = {
-                "payload": getattr(error, "payload", None),
+            signature_detail = {
+                "payload": getattr(exc, "payload", None),
                 "date_signed": date_signed,
             }
-            self.errors.append(signature_details)
+            self.details.append(signature_detail)
 
 
 class NotFound(HTTPError):
@@ -90,66 +90,66 @@ class NotFound(HTTPError):
 class InternalError(HTTPError):
     """HTTP error status code 500"""
 
-    def __init__(self, message: ExcMsg, error: Exception = None) -> None:
+    def __init__(self, message: ExcMsg, exc: Exception = None) -> None:
         """HTTP error status code 500"""
-        super().__init__(HTTPStatus.INTERNAL_SERVER_ERROR, message, error)
+        super().__init__(HTTPStatus.INTERNAL_SERVER_ERROR, message, exc)
 
 
 class BadGateway(HTTPError):
     """HTTP error status code 502"""
 
-    def __init__(self, message: ExcMsg, error: Exception = None) -> None:
+    def __init__(self, message: ExcMsg, exc: Exception = None) -> None:
         """HTTP error status code 502"""
-        super().__init__(HTTPStatus.BAD_GATEWAY, message, error)
+        super().__init__(HTTPStatus.BAD_GATEWAY, message, exc)
 
 
 class ServiceUnavailable(HTTPError):
     """HTTP error status code 503"""
 
-    def __init__(self, message: ExcMsg, error: Exception = None) -> None:
+    def __init__(self, message: ExcMsg, exc: Exception = None) -> None:
         """HTTP error status code 503"""
-        super().__init__(HTTPStatus.SERVICE_UNAVAILABLE, message, error)
+        super().__init__(HTTPStatus.SERVICE_UNAVAILABLE, message, exc)
 
 
 class GatewayTimeout(HTTPError):
     """HTTP error status code 504"""
 
-    def __init__(self, message: ExcMsg, error: Exception = None) -> None:
+    def __init__(self, message: ExcMsg, exc: Exception = None) -> None:
         """HTTP error status code 504"""
-        super().__init__(HTTPStatus.GATEWAY_TIMEOUT, message, error)
+        super().__init__(HTTPStatus.GATEWAY_TIMEOUT, message, exc)
 
-        if isinstance(error, asyncio.TimeoutError):
-            details = {"strerror": error.strerror, "errno": error.errno}
-            self.errors.append(details)
+        if isinstance(exc, asyncio.TimeoutError):
+            timeout_detail = {"strerror": exc.strerror, "errno": exc.errno}
+            self.details.append(timeout_detail)
 
 
 class BadGatewayContent(HTTPError):
     """HTTP error status code 502"""
 
-    def __init__(self, message: ExcMsg, error: Exception, body: str) -> None:
+    def __init__(self, message: ExcMsg, exc: Exception, body: str) -> None:
         """HTTP error status code 502"""
-        super().__init__(HTTPStatus.BAD_GATEWAY, message, error)
-        details: Json = {"raw_body": body}
+        super().__init__(HTTPStatus.BAD_GATEWAY, message, exc)
+        body_detail: Json = {"raw_body": body}
 
-        if isinstance(error, aiohttp.ContentTypeError):
-            content_details: Json = {
-                "message": error.message,
-                "status_code": error.status,
-                "path": error.request_info.url.path,
+        if isinstance(exc, aiohttp.ContentTypeError):
+            content_type_detail: Json = {
+                "message": exc.message,
+                "status_code": exc.status,
+                "path": exc.request_info.url.path,
             }
-            details.update(content_details)
+            body_detail.update(content_type_detail)
 
-        elif isinstance(error, JSONDecodeError):
-            json_details: Json = {
-                "message": error.msg,
-                "doc": error.doc,
-                "pos": error.pos,
-                "lineno": error.lineno,
-                "colno": error.colno,
+        elif isinstance(exc, JSONDecodeError):
+            json_decode_detail: Json = {
+                "message": exc.msg,
+                "doc": exc.doc,
+                "pos": exc.pos,
+                "lineno": exc.lineno,
+                "colno": exc.colno,
             }
-            details.update(json_details)
+            body_detail.update(json_decode_detail)
 
-        self.errors.append(details)
+        self.details.append(body_detail)
 
 
 class ScopusAPIError(HTTPError):
@@ -168,7 +168,7 @@ class ScopusAPIError(HTTPError):
         self.message = scopus_error["text"]
         self.detail = scopus_error["text"]
 
-        error = {
+        scopus_api_detail = {
             **headers,
             "status_code": code,
             "status": HTTPStatus(code).phrase,
@@ -176,4 +176,4 @@ class ScopusAPIError(HTTPError):
             "error_text": scopus_error["text"],
             "docs": SCOPUS_DOCS,
         }
-        self.errors: list[Json] = [error, body]
+        self.details: list[Json] = [scopus_api_detail, body]

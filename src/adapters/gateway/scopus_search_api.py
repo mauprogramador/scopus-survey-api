@@ -52,8 +52,8 @@ class ScopusSearchAPI:
     async def _task_request(
         self, url: str, index: int
     ) -> tuple[int, ResponseBundle]:
-        response = await self._http_client.request(url)
-        return index, response
+        res = await self._http_client.request(url)
+        return index, res
 
     async def survey_totals_found(
         self, bundles_map: dict[int, CombinationBundle]
@@ -79,13 +79,13 @@ class ScopusSearchAPI:
                 remaining_tasks.discard(future)
 
                 try:
-                    index, response = await future
-                    last_completed = response
+                    index, res = await future
+                    last_completed = res
 
                     search = await asyncio.get_running_loop().run_in_executor(
                         executor,
                         ScopusResponse.validate_search,
-                        response,
+                        res,
                     )
                     bundles_map[index].total = search.total_results
                     progress.step()
@@ -145,13 +145,13 @@ class ScopusSearchAPI:
                 remaining_tasks.discard(future)
 
                 try:
-                    response = await future
-                    last_completed = response
+                    res = await future
+                    last_completed = res
 
                     search = await asyncio.get_running_loop().run_in_executor(
                         executor,
                         ScopusResponse.validate_search,
-                        response,
+                        res,
                     )
                     self._state.entry.extend(search.entry)
                     progress.step()
@@ -181,11 +181,11 @@ class ScopusSearchAPI:
     async def search_articles(self, params: SearchParams) -> None:
         url = self._url_builder.search_url(params)
 
-        response = await self._http_client.request(url)
-        search_results = ScopusResponse.validate_search(response)
+        res = await self._http_client.request(url)
+        search_results = ScopusResponse.validate_search(res)
 
         self._details.set_search_data(search_results)
-        self._details.set_search_quota(response)
+        self._details.set_search_quota(res)
 
         self._state.set_first_search(search_results)
 
@@ -193,10 +193,10 @@ class ScopusSearchAPI:
             self._state.handle_search_quota(self._details.search_quota)
 
             if self._state.pages_count == 2:
-                response = await self._get_by_pagination(self._PAGE_TWO_INDEX)
-                self._details.set_search_quota(response)
+                res = await self._get_by_pagination(self._PAGE_TWO_INDEX)
+                self._details.set_search_quota(res)
 
-                search_results = ScopusResponse.validate_search(response)
+                search_results = ScopusResponse.validate_search(res)
                 self._state.entry.extend(search_results.entry)
 
             elif self._state.pages_count > 2:

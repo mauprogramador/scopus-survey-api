@@ -79,7 +79,7 @@ _PREFIXES = {
 }
 
 
-def translate_error(req: FastAPIRequest, exc: Exception) -> str:
+def translate_error(request: FastAPIRequest, exc: Exception) -> str:
     if type(exc) in _PREFIXES:
         prefix, suffix = _PREFIXES[type(exc)]
         suffixes = (suffix, "default")
@@ -91,12 +91,12 @@ def translate_error(req: FastAPIRequest, exc: Exception) -> str:
                 suffixes = (suffix, "default")
                 break
 
-    lang = req.headers.get(_ACCEPT_HEADER, Lang.EN_US)
+    lang = request.headers.get(_ACCEPT_HEADER, Lang.EN_US)
     _e = _ERRORS[Lang(lang)].gettext
 
     if isinstance(exc, ScopusAPIError):
-        status_code = str(exc.errors[0]["status_code"])
-        error_code = exc.errors[0]["error_code"]
+        status_code = str(exc.details[0]["status_code"])
+        error_code = exc.details[0]["error_code"]
         suffixes = (f"{status_code}.{error_code}", status_code, "default")
 
     elif isinstance(exc, HTTPError):

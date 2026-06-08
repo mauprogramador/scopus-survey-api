@@ -96,7 +96,7 @@ JSON_ERROR_RESPONSE = {
                     "method": "GET",
                 },
                 "tracking_id": "ERR_SignatureExpired_d51vk8e1Vd8c",
-                "errors": [
+                "details": [
                     {
                         "type": "itsdangerous.exc.SignatureExpired",
                         "message": "Signature age 3800 > 3600 seconds",
@@ -164,7 +164,7 @@ JSON_RESPONSES = {
                     "status": "OK",
                     "message": "Combination totals survey successfully",
                     "timestamp": "2026-01-01T00:00:00Z",
-                    "data": [
+                    "result": [
                         {
                             "combination": "Python AND Georeference",
                             "total": 2,

@@ -34,9 +34,9 @@ STEP = Patch(ScopusAbstractRetrievalAPI, ProgressBar.step, "ProgressBar")
 @mark.asyncio
 async def test_retrieve_one_partial_abstract():
     fix = abstract_fix(ONE_ABSTRACT, search_raw(1))
-    result = await fix.api.retrieve_abstracts(API_KEY)
-    assert result.shape == (1, 11) and fix.req.call_count == 1
-    assert result[Column.AUTHORS].iloc[0] == "any_author"
+    df = await fix.api.retrieve_abstracts(API_KEY)
+    assert df.shape == (1, 11) and fix.req.call_count == 1
+    assert df[Column.AUTHORS].iloc[0] == "any_author"
     assert len(fix.state.entry) == 1 and fix.state.total_results == 1
     assert fix.state.total_abstracts == len(fix.state.abstracts) == 1
 
@@ -44,9 +44,9 @@ async def test_retrieve_one_partial_abstract():
 @mark.asyncio
 async def test_retrieve_one_abstract_authors():
     fix = abstract_fix(ONE_ABSTRACT_AUTHORS, search_raw(1))
-    result = await fix.api.retrieve_abstracts(API_KEY)
-    assert result.shape == (1, 11) and fix.req.call_count == 1
-    assert result[Column.AUTHORS].iloc[0] == "any_author_1, any_author_2"
+    df = await fix.api.retrieve_abstracts(API_KEY)
+    assert df.shape == (1, 11) and fix.req.call_count == 1
+    assert df[Column.AUTHORS].iloc[0] == "any_author_1, any_author_2"
     assert len(fix.state.entry) == 1 and fix.state.total_results == 1
     assert fix.state.total_abstracts == len(fix.state.abstracts) == 1
 
@@ -54,9 +54,9 @@ async def test_retrieve_one_abstract_authors():
 @mark.asyncio
 async def test_retrieve_one_abstract_full():
     fix = abstract_fix(ONE_ABSTRACT_FULL, search_raw(1))
-    result = await fix.api.retrieve_abstracts(API_KEY)
-    assert result.shape == (1, 11) and fix.req.call_count == 1
-    assert result["Abstract"].iloc[0] == "any_abstract"
+    df = await fix.api.retrieve_abstracts(API_KEY)
+    assert df.shape == (1, 11) and fix.req.call_count == 1
+    assert df["Abstract"].iloc[0] == "any_abstract"
     assert len(fix.state.entry) == 1 and fix.state.total_results == 1
     assert fix.state.total_abstracts == len(fix.state.abstracts) == 1
 
@@ -64,8 +64,8 @@ async def test_retrieve_one_abstract_full():
 @mark.asyncio
 async def test_retrieve_two_abstracts():
     fix = abstract_fix(ONE_ABSTRACT, search_raw(2))
-    result = await fix.api.retrieve_abstracts(API_KEY)
-    assert result.shape == (2, 11) and fix.req.call_count == 2
+    df = await fix.api.retrieve_abstracts(API_KEY)
+    assert df.shape == (2, 11) and fix.req.call_count == 2
     assert len(fix.state.entry) == 2 and fix.state.total_results == 2
     assert fix.state.total_abstracts == len(fix.state.abstracts) == 2
 
@@ -73,15 +73,15 @@ async def test_retrieve_two_abstracts():
 @mark.asyncio
 async def test_retrieve_more_abstracts():
     fix = abstract_fix(ONE_ABSTRACT, search_raw(7))
-    result = await fix.api.retrieve_abstracts(API_KEY)
-    assert result.shape == (7, 11) and fix.req.call_count == 7
+    df = await fix.api.retrieve_abstracts(API_KEY)
+    assert df.shape == (7, 11) and fix.req.call_count == 7
     assert len(fix.state.entry) == 7 and fix.state.total_results == 7
     assert fix.state.total_abstracts == len(fix.state.abstracts) == 7
 
 
 @mark.asyncio
 @mark.parametrize(
-    "response,total",
+    "res_mock,total",
     [
         (ABSTRACT_EXACT_QUOTA_ONE_RESULT, 1),
         (ABSTRACT_EXACT_QUOTA_TWO_RESULTS, 2),
@@ -90,11 +90,11 @@ async def test_retrieve_more_abstracts():
     ids=["One result", "Two results", "More results"],
 )
 async def test_retrieve_exact_quota_limit(
-    response: list[ResponseBundle], total: int
+    res_mock: list[ResponseBundle], total: int
 ):
-    fix = abstract_fix(response, search_raw(total))
-    result = await fix.api.retrieve_abstracts(API_KEY)
-    assert result.shape == (total, 11) and fix.req.call_count == total
+    fix = abstract_fix(res_mock, search_raw(total))
+    df = await fix.api.retrieve_abstracts(API_KEY)
+    assert df.shape == (total, 11) and fix.req.call_count == total
     assert len(fix.state.entry) == total and fix.state.total_results == total
     assert fix.state.total_abstracts == len(fix.state.abstracts) == total
     assert fix.details.abstract_quota[0].remaining == 0
@@ -102,7 +102,7 @@ async def test_retrieve_exact_quota_limit(
 
 @mark.asyncio
 @mark.parametrize(
-    "response,count,total",
+    "res_mock,count,total",
     [
         (ABSTRACT_NO_QUOTA_TWO_RESULTS, 1, 26),
         (ABSTRACT_NO_QUOTA_MORE_RESULTS, 4, 151),
@@ -110,11 +110,11 @@ async def test_retrieve_exact_quota_limit(
     ids=["Two results", "More results"],
 )
 async def test_retrieve_insufficient_quota(
-    response: list[ResponseBundle], count: int, total: int
+    res_mock: list[ResponseBundle], count: int, total: int
 ):
-    fix = abstract_fix(response, search_raw(total, count), count)
-    result = await fix.api.retrieve_abstracts(API_KEY)
-    assert result.shape == (count, 11)
+    fix = abstract_fix(res_mock, search_raw(total, count), count)
+    df = await fix.api.retrieve_abstracts(API_KEY)
+    assert df.shape == (count, 11)
     assert fix.req.call_count == count
     assert len(fix.state.entry) == count and fix.state.total_results == total
     assert fix.state.total_abstracts == len(fix.state.abstracts) == count
@@ -127,9 +127,9 @@ async def test_retrieve_quota_exceeded():
     with raises(ScopusAPIError) as info:
         await fix.api.retrieve_abstracts(API_KEY)
     assert_http_error(info, HTTP_502, "any")
-    assert len(info.value.errors) == 2 and fix.req.call_count == 1
-    assert info.value.errors[0]["status"] == HTTP_429.phrase
-    assert info.value.errors[0]["status_code"] == HTTP_429
+    assert len(info.value.details) == 2 and fix.req.call_count == 1
+    assert info.value.details[0]["status"] == HTTP_429.phrase
+    assert info.value.details[0]["status_code"] == HTTP_429
 
 
 @mark.asyncio
@@ -141,5 +141,5 @@ async def test_retrieve_cancelled_error(mocker: Mocker):
         await fix.api.retrieve_abstracts(API_KEY)
     assert_http_error(info, HTTP_503, ExcMsg.CANCELLED_ERROR)
     assert fix.req.call_count == 7 and spy.call_count == 4
-    assert info.value.errors[0]["type"] == fqn(asyncio.CancelledError)
-    assert info.value.errors[0]["message"] == "any"
+    assert info.value.details[0]["type"] == fqn(asyncio.CancelledError)
+    assert info.value.details[0]["message"] == "any"

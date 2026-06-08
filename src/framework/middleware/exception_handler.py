@@ -37,7 +37,7 @@ async def custom_http_error(
         exc.status_code,
         translate_error(request, exc),
         tracking_id,
-        exc.errors,
+        exc.details,
     )
 
 
@@ -54,7 +54,7 @@ async def scopus_api_error(
         exc.status_code,
         translate_error(request, exc),
         tracking_id,
-        exc.errors,
+        exc.details,
     )
 
 
@@ -64,8 +64,8 @@ async def starlette_http_exception(
 ) -> ErrorJSON:
     tracking_id = _get_tracking_id(exc)
 
-    errors = get_error_details(exc)
-    errors[0]["message"] = exc.detail
+    details = get_error_details(exc)
+    details[0]["message"] = exc.detail
 
     if not logger.excluded_routes(request.url.path):
         logger.error(exc.detail, tracking_id)
@@ -76,7 +76,7 @@ async def starlette_http_exception(
         exc.status_code,
         translate_error(request, exc),
         tracking_id,
-        errors,
+        details,
     )
 
 
@@ -85,13 +85,13 @@ async def fastapi_validation_error(
     exc: RequestValidationError | ResponseValidationError,
 ) -> ErrorJSON:
     tracking_id = _get_tracking_id(exc)
-    errors = get_error_details(exc)
+    details = get_error_details(exc)
 
     validation_errors: list[Json] = exc.errors()
     message = validation_errors[0].get("msg", ExcMsg.INTERNAL_ERROR)
 
-    errors[0]["message"] = message
-    errors.extend(validation_errors)
+    details[0]["message"] = message
+    details.extend(validation_errors)
 
     logger.error(message, tracking_id)
     logger.exception(exc)
@@ -106,7 +106,7 @@ async def fastapi_validation_error(
         status_code,
         translate_error(request, exc),
         tracking_id,
-        errors,
+        details,
     )
 
 
@@ -114,9 +114,9 @@ async def pydantic_validation_error(
     request: FastAPIRequest, exc: ValidationError
 ) -> ErrorJSON:
     tracking_id = _get_tracking_id(exc)
-    errors = get_error_details(exc)
+    details = get_error_details(exc)
 
-    logger.error(errors[0]["message"], tracking_id)
+    logger.error(details[0]["message"], tracking_id)
     logger.exception(exc)
 
     return ErrorJSON(
@@ -124,7 +124,7 @@ async def pydantic_validation_error(
         HTTPStatus.INTERNAL_SERVER_ERROR,
         translate_error(request, exc),
         tracking_id,
-        errors,
+        details,
     )
 
 
@@ -132,15 +132,16 @@ async def rate_limit_error(
     request: FastAPIRequest, exc: RateLimitExceeded
 ) -> ErrorJSON:
     tracking_id = _get_tracking_id(exc)
-    errors = get_error_details(exc)
-    details = {
+    details = get_error_details(exc)
+
+    rate_limit_detail = {
         "status_code": exc.status_code,
         "limit": repr(exc.limit),
         "rate": exc.detail,
     }
-    errors.append(details)
+    details.append(rate_limit_detail)
 
-    errors[0]["message"] = exc.detail
+    details[0]["message"] = exc.detail
 
     logger.error(ExcMsg.SLOWAPI_RATE_ERROR, tracking_id)
     logger.exception(exc)
@@ -150,7 +151,7 @@ async def rate_limit_error(
         HTTPStatus.TOO_MANY_REQUESTS,
         translate_error(request, exc),
         tracking_id,
-        errors,
+        details,
     )
 
 

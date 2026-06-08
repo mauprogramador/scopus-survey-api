@@ -76,10 +76,10 @@ async def web_form_page(
         }
     )
 
-    response = TemplateResponse.form_template(request, csrf_token, lang)
-    response.set_cookie("csrf-token", signed_token, MAX_AGE, httponly=True)
+    res = TemplateResponse.form_template(request, csrf_token, lang)
+    res.set_cookie("csrf-token", signed_token, MAX_AGE, httponly=True)
 
-    return response
+    return res
 
 
 @router.get(
@@ -101,9 +101,9 @@ async def survey_total_combinations(
     logger.debug(params.model_dump())
 
     use_case = make_combinator()
-    response = await use_case.survey_combinations(params)
+    res = await use_case.survey_combinations(params)
 
-    return response
+    return res
 
 
 @router.get(
@@ -125,9 +125,9 @@ async def survey_bibliographic_data(
     logger.debug(params.model_dump())
 
     use_case = make_aggregator()
-    response = await use_case.retrieve_articles(params)
+    res = await use_case.retrieve_articles(params)
 
-    return response
+    return res
 
 
 @router.get(
@@ -148,6 +148,6 @@ async def download_csv(
 ) -> FileResponse:
     logger.debug(params.model_dump())
 
-    response = CSVResponse.retrieve(params.api_key)
+    res = CSVResponse.retrieve(params.api_key)
 
-    return response
+    return res

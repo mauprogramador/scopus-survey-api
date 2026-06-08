@@ -23,7 +23,7 @@ async def test_survey_two_keywords(mocker: Mocker, client: Client):
     COMBINATION_PARAMS.update({"keywords": KEYWORDS[:2]})
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
     assert res.status_code == HTTP_200 and mock.call_count == 3
-    combs = res.json()["data"]["combinations"]
+    combs = res.json()["result"]["combinations"]
     assert len(combs) == 3 and sum(item["total"] for item in combs) == 3
 
 
@@ -33,7 +33,7 @@ async def test_survey_three_keywords(mocker: Mocker, client: Client):
     COMBINATION_PARAMS.update({"keywords": KEYWORDS[:3]})
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
     assert res.status_code == HTTP_200 and mock.call_count == 7
-    combs = res.json()["data"]["combinations"]
+    combs = res.json()["result"]["combinations"]
     assert len(combs) == 7 and sum(item["total"] for item in combs) == 7
 
 
@@ -43,7 +43,7 @@ async def test_survey_four_keywords(mocker: Mocker, client: Client):
     COMBINATION_PARAMS.update({"keywords": KEYWORDS})
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
     assert res.status_code == HTTP_200 and mock.call_count == 15
-    combs = res.json()["data"]["combinations"]
+    combs = res.json()["result"]["combinations"]
     assert len(combs) == 15 and sum(item["total"] for item in combs) == 15
 
 
@@ -53,5 +53,5 @@ async def test_survey_not_found(mocker: Mocker, client: Client):
     COMBINATION_PARAMS.update({"keywords": KEYWORDS[:2]})
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
     assert res.status_code == HTTP_200 and mock.call_count == 3
-    combs = res.json()["data"]["combinations"]
+    combs = res.json()["result"]["combinations"]
     assert len(combs) == 3 and sum(item["total"] for item in combs) == 0

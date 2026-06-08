@@ -88,15 +88,15 @@ def assert_http_error(
 
 
 def assert_error_json(
-    response: ErrorJSON | httpx.Response,
+    res: ErrorJSON | httpx.Response,
     code: HTTPStatus,
     message: str,
 ) -> list[Json] | None:
     """Asserts ErrorJson and HTTPX Response data"""
-    if isinstance(response, ErrorJSON):
-        data: Json = json.loads(response.body.decode())  # type: ignore
+    if isinstance(res, ErrorJSON):
+        data: Json = json.loads(res.body.decode())  # type: ignore
     else:
-        data: Json = response.json()
+        data: Json = res.json()
 
     error_res = ErrorResponse.model_validate(data)
 
@@ -105,4 +105,4 @@ def assert_error_json(
     assert error_res.status == code.phrase
     assert error_res.message == message
 
-    return error_res.errors
+    return error_res.details

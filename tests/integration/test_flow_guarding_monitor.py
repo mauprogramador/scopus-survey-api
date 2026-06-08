@@ -46,9 +46,9 @@ async def test_success_headers(client: Client):
 async def test_uncaught_exception(mocker: Mocker, client: Client):
     mocker.patch(**RETRIEVE(RuntimeError("any")))
     res = await client.get(URL_CSV, params=CSV_PARAMS)
-    errors = assert_error_json(res, HTTP_500, ExcMsg.UNEXPECTED_ERROR)
-    assert errors[0]["type"] == fqn(RuntimeError)
-    assert errors[0]["message"] == "any"
+    details = assert_error_json(res, HTTP_500, ExcMsg.UNEXPECTED_ERROR)
+    assert details[0]["type"] == fqn(RuntimeError)
+    assert details[0]["message"] == "any"
 
 
 @mark.asyncio

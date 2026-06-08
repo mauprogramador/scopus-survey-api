@@ -114,19 +114,19 @@ async def test_retrieve_more_abstracts(mocker: Mocker, client: Client):
 
 @mark.asyncio
 @mark.parametrize(
-    "response,total",
+    "res_mock,total",
     [
         (ABSTRACT_EXACT_QUOTA_ONE_RESULT, 1),
         (ABSTRACT_EXACT_QUOTA_TWO_RESULTS, 2),
         (ABSTRACT_EXACT_QUOTA_MORE_RESULTS, 7),
     ],
-    ids=["One result", "Two results", "More results"],
+    ids=["One res_mock", "Two results", "More results"],
 )
 async def test_retrieve_exact_quota_limit(
-    mocker: Mocker, client: Client, response: list[MagicMock], total: int
+    mocker: Mocker, client: Client, res_mock: list[MagicMock], total: int
 ):
     state = mocker.patch(STATE, MockState())
-    mock = mocker.patch(*get_patch(response))
+    mock = mocker.patch(*get_patch(res_mock))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     assert res.status_code == HTTP_200 and mock.call_count == total + 1
     assert load_csv_from_response(res).shape[0] == 1
@@ -136,7 +136,7 @@ async def test_retrieve_exact_quota_limit(
 
 @mark.asyncio
 @mark.parametrize(
-    "response,count,total",
+    "res_mock,count,total",
     [
         (ABSTRACT_NO_QUOTA_TWO_RESULTS, 1, 2),
         (ABSTRACT_NO_QUOTA_MORE_RESULTS, 4, 7),
@@ -146,12 +146,12 @@ async def test_retrieve_exact_quota_limit(
 async def test_retrieve_insufficient_quota(
     mocker: Mocker,
     client: Client,
-    response: list[MagicMock],
+    res_mock: list[MagicMock],
     count: int,
     total: int,
 ):
     state = mocker.patch(STATE, MockState())
-    mock = mocker.patch(*get_patch(response))
+    mock = mocker.patch(*get_patch(res_mock))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     assert res.status_code == HTTP_200 and mock.call_count == (count + 1)
     assert load_csv_from_response(res).shape[0] == 1
@@ -163,9 +163,9 @@ async def test_retrieve_insufficient_quota(
 async def test_retrieve_quota_exceed(mocker: Mocker, client: Client):
     mock = mocker.patch(*get_patch(ABSTRACT_QUOTA_EXCEEDED))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
-    errors = assert_error_json(res, HTTP_502, trans(SCOPUS_API_QUOTA_ERROR))
-    assert errors is not None and mock.call_count == 3
-    assert errors[0]["error_code"] == QUOTA_ERROR_CODE
+    details = assert_error_json(res, HTTP_502, trans(SCOPUS_API_QUOTA_ERROR))
+    assert details is not None and mock.call_count == 3
+    assert details[0]["error_code"] == QUOTA_ERROR_CODE
 
 
 @mark.asyncio
@@ -174,8 +174,8 @@ async def test_retrieve_cancelled_error(mocker: Mocker, client: Client):
     mocker.patch(**STEP(MORE_CANCELLED))
     mock = mocker.patch(*get_patch(RETRIEVE_MORE_ABSTRACTS))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
-    errors = assert_error_json(res, HTTP_503, ExcMsg.CANCELLED_ERROR)
+    details = assert_error_json(res, HTTP_503, ExcMsg.CANCELLED_ERROR)
 
     assert mock.call_count == 8 and spy.call_count == 4
-    assert errors[0]["type"] == fqn(asyncio.CancelledError)
-    assert errors[0]["message"] == "any"
+    assert details[0]["type"] == fqn(asyncio.CancelledError)
+    assert details[0]["message"] == "any"

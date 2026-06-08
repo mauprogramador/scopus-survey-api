@@ -127,16 +127,16 @@ class HTTPClient:
         self._last_request_time = asyncio.get_event_loop().time()
 
     async def request(self, url: str) -> ResponseBundle:
-        response = await self._send(url)
+        res = await self._send(url)
 
         if (
-            response.code == HTTPStatus.TOO_MANY_REQUESTS
-            and response.headers.get("X-RateLimit-Remaining") == "0"
+            res.code == HTTPStatus.TOO_MANY_REQUESTS
+            and res.headers.get("X-RateLimit-Remaining") == "0"
         ):
             await asyncio.sleep(2)  # Wait 2 secs
-            response = await self._send(url)
+            res = await self._send(url)
 
-        return response
+        return res
 
     async def _send(self, url: str) -> ResponseBundle:
         async with self._semaphore, self._rate_limiter:
@@ -146,12 +146,10 @@ class HTTPClient:
 
             try:
                 start_time = time.perf_counter()
-                response = await self._retry_client.get(
-                    url, raise_for_status=False
-                )
+                res = await self._retry_client.get(url, raise_for_status=False)
                 process_time = time.perf_counter() - start_time
 
-                logger.api_call(url, response.status, process_time)
+                logger.api_call(url, res.status, process_time)
 
             except asyncio.CancelledError as exc:
                 raise exc
@@ -166,17 +164,17 @@ class HTTPClient:
                 raise BadGateway(ExcMsg.REQUEST_EXCEPTION, exc) from exc
 
             try:
-                data: Json | None = await response.json()
+                data: Json | None = await res.json()
                 if data is None:
                     raise self._JSON_ERROR
 
             except (aiohttp.ContentTypeError, JSONDecodeError) as exc:
-                body = await response.text()
+                body = await res.text()
                 raise BadGatewayContent(
                     ExcMsg.INVALID_JSON_ERROR, exc, body
                 ) from exc
 
-            return ResponseBundle(response.status, response.headers, data)
+            return ResponseBundle(res.status, res.headers, data)
 
     async def close(self) -> None:
         await asyncio.sleep(0)

@@ -24,32 +24,32 @@ def file_path_fixture():
 
 
 def test_build_response(file: tuple[Path, str]):
-    response = CSVResponse.build(f"any_{FILE}", "any", {"X-any": "any"})
-    assert response.status_code == HTTP_200
-    assert response.media_type == CSV_MEDIA
-    assert response.path == file[0] and response.filename == file[1]
+    res = CSVResponse.build(f"any_{FILE}", "any", {"X-any": "any"})
+    assert res.status_code == HTTP_200
+    assert res.media_type == CSV_MEDIA
+    assert res.path == file[0] and res.filename == file[1]
 
-    assert response.headers.get("Content-Disposition")
-    assert response.headers.get("Content-Type")
-    assert response.headers.get("X-CSV-Filename") == file[1]
-    assert response.headers.get("X-API-Key") == "any"
-    assert response.headers.get("X-any") == "any"
+    assert res.headers.get("Content-Disposition")
+    assert res.headers.get("Content-Type")
+    assert res.headers.get("X-CSV-Filename") == file[1]
+    assert res.headers.get("X-API-Key") == "any"
+    assert res.headers.get("X-any") == "any"
 
 
 def test_retrieve_csv(file: tuple[Path, str]):
-    response = CSVResponse.retrieve("any")
-    assert response.status_code == HTTP_200
-    assert response.media_type == CSV_MEDIA
-    assert response.path == file[0] and response.filename == file[1]
+    res = CSVResponse.retrieve("any")
+    assert res.status_code == HTTP_200
+    assert res.media_type == CSV_MEDIA
+    assert res.path == file[0] and res.filename == file[1]
 
-    assert response.headers.get("Content-Disposition")
-    assert response.headers.get("Content-Type")
-    assert response.headers.get("X-CSV-Filename") == file[1]
-    assert response.headers.get("X-API-Key") == "any"
+    assert res.headers.get("Content-Disposition")
+    assert res.headers.get("Content-Type")
+    assert res.headers.get("X-CSV-Filename") == file[1]
+    assert res.headers.get("X-API-Key") == "any"
 
 
 def test_csv_not_found():
     with raises(NotFound) as info:
         CSVResponse.retrieve("any")
     assert_http_error(info, HTTP_404, ExcMsg.CSV_NOT_FOUND)
-    assert info.value.errors is None
+    assert info.value.details is None

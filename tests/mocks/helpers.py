@@ -104,9 +104,9 @@ def mock_from_iterable(*_) -> tuple[str, ...]:
     return ("Python",)
 
 
-def load_csv_from_response(response: httpx.Response) -> DataFrame:
+def load_csv_from_response(res: httpx.Response) -> DataFrame:
     """Load DataFrame from CSV file response ignoring metadata"""
-    buffer_data = io.StringIO(response.content.decode())
+    buffer_data = io.StringIO(res.content.decode())
     return pd.read_csv(
         buffer_data, sep=";", skiprows=SKIPROWS, keep_default_na=False
     )
@@ -360,19 +360,19 @@ class MockState(QuotaResultsHandler):
 def search_fix(value: Any | Exception) -> APIsFix:
     """Fixture for ScopusSearchAPI and its dependencies"""
     if isinstance(value, (list, BaseException)):
-        request = AsyncMock(HTTPClient.request, side_effect=value)
+        req_mock = AsyncMock(HTTPClient.request, side_effect=value)
     else:
-        request = AsyncMock(HTTPClient.request, return_value=value)
+        req_mock = AsyncMock(HTTPClient.request, return_value=value)
 
     details = SurveyDetails()
     state = MockState()
     api = ScopusSearchAPI(
-        AsyncMock(HTTPClient, request=request),
+        AsyncMock(HTTPClient, request=req_mock),
         MagicMock(URLBuilder),
         details,
         state,
     )
-    return APIsFix(request, details, state, api)
+    return APIsFix(req_mock, details, state, api)
 
 
 def abstract_fix(
@@ -385,9 +385,9 @@ def abstract_fix(
     details.set_search_data(search_results)
 
     if isinstance(value, (list, BaseException)):
-        request = AsyncMock(HTTPClient.request, side_effect=value)
+        req_mock = AsyncMock(HTTPClient.request, side_effect=value)
     else:
-        request = AsyncMock(HTTPClient.request, return_value=value)
+        req_mock = AsyncMock(HTTPClient.request, return_value=value)
 
     if responses_count is None:
         state = MockState()
@@ -397,12 +397,12 @@ def abstract_fix(
     state.set_first_search(search_results)
 
     api = ScopusAbstractRetrievalAPI(
-        AsyncMock(HTTPClient, request=request),
+        AsyncMock(HTTPClient, request=req_mock),
         MagicMock(URLBuilder),
         details,
         state,
     )
-    return APIsFix(request, details, state, api)
+    return APIsFix(req_mock, details, state, api)
 
 
 def aggregator_fix(value: DataFrame) -> AggFix:
