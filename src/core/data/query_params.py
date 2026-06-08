@@ -209,8 +209,6 @@ class SearchParams(CombinationParams):
     )
     ratio: int = Field(
         default=80,
-        alias="threshold",
-        validation_alias="ratio",
         description="The Filter Ratio used to remove similar documents",
         examples=[80],
         exclude=True,

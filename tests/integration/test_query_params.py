@@ -156,7 +156,7 @@ async def test_search_params_overridden_default(
         "apiKey": API_KEY,
         "keywords": KEYWORDS,
         "combination": "Python AND Web",
-        "threshold": "25",
+        "ratio": "25",
         "button": Button.SURVEY.value,
     }
     res = await client.get(URL_SEARCH, params=params)

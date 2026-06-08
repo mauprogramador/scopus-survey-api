@@ -278,7 +278,7 @@ const allFreshFields = {
 // Final step
 const combTableSection = document.getElementById('combination-table-section');
 const formStep4 = document.getElementById('form-step-4');
-const thresholdField = document.getElementById('threshold');
+const ratioField = document.getElementById('ratio');
 const inputEvent = new InputEvent('input', {
   bubbles: true,
   inputType: 'deleteContent',
@@ -290,13 +290,13 @@ function hideFinalStep() {
   formStep4.toggleAttribute('hidden', true);
   combTbody.innerHTML = '';
 
-  thresholdField.value = '';
-  thresholdField.dispatchEvent(inputEvent);
-  thresholdField.dataset.checked = 'false';
-  thresholdField.ariaInvalid = 'false';
-  thresholdField.setCustomValidity('');
+  ratioField.value = '';
+  ratioField.dispatchEvent(inputEvent);
+  ratioField.dataset.checked = 'false';
+  ratioField.ariaInvalid = 'false';
+  ratioField.setCustomValidity('');
 
-  let fieldFeedback = thresholdField
+  let fieldFeedback = ratioField
     .closest('.field-container')
     .querySelector('.field-feedback');
   fieldFeedback.toggleAttribute('hidden', true);

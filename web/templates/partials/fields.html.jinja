@@ -315,24 +315,24 @@
 {%- endmacro %}
 
 
-{% macro threshold() -%}
+{% macro ratio() -%}
 {% if lang == 'en-US' %}
-<h4 id="threshold-title">
-  Similarity Threshold
+<h4 id="ratio-title">
+  Similarity Ratio
   <span class="badge text-bg-secondary" aria-hidden="true">Optional</span>
 </h4>
-<p id="threshold-desc">
+<p id="ratio-desc">
   The value, <strong>from 0 to 100</strong>, used to filter documents with the <strong>same
     author(s) and similar titles</strong>, keeping <strong>the most recent one</strong>.
   <strong>Default to 80</strong>.
 </p>
 {% else %}
 <!-- cSpell:disable -->
-<h4 id="threshold-title">
-  Similarity Threshold
+<h4 id="ratio-title">
+  Similarity Ratio
   <span class="badge text-bg-secondary" aria-hidden="true">Optional</span>
 </h4>
-<p id="threshold-desc">
+<p id="ratio-desc">
   O valor, <strong>de 0 a 100</strong>, usado para filtrar documentos com <strong>o(s) mesmo(s) autor(es) e títulos
     semelhantes</strong>, mantendo <strong>o mais recente</strong>. <strong>Valor 80 por padrão</strong>.
 </p>

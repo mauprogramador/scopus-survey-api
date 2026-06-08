@@ -9,8 +9,8 @@
       {{partial_fields.quotas()}}
     </section>
 
-    <section class="col ps-lg-5 text-group" aria-labelledby="threshold-title" aria-describedby="threshold-desc">
-      {{partial_fields.threshold()}}
+    <section class="col ps-lg-5 text-group" aria-labelledby="ratio-title" aria-describedby="ratio-desc">
+      {{partial_fields.ratio()}}
       <div class="field-container">
         <div class="field-wrapper">
           <span class="field-icon" aria-hidden="true">
@@ -19,13 +19,13 @@
                 d="M440-160q-17 0-28.5-11.5T400-200v-240L168-736q-15-20-4.5-42t36.5-22h560q26 0 36.5 22t-4.5 42L560-440v240q0 17-11.5 28.5T520-160h-80Zm40-308 198-252H282l198 252Zm0 0Z" />
             </svg>
           </span>
-          <input id="threshold" class="form-control" name="threshold" form="survey-form" type="number" min="0" max="100"
-            step="1" data-checked="false" autocomplete="on" placeholder="{{_t('threshold.placeholder')}}"
-            inputmode="numeric" aria-invalid="false" aria-required="false" aria-labelledby="threshold-title"
-            aria-describedby="threshold-desc" aria-details="threshold-help" aria-errormessage="threshold-feedback">
+          <input id="ratio" class="form-control" name="ratio" form="survey-form" type="number" min="0" max="100"
+            step="1" data-checked="false" autocomplete="on" placeholder="{{_t('ratio.placeholder')}}"
+            inputmode="numeric" aria-invalid="false" aria-required="false" aria-labelledby="ratio-title"
+            aria-describedby="ratio-desc" aria-details="ratio-help" aria-errormessage="ratio-feedback">
         </div>
-        <div id="threshold-feedback" class="field-feedback" role="alert" aria-live="assertive" hidden></div>
-        <div id="threshold-help" class="field-help" role="note">{{_t('threshold.help')}}</div>
+        <div id="ratio-feedback" class="field-feedback" role="alert" aria-live="assertive" hidden></div>
+        <div id="ratio-help" class="field-help" role="note">{{_t('ratio.help')}}</div>
       </div>
     </section>
 

@@ -219,10 +219,10 @@ msgstr "Mostrar Detalhes do Resultado"
 msgid "combination.help"
 msgstr "ex. Neural Network AND LLM"
 
-msgid "threshold.placeholder"
+msgid "ratio.placeholder"
 msgstr "Limiar"
 
-msgid "threshold.help"
+msgid "ratio.help"
 msgstr "ex. 80"
 
 msgid "surv_docs_btn"
