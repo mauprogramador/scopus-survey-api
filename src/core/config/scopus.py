@@ -1,7 +1,5 @@
 from datetime import datetime
 
-from src.core.data.enums import PageRange
-
 
 CURRENT_YEAR = datetime.now().year
 # Last 3 years: considering rapidly evolving fields of study.
@@ -30,11 +28,6 @@ DATA_SOURCE_NOTE = (
     "http://api.elsevier.com and http://www.scopus.com."
 )
 
-PAGE_RANGE = {
-    PageRange.SHORT: "0-4",  # Short paper
-    PageRange.LONG: "5-",  # Long paper
-}
-
 QUERY_FIELDS = {
     "doctype",
     "pubstage",
@@ -42,7 +35,7 @@ QUERY_FIELDS = {
     "open_access",
     "source_type",
     "subject_area",
-    "pages",
+    "page_range",
 }
 
 SEARCH_FIELDS = (

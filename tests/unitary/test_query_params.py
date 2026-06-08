@@ -45,7 +45,7 @@ def test_combination_params_valid_data():
     assert not model.doctype and not model.pubstage
     assert not model.language and not model.open_access
     assert not model.source_type and not model.subject_area
-    assert not model.pages and model.button == Button.COMBINATION
+    assert not model.page_range and model.button == Button.COMBINATION
     assert model.date == f"{model.start_year}-{model.end_year}"
 
 
@@ -58,7 +58,7 @@ def test_combination_params_overridden_default():
     assert model.language == "english" and model.open_access == "0"
     assert model.source_type == SrcType.J
     assert model.subject_area == SubjArea.COMP
-    assert model.pages == PageRange.SHORT
+    assert model.page_range == PageRange.SHORT
     assert model.button == Button.COMBINATION
     assert model.date == f"{model.start_year}-{model.end_year}"
 

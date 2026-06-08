@@ -88,7 +88,7 @@ async def test_combination_params_overridden_default(
         "openAccess": "0",
         "srcType": "j",
         "subjArea": "COMP",
-        "pages": "short",
+        "page_range": "0-4",
         "keywords": KEYWORDS,
         "button": Button.COMBINATION.value,
     }

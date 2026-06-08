@@ -59,6 +59,6 @@ def test_csv_with_more_metadata():
         assert lines[1].count(API_KEY) == 1
         assert lines[1].count("Python AND AI") == 1
         assert lines[1].count("doctype=ar") == 1
-        assert lines[1].count("pages=0-4") == 1
+        assert lines[1].count("page_range=0-4") == 1
         assert lines[2].count("any") == 2
         assert fuzz_partial_ratio(lines[3], DATA_SOURCE_NOTE) > 80

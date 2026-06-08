@@ -155,16 +155,16 @@
 {%- endmacro %}
 
 
-{%- macro pages() %}
+{%- macro page_range() %}
 {% if lang == 'en-US' %}
-<option value="" selected>Pages</option>
-<option value="SHORT">Short papers (up to 4 pages)</option>
-<option value="LONG">Full papers (5 or more pages)</option>
+<option value="" selected>Page Range</option>
+<option value="0-4">Short papers (up to 4 pages)</option>
+<option value="5-">Full papers (5 or more pages)</option>
 {% else %}
 <!-- cSpell:disable -->
-<option value="" selected>Páginas</option>
-<option value="SHORT">Artigos curtos (até 4 páginas)</option>
-<option value="LONG">Artigos completos (5 ou mais páginas)</option>
+<option value="" selected>Intervalo de Páginas</option>
+<option value="0-4">Artigos curtos (até 4 páginas)</option>
+<option value="5-">Artigos completos (5 ou mais páginas)</option>
 <!-- cSpell:enable -->
 {% endif %}
 {%- endmacro %}

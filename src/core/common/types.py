@@ -55,7 +55,7 @@ class CombinationParams(Protocol):
     open_access: int
     source_type: SrcType
     subject_area: SubjArea
-    pages: PageRange
+    page_range: PageRange
     keywords: list[Keyword]
 
     def model_dump(self, **kwargs) -> dict[str, Any]:

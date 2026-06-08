@@ -7,7 +7,6 @@ from pydantic import (
     ValidationError,
     ValidationInfo,
     computed_field,
-    field_serializer,
     field_validator,
 )
 from pydantic_core import InitErrorDetails, PydanticUseDefault
@@ -17,7 +16,6 @@ from src.core.config.scopus import (
     CURRENT_YEAR,
     LAST_THREE_YEARS,
     MAX_RECENT_PUBLICATIONS,
-    PAGE_RANGE,
 )
 from src.core.data.enums import (
     Button,
@@ -134,11 +132,11 @@ class CombinationParams(CSVParams):
         description="The Subject Area in which the document is classified",
         examples=[SubjArea.COMP],
     )
-    pages: PageRange = Field(
+    page_range: PageRange = Field(
         default=None,
         serialization_alias="PAGES",
         description="The documents' size by Page Count",
-        examples=[PageRange.SHORT.name],
+        examples=[PageRange.SHORT],
     )
     keywords: list[Keyword] = Field(
         description="The Keywords in the documents you are searching for",
@@ -189,10 +187,6 @@ class CombinationParams(CSVParams):
                 )
             return keywords
         return value
-
-    @field_serializer("pages", return_type=str)
-    def serialize_page_range(self, value: PageRange | None) -> str | None:
-        return None if value is None else PAGE_RANGE[value]
 
     @computed_field(return_type=str)  # type: ignore[prop-decorator]
     @property

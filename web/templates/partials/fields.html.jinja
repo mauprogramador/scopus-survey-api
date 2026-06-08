@@ -208,22 +208,22 @@
 {%- endmacro %}
 
 
-{% macro pages() -%}
+{% macro page_range() -%}
 {% if lang == 'en-US' %}
-<h4 id="pages-title">
-  Pages
+<h4 id="page_range-title">
+  Page Range
   <span class="badge text-bg-secondary" aria-hidden="true">Optional</span>
 </h4>
-<p id="pages-desc">
+<p id="page_range-desc">
   The documents' <strong>size</strong> by <strong>page count</strong>.
 </p>
 {% else %}
 <!-- cSpell:disable -->
-<h4 id="pages-title">
-  Páginas
+<h4 id="page_range-title">
+  Intervalo de Páginas
   <span class="badge text-bg-secondary" aria-hidden="true">Opcional</span>
 </h4>
-<p id="pages-desc">
+<p id="page_range-desc">
   O <strong>tamanho</strong> dos documentos pelo <strong>número de páginas</strong>.
 </p>
 <!-- cSpell:enable -->

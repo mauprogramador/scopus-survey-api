@@ -191,7 +191,7 @@ ALIAS_COMBINATION_PARAMS_FULL = {
     "open_access": "0",
     "source_type": "j",
     "subject_area": "COMP",
-    "pages": "short",
+    "page_range": "0-4",
     "keywords": KEYWORDS,
     "button": Button.COMBINATION.value,
 }
@@ -211,7 +211,7 @@ ALIAS_SEARCH_PARAMS_FULL = {
     "open_access": "0",
     "source_type": "j",
     "subject_area": "COMP",
-    "pages": "short",
+    "page_range": "0-4",
     "keywords": KEYWORDS,
     "combination": "Python AND AI",
     "ratio": "25",

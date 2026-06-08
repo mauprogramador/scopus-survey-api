@@ -180,8 +180,8 @@
       </div>
     </section>
 
-    <section class="col ps-lg-5 text-group" aria-labelledby="pages-title" aria-describedby="pages-desc">
-      {{partial_fields.pages()}}
+    <section class="col ps-lg-5 text-group" aria-labelledby="page_range-title" aria-describedby="page_range-desc">
+      {{partial_fields.page_range()}}
       <div class="field-container">
         <div class="field-wrapper">
           <span class="field-icon" aria-hidden="true">
@@ -193,15 +193,15 @@
               </g>
             </svg>
           </span>
-          <select id="pages" class="form-select combfield" name="pages" form="survey-form" data-checked="false"
-            autocomplete="on" aria-invalid="false" aria-required="false" aria-autocomplete="both"
-            aria-labelledby="pages-title" aria-describedby="pages-desc" aria-details="pages-help"
-            aria-errormessage="pages-feedback">
-            {{partial_values.pages()}}
+          <select id="page_range" class="form-select combfield" name="page_range" form="survey-form"
+            data-checked="false" autocomplete="on" aria-invalid="false" aria-required="false" aria-autocomplete="both"
+            aria-labelledby="page_range-title" aria-describedby="page_range-desc" aria-details="page_range-help"
+            aria-errormessage="page_range-feedback">
+            {{partial_values.page_range()}}
           </select>
         </div>
-        <div id="pages-feedback" class="field-feedback" role="alert" aria-live="assertive" hidden></div>
-        <div id="pages-help" class="field-help">{{_t('pages.help')}}</div>
+        <div id="page_range-feedback" class="field-feedback" role="alert" aria-live="assertive" hidden></div>
+        <div id="page_range-help" class="field-help">{{_t('page_range.help')}}</div>
       </div>
     </section>
 

@@ -1,7 +1,7 @@
 from urllib.parse import unquote_plus
 
 from src.adapters.helpers.url_builder import URLBuilder
-from src.core.config.scopus import ARTICLE_PAGE_URL, PAGE_RANGE, SEARCH_FIELDS
+from src.core.config.scopus import ARTICLE_PAGE_URL, SEARCH_FIELDS
 from src.core.data.enums import DocType, PageRange, PubStage, SrcType, SubjArea
 from src.core.data.query_params import CombinationParams, SearchParams
 from tests.mocks.raw import (
@@ -55,7 +55,7 @@ def test_combination_url_full():
     assert "OPENACCESS(0)" in url
     assert f"SRCTYPE({SrcType.J})" in url
     assert f"SUBJAREA({SubjArea.COMP})" in url
-    assert f"PAGES({PAGE_RANGE[PageRange.SHORT]})" in url
+    assert f"PAGES({PageRange.SHORT})" in url
 
 
 def test_search_url():
@@ -87,7 +87,7 @@ def test_search_url_full():
     assert "OPENACCESS(0)" in url
     assert f"SRCTYPE({SrcType.J})" in url
     assert f"SUBJAREA({SubjArea.COMP})" in url
-    assert f"PAGES({PAGE_RANGE[PageRange.SHORT]})" in url
+    assert f"PAGES({PageRange.SHORT})" in url
 
 
 def test_pagination_url():

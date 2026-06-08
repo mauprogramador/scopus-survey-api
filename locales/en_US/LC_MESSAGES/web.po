@@ -183,7 +183,7 @@ msgstr "e.g. Journal"
 msgid "subjarea.help"
 msgstr "e.g. Computer Science"
 
-msgid "pages.help"
+msgid "page_range.help"
 msgstr "e.g. Full papers"
 
 msgid "keyword1.placeholder"

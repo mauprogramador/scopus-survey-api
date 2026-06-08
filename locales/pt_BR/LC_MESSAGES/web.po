@@ -183,7 +183,7 @@ msgstr "ex. Periódico"
 msgid "subjarea.help"
 msgstr "ex. Ciência da Computação"
 
-msgid "pages.help"
+msgid "page_range.help"
 msgstr "ex. Artigos completos"
 
 msgid "keyword1.placeholder"
