@@ -36,9 +36,6 @@ _API_ROUTES_PATTERN = re.compile(
 class FlowGuardingMonitorMiddleware(BaseHTTPMiddleware):
     """Middleware for tracing, process time and uncaught errors"""
 
-    _RATELIMIT_POLICY = "X-RateLimit-Policy"
-    _PROCESS_TIME = "X-Process-Time"
-    _TRACE_ID = "X-Trace-ID"
     _ONE_MINUTE = 60
 
     def __init__(self, app: FastAPI):
@@ -73,11 +70,11 @@ class FlowGuardingMonitorMiddleware(BaseHTTPMiddleware):
 
         logger.trace(request, res.status_code, duration)
 
-        res.headers[self._TRACE_ID] = trace_id
-        res.headers[self._PROCESS_TIME] = duration
+        res.headers["X-Trace-ID"] = trace_id
+        res.headers["X-Process-Time"] = duration
 
         res.headers.update(HEADERS)
-        res.headers[self._RATELIMIT_POLICY] = RATELIMIT_POLICY
+        res.headers["X-RateLimit-Policy"] = RATELIMIT_POLICY
         res.headers.update(self._server)
 
         is_error = res.status_code >= HTTPStatus.BAD_REQUEST

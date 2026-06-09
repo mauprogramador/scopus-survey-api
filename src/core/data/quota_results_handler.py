@@ -10,7 +10,6 @@ class QuotaResultsHandler:
     """Gathers the Scopus data while managing the quotas"""
 
     _FIRST_RESULT = 1
-    _RANGE_OFFSET = 1
 
     def __init__(self) -> None:
         """Gathers the Scopus data while managing the quotas"""

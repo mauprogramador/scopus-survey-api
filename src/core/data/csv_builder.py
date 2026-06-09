@@ -15,8 +15,6 @@ class CSVBuilder:
     _GENERATED_BY = (
         "ScopusSurveyAPI https://github.com/mauprogramador/scopus-survey-api"
     )
-    _DATEFMT = "%B %d, %Y"
-    _SEP = ";"
 
     @classmethod
     def write(
@@ -39,7 +37,7 @@ class CSVBuilder:
         )
         csv_metadata["Survey"] = ", ".join(metadata)
 
-        date = datetime.now().strftime(cls._DATEFMT)
+        date = datetime.now().strftime("%B %d, %Y")
         csv_metadata["Source"] = DATA_SOURCE_NOTE.format(date=date)
 
         file_path = DIRECTORY / f"{params.api_key}_{FILE}"
@@ -50,7 +48,7 @@ class CSVBuilder:
 
             docs.to_csv(
                 file,
-                sep=cls._SEP,
+                sep=";",
                 header=True,
                 index=False,
                 encoding="utf-8",

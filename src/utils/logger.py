@@ -117,7 +117,6 @@ _FMT = "%(asctime)s %(levelname)-18s %(message)s"
 _FILENAME = Path(f".logs/{_filename(0)}")
 _LOGGER_NAME = "scopus.survey.api"
 _DATEFMT = "%Y-%m-%d %H:%M:%S"
-_HIDE_API_KEY = "apiKey=..."
 
 TEST_FORMATTER = _ANSIFormatter(fmt=_FMT, datefmt=_DATEFMT, strip_ansi=False)
 
@@ -363,7 +362,7 @@ def _trace(
         "port": port,
         "method_color": _METHOD_COLOR.get(req.method, "90"),
         "method": req.method,
-        "url": _API_KEY_PARAM_PATTERN.sub(_HIDE_API_KEY, str(req.url)),
+        "url": _API_KEY_PARAM_PATTERN.sub("apiKey=...", str(req.url)),
         "status_color": _STATUS_COLOR[(code // 100)],
         "code": code,
         "status_phrase": HTTPStatus(code).phrase,

@@ -12,7 +12,6 @@ from src.utils import logger
 class KeywordCombinationFinder:
     """Map all keyword combination and survey their total in Scopus"""
 
-    _MAX_SIZE = 5
     _START = 1
 
     def __init__(

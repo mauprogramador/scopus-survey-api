@@ -10,8 +10,6 @@ from src.core.domain.http_exceptions import NotFound
 class CSVResponse:
     """Generates CSV file responses"""
 
-    _MEDIA_TYPE = "text/csv"
-
     @classmethod
     def build(
         cls, filename: str, api_key: str, details_headers: dict[str, str]
@@ -30,7 +28,7 @@ class CSVResponse:
             path=file_path,
             status_code=HTTPStatus.OK,
             headers=headers,
-            media_type=cls._MEDIA_TYPE,
+            media_type="text/csv",
             filename=filename,
         )
 
@@ -53,6 +51,6 @@ class CSVResponse:
             path=file_path,
             status_code=HTTPStatus.OK,
             headers=headers,
-            media_type=cls._MEDIA_TYPE,
+            media_type="text/csv",
             filename=filename,
         )

@@ -10,9 +10,6 @@ from starlette.responses import Response as StarletteResponse
 class ProxyForwardedHeadersMiddleware(BaseHTTPMiddleware):
     """Middleware for mapping the scheme and host when forwarded"""
 
-    _FORWARDED_PROTO = "x-forwarded-proto"
-    _FORWARDED_HOST = "x-forwarded-host"
-
     def __init__(self, app: FastAPI):
         """Middleware for mapping the scheme and host when forwarded"""
         super().__init__(app)
@@ -21,8 +18,8 @@ class ProxyForwardedHeadersMiddleware(BaseHTTPMiddleware):
         self, request: FastAPIRequest, call_next: RequestResponseEndpoint
     ) -> StarletteResponse:
 
-        proto = request.headers.get(self._FORWARDED_PROTO)
-        host = request.headers.get(self._FORWARDED_HOST)
+        proto = request.headers.get("x-forwarded-proto")
+        host = request.headers.get("x-forwarded-host")
 
         if proto:
             request.scope["scheme"] = proto

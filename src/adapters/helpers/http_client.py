@@ -30,11 +30,7 @@ class HTTPClient:
     """
 
     _LEEWAY = 10
-    _ATTEMPTS = 3
-    _RATE_PERIOD = 1.0
     _BASE_STRATEGY = 100
-    _START_TIMEOUT = 0.5
-    _MAX_TIMEOUT = 15.0
     _TIMEOUT = aiohttp.ClientTimeout(total=15.0)
     _JSON_ERROR = JSONDecodeError("Expecting value", "Scopus JSON", 0)
     # Strategy:
@@ -80,7 +76,7 @@ class HTTPClient:
 
     def _mount(self) -> None:
         self._rate_limiter = aiolimiter.AsyncLimiter(
-            max_rate=self._strategy.rate, time_period=self._RATE_PERIOD
+            max_rate=self._strategy.rate, time_period=1.0
         )
         self._semaphore = asyncio.Semaphore(self._strategy.concurrent)
         connector = aiohttp.TCPConnector(limit=self._strategy.concurrent)
@@ -91,9 +87,9 @@ class HTTPClient:
             timeout=self._TIMEOUT,
         )
         self._retry_options = aioretry.JitterRetry(
-            attempts=self._ATTEMPTS,
-            start_timeout=self._START_TIMEOUT,
-            max_timeout=self._MAX_TIMEOUT,
+            attempts=3,
+            start_timeout=0.5,
+            max_timeout=15.0,
             factor=self._strategy.backoff,
             statuses=self._RETRYABLE_STATUS_CODES,
             exceptions=self._RETRYABLE_EXCEPTIONS,

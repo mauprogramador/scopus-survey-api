@@ -17,9 +17,7 @@ from src.utils import logger
 class ScopusArticlesAggregator:
     """Gathers, filters and compiles data from Scopus articles"""
 
-    _ROWS_INDEX = 0
     _SINGLE_ROW = 1
-    _PERCENT = 100
     _NON_RATIO = 0
 
     def __init__(
@@ -47,7 +45,7 @@ class ScopusArticlesAggregator:
         finally:
             await self._search_api.http_client.close()
 
-        initial = self._docs.shape[self._ROWS_INDEX]
+        initial = self._docs.shape[0]
         rows_out = self._SINGLE_ROW
 
         if initial != self._SINGLE_ROW:
@@ -56,15 +54,15 @@ class ScopusArticlesAggregator:
 
             self._docs = self._docs.drop_duplicates(Column.DROP)
             self._docs = self._docs.reset_index(drop=True)
-            rows_out = self._docs.shape[self._ROWS_INDEX]
+            rows_out = self._docs.shape[0]
 
         if rows_out != self._SINGLE_ROW and params.ratio != self._NON_RATIO:
             self._docs = self._similarity_filter.filter(
                 self._docs, params.ratio
             )
 
-        final = initial - self._docs.shape[self._ROWS_INDEX]
-        loss = 0.0 if final == 0 else (final / initial) * self._PERCENT
+        final = initial - self._docs.shape[0]
+        loss = 0.0 if final == 0 else (final / initial) * 100.0  # %
         self._details.set_loss(final, loss)
 
         logger.loss(initial, final, loss)

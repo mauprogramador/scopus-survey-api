@@ -14,9 +14,7 @@ from src.utils import logger
 class ArticlesSimilarityFilter:
     """Filter articles from identical authors with similar titles"""
 
-    _DATEFMT = "%Y-%m-%d"
     _SINGLE_ROW = 1
-    _SIZE = 2
 
     def __init__(self) -> None:
         """Filter articles from identical authors with similar titles"""
@@ -29,13 +27,14 @@ class ArticlesSimilarityFilter:
             self._workers = cpu_cores - 1 if cpu_cores else 4
 
     def _drop_singles(self, group: DataFrame) -> bool:
-        return group.shape[0] > 1
+        return group.shape[0] > self._SINGLE_ROW
 
     @staticmethod
     def _get_similar_title_indexes(
-        group: DataFrame, similarity_ratio: int, size: int
+        group: DataFrame, similarity_ratio: int
     ) -> int | set[int] | None:
         title = group[Column.TITLE]
+        size = 2
 
         if title.shape[0] == 2:
             if fuzz_ratio(title.iloc[0], title.iloc[1]) > similarity_ratio:
@@ -59,7 +58,8 @@ class ArticlesSimilarityFilter:
 
     def _get_single_group_index(self, grouped_df: DataFrame) -> set[int]:
         rows_indexes = self._get_similar_title_indexes(
-            grouped_df, self._ratio, self._SIZE
+            grouped_df,
+            self._ratio,
         )
 
         if rows_indexes is None:
@@ -91,7 +91,6 @@ class ArticlesSimilarityFilter:
                     ArticlesSimilarityFilter._get_similar_title_indexes,
                     group,
                     self._ratio,
-                    self._SIZE,
                 )
                 for _, group in grouped_df
             }
@@ -136,7 +135,7 @@ class ArticlesSimilarityFilter:
         df_subset[Column.DATE] = pd.to_datetime(
             df_subset[Column.DATE],
             yearfirst=True,
-            format=self._DATEFMT,
+            format="%Y-%m-%d",
             errors="coerce",
         )
 

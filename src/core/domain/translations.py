@@ -14,13 +14,11 @@ from src.core.domain.http_exceptions import HTTPError, ScopusAPIError
 from src.utils import logger
 
 
-_ACCEPT_HEADER = "Accept-Language"
 _LOCALEDIR = Path("locales")
+_ERRORS: Translations = {}
 _ERROR_DOMAIN = "error"
 _META_DOMAIN = "meta"
 _WEB_DOMAIN = "web"
-
-_ERRORS: Translations = {}
 
 
 def load_translations() -> tuple[Translations, Translations]:
@@ -91,7 +89,7 @@ def translate_error(request: FastAPIRequest, exc: Exception) -> str:
                 suffixes = (suffix, "default")
                 break
 
-    lang = request.headers.get(_ACCEPT_HEADER, Lang.EN_US)
+    lang = request.headers.get("Accept-Language", Lang.EN_US)
     _e = _ERRORS[Lang(lang)].gettext
 
     if isinstance(exc, ScopusAPIError):

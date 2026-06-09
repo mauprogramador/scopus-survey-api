@@ -16,16 +16,12 @@ class _DisabledProgressBar:
 class ProgressBar:
     """Display a progress bar for running tasks"""
 
-    _PREFIX = "\x1b[93m[\x1b[92mPROGRESS\x1b[93m]\x1b[m"
     _FORMAT = (
         "{desc}\x1b[93m {n_fmt}/{total_fmt} \u2503\x1b[m{bar}\x1b[93m\u2503 "
         "{percentage:.2f}% \x1b[35m\u25fe\x1b[93m[{elapsed_s:.3f}s, "
         "{rate_fmt}]"
     )
-    _DISABLED = _DisabledProgressBar()
-    _COLOR = "green"
-    _POSITION = 0
-    _LENGTH = 100
+    _PREFIX = "\x1b[93m[\x1b[92mPROGRESS\x1b[93m]\x1b[m"
 
     def __init__(
         self, total: int, step: int = None, start: int = None
@@ -38,10 +34,10 @@ class ProgressBar:
         self._progress_bar = tqdm(
             desc=self._PREFIX,
             total=total,
-            ncols=self._LENGTH,
+            ncols=100,
             bar_format=self._FORMAT,
-            position=self._POSITION,
-            colour=self._COLOR,
+            position=0,
+            colour="green",
         )
 
         if start is not None:
@@ -51,7 +47,7 @@ class ProgressBar:
     def start(total: int, step: int = None, start: int = None):
         if ENV.progress_bar:
             return ProgressBar(total, step, start)
-        return contextlib.nullcontext(ProgressBar._DISABLED)
+        return contextlib.nullcontext(_DisabledProgressBar())
 
     def step(self) -> None:
         progress = int(self._progress_bar.n)
