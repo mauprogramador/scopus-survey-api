@@ -7,50 +7,46 @@ from src.core.data.enums import ExcMsg
 from src.core.domain.http_exceptions import NotFound
 
 
-class CSVResponse:
-    """Generates CSV file responses"""
+def csv_response(
+    filename: str, api_key: str, details_headers: dict[str, str]
+) -> FileResponse:
+    file_path = DIRECTORY / f"{api_key}_{FILE}"
 
-    @classmethod
-    def build(
-        cls, filename: str, api_key: str, details_headers: dict[str, str]
-    ) -> FileResponse:
-        file_path = DIRECTORY / f"{api_key}_{FILE}"
+    headers = {
+        "Content-Disposition": f"attachment; filename={filename}",
+        "Content-Type": "text/csv; charset=utf-8",
+        "X-CSV-Filename": filename,
+        "X-API-Key": api_key,
+    }
+    headers.update(details_headers)
 
-        headers = {
-            "Content-Disposition": f"attachment; filename={filename}",
-            "Content-Type": "text/csv; charset=utf-8",
-            "X-CSV-Filename": filename,
-            "X-API-Key": api_key,
-        }
-        headers.update(details_headers)
+    return FileResponse(
+        path=file_path,
+        status_code=HTTPStatus.OK,
+        headers=headers,
+        media_type="text/csv",
+        filename=filename,
+    )
 
-        return FileResponse(
-            path=file_path,
-            status_code=HTTPStatus.OK,
-            headers=headers,
-            media_type="text/csv",
-            filename=filename,
-        )
 
-    @classmethod
-    def retrieve(cls, api_key: str) -> FileResponse:
-        filename = f"{api_key}_{FILE}"
-        file_path = DIRECTORY / filename
+def retrieve_csv(api_key: str) -> FileResponse:
+    filename = f"{api_key}_{FILE}"
+    file_path = DIRECTORY / filename
 
-        if not file_path.exists():
-            raise NotFound(ExcMsg.CSV_NOT_FOUND)
+    if not file_path.exists():
+        raise NotFound(ExcMsg.CSV_NOT_FOUND)
 
-        headers = {
-            "Content-Disposition": f"attachment; filename={filename}",
-            "Content-Type": "text/csv; charset=utf-8",
-            "X-CSV-Filename": filename,
-            "X-API-Key": api_key,
-        }
+    headers = {
+        "Content-Disposition": f"attachment; filename={filename}",
+        "Content-Type": "text/csv; charset=utf-8",
+        "X-CSV-Filename": filename,
+        "X-API-Key": api_key,
+    }
 
-        return FileResponse(
-            path=file_path,
-            status_code=HTTPStatus.OK,
-            headers=headers,
-            media_type="text/csv",
-            filename=filename,
-        )
+    return FileResponse(
+        path=file_path,
+        status_code=HTTPStatus.OK,
+        headers=headers,
+        media_type="text/csv",
+        filename=filename,
+    )

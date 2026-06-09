@@ -6,8 +6,8 @@ from fastapi.requests import Request as FastAPIRequest
 from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
 from fastapi.routing import APIRouter
 
-from src.adapters.presenters.csv_response import CSVResponse
-from src.adapters.presenters.template_response import TemplateResponse
+from src.adapters.presenters.csv_response import retrieve_csv
+from src.adapters.presenters.template_response import get_web_form_template
 from src.core.config.config import (
     FAVICON_HEADERS,
     FAVICON_PATH,
@@ -23,7 +23,10 @@ from src.core.data.query_params import (
     SearchParams,
 )
 from src.core.domain.factory import make_aggregator, make_combinator
-from src.framework.fastapi.csrf_token import CSRFToken
+from src.framework.fastapi.csrf_token import (
+    generate_csrf_token,
+    verify_csrf_token,
+)
 from src.framework.fastapi.swagger import (
     CSV_RESPONSES,
     JSON_RESPONSES,
@@ -67,7 +70,7 @@ async def web_form_page(
     lang: Lang,
 ) -> HTMLResponse:
 
-    csrf_token, signed_token = CSRFToken.generate_csrf_tokens()
+    csrf_token, signed_token = generate_csrf_token()
     logger.debug(
         {
             "search_page_lang": lang,
@@ -76,7 +79,7 @@ async def web_form_page(
         }
     )
 
-    res = TemplateResponse.form_template(request, csrf_token, lang)
+    res = get_web_form_template(request, csrf_token, lang)
     res.set_cookie("csrf-token", signed_token, MAX_AGE, httponly=True)
 
     return res
@@ -86,7 +89,7 @@ async def web_form_page(
     "/api/combination",
     status_code=HTTPStatus.OK,
     tags=["API"],
-    dependencies=[fastapi.Depends(CSRFToken.verify_csrf_token)],
+    dependencies=[fastapi.Depends(verify_csrf_token)],
     summary="Survey the totals of keyword combinations",
     description=ROUTE_DESCRIPTION,
     responses=JSON_RESPONSES,
@@ -110,7 +113,7 @@ async def survey_total_combinations(
     "/api/survey",
     status_code=HTTPStatus.OK,
     tags=["API"],
-    dependencies=[fastapi.Depends(CSRFToken.verify_csrf_token)],
+    dependencies=[fastapi.Depends(verify_csrf_token)],
     summary="Survey bibliographies and return the CSV file",
     description=ROUTE_DESCRIPTION,
     responses=CSV_RESPONSES,
@@ -134,7 +137,7 @@ async def survey_bibliographic_data(
     "/api/csv",
     status_code=HTTPStatus.OK,
     tags=["API"],
-    dependencies=[fastapi.Depends(CSRFToken.verify_csrf_token)],
+    dependencies=[fastapi.Depends(verify_csrf_token)],
     summary="Download the pre-existing CSV file",
     description=ROUTE_DESCRIPTION,
     responses=CSV_RESPONSES,
@@ -148,6 +151,6 @@ async def download_csv(
 ) -> FileResponse:
     logger.debug(params.model_dump())
 
-    res = CSVResponse.retrieve(params.api_key)
+    res = retrieve_csv(params.api_key)
 
     return res

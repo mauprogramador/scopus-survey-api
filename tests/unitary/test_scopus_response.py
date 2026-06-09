@@ -1,7 +1,7 @@
 from pydantic_core import ValidationError
 from pytest import raises
 
-from src.adapters.helpers.scopus_response import ScopusResponse
+from src.adapters.helpers.scopus_response import validate_search_response
 from src.core.common.types import ResponseBundle
 from src.core.config.scopus import QUOTA_ERROR_CODE, RATE_LIMIT_ERROR_CODE
 from src.core.data.enums import ExcMsg
@@ -24,7 +24,7 @@ from tests.mocks.raw import (
 
 def test_scopus_response():
     res = ResponseBundle(HTTP_200, RAW_HEADERS_OK, RAW_SEARCH_OK)
-    model = ScopusResponse.validate_search(res)
+    model = validate_search_response(res)
     assert model.total_results == 1 and model.items_per_page == 1
     assert len(model.entry) == 1
 
@@ -33,7 +33,7 @@ def test_status_error():
     headers = {"X-ELS-Status": "INVALID_INPUT"}
     res = ResponseBundle(HTTP_400, headers, RAW_SERVICE_ERROR_INVALID_INPUT)
     with raises(ScopusAPIError) as info:
-        ScopusResponse.validate_search(res)
+        validate_search_response(res)
     assert_http_error(info, HTTP_502, "any")
     assert len(info.value.details) == 2 and info.value.details[1]
     assert info.value.details[0]["error_code"] == "INVALID_INPUT"
@@ -44,7 +44,7 @@ def test_quota_exceeded():
     headers = {"X-ELS-Status": QUOTA_ERROR_CODE}
     res = ResponseBundle(HTTP_429, headers, RAW_SERVICE_ERROR_QUOTA)
     with raises(ScopusAPIError) as info:
-        ScopusResponse.validate_search(res)
+        validate_search_response(res)
     assert_http_error(info, HTTP_502, "any")
     assert len(info.value.details) and info.value.details[1]
     assert info.value.details[0]["error_code"] == QUOTA_ERROR_CODE
@@ -55,7 +55,7 @@ def test_rate_limit_exceeded():
     headers = {"X-ELS-Status": RATE_LIMIT_ERROR_CODE}
     res = ResponseBundle(HTTP_429, headers, RAW_ERROR_RESPONSE_RATE_LIMIT)
     with raises(ScopusAPIError) as info:
-        ScopusResponse.validate_search(res)
+        validate_search_response(res)
     assert_http_error(info, HTTP_502, "any")
     assert len(info.value.details) and info.value.details[1]
     assert info.value.details[0]["error_code"] == RATE_LIMIT_ERROR_CODE
@@ -65,7 +65,7 @@ def test_rate_limit_exceeded():
 def test_json_validation_error():
     res = ResponseBundle(HTTP_200, RAW_HEADERS_OK, {"search-results": ""})
     with raises(InternalError) as info:
-        ScopusResponse.validate_search(res)
+        validate_search_response(res)
     assert_http_error(info, HTTP_500, ExcMsg.VALIDATE_ERROR)
     assert info.value.details[0]["type"] == fqn(ValidationError)
     assert info.value.details[0]["message"]
@@ -75,7 +75,7 @@ def test_json_validation_error():
 def test_json_key_error():
     res = ResponseBundle(HTTP_200, RAW_HEADERS_OK, {"any": "any"})
     with raises(InternalError) as info:
-        ScopusResponse.validate_search(res)
+        validate_search_response(res)
     assert_http_error(info, HTTP_500, ExcMsg.VALIDATE_ERROR)
     assert info.value.details[0]["type"] == fqn(KeyError)
     assert info.value.details[0]["message"]

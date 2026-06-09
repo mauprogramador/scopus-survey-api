@@ -4,13 +4,16 @@ from pytest import mark
 from pytest_mock import MockerFixture as Mocker
 from starlette.middleware.base import _StreamingResponse
 
-from src.adapters.presenters.csv_response import CSVResponse
+from src.adapters.presenters.csv_response import retrieve_csv
 from src.adapters.presenters.json_response import ErrorJSON
-from src.adapters.presenters.template_response import TemplateResponse
+from src.adapters.presenters.template_response import get_not_found_template
 from src.core.config.config import HEADERS, RATELIMIT_POLICY, SERVER
 from src.core.data.enums import ExcMsg
-from src.framework.fastapi.csrf_token import CSRFToken
+from src.framework.fastapi.csrf_token import generate_csrf_token
 from src.framework.fastapi.routes import favicon
+from src.framework.middleware.flow_guarding_monitor import (
+    FlowGuardingMonitorMiddleware,
+)
 from tests.conftest import assert_error_json
 from tests.mocks.helpers import Patch, fqn
 from tests.mocks.raw import (
@@ -24,8 +27,9 @@ from tests.mocks.raw import (
 )
 
 
-RETRIEVE = Patch(CSVResponse.retrieve).classmethod(favicon)
-GENERATE = Patch(CSRFToken.generate_csrf_tokens).classmethod(favicon)
+RETRIEVE = Patch(favicon, retrieve_csv)
+GENERATE = Patch(favicon, generate_csrf_token)
+NOT_FOUND = fqn(FlowGuardingMonitorMiddleware, get_not_found_template)
 
 
 @mark.asyncio
@@ -55,7 +59,7 @@ async def test_uncaught_exception(mocker: Mocker, client: Client):
 async def test_routing_error(mocker: Mocker, client: Client):
     client.cookies.clear()
     client.headers.clear()
-    spy = mocker.spy(TemplateResponse, "not_found_template")
+    spy = mocker.patch(NOT_FOUND, wraps=get_not_found_template)
     res = await client.get("/api/any")
     assert res.status_code == HTTP_404 and res.text
     assert res.headers["Content-Type"] == HTML_CONTENT_TYPE
@@ -67,7 +71,7 @@ async def test_internal_error(mocker: Mocker, client: Client):
     client.cookies.clear()
     client.headers.clear()
     mocker.patch(**GENERATE(RuntimeError("any")))
-    spy = mocker.spy(TemplateResponse, "not_found_template")
+    spy = mocker.patch(NOT_FOUND, wraps=get_not_found_template)
     res = await client.get(URL_WEB)
     assert res.status_code == HTTP_500 and res.text
     assert res.headers["Content-Type"] == HTML_CONTENT_TYPE

@@ -14,7 +14,7 @@ from starlette.middleware.base import (
 from starlette.responses import Response as StarletteResponse
 
 from src.adapters.presenters.json_response import ErrorJSON
-from src.adapters.presenters.template_response import TemplateResponse
+from src.adapters.presenters.template_response import get_not_found_template
 from src.core.config.config import (
     HEADERS,
     RATELIMIT_POLICY,
@@ -84,6 +84,6 @@ class FlowGuardingMonitorMiddleware(BaseHTTPMiddleware):
                 chunks = [chunk async for chunk in res.body_iterator]
                 setattr(res, "body", b"".join(chunks))
 
-            return TemplateResponse.not_found_template(request, res)
+            return get_not_found_template(request, res)
 
         return res

@@ -1,7 +1,7 @@
 from fastapi.responses import FileResponse
 from pandas import DataFrame
 
-from src.adapters.presenters.csv_response import CSVResponse
+from src.adapters.presenters.csv_response import csv_response
 from src.core.common.types import (
     AbstractAPI,
     SearchAPI,
@@ -9,7 +9,7 @@ from src.core.common.types import (
     SimilarityFilter,
     SurveyDetails,
 )
-from src.core.data.csv_builder import CSVBuilder
+from src.core.data.csv_builder import write_csv_file
 from src.utils import logger
 
 
@@ -69,8 +69,6 @@ class ScopusArticlesAggregator:
         logger.quota(*self._details.search_quota)
         logger.quota(*self._details.abstract_quota)
 
-        filename = CSVBuilder.write(self._docs, params, self._details.metadata)
+        filename = write_csv_file(self._docs, params, self._details.metadata)
 
-        return CSVResponse.build(
-            filename, params.api_key, self._details.headers
-        )
+        return csv_response(filename, params.api_key, self._details.headers)

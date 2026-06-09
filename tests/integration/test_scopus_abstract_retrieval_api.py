@@ -9,7 +9,7 @@ from pytest_mock import MockerFixture as Mocker
 from src.adapters.gateway.scopus_abstract_retrieval_api import (
     ScopusAbstractRetrievalAPI,
 )
-from src.adapters.helpers.scopus_response import ScopusResponse
+from src.adapters.helpers.scopus_response import validate_abstract_response
 from src.core.config.scopus import QUOTA_ERROR_CODE
 from src.core.data.enums import ExcMsg
 from src.core.data.quota_results_handler import QuotaResultsHandler
@@ -48,6 +48,7 @@ from tests.mocks.raw import (
 
 
 STATE = fqn(make_aggregator, QuotaResultsHandler)
+ABSTRACT_RES = fqn(ScopusAbstractRetrievalAPI, validate_abstract_response)
 STEP = Patch(ScopusAbstractRetrievalAPI, ProgressBar.step, "ProgressBar")
 
 
@@ -170,7 +171,7 @@ async def test_retrieve_quota_exceed(mocker: Mocker, client: Client):
 
 @mark.asyncio
 async def test_retrieve_cancelled_error(mocker: Mocker, client: Client):
-    spy = mocker.spy(ScopusResponse, "validate_abstract")
+    spy = mocker.patch(ABSTRACT_RES, wraps=validate_abstract_response)
     mocker.patch(**STEP(MORE_CANCELLED))
     mock = mocker.patch(*get_patch(RETRIEVE_MORE_ABSTRACTS))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)

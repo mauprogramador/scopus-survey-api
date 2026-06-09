@@ -8,7 +8,7 @@ from pytest_mock import MockerFixture as Mocker
 from slowapi.errors import RateLimitExceeded
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
-from src.adapters.presenters.csv_response import CSVResponse
+from src.adapters.presenters.csv_response import retrieve_csv
 from src.core.data.enums import ExcMsg
 from src.framework.fastapi.routes import favicon
 from tests.conftest import assert_error_json
@@ -34,7 +34,7 @@ from tests.mocks.raw import (
 )
 
 
-RETRIEVE = Patch(CSVResponse.retrieve).classmethod(favicon)
+RETRIEVE = Patch(favicon, retrieve_csv)
 
 
 @mark.asyncio

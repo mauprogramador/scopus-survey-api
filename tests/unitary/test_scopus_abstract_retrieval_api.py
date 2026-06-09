@@ -6,7 +6,7 @@ from pytest_mock import MockerFixture as Mocker
 from src.adapters.gateway.scopus_abstract_retrieval_api import (
     ProgressBar,
     ScopusAbstractRetrievalAPI,
-    ScopusResponse,
+    validate_abstract_response,
 )
 from src.core.common.types import ResponseBundle
 from src.core.data.enums import ExcMsg
@@ -28,6 +28,7 @@ from tests.mocks.unitary import (
 )
 
 
+ABSTRACT_RES = fqn(ScopusAbstractRetrievalAPI, validate_abstract_response)
 STEP = Patch(ScopusAbstractRetrievalAPI, ProgressBar.step, "ProgressBar")
 
 
@@ -134,7 +135,7 @@ async def test_retrieve_quota_exceeded():
 
 @mark.asyncio
 async def test_retrieve_cancelled_error(mocker: Mocker):
-    spy = mocker.spy(ScopusResponse, "validate_abstract")
+    spy = mocker.patch(ABSTRACT_RES, wraps=validate_abstract_response)
     fix = abstract_fix(ONE_ABSTRACT, search_raw(7))
     mocker.patch(**STEP(MORE_CANCELLED))
     with raises(ServiceUnavailable) as info:

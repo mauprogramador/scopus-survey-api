@@ -3,7 +3,7 @@ from thefuzz.fuzz import partial_ratio as fuzz_partial_ratio
 
 from src.core.config.config import DIRECTORY, FILE
 from src.core.config.scopus import DATA_SOURCE_NOTE
-from src.core.data.csv_builder import CSVBuilder
+from src.core.data.csv_builder import write_csv_file
 from src.core.data.query_params import SearchParams
 from tests.mocks.raw import (
     ALIAS_SEARCH_PARAMS,
@@ -16,7 +16,7 @@ def test_write_csv_with_metadata():
     docs = DataFrame({"Title": ["any_title_1", "any_title_2"]})
     params = SearchParams(**ALIAS_SEARCH_PARAMS)
 
-    filename = CSVBuilder.write(docs, params, ["any", "any"])
+    filename = write_csv_file(docs, params, ["any", "any"])
     file_path = DIRECTORY / f"{API_KEY}_{FILE}"
 
     assert filename == f"{API_KEY}_python-ai_{FILE}"
@@ -41,7 +41,7 @@ def test_csv_with_more_metadata():
     docs = DataFrame({"Title": ["any_title_1", "any_title_2"]})
     params = SearchParams(**ALIAS_SEARCH_PARAMS_FULL)
 
-    filename = CSVBuilder.write(docs, params, ["any", "any"])
+    filename = write_csv_file(docs, params, ["any", "any"])
     file_path = DIRECTORY / f"{API_KEY}_{FILE}"
 
     assert filename == f"{API_KEY}_python-ai_{FILE}"

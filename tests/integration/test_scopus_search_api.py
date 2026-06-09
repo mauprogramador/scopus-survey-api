@@ -7,7 +7,7 @@ from pytest import mark
 from pytest_mock import MockerFixture as Mocker
 
 from src.adapters.gateway.scopus_search_api import ScopusSearchAPI
-from src.adapters.helpers.scopus_response import ScopusResponse
+from src.adapters.helpers.scopus_response import validate_search_response
 from src.core.config.scopus import QUOTA_ERROR_CODE
 from src.core.data.enums import ExcMsg
 from src.core.data.quota_results_handler import QuotaResultsHandler
@@ -56,6 +56,7 @@ from tests.mocks.raw import (
 
 
 STATE = fqn(make_aggregator, QuotaResultsHandler)
+SEARCH_RES = fqn(ScopusSearchAPI, validate_search_response)
 STEP = Patch(ScopusSearchAPI, ProgressBar.step, "ProgressBar")
 
 
@@ -250,7 +251,7 @@ async def test_search_quota_exceeded(mocker: Mocker, client: Client):
 
 @mark.asyncio
 async def test_search_cancelled_error(mocker: Mocker, client: Client):
-    spy = mocker.spy(ScopusResponse, "validate_search")
+    spy = mocker.patch(SEARCH_RES, wraps=validate_search_response)
     mocker.patch(**STEP(MORE_CANCELLED))
     mock = mocker.patch(*get_patch(SEARCH_MORE_PAGES_PARTIAL_RESULTS))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)

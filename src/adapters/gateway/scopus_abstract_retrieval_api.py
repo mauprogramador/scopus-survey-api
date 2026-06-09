@@ -4,7 +4,7 @@ from concurrent.futures import ThreadPoolExecutor
 
 from pandas import DataFrame
 
-from src.adapters.helpers.scopus_response import ScopusResponse
+from src.adapters.helpers.scopus_response import validate_abstract_response
 from src.core.common.types import (
     HTTPClient,
     QuotaResultsHandler,
@@ -74,7 +74,7 @@ class ScopusAbstractRetrievalAPI:
                     abstract = (
                         await asyncio.get_running_loop().run_in_executor(
                             executor,
-                            ScopusResponse.validate_abstract,
+                            validate_abstract_response,
                             res,
                         )
                     )
@@ -111,7 +111,7 @@ class ScopusAbstractRetrievalAPI:
         res = await self._http_client.request(url)
         self._details.set_abstract_quota(res)
 
-        abstract = ScopusResponse.validate_abstract(res)
+        abstract = validate_abstract_response(res)
         abstract_data = abstract.model_dump(by_alias=True)
         self._state.abstracts.append(abstract_data)
 

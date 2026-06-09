@@ -2,7 +2,7 @@ import asyncio
 import os
 from concurrent.futures import ThreadPoolExecutor
 
-from src.adapters.helpers.scopus_response import ScopusResponse
+from src.adapters.helpers.scopus_response import validate_search_response
 from src.core.common.types import (
     CombinationBundle,
     HTTPClient,
@@ -84,7 +84,7 @@ class ScopusSearchAPI:
 
                     search = await asyncio.get_running_loop().run_in_executor(
                         executor,
-                        ScopusResponse.validate_search,
+                        validate_search_response,
                         res,
                     )
                     bundles_map[index].total = search.total_results
@@ -150,7 +150,7 @@ class ScopusSearchAPI:
 
                     search = await asyncio.get_running_loop().run_in_executor(
                         executor,
-                        ScopusResponse.validate_search,
+                        validate_search_response,
                         res,
                     )
                     self._state.entry.extend(search.entry)
@@ -182,7 +182,7 @@ class ScopusSearchAPI:
         url = self._url_builder.search_url(params)
 
         res = await self._http_client.request(url)
-        search_results = ScopusResponse.validate_search(res)
+        search_results = validate_search_response(res)
 
         self._details.set_search_data(search_results)
         self._details.set_search_quota(res)
@@ -196,7 +196,7 @@ class ScopusSearchAPI:
                 res = await self._get_by_pagination(self._PAGE_TWO_INDEX)
                 self._details.set_search_quota(res)
 
-                search_results = ScopusResponse.validate_search(res)
+                search_results = validate_search_response(res)
                 self._state.entry.extend(search_results.entry)
 
             elif self._state.pages_count > 2:

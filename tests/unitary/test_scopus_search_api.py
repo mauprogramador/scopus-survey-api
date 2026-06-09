@@ -5,8 +5,8 @@ from pytest_mock import MockerFixture as Mocker
 
 from src.adapters.gateway.scopus_search_api import (
     ProgressBar,
-    ScopusResponse,
     ScopusSearchAPI,
+    validate_search_response,
 )
 from src.core.common.types import ResponseBundle
 from src.core.data.enums import ExcMsg
@@ -41,6 +41,7 @@ from tests.mocks.unitary import (
 )
 
 
+SEARCH_RES = fqn(ScopusSearchAPI, validate_search_response)
 STEP = Patch(ScopusSearchAPI, ProgressBar.step, "ProgressBar")
 
 
@@ -78,7 +79,7 @@ async def test_survey_not_found():
 
 @mark.asyncio
 async def test_survey_cancelled_error(mocker: Mocker):
-    spy = mocker.spy(ScopusResponse, "validate_search")
+    spy = mocker.patch(SEARCH_RES, wraps=validate_search_response)
     fix = search_fix(SURVEY_RESULTS)
     mocker.patch(**STEP(MORE_CANCELLED))
     with raises(ServiceUnavailable) as info:
@@ -214,7 +215,7 @@ async def test_search_quota_exceeded():
 
 @mark.asyncio
 async def test_search_cancelled_error(mocker: Mocker):
-    spy = mocker.spy(ScopusResponse, "validate_search")
+    spy = mocker.patch(SEARCH_RES, wraps=validate_search_response)
     fix = search_fix(MORE_PAGES_PARTIAL_RESULTS)
     mocker.patch(**STEP(MORE_CANCELLED))
     with raises(ServiceUnavailable) as info:

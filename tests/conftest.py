@@ -9,7 +9,7 @@ from pytest import ExceptionInfo, LogCaptureFixture, fixture
 from pytest_asyncio import fixture as async_fixture
 
 from src.adapters.presenters.json_response import ErrorJSON, ErrorResponse
-from src.adapters.presenters.template_response import TemplateResponse
+from src.adapters.presenters.template_response import build_all_templates
 from src.core.common.types import Json
 from src.core.config.config import DIRECTORY, PREFIX, SERVER
 from src.core.domain.http_exceptions import HTTPError
@@ -20,7 +20,7 @@ from tests.mocks.raw import CSRF_TOKEN, CSV_FILE_NAME, SIGNED_TOKEN
 
 
 uvloop.install()
-TIMEOUT = 15
+
 BASE_URL = urljoin("http://127.0.0.1:123", PREFIX)
 TRANSPORT = httpx.ASGITransport(app=app, client=("127.0.0.1", 123))
 
@@ -49,7 +49,7 @@ def apply_custom_logging_formatter_to_pytest(caplog: LogCaptureFixture):
 def lifespan():
     SERVER.set("Pytest/1.2.3")
 
-    TemplateResponse.build_all(*load_translations())
+    build_all_templates(*load_translations())
     csv_file_path = DIRECTORY / CSV_FILE_NAME
 
     DIRECTORY.mkdir(parents=True, exist_ok=True)
@@ -69,7 +69,7 @@ async def httpx_async_client():
     async with httpx.AsyncClient(
         cookies={"csrf-token": SIGNED_TOKEN},
         headers={"X-CSRF-Token": CSRF_TOKEN},
-        timeout=TIMEOUT,
+        timeout=15,
         base_url=BASE_URL,
         transport=TRANSPORT,
     ) as client:

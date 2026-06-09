@@ -15,7 +15,7 @@ from src.core.config.scopus import (
 )
 from src.core.data.enums import Button, Lang
 from src.core.data.serializers import ScopusHeaders
-from src.framework.fastapi.csrf_token import CSRFToken
+from src.framework.fastapi.csrf_token import generate_csrf_token
 
 
 # HTTP Status code
@@ -34,7 +34,7 @@ HTTP_504 = HTTPStatus.GATEWAY_TIMEOUT
 # Client params
 
 API_KEY = secrets.token_hex(16)
-CSRF_TOKEN, SIGNED_TOKEN = CSRFToken.generate_csrf_tokens()
+CSRF_TOKEN, SIGNED_TOKEN = generate_csrf_token()
 KEYWORDS = ["Python", "AI", "Automation", "Web"]
 CSV_FILE_NAME = f"{API_KEY}_{FILE}"
 

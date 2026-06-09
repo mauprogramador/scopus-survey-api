@@ -2,9 +2,12 @@ from pandas import DataFrame
 from pytest import mark
 from pytest_mock import MockerFixture as Mocker
 
-from src.core.data.csv_builder import CSVBuilder
+from src.core.data.csv_builder import write_csv_file
 from src.core.data.query_params import SearchParams
-from tests.mocks.helpers import aggregator_fix
+from src.core.use_cases.scopus_articles_aggregator import (
+    ScopusArticlesAggregator,
+)
+from tests.mocks.helpers import aggregator_fix, fqn
 from tests.mocks.raw import ALIAS_SEARCH_PARAMS, HTTP_200
 from tests.mocks.unitary import (
     DIFFERENT_ARTICLES,
@@ -14,13 +17,14 @@ from tests.mocks.unitary import (
 
 
 PARAMS = SearchParams(**ALIAS_SEARCH_PARAMS)
+WRITE_CSV = fqn(ScopusArticlesAggregator, write_csv_file)
 
 
 @mark.asyncio
 async def test_one_row(mocker: Mocker):
     fix = aggregator_fix(DIFFERENT_ARTICLES.iloc[0:1])
     spy_drop = mocker.spy(DataFrame, "drop_duplicates")
-    spy_write = mocker.spy(CSVBuilder, "write")
+    spy_write = mocker.patch(WRITE_CSV, wraps=write_csv_file)
 
     res = await fix.use_case.retrieve_articles(PARAMS)
     df_spy: DataFrame = spy_write.call_args_list[0].args[0]
@@ -35,7 +39,7 @@ async def test_one_row(mocker: Mocker):
 async def test_more_rows(mocker: Mocker):
     fix = aggregator_fix(DIFFERENT_ARTICLES)
     spy_drop = mocker.spy(DataFrame, "drop_duplicates")
-    spy_write = mocker.spy(CSVBuilder, "write")
+    spy_write = mocker.patch(WRITE_CSV, wraps=write_csv_file)
 
     res = await fix.use_case.retrieve_articles(PARAMS)
     df_spy: DataFrame = spy_write.call_args_list[0].args[0]
@@ -85,7 +89,7 @@ async def test_non_ratio(mocker: Mocker):
     fix = aggregator_fix(DIFFERENT_ARTICLES)
     PARAMS.ratio = 0
 
-    spy = mocker.spy(CSVBuilder, "write")
+    spy = mocker.patch(WRITE_CSV, wraps=write_csv_file)
     res = await fix.use_case.retrieve_articles(PARAMS)
     df_spy: DataFrame = spy.call_args_list[0].args[0]
 

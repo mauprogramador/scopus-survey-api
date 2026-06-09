@@ -5,14 +5,17 @@ from pytest_mock import MockerFixture as Mocker
 
 from src.core.common.types import ResponseBundle
 from src.core.config.scopus import BOOLEAN_OPERATOR
-from src.core.data.csv_builder import CSVBuilder
+from src.core.data.csv_builder import write_csv_file
 from src.core.data.serializers import ScopusHeaders, ScopusSearch
 from src.core.data.survey_details import SurveyDetails
 from src.core.use_cases.keyword_combination_finder import (
     KeywordCombinationFinder,
 )
+from src.core.use_cases.scopus_articles_aggregator import (
+    ScopusArticlesAggregator,
+)
 from src.utils import logger
-from tests.mocks.helpers import get_patch, spec
+from tests.mocks.helpers import fqn, get_patch, spec
 from tests.mocks.integration import (
     COMBINATION_DETAILS,
     HEADERS,
@@ -31,6 +34,7 @@ from tests.mocks.raw import (
 
 
 LOG_QUOTA = spec(KeywordCombinationFinder, logger.quota, "logger")
+WRITE_CSV = fqn(ScopusArticlesAggregator, write_csv_file)
 
 
 @mark.asyncio
@@ -64,7 +68,7 @@ async def test_search_details_one_result(mocker: Mocker, client: Client):
     spy_search_quota = mocker.spy(SurveyDetails, "set_search_quota")
     spy_abstract_quota = mocker.spy(SurveyDetails, "set_abstract_quota")
     spy_loss = mocker.spy(SurveyDetails, "set_loss")
-    spy_write = mocker.spy(CSVBuilder, "write")
+    spy_write = mocker.patch(WRITE_CSV, wraps=write_csv_file)
     spy_log = mocker.patch(**LOG_QUOTA)
     mocker.patch(*get_patch(SEARCH_DETAILS_ONE_RESULT))
 
@@ -115,7 +119,7 @@ async def test_search_details_more_results(mocker: Mocker, client: Client):
     spy_search_quota = mocker.spy(SurveyDetails, "set_search_quota")
     spy_abstract_quota = mocker.spy(SurveyDetails, "set_abstract_quota")
     spy_loss = mocker.spy(SurveyDetails, "set_loss")
-    spy_write = mocker.spy(CSVBuilder, "write")
+    spy_write = mocker.patch(WRITE_CSV, wraps=write_csv_file)
     spy_log = mocker.patch(**LOG_QUOTA)
     mocker.patch(*get_patch(SEARCH_DETAILS_MORE_RESULTS))
 

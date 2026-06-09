@@ -2,7 +2,7 @@ from pathlib import Path
 
 from pytest import fixture, raises
 
-from src.adapters.presenters.csv_response import CSVResponse
+from src.adapters.presenters.csv_response import csv_response, retrieve_csv
 from src.core.config.config import DIRECTORY, FILE
 from src.core.data.enums import ExcMsg
 from src.core.domain.http_exceptions import NotFound
@@ -24,7 +24,7 @@ def file_path_fixture():
 
 
 def test_build_response(file: tuple[Path, str]):
-    res = CSVResponse.build(f"any_{FILE}", "any", {"X-any": "any"})
+    res = csv_response(f"any_{FILE}", "any", {"X-any": "any"})
     assert res.status_code == HTTP_200
     assert res.media_type == CSV_MEDIA
     assert res.path == file[0] and res.filename == file[1]
@@ -37,7 +37,7 @@ def test_build_response(file: tuple[Path, str]):
 
 
 def test_retrieve_csv(file: tuple[Path, str]):
-    res = CSVResponse.retrieve("any")
+    res = retrieve_csv("any")
     assert res.status_code == HTTP_200
     assert res.media_type == CSV_MEDIA
     assert res.path == file[0] and res.filename == file[1]
@@ -50,6 +50,6 @@ def test_retrieve_csv(file: tuple[Path, str]):
 
 def test_csv_not_found():
     with raises(NotFound) as info:
-        CSVResponse.retrieve("any")
+        retrieve_csv("any")
     assert_http_error(info, HTTP_404, ExcMsg.CSV_NOT_FOUND)
     assert info.value.details is None

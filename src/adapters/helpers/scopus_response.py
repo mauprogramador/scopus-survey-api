@@ -16,45 +16,39 @@ from src.core.domain.http_exceptions import InternalError, ScopusAPIError
 from src.utils import logger
 
 
-class ScopusResponse:
-    """Handle errors and status from Scopus responses"""
+def _validate(model: Type[ScopusModel], res: ResponseBundle) -> ScopusModel:
+    try:
+        if res.code >= HTTPStatus.BAD_REQUEST:
+            quota = ScopusHeaders.model_validate(res.headers)
+            logger.quota(quota, res.code)
 
-    @classmethod
-    def _validate(
-        cls, model: Type[ScopusModel], res: ResponseBundle
-    ) -> ScopusModel:
-        try:
-            if res.code >= HTTPStatus.BAD_REQUEST:
-                quota = ScopusHeaders.model_validate(res.headers)
-                logger.quota(quota, res.code)
+            error_res = ScopusError.model_validate(res.data)
 
-                error_res = ScopusError.model_validate(res.data)
+            if res.code == HTTPStatus.TOO_MANY_REQUESTS:
 
-                if res.code == HTTPStatus.TOO_MANY_REQUESTS:
+                if error_res.code == QUOTA_ERROR_CODE:
+                    logger.error(ExcMsg.QUOTA_EXCEEDED)
+                    logger.try_again(quota.reset_datetime)
 
-                    if error_res.code == QUOTA_ERROR_CODE:
-                        logger.error(ExcMsg.QUOTA_EXCEEDED)
-                        logger.try_again(quota.reset_datetime)
+                elif error_res.code == RATE_LIMIT_ERROR_CODE:
+                    logger.error(ExcMsg.RATE_LIMIT_EXCEEDED)
 
-                    elif error_res.code == RATE_LIMIT_ERROR_CODE:
-                        logger.error(ExcMsg.RATE_LIMIT_EXCEEDED)
+            raise ScopusAPIError(
+                res.code,
+                quota.model_dump(),
+                error_res.model_dump(),
+                res.data,
+            )
 
-                raise ScopusAPIError(
-                    res.code,
-                    quota.model_dump(),
-                    error_res.model_dump(),
-                    res.data,
-                )
+        return model.model_validate(res.data)
 
-            return model.model_validate(res.data)
+    except (ValidationError, KeyError) as exc:
+        raise InternalError(ExcMsg.VALIDATE_ERROR, exc) from exc
 
-        except (ValidationError, KeyError) as exc:
-            raise InternalError(ExcMsg.VALIDATE_ERROR, exc) from exc
 
-    @classmethod
-    def validate_search(cls, res: ResponseBundle) -> ScopusSearch:
-        return cls._validate(ScopusSearch, res)
+def validate_search_response(res: ResponseBundle) -> ScopusSearch:
+    return _validate(ScopusSearch, res)
 
-    @classmethod
-    def validate_abstract(cls, res: ResponseBundle) -> ScopusAbstract:
-        return cls._validate(ScopusAbstract, res)
+
+def validate_abstract_response(res: ResponseBundle) -> ScopusAbstract:
+    return _validate(ScopusAbstract, res)
