@@ -10,7 +10,7 @@ from thefuzz.fuzz import partial_ratio as fuzz_partial_ratio
 from src.adapters.helpers.url_builder import URLBuilder
 from src.core.config.config import DIRECTORY, FILE
 from src.core.config.scopus import DATA_SOURCE_NOTE
-from src.core.data.enums import Column, ExcMsg
+from src.core.data.enums import ExcMsg
 from tests.conftest import assert_error_json
 from tests.mocks.helpers import (
     get_patch,
@@ -164,11 +164,10 @@ class TestUserFlowSurveySteps:
 
         df = load_csv_from_response(res)
         assert df.shape == (1, 11)
-        assert df[Column.URL].iloc[0] == URLBuilder.article_page_url(
-            "0123456789"
-        )
-        assert df[Column.AUTHORS].iloc[0] == "any_author"
-        assert df[Column.TITLE].iloc[0] == "any_title"
+        url = URLBuilder.article_page_url("0123456789")
+        assert df["Article Preview Page URL"].iloc[0] == url
+        assert df["Authors"].iloc[0] == "any_author"
+        assert df["Title"].iloc[0] == "any_title"
 
         cls._file_path = DIRECTORY / f"{cls._api_key}_{FILE}"
         assert cls._file_path.exists()
@@ -211,10 +210,9 @@ class TestUserFlowSurveySteps:
 
         df = load_csv_from_response(res)
         assert df.shape == (1, 11)
-        assert df[Column.URL].iloc[0] == URLBuilder.article_page_url(
-            "0123456789"
-        )
-        assert df[Column.AUTHORS].iloc[0] == "any_author"
-        assert df[Column.TITLE].iloc[0] == "any_title"
+        url = URLBuilder.article_page_url("0123456789")
+        assert df["Article Preview Page URL"].iloc[0] == url
+        assert df["Authors"].iloc[0] == "any_author"
+        assert df["Title"].iloc[0] == "any_title"
 
         cls._file_path.unlink()

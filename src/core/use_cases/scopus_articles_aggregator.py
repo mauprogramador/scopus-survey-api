@@ -10,13 +10,13 @@ from src.core.common.types import (
     SurveyDetails,
 )
 from src.core.data.csv_builder import CSVBuilder
-from src.core.data.enums import Column
 from src.utils import logger
 
 
 class ScopusArticlesAggregator:
     """Gathers, filters and compiles data from Scopus articles"""
 
+    _COLUMNS = ["title", "authors"]
     _SINGLE_ROW = 1
     _NON_RATIO = 0
 
@@ -52,7 +52,7 @@ class ScopusArticlesAggregator:
             self._docs = self._docs.drop_duplicates()
             self._docs = self._docs.reset_index(drop=True)
 
-            self._docs = self._docs.drop_duplicates(Column.DROP)
+            self._docs = self._docs.drop_duplicates(self._COLUMNS)
             self._docs = self._docs.reset_index(drop=True)
             rows_out = self._docs.shape[0]
 

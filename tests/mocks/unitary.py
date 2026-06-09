@@ -5,7 +5,6 @@ import string
 from pandas import DataFrame
 
 from src.core.common.types import CombinationBundle
-from src.core.data.enums import Column
 from src.core.data.serializers import ScopusAbstract
 from tests.mocks.errors import CONTENT_TYPE_ERROR, JSON_DECODE_ERROR
 from tests.mocks.helpers import (
@@ -135,30 +134,30 @@ ABSTRACT_QUOTA_EXCEEDED = bundle_mock(
 
 ONE_GROUP_TWO_SIMILAR = DataFrame(
     {
-        Column.AUTHORS: ["a", "a"],
-        Column.TITLE: ["any_a_1", "any_a_2"],
-        Column.DATE: ["2025-05-01", "2025-06-01"],
+        "authors": ["a", "a"],
+        "title": ["any_a_1", "any_a_2"],
+        "date": ["2025-05-01", "2025-06-01"],
     }
 )
 ONE_GROUP_MORE_SIMILAR = DataFrame(
     {
-        Column.AUTHORS: ["a"] * 5,
-        Column.TITLE: [f"any_a_{index}" for index in range(1, 6)],
-        Column.DATE: [f"2025-05-0{index}" for index in range(1, 6)],
+        "authors": ["a"] * 5,
+        "title": [f"any_a_{index}" for index in range(1, 6)],
+        "date": [f"2025-05-0{index}" for index in range(1, 6)],
     }
 )
 ONE_GROUP_NO_SIMILAR = DataFrame(
     {
-        Column.AUTHORS: ["a", "a"],
-        Column.TITLE: ["abc", "def"],
-        Column.DATE: ["2025-06-01", "2025-06-02"],
+        "authors": ["a", "a"],
+        "title": ["abc", "def"],
+        "date": ["2025-06-01", "2025-06-02"],
     }
 )
 MORE_GROUPS_TWO_SIMILAR = DataFrame(
     {
-        Column.AUTHORS: ["a", "a", "b", "b", "c"],
-        Column.TITLE: ["any_a_1", "any_a_2", "any_b_1", "any_b_2", "any_c_1"],
-        Column.DATE: [
+        "authors": ["a", "a", "b", "b", "c"],
+        "title": ["any_a_1", "any_a_2", "any_b_1", "any_b_2", "any_c_1"],
+        "date": [
             "2025-06-01",
             "2025-05-01",
             "2025-06-01",
@@ -169,14 +168,14 @@ MORE_GROUPS_TWO_SIMILAR = DataFrame(
 )
 MORE_GROUPS_MORE_SIMILAR = DataFrame(
     {
-        Column.AUTHORS: [*["a"] * 4, *["b"] * 3, "c", "c"],
-        Column.TITLE: [
+        "authors": [*["a"] * 4, *["b"] * 3, "c", "c"],
+        "title": [
             *[f"any_a_{index}" for index in range(1, 5)],
             *[f"any_b_{index}" for index in range(1, 4)],
             "any_c_1",
             "any_c_2",
         ],
-        Column.DATE: [
+        "date": [
             *[f"2025-06-0{index}" for index in range(1, 5)],
             *[f"2025-05-0{index}" for index in range(1, 4)],
             "2025-04-01",
@@ -186,14 +185,14 @@ MORE_GROUPS_MORE_SIMILAR = DataFrame(
 )
 MORE_GROUPS_NO_SIMILAR = DataFrame(
     {
-        Column.AUTHORS: [*["a"] * 4, *["b"] * 3, "c", "c"],
-        Column.TITLE: [
+        "authors": [*["a"] * 4, *["b"] * 3, "c", "c"],
+        "title": [
             *map("".join, itertools.batched(string.ascii_lowercase[:12], 3)),
             *map("".join, itertools.batched(string.ascii_lowercase[:9], 3)),
             "abc",
             "def",
         ],
-        Column.DATE: [
+        "date": [
             *[f"2025-06-0{index}" for index in range(1, 5)],
             *[f"2025-05-0{index}" for index in range(1, 4)],
             "2025-04-01",
@@ -203,23 +202,23 @@ MORE_GROUPS_NO_SIMILAR = DataFrame(
 )
 NO_DATETIME_LEFT = DataFrame(
     {
-        Column.AUTHORS: ["a", "a"],
-        Column.TITLE: ["any_a_1", "any_a_2"],
-        Column.DATE: ["NaN", "null"],
+        "authors": ["a", "a"],
+        "title": ["any_a_1", "any_a_2"],
+        "date": ["NaN", "null"],
     }
 )
 ONE_DATETIME_LEFT = DataFrame(
     {
-        Column.AUTHORS: ["a", "a"],
-        Column.TITLE: ["any_a_1", "any_a_2"],
-        Column.DATE: ["2025-06-01", "null"],
+        "authors": ["a", "a"],
+        "title": ["any_a_1", "any_a_2"],
+        "date": ["2025-06-01", "null"],
     }
 )
 NO_REPEATED_AUTHORS = DataFrame(
     {
-        Column.AUTHORS: ["a", "b"],
-        Column.TITLE: ["any", "any"],
-        Column.DATE: ["2025-06-01", "2025-06-01"],
+        "authors": ["a", "b"],
+        "title": ["any", "any"],
+        "date": ["2025-06-01", "2025-06-01"],
     }
 )
 

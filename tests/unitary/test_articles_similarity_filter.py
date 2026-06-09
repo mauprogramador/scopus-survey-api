@@ -7,7 +7,7 @@ from pandas.api.typing import DataFrameGroupBy
 from pytest import raises
 from pytest_mock import MockerFixture as Mocker
 
-from src.core.data.enums import Column, ExcMsg
+from src.core.data.enums import ExcMsg
 from src.core.domain.http_exceptions import ServiceUnavailable
 from src.core.use_cases.articles_similarity_filter import (
     ArticlesSimilarityFilter,
@@ -41,8 +41,8 @@ def test_one_group_two_similar_titles(mocker: Mocker):
     df = SIMILARITY_FILTER.filter(ONE_GROUP_TWO_SIMILAR, RATIO)
     spy.assert_called_once()
     assert df.shape[0] == 1
-    assert df[Column.AUTHORS].iloc[0] == "a"
-    assert df[Column.DATE].iloc[0] == "2025-06-01"
+    assert df["authors"].iloc[0] == "a"
+    assert df["date"].iloc[0] == "2025-06-01"
 
 
 def test_one_group_more_similar_titles(mocker: Mocker):
@@ -50,8 +50,8 @@ def test_one_group_more_similar_titles(mocker: Mocker):
     df = SIMILARITY_FILTER.filter(ONE_GROUP_MORE_SIMILAR, RATIO)
     spy.assert_called_once()
     assert df.shape[0] == 1
-    assert df[Column.AUTHORS].iloc[0] == "a"
-    assert df[Column.DATE].iloc[0] == "2025-05-05"
+    assert df["authors"].iloc[0] == "a"
+    assert df["date"].iloc[0] == "2025-05-05"
 
 
 def test_one_group_no_similar_titles(mocker: Mocker):
@@ -66,9 +66,9 @@ def test_more_groups_two_similar_titles(mocker: Mocker):
     df = SIMILARITY_FILTER.filter(MORE_GROUPS_TWO_SIMILAR, RATIO)
     spy.assert_not_called()
     assert df.shape[0] == 3
-    assert df[Column.AUTHORS].tolist() == ["a", "b", "c"]
+    assert df["authors"].tolist() == ["a", "b", "c"]
     recent_dates = ["2025-06-01", "2025-06-01", "2025-06-01"]
-    assert df[Column.DATE].tolist() == recent_dates
+    assert df["date"].tolist() == recent_dates
 
 
 def test_more_groups_more_similar_titles(mocker: Mocker):
@@ -76,9 +76,9 @@ def test_more_groups_more_similar_titles(mocker: Mocker):
     df = SIMILARITY_FILTER.filter(MORE_GROUPS_MORE_SIMILAR, RATIO)
     spy.assert_not_called()
     assert df.shape[0] == 3
-    assert df[Column.AUTHORS].tolist() == ["a", "b", "c"]
+    assert df["authors"].tolist() == ["a", "b", "c"]
     recent_dates = ["2025-06-04", "2025-05-03", "2025-04-02"]
-    assert df[Column.DATE].tolist() == recent_dates
+    assert df["date"].tolist() == recent_dates
 
 
 def test_more_groups_no_similar_titles(mocker: Mocker):
@@ -102,7 +102,7 @@ def test_to_datetime_no_left(mocker: Mocker):
     spy_dropna.assert_called_once()
 
     assert all(isinstance(value, str) for value in df_to_datetime)
-    assert all(pd.isna(value) for value in df_dropna[Column.DATE])
+    assert all(pd.isna(value) for value in df_dropna["date"])
     assert df.equals(NO_DATETIME_LEFT)
 
 
@@ -120,8 +120,8 @@ def test_to_datetime_one_left(mocker: Mocker):
     spy_dropna.assert_called_once()
 
     assert all(isinstance(value, str) for value in df_to_datetime)
-    assert isinstance(df_dropna[Column.DATE].iloc[0], datetime)
-    assert pd.isna(df_dropna[Column.DATE].iloc[1])
+    assert isinstance(df_dropna["date"].iloc[0], datetime)
+    assert pd.isna(df_dropna["date"].iloc[1])
     assert df.equals(ONE_DATETIME_LEFT)
 
 
@@ -144,19 +144,19 @@ def test_filter_drop_singles(mocker: Mocker):
 
     assert df.shape[0] == df_filter.ngroups == 3
     assert df_group.shape[0] == 4
-    assert "c" not in df_group[Column.AUTHORS].values
+    assert "c" not in df_group["authors"].values
 
 
 def test_discard_one_older_similar():
     df = SIMILARITY_FILTER.filter(ONE_GROUP_TWO_SIMILAR, RATIO)
     assert df.shape[0] == 1 and ONE_GROUP_TWO_SIMILAR.shape[0] == 2
-    assert df[Column.DATE].iloc[0] == "2025-06-01"
+    assert df["date"].iloc[0] == "2025-06-01"
 
 
 def test_discard_all_older_similar():
     df = SIMILARITY_FILTER.filter(ONE_GROUP_MORE_SIMILAR, RATIO)
     assert df.shape[0] == 1 and ONE_GROUP_MORE_SIMILAR.shape[0] == 5
-    assert df[Column.DATE].iloc[0] == "2025-05-05"
+    assert df["date"].iloc[0] == "2025-05-05"
 
 
 def test_cancelled_error(mocker: Mocker):

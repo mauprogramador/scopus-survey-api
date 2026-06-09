@@ -11,7 +11,7 @@ from src.adapters.gateway.scopus_abstract_retrieval_api import (
 )
 from src.adapters.helpers.scopus_response import ScopusResponse
 from src.core.config.scopus import QUOTA_ERROR_CODE
-from src.core.data.enums import Column, ExcMsg
+from src.core.data.enums import ExcMsg
 from src.core.data.quota_results_handler import QuotaResultsHandler
 from src.core.domain.factory import make_aggregator
 from src.utils.progress_bar import ProgressBar
@@ -59,7 +59,7 @@ async def test_retrieve_one_partial_abstract(mocker: Mocker, client: Client):
     assert res.status_code == HTTP_200 and mock.call_count == 2
     df = load_csv_from_response(res)
     assert df.shape[0] == 1
-    assert df[Column.AUTHORS].iloc[0] == "any_author"
+    assert df["Authors"].iloc[0] == "any_author"
     assert len(state.entry) == state.total_results == 1
     assert state.total_abstracts == len(state.abstracts) == 1
 
@@ -72,7 +72,7 @@ async def test_retrieve_one_abstract_authors(mocker: Mocker, client: Client):
     assert res.status_code == HTTP_200 and mock.call_count == 2
     df = load_csv_from_response(res)
     assert df.shape[0] == 1
-    assert df[Column.AUTHORS].iloc[0] == "any_author_1, any_author_2"
+    assert df["Authors"].iloc[0] == "any_author_1, any_author_2"
     assert len(state.entry) == state.total_results == 1
     assert state.total_abstracts == len(state.abstracts) == 1
 

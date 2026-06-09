@@ -9,7 +9,7 @@ from src.adapters.gateway.scopus_abstract_retrieval_api import (
     ScopusResponse,
 )
 from src.core.common.types import ResponseBundle
-from src.core.data.enums import Column, ExcMsg
+from src.core.data.enums import ExcMsg
 from src.core.domain.http_exceptions import ScopusAPIError, ServiceUnavailable
 from tests.conftest import assert_http_error
 from tests.mocks.errors import MORE_CANCELLED
@@ -36,7 +36,7 @@ async def test_retrieve_one_partial_abstract():
     fix = abstract_fix(ONE_ABSTRACT, search_raw(1))
     df = await fix.api.retrieve_abstracts(API_KEY)
     assert df.shape == (1, 11) and fix.req.call_count == 1
-    assert df[Column.AUTHORS].iloc[0] == "any_author"
+    assert df["authors"].iloc[0] == "any_author"
     assert len(fix.state.entry) == 1 and fix.state.total_results == 1
     assert fix.state.total_abstracts == len(fix.state.abstracts) == 1
 
@@ -46,7 +46,7 @@ async def test_retrieve_one_abstract_authors():
     fix = abstract_fix(ONE_ABSTRACT_AUTHORS, search_raw(1))
     df = await fix.api.retrieve_abstracts(API_KEY)
     assert df.shape == (1, 11) and fix.req.call_count == 1
-    assert df[Column.AUTHORS].iloc[0] == "any_author_1, any_author_2"
+    assert df["authors"].iloc[0] == "any_author_1, any_author_2"
     assert len(fix.state.entry) == 1 and fix.state.total_results == 1
     assert fix.state.total_abstracts == len(fix.state.abstracts) == 1
 
@@ -56,7 +56,7 @@ async def test_retrieve_one_abstract_full():
     fix = abstract_fix(ONE_ABSTRACT_FULL, search_raw(1))
     df = await fix.api.retrieve_abstracts(API_KEY)
     assert df.shape == (1, 11) and fix.req.call_count == 1
-    assert df["Abstract"].iloc[0] == "any_abstract"
+    assert df["abstract"].iloc[0] == "any_abstract"
     assert len(fix.state.entry) == 1 and fix.state.total_results == 1
     assert fix.state.total_abstracts == len(fix.state.abstracts) == 1
 

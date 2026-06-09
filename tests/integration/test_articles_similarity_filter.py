@@ -9,7 +9,7 @@ from pandas.api.typing import DataFrameGroupBy
 from pytest import mark
 from pytest_mock import MockerFixture as Mocker
 
-from src.core.data.enums import Column, ExcMsg
+from src.core.data.enums import ExcMsg
 from src.core.use_cases.articles_similarity_filter import (
     ArticlesSimilarityFilter,
 )
@@ -56,8 +56,8 @@ async def test_one_group_two_similar_titles(mocker: Mocker, client: Client):
     assert res.status_code == HTTP_200 and mock.call_count == 3
     df = load_csv_from_response(res)
     assert df.shape[0] == 1
-    assert df[Column.AUTHORS].iloc[0] == "a"
-    assert df[Column.DATE].iloc[0] == "2025-06-02"
+    assert df["Authors"].iloc[0] == "a"
+    assert df["Date"].iloc[0] == "2025-06-02"
 
 
 @mark.asyncio
@@ -70,8 +70,8 @@ async def test_one_group_more_similar_titles(mocker: Mocker, client: Client):
     assert res.status_code == HTTP_200 and mock.call_count == 6
     df = load_csv_from_response(res)
     assert df.shape[0] == 1
-    assert df[Column.AUTHORS].iloc[0] == "a"
-    assert df[Column.DATE].iloc[0] == "2025-06-05"
+    assert df["Authors"].iloc[0] == "a"
+    assert df["Date"].iloc[0] == "2025-06-05"
 
 
 @mark.asyncio
@@ -95,9 +95,9 @@ async def test_more_groups_two_similar_titles(mocker: Mocker, client: Client):
     assert res.status_code == HTTP_200 and mock.call_count == 6
     df = load_csv_from_response(res)
     assert df.shape[0] == 3
-    assert df[Column.AUTHORS].tolist() == ["a", "b", "c"]
+    assert df["Authors"].tolist() == ["a", "b", "c"]
     recent_dates = ["2025-06-05", "2025-06-05", "2025-06-01"]
-    assert df[Column.DATE].tolist() == recent_dates
+    assert df["Date"].tolist() == recent_dates
 
 
 @mark.asyncio
@@ -110,9 +110,9 @@ async def test_more_groups_more_similar_titles(mocker: Mocker, client: Client):
     assert res.status_code == HTTP_200 and mock.call_count == 10
     df = load_csv_from_response(res)
     assert df.shape[0] == 3
-    assert df[Column.AUTHORS].tolist() == ["a", "b", "c"]
+    assert df["Authors"].tolist() == ["a", "b", "c"]
     recent_dates = ["2025-06-04", "2025-06-03", "2025-06-02"]
-    assert df[Column.DATE].tolist() == recent_dates
+    assert df["Date"].tolist() == recent_dates
 
 
 @mark.asyncio
@@ -147,7 +147,7 @@ async def test_to_datetime_no_left(mocker: Mocker, client: Client):
     assert df.shape[0] == 2
 
     assert all(isinstance(value, str) for value in df_to_datetime)
-    assert all(pd.isna(value) for value in df_dropna[Column.DATE])
+    assert all(pd.isna(value) for value in df_dropna["date"])
 
 
 @mark.asyncio
@@ -170,8 +170,8 @@ async def test_to_datetime_one_left(mocker: Mocker, client: Client):
     assert df.shape[0] == 2
 
     assert all(isinstance(value, str) for value in df_to_datetime)
-    assert isinstance(df_dropna[Column.DATE].iloc[0], datetime)
-    assert pd.isna(df_dropna[Column.DATE].iloc[1])
+    assert isinstance(df_dropna["date"].iloc[0], datetime)
+    assert pd.isna(df_dropna["date"].iloc[1])
 
 
 @mark.asyncio
@@ -212,7 +212,7 @@ async def test_discard_one_older_similar(mocker: Mocker, client: Client):
     assert res.status_code == HTTP_200 and mock.call_count == 3
     df = load_csv_from_response(res)
     assert df.shape[0] == 1
-    assert df[Column.DATE].iloc[0] == "2025-06-02"
+    assert df["Date"].iloc[0] == "2025-06-02"
 
 
 @mark.asyncio
@@ -222,7 +222,7 @@ async def test_discard_all_older_similar(mocker: Mocker, client: Client):
     assert res.status_code == HTTP_200 and mock.call_count == 6
     df = load_csv_from_response(res)
     assert df.shape[0] == 1
-    assert df[Column.DATE].iloc[0] == "2025-06-05"
+    assert df["Date"].iloc[0] == "2025-06-05"
 
 
 @mark.asyncio

@@ -15,6 +15,19 @@ class CSVBuilder:
     _GENERATED_BY = (
         "ScopusSurveyAPI https://github.com/mauprogramador/scopus-survey-api"
     )
+    _COLUMN_TRANSLATION = {
+        "url": "Article Preview Page URL",
+        "scopus_id": "Scopus ID",
+        "authors": "Authors",
+        "title": "Title",
+        "publication_name": "Publication Name",
+        "abstract": "Abstract",
+        "date": "Date",
+        "eid": "Electronic ID",
+        "doi": "DOI",
+        "volume": "Volume",
+        "citations": "Citations",
+    }
 
     @classmethod
     def write(
@@ -45,7 +58,7 @@ class CSVBuilder:
             for field, value in csv_metadata.items():
                 file.write(f"# {field}: {value}\n")
 
-            docs.to_csv(
+            docs.rename(columns=cls._COLUMN_TRANSLATION).to_csv(
                 file,
                 sep=";",
                 header=True,

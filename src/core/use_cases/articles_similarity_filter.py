@@ -6,7 +6,7 @@ import pandas as pd
 from pandas import DataFrame
 from thefuzz.fuzz import ratio as fuzz_ratio  # type: ignore
 
-from src.core.data.enums import Column, ExcMsg
+from src.core.data.enums import ExcMsg
 from src.core.domain.http_exceptions import ServiceUnavailable
 from src.utils import logger
 
@@ -14,6 +14,7 @@ from src.utils import logger
 class ArticlesSimilarityFilter:
     """Filter articles from identical authors with similar titles"""
 
+    _COLUMNS = ["authors", "title", "date"]
     _SINGLE_ROW = 1
 
     def __init__(self) -> None:
@@ -33,12 +34,12 @@ class ArticlesSimilarityFilter:
     def _get_similar_title_indexes(
         group: DataFrame, similarity_ratio: int
     ) -> int | set[int] | None:
-        titles = group[Column.TITLE]
+        titles = group["title"]
         size = 2
 
         if titles.shape[0] == size:
             if fuzz_ratio(titles.iloc[0], titles.iloc[1]) > similarity_ratio:
-                return int(group[Column.DATE].idxmin())
+                return int(group["date"].idxmin())
 
             return None
 
@@ -69,13 +70,13 @@ class ArticlesSimilarityFilter:
             return {rows_indexes}
 
         similar_titles_subset = self._filtered_df.loc[list(rows_indexes)]
-        latest_index = similar_titles_subset[Column.DATE].idxmax()
+        latest_index = similar_titles_subset["date"].idxmax()
         rows_indexes.discard(latest_index)
 
         return rows_indexes
 
     def _handle_groups_similarity(self) -> set[int]:
-        grouped_df = self._filtered_df.groupby(Column.AUTHORS)
+        grouped_df = self._filtered_df.groupby("authors")
         similar_titles: set[int] = set()
 
         if grouped_df.ngroups == 1:
@@ -111,7 +112,7 @@ class ArticlesSimilarityFilter:
                     similar_titles_subset = self._filtered_df.loc[
                         list(rows_indexes)
                     ]
-                    latest_index = similar_titles_subset[Column.DATE].idxmax()
+                    latest_index = similar_titles_subset["date"].idxmax()
 
                     rows_indexes.discard(latest_index)
                     similar_titles.update(rows_indexes)
@@ -129,23 +130,23 @@ class ArticlesSimilarityFilter:
         return similar_titles
 
     def filter(self, dataframe: DataFrame, similarity_ratio: int) -> DataFrame:
-        df_subset = dataframe.loc[:, Column.FILTER].copy()
+        df_subset = dataframe.loc[:, self._COLUMNS].copy()
         self._ratio = similarity_ratio
 
-        df_subset[Column.DATE] = pd.to_datetime(
-            df_subset[Column.DATE],
+        df_subset["date"] = pd.to_datetime(
+            df_subset["date"],
             yearfirst=True,
             format="%Y-%m-%d",
             errors="coerce",
         )
 
-        self._filtered_df = df_subset.dropna(subset=[Column.DATE])
+        self._filtered_df = df_subset.dropna(subset=["date"])
         logger.debug({"invalids_datetime": self._filtered_df.shape[0]})
 
         if self._filtered_df.shape[0] <= self._SINGLE_ROW:
             return dataframe
 
-        grouped_df = self._filtered_df.groupby(Column.AUTHORS)
+        grouped_df = self._filtered_df.groupby("authors")
 
         logger.debug({"same_authors_count": grouped_df.ngroups})
         if grouped_df.ngroups == dataframe.shape[0]:

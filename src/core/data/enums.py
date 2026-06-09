@@ -40,16 +40,6 @@ class ExcMsg(StrEnum):
     SLOWAPI_RATE_ERROR = "Request rate limit exceeded"
 
 
-class Column:
-    URL = "Article Preview Page URL"
-    AUTHORS = "Authors"
-    TITLE = "Title"
-    DATE = "Date"
-
-    DROP = [TITLE, AUTHORS]
-    FILTER = [AUTHORS, TITLE, DATE]
-
-
 @unique
 class Button(StrEnum):
     PREVIOUS = auto()

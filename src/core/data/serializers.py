@@ -83,53 +83,24 @@ class ScopusAbstract(BaseModel):
 
     model_config = ConfigDict(str_strip_whitespace=True)
 
-    url: str = Field(
-        default=NULL,
-        serialization_alias="Article Preview Page URL",
-    )
+    url: str = Field(default=NULL)
     scopus_id: str = Field(
         validation_alias="dc:identifier",
-        serialization_alias="Scopus ID",
         pattern=_SCOPUS_ID_PATTERN,
         min_length=20,
         max_length=29,
     )
-    authors: str = Field(serialization_alias="Authors")
-    title: str = Field(
-        validation_alias="dc:title",
-        serialization_alias="Title",
-    )
+    authors: str = Field()
+    title: str = Field(validation_alias="dc:title")
     publication_name: str = Field(
-        default=NULL,
-        validation_alias="prism:publicationName",
-        serialization_alias="Publication Name",
+        default=NULL, validation_alias="prism:publicationName"
     )
-    abstract: str = Field(
-        default=NULL,
-        validation_alias="dc:description",
-        serialization_alias="Abstract",
-    )
-    date: str = Field(
-        default=NULL,
-        validation_alias="prism:coverDate",
-        serialization_alias="Date",
-    )
-    eid: str = Field(default=NULL, serialization_alias="Electronic ID")
-    doi: str = Field(
-        default=NULL,
-        validation_alias="prism:doi",
-        serialization_alias="DOI",
-    )
-    volume: str = Field(
-        default=NULL,
-        validation_alias="prism:volume",
-        serialization_alias="Volume",
-    )
-    citations: str = Field(
-        default=NULL,
-        validation_alias="citedby-count",
-        serialization_alias="Citations",
-    )
+    abstract: str = Field(default=NULL, validation_alias="dc:description")
+    date: str = Field(default=NULL, validation_alias="prism:coverDate")
+    eid: str = Field(default=NULL)
+    doi: str = Field(default=NULL, validation_alias="prism:doi")
+    volume: str = Field(default=NULL, validation_alias="prism:volume")
+    citations: str = Field(default=NULL, validation_alias="citedby-count")
 
     @model_validator(mode="before")
     @classmethod
