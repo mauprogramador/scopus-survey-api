@@ -103,6 +103,7 @@ class _FileHandler(RotatingFileHandler):
         self.namer = self._namer
 
     def _namer(self, path: str) -> str:
+        # From file.log.1 to file_1.log
         count = int(Path(path).suffixes[1].removeprefix("."))
         return Path(path).with_name(_filename(count)).as_posix()
 
@@ -116,7 +117,7 @@ _STATUS_COLOR = {2: "32", 3: "33", 4: "31", 5: "31"}
 _FMT = "%(asctime)s %(levelname)-18s %(message)s"
 _FILENAME = Path(f".logs/{_filename(0)}")
 _LOGGER_NAME = "scopus.survey.api"
-_DATEFMT = "%Y-%m-%d %H:%M:%S"
+_DATEFMT = "%Y-%m-%d %H:%M:%S"  # e.g. 2026-01-01 00:00:00
 
 TEST_FORMATTER = _ANSIFormatter(fmt=_FMT, datefmt=_DATEFMT, strip_ansi=False)
 
@@ -126,7 +127,7 @@ _FILE_HANDLER: Json = {
     "filename": _FILENAME,
     "mode": "a",
     "maxBytes": 10485760,  # 10MB
-    "backupCount": 15,
+    "backupCount": 15,  # 15 files
     "encoding": "utf-8",
 }
 _LOGGING_CONFIG: Json = {
@@ -392,7 +393,7 @@ def api_call(url: str, code: int, time: float) -> None:
 
 class ProdLogger(gunicorn.glogging.Logger):
     error_fmt = r"%(asctime)s %(levelname)-10s %(message)s"
-    datefmt = r"%Y-%m-%d %H:%M:%S"
+    datefmt = r"%Y-%m-%d %H:%M:%S"  # e.g. 2026-01-01 00:00:00
     access_fmt = ""
 
     def access(self, resp, req, environ, request_time):

@@ -25,7 +25,7 @@ class ProxyForwardedHeadersMiddleware(BaseHTTPMiddleware):
             request.scope["scheme"] = proto
 
         if host:
-            port = 443 if proto == "https" else 80
+            port = 443 if proto == "https" else 80  # RFC TCP Standard
             server = (host, port)
 
             headers = [

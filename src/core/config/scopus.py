@@ -10,7 +10,12 @@ MAX_RECENT_PUBLICATIONS = CURRENT_YEAR - 15
 BOOLEAN_OPERATOR = " AND "
 NULL = "null"
 
+# Scopus Search API response standard
+# https://dev.elsevier.com/documentation/ScopusSearchAPI.wadl
 MAX_ITEMS_PER_PAGE = 25
+
+# Scopus Search API quota standard
+# https://dev.elsevier.com/api_key_settings.html
 MAX_SEARCH_QUOTA = 20000
 
 NO_RESULTS = "NO_SEARCH_RESULTS"

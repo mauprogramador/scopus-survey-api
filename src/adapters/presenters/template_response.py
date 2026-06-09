@@ -108,7 +108,7 @@ class TemplateResponse:
             "status_code": res.status_code,
             "status": HTTPStatus(res.status_code).phrase,
             "timestamp": datetime.now(timezone.utc).isoformat(
-                timespec="seconds"
+                timespec="seconds"  # e.g. 2026-01-01T00:00:00Z
             ),
             "error_json": res.body.decode(),  # type: ignore
         }

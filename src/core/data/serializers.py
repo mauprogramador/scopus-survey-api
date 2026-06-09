@@ -147,7 +147,7 @@ class ScopusHeaders(BaseModel):
         if self.reset is None:
             return None
         epoch = datetime.fromtimestamp(self.reset)
-        return epoch.strftime("%Y-%m-%d %H:%M:%S")
+        return epoch.strftime("%Y-%m-%d %H:%M:%S")  # e.g. 2026-01-01 00:00:00
 
 
 class ScopusError(BaseModel):

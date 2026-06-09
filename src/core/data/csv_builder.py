@@ -49,7 +49,7 @@ class CSVBuilder:
         )
         csv_metadata["Survey"] = ", ".join(metadata)
 
-        date = datetime.now().strftime("%B %d, %Y")
+        date = datetime.now().strftime("%B %d, %Y")  # e.g. May 01, 2026
         csv_metadata["Source"] = DATA_SOURCE_NOTE.format(date=date)
 
         file_path = DIRECTORY / f"{params.api_key}_{FILE}"

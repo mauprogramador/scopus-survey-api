@@ -34,6 +34,7 @@ _API_KEY_PATTERN = r"^[a-zA-Z0-9]{32}$"
 _LANGUAGE_PATTERN = r"^[a-z\-\' ]{3,50}$"
 
 # e.g. Python AND "Data Science", COVID-19 OR H2O2
+# https://dev.elsevier.com/sc_search_tips.html
 _KEYWORD_COMBINATION_PATTERN = r"^[a-zA-Z0-9\{\}\?\"\*\-\_ ]{2,510}$"
 
 

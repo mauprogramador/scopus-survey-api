@@ -69,7 +69,7 @@ class Unauthorized(HTTPError):
 
             if isinstance(date_signed, datetime):
                 date_signed = date_signed.replace(
-                    tzinfo=timezone.utc
+                    tzinfo=timezone.utc  # e.g. 2026-01-01T00:00:00Z
                 ).isoformat(timespec="seconds")
 
             signature_detail = {

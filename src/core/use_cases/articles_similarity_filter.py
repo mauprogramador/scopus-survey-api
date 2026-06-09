@@ -35,7 +35,7 @@ class ArticlesSimilarityFilter:
         group: DataFrame, similarity_ratio: int
     ) -> int | set[int] | None:
         titles = group["title"]
-        size = 2
+        size = 2  # Two titles
 
         if titles.shape[0] == size:
             if fuzz_ratio(titles.iloc[0], titles.iloc[1]) > similarity_ratio:
@@ -136,7 +136,7 @@ class ArticlesSimilarityFilter:
         df_subset["date"] = pd.to_datetime(
             df_subset["date"],
             yearfirst=True,
-            format="%Y-%m-%d",
+            format="%Y-%m-%d",  # e.g. 2026-01-01
             errors="coerce",
         )
 
