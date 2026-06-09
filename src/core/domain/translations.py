@@ -90,7 +90,6 @@ def translate_error(request: FastAPIRequest, exc: Exception) -> str:
                 break
 
     lang = request.headers.get("Accept-Language", Lang.EN_US)
-    _e = _ERRORS[Lang(lang)].gettext
 
     if isinstance(exc, ScopusAPIError):
         status_code = str(exc.details[0]["status_code"])
@@ -102,7 +101,7 @@ def translate_error(request: FastAPIRequest, exc: Exception) -> str:
 
     for suffix in suffixes:
         key = f"{prefix}.{suffix}".lower()
-        message = _e(key)
+        message = _ERRORS[Lang(lang)].gettext(key)
 
         if message != key:
             return message

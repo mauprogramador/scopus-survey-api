@@ -33,11 +33,11 @@ class ArticlesSimilarityFilter:
     def _get_similar_title_indexes(
         group: DataFrame, similarity_ratio: int
     ) -> int | set[int] | None:
-        title = group[Column.TITLE]
+        titles = group[Column.TITLE]
         size = 2
 
-        if title.shape[0] == 2:
-            if fuzz_ratio(title.iloc[0], title.iloc[1]) > similarity_ratio:
+        if titles.shape[0] == size:
+            if fuzz_ratio(titles.iloc[0], titles.iloc[1]) > similarity_ratio:
                 return int(group[Column.DATE].idxmin())
 
             return None
@@ -45,9 +45,9 @@ class ArticlesSimilarityFilter:
         rows_indexes: set[int] = set()
 
         for indexes in itertools.combinations(range(group.shape[0]), size):
-            titles = title.iloc[indexes[0]], title.iloc[indexes[1]]
+            two_titles = titles.iloc[indexes[0]], titles.iloc[indexes[1]]
 
-            if fuzz_ratio(titles[0], titles[1]) > similarity_ratio:
+            if fuzz_ratio(two_titles[0], two_titles[1]) > similarity_ratio:
                 rows_indexes.add(group.index[indexes[0]])
                 rows_indexes.add(group.index[indexes[1]])
 

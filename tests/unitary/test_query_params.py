@@ -95,6 +95,11 @@ def test_combination_params_keywords():
         CombinationParams(**raw)
     assert info.value.errors()[0]["type"] == "too_long"
 
+    raw.update({"keywords": ["any", "any", "any", "any", "any"]})
+    with raises(ValidationError) as info:
+        CombinationParams(**raw)
+    assert info.value.errors()[0]["type"] == "too_long"
+
     raw.update({"keywords": ["any"]})
     with raises(ValidationError) as info:
         CombinationParams(**raw)

@@ -45,10 +45,10 @@ class ScopusArticlesAggregator:
         finally:
             await self._search_api.http_client.close()
 
-        initial = self._docs.shape[0]
+        initial_count = self._docs.shape[0]
         rows_out = self._SINGLE_ROW
 
-        if initial != self._SINGLE_ROW:
+        if initial_count != self._SINGLE_ROW:
             self._docs = self._docs.drop_duplicates()
             self._docs = self._docs.reset_index(drop=True)
 
@@ -61,11 +61,11 @@ class ScopusArticlesAggregator:
                 self._docs, params.ratio
             )
 
-        final = initial - self._docs.shape[0]
-        loss = 0.0 if final == 0 else (final / initial) * 100.0  # %
+        final = initial_count - self._docs.shape[0]
+        loss = 0.0 if final == 0 else (final / initial_count) * 100.0  # %
         self._details.set_loss(final, loss)
 
-        logger.loss(initial, final, loss)
+        logger.loss(initial_count, final, loss)
         logger.quota(*self._details.search_quota)
         logger.quota(*self._details.abstract_quota)
 

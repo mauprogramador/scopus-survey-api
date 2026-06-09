@@ -49,8 +49,7 @@ def apply_custom_logging_formatter_to_pytest(caplog: LogCaptureFixture):
 def lifespan():
     SERVER.set("Pytest/1.2.3")
 
-    translations = load_translations()
-    TemplateResponse.build_all(*translations)
+    TemplateResponse.build_all(*load_translations())
     csv_file_path = DIRECTORY / CSV_FILE_NAME
 
     DIRECTORY.mkdir(parents=True, exist_ok=True)

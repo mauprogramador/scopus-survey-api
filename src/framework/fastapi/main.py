@@ -27,8 +27,7 @@ from src.utils import logger
 @asynccontextmanager
 async def lifespan(app: FastAPI):  # pylint: disable=W0621,W0613
     DIRECTORY.mkdir(parents=True, exist_ok=True)
-    translations = load_translations()
-    TemplateResponse.build_all(*translations)
+    TemplateResponse.build_all(*load_translations())
 
     if ENV.host == "0.0.0.0":
         logger.localhost(ENV.port)

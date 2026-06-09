@@ -20,8 +20,7 @@ class CSVBuilder:
     def write(
         cls, docs: DataFrame, params: SearchParams, metadata: list[str]
     ) -> str:
-        csv_metadata = {}
-        csv_metadata["GeneratedBy"] = cls._GENERATED_BY
+        csv_metadata = {"GeneratedBy": cls._GENERATED_BY}
 
         params_obj = params.model_dump(exclude_none=True)
         params_obj.update(

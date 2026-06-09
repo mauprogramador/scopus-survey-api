@@ -31,7 +31,7 @@ class KeywordCombinationFinder:
         self._details.set_keywords(params.keywords)
         self._url_builder.set_combination_query(params)
 
-        max_size = min(len(params.keywords) + self._START, self._MAX_SIZE)
+        max_size = len(params.keywords) + self._START
         bundles_map: dict[int, CombinationBundle] = {}
 
         arrangements = (
@@ -48,16 +48,16 @@ class KeywordCombinationFinder:
 
         survey_list = await self._search_api.survey_totals_found(bundles_map)
         totals: list[int] = [data["total"] for data in survey_list]
-        nkeywords, average = len(params.keywords), 0.0
+        keywords_count, average = len(params.keywords), 0.0
 
         if sum(totals) > 0:
             square_totals_sum = sum(total * total for total in totals)
-            average = square_totals_sum / (nkeywords * sum(totals))
+            average = square_totals_sum / (keywords_count * sum(totals))
 
         average = int(average)
         self._details.set_average_found(average)
 
-        logger.combinations(nkeywords, totals, average)
+        logger.combinations(keywords_count, totals, average)
         logger.quota(*self._details.search_quota)
 
         headers = self._details.headers
