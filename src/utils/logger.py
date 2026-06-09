@@ -108,38 +108,10 @@ class _FileHandler(RotatingFileHandler):
 
 
 _METHOD_COLOR = {"GET": "94", "POST": "92", "PUT": "93", "DELETE": "91"}
-_QUOTA = (
-    "Scopus API: \033[32m%(api)s\033[m. Limit: \033[33m%(limit)s\033[m. "
-    "Remaining: \033[33m%(remaining)s\033[m. Reset: \033[33m%(reset)s"
-    "\033[m. ELS-Status: \033[%(color)sm%(status)s\033[m"
-)
-_TRACE = (
-    "[\033[36m%(host)s\033[m:\033[36m%(port)d\033[m] \033[%(method_color)sm"
-    "%(method)s \033[37;1m%(url)s\033[m \033[%(status_color)sm%(code)d "
-    "%(status_phrase)s \033[m%(time)s\033[m"
-)
-_COMBINATIONS = (
-    "Keywords: \033[33m%(keywords)d\033[m. Combinations: \033[33m"
-    "%(combinations)d\033[m. Total-Sum: \033[33m%(total)s\033[m. "
-    "Average-Found: \033[33m~%(average)s\033[m"
-)
-_LOSS = (
-    "Initial: \033[33m%(initial)d\033[m. Final: \033[33m%(final)d"
-    "\033[m. Loss: \033[33m%(loss_amount)ddoc \033[m/ \033[33m"
-    "%(loss_percent).2f%%\033[m"
-)
-_STRATEGY = (
-    "RateLimit: \033[33m%(rate).1freq\033[m/\033[33m%(time).1fs\033[m. "
-    "Backoff: \033[33m%(backoff).1f\033[m. Sleep: \033[33m%(sleep).1f"
-    "s\033[m. Concurrent: \033[33m%(concurrent)d\033[m"
-)
-_EXCEPTION = (
-    '\033[31m%(qualname)s\033[m: File "%(filepath)s", line %(line)d, col '
-    "%(col)d, from \033[31m%(module)s.%(qualname)s\033[m"
-)
-_TRY_AGAIN = "Please try again on \033[37;1m%s\033[m"
 _UVICORN_FMT = "%(asctime)s %(levelprefix)-19s %(message)s"
-_FRAME = traceback.FrameSummary(__file__, 1, "<logging>", colno=0)
+_FRAME = traceback.FrameSummary(
+    filename=__file__, lineno=1, name="<logging>", colno=1
+)
 _STATUS_COLOR = {2: "32", 3: "33", 4: "31", 5: "31"}
 _FMT = "%(asctime)s %(levelname)-18s %(message)s"
 _FILENAME = Path(f".logs/{_filename(0)}")
@@ -218,6 +190,7 @@ UVICORN_LOGGING_CONFIG: Json = {
     },
 }
 
+
 if ENV.logging_file:
     _FILENAME.parent.mkdir(exist_ok=True)
     _LOGGING_CONFIG["handlers"].setdefault("file", _FILE_HANDLER)
@@ -235,8 +208,46 @@ dictConfig(_LOGGING_CONFIG)
 LOGGER = logging.getLogger(_LOGGER_NAME)
 
 
-def info(message: str) -> None:
-    LOGGER.info("%s\033[m", message, stacklevel=2)
+_QUOTA = (
+    "Scopus API: \033[32m%(api)s\033[m. Limit: \033[33m%(limit)s\033[m. "
+    "Remaining: \033[33m%(remaining)s\033[m. Reset: \033[33m%(reset)s"
+    "\033[m. ELS-Status: \033[%(color)sm%(status)s\033[m"
+)
+_TRACE = (
+    "[\033[36m%(host)s\033[m:\033[36m%(port)d\033[m] \033[%(method_color)sm"
+    "%(method)s \033[37;1m%(url)s\033[m \033[%(status_color)sm%(code)d "
+    "%(status_phrase)s \033[m%(time)s\033[m"
+)
+_COMBINATIONS = (
+    "Keywords: \033[33m%(keywords)d\033[m. Combinations: \033[33m"
+    "%(combinations)d\033[m. Total-Sum: \033[33m%(total)s\033[m. "
+    "Average-Found: \033[33m~%(average)s\033[m"
+)
+_LOSS = (
+    "Initial: \033[33m%(initial)d\033[m. Final: \033[33m%(final)d"
+    "\033[m. Loss: \033[33m%(loss_amount)ddoc \033[m/ \033[33m"
+    "%(loss_percent).2f%%\033[m"
+)
+_STRATEGY = (
+    "RateLimit: \033[33m%(rate).1freq/s\033[m. Backoff: \033[33m"
+    "%(backoff).1f\033[m. Sleep: \033[33m%(sleep).1f"
+    "s\033[m. Concurrent: \033[33m%(concurrent)d\033[m"
+)
+_EXCEPTION = (
+    '\033[31m%(qualname)s\033[m: File "%(filepath)s", line %(line)d, col '
+    "%(col)d, from \033[31m%(module)s.%(qualname)s\033[m"
+)
+_GUNICORN_RUNNING = (
+    "Gunicorn running at\033[37;1m http://localhost:%d"
+    "\033[m (Press CTRL+C to quit)\033[m"
+)
+_LOCALHOST_ACCESS = "Please access at \033[37;1mhttp://localhost:%d\033[m"
+_TRY_AGAIN = "Please try again on \033[37;1m%s\033[m"
+_TOTAL_FOUND = "Total Found: \033[33m%d\033[m"
+
+
+def initialize() -> None:
+    LOGGER.info("\033[33mScopus Survey API was initialized 🚀", stacklevel=2)
 
 
 def loss(initial: int, final: int, loss: float) -> None:
@@ -259,10 +270,9 @@ def combinations(nkeywords: int, totals: list[int], average: int) -> None:
     LOGGER.info(_COMBINATIONS, args, stacklevel=2)
 
 
-def strategy(strategy: RateStrategy, time: float) -> None:
+def strategy(strategy: RateStrategy) -> None:
     args = {
         "rate": strategy.rate,
-        "time": time,
         "backoff": strategy.backoff,
         "sleep": strategy.sleep,
         "concurrent": strategy.concurrent,
@@ -291,13 +301,28 @@ def try_again(reset: str) -> None:
     LOGGER.info(_TRY_AGAIN, reset, stacklevel=2)
 
 
+def localhost(port: int) -> None:
+    LOGGER.info(_LOCALHOST_ACCESS, port, stacklevel=2)
+
+
+def total_found(total_results: int) -> None:
+    LOGGER.info(_TOTAL_FOUND, total_results, stacklevel=2)
+
+
+def gunicorn_running(port: int) -> None:
+    LOGGER.info(_GUNICORN_RUNNING, port, stacklevel=2)
+
+
 def error(message: str, tracking_id: str = None) -> None:
-    LOGGER.error(
-        "\033[31m%s\033[m [ID:\033[36m%s\033[m]",
-        message,
-        tracking_id if tracking_id else "ERR_None_None",
-        stacklevel=2,
-    )
+    if tracking_id:
+        LOGGER.error(
+            "\033[31m%s\033[m [ID:\033[36m%s\033[m]",
+            message,
+            tracking_id,
+            stacklevel=2,
+        )
+    else:
+        LOGGER.error("\033[31m%s\033[m", message, stacklevel=2)
 
 
 def debug(data: Json) -> None:

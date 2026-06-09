@@ -23,12 +23,9 @@ SERVER.set(f"Gunicorn/{gunicorn.__version__}")
 
 
 def when_ready_hook(_: Arbiter) -> None:
-    logger.info("\033[33mScopus Survey API was initialized 🚀")
+    logger.initialize()
     logger.debug(ENV.model_dump())
-    logger.info(
-        f"Gunicorn running at\033[37;1m http://localhost:{ENV.port}"
-        "\033[m (Press CTRL+C to quit)"
-    )
+    logger.gunicorn_running(ENV.port)
 
 
 # pylint: disable=C0103

@@ -102,7 +102,7 @@ class HTTPClient:
             client_session=self._session,
             retry_options=self._retry_options,
         )
-        logger.strategy(self._strategy, self._RATE_PERIOD)
+        logger.strategy(self._strategy)
 
     async def update_strategy(self, total_requests: int) -> None:
         if (total_requests - self._LEEWAY) <= self._BASE_STRATEGY:

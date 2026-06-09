@@ -18,7 +18,7 @@ from src.utils import logger
 
 if __name__ == "__main__":
     SERVER.set(f"Uvicorn/{uvicorn.__version__}")
-    logger.info("\033[33mScopus Survey API was initialized 🚀")
+    logger.initialize()
     logger.debug(ENV.model_dump())
 
     uvloop.install()

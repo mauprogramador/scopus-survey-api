@@ -31,7 +31,7 @@ async def lifespan(app: FastAPI):  # pylint: disable=W0621,W0613
     TemplateResponse.build_all(*translations)
 
     if ENV.host == "0.0.0.0":
-        logger.info(f"Please access at \033[37;1mhttp://localhost:{ENV.port}")
+        logger.localhost(ENV.port)
 
     yield
 

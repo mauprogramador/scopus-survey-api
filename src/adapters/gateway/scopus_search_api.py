@@ -205,6 +205,6 @@ class ScopusSearchAPI:
                 )
                 await self._get_multiple_articles_by_pagination()
 
-        logger.info(f"Total Found: \033[33m{self._state.total_results}")
+        logger.total_found(self._state.total_results)
 
         self._state.validate_integrity()
