@@ -55,11 +55,11 @@ class ErrorJSON(JSONResponse):
                 logger.error(ExcMsg.SERIALIZE_ERROR)
                 logger.exception(exc)
 
-                details = get_error_details(exc)
                 serialize_detail = {
                     "desc": ExcMsg.SERIALIZE_ERROR,
                     "raw_repr": repr(details),
                 }
+                details = get_error_details(exc)
                 details.append(serialize_detail)
 
         error_response = ErrorResponse(
