@@ -119,6 +119,6 @@ async def test_rate_limit_error(mocker: Mocker, client: Client):
     res = await client.get(URL_CSV, params=CSV_PARAMS)
     details = assert_error_json(res, HTTP_429, trans(RATE_LIMIT_ERROR))
     assert details[0]["type"] == fqn(RateLimitExceeded)
-    assert details[0]["message"] == "any"
-    assert details[1]["status_code"] == 429 and details[1]["limit"] is not None
+    assert details[0]["message"] == ExcMsg.SLOWAPI_RATE_ERROR
+    assert URL_CSV in details[1]["path"]
     assert details[1]["rate"] == RATE_LIMIT_ERROR.detail

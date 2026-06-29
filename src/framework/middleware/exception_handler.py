@@ -136,12 +136,12 @@ async def rate_limit_error(
 
     rate_limit_detail = {
         "status_code": exc.status_code,
-        "limit": repr(exc.limit),
+        "path": request.url.path,
         "rate": exc.detail,
     }
     details.append(rate_limit_detail)
 
-    details[0]["message"] = exc.detail
+    details[0]["message"] = ExcMsg.SLOWAPI_RATE_ERROR
 
     logger.error(ExcMsg.SLOWAPI_RATE_ERROR, tracking_id)
     logger.exception(exc)
