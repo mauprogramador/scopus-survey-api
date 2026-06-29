@@ -38,8 +38,8 @@ from tests.mocks.integration import (
 from tests.mocks.raw import (
     COMBINATION_PARAMS,
     HTTP_200,
+    HTTP_500,
     HTTP_502,
-    HTTP_503,
     HTTP_504,
     SEARCH_PARAMS,
     URL_COMBINATION,
@@ -66,7 +66,7 @@ async def test_success(mocker: Mocker, client: Client):
 async def test_cancelled_error(mocker: Mocker, client: Client):
     mock = mocker.patch(*get_patch(asyncio.CancelledError("any")))
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
-    details = assert_error_json(res, HTTP_503, ExcMsg.CANCELLED_ERROR)
+    details = assert_error_json(res, HTTP_500, ExcMsg.CANCELLED_ERROR)
     assert details[0]["type"] == fqn(asyncio.CancelledError)
     assert details[0]["message"] == "any" and mock.call_count == 3
 

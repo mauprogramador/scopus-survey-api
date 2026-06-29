@@ -7,7 +7,7 @@ from pandas import DataFrame
 from thefuzz.fuzz import ratio as fuzz_ratio  # type: ignore
 
 from src.core.data.enums import ExcMsg
-from src.core.domain.http_exceptions import ServiceUnavailable
+from src.core.domain.http_exceptions import InternalError
 from src.utils import logger
 
 

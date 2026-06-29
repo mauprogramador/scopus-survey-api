@@ -14,10 +14,7 @@ from src.core.common.types import (
     URLBuilder,
 )
 from src.core.data.enums import ExcMsg
-from src.core.domain.http_exceptions import (
-    HTTPError,
-    ServiceUnavailable,
-)
+from src.core.domain.http_exceptions import HTTPError, InternalError
 from src.utils import logger
 from src.utils.progress_bar import ProgressBar
 
