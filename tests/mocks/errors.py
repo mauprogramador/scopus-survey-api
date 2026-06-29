@@ -17,7 +17,7 @@ from src.core.domain.http_exceptions import HTTPError, ScopusAPIError
 
 
 HTTP_ERROR = HTTPError(
-    HTTPStatus.BAD_REQUEST, ExcMsg.UNEXPECTED_ERROR, ValueError("any")
+    HTTPStatus.BAD_REQUEST, ExcMsg.INTERNAL_ERROR, ValueError("any")
 )
 
 SCOPUS_API_ERROR = ScopusAPIError(

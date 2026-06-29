@@ -36,7 +36,6 @@ class ExcMsg(StrEnum):
     SERIALIZE_ERROR = "Error serializing error details"
     ARTICLES_NOT_FOUND = "No articles found"
     CSV_NOT_FOUND = "No CSV file found"
-    UNEXPECTED_ERROR = "An unexpected error occurred"
     SLOWAPI_RATE_ERROR = "Request rate limit exceeded"
 
 

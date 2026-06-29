@@ -26,7 +26,7 @@ _TRANSLATIONS = {
     "scopus.500.any": "any",
     "scopus.500": "any",
     "scopus.default": "any",
-    "api.unexpected_error": "any",
+    "api.internal_error": "any",
     "api.default": "any",
 }
 
@@ -68,7 +68,7 @@ def test_translate_error():
     assert translate_error(REQUEST, STARLETTE_HTTP_EXCEPTION) == "any"
     _TRANSLATIONS["starlette.default"] = "starlette.default"
 
-    exc_msg = ExcMsg.UNEXPECTED_ERROR
+    exc_msg = ExcMsg.INTERNAL_ERROR
     assert translate_error(REQUEST, STARLETTE_HTTP_EXCEPTION) == exc_msg
 
 
@@ -83,17 +83,17 @@ def test_translate_scopus_api_error():
     assert translate_error(REQUEST, SCOPUS_API_ERROR) == "any"
     _TRANSLATIONS["scopus.default"] = "scopus.default"
 
-    exc_msg = ExcMsg.UNEXPECTED_ERROR
+    exc_msg = ExcMsg.INTERNAL_ERROR
     assert translate_error(REQUEST, SCOPUS_API_ERROR) == exc_msg
 
 
 @mark.usefixtures("trans")
 def test_translate_http_error():
     assert translate_error(REQUEST, HTTP_ERROR) == "any"
-    _TRANSLATIONS["api.unexpected_error"] = "api.unexpected_error"
+    _TRANSLATIONS["api.internal_error"] = "api.internal_error"
 
     assert translate_error(REQUEST, HTTP_ERROR) == "any"
     _TRANSLATIONS["api.default"] = "api.default"
 
-    exc_msg = ExcMsg.UNEXPECTED_ERROR
+    exc_msg = ExcMsg.INTERNAL_ERROR
     assert translate_error(REQUEST, HTTP_ERROR) == exc_msg

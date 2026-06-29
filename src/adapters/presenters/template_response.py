@@ -104,7 +104,7 @@ def get_not_found_template(
 
     context = {
         "prefix": PREFIX,
-        "message": ExcMsg.UNEXPECTED_ERROR,
+        "message": ExcMsg.INTERNAL_ERROR,
         "status_code": res.status_code,
         "status": HTTPStatus(res.status_code).phrase,
         "timestamp": datetime.now(timezone.utc).isoformat(

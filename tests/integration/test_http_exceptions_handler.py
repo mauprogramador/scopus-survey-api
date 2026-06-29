@@ -41,7 +41,7 @@ RETRIEVE = Patch(favicon, retrieve_csv)
 async def test_custom_http_error(mocker: Mocker, client: Client):
     mocker.patch(**RETRIEVE(HTTP_ERROR))
     res = await client.get(URL_CSV, params=CSV_PARAMS)
-    details = assert_error_json(res, HTTP_400, ExcMsg.UNEXPECTED_ERROR)
+    details = assert_error_json(res, HTTP_400, ExcMsg.INTERNAL_ERROR)
     assert details[0]["type"] == fqn(ValueError)
     assert details[0]["message"] == "any"
 

@@ -66,7 +66,7 @@ def test_get_error_details():
 def test_http_error():
     with raises(HTTPError) as info:
         exc = ValueError("any")
-        raise HTTPError(HTTP_500, ExcMsg.UNEXPECTED_ERROR, exc)
+        raise HTTPError(HTTP_500, ExcMsg.INTERNAL_ERROR, exc)
 
     assert_http_error(info, HTTP_500, trans(info.value))
     assert info.value.details[0]["type"] == fqn(ValueError)

@@ -68,5 +68,5 @@ def test_not_found_template(mocker: Mocker):
     ctx: dict = spy_jinja.call_args_list[0].args[3]
     assert ctx["status"] and ctx["prefix"] and ctx["timestamp"]
     assert ctx["status_code"] == HTTP_404
-    assert ctx["message"] == ExcMsg.UNEXPECTED_ERROR
+    assert ctx["message"] == ExcMsg.INTERNAL_ERROR
     assert ctx["error_json"]

@@ -33,7 +33,7 @@ from tests.mocks.raw import (
 @mark.asyncio
 async def test_custom_http_error():
     res = await handler.custom_http_error(REQUEST, HTTP_ERROR)
-    details = assert_error_json(res, HTTP_400, ExcMsg.UNEXPECTED_ERROR)
+    details = assert_error_json(res, HTTP_400, ExcMsg.INTERNAL_ERROR)
     assert details[0]["type"] == fqn(ValueError)
     assert details[0]["message"] == "any"
 

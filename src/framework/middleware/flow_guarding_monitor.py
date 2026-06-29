@@ -55,7 +55,7 @@ class FlowGuardingMonitorMiddleware(BaseHTTPMiddleware):
 
         except Exception as exc:  # pylint: disable=W0718
             trace_id = TRACE_ID_CTX.get()
-            exc = InternalError(ExcMsg.UNEXPECTED_ERROR, exc)
+            exc = InternalError(ExcMsg.INTERNAL_ERROR, exc)
             res = await custom_http_error(request, exc)
 
         finally:

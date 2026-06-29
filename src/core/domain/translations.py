@@ -107,4 +107,4 @@ def translate_error(request: FastAPIRequest, exc: Exception) -> str:
             return message
 
     logger.error("No translation found")
-    return ExcMsg.UNEXPECTED_ERROR
+    return ExcMsg.INTERNAL_ERROR
