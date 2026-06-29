@@ -1,5 +1,5 @@
 import asyncio
-import bisect
+import random
 import time
 from http import HTTPStatus
 from json import JSONDecodeError
@@ -8,8 +8,8 @@ import aiohttp
 import aiohttp_retry as aioretry
 import aiolimiter
 
-from src.core.common.types import Json, RateStrategy, ResponseBundle
-from src.core.config.scopus import SCOPUS_HEADERS
+from src.core.common.types import Json, ResponseBundle
+from src.core.config.scopus import RATE_LIMIT_ERROR_CODE, SCOPUS_HEADERS
 from src.core.data.enums import ExcMsg
 from src.core.domain.http_exceptions import (
     BadGateway,
@@ -23,34 +23,15 @@ from src.utils import logger
 # https://dev.elsevier.com/api_key_settings.html
 
 
-class HTTPClient:
+class HTTPClient:  # pylint: disable=R0902
     """Make async HTTP requests with throttling and retry mechanisms
 
     **Note:** This client must be initialized within an async **event loop**
     """
 
-    _LEEWAY = 10
-    _BASE_STRATEGY = 100
-    _TIMEOUT = aiohttp.ClientTimeout(total=15.0)
     _JSON_ERROR = JSONDecodeError("Expecting value", "Scopus JSON", 0)
-    # Strategy:
-    # - Rate (req/sec)
-    # - Backoff factor
-    # - Additional sleep (sec)
-    # - Concurrent requests
-    _STRATEGIES = {
-        100: RateStrategy(8.0, 2.0, 0.0, 10),
-        200: RateStrategy(7.5, 2.2, 0.0, 10),
-        300: RateStrategy(7.0, 2.5, 0.05, 8),
-        400: RateStrategy(6.5, 2.8, 0.1, 6),
-        500: RateStrategy(6.0, 3.0, 0.15, 5),
-        750: RateStrategy(5.5, 3.2, 0.2, 4),
-        1000: RateStrategy(5.0, 3.5, 0.25, 3),
-        1500: RateStrategy(4.5, 4.0, 0.3, 3),
-        2000: RateStrategy(4.0, 4.5, 0.35, 2),
-    }
+    _TIMEOUT = aiohttp.ClientTimeout(total=8.0)
     _RETRYABLE_STATUS_CODES = {
-        HTTPStatus.TOO_MANY_REQUESTS.value,
         HTTPStatus.INTERNAL_SERVER_ERROR.value,
         HTTPStatus.BAD_GATEWAY.value,
         HTTPStatus.SERVICE_UNAVAILABLE.value,
@@ -61,88 +42,95 @@ class HTTPClient:
         aiohttp.ClientConnectionError,
         aiohttp.ClientPayloadError,
     )
-    _KEYS = sorted(_STRATEGIES.keys())
+    _BATCH = 50
 
     def __init__(self) -> None:
         """Make async HTTP requests with throttling and retry mechanisms"""
-        self._strategy: RateStrategy = self._STRATEGIES[self._BASE_STRATEGY]
-        self._last_request_time: int = 0
-        self._rate_limiter: aiolimiter.AsyncLimiter = None
-        self._semaphore: asyncio.Semaphore = None
-        self._session: aiohttp.ClientSession = None
-        self._retry_options: aioretry.JitterRetry = None
-        self._retry_client: aioretry.RetryClient = None
-        self._mount()
-
-    def _mount(self) -> None:
-        self._rate_limiter = aiolimiter.AsyncLimiter(
-            max_rate=self._strategy.rate, time_period=1.0
-        )
-        self._semaphore = asyncio.Semaphore(self._strategy.concurrent)
-        connector = aiohttp.TCPConnector(limit=self._strategy.concurrent)
-
+        # Scopus standard rate limit with leeway (8req/s)
+        self._limiter = aiolimiter.AsyncLimiter(max_rate=8.0, time_period=1.0)
+        self._semaphore = asyncio.Semaphore(5)
         self._session = aiohttp.ClientSession(
-            connector=connector,
+            connector=aiohttp.TCPConnector(),
             headers=SCOPUS_HEADERS,
             timeout=self._TIMEOUT,
         )
         self._retry_options = aioretry.JitterRetry(
             attempts=3,
-            start_timeout=0.5,
-            max_timeout=15.0,
-            factor=self._strategy.backoff,
+            start_timeout=1.5,
+            max_timeout=8.0,
+            factor=2.0,
             statuses=self._RETRYABLE_STATUS_CODES,
             exceptions=self._RETRYABLE_EXCEPTIONS,
         )
-        self._retry_client = aioretry.RetryClient(
+        self._client = aioretry.RetryClient(
             client_session=self._session,
             retry_options=self._retry_options,
         )
-        logger.strategy(self._strategy)
+        self._rate_limit_holder = asyncio.Event()
+        self._rate_limit_holder.set()  # Procced
+        self._request_count = 0
+        self._lock = asyncio.Lock()
 
-    async def update_strategy(self, total_requests: int) -> None:
-        if (total_requests - self._LEEWAY) <= self._BASE_STRATEGY:
-            return None
+    def _rate_limit_exceeded(self, res: ResponseBundle) -> bool:
+        if res.code == HTTPStatus.TOO_MANY_REQUESTS:
+            error_res: Json | None = res.data.get("error-response")
+            logger.debug({"scopus-error-response": error_res})
 
-        index = bisect.bisect_left(self._KEYS, (total_requests - self._LEEWAY))
-        key = self._KEYS[index] if index < len(self._KEYS) else self._KEYS[-1]
+            if error_res and error_res.get("error-code"):
+                return error_res["error-code"] == RATE_LIMIT_ERROR_CODE
 
-        if self._STRATEGIES[key] != self._strategy:
-            await self.close()
-            self._strategy = self._STRATEGIES[key]
-            self._mount()
+        return False
 
-        return None
+    async def _track_batch(self):
+        # Ensures execution of only one task at a time
+        async with self._lock:
+            self._request_count += 1
+            should_sleep = self._request_count >= self._BATCH
 
-    async def _additional_sleep(self) -> None:
-        current_time = asyncio.get_event_loop().time()
-        elapsed = current_time - self._last_request_time
+            if should_sleep:
+                self._request_count = 0
+                self._rate_limit_holder.clear()  # Block
 
-        if elapsed < self._strategy.sleep:
-            await asyncio.sleep(self._strategy.sleep - elapsed)
-        self._last_request_time = asyncio.get_event_loop().time()
+        # CRITICAL: The sleep execution MUST happen outside the lock context
+        # Prevent task sleep from holding the lock for all other tasks,
+        # causing massive lock contention/deadlocks for concurrency
+        if should_sleep:
+            await asyncio.sleep(1.5)
+            self._rate_limit_holder.set()  # Proceed
 
-    async def request(self, url: str) -> ResponseBundle:
-        res = await self._send(url)
+    async def api_call(self, url: str) -> ResponseBundle:
+        attempt = 1
 
-        if (
-            res.code == HTTPStatus.TOO_MANY_REQUESTS
-            and res.headers.get("X-RateLimit-Remaining") == "0"
-        ):
-            await asyncio.sleep(2)  # Wait 2 secs
-            res = await self._send(url)
+        while True:
+            await self._rate_limit_holder.wait()
+            await asyncio.sleep(random.uniform(0.01, 0.1))
+            await self._track_batch()
 
-        return res
+            res = await self._request(url)
 
-    async def _send(self, url: str) -> ResponseBundle:
-        async with self._semaphore, self._rate_limiter:
+            if not self._rate_limit_exceeded(res):
+                return res
 
-            if self._strategy.sleep > 0:
-                await self._additional_sleep()
+            if attempt >= 5:
+                logger.error("Exhausted rate limit request retries")
+                return res
+
+            logger.error(f"HTTP 249 Rate Limit Exceeded ({attempt})")
+            attempt += 1
+
+            if self._rate_limit_holder.is_set():
+
+                self._rate_limit_holder.clear()  # Block
+                await asyncio.sleep(2)
+                self._rate_limit_holder.set()  # Proceed
+
+    async def _request(self, url: str) -> ResponseBundle:
+        async with self._semaphore, self._limiter:
+            await asyncio.sleep(random.uniform(0.01, 0.1))
 
             try:
                 start_time = time.perf_counter()
-                res = await self._retry_client.get(url, raise_for_status=False)
+                res = await self._client.get(url, raise_for_status=False)
                 process_time = time.perf_counter() - start_time
 
                 logger.api_call(url, res.status, process_time)
@@ -174,5 +162,5 @@ class HTTPClient:
 
     async def close(self) -> None:
         await asyncio.sleep(0)
-        await self._retry_client.close()
+        await self._client.close()
         await self._session.close()

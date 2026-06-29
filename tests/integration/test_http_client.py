@@ -3,6 +3,7 @@ import asyncio
 import collections
 import itertools
 from json import JSONDecodeError
+from typing import cast
 from unittest.mock import AsyncMock, MagicMock, Mock
 
 import aiohttp
@@ -11,29 +12,22 @@ from pytest import mark
 from pytest_mock import MockerFixture as Mocker
 
 from src.adapters.helpers.http_client import HTTPClient
-from src.core.common.types import RateStrategy
 from src.core.data.enums import ExcMsg
 from src.core.data.quota_results_handler import QuotaResultsHandler
 from src.core.domain.factory import make_aggregator
 from src.core.use_cases.keyword_combination_finder import (
     KeywordCombinationFinder,
 )
-from src.utils import logger
 from tests.conftest import assert_error_json
-from tests.mocks.helpers import (
-    MockState,
-    fqn,
-    get_patch,
-    mock_from_iterable,
-)
+from tests.mocks.helpers import fqn, get_patch, mock_from_iterable
 from tests.mocks.integration import (
     GET_CONTENT_TYPE_ERROR,
     GET_EMPTY_RESPONSE,
     GET_JSON_DECODE_ERROR,
     GET_RATE_LIMIT,
     GET_RETRY,
-    GET_STRATEGY,
     GET_SUCCESS,
+    SURVEY_THREE_KEYWORDS,
 )
 from tests.mocks.raw import (
     COMBINATION_PARAMS,
@@ -41,15 +35,13 @@ from tests.mocks.raw import (
     HTTP_500,
     HTTP_502,
     HTTP_504,
-    SEARCH_PARAMS,
+    KEYWORDS,
     URL_COMBINATION,
-    URL_SEARCH,
 )
 
 
 STATE = fqn(make_aggregator, QuotaResultsHandler)
 CHAIN = fqn(KeywordCombinationFinder, itertools.chain, "itertools")
-LOG_STRATEGY = fqn(HTTPClient, logger.strategy, "logger")
 REQUEST = fqn(aiohttp.ClientSession.request)
 SLEEP = fqn(HTTPClient, asyncio.sleep, "asyncio")
 
@@ -140,7 +132,6 @@ async def test_request_retry(mocker: Mocker, client: Client):
     mock = mocker.patch(REQUEST, new_request)
     await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
     assert mock.call_count == 3
-    mock.assert_called()
 
     group_call = collections.defaultdict(list)
     for call in mock.call_args_list:
@@ -152,35 +143,28 @@ async def test_request_retry(mocker: Mocker, client: Client):
 
 @mark.asyncio
 async def test_retry_on_rate_limit(mocker: Mocker, client: Client):
-    spy = mocker.patch(SLEEP, new_callable=AsyncMock, wraps=asyncio.sleep)
+    mock_sleep = cast(AsyncMock, getattr(client, "mock_sleep"))
     mock = mocker.patch(*get_patch(GET_RATE_LIMIT))
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
-    assert spy.call_args_list[0].args[0] == 2
-    assert spy.call_count == 2  # +1 close
     assert res.status_code == HTTP_200 and mock.call_count == 4
+    mock_sleep.assert_any_await(2)
+    # filter retry calls = call(0)
+    calls = [call for call in mock_sleep.call_args_list if call != call(0)]
+    assert len(calls) == 4 * 2 + 1  # 8 req + 1 rate limit
     assert len(res.json()["result"]["combinations"]) == 3
-    spy.assert_awaited()
     mock.assert_awaited()
 
 
 @mark.asyncio
-async def test_update_strategy_and_additional_sleep(
-    mocker: Mocker, client: Client
-):
-    state = mocker.patch(STATE, MockState(5, 113))
-    spy_sleep = mocker.patch(SLEEP, wraps=asyncio.sleep)
-    spy_log = mocker.patch(LOG_STRATEGY, wraps=logger.strategy)
-    mock = mocker.patch(*get_patch(GET_STRATEGY))
-
-    res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
-    assert res.status_code == HTTP_200 and mock.call_count == 10
-    strategy: RateStrategy = spy_log.call_args_list[1].args[0]
-    assert strategy.rate == 7.5 and strategy.backoff == 2.2
-    assert spy_sleep.call_count == 2  # +1 close
-
-    spy_sleep.assert_awaited()
-    spy_log.assert_called()
+async def test_batch_additional_sleep(mocker: Mocker, client: Client):
+    mock_sleep = cast(AsyncMock, getattr(client, "mock_sleep"))
+    mocker.patch(f"{fqn(HTTPClient)}._BATCH", 5)
+    mock = mocker.patch(*get_patch(SURVEY_THREE_KEYWORDS))
+    mocker.patch.dict(COMBINATION_PARAMS, {"keywords": KEYWORDS[:3]})
+    res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
+    assert res.status_code == HTTP_200 and mock.call_count == 7
+    mock_sleep.assert_any_await(1.5)
+    # filter retry calls = call(0)
+    calls = [call for call in mock_sleep.call_args_list if call != call(0)]
+    assert len(calls) == 7 * 2 + 1  # 7 req + 1 rate limit
     mock.assert_awaited()
-
-    assert len(state.entry) == 5 and state.total_results == 113
-    assert state.items_per_page == 25 and state.pages_count == 5

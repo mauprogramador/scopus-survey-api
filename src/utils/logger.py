@@ -17,7 +17,7 @@ from fastapi.requests import Request as FastAPIRequest
 from pydantic_core import to_jsonable_python
 from starlette.types import Scope as StarletteScope
 
-from src.core.common.types import Json, Quota, RateStrategy
+from src.core.common.types import Json, Quota
 from src.core.config.config import ENV
 from src.core.config.scopus import MAX_SEARCH_QUOTA, NO_RESULTS, SEARCH_API_URL
 
@@ -230,11 +230,6 @@ _LOSS = (
     "\033[m. Loss: \033[33m%(loss_amount)ddoc \033[m/ \033[33m"
     "%(loss_percent).2f%%\033[m"
 )
-_STRATEGY = (
-    "RateLimit: \033[33m%(rate).1freq/s\033[m. Backoff: \033[33m"
-    "%(backoff).1f\033[m. Sleep: \033[33m%(sleep).1f"
-    "s\033[m. Concurrent: \033[33m%(concurrent)d\033[m"
-)
 _EXCEPTION = (
     '\033[31m%(qualname)s\033[m: File "%(filepath)s", line %(line)d, col '
     "%(col)d, from \033[31m%(module)s.%(qualname)s\033[m"
@@ -270,16 +265,6 @@ def combinations(nkeywords: int, totals: list[int], average: int) -> None:
         "average": f"{average:,}",
     }
     LOGGER.info(_COMBINATIONS, args, stacklevel=2)
-
-
-def strategy(strategy: RateStrategy) -> None:
-    args = {
-        "rate": strategy.rate,
-        "backoff": strategy.backoff,
-        "sleep": strategy.sleep,
-        "concurrent": strategy.concurrent,
-    }
-    LOGGER.info(_STRATEGY, args, stacklevel=2)
 
 
 def quota(quota: Quota, code: int) -> None:

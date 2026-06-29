@@ -84,13 +84,6 @@ class CombinationBundle(BaseModel):
     total: int = Field(default=None)
 
 
-class RateStrategy(NamedTuple):
-    rate: float
-    backoff: float
-    sleep: float
-    concurrent: int
-
-
 class ScopusEntry(Protocol):
     url: str
     scopus_id: str
@@ -168,10 +161,7 @@ class QuotaResultsHandler(Protocol):
 
 class HTTPClient(Protocol):
 
-    async def update_strategy(self, total_requests: int) -> None:
-        pass
-
-    async def request(self, url: str) -> ResponseBundle:
+    async def api_call(self, url: str) -> ResponseBundle:
         pass
 
     async def close(self) -> None:

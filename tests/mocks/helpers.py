@@ -1,3 +1,4 @@
+import asyncio
 import io
 import random
 from http import HTTPMethod, HTTPStatus
@@ -200,13 +201,6 @@ def get_patch(value: Any | Exception) -> tuple[str, AsyncMock]:
     return fqn(aioretry.RetryClient.get), new
 
 
-def http_patch(target: Target) -> tuple[str, AsyncMock]:
-    """Patch AsyncLimiter and Semaphore With Context"""
-    if target.__name__ == "__aexit__":
-        return fqn(target), AsyncMock(target, return_value=False)
-    return fqn(target), AsyncMock(target)
-
-
 class Patch:
     """Context for mocker.patch params
     Args:
@@ -357,22 +351,62 @@ class MockState(QuotaResultsHandler):
         self.abstracts = []
 
 
+class MockAsyncContext:
+    """Mock async contexts `async with`"""
+
+    def __call__(self, *args: Any, **kwds: Any) -> Self:
+        return self
+
+    async def __await__(self):
+        pass
+
+    async def __aenter__(self):
+        pass
+
+    async def __aexit__(self, exc_type, exc_val, exc_tb):
+        pass
+
+
+class MockSemaphore(asyncio.Semaphore):
+    def __init__(self, value: int = 1) -> None:
+        super().__init__(value)
+        self.acquires: list[Json] = []
+        self.releases: list[Json] = []
+
+    def __call__(self) -> Any:
+        return self
+
+    async def acquire(self) -> Literal[True]:
+        self.acquires.append(
+            # pylint: disable=W0212
+            {"value": self._value, "waiters": len(self._waiters or [])}
+        )
+        return await super().acquire()
+
+    def release(self) -> None:
+        self.releases.append(
+            # pylint: disable=W0212
+            {"value": self._value, "waiters": len(self._waiters or [])}
+        )
+        return super().release()
+
+
 def search_fix(value: Any | Exception) -> APIsFix:
     """Fixture for ScopusSearchAPI and its dependencies"""
     if isinstance(value, (list, BaseException)):
-        req_mock = AsyncMock(HTTPClient.request, side_effect=value)
+        api_call_mock = AsyncMock(HTTPClient.api_call, side_effect=value)
     else:
-        req_mock = AsyncMock(HTTPClient.request, return_value=value)
+        api_call_mock = AsyncMock(HTTPClient.api_call, return_value=value)
 
     details = SurveyDetails()
     state = MockState()
     api = ScopusSearchAPI(
-        AsyncMock(HTTPClient, request=req_mock),
+        AsyncMock(HTTPClient, api_call=api_call_mock),
         MagicMock(URLBuilder),
         details,
         state,
     )
-    return APIsFix(req_mock, details, state, api)
+    return APIsFix(api_call_mock, details, state, api)
 
 
 def abstract_fix(
@@ -385,9 +419,9 @@ def abstract_fix(
     details.set_search_data(search_results)
 
     if isinstance(value, (list, BaseException)):
-        req_mock = AsyncMock(HTTPClient.request, side_effect=value)
+        api_call_mock = AsyncMock(HTTPClient.api_call, side_effect=value)
     else:
-        req_mock = AsyncMock(HTTPClient.request, return_value=value)
+        api_call_mock = AsyncMock(HTTPClient.api_call, return_value=value)
 
     if responses_count is None:
         state = MockState()
@@ -397,12 +431,12 @@ def abstract_fix(
     state.set_first_search(search_results)
 
     api = ScopusAbstractRetrievalAPI(
-        AsyncMock(HTTPClient, request=req_mock),
+        AsyncMock(HTTPClient, api_call=api_call_mock),
         MagicMock(URLBuilder),
         details,
         state,
     )
-    return APIsFix(req_mock, details, state, api)
+    return APIsFix(api_call_mock, details, state, api)
 
 
 def aggregator_fix(value: DataFrame) -> AggFix:
