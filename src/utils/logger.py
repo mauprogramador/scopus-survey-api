@@ -246,8 +246,8 @@ _TRY_AGAIN = "Please try again on \033[37;1m%s\033[m"
 _TOTAL_FOUND = "Total Found: \033[33m%d\033[m"
 
 
-def initialize() -> None:
-    LOGGER.info("\033[33mScopus Survey API was initialized 🚀", stacklevel=2)
+def info(message: str) -> None:
+    LOGGER.info("%s\033[m", message, stacklevel=2)
 
 
 def loss(initial: int, final: int, loss: float) -> None:
