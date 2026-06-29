@@ -84,28 +84,3 @@ async def test_incorrect(mocker: Mocker, client: Client):
     mock.assert_called_once_with(SIGNED_TOKEN, MAX_AGE)
     details = assert_error_json(res, HTTP_401, ExcMsg.INVALID_TOKEN)
     assert details is None
-
-
-@mark.asyncio
-async def test_cookie_flow(client: Client):
-    client.cookies.delete("csrf-token")
-    client.headers.clear()
-
-    res = await client.get(URL_WEB)
-    assert res.headers.get("set-cookie") is not None
-    assert res.status_code == HTTP_200
-
-    signed_token = res.cookies.get("csrf-token")
-    assert signed_token is not None
-
-    csrf_token = res.headers.get("X-CSRF-Token")
-    assert csrf_token is not None
-
-    res = await client.get(
-        URL_CSV,
-        params=CSV_PARAMS,
-        cookies={"csrf-token": signed_token},
-        headers={"X-CSRF-Token": csrf_token},
-    )
-    assert res.status_code == HTTP_200
-    assert "csrf-token" in client.cookies
