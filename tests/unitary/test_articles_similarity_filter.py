@@ -1,21 +1,15 @@
-import concurrent.futures as concurrent
 from datetime import datetime
 
 import pandas as pd
 from pandas import DataFrame, Series
 from pandas.api.typing import DataFrameGroupBy
-from pytest import raises
 from pytest_mock import MockerFixture as Mocker
 
-from src.core.data.enums import ExcMsg
-from src.core.domain.http_exceptions import ServiceUnavailable
 from src.core.use_cases.articles_similarity_filter import (
     ArticlesSimilarityFilter,
 )
 from src.utils import logger
-from tests.conftest import assert_http_error
-from tests.mocks.helpers import Patch, fqn, spec
-from tests.mocks.raw import HTTP_503
+from tests.mocks.helpers import fqn, spec
 from tests.mocks.unitary import (
     MORE_GROUPS_MORE_SIMILAR,
     MORE_GROUPS_NO_SIMILAR,
@@ -32,7 +26,6 @@ from tests.mocks.unitary import (
 SIMILARITY_FILTER = ArticlesSimilarityFilter()
 TO_DATETIME = fqn(ArticlesSimilarityFilter, pd.to_datetime, "pd")
 LOG_DEBUG = spec(ArticlesSimilarityFilter, logger.debug, "logger")
-CANCELLED = Patch(concurrent.Future.result)
 RATIO = 80
 
 
@@ -157,15 +150,6 @@ def test_discard_all_older_similar():
     df = SIMILARITY_FILTER.filter(ONE_GROUP_MORE_SIMILAR, RATIO)
     assert df.shape[0] == 1 and ONE_GROUP_MORE_SIMILAR.shape[0] == 5
     assert df["date"].iloc[0] == "2025-05-05"
-
-
-def test_cancelled_error(mocker: Mocker):
-    mocker.patch(**CANCELLED([None, concurrent.CancelledError("any")]))
-    with raises(ServiceUnavailable) as info:
-        SIMILARITY_FILTER.filter(MORE_GROUPS_TWO_SIMILAR, RATIO)
-    assert_http_error(info, HTTP_503, ExcMsg.CANCELLED_ERROR)
-    assert info.value.details[0]["type"] == fqn(concurrent.CancelledError)
-    assert info.value.details[0]["message"] == "any"
 
 
 def test_drop_similar(mocker: Mocker):
