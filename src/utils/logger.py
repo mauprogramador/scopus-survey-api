@@ -52,6 +52,7 @@ class _Level(IntEnum):
     EXCEPTION = 41
     SEARCH = 23
     ABSTRACT = 24
+    WARNING = 30
 
 
 class _ANSIFormatter(logging.Formatter):
@@ -65,6 +66,7 @@ class _ANSIFormatter(logging.Formatter):
         _Level.EXCEPTION: "31",
         _Level.SEARCH: "36",
         _Level.ABSTRACT: "36",
+        _Level.WARNING: "33",
     }
 
     def __init__(self, fmt: str, datefmt: str, strip_ansi: bool):
