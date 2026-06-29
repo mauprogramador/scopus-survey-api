@@ -1,8 +1,9 @@
-from contextlib import asynccontextmanager
+import contextlib
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from tqdm.contrib.logging import logging_redirect_tqdm
 
 from src import __version__
 from src.adapters.presenters.template_response import build_all_templates
@@ -24,7 +25,7 @@ from src.framework.middleware import (
 from src.utils import logger
 
 
-@asynccontextmanager
+@contextlib.asynccontextmanager
 async def lifespan(app: FastAPI):  # pylint: disable=W0621,W0613
     DIRECTORY.mkdir(parents=True, exist_ok=True)
     build_all_templates(*load_translations())
@@ -32,7 +33,11 @@ async def lifespan(app: FastAPI):  # pylint: disable=W0621,W0613
     if ENV.host == "0.0.0.0":
         logger.localhost(ENV.port)
 
-    yield
+    if ENV.progress_bar:
+        with logging_redirect_tqdm([logger.LOGGER]):
+            yield
+    else:
+        yield
 
 
 app = FastAPI(
