@@ -39,7 +39,7 @@ _LIVERELOAD_ROUTE = "/livereload"
 
 def excluded_routes(path: str) -> bool:
     is_devtools = path.endswith(_CHROME_DEVTOOLS_URL)
-    is_livereload = path.count(_LIVERELOAD_ROUTE)
+    is_livereload = path.count(_LIVERELOAD_ROUTE) == 1
     return is_devtools and is_livereload
 
 
