@@ -53,7 +53,7 @@ msgid "api.data_mismatch_error"
 msgstr "Mismatch in total results retrieved"
 
 msgid "api.cancelled_error"
-msgstr "Unexpected cancellation of requests"
+msgstr "Unexpected cancellation of tasks"
 
 msgid "api.articles_not_found"
 msgstr "No articles found"
@@ -61,8 +61,8 @@ msgstr "No articles found"
 msgid "api.csv_not_found"
 msgstr "No CSV file found"
 
-msgid "api.unexpected_error"
-msgstr "An unexpected error occurred"
+msgid "api.internal_error"
+msgstr "Unexpected internal error occurred"
 
 msgid "scopus.400.invalid_input"
 msgstr "Invalid information or query submitted"
