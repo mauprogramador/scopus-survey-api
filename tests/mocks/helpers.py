@@ -12,7 +12,6 @@ import httpx
 import pandas as pd
 from fastapi.responses import FileResponse, JSONResponse
 from pandas import DataFrame
-from typing_extensions import deprecated
 
 from src.adapters.gateway.scopus_abstract_retrieval_api import (
     ScopusAbstractRetrievalAPI,
@@ -240,14 +239,6 @@ class Patch:
         self.target = fqn(target, method, altname)
         self.spec = target if method is None else method
         self._handle_value(value)
-
-    @deprecated("⚠️ Will be removed after converting classes to modules")
-    def classmethod(self, target: Target) -> Self:
-        class_method = self.target.split(".")[-2:]
-        target_path = fqn(target).split(".")[:-1]
-        self.target = ".".join([*target_path, *class_method])
-
-        return self
 
     def _handle_value(self, value: Exception | Any) -> None:
         if value is None:
