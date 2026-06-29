@@ -37,7 +37,7 @@ class SuccessResponse(BaseResponse):
 class ErrorJSON(JSONResponse):
     """Builds JSON error response and validates details"""
 
-    def __init__(
+    def __init__(  # pylint: disable=R0913,R0917
         self,
         request: FastAPIRequest,
         status_code: int,

@@ -252,7 +252,7 @@ async def test_search_not_found(mocker: Mocker, client: Client):
     ],
     ids=["One result", "Two results", "More results"],
 )
-async def test_search_exact_quota_limit(
+async def test_search_exact_quota_limit(  # pylint: disable=R0913,R0917
     mocker: Mocker,
     client: Client,
     res_mock: list[MagicMock],
@@ -279,7 +279,7 @@ async def test_search_exact_quota_limit(
     ],
     ids=["Two results", "More results"],
 )
-async def test_search_insufficient_quota(
+async def test_search_insufficient_quota(  # pylint: disable=R0913,R0917
     mocker: Mocker,
     client: Client,
     re_mock: list[MagicMock],

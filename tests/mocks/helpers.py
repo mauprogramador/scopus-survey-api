@@ -3,7 +3,7 @@ import io
 import random
 from http import HTTPMethod, HTTPStatus
 from types import FunctionType
-from typing import Any, Callable, Self, Type, TypeAlias
+from typing import Any, Callable, Literal, Self, Type, TypeAlias
 from unittest.mock import AsyncMock, MagicMock, Mock
 
 import aiohttp
@@ -129,7 +129,7 @@ def abstract_raw(
     title: str | None = None,
     author: str | None = None,
     date: str | None = None,
-) -> dict[str, Any]:
+) -> Json:
     """Build a raw abstract response"""
     return {
         "abstracts-retrieval-response": {
@@ -191,7 +191,7 @@ def bundle_mock(
     )
 
 
-def get_patch(value: Any | Exception) -> tuple[str, AsyncMock]:
+def get_patch(value: Any | list[Any] | Exception) -> tuple[str, AsyncMock]:
     """Patch AIOHTTP Retry.get"""
     if isinstance(value, (list, BaseException)):
         new = AsyncMock(aiohttp.ClientResponse, side_effect=value)
