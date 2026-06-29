@@ -77,8 +77,8 @@ async def test_api_csv_success(client: Client):
 
 
 @mark.asyncio
-async def test_api_csv_not_found(client: Client):
-    CSV_PARAMS.update({"apiKey": secrets.token_hex(16)})
+async def test_api_csv_not_found(mocker: Mocker, client: Client):
+    mocker.patch.dict(CSV_PARAMS, {"apiKey": secrets.token_hex(16)})
     res = await client.get(URL_CSV, params=CSV_PARAMS)
     assert res.status_code == HTTP_404
     assert res.headers.get("Content-Type") in JSON_CONTENT_TYPE

@@ -20,7 +20,7 @@ from tests.mocks.raw import (
 @mark.asyncio
 async def test_survey_two_keywords(mocker: Mocker, client: Client):
     mock = mocker.patch(*get_patch(SURVEY_TWO_KEYWORDS))
-    COMBINATION_PARAMS.update({"keywords": KEYWORDS[:2]})
+    mocker.patch.dict(COMBINATION_PARAMS, {"keywords": KEYWORDS[:2]})
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
     assert res.status_code == HTTP_200 and mock.call_count == 3
     combs = res.json()["result"]["combinations"]
@@ -30,7 +30,7 @@ async def test_survey_two_keywords(mocker: Mocker, client: Client):
 @mark.asyncio
 async def test_survey_three_keywords(mocker: Mocker, client: Client):
     mock = mocker.patch(*get_patch(SURVEY_THREE_KEYWORDS))
-    COMBINATION_PARAMS.update({"keywords": KEYWORDS[:3]})
+    mocker.patch.dict(COMBINATION_PARAMS, {"keywords": KEYWORDS[:3]})
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
     assert res.status_code == HTTP_200 and mock.call_count == 7
     combs = res.json()["result"]["combinations"]
@@ -40,7 +40,7 @@ async def test_survey_three_keywords(mocker: Mocker, client: Client):
 @mark.asyncio
 async def test_survey_four_keywords(mocker: Mocker, client: Client):
     mock = mocker.patch(*get_patch(SURVEY_FOUR_KEYWORDS))
-    COMBINATION_PARAMS.update({"keywords": KEYWORDS})
+    mocker.patch.dict(COMBINATION_PARAMS, {"keywords": KEYWORDS})
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
     assert res.status_code == HTTP_200 and mock.call_count == 15
     combs = res.json()["result"]["combinations"]
@@ -50,7 +50,7 @@ async def test_survey_four_keywords(mocker: Mocker, client: Client):
 @mark.asyncio
 async def test_survey_not_found(mocker: Mocker, client: Client):
     mock = mocker.patch(*get_patch(SURVEY_NOT_FOUND))
-    COMBINATION_PARAMS.update({"keywords": KEYWORDS[:2]})
+    mocker.patch.dict(COMBINATION_PARAMS, {"keywords": KEYWORDS[:2]})
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
     assert res.status_code == HTTP_200 and mock.call_count == 3
     combs = res.json()["result"]["combinations"]

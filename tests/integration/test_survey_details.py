@@ -43,7 +43,7 @@ async def test_combination_details(mocker: Mocker, client: Client):
     spy_log = mocker.patch(**LOG_QUOTA)
     mocker.patch(*get_patch(COMBINATION_DETAILS))
 
-    COMBINATION_PARAMS.update({"keywords": KEYWORDS[:2]})
+    mocker.patch.dict(COMBINATION_PARAMS, {"keywords": KEYWORDS[:2]})
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
     bundle: ResponseBundle = spy_quota.call_args_list[0].args[1]
 
