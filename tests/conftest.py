@@ -1,13 +1,18 @@
+import asyncio
 import json
 import logging
 from http import HTTPStatus
+from unittest.mock import AsyncMock
 from urllib.parse import urljoin
 
+import aiolimiter
 import httpx
 import uvloop
 from pytest import ExceptionInfo, LogCaptureFixture, fixture
 from pytest_asyncio import fixture as async_fixture
+from pytest_mock import MockerFixture as Mocker
 
+from src.adapters.helpers.http_client import HTTPClient
 from src.adapters.presenters.json_response import ErrorJSON, ErrorResponse
 from src.adapters.presenters.template_response import build_all_templates
 from src.core.common.types import Json
@@ -16,6 +21,7 @@ from src.core.domain.http_exceptions import HTTPError
 from src.core.domain.translations import load_translations
 from src.framework.fastapi.main import app
 from src.utils.logger import TEST_FORMATTER
+from tests.mocks.helpers import MockAsyncContext, fqn
 from tests.mocks.raw import CSRF_TOKEN, CSV_FILE_NAME, SIGNED_TOKEN
 
 
@@ -23,6 +29,10 @@ uvloop.install()
 
 BASE_URL = urljoin("http://127.0.0.1:123", PREFIX)
 TRANSPORT = httpx.ASGITransport(app=app, client=("127.0.0.1", 123))
+
+SLEEP = fqn(HTTPClient, asyncio.sleep, "asyncio")
+LIMITER = fqn(HTTPClient, aiolimiter.AsyncLimiter, "aiolimiter")
+SEMAPHORE = fqn(HTTPClient, asyncio.Semaphore, "asyncio")
 
 
 @fixture(scope="session")
@@ -48,6 +58,7 @@ def apply_custom_logging_formatter_to_pytest(caplog: LogCaptureFixture):
 @fixture(scope="session", autouse=True)
 def lifespan():
     SERVER.set("Pytest/1.2.3")
+    setattr(app.state.limiter, "enabled", False)
 
     build_all_templates(*load_translations())
     csv_file_path = DIRECTORY / CSV_FILE_NAME
@@ -64,8 +75,13 @@ def lifespan():
 
 
 @async_fixture(name="client")
-async def httpx_async_client():
+async def httpx_async_client(mocker: Mocker):
     """HTTPX Async Client with ASGITransport fixture"""
+
+    mocker.patch(LIMITER, new_callable=MockAsyncContext)
+    mocker.patch(SEMAPHORE, new_callable=MockAsyncContext)
+    mock_sleep = mocker.patch(SLEEP, new_callable=AsyncMock)
+
     async with httpx.AsyncClient(
         cookies={"csrf-token": SIGNED_TOKEN},
         headers={"X-CSRF-Token": CSRF_TOKEN},
@@ -73,6 +89,7 @@ async def httpx_async_client():
         base_url=BASE_URL,
         transport=TRANSPORT,
     ) as client:
+        setattr(client, "mock_sleep", mock_sleep)
         yield client
 
 
