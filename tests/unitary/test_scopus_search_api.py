@@ -1,5 +1,8 @@
+# mypy: disable-error-code="union-attr"
 import asyncio
+from unittest.mock import PropertyMock
 
+from pydantic import ValidationError
 from pytest import mark, raises
 from pytest_mock import MockerFixture as Mocker
 
@@ -11,14 +14,19 @@ from src.adapters.gateway.scopus_search_api import (
 from src.core.common.types import ResponseBundle
 from src.core.data.enums import ExcMsg
 from src.core.domain.http_exceptions import (
+    HTTPError,
+    InternalError,
     NotFound,
     ScopusAPIError,
-    ServiceUnavailable,
 )
 from tests.conftest import assert_http_error
-from tests.mocks.errors import MORE_CANCELLED
-from tests.mocks.helpers import Patch, fqn, search_fix
-from tests.mocks.raw import HTTP_404, HTTP_429, HTTP_502, HTTP_503
+from tests.mocks.errors import (
+    TASKS_CANCELLED_ERROR,
+    TASKS_COMMON_ERROR,
+    TASKS_HTTP_ERROR,
+)
+from tests.mocks.helpers import MockState, Patch, fqn, search_fix
+from tests.mocks.raw import HTTP_400, HTTP_404, HTTP_429, HTTP_500, HTTP_502
 from tests.mocks.unitary import (
     FOUR_KEYWORDS,
     MORE_PAGES_FULL_RESULTS,
@@ -78,16 +86,54 @@ async def test_survey_not_found():
 
 
 @mark.asyncio
+async def test_survey_no_tasks():
+    fix = search_fix(SURVEY_RESULTS[:3])
+    with raises(HTTPError) as info:
+        await fix.api.survey_totals_found({})
+    assert_http_error(info, HTTP_500, ExcMsg.INTERNAL_ERROR)
+    fix.req.assert_not_called()
+
+
+@mark.asyncio
+async def test_survey_http_error(mocker: Mocker):
+    spy = mocker.patch(SEARCH_RES, wraps=validate_search_response)
+    fix = search_fix(SURVEY_RESULTS[:7])
+    mocker.patch(**STEP(TASKS_HTTP_ERROR))
+    with raises(HTTPError) as info:
+        await fix.api.survey_totals_found(TWO_KEYWORDS)
+    assert_http_error(info, HTTP_400, ExcMsg.INTERNAL_ERROR)
+    # _get_article has less CPU executions
+    assert fix.req.call_count == 3 and spy.call_count == 3
+    assert info.value.details[0]["type"] == fqn(ValueError)
+    assert info.value.details[0]["message"] == "any"
+
+
+@mark.asyncio
 async def test_survey_cancelled_error(mocker: Mocker):
     spy = mocker.patch(SEARCH_RES, wraps=validate_search_response)
-    fix = search_fix(SURVEY_RESULTS)
-    mocker.patch(**STEP(MORE_CANCELLED))
-    with raises(ServiceUnavailable) as info:
+    fix = search_fix(SURVEY_RESULTS[:7])
+    mocker.patch(**STEP(TASKS_CANCELLED_ERROR))
+    with raises(InternalError) as info:
         await fix.api.survey_totals_found(FOUR_KEYWORDS)
-    assert_http_error(info, HTTP_503, ExcMsg.CANCELLED_ERROR)
-    assert fix.req.call_count == 15 and spy.call_count == 3
+    assert_http_error(info, HTTP_500, ExcMsg.CANCELLED_ERROR)
+    # TaskGroup swallows CancelledError
+    assert fix.req.call_count == 15 and spy.call_count in (6, 7)
     assert info.value.details[0]["type"] == fqn(asyncio.CancelledError)
-    assert info.value.details[0]["message"] == "any"
+    assert info.value.details[0]["message"] == repr(asyncio.CancelledError())
+
+
+@mark.asyncio
+async def test_survey_operational_error(mocker: Mocker):
+    spy = mocker.patch(SEARCH_RES, wraps=validate_search_response)
+    fix = search_fix(SURVEY_RESULTS[:7])
+    mocker.patch(**STEP(TASKS_COMMON_ERROR))
+    with raises(InternalError) as info:
+        await fix.api.survey_totals_found(TWO_KEYWORDS)
+    assert_http_error(info, HTTP_500, ExcMsg.CANCELLED_ERROR)
+    # _get_article has less CPU executions
+    assert fix.req.call_count == 3 and spy.call_count == 3
+    assert info.value.details[0]["type"] == fqn(ValidationError)
+    assert info.value.details[0]["message"] is not None
 
 
 @mark.asyncio
@@ -214,13 +260,55 @@ async def test_search_quota_exceeded():
 
 
 @mark.asyncio
+async def test_search_no_tasks(mocker: Mocker):
+    fix = search_fix(MORE_PAGES_PARTIAL_RESULTS)
+    mocker.patch(
+        f"{fqn(MockState)}.pages_to_fetch_range",
+        PropertyMock(return_value=range(0)),
+    )
+    with raises(HTTPError) as info:
+        await fix.api.search_articles(None)
+    assert_http_error(info, HTTP_500, ExcMsg.INTERNAL_ERROR)
+    assert fix.req.call_count == 1
+
+
+@mark.asyncio
+async def test_search_http_error(mocker: Mocker):
+    spy = mocker.patch(SEARCH_RES, wraps=validate_search_response)
+    fix = search_fix(MORE_PAGES_PARTIAL_RESULTS)
+    mocker.patch(**STEP(TASKS_HTTP_ERROR))
+    with raises(HTTPError) as info:
+        await fix.api.search_articles(None)
+    assert_http_error(info, HTTP_400, ExcMsg.INTERNAL_ERROR)
+    # _get_article has less CPU executions
+    assert fix.req.call_count == 7 and spy.call_count == 7
+    assert info.value.details[0]["type"] == fqn(ValueError)
+    assert info.value.details[0]["message"] == "any"
+
+
+@mark.asyncio
 async def test_search_cancelled_error(mocker: Mocker):
     spy = mocker.patch(SEARCH_RES, wraps=validate_search_response)
     fix = search_fix(MORE_PAGES_PARTIAL_RESULTS)
-    mocker.patch(**STEP(MORE_CANCELLED))
-    with raises(ServiceUnavailable) as info:
+    mocker.patch(**STEP(TASKS_CANCELLED_ERROR))
+    with raises(InternalError) as info:
         await fix.api.search_articles(None)
-    assert_http_error(info, HTTP_503, ExcMsg.CANCELLED_ERROR)
-    assert fix.req.call_count == 7 and spy.call_count == 4
+    assert_http_error(info, HTTP_500, ExcMsg.CANCELLED_ERROR)
+    # TaskGroup swallows CancelledError
+    assert fix.req.call_count == 7 and spy.call_count == 7
     assert info.value.details[0]["type"] == fqn(asyncio.CancelledError)
     assert info.value.details[0]["message"] == "any"
+
+
+@mark.asyncio
+async def test_search_operational_error(mocker: Mocker):
+    spy = mocker.patch(SEARCH_RES, wraps=validate_search_response)
+    fix = search_fix(MORE_PAGES_PARTIAL_RESULTS)
+    mocker.patch(**STEP(TASKS_COMMON_ERROR))
+    with raises(InternalError) as info:
+        await fix.api.search_articles(None)
+    assert_http_error(info, HTTP_500, ExcMsg.CANCELLED_ERROR)
+    # _get_article has less CPU executions
+    assert fix.req.call_count == 7 and spy.call_count == 7
+    assert info.value.details[0]["type"] == fqn(ValidationError)
+    assert info.value.details[0]["message"] is not None

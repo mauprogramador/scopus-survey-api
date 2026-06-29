@@ -1,6 +1,4 @@
 import asyncio
-import os
-from concurrent.futures import ThreadPoolExecutor
 
 from src.adapters.helpers.scopus_response import validate_search_response
 from src.core.common.types import (
@@ -36,149 +34,104 @@ class ScopusSearchAPI:
         self._url_builder = url_builder
         self._details = survey_details
         self._state = state
-
-        try:
-            self._workers = min(2 * len(os.sched_getaffinity(0)), 32)
-        except AttributeError:
-            self._workers = min(2 * (os.cpu_count() or 4), 32)
+        self._last_completed: ResponseBundle = None
 
     @property
     def http_client(self) -> HTTPClient:
         return self._http_client
 
-    async def _task_request(
-        self, url: str, index: int
-    ) -> tuple[int, ResponseBundle]:
-        res = await self._http_client.request(url)
-        return index, res
+    async def _get_article(
+        self, bundle: CombinationBundle, pbar: ProgressBar
+    ) -> None:
+        res = await self._http_client.api_call(bundle.url)
+        self._last_completed = res
+
+        search = await asyncio.to_thread(validate_search_response, res)
+        bundle.total = search.total_results
+        pbar.step()
 
     async def survey_totals_found(
         self, bundles_map: dict[int, CombinationBundle]
     ) -> list[Json]:
-        max_workers = min(len(bundles_map), self._workers)
-        logger.debug({"max_workers": max_workers})
+        pbar = ProgressBar(len(bundles_map))
+        tasks: list[asyncio.Task[None]] = []
 
-        all_tasks = {
-            asyncio.create_task(
-                self._task_request(bundle.url, index),
-                name=f"combination_index:{index}",
-            )
-            for index, bundle in bundles_map.items()
-        }
-        remaining_tasks = all_tasks.copy()
-        last_completed: ResponseBundle = None
+        try:
+            async with asyncio.TaskGroup() as tg:
+                tasks = [
+                    tg.create_task(self._get_article(bundle, pbar))
+                    for bundle in bundles_map.values()
+                ]
+        except ExceptionGroup:  # pylint: disable=W0718
+            pass
 
-        with (
-            ThreadPoolExecutor(max_workers) as executor,
-            ProgressBar.start(len(bundles_map)) as progress,
-        ):
-            for future in asyncio.as_completed(all_tasks):
-                remaining_tasks.discard(future)
+        finally:
+            pbar.close()
+            await self._http_client.close()
 
-                try:
-                    index, res = await future
-                    last_completed = res
+        if not tasks:
+            raise InternalError(ExcMsg.INTERNAL_ERROR)
 
-                    search = await asyncio.get_running_loop().run_in_executor(
-                        executor,
-                        validate_search_response,
-                        res,
-                    )
-                    bundles_map[index].total = search.total_results
-                    progress.step()
+        for task in tasks:
+            try:
+                task.result()
 
-                except (asyncio.CancelledError, HTTPError, Exception) as exc:
+            except HTTPError as exc:
+                raise exc
 
-                    for task in remaining_tasks:
-                        if task.done() and not isinstance(
-                            exc, asyncio.CancelledError
-                        ):
-                            task.exception()  # Retrieve task exception
-                        else:
-                            task.cancel()
+            except (asyncio.CancelledError, Exception) as exc:
+                raise InternalError(ExcMsg.CANCELLED_ERROR, exc) from exc
 
-                    await self._http_client.close()
-
-                    if isinstance(exc, HTTPError):
-                        raise exc
-
-                    raise ServiceUnavailable(
-                        ExcMsg.CANCELLED_ERROR, exc
-                    ) from exc
-
-        if remaining_tasks:
-            await asyncio.gather(*remaining_tasks, return_exceptions=True)
-
-        await self._http_client.close()
-        self._details.set_search_quota(last_completed)
+        self._details.set_search_quota(self._last_completed)
 
         return [bundle.model_dump() for bundle in bundles_map.values()]
 
-    async def _get_by_pagination(self, index: int) -> ResponseBundle:
+    async def _get_by_pagination(self, index: int, pbar: ProgressBar) -> None:
         page = index * self._state.items_per_page
         url = self._url_builder.pagination_url(page)
-        return await self._http_client.request(url)
+
+        res = await self._http_client.api_call(url)
+        self._last_completed = res
+
+        search = await asyncio.to_thread(validate_search_response, res)
+        self._state.entry.extend(search.entry)
+        pbar.step()
 
     async def _get_multiple_articles_by_pagination(self) -> None:
-        max_workers = min(self._state.pages_to_fetch, self._workers)
-        logger.debug({"max_workers": max_workers})
+        pbar = ProgressBar(*self._state.pages_to_fetch_progress)
+        tasks: list[asyncio.Task[None]] = []
 
-        all_tasks = {
-            asyncio.create_task(
-                self._get_by_pagination(start),
-                name=f"pagination_start:{start}",
-            )
-            for start in self._state.pages_to_fetch_range
-        }
-        remaining_tasks = all_tasks.copy()
-        last_completed: ResponseBundle = None
-        progress_args = self._state.pages_to_fetch_progress
+        try:
+            async with asyncio.TaskGroup() as tg:
+                tasks = [
+                    tg.create_task(self._get_by_pagination(start, pbar))
+                    for start in self._state.pages_to_fetch_range
+                ]
+        except ExceptionGroup:  # pylint: disable=W0718
+            pass
 
-        with (
-            ThreadPoolExecutor(max_workers) as executor,
-            ProgressBar.start(*progress_args) as progress,
-        ):
-            for future in asyncio.as_completed(all_tasks):
-                remaining_tasks.discard(future)
+        finally:
+            pbar.close()
 
-                try:
-                    res = await future
-                    last_completed = res
+        if not tasks:
+            raise InternalError(ExcMsg.INTERNAL_ERROR)
 
-                    search = await asyncio.get_running_loop().run_in_executor(
-                        executor,
-                        validate_search_response,
-                        res,
-                    )
-                    self._state.entry.extend(search.entry)
-                    progress.step()
+        for task in tasks:
+            try:
+                task.result()
 
-                except (asyncio.CancelledError, HTTPError, Exception) as exc:
+            except HTTPError as exc:
+                raise exc
 
-                    for task in remaining_tasks:
-                        if task.done() and not isinstance(
-                            exc, asyncio.CancelledError
-                        ):
-                            task.exception()  # Retrieve task exception
-                        else:
-                            task.cancel()
+            except (asyncio.CancelledError, Exception) as exc:
+                raise InternalError(ExcMsg.CANCELLED_ERROR, exc) from exc
 
-                    if isinstance(exc, HTTPError):
-                        raise exc
-
-                    raise ServiceUnavailable(
-                        ExcMsg.CANCELLED_ERROR, exc
-                    ) from exc
-
-        if remaining_tasks:
-            await asyncio.gather(*remaining_tasks, return_exceptions=True)
-
-        self._details.set_search_quota(last_completed)
+        self._details.set_search_quota(self._last_completed)
 
     async def search_articles(self, params: SearchParams) -> None:
         url = self._url_builder.search_url(params)
 
-        res = await self._http_client.request(url)
+        res = await self._http_client.api_call(url)
         search_results = validate_search_response(res)
 
         self._details.set_search_data(search_results)
@@ -190,16 +143,16 @@ class ScopusSearchAPI:
             self._state.handle_search_quota(self._details.search_quota)
 
             if self._state.pages_count == 2:
-                res = await self._get_by_pagination(self._PAGE_TWO_INDEX)
+                page = self._PAGE_TWO_INDEX * self._state.items_per_page
+                url = self._url_builder.pagination_url(page)
+
+                res = await self._http_client.api_call(url)
                 self._details.set_search_quota(res)
 
                 search_results = validate_search_response(res)
                 self._state.entry.extend(search_results.entry)
 
             elif self._state.pages_count > 2:
-                await self._http_client.update_strategy(
-                    self._state.total_results
-                )
                 await self._get_multiple_articles_by_pagination()
 
         logger.total_found(self._state.total_results)

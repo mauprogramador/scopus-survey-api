@@ -1,6 +1,4 @@
 import asyncio
-import os
-from concurrent.futures import ThreadPoolExecutor
 
 from pandas import DataFrame
 
@@ -35,82 +33,57 @@ class ScopusAbstractRetrievalAPI:
         self._url_builder = url_builder
         self._details = survey_details
         self._state = state
+        self._last_completed: ResponseBundle = None
 
-        try:
-            self._workers = min(2 * len(os.sched_getaffinity(0)), 32)
-        except AttributeError:
-            self._workers = min(2 * (os.cpu_count() or 4), 32)
-
-    async def _get_abstract(self, index: int) -> ResponseBundle:
+    async def _get_abstract(self, index: int, pbar: ProgressBar) -> None:
         url = self._url_builder.abstract_url(self._state.entry[index].url)
-        return await self._http_client.request(url)
+        res = await self._http_client.api_call(url)
+
+        self._last_completed = res
+        abstract = await asyncio.to_thread(validate_abstract_response, res)
+
+        abstract_data = abstract.model_dump(by_alias=True)
+        self._state.abstracts.append(abstract_data)
+        pbar.step()
 
     async def _get_multiple_abstracts(self) -> None:
-        max_workers = min(self._state.abstracts_to_fetch, self._workers)
-        logger.debug({"max_workers": max_workers})
+        pbar = ProgressBar(self._state.abstracts_to_fetch)
+        tasks: list[asyncio.Task[None]] = []
 
-        all_tasks = {
-            asyncio.create_task(
-                self._get_abstract(index),
-                name=f"entry_index:{index}",
-            )
-            for index in self._state.abstracts_to_fetch_range
-        }
-        remaining_tasks = all_tasks.copy()
-        last_completed: ResponseBundle = None
+        try:
+            async with asyncio.TaskGroup() as tg:
+                tasks = [
+                    tg.create_task(self._get_abstract(index, pbar))
+                    for index in self._state.abstracts_to_fetch_range
+                ]
+        except ExceptionGroup:  # pylint: disable=W0718
+            pass
 
-        with (
-            ThreadPoolExecutor(max_workers) as executor,
-            ProgressBar.start(self._state.abstracts_to_fetch) as progress,
-        ):
-            for future in asyncio.as_completed(all_tasks):
-                remaining_tasks.discard(future)
+        finally:
+            pbar.close()
 
-                try:
-                    res = await future
-                    last_completed = res
+        if not tasks:
+            raise InternalError(ExcMsg.INTERNAL_ERROR)
 
-                    abstract = (
-                        await asyncio.get_running_loop().run_in_executor(
-                            executor,
-                            validate_abstract_response,
-                            res,
-                        )
-                    )
-                    abstract_data = abstract.model_dump(by_alias=True)
-                    self._state.abstracts.append(abstract_data)
-                    progress.step()
+        for task in tasks:
+            try:
+                task.result()
 
-                except (asyncio.CancelledError, HTTPError, Exception) as exc:
+            except HTTPError as exc:
+                raise exc
 
-                    for task in remaining_tasks:
-                        if task.done() and not isinstance(
-                            exc, asyncio.CancelledError
-                        ):
-                            task.exception()  # Retrieve task exception
-                        else:
-                            task.cancel()
+            except (asyncio.CancelledError, Exception) as exc:
+                raise InternalError(ExcMsg.CANCELLED_ERROR, exc) from exc
 
-                    if isinstance(exc, HTTPError):
-                        raise exc
-
-                    raise ServiceUnavailable(
-                        ExcMsg.CANCELLED_ERROR, exc
-                    ) from exc
-
-        if remaining_tasks:
-            await asyncio.gather(*remaining_tasks, return_exceptions=True)
-
-        self._details.set_abstract_quota(last_completed)
+        self._details.set_abstract_quota(self._last_completed)
 
     async def _get_one_abstract(self, index: int) -> None:
-        url = self._state.entry[index].url
-        url = self._url_builder.abstract_url(url)
+        url = self._url_builder.abstract_url(self._state.entry[index].url)
+        res = await self._http_client.api_call(url)
 
-        res = await self._http_client.request(url)
         self._details.set_abstract_quota(res)
-
         abstract = validate_abstract_response(res)
+
         abstract_data = abstract.model_dump(by_alias=True)
         self._state.abstracts.append(abstract_data)
 
@@ -127,9 +100,6 @@ class ScopusAbstractRetrievalAPI:
                 await self._get_one_abstract(self._TWO_RESULTS_INDEX)
 
             elif self._state.total_abstracts > 2:
-                await self._http_client.update_strategy(
-                    self._state.total_abstracts
-                )
                 await self._get_multiple_abstracts()
 
         self._details.set_results(self._state.total_abstracts)

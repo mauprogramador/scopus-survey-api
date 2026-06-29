@@ -1,8 +1,9 @@
 # mypy: disable-error-code="index"
 import asyncio
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, PropertyMock
 
 from httpx import AsyncClient as Client
+from pydantic import ValidationError
 from pytest import mark
 from pytest_mock import MockerFixture as Mocker
 
@@ -16,7 +17,12 @@ from src.core.data.quota_results_handler import QuotaResultsHandler
 from src.core.domain.factory import make_aggregator
 from src.utils.progress_bar import ProgressBar
 from tests.conftest import assert_error_json
-from tests.mocks.errors import MORE_CANCELLED, SCOPUS_API_QUOTA_ERROR
+from tests.mocks.errors import (
+    SCOPUS_API_QUOTA_ERROR,
+    TASKS_CANCELLED_ERROR,
+    TASKS_COMMON_ERROR,
+    TASKS_HTTP_ERROR,
+)
 from tests.mocks.helpers import (
     MockState,
     Patch,
@@ -40,8 +46,9 @@ from tests.mocks.integration import (
 )
 from tests.mocks.raw import (
     HTTP_200,
+    HTTP_400,
+    HTTP_500,
     HTTP_502,
-    HTTP_503,
     SEARCH_PARAMS,
     URL_SEARCH,
 )
@@ -165,18 +172,62 @@ async def test_retrieve_quota_exceed(mocker: Mocker, client: Client):
     mock = mocker.patch(*get_patch(ABSTRACT_QUOTA_EXCEEDED))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     details = assert_error_json(res, HTTP_502, trans(SCOPUS_API_QUOTA_ERROR))
-    assert details is not None and mock.call_count == 3
+    assert details is not None and mock.call_count == 2
     assert details[0]["error_code"] == QUOTA_ERROR_CODE
+
+
+@mark.asyncio
+async def test_retrieve_no_tasks(mocker: Mocker, client: Client):
+    mocker.patch(
+        f"{fqn(QuotaResultsHandler)}.abstracts_to_fetch_range",
+        PropertyMock(return_value=range(0)),
+    )
+    mock = mocker.patch(*get_patch(RETRIEVE_MORE_ABSTRACTS))
+
+    res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
+    details = assert_error_json(res, HTTP_500, ExcMsg.INTERNAL_ERROR)
+    assert mock.call_count == 2 and details is None
+
+
+@mark.asyncio
+async def test_retrieve_http_error(mocker: Mocker, client: Client):
+    spy = mocker.patch(ABSTRACT_RES, wraps=validate_abstract_response)
+    mock = mocker.patch(*get_patch(RETRIEVE_MORE_ABSTRACTS))
+    mocker.patch(**STEP(TASKS_HTTP_ERROR))
+
+    res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
+    details = assert_error_json(res, HTTP_400, ExcMsg.INTERNAL_ERROR)
+    # _get_abstract has more CPU executions like model_dump
+    assert mock.call_count == 8 and spy.call_count == 7
+    assert details[0]["type"] == fqn(ValueError)
+    assert details[0]["message"] == "any"
 
 
 @mark.asyncio
 async def test_retrieve_cancelled_error(mocker: Mocker, client: Client):
     spy = mocker.patch(ABSTRACT_RES, wraps=validate_abstract_response)
-    mocker.patch(**STEP(MORE_CANCELLED))
     mock = mocker.patch(*get_patch(RETRIEVE_MORE_ABSTRACTS))
-    res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
-    details = assert_error_json(res, HTTP_503, ExcMsg.CANCELLED_ERROR)
+    mocker.patch(**STEP(TASKS_CANCELLED_ERROR))
 
-    assert mock.call_count == 8 and spy.call_count == 4
+    res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
+    details = assert_error_json(res, HTTP_500, ExcMsg.CANCELLED_ERROR)
+
+    # TaskGroup swallows CancelledError
+    assert mock.call_count == 8 and spy.call_count == 7
     assert details[0]["type"] == fqn(asyncio.CancelledError)
     assert details[0]["message"] == "any"
+
+
+@mark.asyncio
+async def test_retrieve_operational_error(mocker: Mocker, client: Client):
+    spy = mocker.patch(ABSTRACT_RES, wraps=validate_abstract_response)
+    mock = mocker.patch(*get_patch(RETRIEVE_MORE_ABSTRACTS))
+    mocker.patch(**STEP(TASKS_COMMON_ERROR))
+
+    res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
+    details = assert_error_json(res, HTTP_500, ExcMsg.CANCELLED_ERROR)
+
+    # _get_abstract has more CPU executions like model_dump
+    assert mock.call_count == 8 and spy.call_count in (6, 7)
+    assert details[0]["type"] == fqn(ValidationError)
+    assert details[0]["message"] is not None

@@ -58,7 +58,6 @@ SURVEY_TWO_KEYWORDS = [response_mock(RAW_SEARCH_OK)] * 3
 SURVEY_THREE_KEYWORDS = [response_mock(RAW_SEARCH_OK)] * 7
 SURVEY_FOUR_KEYWORDS = [response_mock(RAW_SEARCH_OK)] * 15
 SURVEY_NOT_FOUND = [response_mock(RAW_SEARCH_NOT_FOUND)] * 3
-SURVEY_CANCELLED_ERROR = [response_mock(RAW_SEARCH_NOT_FOUND)] * 15
 
 # ScopusSearchAPI.search_articles
 
@@ -177,8 +176,6 @@ ABSTRACT_NO_QUOTA_MORE_RESULTS = [
 ]
 ABSTRACT_QUOTA_EXCEEDED = [
     response_mock(search_raw(1)),
-    response_mock(RAW_SERVICE_ERROR_QUOTA, HTTP_429, RAW_HEADERS_NO_QUOTA),
-    # HTTP client retry once on 429, so we add another mock to cover it
     response_mock(RAW_SERVICE_ERROR_QUOTA, HTTP_429, RAW_HEADERS_NO_QUOTA),
 ]
 

@@ -1,5 +1,8 @@
+# mypy: disable-error-code="union-attr"
 import asyncio
+from unittest.mock import PropertyMock
 
+from pydantic import ValidationError
 from pytest import mark, raises
 from pytest_mock import MockerFixture as Mocker
 
@@ -10,11 +13,19 @@ from src.adapters.gateway.scopus_abstract_retrieval_api import (
 )
 from src.core.common.types import ResponseBundle
 from src.core.data.enums import ExcMsg
-from src.core.domain.http_exceptions import ScopusAPIError, ServiceUnavailable
+from src.core.domain.http_exceptions import (
+    HTTPError,
+    InternalError,
+    ScopusAPIError,
+)
 from tests.conftest import assert_http_error
-from tests.mocks.errors import MORE_CANCELLED
-from tests.mocks.helpers import Patch, abstract_fix, fqn, search_raw
-from tests.mocks.raw import API_KEY, HTTP_429, HTTP_502, HTTP_503
+from tests.mocks.errors import (
+    TASKS_CANCELLED_ERROR,
+    TASKS_COMMON_ERROR,
+    TASKS_HTTP_ERROR,
+)
+from tests.mocks.helpers import MockState, Patch, abstract_fix, fqn, search_raw
+from tests.mocks.raw import API_KEY, HTTP_400, HTTP_429, HTTP_500, HTTP_502
 from tests.mocks.unitary import (
     ABSTRACT_EXACT_QUOTA_MORE_RESULTS,
     ABSTRACT_EXACT_QUOTA_ONE_RESULT,
@@ -134,13 +145,55 @@ async def test_retrieve_quota_exceeded():
 
 
 @mark.asyncio
+async def test_retrieve_no_tasks(mocker: Mocker):
+    fix = abstract_fix(ONE_ABSTRACT, search_raw(3))
+    mocker.patch(
+        f"{fqn(MockState)}.abstracts_to_fetch_range",
+        PropertyMock(return_value=range(0)),
+    )
+    with raises(HTTPError) as info:
+        await fix.api.retrieve_abstracts(API_KEY)
+    assert_http_error(info, HTTP_500, ExcMsg.INTERNAL_ERROR)
+    assert fix.req.call_count == 1  # First abstract
+
+
+@mark.asyncio
+async def test_retrieve_http_error(mocker: Mocker):
+    spy = mocker.patch(ABSTRACT_RES, wraps=validate_abstract_response)
+    fix = abstract_fix(ONE_ABSTRACT, search_raw(7))
+    mocker.patch(**STEP(TASKS_HTTP_ERROR))
+    with raises(HTTPError) as info:
+        await fix.api.retrieve_abstracts(API_KEY)
+    assert_http_error(info, HTTP_400, ExcMsg.INTERNAL_ERROR)
+    # _get_abstract has more CPU executions like model_dump
+    assert fix.req.call_count == 7 and spy.call_count in (6, 7)
+    assert info.value.details[0]["type"] == fqn(ValueError)
+    assert info.value.details[0]["message"] == "any"
+
+
+@mark.asyncio
 async def test_retrieve_cancelled_error(mocker: Mocker):
     spy = mocker.patch(ABSTRACT_RES, wraps=validate_abstract_response)
     fix = abstract_fix(ONE_ABSTRACT, search_raw(7))
-    mocker.patch(**STEP(MORE_CANCELLED))
-    with raises(ServiceUnavailable) as info:
+    mocker.patch(**STEP(TASKS_CANCELLED_ERROR))
+    with raises(InternalError) as info:
         await fix.api.retrieve_abstracts(API_KEY)
-    assert_http_error(info, HTTP_503, ExcMsg.CANCELLED_ERROR)
-    assert fix.req.call_count == 7 and spy.call_count == 4
+    assert_http_error(info, HTTP_500, ExcMsg.CANCELLED_ERROR)
+    # TaskGroup swallows CancelledError
+    assert fix.req.call_count == 7 and spy.call_count == 7
     assert info.value.details[0]["type"] == fqn(asyncio.CancelledError)
     assert info.value.details[0]["message"] == "any"
+
+
+@mark.asyncio
+async def test_retrieve_operational_error(mocker: Mocker):
+    spy = mocker.patch(ABSTRACT_RES, wraps=validate_abstract_response)
+    fix = abstract_fix(ONE_ABSTRACT, search_raw(7))
+    mocker.patch(**STEP(TASKS_COMMON_ERROR))
+    with raises(InternalError) as info:
+        await fix.api.retrieve_abstracts(API_KEY)
+    assert_http_error(info, HTTP_500, ExcMsg.CANCELLED_ERROR)
+    # _get_abstract has more CPU executions like model_dump
+    assert fix.req.call_count == 7 and spy.call_count in (6, 7)
+    assert info.value.details[0]["type"] == fqn(ValidationError)
+    assert info.value.details[0]["message"] is not None

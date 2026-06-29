@@ -1,8 +1,10 @@
 # mypy: disable-error-code="index"
 import asyncio
-from unittest.mock import MagicMock
+import itertools
+from unittest.mock import MagicMock, Mock, PropertyMock
 
 from httpx import AsyncClient as Client
+from pydantic import ValidationError
 from pytest import mark
 from pytest_mock import MockerFixture as Mocker
 
@@ -12,9 +14,17 @@ from src.core.config.scopus import QUOTA_ERROR_CODE
 from src.core.data.enums import ExcMsg
 from src.core.data.quota_results_handler import QuotaResultsHandler
 from src.core.domain.factory import make_aggregator
+from src.core.use_cases.keyword_combination_finder import (
+    KeywordCombinationFinder,
+)
 from src.utils.progress_bar import ProgressBar
 from tests.conftest import assert_error_json
-from tests.mocks.errors import MORE_CANCELLED, SCOPUS_API_QUOTA_ERROR
+from tests.mocks.errors import (
+    SCOPUS_API_QUOTA_ERROR,
+    TASKS_CANCELLED_ERROR,
+    TASKS_COMMON_ERROR,
+    TASKS_HTTP_ERROR,
+)
 from tests.mocks.helpers import (
     MockState,
     Patch,
@@ -37,17 +47,18 @@ from tests.mocks.integration import (
     SEARCH_QUOTA_EXCEEDED,
     SEARCH_TWO_PAGES_FULL_RESULTS,
     SEARCH_TWO_PAGES_PARTIAL_RESULTS,
-    SURVEY_CANCELLED_ERROR,
     SURVEY_FOUR_KEYWORDS,
     SURVEY_NOT_FOUND,
+    SURVEY_THREE_KEYWORDS,
     SURVEY_TWO_KEYWORDS,
 )
 from tests.mocks.raw import (
     COMBINATION_PARAMS,
     HTTP_200,
+    HTTP_400,
     HTTP_404,
+    HTTP_500,
     HTTP_502,
-    HTTP_503,
     KEYWORDS,
     SEARCH_PARAMS,
     URL_COMBINATION,
@@ -58,6 +69,7 @@ from tests.mocks.raw import (
 STATE = fqn(make_aggregator, QuotaResultsHandler)
 SEARCH_RES = fqn(ScopusSearchAPI, validate_search_response)
 STEP = Patch(ScopusSearchAPI, ProgressBar.step, "ProgressBar")
+CHAIN = fqn(KeywordCombinationFinder, itertools.chain, "itertools")
 
 
 @mark.asyncio
@@ -91,14 +103,59 @@ async def test_survey_not_found(mocker: Mocker, client: Client):
 
 
 @mark.asyncio
-async def test_survey_cancelled_error(mocker: Mocker, client: Client):
-    mock = mocker.patch(*get_patch(SURVEY_CANCELLED_ERROR))
-    mocker.patch(**STEP(MORE_CANCELLED))
-    COMBINATION_PARAMS.update({"keywords": KEYWORDS})
+async def test_survey_no_tasks(mocker: Mocker, client: Client):
+    from_iterable = Mock(itertools.chain.from_iterable, return_value=[])
+    mocker.patch(
+        CHAIN, MagicMock(itertools.chain, from_iterable=from_iterable)
+    )
+    mock = mocker.patch(*get_patch(SURVEY_THREE_KEYWORDS))
+
+    mocker.patch.dict(COMBINATION_PARAMS, {"keywords": KEYWORDS[:3]})
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
-    details = assert_error_json(res, HTTP_503, ExcMsg.CANCELLED_ERROR)
+    details = assert_error_json(res, HTTP_500, ExcMsg.INTERNAL_ERROR)
+    assert mock.call_count == 0 and details is None
+
+
+@mark.asyncio
+async def test_survey_http_error(mocker: Mocker, client: Client):
+    spy = mocker.patch(SEARCH_RES, wraps=validate_search_response)
+    mock = mocker.patch(*get_patch(SURVEY_THREE_KEYWORDS))
+    mocker.patch(**STEP(TASKS_HTTP_ERROR))
+    mocker.patch.dict(COMBINATION_PARAMS, {"keywords": KEYWORDS[:3]})
+    res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
+    details = assert_error_json(res, HTTP_400, ExcMsg.INTERNAL_ERROR)
+    # _get_article has less CPU executions
+    assert mock.call_count == 7 and spy.call_count in (6, 7)
+    assert details[0]["type"] == fqn(ValueError)
+    assert details[0]["message"] == "any"
+
+
+@mark.asyncio
+async def test_survey_cancelled_error(mocker: Mocker, client: Client):
+    spy = mocker.patch(SEARCH_RES, wraps=validate_search_response)
+    mock = mocker.patch(*get_patch(SURVEY_THREE_KEYWORDS))
+    mocker.patch(**STEP(TASKS_CANCELLED_ERROR))
+    mocker.patch.dict(COMBINATION_PARAMS, {"keywords": KEYWORDS[:3]})
+    res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
+    details = assert_error_json(res, HTTP_500, ExcMsg.CANCELLED_ERROR)
+    # TaskGroup swallows CancelledError
+    assert mock.call_count == 7 and spy.call_count == 7
     assert details[0]["type"] == fqn(asyncio.CancelledError)
-    assert details[0]["message"] == "any" and mock.call_count == 8
+    assert details[0]["message"] == "any"
+
+
+@mark.asyncio
+async def test_survey_operational_error(mocker: Mocker, client: Client):
+    spy = mocker.patch(SEARCH_RES, wraps=validate_search_response)
+    mock = mocker.patch(*get_patch(SURVEY_THREE_KEYWORDS))
+    mocker.patch(**STEP(TASKS_COMMON_ERROR))
+    mocker.patch.dict(COMBINATION_PARAMS, {"keywords": KEYWORDS[:3]})
+    res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
+    details = assert_error_json(res, HTTP_500, ExcMsg.CANCELLED_ERROR)
+    # _get_article has less CPU executions
+    assert mock.call_count == 7 and spy.call_count in (6, 7)
+    assert details[0]["type"] == fqn(ValidationError)
+    assert details[0]["message"] is not None
 
 
 @mark.asyncio
@@ -245,18 +302,58 @@ async def test_search_quota_exceeded(mocker: Mocker, client: Client):
     mock = mocker.patch(*get_patch(SEARCH_QUOTA_EXCEEDED))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     details = assert_error_json(res, HTTP_502, trans(SCOPUS_API_QUOTA_ERROR))
-    assert details is not None and mock.call_count == 2
+    assert details is not None and mock.call_count == 1
     assert details[0]["error_code"] == QUOTA_ERROR_CODE
+
+
+@mark.asyncio
+async def test_search_no_tasks(mocker: Mocker, client: Client):
+    mocker.patch(STATE, MockState(7, 151))
+    mocker.patch(
+        f"{fqn(MockState)}.pages_to_fetch_range",
+        PropertyMock(return_value=range(0)),
+    )
+    mock = mocker.patch(*get_patch(SEARCH_MORE_PAGES_PARTIAL_RESULTS))
+
+    res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
+    details = assert_error_json(res, HTTP_500, ExcMsg.INTERNAL_ERROR)
+    assert mock.call_count == 1 and details is None
+
+
+@mark.asyncio
+async def test_search_http_error(mocker: Mocker, client: Client):
+    spy = mocker.patch(SEARCH_RES, wraps=validate_search_response)
+    mock = mocker.patch(*get_patch(SEARCH_MORE_PAGES_PARTIAL_RESULTS))
+    mocker.patch(**STEP(TASKS_HTTP_ERROR))
+    res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
+    details = assert_error_json(res, HTTP_400, ExcMsg.INTERNAL_ERROR)
+    # _get_article has less CPU executions
+    assert mock.call_count == 7 and spy.call_count in (6, 7)
+    assert details[0]["type"] == fqn(ValueError)
+    assert details[0]["message"] == "any"
 
 
 @mark.asyncio
 async def test_search_cancelled_error(mocker: Mocker, client: Client):
     spy = mocker.patch(SEARCH_RES, wraps=validate_search_response)
-    mocker.patch(**STEP(MORE_CANCELLED))
+    mocker.patch(**STEP(TASKS_CANCELLED_ERROR))
     mock = mocker.patch(*get_patch(SEARCH_MORE_PAGES_PARTIAL_RESULTS))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
-    details = assert_error_json(res, HTTP_503, ExcMsg.CANCELLED_ERROR)
+    details = assert_error_json(res, HTTP_500, ExcMsg.CANCELLED_ERROR)
 
-    assert mock.call_count == 7 and spy.call_count == 4
+    assert mock.call_count == 7 and spy.call_count == 7
     assert details[0]["type"] == fqn(asyncio.CancelledError)
     assert details[0]["message"] == "any"
+
+
+@mark.asyncio
+async def test_search_operational_error(mocker: Mocker, client: Client):
+    spy = mocker.patch(SEARCH_RES, wraps=validate_search_response)
+    mock = mocker.patch(*get_patch(SEARCH_MORE_PAGES_PARTIAL_RESULTS))
+    mocker.patch(**STEP(TASKS_COMMON_ERROR))
+    res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
+    details = assert_error_json(res, HTTP_500, ExcMsg.CANCELLED_ERROR)
+    # _get_article has less CPU executions
+    assert mock.call_count == 7 and spy.call_count in (6, 7)
+    assert details[0]["type"] == fqn(ValidationError)
+    assert details[0]["message"] is not None

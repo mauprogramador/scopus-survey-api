@@ -71,4 +71,29 @@ CONTENT_TYPE_ERROR = aiohttp.ContentTypeError(
     message="any",
 )
 
-MORE_CANCELLED = [None, None, asyncio.CancelledError("any")]
+TASKS_CANCELLED_ERROR = [
+    None,
+    None,
+    asyncio.CancelledError("any"),
+    None,
+    None,
+    None,
+]
+
+TASKS_HTTP_ERROR = [
+    None,
+    None,
+    HTTP_ERROR,
+    None,
+    None,
+    None,
+]
+
+TASKS_COMMON_ERROR = [
+    None,
+    None,
+    PYDANTIC_VALIDATION_ERROR,
+    None,
+    None,
+    None,
+]
