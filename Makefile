@@ -85,7 +85,7 @@ docs:
 # Tests
 
 test:
-	@poetry run pytest --color=yes --log-format=%(asctime)s %(levelname)s %(message)s --log-date-format=%Y-%m-%d %H:%M:%S
+	@poetry run pytest --color=yes --log-format="%%(asctime)s %%(levelname)-18s %%(message)s" --log-date-format="%Y-%m-%d %H:%M:%S"
 
 coverage:
 	@poetry run coverage erase
