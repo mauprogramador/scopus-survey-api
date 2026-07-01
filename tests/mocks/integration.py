@@ -221,7 +221,7 @@ SEARCH_DETAILS_MORE_RESULTS = [
     response_mock(RAW_ABSTRACT_OK, headers=HEADERS),
 ]
 
-# ArticlesSimilarityFilter.filter
+# SimilarityFilter.filter
 
 ONE_GROUP_TWO_SIMILAR = [
     response_mock(search_raw(2)),
@@ -290,7 +290,7 @@ NO_REPEATED_AUTHORS = [
     response_mock(abstract_raw("any", "b", "2025-06-01")),
 ]
 
-# ScopusArticlesAggregator.retrieve_articles
+# SurveyOrchestrator.retrieve_articles
 
 ONE_DIFFERENT_ARTICLE = [
     response_mock(RAW_SEARCH_OK),

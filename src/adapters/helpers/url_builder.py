@@ -4,7 +4,7 @@ from src.core.common.types import (
     CombinationBundle,
     CombinationParams,
     Keyword,
-    SearchParams,
+    SurveyParams,
 )
 from src.core.config.scopus import (
     ARTICLE_PAGE_URL,
@@ -75,7 +75,7 @@ class URLBuilder:
 
         return CombinationBundle(combination=combination, url=url)
 
-    def search_url(self, params: SearchParams) -> str:
+    def search_url(self, params: SurveyParams) -> str:
         query_fields = params.model_dump(
             by_alias=True,
             exclude_unset=True,

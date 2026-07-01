@@ -6,14 +6,10 @@ from pytest_mock import MockerFixture as Mocker
 from src.core.common.types import ResponseBundle
 from src.core.config.scopus import BOOLEAN_OPERATOR
 from src.core.data.csv_builder import write_csv_file
-from src.core.data.serializers import ScopusHeaders, ScopusSearch
+from src.core.data.serializers import ScopusHeaders, ScopusPage
 from src.core.data.survey_details import SurveyDetails
-from src.core.use_cases.keyword_combination_finder import (
-    KeywordCombinationFinder,
-)
-from src.core.use_cases.scopus_articles_aggregator import (
-    ScopusArticlesAggregator,
-)
+from src.core.use_cases.keyword_scouter import KeywordsScouter
+from src.core.use_cases.survey_orchestrator import SurveyOrchestrator
 from src.utils import logger
 from tests.mocks.helpers import fqn, get_patch, spec
 from tests.mocks.integration import (
@@ -33,8 +29,8 @@ from tests.mocks.raw import (
 )
 
 
-LOG_QUOTA = spec(KeywordCombinationFinder, logger.quota, "logger")
-WRITE_CSV = fqn(ScopusArticlesAggregator, write_csv_file)
+LOG_QUOTA = spec(KeywordsScouter, logger.quota, "logger")
+WRITE_CSV = fqn(SurveyOrchestrator, write_csv_file)
 
 
 @mark.asyncio
@@ -88,7 +84,7 @@ async def test_search_details_one_result(mocker: Mocker, client: Client):
 
     assert res.status_code == spy_log.call_args_list[0].args[1] == HTTP_200
     assert isinstance(spy_log.call_args_list[0].args[0], ScopusHeaders)
-    assert isinstance(spy_search.call_args_list[0].args[1], ScopusSearch)
+    assert isinstance(spy_search.call_args_list[0].args[1], ScopusPage)
     assert search_bundle.headers == abstract_bundle.headers == HEADERS
     assert loss == 0.0
 
@@ -139,7 +135,7 @@ async def test_search_details_more_results(mocker: Mocker, client: Client):
 
     assert res.status_code == spy_log.call_args_list[0].args[1] == HTTP_200
     assert isinstance(spy_log.call_args_list[0].args[0], ScopusHeaders)
-    assert isinstance(spy_search.call_args_list[0].args[1], ScopusSearch)
+    assert isinstance(spy_search.call_args_list[0].args[1], ScopusPage)
     assert search_bundle.headers == abstract_bundle.headers == HEADERS
     assert loss == 2
 

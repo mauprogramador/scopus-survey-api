@@ -1,14 +1,14 @@
 import asyncio
 
-from src.adapters.helpers.scopus_response import validate_search_response
+from src.adapters.helpers.response_auditor import validate_search_response
 from src.core.common.types import (
     CombinationBundle,
     HTTPClient,
     Json,
-    QuotaResultsHandler,
     ResponseBundle,
-    SearchParams,
     SurveyDetails,
+    SurveyParams,
+    SurveyState,
     URLBuilder,
 )
 from src.core.data.enums import ExcMsg
@@ -27,7 +27,7 @@ class ScopusSearchAPI:
         http_client: HTTPClient,
         url_builder: URLBuilder,
         survey_details: SurveyDetails,
-        state: QuotaResultsHandler,
+        state: SurveyState,
     ) -> None:
         """Search and retrieve articles via the Scopus Search API"""
         self._http_client = http_client
@@ -128,7 +128,7 @@ class ScopusSearchAPI:
 
         self._details.set_search_quota(self._last_completed)
 
-    async def search_articles(self, params: SearchParams) -> None:
+    async def search_articles(self, params: SurveyParams) -> None:
         url = self._url_builder.search_url(params)
 
         res = await self._http_client.api_call(url)

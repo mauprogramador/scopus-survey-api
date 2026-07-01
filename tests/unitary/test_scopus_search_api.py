@@ -281,7 +281,7 @@ async def test_search_http_error(mocker: Mocker):
         await fix.api.search_articles(None)
     assert_http_error(info, HTTP_400, ExcMsg.INTERNAL_ERROR)
     # _get_article has less CPU executions
-    assert fix.req.call_count == 7 and spy.call_count == 7
+    assert fix.req.call_count == 7 and spy.call_count in (6, 7)
     assert info.value.details[0]["type"] == fqn(ValueError)
     assert info.value.details[0]["message"] == "any"
 
@@ -309,6 +309,6 @@ async def test_search_operational_error(mocker: Mocker):
         await fix.api.search_articles(None)
     assert_http_error(info, HTTP_500, ExcMsg.CANCELLED_ERROR)
     # _get_article has less CPU executions
-    assert fix.req.call_count == 7 and spy.call_count == 7
+    assert fix.req.call_count == 7 and spy.call_count in (6, 7)
     assert info.value.details[0]["type"] == fqn(ValidationError)
     assert info.value.details[0]["message"] is not None

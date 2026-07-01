@@ -12,11 +12,9 @@ from src.core.config.config import DIRECTORY, FILE
 from src.core.config.scopus import MAX_ITEMS_PER_PAGE
 from src.core.data.csv_builder import _COLUMN_TRANSLATION, write_csv_file
 from src.core.data.enums import Button, Lang
-from src.core.data.query_params import SearchParams
-from src.core.data.serializers import ScopusAbstract, ScopusSearch
-from src.core.use_cases.articles_similarity_filter import (
-    ArticlesSimilarityFilter,
-)
+from src.core.data.query_params import SurveyParams
+from src.core.data.serializers import ScopusAbstract, ScopusPage
+from src.core.use_cases.similarity_filter import SimilarityFilter
 from tests.mocks.helpers import (
     abstract_raw,
     get_patch,
@@ -67,7 +65,7 @@ def test_high_volume_data_parsing(total: int, elapsed: float):
 
     with _assert_time(elapsed):
         for raw in raw_list:
-            ScopusSearch(**raw)
+            ScopusPage(**raw)
 
     raw_list = [abstract_raw()] * total
     assert len(raw_list) == total
@@ -86,7 +84,7 @@ def test_high_volume_data_parsing(total: int, elapsed: float):
 
     with _assert_time(elapsed):
         # pylint: disable=W0212
-        df_subset = df.loc[:, ArticlesSimilarityFilter._COLUMNS].copy()
+        df_subset = df.loc[:, SimilarityFilter._COLUMNS].copy()
         assert df.shape[0] == total
 
         pd.to_datetime(
@@ -138,7 +136,7 @@ def test_high_volume_filtering_one_group(total: int, elapsed: float):
     assert df.shape[0] == total
 
     with _assert_time(elapsed):
-        df = ArticlesSimilarityFilter().filter(df, 80)  # default ratio
+        df = SimilarityFilter().filter(df, 80)  # default ratio
 
     assert df.shape[0] == 1 and df["date"].iloc[0] == "2026-01-02"
 
@@ -175,7 +173,7 @@ def test_high_volume_filtering_groups(total: int, elapsed: float):
     assert df.shape[0] == total
 
     with _assert_time(elapsed):
-        df = ArticlesSimilarityFilter().filter(df, 80)  # default ratio
+        df = SimilarityFilter().filter(df, 80)  # default ratio
 
     assert df.shape[0] == ngroups
 
@@ -205,7 +203,7 @@ async def test_high_volume_csv_download(
     df = pd.DataFrame([data] * total)
     assert df.shape[0] == total
 
-    write_csv_file(df, SearchParams(**ALIAS_SEARCH_PARAMS), ["any"])
+    write_csv_file(df, SurveyParams(**ALIAS_SEARCH_PARAMS), ["any"])
 
     with _assert_time(elapsed):
         res = await client.get(URL_CSV, params=CSV_PARAMS)

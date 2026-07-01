@@ -10,9 +10,7 @@ from pytest import mark
 from pytest_mock import MockerFixture as Mocker
 
 from src.core.data.enums import ExcMsg
-from src.core.use_cases.articles_similarity_filter import (
-    ArticlesSimilarityFilter,
-)
+from src.core.use_cases.similarity_filter import SimilarityFilter
 from src.utils import logger
 from tests.conftest import assert_error_json
 from tests.mocks.helpers import (
@@ -41,15 +39,15 @@ from tests.mocks.raw import (
 )
 
 
-TO_DATETIME = fqn(ArticlesSimilarityFilter, pd.to_datetime, "pd")
-LOG_DEBUG = spec(ArticlesSimilarityFilter, logger.debug, "logger")
+TO_DATETIME = fqn(SimilarityFilter, pd.to_datetime, "pd")
+LOG_DEBUG = spec(SimilarityFilter, logger.debug, "logger")
 IDXMAX = Patch(Series.idxmax)
 
 
 @mark.asyncio
 async def test_one_group_two_similar_titles(mocker: Mocker, client: Client):
     mock = mocker.patch(*get_patch(ONE_GROUP_TWO_SIMILAR))
-    spy = mocker.spy(ArticlesSimilarityFilter, "_get_single_group_index")
+    spy = mocker.spy(SimilarityFilter, "_get_single_group_index")
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     spy.assert_called_once()
 
@@ -63,7 +61,7 @@ async def test_one_group_two_similar_titles(mocker: Mocker, client: Client):
 @mark.asyncio
 async def test_one_group_more_similar_titles(mocker: Mocker, client: Client):
     mock = mocker.patch(*get_patch(ONE_GROUP_MORE_SIMILAR))
-    spy = mocker.spy(ArticlesSimilarityFilter, "_get_single_group_index")
+    spy = mocker.spy(SimilarityFilter, "_get_single_group_index")
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     spy.assert_called_once()
 
@@ -77,7 +75,7 @@ async def test_one_group_more_similar_titles(mocker: Mocker, client: Client):
 @mark.asyncio
 async def test_one_group_no_similar_titles(mocker: Mocker, client: Client):
     mock = mocker.patch(*get_patch(ONE_GROUP_NO_SIMILAR))
-    spy = mocker.spy(ArticlesSimilarityFilter, "_get_single_group_index")
+    spy = mocker.spy(SimilarityFilter, "_get_single_group_index")
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     spy.assert_called_once()
     assert res.status_code == HTTP_200 and mock.call_count == 3
@@ -88,7 +86,7 @@ async def test_one_group_no_similar_titles(mocker: Mocker, client: Client):
 @mark.asyncio
 async def test_more_groups_two_similar_titles(mocker: Mocker, client: Client):
     mock = mocker.patch(*get_patch(MORE_GROUPS_TWO_SIMILAR))
-    spy = mocker.spy(ArticlesSimilarityFilter, "_get_single_group_index")
+    spy = mocker.spy(SimilarityFilter, "_get_single_group_index")
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     spy.assert_not_called()
 
@@ -103,7 +101,7 @@ async def test_more_groups_two_similar_titles(mocker: Mocker, client: Client):
 @mark.asyncio
 async def test_more_groups_more_similar_titles(mocker: Mocker, client: Client):
     mock = mocker.patch(*get_patch(MORE_GROUPS_MORE_SIMILAR))
-    spy = mocker.spy(ArticlesSimilarityFilter, "_get_single_group_index")
+    spy = mocker.spy(SimilarityFilter, "_get_single_group_index")
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     spy.assert_not_called()
 
@@ -118,7 +116,7 @@ async def test_more_groups_more_similar_titles(mocker: Mocker, client: Client):
 @mark.asyncio
 async def test_more_groups_no_similar_titles(mocker: Mocker, client: Client):
     mock = mocker.patch(*get_patch(MORE_GROUPS_NO_SIMILAR))
-    spy = mocker.spy(ArticlesSimilarityFilter, "_get_single_group_index")
+    spy = mocker.spy(SimilarityFilter, "_get_single_group_index")
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     spy.assert_not_called()
 

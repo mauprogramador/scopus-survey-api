@@ -5,15 +5,15 @@ from src.adapters.presenters.csv_response import csv_response
 from src.core.common.types import (
     AbstractAPI,
     SearchAPI,
-    SearchParams,
     SimilarityFilter,
     SurveyDetails,
+    SurveyParams,
 )
 from src.core.data.csv_builder import write_csv_file
 from src.utils import logger
 
 
-class ScopusArticlesAggregator:
+class SurveyOrchestrator:
     """Gathers, filters and compiles data from Scopus articles"""
 
     _COLUMNS = ["title", "authors"]
@@ -34,7 +34,7 @@ class ScopusArticlesAggregator:
         self._details = survey_details
         self._docs: DataFrame = None
 
-    async def retrieve_articles(self, params: SearchParams) -> FileResponse:
+    async def retrieve_articles(self, params: SurveyParams) -> FileResponse:
         self._details.set_combination(params.combination)
 
         try:

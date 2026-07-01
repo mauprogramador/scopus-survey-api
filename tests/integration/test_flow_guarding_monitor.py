@@ -5,8 +5,8 @@ from pytest_mock import MockerFixture as Mocker
 from starlette.middleware.base import _StreamingResponse
 
 from src.adapters.presenters.csv_response import retrieve_csv
+from src.adapters.presenters.jinja_response import get_not_found_template
 from src.adapters.presenters.json_response import ErrorJSON
-from src.adapters.presenters.template_response import get_not_found_template
 from src.core.config.config import HEADERS, RATELIMIT_POLICY, SERVER
 from src.core.data.enums import ExcMsg
 from src.framework.fastapi.csrf_token import generate_csrf_token

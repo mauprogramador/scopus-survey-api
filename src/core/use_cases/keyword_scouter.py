@@ -9,7 +9,7 @@ from src.core.data.survey_details import SurveyDetails
 from src.utils import logger
 
 
-class KeywordCombinationFinder:
+class KeywordsScouter:
     """Map all keyword combination and survey their total in Scopus"""
 
     _START = 1

@@ -8,7 +8,7 @@ from thefuzz.fuzz import ratio as fuzz_ratio  # type: ignore
 from src.utils import logger
 
 
-class ArticlesSimilarityFilter:
+class SimilarityFilter:
     """Filter articles from identical authors with similar titles"""
 
     _COLUMNS = ["authors", "title", "date"]

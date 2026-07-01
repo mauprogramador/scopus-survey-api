@@ -6,7 +6,7 @@ from fastapi.staticfiles import StaticFiles
 from tqdm.contrib.logging import logging_redirect_tqdm
 
 from src import __version__
-from src.adapters.presenters.template_response import build_all_templates
+from src.adapters.presenters.jinja_response import build_all_templates
 from src.core.config.config import DIRECTORY, ENV, LIMITER
 from src.core.domain.translations import load_translations
 from src.framework.fastapi.routes import favicon_router, router
@@ -20,7 +20,7 @@ from src.framework.fastapi.swagger import (
 from src.framework.middleware import (
     HANDLERS,
     FlowGuardingMonitorMiddleware,
-    ProxyForwardedHeadersMiddleware,
+    ProxyForwardedResolverMiddleware,
 )
 from src.utils import logger
 
@@ -58,7 +58,7 @@ app = FastAPI(
 app.state.limiter = LIMITER
 
 
-app.add_middleware(ProxyForwardedHeadersMiddleware)
+app.add_middleware(ProxyForwardedResolverMiddleware)
 app.add_middleware(FlowGuardingMonitorMiddleware)
 
 app.add_middleware(

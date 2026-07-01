@@ -1,7 +1,7 @@
 from pydantic_core import ValidationError
 from pytest import raises
 
-from src.adapters.helpers.scopus_response import validate_search_response
+from src.adapters.helpers.response_auditor import validate_search_response
 from src.core.common.types import ResponseBundle
 from src.core.config.scopus import QUOTA_ERROR_CODE, RATE_LIMIT_ERROR_CODE
 from src.core.data.enums import ExcMsg

@@ -2,7 +2,7 @@ from datetime import datetime
 
 from pandas import DataFrame
 
-from src.core.common.types import SearchParams
+from src.core.common.types import SurveyParams
 from src.core.config.config import DIRECTORY, FILE
 from src.core.config.scopus import BOOLEAN_OPERATOR, DATA_SOURCE_NOTE
 
@@ -26,7 +26,7 @@ _COLUMN_TRANSLATION = {
 
 
 def write_csv_file(
-    docs: DataFrame, params: SearchParams, metadata: list[str]
+    docs: DataFrame, params: SurveyParams, metadata: list[str]
 ) -> str:
     csv_metadata = {"GeneratedBy": _GENERATED_BY}
 

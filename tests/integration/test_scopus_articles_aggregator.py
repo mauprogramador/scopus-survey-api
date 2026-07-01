@@ -6,9 +6,7 @@ from pytest import mark
 from pytest_mock import MockerFixture as Mocker
 
 from src.core.data.survey_details import SurveyDetails
-from src.core.use_cases.articles_similarity_filter import (
-    ArticlesSimilarityFilter,
-)
+from src.core.use_cases.similarity_filter import SimilarityFilter
 from tests.mocks.helpers import get_patch, load_csv_from_response
 from tests.mocks.integration import (
     EXACT_DUPLICATES,
@@ -23,7 +21,7 @@ from tests.mocks.raw import HTTP_200, SEARCH_PARAMS, URL_SEARCH
 async def test_one_row(mocker: Mocker, client: Client):
     mock = mocker.patch(*get_patch(ONE_DIFFERENT_ARTICLE))
     spy_drop = mocker.spy(DataFrame, "drop_duplicates")
-    spy_filter = mocker.spy(ArticlesSimilarityFilter, "filter")
+    spy_filter = mocker.spy(SimilarityFilter, "filter")
     spy_loss = mocker.spy(SurveyDetails, "set_loss")
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
 
@@ -39,7 +37,7 @@ async def test_one_row(mocker: Mocker, client: Client):
 async def test_more_rows(mocker: Mocker, client: Client):
     mock = mocker.patch(*get_patch(MORE_DIFFERENT_ARTICLES))
     spy_drop = mocker.spy(DataFrame, "drop_duplicates")
-    spy_filter = mocker.spy(ArticlesSimilarityFilter, "filter")
+    spy_filter = mocker.spy(SimilarityFilter, "filter")
     spy_loss = mocker.spy(SurveyDetails, "set_loss")
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
 
@@ -56,7 +54,7 @@ async def test_drop_exact_duplicates(mocker: Mocker, client: Client):
     mock = mocker.patch(*get_patch(EXACT_DUPLICATES))
     spy_drop = mocker.spy(DataFrame, "drop_duplicates")
     spy_reset = mocker.spy(DataFrame, "reset_index")
-    spy_filter = mocker.spy(ArticlesSimilarityFilter, "filter")
+    spy_filter = mocker.spy(SimilarityFilter, "filter")
     spy_loss = mocker.spy(SurveyDetails, "set_loss")
 
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
@@ -77,7 +75,7 @@ async def test_drop_same_title_and_authors(mocker: Mocker, client: Client):
     mock = mocker.patch(*get_patch(SAME_TITLE_AND_AUTHORS))
     spy_drop = mocker.spy(DataFrame, "drop_duplicates")
     spy_reset = mocker.spy(DataFrame, "reset_index")
-    spy_filter = mocker.spy(ArticlesSimilarityFilter, "filter")
+    spy_filter = mocker.spy(SimilarityFilter, "filter")
     spy_loss = mocker.spy(SurveyDetails, "set_loss")
 
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
@@ -96,7 +94,7 @@ async def test_drop_same_title_and_authors(mocker: Mocker, client: Client):
 @mark.asyncio
 async def test_non_ratio(mocker: Mocker, client: Client):
     mock = mocker.patch(*get_patch(MORE_DIFFERENT_ARTICLES))
-    spy_filter = mocker.spy(ArticlesSimilarityFilter, "filter")
+    spy_filter = mocker.spy(SimilarityFilter, "filter")
 
     mocker.patch.dict(SEARCH_PARAMS, {"ratio": 0})
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)

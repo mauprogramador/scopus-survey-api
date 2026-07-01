@@ -1,5 +1,5 @@
 from gettext import GNUTranslations
-from typing import Annotated, Any, NamedTuple, Protocol, TypeAlias, TypeVar
+from typing import Annotated, Any, NamedTuple, Protocol, TypeAlias
 
 from pandas import DataFrame
 from pydantic import BaseModel, Field
@@ -30,8 +30,6 @@ Json: TypeAlias = dict[str, Any]
 Articles: TypeAlias = list[dict[str, str]]
 
 Translations: TypeAlias = dict[Lang, GNUTranslations]
-
-ScopusModel = TypeVar("ScopusModel", bound=BaseModel)
 
 Token: TypeAlias = Annotated[
     str, Field(pattern=_TOKEN_PATTERN, min_length=64, max_length=64)
@@ -66,7 +64,7 @@ class CombinationParams(Protocol):
         pass
 
 
-class SearchParams(CombinationParams):
+class SurveyParams(CombinationParams):
     combination: str
     ratio: int
 
@@ -89,7 +87,7 @@ class ScopusEntry(Protocol):
     scopus_id: str
 
 
-class ScopusSearch(Protocol):
+class ScopusPage(Protocol):
     total_results: int
     items_per_page: int
     entry: list[ScopusEntry]
@@ -111,7 +109,7 @@ class SurveyDetails(Protocol):
     def set_combination(self, combination: str) -> None:
         pass
 
-    def set_search_data(self, scopus_search: ScopusSearch) -> None:
+    def set_search_data(self, scopus_search: ScopusPage) -> None:
         pass
 
     def set_search_quota(self, res: ResponseBundle) -> None:
@@ -130,7 +128,7 @@ class SurveyDetails(Protocol):
         pass
 
 
-class QuotaResultsHandler(Protocol):
+class SurveyState(Protocol):
     total_results: int
     items_per_page: int
     entry: list[ScopusEntry]
@@ -143,7 +141,7 @@ class QuotaResultsHandler(Protocol):
     abstracts_to_fetch: int
     abstracts_to_fetch_range: range
 
-    def set_first_search(self, first_search: ScopusSearch) -> None:
+    def set_first_search(self, first_search: ScopusPage) -> None:
         pass
 
     def validate_integrity(self) -> None:
@@ -182,7 +180,7 @@ class URLBuilder(Protocol):
     ) -> CombinationBundle:
         pass
 
-    def search_url(self, params: SearchParams) -> str:
+    def search_url(self, params: SurveyParams) -> str:
         pass
 
     def pagination_url(self, page: int) -> str:
@@ -203,7 +201,7 @@ class SearchAPI(Protocol):
     ) -> list[Json]:
         pass
 
-    async def search_articles(self, params: SearchParams) -> None:
+    async def search_articles(self, params: SurveyParams) -> None:
         pass
 
 

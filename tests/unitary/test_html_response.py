@@ -4,14 +4,14 @@ import jinja2
 from fastapi.templating import Jinja2Templates
 from pytest_mock import MockerFixture as Mocker
 
-from src.adapters.presenters.json_response import ErrorJSON
-from src.adapters.presenters.template_response import (
+from src.adapters.presenters.jinja_response import (
     _DIST_DIR,
     _INDEX_FILENAMES,
     build_all_templates,
     get_not_found_template,
     get_web_form_template,
 )
+from src.adapters.presenters.json_response import ErrorJSON
 from src.core.config.config import META_INFO
 from src.core.data.enums import ExcMsg, Lang
 from src.core.domain.translations import load_translations

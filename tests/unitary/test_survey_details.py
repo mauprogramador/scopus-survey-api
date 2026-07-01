@@ -1,6 +1,6 @@
 from src.core.common.types import ResponseBundle
 from src.core.config.scopus import BOOLEAN_OPERATOR
-from src.core.data.serializers import ScopusSearch
+from src.core.data.serializers import ScopusPage
 from src.core.data.survey_details import SurveyDetails
 from tests.mocks.raw import (
     HTTP_200,
@@ -27,7 +27,7 @@ def test_combination():
 
 
 def test_search_data():
-    model = ScopusSearch(**RAW_SEARCH_OK)
+    model = ScopusPage(**RAW_SEARCH_OK)
     SURVEY_DETAIL.set_search_data(model)
     assert SURVEY_DETAIL.headers["X-Total"] == "1"
     assert SURVEY_DETAIL.headers["X-Items-Per-Page"] == "1"

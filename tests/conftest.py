@@ -13,8 +13,8 @@ from pytest_asyncio import fixture as async_fixture
 from pytest_mock import MockerFixture as Mocker
 
 from src.adapters.helpers.http_client import HTTPClient
+from src.adapters.presenters.jinja_response import build_all_templates
 from src.adapters.presenters.json_response import ErrorJSON, ErrorResponse
-from src.adapters.presenters.template_response import build_all_templates
 from src.core.common.types import Json
 from src.core.config.config import DIRECTORY, PREFIX, SERVER
 from src.core.domain.http_exceptions import HTTPError

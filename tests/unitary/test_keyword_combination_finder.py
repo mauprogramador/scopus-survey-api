@@ -11,9 +11,7 @@ from src.core.common.types import Json
 from src.core.data.enums import Button
 from src.core.data.query_params import CombinationParams
 from src.core.data.survey_details import SurveyDetails
-from src.core.use_cases.keyword_combination_finder import (
-    KeywordCombinationFinder,
-)
+from src.core.use_cases.keyword_scouter import KeywordsScouter
 from tests.mocks.helpers import (
     Patch,
     mock_combination_url,
@@ -22,7 +20,7 @@ from tests.mocks.helpers import (
 from tests.mocks.raw import API_KEY, HTTP_200, KEYWORDS, LOG_QUOTA
 
 
-COMBINATION_FINDER = KeywordCombinationFinder(
+COMBINATION_FINDER = KeywordsScouter(
     MagicMock(
         URLBuilder,
         combination_url=Mock(

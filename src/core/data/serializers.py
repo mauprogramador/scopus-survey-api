@@ -50,7 +50,7 @@ class ScopusEntry(BaseModel):
     )
 
 
-class ScopusSearch(BaseModel):
+class ScopusPage(BaseModel):
     """Serialize the Scopus Search API JSON response"""
 
     model_config = ConfigDict(str_strip_whitespace=True)

@@ -12,7 +12,7 @@ from src.core.data.serializers import (
     ScopusEntry,
     ScopusError,
     ScopusHeaders,
-    ScopusSearch,
+    ScopusPage,
 )
 from tests.mocks.helpers import search_raw
 from tests.mocks.raw import (
@@ -43,25 +43,25 @@ def test_scopus_entry_raise_errors():
 
 
 def test_scopus_search_valid_data():
-    model = ScopusSearch(**search_raw(156, 1))
+    model = ScopusPage(**search_raw(156, 1))
     assert model.total_results == 156 and model.items_per_page == 25
     assert model.pages_count == 7 and len(model.entry) == 1
 
 
 def test_scopus_search_raise_errors():
     with raises(ValidationError) as info:
-        ScopusSearch(**{"search-results": {}})
+        ScopusPage(**{"search-results": {}})
     assert len(info.value.errors()) == 3
 
 
 def test_scopus_search_key_error():
     with raises(KeyError) as info:
-        ScopusSearch(**{"any": "any"})
+        ScopusPage(**{"any": "any"})
     assert info.value.args[0] == "search-results"
 
 
 def test_scopus_search_empty_result():
-    model = ScopusSearch(**RAW_SEARCH_NOT_FOUND)
+    model = ScopusPage(**RAW_SEARCH_NOT_FOUND)
     assert model.total_results == 0 and model.items_per_page == 0
     assert len(model.entry) == 0
 

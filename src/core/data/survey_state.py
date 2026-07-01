@@ -2,11 +2,11 @@ import math
 
 from src.core.common.types import Json, Quota
 from src.core.data.enums import ExcMsg
-from src.core.data.serializers import ScopusEntry, ScopusSearch
+from src.core.data.serializers import ScopusEntry, ScopusPage
 from src.core.domain.http_exceptions import BadGateway, NotFound
 
 
-class QuotaResultsHandler:
+class SurveyState:
     """Gathers the Scopus data while managing the quotas"""
 
     _FIRST_RESULT = 1
@@ -40,7 +40,7 @@ class QuotaResultsHandler:
     def abstracts_to_fetch_range(self) -> range:
         return range(self._FIRST_RESULT, self.total_abstracts)
 
-    def set_first_search(self, first_search: ScopusSearch) -> None:
+    def set_first_search(self, first_search: ScopusPage) -> None:
         self.total_results = first_search.total_results
         self.items_per_page = first_search.items_per_page
         self.entry = [*first_search.entry]

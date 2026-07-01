@@ -22,16 +22,12 @@ from src.adapters.helpers.url_builder import URLBuilder
 from src.core.common.types import CombinationBundle, Json, ResponseBundle
 from src.core.config.config import DIRECTORY
 from src.core.config.scopus import MAX_ITEMS_PER_PAGE
-from src.core.data.quota_results_handler import QuotaResultsHandler
-from src.core.data.serializers import ScopusSearch
+from src.core.data.serializers import ScopusPage
 from src.core.data.survey_details import SurveyDetails
+from src.core.data.survey_state import SurveyState
 from src.core.domain.translations import translate_error
-from src.core.use_cases.articles_similarity_filter import (
-    ArticlesSimilarityFilter,
-)
-from src.core.use_cases.scopus_articles_aggregator import (
-    ScopusArticlesAggregator,
-)
+from src.core.use_cases.similarity_filter import SimilarityFilter
+from src.core.use_cases.survey_orchestrator import SurveyOrchestrator
 from tests.mocks.raw import (
     CSV_FILE_NAME,
     HTTP_200,
@@ -85,17 +81,17 @@ async def mock_survey_totals_found(
 
 
 def mock_filter(dataframe: DataFrame, *_) -> DataFrame:
-    """Mock ArticlesSimilarityFilter.filter"""
+    """Mock SimilarityFilter.filter"""
     return dataframe
 
 
 async def mock_survey_combinations(*_) -> JSONResponse:
-    """Mock KeywordCombinationFinder.survey_combinations"""
+    """Mock KeywordsScouter.survey_combinations"""
     return JSONResponse({"Any": "any"})
 
 
 async def mock_retrieve_articles(*_) -> FileResponse:
-    """Mock ScopusArticlesAggregator.retrieve_articles"""
+    """Mock SurveyOrchestrator.retrieve_articles"""
     return FileResponse(DIRECTORY / CSV_FILE_NAME)
 
 
@@ -280,7 +276,7 @@ class APIsFix:
         self,
         request: AsyncMock,
         details: SurveyDetails,
-        state: QuotaResultsHandler,
+        state: SurveyState,
         api: ScopusSearchAPI | ScopusAbstractRetrievalAPI,
     ) -> None:
         """Context for ScopusAPIs and its dependencies"""
@@ -291,27 +287,27 @@ class APIsFix:
 
 
 class AggFix:
-    """Context for ScopusArticlesAggregator and its dependencies"""
+    """Context for SurveyOrchestrator and its dependencies"""
 
     def __init__(
         self,
-        use_case: ScopusArticlesAggregator,
+        use_case: SurveyOrchestrator,
         similarity_filter: Mock,
         set_loss: Mock,
     ) -> None:
-        """Context for ScopusArticlesAggregator and its dependencies"""
+        """Context for SurveyOrchestrator and its dependencies"""
         self.use_case = use_case
         self.filter = similarity_filter
         self.set_loss = set_loss
 
 
-class MockState(QuotaResultsHandler):
-    """Mock QuotaResultsHandler"""
+class MockState(SurveyState):
+    """Mock SurveyState"""
 
     def __init__(
         self, responses_count: int = None, total_results: int = None
     ) -> None:
-        """Mock QuotaResultsHandler"""
+        """Mock SurveyState"""
         super().__init__()
         self._mock_abstracts_to_fetch = responses_count
         self._mock_total_abstracts = total_results
@@ -404,7 +400,7 @@ def abstract_fix(
     value: Any | Exception, first_search: Json, responses_count: int = None
 ) -> APIsFix:
     """Fixture for ScopusAbstractAPI and its dependencies"""
-    search_results = ScopusSearch(**first_search)
+    search_results = ScopusPage(**first_search)
 
     details = SurveyDetails()
     details.set_search_data(search_results)
@@ -431,21 +427,19 @@ def abstract_fix(
 
 
 def aggregator_fix(value: DataFrame) -> AggFix:
-    """Fixture for ScopusArticlesAggregator and its dependencies"""
+    """Fixture for SurveyOrchestrator and its dependencies"""
     retrieve = AsyncMock(
         ScopusAbstractRetrievalAPI.retrieve_abstracts, return_value=value
     )
-    similarity_filter = Mock(
-        ArticlesSimilarityFilter.filter, side_effect=mock_filter
-    )
+    similarity_filter = Mock(SimilarityFilter.filter, side_effect=mock_filter)
     set_loss = Mock(SurveyDetails().set_loss)
-    use_case = ScopusArticlesAggregator(
+    use_case = SurveyOrchestrator(
         AsyncMock(ScopusSearchAPI, http_client=AsyncMock(HTTPClient)),
         AsyncMock(
             ScopusAbstractRetrievalAPI,
             retrieve_abstracts=retrieve,
         ),
-        MagicMock(ArticlesSimilarityFilter, filter=similarity_filter),
+        MagicMock(SimilarityFilter, filter=similarity_filter),
         MagicMock(
             SurveyDetails,
             set_loss=set_loss,

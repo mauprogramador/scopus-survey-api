@@ -10,10 +10,10 @@ from pytest_mock import MockerFixture as Mocker
 from src.adapters.gateway.scopus_abstract_retrieval_api import (
     ScopusAbstractRetrievalAPI,
 )
-from src.adapters.helpers.scopus_response import validate_abstract_response
+from src.adapters.helpers.response_auditor import validate_abstract_response
 from src.core.config.scopus import QUOTA_ERROR_CODE
 from src.core.data.enums import ExcMsg
-from src.core.data.quota_results_handler import QuotaResultsHandler
+from src.core.data.survey_state import SurveyState
 from src.core.domain.factory import make_aggregator
 from src.utils.progress_bar import ProgressBar
 from tests.conftest import assert_error_json
@@ -54,7 +54,7 @@ from tests.mocks.raw import (
 )
 
 
-STATE = fqn(make_aggregator, QuotaResultsHandler)
+STATE = fqn(make_aggregator, SurveyState)
 ABSTRACT_RES = fqn(ScopusAbstractRetrievalAPI, validate_abstract_response)
 STEP = Patch(ScopusAbstractRetrievalAPI, ProgressBar.step, "ProgressBar")
 
@@ -179,7 +179,7 @@ async def test_retrieve_quota_exceed(mocker: Mocker, client: Client):
 @mark.asyncio
 async def test_retrieve_no_tasks(mocker: Mocker, client: Client):
     mocker.patch(
-        f"{fqn(QuotaResultsHandler)}.abstracts_to_fetch_range",
+        f"{fqn(SurveyState)}.abstracts_to_fetch_range",
         PropertyMock(return_value=range(0)),
     )
     mock = mocker.patch(*get_patch(RETRIEVE_MORE_ABSTRACTS))

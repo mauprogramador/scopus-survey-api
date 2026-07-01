@@ -13,11 +13,9 @@ from pytest_mock import MockerFixture as Mocker
 
 from src.adapters.helpers.http_client import HTTPClient
 from src.core.data.enums import ExcMsg
-from src.core.data.quota_results_handler import QuotaResultsHandler
+from src.core.data.survey_state import SurveyState
 from src.core.domain.factory import make_aggregator
-from src.core.use_cases.keyword_combination_finder import (
-    KeywordCombinationFinder,
-)
+from src.core.use_cases.keyword_scouter import KeywordsScouter
 from tests.conftest import assert_error_json
 from tests.mocks.helpers import fqn, get_patch, mock_from_iterable
 from tests.mocks.integration import (
@@ -40,8 +38,8 @@ from tests.mocks.raw import (
 )
 
 
-STATE = fqn(make_aggregator, QuotaResultsHandler)
-CHAIN = fqn(KeywordCombinationFinder, itertools.chain, "itertools")
+STATE = fqn(make_aggregator, SurveyState)
+CHAIN = fqn(KeywordsScouter, itertools.chain, "itertools")
 REQUEST = fqn(aiohttp.ClientSession.request)
 SLEEP = fqn(HTTPClient, asyncio.sleep, "asyncio")
 

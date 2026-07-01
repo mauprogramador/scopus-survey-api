@@ -9,14 +9,12 @@ from pytest import mark
 from pytest_mock import MockerFixture as Mocker
 
 from src.adapters.gateway.scopus_search_api import ScopusSearchAPI
-from src.adapters.helpers.scopus_response import validate_search_response
+from src.adapters.helpers.response_auditor import validate_search_response
 from src.core.config.scopus import QUOTA_ERROR_CODE
 from src.core.data.enums import ExcMsg
-from src.core.data.quota_results_handler import QuotaResultsHandler
+from src.core.data.survey_state import SurveyState
 from src.core.domain.factory import make_aggregator
-from src.core.use_cases.keyword_combination_finder import (
-    KeywordCombinationFinder,
-)
+from src.core.use_cases.keyword_scouter import KeywordsScouter
 from src.utils.progress_bar import ProgressBar
 from tests.conftest import assert_error_json
 from tests.mocks.errors import (
@@ -66,10 +64,10 @@ from tests.mocks.raw import (
 )
 
 
-STATE = fqn(make_aggregator, QuotaResultsHandler)
+STATE = fqn(make_aggregator, SurveyState)
 SEARCH_RES = fqn(ScopusSearchAPI, validate_search_response)
 STEP = Patch(ScopusSearchAPI, ProgressBar.step, "ProgressBar")
-CHAIN = fqn(KeywordCombinationFinder, itertools.chain, "itertools")
+CHAIN = fqn(KeywordsScouter, itertools.chain, "itertools")
 
 
 @mark.asyncio

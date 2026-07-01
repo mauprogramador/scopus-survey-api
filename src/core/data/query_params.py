@@ -195,7 +195,7 @@ class CombinationParams(CSVParams):
         return f"{self.start_year}-{self.end_year}"
 
 
-class SearchParams(CombinationParams):
+class SurveyParams(CombinationParams):
     """Validate query params for survey articles"""
 
     model_config = ConfigDict(extra="forbid", str_strip_whitespace=True)

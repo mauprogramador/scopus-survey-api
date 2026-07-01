@@ -6,18 +6,12 @@ from src.adapters.gateway.scopus_abstract_retrieval_api import (
 from src.adapters.gateway.scopus_search_api import ScopusSearchAPI
 from src.adapters.helpers.http_client import HTTPClient
 from src.adapters.helpers.url_builder import URLBuilder
-from src.core.data.quota_results_handler import QuotaResultsHandler
 from src.core.data.survey_details import SurveyDetails
+from src.core.data.survey_state import SurveyState
 from src.core.domain.factory import make_aggregator, make_combinator
-from src.core.use_cases.articles_similarity_filter import (
-    ArticlesSimilarityFilter,
-)
-from src.core.use_cases.keyword_combination_finder import (
-    KeywordCombinationFinder,
-)
-from src.core.use_cases.scopus_articles_aggregator import (
-    ScopusArticlesAggregator,
-)
+from src.core.use_cases.keyword_scouter import KeywordsScouter
+from src.core.use_cases.similarity_filter import SimilarityFilter
+from src.core.use_cases.survey_orchestrator import SurveyOrchestrator
 
 
 @mark.asyncio
@@ -34,7 +28,7 @@ async def test_make_combinator():
     search_api_details = getattr(search_api, "_details")
     state = getattr(search_api, "_state")
 
-    assert use_case and isinstance(use_case, KeywordCombinationFinder)
+    assert use_case and isinstance(use_case, KeywordsScouter)
     assert search_api and isinstance(search_api, ScopusSearchAPI)
     assert client and isinstance(client, HTTPClient)
     assert search_api_builder and search_api_details
@@ -67,9 +61,9 @@ async def test_make_aggregator():
     abstract_details = getattr(abstract_api, "_details")
     abstract_state = getattr(abstract_api, "_state")
 
-    assert use_case and isinstance(use_case, ScopusArticlesAggregator)
+    assert use_case and isinstance(use_case, SurveyOrchestrator)
     assert similarity_filter and isinstance(
-        similarity_filter, ArticlesSimilarityFilter
+        similarity_filter, SimilarityFilter
     )
     assert search_api and isinstance(search_api, ScopusSearchAPI)
     assert abstract_api and isinstance(
@@ -87,5 +81,5 @@ async def test_make_aggregator():
     assert search_details and isinstance(search_details, SurveyDetails)
     assert id(search_details) == id(abstract_details) == id(use_case_details)
 
-    assert search_state and isinstance(search_state, QuotaResultsHandler)
+    assert search_state and isinstance(search_state, SurveyState)
     assert id(search_state) == id(abstract_state)

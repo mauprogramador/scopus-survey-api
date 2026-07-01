@@ -1,8 +1,8 @@
-from .articles_similarity_filter import ArticlesSimilarityFilter
-from .scopus_articles_aggregator import ScopusArticlesAggregator
+from .similarity_filter import SimilarityFilter
+from .survey_orchestrator import SurveyOrchestrator
 
 
 __all__ = [
-    "ArticlesSimilarityFilter",
-    "ScopusArticlesAggregator",
+    "SimilarityFilter",
+    "SurveyOrchestrator",
 ]

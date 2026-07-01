@@ -1,8 +1,8 @@
 from pytest import raises
 
 from src.core.data.enums import ExcMsg
-from src.core.data.quota_results_handler import QuotaResultsHandler
-from src.core.data.serializers import ScopusSearch
+from src.core.data.serializers import ScopusPage
+from src.core.data.survey_state import SurveyState
 from src.core.domain.http_exceptions import (
     BadGateway,
     NotFound,
@@ -19,11 +19,11 @@ from tests.mocks.raw import (
 )
 
 
-STATE = QuotaResultsHandler()
+STATE = SurveyState()
 
 
 def test_search_valid_data():
-    first_search = ScopusSearch(**search_raw(7, 1))
+    first_search = ScopusPage(**search_raw(7, 1))
     STATE.set_first_search(first_search)
 
     assert STATE.total_results == 7 and STATE.items_per_page == 7
@@ -32,20 +32,20 @@ def test_search_valid_data():
 
 
 def test_search_not_found():
-    first_search = ScopusSearch(**RAW_SEARCH_NOT_FOUND)
+    first_search = ScopusPage(**RAW_SEARCH_NOT_FOUND)
     with raises(NotFound) as info:
         STATE.set_first_search(first_search)
     assert_http_error(info, HTTP_404, ExcMsg.ARTICLES_NOT_FOUND)
 
 
 def test_validate_integrity():
-    first_search = ScopusSearch(**search_raw(1))
+    first_search = ScopusPage(**search_raw(1))
     STATE.set_first_search(first_search)
     STATE.validate_integrity()
 
 
 def test_validate_integrity_error():
-    first_search = ScopusSearch(**search_raw(156, 1))
+    first_search = ScopusPage(**search_raw(156, 1))
     STATE.set_first_search(first_search)
     with raises(BadGateway) as info:
         STATE.validate_integrity()
@@ -53,7 +53,7 @@ def test_validate_integrity_error():
 
 
 def test_fix_total():
-    first_search = ScopusSearch(**search_raw(156, 1))
+    first_search = ScopusPage(**search_raw(156, 1))
     STATE.set_first_search(first_search)
     STATE.fix_total()
 
@@ -61,7 +61,7 @@ def test_fix_total():
 
 
 def test_search_quota_greater():
-    first_search = ScopusSearch(**search_raw(156, 1))
+    first_search = ScopusPage(**search_raw(156, 1))
     STATE.set_first_search(first_search)
 
     assert STATE.total_results == 156 and STATE.items_per_page == 25
@@ -77,7 +77,7 @@ def test_search_quota_greater():
 
 
 def test_search_quota_lesses():
-    first_search = ScopusSearch(**search_raw(156, 1))
+    first_search = ScopusPage(**search_raw(156, 1))
     STATE.set_first_search(first_search)
 
     assert STATE.total_results == 156 and STATE.items_per_page == 25
@@ -90,7 +90,7 @@ def test_search_quota_lesses():
 
 
 def test_search_quota_exceeded():
-    first_search = ScopusSearch(**search_raw(156, 1))
+    first_search = ScopusPage(**search_raw(156, 1))
     STATE.set_first_search(first_search)
 
     assert STATE.total_results == 156 and STATE.items_per_page == 25
@@ -103,7 +103,7 @@ def test_search_quota_exceeded():
 
 
 def test_abstract_quota_greater():
-    first_search = ScopusSearch(**search_raw(156, 7))
+    first_search = ScopusPage(**search_raw(156, 7))
     STATE.set_first_search(first_search)
     STATE.fix_total()
 
@@ -119,7 +119,7 @@ def test_abstract_quota_greater():
 
 
 def test_abstract_quota_lesser():
-    first_search = ScopusSearch(**search_raw(156, 7))
+    first_search = ScopusPage(**search_raw(156, 7))
     STATE.set_first_search(first_search)
     STATE.fix_total()
 
@@ -132,7 +132,7 @@ def test_abstract_quota_lesser():
 
 
 def test_abstract_quota_exceeded():
-    first_search = ScopusSearch(**search_raw(156, 7))
+    first_search = ScopusPage(**search_raw(156, 7))
     STATE.set_first_search(first_search)
     STATE.fix_total()
 

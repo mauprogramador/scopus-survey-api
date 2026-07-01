@@ -2,12 +2,12 @@ import asyncio
 
 from pandas import DataFrame
 
-from src.adapters.helpers.scopus_response import validate_abstract_response
+from src.adapters.helpers.response_auditor import validate_abstract_response
 from src.core.common.types import (
     HTTPClient,
-    QuotaResultsHandler,
     ResponseBundle,
     SurveyDetails,
+    SurveyState,
     URLBuilder,
 )
 from src.core.data.enums import ExcMsg
@@ -26,7 +26,7 @@ class ScopusAbstractRetrievalAPI:
         http_client: HTTPClient,
         url_builder: URLBuilder,
         survey_details: SurveyDetails,
-        state: QuotaResultsHandler,
+        state: SurveyState,
     ) -> None:
         """Retrieves Scopus abstracts via the Scopus Abstract Retrieval API"""
         self._http_client = http_client

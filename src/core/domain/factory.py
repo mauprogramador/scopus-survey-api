@@ -4,18 +4,16 @@ from src.adapters.gateway.scopus_abstract_retrieval_api import (
 from src.adapters.gateway.scopus_search_api import ScopusSearchAPI
 from src.adapters.helpers.http_client import HTTPClient
 from src.adapters.helpers.url_builder import URLBuilder
-from src.core.data.quota_results_handler import QuotaResultsHandler
 from src.core.data.survey_details import SurveyDetails
+from src.core.data.survey_state import SurveyState
 from src.core.use_cases import (
-    ArticlesSimilarityFilter,
-    ScopusArticlesAggregator,
+    SimilarityFilter,
+    SurveyOrchestrator,
 )
-from src.core.use_cases.keyword_combination_finder import (
-    KeywordCombinationFinder,
-)
+from src.core.use_cases.keyword_scouter import KeywordsScouter
 
 
-def make_combinator() -> KeywordCombinationFinder:
+def make_combinator() -> KeywordsScouter:
     survey_details = SurveyDetails()
 
     url_builder = URLBuilder()
@@ -25,16 +23,16 @@ def make_combinator() -> KeywordCombinationFinder:
         http_client, url_builder, survey_details, None
     )
 
-    combinator_finder = KeywordCombinationFinder(
+    combinator_finder = KeywordsScouter(
         url_builder, search_api, survey_details
     )
 
     return combinator_finder
 
 
-def make_aggregator() -> ScopusArticlesAggregator:
+def make_aggregator() -> SurveyOrchestrator:
     survey_details = SurveyDetails()
-    state = QuotaResultsHandler()
+    state = SurveyState()
 
     url_builder = URLBuilder()
     http_client = HTTPClient()
@@ -47,9 +45,9 @@ def make_aggregator() -> ScopusArticlesAggregator:
         http_client, url_builder, survey_details, state
     )
 
-    similarity_filter = ArticlesSimilarityFilter()
+    similarity_filter = SimilarityFilter()
 
-    articles_aggregator = ScopusArticlesAggregator(
+    articles_aggregator = SurveyOrchestrator(
         search_api, abstract_api, similarity_filter, survey_details
     )
 

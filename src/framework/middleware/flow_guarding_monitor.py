@@ -13,8 +13,8 @@ from starlette.middleware.base import (
 )
 from starlette.responses import Response as StarletteResponse
 
+from src.adapters.presenters.jinja_response import get_not_found_template
 from src.adapters.presenters.json_response import ErrorJSON
-from src.adapters.presenters.template_response import get_not_found_template
 from src.core.config.config import (
     HEADERS,
     RATELIMIT_POLICY,

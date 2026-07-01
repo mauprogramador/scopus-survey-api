@@ -13,7 +13,7 @@ from src.core.data.enums import (
 from src.core.data.query_params import (
     CombinationParams,
     CSVParams,
-    SearchParams,
+    SurveyParams,
 )
 from tests.mocks.raw import (
     ALIAS_COMBINATION_PARAMS,
@@ -107,7 +107,7 @@ def test_combination_params_keywords():
 
 
 def test_search_params_valid_data():
-    model = SearchParams(**ALIAS_SEARCH_PARAMS)
+    model = SurveyParams(**ALIAS_SEARCH_PARAMS)
     assert model.api_key == API_KEY and model.keywords == KEYWORDS
     assert model.combination == "Python AND AI"
     assert model.button == Button.SURVEY
@@ -116,7 +116,7 @@ def test_search_params_valid_data():
 
 
 def test_search_params_overridden_default():
-    model = SearchParams(**ALIAS_SEARCH_PARAMS_FULL)
+    model = SurveyParams(**ALIAS_SEARCH_PARAMS_FULL)
     assert model.api_key == API_KEY and model.keywords == KEYWORDS
     assert model.combination == "Python AND AI"
     assert model.button == Button.SURVEY
@@ -125,7 +125,7 @@ def test_search_params_overridden_default():
 
 def test_search_params_raise_errors():
     with raises(ValidationError) as info:
-        SearchParams(**{})
+        SurveyParams(**{})
     assert len(info.value.errors()) == 4
 
 
@@ -138,5 +138,5 @@ def test_search_params_empty_to_default():
         "combination": "Python",
         "button": Button.SURVEY.value,
     }
-    model = SearchParams(**raw)
+    model = SurveyParams(**raw)
     assert not model.doctype and not model.pubstage

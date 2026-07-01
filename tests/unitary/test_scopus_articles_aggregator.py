@@ -3,10 +3,8 @@ from pytest import mark
 from pytest_mock import MockerFixture as Mocker
 
 from src.core.data.csv_builder import write_csv_file
-from src.core.data.query_params import SearchParams
-from src.core.use_cases.scopus_articles_aggregator import (
-    ScopusArticlesAggregator,
-)
+from src.core.data.query_params import SurveyParams
+from src.core.use_cases.survey_orchestrator import SurveyOrchestrator
 from tests.mocks.helpers import aggregator_fix, fqn
 from tests.mocks.raw import ALIAS_SEARCH_PARAMS, HTTP_200
 from tests.mocks.unitary import (
@@ -16,8 +14,8 @@ from tests.mocks.unitary import (
 )
 
 
-PARAMS = SearchParams(**ALIAS_SEARCH_PARAMS)
-WRITE_CSV = fqn(ScopusArticlesAggregator, write_csv_file)
+PARAMS = SurveyParams(**ALIAS_SEARCH_PARAMS)
+WRITE_CSV = fqn(SurveyOrchestrator, write_csv_file)
 
 
 @mark.asyncio

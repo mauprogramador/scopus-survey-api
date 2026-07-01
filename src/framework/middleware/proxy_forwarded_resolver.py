@@ -7,7 +7,7 @@ from starlette.middleware.base import (
 from starlette.responses import Response as StarletteResponse
 
 
-class ProxyForwardedHeadersMiddleware(BaseHTTPMiddleware):
+class ProxyForwardedResolverMiddleware(BaseHTTPMiddleware):
     """Middleware for mapping the scheme and host when forwarded"""
 
     def __init__(self, app: FastAPI):

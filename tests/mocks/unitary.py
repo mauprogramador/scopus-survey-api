@@ -133,7 +133,7 @@ ABSTRACT_QUOTA_EXCEEDED = bundle_mock(
     RAW_SERVICE_ERROR_QUOTA, HTTP_429, RAW_HEADERS_NO_QUOTA
 )
 
-# ArticlesSimilarityFilter.filter
+# SimilarityFilter.filter
 
 ONE_GROUP_TWO_SIMILAR = DataFrame(
     {
@@ -225,7 +225,7 @@ NO_REPEATED_AUTHORS = DataFrame(
     }
 )
 
-# ScopusArticlesAggregator.retrieve_articles
+# SurveyOrchestrator.retrieve_articles
 
 DIFFERENT_ARTICLES = DataFrame(
     [

@@ -1,22 +1,22 @@
+# mypy: disable-error-code="return-value"
 from http import HTTPStatus
-from typing import Type
 
-from pydantic import ValidationError
+from pydantic import BaseModel, ValidationError
 
-from src.core.common.types import ResponseBundle, ScopusModel
+from src.core.common.types import ResponseBundle
 from src.core.config.scopus import QUOTA_ERROR_CODE, RATE_LIMIT_ERROR_CODE
 from src.core.data.enums import ExcMsg
 from src.core.data.serializers import (
     ScopusAbstract,
     ScopusError,
     ScopusHeaders,
-    ScopusSearch,
+    ScopusPage,
 )
 from src.core.domain.http_exceptions import InternalError, ScopusAPIError
 from src.utils import logger
 
 
-def _validate(model: Type[ScopusModel], res: ResponseBundle) -> ScopusModel:
+def _validate(model: BaseModel, res: ResponseBundle) -> BaseModel:
     try:
         if res.code >= HTTPStatus.BAD_REQUEST:
             quota = ScopusHeaders.model_validate(res.headers)
@@ -46,8 +46,8 @@ def _validate(model: Type[ScopusModel], res: ResponseBundle) -> ScopusModel:
         raise InternalError(ExcMsg.VALIDATE_ERROR, exc) from exc
 
 
-def validate_search_response(res: ResponseBundle) -> ScopusSearch:
-    return _validate(ScopusSearch, res)
+def validate_search_response(res: ResponseBundle) -> ScopusPage:
+    return _validate(ScopusPage, res)
 
 
 def validate_abstract_response(res: ResponseBundle) -> ScopusAbstract:

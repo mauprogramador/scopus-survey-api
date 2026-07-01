@@ -12,7 +12,7 @@ from src.adapters.gateway.scopus_abstract_retrieval_api import (
     ScopusAbstractRetrievalAPI,
 )
 from src.adapters.gateway.scopus_search_api import ScopusSearchAPI
-from src.core.common.types import QuotaResultsHandler
+from src.core.common.types import SurveyState
 from src.core.data.enums import ExcMsg
 from src.core.domain.factory import make_aggregator
 from src.framework.fastapi.main import app
@@ -49,7 +49,7 @@ from tests.mocks.raw import (
 
 
 STEP = Patch(ScopusSearchAPI, ProgressBar.step, "ProgressBar")
-STATE = fqn(make_aggregator, QuotaResultsHandler)
+STATE = fqn(make_aggregator, SurveyState)
 
 
 def _task_name(task: asyncio.Task) -> str:

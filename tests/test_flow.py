@@ -34,7 +34,7 @@ from tests.mocks.raw import (
 )
 
 
-class TestUserFlowSurveySteps:
+class TestEndpointsSequenceFlow:
     THREE_COMBINATIONS = [
         response_mock(search_raw(random.randint(16, 256)))
     ] * 3

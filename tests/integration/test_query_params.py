@@ -6,12 +6,8 @@ from pytest_mock import MockerFixture as Mocker
 
 from src.core.data.enums import Button
 from src.core.domain.factory import make_aggregator, make_combinator
-from src.core.use_cases.keyword_combination_finder import (
-    KeywordCombinationFinder,
-)
-from src.core.use_cases.scopus_articles_aggregator import (
-    ScopusArticlesAggregator,
-)
+from src.core.use_cases.keyword_scouter import KeywordsScouter
+from src.core.use_cases.survey_orchestrator import SurveyOrchestrator
 from src.framework.fastapi.routes import survey_bibliographic_data
 from tests.conftest import assert_error_json
 from tests.mocks.errors import REQUEST_VALIDATION_ERROR
@@ -38,16 +34,16 @@ from tests.mocks.raw import (
 MAKE_COMBINATOR = Patch(survey_bibliographic_data, make_combinator)
 MAKE_AGGREGATOR = Patch(survey_bibliographic_data, make_aggregator)
 SURVEY_COMBINATIONS = MagicMock(
-    KeywordCombinationFinder,
+    KeywordsScouter,
     survey_combinations=AsyncMock(
-        KeywordCombinationFinder.survey_combinations,
+        KeywordsScouter.survey_combinations,
         side_effect=mock_survey_combinations,
     ),
 )
 RETRIEVE_ARTICLES = MagicMock(
-    ScopusArticlesAggregator,
+    SurveyOrchestrator,
     retrieve_articles=AsyncMock(
-        ScopusArticlesAggregator.retrieve_articles,
+        SurveyOrchestrator.retrieve_articles,
         side_effect=mock_retrieve_articles,
     ),
 )

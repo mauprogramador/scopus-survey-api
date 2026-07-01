@@ -3,7 +3,7 @@ from urllib.parse import unquote_plus
 from src.adapters.helpers.url_builder import URLBuilder
 from src.core.config.scopus import ARTICLE_PAGE_URL, SEARCH_FIELDS
 from src.core.data.enums import DocType, PageRange, PubStage, SrcType, SubjArea
-from src.core.data.query_params import CombinationParams, SearchParams
+from src.core.data.query_params import CombinationParams, SurveyParams
 from tests.mocks.raw import (
     ALIAS_COMBINATION_PARAMS,
     ALIAS_COMBINATION_PARAMS_FULL,
@@ -59,7 +59,7 @@ def test_combination_url_full():
 
 
 def test_search_url():
-    params = SearchParams(**ALIAS_SEARCH_PARAMS)
+    params = SurveyParams(**ALIAS_SEARCH_PARAMS)
     url = URL_BUILDER.search_url(params)
     url = unquote_plus(url)
     query = params.combination
@@ -74,7 +74,7 @@ def test_search_url():
 
 
 def test_search_url_full():
-    params = SearchParams(**ALIAS_SEARCH_PARAMS_FULL)
+    params = SurveyParams(**ALIAS_SEARCH_PARAMS_FULL)
     url = URL_BUILDER.search_url(params)
     url = unquote_plus(url)
     query = params.combination
@@ -91,7 +91,7 @@ def test_search_url_full():
 
 
 def test_pagination_url():
-    params = SearchParams(**ALIAS_SEARCH_PARAMS)
+    params = SurveyParams(**ALIAS_SEARCH_PARAMS)
     URL_BUILDER.search_url(params)
     url = URL_BUILDER.pagination_url(page=7)
 

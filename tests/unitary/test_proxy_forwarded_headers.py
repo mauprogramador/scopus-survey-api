@@ -7,8 +7,8 @@ from starlette.middleware.base import RequestResponseEndpoint
 from starlette.testclient import TestClient
 from starlette.types import Scope as StarletteScope
 
-from src.framework.middleware.proxy_forwarded_headers import (
-    ProxyForwardedHeadersMiddleware,
+from src.framework.middleware.proxy_forwarded_resolver import (
+    ProxyForwardedResolverMiddleware,
 )
 from tests.mocks.raw import HTTP_200
 
@@ -29,7 +29,7 @@ async def test_success_headers():
 
     request = fastapi.Request(scope)
     call_next = AsyncMock(RequestResponseEndpoint)
-    middleware = ProxyForwardedHeadersMiddleware(None)
+    middleware = ProxyForwardedResolverMiddleware(None)
 
     await middleware.dispatch(request, call_next)
     call_next.assert_called_once_with(request)
@@ -42,7 +42,7 @@ async def test_success_headers():
 @fixture(scope="module", name="client")
 def sub_app_test_client():
     app = fastapi.FastAPI()
-    app.add_middleware(ProxyForwardedHeadersMiddleware)
+    app.add_middleware(ProxyForwardedResolverMiddleware)
 
     @app.get("/test")
     def test_url_for_route(request: fastapi.Request):

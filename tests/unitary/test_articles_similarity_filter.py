@@ -5,9 +5,7 @@ from pandas import DataFrame, Series
 from pandas.api.typing import DataFrameGroupBy
 from pytest_mock import MockerFixture as Mocker
 
-from src.core.use_cases.articles_similarity_filter import (
-    ArticlesSimilarityFilter,
-)
+from src.core.use_cases.similarity_filter import SimilarityFilter
 from src.utils import logger
 from tests.mocks.helpers import fqn, spec
 from tests.mocks.unitary import (
@@ -23,14 +21,14 @@ from tests.mocks.unitary import (
 )
 
 
-SIMILARITY_FILTER = ArticlesSimilarityFilter()
-TO_DATETIME = fqn(ArticlesSimilarityFilter, pd.to_datetime, "pd")
-LOG_DEBUG = spec(ArticlesSimilarityFilter, logger.debug, "logger")
+SIMILARITY_FILTER = SimilarityFilter()
+TO_DATETIME = fqn(SimilarityFilter, pd.to_datetime, "pd")
+LOG_DEBUG = spec(SimilarityFilter, logger.debug, "logger")
 RATIO = 80
 
 
 def test_one_group_two_similar_titles(mocker: Mocker):
-    spy = mocker.spy(ArticlesSimilarityFilter, "_get_single_group_index")
+    spy = mocker.spy(SimilarityFilter, "_get_single_group_index")
     df = SIMILARITY_FILTER.filter(ONE_GROUP_TWO_SIMILAR, RATIO)
     spy.assert_called_once()
     assert df.shape[0] == 1
@@ -39,7 +37,7 @@ def test_one_group_two_similar_titles(mocker: Mocker):
 
 
 def test_one_group_more_similar_titles(mocker: Mocker):
-    spy = mocker.spy(ArticlesSimilarityFilter, "_get_single_group_index")
+    spy = mocker.spy(SimilarityFilter, "_get_single_group_index")
     df = SIMILARITY_FILTER.filter(ONE_GROUP_MORE_SIMILAR, RATIO)
     spy.assert_called_once()
     assert df.shape[0] == 1
@@ -48,14 +46,14 @@ def test_one_group_more_similar_titles(mocker: Mocker):
 
 
 def test_one_group_no_similar_titles(mocker: Mocker):
-    spy = mocker.spy(ArticlesSimilarityFilter, "_get_single_group_index")
+    spy = mocker.spy(SimilarityFilter, "_get_single_group_index")
     df = SIMILARITY_FILTER.filter(ONE_GROUP_NO_SIMILAR, RATIO)
     spy.assert_called_once()
     assert df.equals(ONE_GROUP_NO_SIMILAR)
 
 
 def test_more_groups_two_similar_titles(mocker: Mocker):
-    spy = mocker.spy(ArticlesSimilarityFilter, "_get_single_group_index")
+    spy = mocker.spy(SimilarityFilter, "_get_single_group_index")
     df = SIMILARITY_FILTER.filter(MORE_GROUPS_TWO_SIMILAR, RATIO)
     spy.assert_not_called()
     assert df.shape[0] == 3
@@ -65,7 +63,7 @@ def test_more_groups_two_similar_titles(mocker: Mocker):
 
 
 def test_more_groups_more_similar_titles(mocker: Mocker):
-    spy = mocker.spy(ArticlesSimilarityFilter, "_get_single_group_index")
+    spy = mocker.spy(SimilarityFilter, "_get_single_group_index")
     df = SIMILARITY_FILTER.filter(MORE_GROUPS_MORE_SIMILAR, RATIO)
     spy.assert_not_called()
     assert df.shape[0] == 3
@@ -75,7 +73,7 @@ def test_more_groups_more_similar_titles(mocker: Mocker):
 
 
 def test_more_groups_no_similar_titles(mocker: Mocker):
-    spy = mocker.spy(ArticlesSimilarityFilter, "_get_single_group_index")
+    spy = mocker.spy(SimilarityFilter, "_get_single_group_index")
     df = SIMILARITY_FILTER.filter(MORE_GROUPS_NO_SIMILAR, RATIO)
     spy.assert_not_called()
     assert df.shape[0] == 9 and df.equals(MORE_GROUPS_NO_SIMILAR)

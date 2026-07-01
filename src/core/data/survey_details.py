@@ -1,6 +1,6 @@
 from src.core.common.types import ResponseBundle
 from src.core.config.scopus import BOOLEAN_OPERATOR, MAX_ITEMS_PER_PAGE
-from src.core.data.serializers import ScopusHeaders, ScopusSearch
+from src.core.data.serializers import ScopusHeaders, ScopusPage
 
 
 class SurveyDetails:
@@ -19,7 +19,7 @@ class SurveyDetails:
     def set_combination(self, combination: str) -> None:
         self.headers.update({"X-Combination": combination})
 
-    def set_search_data(self, scopus_search: ScopusSearch) -> None:
+    def set_search_data(self, scopus_search: ScopusPage) -> None:
         if scopus_search.total_results > MAX_ITEMS_PER_PAGE:
             scopus_search.items_per_page = MAX_ITEMS_PER_PAGE
 

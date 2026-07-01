@@ -7,7 +7,7 @@ from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
 from fastapi.routing import APIRouter
 
 from src.adapters.presenters.csv_response import retrieve_csv
-from src.adapters.presenters.template_response import get_web_form_template
+from src.adapters.presenters.jinja_response import get_web_form_template
 from src.core.config.config import (
     FAVICON_HEADERS,
     FAVICON_PATH,
@@ -20,7 +20,7 @@ from src.core.data.enums import Lang
 from src.core.data.query_params import (
     CombinationParams,
     CSVParams,
-    SearchParams,
+    SurveyParams,
 )
 from src.core.domain.factory import make_aggregator, make_combinator
 from src.framework.fastapi.csrf_token import (
@@ -123,7 +123,7 @@ async def survey_total_combinations(
 @LIMITER.limit(LIMIT)
 async def survey_bibliographic_data(
     request: FastAPIRequest,  # pylint: disable=W0613
-    params: Annotated[SearchParams, fastapi.Query()],
+    params: Annotated[SurveyParams, fastapi.Query()],
 ) -> FileResponse:
     logger.debug(params.model_dump())
 
