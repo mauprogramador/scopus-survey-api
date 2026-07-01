@@ -11,6 +11,8 @@ on:
 jobs:
   verification:
     runs-on: ubuntu-latest
+    env:
+      SECRET_KEY: "test0123456789CI132Dummy0123Secret0123Key0123Never0123Use0123In0123Production0123456789"
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
