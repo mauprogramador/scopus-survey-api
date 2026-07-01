@@ -94,19 +94,29 @@ coverage:
 # Formatting and Linting
 
 format:
+	@printf "\033[33mIsort:\033[m\n"
 	@poetry run isort .
+	@printf "\033[33mBlack:\033[m\n"
 	@poetry run black .
 
 lint:
+	@printf "\033[33mIsort:\033[m\n"
 	@poetry run isort src/ --check
+	@printf "\033[33mBlack:\033[m\n"
 	@poetry run black src/ --check
+	@printf "\033[33mPylint:\033[m\n"
 	@poetry run pylint src/
+	@printf "\033[33mMypy:\033[m\n"
 	@poetry run mypy src/
 
 lint-tests:
+	@printf "\033[33mIsort:\033[m\n"
 	@poetry run isort tests/ --check
+	@printf "\033[33mBlack:\033[m\n"
 	@poetry run black tests/ --check
+	@printf "\033[33mPylint:\033[m\n"
 	@poetry run pylint tests/
+	@printf "\033[33mMypy:\033[m\n"
 	@poetry run mypy tests/
 
 
@@ -123,19 +133,26 @@ locales:
 # Metrics
 
 measure:
+	@printf "\033[33mRadon [CC]:\033[m\n"
 	@poetry run radon cc src/
+	@printf "\033[33mRadon [MI]:\033[m\n"
 	@poetry run radon mi src/
 
 measure-tests:
+	@printf "\033[33mRadon [CC]:\033[m\n"
 	@poetry run radon cc tests/
+	@printf "\033[33mRadon [MI]:\033[m\n"
 	@poetry run radon mi tests/
 
 
 # Vulnerability
 
 audit:
+	@printf "\033[33mPip-Audit:\033[m\n"
 	@poetry run pip-audit -l . || true
+	@printf "\033[33mBandit [src]:\033[m\n"
 	@poetry run bandit -c pyproject.toml -r src/ || true
+	@printf "\033[33mBandit [tests]:\033[m\n"
 	@poetry run bandit -c pyproject.toml -r tests/ || true
 
 
