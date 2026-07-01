@@ -48,6 +48,8 @@ secret:
 	@openssl rand -base64 64 | tr -d '\n=' | tr '/+' '_-'; echo ""
 
 clean:
+	@printf "\033[33mDelete files?\033[m [ENTER] "
+	@read _
 	@deactivate
 	@rm -rf .venv/
 	@rm -rf .logs/
