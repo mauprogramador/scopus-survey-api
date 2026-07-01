@@ -47,7 +47,7 @@ jobs:
           poetry install --with dev,test --no-interaction
 
       - name: Linting
-        run: poetry run make lint
+        run: make lint
 
       - name: Testing
-        run: poetry run make test
+        run: make test
