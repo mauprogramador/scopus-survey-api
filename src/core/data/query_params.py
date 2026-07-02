@@ -170,7 +170,7 @@ class CombinationParams(CSVParams):
             and len(value) == 1
             and isinstance(value[0], str)
         ):
-            keywords = value[0].split(",")
+            keywords = [keyword.strip() for keyword in value[0].split(",")]
             if len(keywords) < 2:
                 raise ValidationError.from_exception_data(
                     "Keywords length too short",

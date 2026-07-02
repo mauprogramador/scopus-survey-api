@@ -90,6 +90,10 @@ def test_combination_params_keywords():
     model = CombinationParams(**raw)
     assert model.keywords == ["any", "any"]
 
+    raw.update({"keywords": [" any, any "]})
+    model = CombinationParams(**raw)
+    assert model.keywords == ["any", "any"]
+
     raw.update({"keywords": ["any,any,any,any,any"]})
     with raises(ValidationError) as info:
         CombinationParams(**raw)
