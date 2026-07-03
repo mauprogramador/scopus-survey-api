@@ -43,7 +43,6 @@ def test_search_quota():
     assert SURVEY_DETAIL.headers["X-Search-Limit"] == "20000"
     assert SURVEY_DETAIL.headers["X-Search-Remaining"] == "20000"
     assert SURVEY_DETAIL.headers["X-Search-Reset"] == RESET_DATETIME
-    assert SURVEY_DETAIL.headers["X-Search-ELS-Status"] == "OK"
 
 
 def test_abstract_quota():
@@ -52,7 +51,6 @@ def test_abstract_quota():
     assert SURVEY_DETAIL.headers["X-Abstract-Limit"] == "20000"
     assert SURVEY_DETAIL.headers["X-Abstract-Remaining"] == "20000"
     assert SURVEY_DETAIL.headers["X-Abstract-Reset"] == RESET_DATETIME
-    assert SURVEY_DETAIL.headers["X-Abstract-ELS-Status"] == "OK"
 
 
 def test_results():
@@ -67,13 +65,8 @@ def test_loss():
     assert SURVEY_DETAIL.metadata[4] == "loss=5doc / 13.57%"
 
 
-def test_average_found():
-    SURVEY_DETAIL.set_average_found(10000)
-    assert SURVEY_DETAIL.headers["X-Average-Found"] == "~10,000"
-
-
 def test_full_headers():
     assert len(SURVEY_DETAIL.search_quota) == 2
     assert len(SURVEY_DETAIL.abstract_quota) == 2
-    assert len(SURVEY_DETAIL.headers) == 16
+    assert len(SURVEY_DETAIL.headers) == 13
     assert len(SURVEY_DETAIL.metadata) == 5

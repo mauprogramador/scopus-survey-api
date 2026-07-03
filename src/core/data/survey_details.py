@@ -47,7 +47,6 @@ class SurveyDetails:
                 "X-Search-Limit": str(quota.limit),
                 "X-Search-Remaining": str(quota.remaining),
                 "X-Search-Reset": str(quota.reset_datetime),
-                "X-Search-ELS-Status": quota.status,
             }
         )
 
@@ -59,7 +58,6 @@ class SurveyDetails:
                 "X-Abstract-Limit": str(quota.limit),
                 "X-Abstract-Remaining": str(quota.remaining),
                 "X-Abstract-Reset": str(quota.reset_datetime),
-                "X-Abstract-ELS-Status": quota.status,
             }
         )
 
@@ -73,6 +71,3 @@ class SurveyDetails:
         loss = f"{loss_amount}doc / {loss_percent:.2f}%"
         self.headers.update({"X-Loss": loss})
         self.metadata.append(f"loss={loss}")
-
-    def set_average_found(self, average: int) -> None:
-        self.headers.update({"X-Average-Found": f"~{average:,}"})

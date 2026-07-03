@@ -222,8 +222,7 @@ _TRACE = (
 )
 _COMBINATIONS = (
     "Keywords: \033[33m%(keywords)d\033[m. Combinations: \033[33m"
-    "%(combinations)d\033[m. Total-Sum: \033[33m%(total)s\033[m. "
-    "Average-Found: \033[33m~%(average)s\033[m"
+    "%(combinations)d\033[m. Total-Sum: \033[33m%(total)s\033[m"
 )
 _LOSS = (
     "Initial: \033[33m%(initial)d\033[m. Final: \033[33m%(final)d"
@@ -257,12 +256,11 @@ def loss(initial: int, final: int, loss: float) -> None:
     LOGGER.info(_LOSS, args, stacklevel=2)
 
 
-def combinations(nkeywords: int, totals: list[int], average: int) -> None:
+def combinations(keywords_count: int, totals: list[int]) -> None:
     args = {
-        "keywords": nkeywords,
+        "keywords": keywords_count,
         "combinations": len(totals),
         "total": f"{sum(totals):,}",
-        "average": f"{average:,}",
     }
     LOGGER.info(_COMBINATIONS, args, stacklevel=2)
 

@@ -124,9 +124,6 @@ class SurveyDetails(Protocol):
     def set_loss(self, loss_amount: int, loss_percent: float) -> None:
         pass
 
-    def set_average_found(self, average: int) -> None:
-        pass
-
 
 class SurveyState(Protocol):
     total_results: int

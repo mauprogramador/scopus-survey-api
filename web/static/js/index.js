@@ -15,18 +15,15 @@ const detailsCache = {
   'x-search-limit': 20000,
   'x-search-remaining': 20000,
   'x-search-reset': null,
-  'x-search-els-status': null,
   'x-abstract-limit': 10000,
   'x-abstract-remaining': 10000,
   'x-abstract-reset': null,
-  'x-abstract-els-status': null,
   'x-keywords': null,
   'x-combination': null,
   'x-total': null,
   'x-results': null,
   'x-pages-count': null,
   'x-items-per-page': null,
-  'x-average-found': null,
   'x-loss': null,
   'x-process-time': null,
   'x-csv-filename': null,
@@ -43,7 +40,6 @@ function updateDetails(headers) {
   detailsCache['x-total'] = null;
   detailsCache['x-pages-count'] = null;
   detailsCache['x-items-per-page'] = null;
-  detailsCache['x-average-found'] = null;
   detailsCache['x-loss'] = null;
   detailsCache['x-csv-filename'] = null;
 

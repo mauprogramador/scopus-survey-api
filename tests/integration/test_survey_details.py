@@ -54,8 +54,6 @@ async def test_combination_details(mocker: Mocker, client: Client):
     assert res.headers["X-Search-Limit"] == "20000"
     assert res.headers["X-Search-Remaining"] == "12345"
     assert res.headers["X-Search-Reset"] == RESET_DATETIME
-    assert res.headers["X-Search-ELS-Status"] == "OK"
-    assert res.headers["X-Average-Found"] == "~0"
 
 
 @mark.asyncio
@@ -100,11 +98,9 @@ async def test_search_details_one_result(mocker: Mocker, client: Client):
     assert res.headers["X-Search-Limit"] == "20000"
     assert res.headers["X-Search-Remaining"] == "12345"
     assert res.headers["X-Search-Reset"] == RESET_DATETIME
-    assert res.headers["X-Search-ELS-Status"] == "OK"
     assert res.headers["X-Abstract-Limit"] == "20000"
     assert res.headers["X-Abstract-Remaining"] == "12345"
     assert res.headers["X-Abstract-Reset"] == RESET_DATETIME
-    assert res.headers["X-Abstract-ELS-Status"] == "OK"
     assert res.headers["X-Results"] == "1doc / 1doc"
     assert res.headers["X-Loss"] == "0doc / 0.00%"
 
@@ -151,10 +147,8 @@ async def test_search_details_more_results(mocker: Mocker, client: Client):
     assert res.headers["X-Search-Limit"] == "20000"
     assert res.headers["X-Search-Remaining"] == "12345"
     assert res.headers["X-Search-Reset"] == RESET_DATETIME
-    assert res.headers["X-Search-ELS-Status"] == "OK"
     assert res.headers["X-Abstract-Limit"] == "20000"
     assert res.headers["X-Abstract-Remaining"] == "12345"
     assert res.headers["X-Abstract-Reset"] == RESET_DATETIME
-    assert res.headers["X-Abstract-ELS-Status"] == "OK"
     assert res.headers["X-Results"] == "3doc / 3doc"
     assert res.headers["X-Loss"] == "2doc / 66.67%"

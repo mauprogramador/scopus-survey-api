@@ -48,16 +48,8 @@ class KeywordsScouter:
 
         survey_list = await self._search_api.survey_totals_found(bundles_map)
         totals: list[int] = [data["total"] for data in survey_list]
-        keywords_count, average = len(params.keywords), 0.0
 
-        if sum(totals) > 0:
-            square_totals_sum = sum(total * total for total in totals)
-            average = square_totals_sum / (keywords_count * sum(totals))
-
-        average = int(average)
-        self._details.set_average_found(average)
-
-        logger.combinations(keywords_count, totals, average)
+        logger.combinations((max_size - self._START), totals)
         logger.quota(*self._details.search_quota)
 
         headers = self._details.headers

@@ -112,8 +112,6 @@ class TestEndpointsSequenceFlow:
         assert res.headers.get("X-Search-Limit") == "20000"
         assert res.headers.get("X-Search-Remaining") == "20000"
         assert res.headers.get("X-Search-Reset") == RESET_DATETIME
-        assert res.headers.get("X-Search-ELS-Status") == "OK"
-        assert res.headers.get("X-Average-Found")
         assert len(res.json()["result"]["combinations"]) == 3
 
         cls.combination = res.json()["result"]["combinations"][0][
@@ -150,11 +148,9 @@ class TestEndpointsSequenceFlow:
         assert res.headers.get("X-Search-Limit") == "20000"
         assert res.headers.get("X-Search-Remaining") == "20000"
         assert res.headers.get("X-Search-Reset") == RESET_DATETIME
-        assert res.headers.get("X-Search-ELS-Status") == "OK"
         assert res.headers.get("X-Abstract-Limit") == "20000"
         assert res.headers.get("X-Abstract-Remaining") == "20000"
         assert res.headers.get("X-Abstract-Reset") == RESET_DATETIME
-        assert res.headers.get("X-Abstract-ELS-Status") == "OK"
         assert res.headers.get("X-Loss") == "0doc / 0.00%"
 
         filename: str | None = res.headers.get("X-CSV-Filename")
