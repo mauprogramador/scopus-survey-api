@@ -26,8 +26,8 @@ _TEMPLATES_DIR = Path("web/templates")
 _DIST_DIR = Path("web/templates/dist")
 _DIST = Path("dist")
 
-_INDEX_EN_FILENAME = f"index_{Lang.EN_US.locale}.html.jinja"
-_INDEX_PT_FILENAME = f"index_{Lang.PT_BR.locale}.html.jinja"
+_INDEX_EN_FILENAME = f"index_{Lang.EN_US.snake_case}.html.jinja"
+_INDEX_PT_FILENAME = f"index_{Lang.PT_BR.snake_case}.html.jinja"
 
 _INDEX_FILENAMES = {
     Lang.EN_US: (_DIST_DIR / _INDEX_EN_FILENAME),

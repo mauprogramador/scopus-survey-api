@@ -1,5 +1,5 @@
 import gettext
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, Mock
 
 from pytest import fixture, mark, raises
 from pytest_mock import MockerFixture as Mocker
@@ -7,6 +7,7 @@ from pytest_mock import MockerFixture as Mocker
 from src.core.data.enums import ExcMsg, Lang
 from src.core.domain.translations import (
     _ERRORS,
+    _get_lang,
     load_translations,
     translate_error,
 )
@@ -48,7 +49,7 @@ def test_error_load_translations(mocker: Mocker):
     assert info.value.args[0] == "any"
 
 
-@fixture(scope="module", name="trans")
+@fixture(scope="module", name="mock_gettext")
 def translate_error_fixture():
 
     def _mock_gettext(key: str) -> str:
@@ -60,7 +61,7 @@ def translate_error_fixture():
     yield
 
 
-@mark.usefixtures("trans")
+@mark.usefixtures("mock_gettext")
 def test_translate_error():
     assert translate_error(REQUEST, STARLETTE_HTTP_EXCEPTION) == "any"
     _TRANSLATIONS["starlette.unexpected_error"] = "starlette.unexpected_error"
@@ -72,7 +73,7 @@ def test_translate_error():
     assert translate_error(REQUEST, STARLETTE_HTTP_EXCEPTION) == exc_msg
 
 
-@mark.usefixtures("trans")
+@mark.usefixtures("mock_gettext")
 def test_translate_scopus_api_error():
     assert translate_error(REQUEST, SCOPUS_API_ERROR) == "any"
     _TRANSLATIONS["scopus.500.any"] = "scopus.500.any"
@@ -87,7 +88,7 @@ def test_translate_scopus_api_error():
     assert translate_error(REQUEST, SCOPUS_API_ERROR) == exc_msg
 
 
-@mark.usefixtures("trans")
+@mark.usefixtures("mock_gettext")
 def test_translate_http_error():
     assert translate_error(REQUEST, HTTP_ERROR) == "any"
     _TRANSLATIONS["api.internal_error"] = "api.internal_error"
@@ -97,3 +98,25 @@ def test_translate_http_error():
 
     exc_msg = ExcMsg.INTERNAL_ERROR
     assert translate_error(REQUEST, HTTP_ERROR) == exc_msg
+
+
+@mark.parametrize(
+    "accept_lang,expected_lang",
+    [
+        (None, Lang.EN_US),
+        ("en-US", Lang.EN_US),
+        ("pt-BR", Lang.PT_BR),
+        ("en-US,en;q=0.9,pt-BR;q=0.8,pt;q=0.7", Lang.EN_US),
+        ("en;q=0.9,pt-BR;q=0.8,pt;q=0.7", Lang.EN_US),
+        ("pt-BR;q=0.8,pt;q=0.7", Lang.PT_BR),
+        ("pt;q=0.7", Lang.PT_BR),
+        ("en-GB;q=0.7", Lang.EN_US),
+        ("en", Lang.EN_US),
+        ("pt", Lang.PT_BR),
+        ("fr", Lang.EN_US),
+        ("fr-FR;q=0.8,fr;q=0.7", Lang.EN_US),
+    ],
+)
+def test_get_lang(accept_lang: str | None, expected_lang: Lang):
+    req = Mock(headers={"Accept-Language": accept_lang})
+    assert _get_lang(req) == expected_lang

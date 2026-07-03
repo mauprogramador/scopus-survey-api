@@ -7,8 +7,12 @@ class Lang(StrEnum):
     PT_BR = "pt-BR"
 
     @property
-    def locale(self) -> str:
+    def snake_case(self) -> str:
         return self.value.replace("-", "_")
+
+    @property
+    def short(self) -> str:
+        return self.value.split("-", maxsplit=1)[0]
 
 
 @unique

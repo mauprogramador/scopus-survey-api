@@ -29,33 +29,33 @@ def load_translations() -> tuple[Translations, Translations]:
         web[Lang.EN_US] = gettext.translation(
             domain=_WEB_DOMAIN,
             localedir=_LOCALEDIR,
-            languages=[Lang.EN_US.locale],
+            languages=[Lang.EN_US.snake_case],
         )
         meta[Lang.EN_US] = gettext.translation(
             domain=_META_DOMAIN,
             localedir=_LOCALEDIR,
-            languages=[Lang.EN_US.locale],
+            languages=[Lang.EN_US.snake_case],
         )
         _ERRORS[Lang.EN_US] = gettext.translation(
             domain=_ERROR_DOMAIN,
             localedir=_LOCALEDIR,
-            languages=[Lang.EN_US.locale],
+            languages=[Lang.EN_US.snake_case],
         )
 
         web[Lang.PT_BR] = gettext.translation(
             domain=_WEB_DOMAIN,
             localedir=_LOCALEDIR,
-            languages=[Lang.PT_BR.locale],
+            languages=[Lang.PT_BR.snake_case],
         )
         meta[Lang.PT_BR] = gettext.translation(
             domain=_META_DOMAIN,
             localedir=_LOCALEDIR,
-            languages=[Lang.PT_BR.locale],
+            languages=[Lang.PT_BR.snake_case],
         )
         _ERRORS[Lang.PT_BR] = gettext.translation(
             domain=_ERROR_DOMAIN,
             localedir=_LOCALEDIR,
-            languages=[Lang.PT_BR.locale],
+            languages=[Lang.PT_BR.snake_case],
         )
 
         return web, meta
@@ -63,6 +63,46 @@ def load_translations() -> tuple[Translations, Translations]:
     except (FileNotFoundError, OSError) as exc:
         logger.error("Error loading translations")
         raise exc
+
+
+_LANG_CODE_MAP = {
+    Lang.EN_US.lower(): Lang.EN_US,
+    Lang.EN_US.snake_case: Lang.EN_US,
+    Lang.EN_US.snake_case.lower(): Lang.EN_US,
+    Lang.EN_US.short: Lang.EN_US,
+    Lang.PT_BR.lower(): Lang.PT_BR,
+    Lang.PT_BR.snake_case: Lang.PT_BR,
+    Lang.PT_BR.snake_case.lower(): Lang.PT_BR,
+    Lang.PT_BR.short: Lang.PT_BR,
+}
+
+
+def _get_lang(request: FastAPIRequest) -> Lang:
+    accept_lang = request.headers.get("Accept-Language")
+
+    if not accept_lang:
+        return Lang.EN_US
+
+    if accept_lang in Lang:
+        return Lang(accept_lang)
+
+    for part in accept_lang.split(","):
+        lang = part.strip().split(";", maxsplit=1)[0]
+
+        if not lang:
+            continue
+
+        if lang in Lang:
+            return Lang(lang)
+
+        if lang in _LANG_CODE_MAP:
+            return _LANG_CODE_MAP[lang]
+
+        base_lang = lang.split("-", maxsplit=1)[0]
+        if base_lang in _LANG_CODE_MAP:
+            return _LANG_CODE_MAP[base_lang]
+
+    return Lang.EN_US
 
 
 _PREFIXES = {
@@ -89,7 +129,7 @@ def translate_error(request: FastAPIRequest, exc: Exception) -> str:
                 suffixes = (suffix, "default")
                 break
 
-    lang = request.headers.get("Accept-Language", Lang.EN_US)
+    lang = _get_lang(request)
 
     if isinstance(exc, ScopusAPIError):
         status_code = str(exc.details[0]["status_code"])
@@ -101,7 +141,7 @@ def translate_error(request: FastAPIRequest, exc: Exception) -> str:
 
     for suffix in suffixes:
         key = f"{prefix}.{suffix}".lower()
-        message = _ERRORS[Lang(lang)].gettext(key)
+        message = _ERRORS[lang].gettext(key)
 
         if message != key:
             return message
