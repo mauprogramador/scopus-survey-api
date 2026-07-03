@@ -12,9 +12,10 @@ from src.core.common.types import (
     URLBuilder,
 )
 from src.core.data.enums import ExcMsg
+from src.core.data.serializers import ScopusPage
 from src.core.domain.http_exceptions import HTTPError, InternalError
 from src.utils import logger
-from src.utils.progress_bar import ProgressBar
+from src.utils.progress_bar import progress_bar
 
 
 class ScopusSearchAPI:
@@ -41,92 +42,95 @@ class ScopusSearchAPI:
         return self._http_client
 
     async def _get_article(
-        self, bundle: CombinationBundle, pbar: ProgressBar
-    ) -> None:
-        res = await self._http_client.api_call(bundle.url)
-        self._last_completed = res
-
+        self, url: str, index: int
+    ) -> tuple[ResponseBundle, int, ScopusPage]:
+        res = await self._http_client.api_call(url)
         search = await asyncio.to_thread(validate_search_response, res)
-        bundle.total = search.total_results
-        pbar.step()
+        return res, index, search
 
     async def survey_totals_found(
         self, bundles_map: dict[int, CombinationBundle]
     ) -> list[Json]:
-        pbar = ProgressBar(len(bundles_map))
-        tasks: list[asyncio.Task[None]] = []
+        tasks: list[asyncio.Task[tuple[ResponseBundle, int, ScopusPage]]] = []
 
         try:
             async with asyncio.TaskGroup() as tg:
                 tasks = [
-                    tg.create_task(self._get_article(bundle, pbar))
-                    for bundle in bundles_map.values()
+                    tg.create_task(self._get_article(bundle.url, index))
+                    for index, bundle in bundles_map.items()
                 ]
         except ExceptionGroup:  # pylint: disable=W0718
             pass
 
         finally:
-            pbar.close()
             await self._http_client.close()
 
         if not tasks:
             raise InternalError(ExcMsg.INTERNAL_ERROR)
 
-        for task in tasks:
-            try:
-                task.result()
+        last_completed: ResponseBundle = None
 
-            except HTTPError as exc:
-                raise exc
+        with progress_bar(len(bundles_map)) as pbar:
+            for task in tasks:
+                try:
+                    last_completed, index, search = task.result()
+                    bundles_map[index].total = search.total_results
+                    pbar.step()
 
-            except (asyncio.CancelledError, Exception) as exc:
-                raise InternalError(ExcMsg.CANCELLED_ERROR, exc) from exc
+                except HTTPError as exc:
+                    print("A")
+                    raise exc
 
-        self._details.set_search_quota(self._last_completed)
+                except (asyncio.CancelledError, Exception) as exc:
+                    print("B")
+                    raise InternalError(ExcMsg.CANCELLED_ERROR, exc) from exc
+
+        self._details.set_search_quota(last_completed)
 
         return [bundle.model_dump() for bundle in bundles_map.values()]
 
-    async def _get_by_pagination(self, index: int, pbar: ProgressBar) -> None:
+    async def _get_by_pagination(
+        self, index: int
+    ) -> tuple[ResponseBundle, ScopusPage]:
         page = index * self._state.items_per_page
         url = self._url_builder.pagination_url(page)
 
         res = await self._http_client.api_call(url)
-        self._last_completed = res
-
         search = await asyncio.to_thread(validate_search_response, res)
-        self._state.entry.extend(search.entry)
-        pbar.step()
+
+        return res, search
 
     async def _get_multiple_articles_by_pagination(self) -> None:
-        pbar = ProgressBar(*self._state.pages_to_fetch_progress)
-        tasks: list[asyncio.Task[None]] = []
+        tasks: list[asyncio.Task[tuple[ResponseBundle, ScopusPage]]] = []
 
         try:
             async with asyncio.TaskGroup() as tg:
                 tasks = [
-                    tg.create_task(self._get_by_pagination(start, pbar))
+                    tg.create_task(self._get_by_pagination(start))
                     for start in self._state.pages_to_fetch_range
                 ]
         except ExceptionGroup:  # pylint: disable=W0718
             pass
 
-        finally:
-            pbar.close()
-
         if not tasks:
             raise InternalError(ExcMsg.INTERNAL_ERROR)
 
-        for task in tasks:
-            try:
-                task.result()
+        last_completed: ResponseBundle = None
 
-            except HTTPError as exc:
-                raise exc
+        with progress_bar(*self._state.pages_to_fetch_progress) as pbar:
+            for task in tasks:
+                try:
+                    last_completed, search = task.result()
+                    self._state.entry.extend(search.entry)
+                    pbar.step()
 
-            except (asyncio.CancelledError, Exception) as exc:
-                raise InternalError(ExcMsg.CANCELLED_ERROR, exc) from exc
+                except HTTPError as exc:
+                    raise exc
 
-        self._details.set_search_quota(self._last_completed)
+                except (asyncio.CancelledError, Exception) as exc:
+                    raise InternalError(ExcMsg.CANCELLED_ERROR, exc) from exc
+
+        self._details.set_search_quota(last_completed)
 
     async def search_articles(self, params: SurveyParams) -> None:
         url = self._url_builder.search_url(params)

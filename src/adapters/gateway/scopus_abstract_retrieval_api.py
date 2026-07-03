@@ -5,6 +5,7 @@ from pandas import DataFrame
 from src.adapters.helpers.response_auditor import validate_abstract_response
 from src.core.common.types import (
     HTTPClient,
+    Json,
     ResponseBundle,
     SurveyDetails,
     SurveyState,
@@ -12,7 +13,7 @@ from src.core.common.types import (
 )
 from src.core.data.enums import ExcMsg
 from src.core.domain.http_exceptions import HTTPError, InternalError
-from src.utils.progress_bar import ProgressBar
+from src.utils.progress_bar import progress_bar
 
 
 class ScopusAbstractRetrievalAPI:
@@ -33,49 +34,46 @@ class ScopusAbstractRetrievalAPI:
         self._url_builder = url_builder
         self._details = survey_details
         self._state = state
-        self._last_completed: ResponseBundle = None
 
-    async def _get_abstract(self, index: int, pbar: ProgressBar) -> None:
+    async def _get_abstract(self, index: int) -> tuple[ResponseBundle, Json]:
         url = self._url_builder.abstract_url(self._state.entry[index].url)
-        res = await self._http_client.api_call(url)
 
-        self._last_completed = res
+        res = await self._http_client.api_call(url)
         abstract = await asyncio.to_thread(validate_abstract_response, res)
 
-        abstract_data = abstract.model_dump(by_alias=True)
-        self._state.abstracts.append(abstract_data)
-        pbar.step()
+        return res, abstract.model_dump(by_alias=True)
 
     async def _get_multiple_abstracts(self) -> None:
-        pbar = ProgressBar(self._state.abstracts_to_fetch)
-        tasks: list[asyncio.Task[None]] = []
+        tasks: list[asyncio.Task[tuple[ResponseBundle, Json]]] = []
 
         try:
             async with asyncio.TaskGroup() as tg:
                 tasks = [
-                    tg.create_task(self._get_abstract(index, pbar))
+                    tg.create_task(self._get_abstract(index))
                     for index in self._state.abstracts_to_fetch_range
                 ]
         except ExceptionGroup:  # pylint: disable=W0718
             pass
 
-        finally:
-            pbar.close()
-
         if not tasks:
             raise InternalError(ExcMsg.INTERNAL_ERROR)
 
-        for task in tasks:
-            try:
-                task.result()
+        last_completed: ResponseBundle = None
 
-            except HTTPError as exc:
-                raise exc
+        with progress_bar(self._state.abstracts_to_fetch) as pbar:
+            for task in tasks:
+                try:
+                    last_completed, abstract_data = task.result()
+                    self._state.abstracts.append(abstract_data)
+                    pbar.step()
 
-            except (asyncio.CancelledError, Exception) as exc:
-                raise InternalError(ExcMsg.CANCELLED_ERROR, exc) from exc
+                except HTTPError as exc:
+                    raise exc
 
-        self._details.set_abstract_quota(self._last_completed)
+                except (asyncio.CancelledError, Exception) as exc:
+                    raise InternalError(ExcMsg.CANCELLED_ERROR, exc) from exc
+
+        self._details.set_abstract_quota(last_completed)
 
     async def _get_one_abstract(self, index: int) -> None:
         url = self._url_builder.abstract_url(self._state.entry[index].url)
