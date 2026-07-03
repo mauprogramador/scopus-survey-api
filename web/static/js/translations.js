@@ -84,14 +84,18 @@ const errorFeedbacks = {
 
 const detailsGroupLabels = {
   'en-US': {
-    'API Key (Quota)': {
+    'API Key': {
       'x-api-key': 'API Key',
-      'x-search-limit': 'Search API: limit',
-      'x-search-remaining': 'Search API: remaining',
-      'x-search-reset': 'Search API: reset',
-      'x-abstract-limit': 'Abstract API: limit',
-      'x-abstract-remaining': 'Abstract API: remaining',
-      'x-abstract-reset': 'Abstract API: reset',
+    },
+    'Search API (Quota)': {
+      'x-search-limit': 'Limit',
+      'x-search-remaining': 'Remaining',
+      'x-search-reset': 'Reset',
+    },
+    'Abstract API (Quota)': {
+      'x-abstract-limit': 'Limit',
+      'x-abstract-remaining': 'Remaining',
+      'x-abstract-reset': 'Reset',
     },
     Survey: {
       'x-keywords': 'Keywords',
@@ -105,14 +109,18 @@ const detailsGroupLabels = {
     },
   },
   'pt-BR': {
-    'Chave de API (Cota)': {
+    'Chave de API': {
       'x-api-key': 'Chave de API',
-      'x-search-limit': 'Search API: limite',
-      'x-search-remaining': 'Search API: restante',
-      'x-search-reset': 'Search API: redefinição',
-      'x-abstract-limit': 'Abstract API: limite',
-      'x-abstract-remaining': 'Abstract API: restante',
-      'x-abstract-reset': 'Abstract API: redefinição',
+    },
+    'Search API (Cota)': {
+      'x-search-limit': 'Limite',
+      'x-search-remaining': 'Restante',
+      'x-search-reset': 'Redefinição',
+    },
+    'Abstract API (Cota)': {
+      'x-abstract-limit': 'Limite',
+      'x-abstract-remaining': 'Restante',
+      'x-abstract-reset': 'Redefinição',
     },
     Levantamento: {
       'x-keywords': 'Palavras-chave',

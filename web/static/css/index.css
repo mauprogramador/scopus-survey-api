@@ -42,9 +42,8 @@
 }
 #details-tbody td,
 #warning-tbody td {
-  text-overflow: ellipsis;
   white-space: nowrap;
-  overflow: hidden;
+  overflow: overlay;
 }
 
 /* Content containers */
@@ -63,7 +62,7 @@ article {
   --bs-link-color-rgb: 255, 108, 0;
 }
 #navbar-subtitle {
-  font-size: .875em;
+  font-size: 0.875em;
   margin-bottom: 0;
 }
 .navbar-nav {

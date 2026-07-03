@@ -1,5 +1,5 @@
 from src.core.common.types import ResponseBundle
-from src.core.config.scopus import BOOLEAN_OPERATOR, MAX_ITEMS_PER_PAGE
+from src.core.config.scopus import MAX_ITEMS_PER_PAGE
 from src.core.data.serializers import ScopusHeaders, ScopusPage
 
 
@@ -14,7 +14,7 @@ class SurveyDetails:
         self.abstract_quota: tuple[ScopusHeaders, int] = None
 
     def set_keywords(self, keywords: list[str]) -> None:
-        self.headers.update({"X-Keywords": BOOLEAN_OPERATOR.join(keywords)})
+        self.headers.update({"X-Keywords": "; ".join(keywords)})
 
     def set_combination(self, combination: str) -> None:
         self.headers.update({"X-Combination": combination})
@@ -63,11 +63,11 @@ class SurveyDetails:
 
     def set_results(self, retrieved: int) -> None:
         total = int(self.headers["X-Total"])
-        results = f"{retrieved:,}doc / {total:,}doc"
+        results = f"{retrieved:,} / {total:,}"
         self.headers.update({"X-Results": results})
         self.metadata.append(f"results={results}")
 
     def set_loss(self, loss_amount: int, loss_percent: float) -> None:
-        loss = f"{loss_amount}doc / {loss_percent:.2f}%"
+        loss = f"{loss_amount} ({loss_percent:.2f}%)"
         self.headers.update({"X-Loss": loss})
         self.metadata.append(f"loss={loss}")

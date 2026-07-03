@@ -1,5 +1,4 @@
 from src.core.common.types import ResponseBundle
-from src.core.config.scopus import BOOLEAN_OPERATOR
 from src.core.data.serializers import ScopusPage
 from src.core.data.survey_details import SurveyDetails
 from tests.mocks.raw import (
@@ -16,9 +15,7 @@ SURVEY_DETAIL = SurveyDetails()
 
 def test_keywords():
     SURVEY_DETAIL.set_keywords(KEYWORDS)
-    assert SURVEY_DETAIL.headers["X-Keywords"] == BOOLEAN_OPERATOR.join(
-        KEYWORDS
-    )
+    assert SURVEY_DETAIL.headers["X-Keywords"] == "; ".join(KEYWORDS)
 
 
 def test_combination():
@@ -55,14 +52,14 @@ def test_abstract_quota():
 
 def test_results():
     SURVEY_DETAIL.set_results(1)
-    assert SURVEY_DETAIL.headers["X-Results"] == "1doc / 1doc"
-    assert SURVEY_DETAIL.metadata[3] == "results=1doc / 1doc"
+    assert SURVEY_DETAIL.headers["X-Results"] == "1 / 1"
+    assert SURVEY_DETAIL.metadata[3] == "results=1 / 1"
 
 
 def test_loss():
     SURVEY_DETAIL.set_loss(5, 13.5671)
-    assert SURVEY_DETAIL.headers["X-Loss"] == "5doc / 13.57%"
-    assert SURVEY_DETAIL.metadata[4] == "loss=5doc / 13.57%"
+    assert SURVEY_DETAIL.headers["X-Loss"] == "5 (13.57%)"
+    assert SURVEY_DETAIL.metadata[4] == "loss=5 (13.57%)"
 
 
 def test_full_headers():

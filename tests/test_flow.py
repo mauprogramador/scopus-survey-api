@@ -108,7 +108,7 @@ class TestEndpointsSequenceFlow:
         assert res.status_code == HTTP_200
         assert res.headers.get("Content-Type") == JSON_CONTENT_TYPE
         assert res.headers.get("X-API-Key") == cls.api_key
-        assert res.headers.get("X-Keywords") == "FastAPI AND API"
+        assert res.headers.get("X-Keywords") == "FastAPI; API"
         assert res.headers.get("X-Search-Limit") == "20000"
         assert res.headers.get("X-Search-Remaining") == "20000"
         assert res.headers.get("X-Search-Reset") == RESET_DATETIME
@@ -151,7 +151,8 @@ class TestEndpointsSequenceFlow:
         assert res.headers.get("X-Abstract-Limit") == "20000"
         assert res.headers.get("X-Abstract-Remaining") == "20000"
         assert res.headers.get("X-Abstract-Reset") == RESET_DATETIME
-        assert res.headers.get("X-Loss") == "0doc / 0.00%"
+        assert res.headers.get("X-Results") == "1 / 1"
+        assert res.headers.get("X-Loss") == "0 (0.00%)"
 
         filename: str | None = res.headers.get("X-CSV-Filename")
         assert filename == f"{cls.api_key}_{cls.combination.lower()}_{FILE}"

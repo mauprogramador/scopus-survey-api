@@ -26,7 +26,6 @@ const detailsCache = {
   'x-items-per-page': null,
   'x-loss': null,
   'x-process-time': null,
-  'x-csv-filename': null,
 };
 const apiKeyQuota = [
   'x-api-key',
@@ -41,7 +40,6 @@ function updateDetails(headers) {
   detailsCache['x-pages-count'] = null;
   detailsCache['x-items-per-page'] = null;
   detailsCache['x-loss'] = null;
-  detailsCache['x-csv-filename'] = null;
 
   detailsTbody.innerHTML = '';
 
@@ -71,6 +69,13 @@ function updateDetails(headers) {
 
           let tdHeaderValue = document.createElement('td');
           tdHeaderValue.innerText = detailsCache[headerName];
+
+          if (headerName === 'x-keywords') {
+            tdHeaderValue.innerText = detailsCache[headerName].replace(
+              /;/g,
+              '\n',
+            );
+          }
 
           let tr = document.createElement('tr');
           tr.appendChild(tdHeaderName);

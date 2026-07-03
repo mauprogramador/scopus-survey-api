@@ -4,7 +4,6 @@ from pytest import mark
 from pytest_mock import MockerFixture as Mocker
 
 from src.core.common.types import ResponseBundle
-from src.core.config.scopus import BOOLEAN_OPERATOR
 from src.core.data.csv_builder import write_csv_file
 from src.core.data.serializers import ScopusHeaders, ScopusPage
 from src.core.data.survey_details import SurveyDetails
@@ -50,7 +49,7 @@ async def test_combination_details(mocker: Mocker, client: Client):
     assert isinstance(spy_log.call_args_list[0].args[0], ScopusHeaders)
     assert bundle.headers == HEADERS
 
-    assert res.headers["X-Keywords"] == BOOLEAN_OPERATOR.join(KEYWORDS[:2])
+    assert res.headers["X-Keywords"] == "; ".join(KEYWORDS[:2])
     assert res.headers["X-Search-Limit"] == "20000"
     assert res.headers["X-Search-Remaining"] == "12345"
     assert res.headers["X-Search-Reset"] == RESET_DATETIME
@@ -88,8 +87,8 @@ async def test_search_details_one_result(mocker: Mocker, client: Client):
 
     assert metadata[0] == "total=1" and metadata[1] == "items_per_page=1"
     assert metadata[2] == "pages_count=1"
-    assert metadata[3] == "results=1doc / 1doc"
-    assert metadata[4] == "loss=0doc / 0.00%"
+    assert metadata[3] == "results=1 / 1"
+    assert metadata[4] == "loss=0 (0.00%)"
 
     assert res.headers["X-Combination"] == KEYWORDS[0]
     assert res.headers["X-Total"] == "1"
@@ -101,8 +100,8 @@ async def test_search_details_one_result(mocker: Mocker, client: Client):
     assert res.headers["X-Abstract-Limit"] == "20000"
     assert res.headers["X-Abstract-Remaining"] == "12345"
     assert res.headers["X-Abstract-Reset"] == RESET_DATETIME
-    assert res.headers["X-Results"] == "1doc / 1doc"
-    assert res.headers["X-Loss"] == "0doc / 0.00%"
+    assert res.headers["X-Results"] == "1 / 1"
+    assert res.headers["X-Loss"] == "0 (0.00%)"
 
 
 @mark.asyncio
@@ -137,8 +136,8 @@ async def test_search_details_more_results(mocker: Mocker, client: Client):
 
     assert metadata[0] == "total=3" and metadata[1] == "items_per_page=3"
     assert metadata[2] == "pages_count=1"
-    assert metadata[3] == "results=3doc / 3doc"
-    assert metadata[4] == "loss=2doc / 66.67%"
+    assert metadata[3] == "results=3 / 3"
+    assert metadata[4] == "loss=2 (66.67%)"
 
     assert res.headers["X-Combination"] == KEYWORDS[0]
     assert res.headers["X-Total"] == "3"
@@ -150,5 +149,5 @@ async def test_search_details_more_results(mocker: Mocker, client: Client):
     assert res.headers["X-Abstract-Limit"] == "20000"
     assert res.headers["X-Abstract-Remaining"] == "12345"
     assert res.headers["X-Abstract-Reset"] == RESET_DATETIME
-    assert res.headers["X-Results"] == "3doc / 3doc"
-    assert res.headers["X-Loss"] == "2doc / 66.67%"
+    assert res.headers["X-Results"] == "3 / 3"
+    assert res.headers["X-Loss"] == "2 (66.67%)"
