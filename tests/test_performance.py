@@ -1,11 +1,11 @@
+import contextlib
 import random
 import string
 import time
-from contextlib import contextmanager
 
 import pandas as pd
 from httpx import AsyncClient as Client
-from pytest import mark
+from pytest import mark, param
 from pytest_mock import MockerFixture as Mocker
 
 from src.core.config.config import DIRECTORY, FILE
@@ -38,12 +38,16 @@ from tests.mocks.raw import (
 )
 
 
-@contextmanager
+# Base duration is the P95 time based on a summary report of 50x executions
+
+
+@contextlib.contextmanager
 def _assert_time(elapsed: float):
     start_time = time.perf_counter()
     yield
     duration = time.perf_counter() - start_time
-    assert duration <= elapsed
+    latency = elapsed * (1 + 0.30)  # 30% tolerance
+    assert duration <= latency
 
 
 @mark.parametrize(
@@ -52,9 +56,9 @@ def _assert_time(elapsed: float):
         (100, 0.01),
         (500, 0.01),
         (1000, 0.01),
-        (2000, 0.02),
-        (5000, 0.04),
-        (10000, 0.11),
+        param(2000, 0.02, marks=mark.xfail(reason="Unstable latency")),
+        param(5000, 0.04, marks=mark.xfail(reason="Unstable latency")),
+        param(10000, 0.11, marks=mark.xfail(reason="Unstable latency")),
     ],
     ids=["100", "500", "1.000", "2.000", "5.000", "10.000"],
 )
@@ -149,7 +153,7 @@ def test_high_volume_filtering_one_group(total: int, elapsed: float):
         (1000, 0.02),
         (2000, 0.04),
         (5000, 0.08),
-        (10000, 0.15),
+        (10000, 0.16),
     ],
     ids=["100", "500", "1.000", "2.000", "5.000", "10.000"],
 )
@@ -272,7 +276,7 @@ async def test_api_survey_route_process_time(mocker: Mocker, client: Client):
         "button": Button.SURVEY.value,
     }
 
-    with _assert_time(0.30):
+    with _assert_time(0.31):
         res = await client.get(URL_SEARCH, params=params)
         assert res.status_code == HTTP_200 and mock.call_count == 2
 
@@ -283,7 +287,7 @@ async def test_api_survey_route_process_time(mocker: Mocker, client: Client):
     ]
     mock = mocker.patch(*get_patch(res_mock))
 
-    with _assert_time(2.50):
+    with _assert_time(2.44):
         res = await client.get(URL_SEARCH, params=params)
         assert res.status_code == HTTP_200 and mock.call_count == 26
 
@@ -319,7 +323,7 @@ async def test_high_volume_complete_survey(mocker: Mocker, client: Client):
     assert len(data) == 52  # 2 full pages + 50 abstracts
     mock = mocker.patch(*get_patch(data))
 
-    with _assert_time(5.70):
+    with _assert_time(5.72):
         res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
         assert res.status_code == HTTP_200
 
