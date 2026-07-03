@@ -13,8 +13,6 @@ def csv_response(
     file_path = DIRECTORY / f"{api_key}_{FILE}"
 
     headers = {
-        "Content-Disposition": f"attachment; filename={filename}",
-        "Content-Type": "text/csv; charset=utf-8",
         "X-CSV-Filename": filename,
         "X-API-Key": api_key,
     }
@@ -37,8 +35,6 @@ def retrieve_csv(api_key: str) -> FileResponse:
         raise NotFound(ExcMsg.CSV_NOT_FOUND)
 
     headers = {
-        "Content-Disposition": f"attachment; filename={filename}",
-        "Content-Type": "text/csv; charset=utf-8",
         "X-CSV-Filename": filename,
         "X-API-Key": api_key,
     }
