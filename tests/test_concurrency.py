@@ -19,17 +19,16 @@ from src.framework.fastapi.main import app
 from src.framework.middleware.flow_guarding_monitor import (
     FlowGuardingMonitorMiddleware,
 )
-from src.utils.progress_bar import ProgressBar
 from tests.conftest import SEMAPHORE, assert_error_json
 from tests.mocks.errors import RATE_LIMIT_ERROR
 from tests.mocks.helpers import (
     MockSemaphore,
     MockState,
-    Patch,
     fqn,
     get_patch,
     response_mock,
     search_raw,
+    spec,
     trans,
 )
 from tests.mocks.integration import SURVEY_FOUR_KEYWORDS
@@ -48,7 +47,7 @@ from tests.mocks.raw import (
 )
 
 
-STEP = Patch(ScopusSearchAPI, ProgressBar.step, "ProgressBar")
+TO_THREAD = spec(ScopusSearchAPI, asyncio.to_thread, "asyncio")
 STATE = fqn(make_aggregator, SurveyState)
 
 
@@ -88,11 +87,12 @@ async def test_slowapi_rate_limit_exceed(mocker: Mocker, client: Client):
 async def test_async_tasks_api_combination(mocker: Mocker, client: Client):
     running_tasks: set[asyncio.Task[Any]] = set()
 
-    def _retrieve_tasks():
+    def _retrieve_tasks(func, *args):
         loop = asyncio.get_running_loop()
         running_tasks.update(asyncio.all_tasks(loop))
+        return func(*args)  # Call validate_search_response passing res
 
-    mocker.patch(**STEP, side_effect=_retrieve_tasks)
+    mocker.patch(**TO_THREAD, side_effect=_retrieve_tasks)
     mock = mocker.patch(*get_patch([response_mock(RAW_SEARCH_OK)] * 3))
 
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
@@ -111,12 +111,13 @@ async def test_async_tasks_api_combination(mocker: Mocker, client: Client):
 async def test_async_tasks_api_survey(mocker: Mocker, client: Client):
     running_tasks: set[asyncio.Task[Any]] = set()
 
-    def _retrieve_tasks():
+    def _retrieve_tasks(func, *args):
         loop = asyncio.get_running_loop()
         running_tasks.update(asyncio.all_tasks(loop))
+        return func(*args)  # Call validate_search_response passing res
 
     state = mocker.patch(STATE, MockState(3, 51))
-    mocker.patch(**STEP, side_effect=_retrieve_tasks)
+    mocker.patch(**TO_THREAD, side_effect=_retrieve_tasks)
     mock = mocker.patch(
         *get_patch(
             [

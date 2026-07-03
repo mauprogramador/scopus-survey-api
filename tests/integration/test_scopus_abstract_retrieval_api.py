@@ -15,7 +15,7 @@ from src.core.config.scopus import QUOTA_ERROR_CODE
 from src.core.data.enums import ExcMsg
 from src.core.data.survey_state import SurveyState
 from src.core.domain.factory import make_aggregator
-from src.utils.progress_bar import ProgressBar
+from src.utils.progress_bar import progress_bar
 from tests.conftest import assert_error_json
 from tests.mocks.errors import (
     SCOPUS_API_QUOTA_ERROR,
@@ -24,8 +24,8 @@ from tests.mocks.errors import (
     TASKS_HTTP_ERROR,
 )
 from tests.mocks.helpers import (
+    MockProgressBar,
     MockState,
-    Patch,
     fqn,
     get_patch,
     load_csv_from_response,
@@ -56,7 +56,7 @@ from tests.mocks.raw import (
 
 STATE = fqn(make_aggregator, SurveyState)
 ABSTRACT_RES = fqn(ScopusAbstractRetrievalAPI, validate_abstract_response)
-STEP = Patch(ScopusAbstractRetrievalAPI, ProgressBar.step, "ProgressBar")
+PBAR = fqn(ScopusAbstractRetrievalAPI, progress_bar)
 
 
 @mark.asyncio
@@ -193,7 +193,7 @@ async def test_retrieve_no_tasks(mocker: Mocker, client: Client):
 async def test_retrieve_http_error(mocker: Mocker, client: Client):
     spy = mocker.patch(ABSTRACT_RES, wraps=validate_abstract_response)
     mock = mocker.patch(*get_patch(RETRIEVE_MORE_ABSTRACTS))
-    mocker.patch(**STEP(TASKS_HTTP_ERROR))
+    mocker.patch(PBAR, MockProgressBar(TASKS_HTTP_ERROR))
 
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     details = assert_error_json(res, HTTP_400, ExcMsg.INTERNAL_ERROR)
@@ -207,7 +207,7 @@ async def test_retrieve_http_error(mocker: Mocker, client: Client):
 async def test_retrieve_cancelled_error(mocker: Mocker, client: Client):
     spy = mocker.patch(ABSTRACT_RES, wraps=validate_abstract_response)
     mock = mocker.patch(*get_patch(RETRIEVE_MORE_ABSTRACTS))
-    mocker.patch(**STEP(TASKS_CANCELLED_ERROR))
+    mocker.patch(PBAR, MockProgressBar(TASKS_CANCELLED_ERROR))
 
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     details = assert_error_json(res, HTTP_500, ExcMsg.CANCELLED_ERROR)
@@ -222,7 +222,7 @@ async def test_retrieve_cancelled_error(mocker: Mocker, client: Client):
 async def test_retrieve_operational_error(mocker: Mocker, client: Client):
     spy = mocker.patch(ABSTRACT_RES, wraps=validate_abstract_response)
     mock = mocker.patch(*get_patch(RETRIEVE_MORE_ABSTRACTS))
-    mocker.patch(**STEP(TASKS_COMMON_ERROR))
+    mocker.patch(PBAR, MockProgressBar(TASKS_COMMON_ERROR))
 
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     details = assert_error_json(res, HTTP_500, ExcMsg.CANCELLED_ERROR)

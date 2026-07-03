@@ -378,6 +378,32 @@ class MockSemaphore(asyncio.Semaphore):
         return super().release()
 
 
+class MockProgressBar:
+    def __init__(self, side_effect: list[Any]) -> None:
+        self.side_effect = side_effect
+        self.count = -1
+
+    def __call__(self, *args):
+        return self
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        return False
+
+    def step(self) -> None:
+        if self.count < len(self.side_effect):
+            self.count += 1
+
+        current = self.side_effect[self.count]
+
+        if isinstance(current, BaseException):
+            raise current
+
+        return current
+
+
 def search_fix(value: Any | Exception) -> APIsFix:
     """Fixture for ScopusSearchAPI and its dependencies"""
     if isinstance(value, (list, BaseException)):

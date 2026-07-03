@@ -7,8 +7,8 @@ from pytest import mark, raises
 from pytest_mock import MockerFixture as Mocker
 
 from src.adapters.gateway.scopus_search_api import (
-    ProgressBar,
     ScopusSearchAPI,
+    progress_bar,
     validate_search_response,
 )
 from src.core.common.types import ResponseBundle
@@ -25,7 +25,7 @@ from tests.mocks.errors import (
     TASKS_COMMON_ERROR,
     TASKS_HTTP_ERROR,
 )
-from tests.mocks.helpers import MockState, Patch, fqn, search_fix
+from tests.mocks.helpers import MockProgressBar, MockState, fqn, search_fix
 from tests.mocks.raw import HTTP_400, HTTP_404, HTTP_429, HTTP_500, HTTP_502
 from tests.mocks.unitary import (
     FOUR_KEYWORDS,
@@ -50,7 +50,7 @@ from tests.mocks.unitary import (
 
 
 SEARCH_RES = fqn(ScopusSearchAPI, validate_search_response)
-STEP = Patch(ScopusSearchAPI, ProgressBar.step, "ProgressBar")
+PBAR = fqn(ScopusSearchAPI, progress_bar)
 
 
 @mark.asyncio
@@ -98,7 +98,7 @@ async def test_survey_no_tasks():
 async def test_survey_http_error(mocker: Mocker):
     spy = mocker.patch(SEARCH_RES, wraps=validate_search_response)
     fix = search_fix(SURVEY_RESULTS[:7])
-    mocker.patch(**STEP(TASKS_HTTP_ERROR))
+    mocker.patch(PBAR, MockProgressBar(TASKS_HTTP_ERROR))
     with raises(HTTPError) as info:
         await fix.api.survey_totals_found(TWO_KEYWORDS)
     assert_http_error(info, HTTP_400, ExcMsg.INTERNAL_ERROR)
@@ -112,7 +112,7 @@ async def test_survey_http_error(mocker: Mocker):
 async def test_survey_cancelled_error(mocker: Mocker):
     spy = mocker.patch(SEARCH_RES, wraps=validate_search_response)
     fix = search_fix(SURVEY_RESULTS[:7])
-    mocker.patch(**STEP(TASKS_CANCELLED_ERROR))
+    mocker.patch(PBAR, MockProgressBar(TASKS_CANCELLED_ERROR))
     with raises(InternalError) as info:
         await fix.api.survey_totals_found(FOUR_KEYWORDS)
     assert_http_error(info, HTTP_500, ExcMsg.CANCELLED_ERROR)
@@ -126,7 +126,7 @@ async def test_survey_cancelled_error(mocker: Mocker):
 async def test_survey_operational_error(mocker: Mocker):
     spy = mocker.patch(SEARCH_RES, wraps=validate_search_response)
     fix = search_fix(SURVEY_RESULTS[:7])
-    mocker.patch(**STEP(TASKS_COMMON_ERROR))
+    mocker.patch(PBAR, MockProgressBar(TASKS_COMMON_ERROR))
     with raises(InternalError) as info:
         await fix.api.survey_totals_found(TWO_KEYWORDS)
     assert_http_error(info, HTTP_500, ExcMsg.CANCELLED_ERROR)
@@ -276,7 +276,7 @@ async def test_search_no_tasks(mocker: Mocker):
 async def test_search_http_error(mocker: Mocker):
     spy = mocker.patch(SEARCH_RES, wraps=validate_search_response)
     fix = search_fix(MORE_PAGES_PARTIAL_RESULTS)
-    mocker.patch(**STEP(TASKS_HTTP_ERROR))
+    mocker.patch(PBAR, MockProgressBar(TASKS_HTTP_ERROR))
     with raises(HTTPError) as info:
         await fix.api.search_articles(None)
     assert_http_error(info, HTTP_400, ExcMsg.INTERNAL_ERROR)
@@ -290,7 +290,7 @@ async def test_search_http_error(mocker: Mocker):
 async def test_search_cancelled_error(mocker: Mocker):
     spy = mocker.patch(SEARCH_RES, wraps=validate_search_response)
     fix = search_fix(MORE_PAGES_PARTIAL_RESULTS)
-    mocker.patch(**STEP(TASKS_CANCELLED_ERROR))
+    mocker.patch(PBAR, MockProgressBar(TASKS_CANCELLED_ERROR))
     with raises(InternalError) as info:
         await fix.api.search_articles(None)
     assert_http_error(info, HTTP_500, ExcMsg.CANCELLED_ERROR)
@@ -304,7 +304,7 @@ async def test_search_cancelled_error(mocker: Mocker):
 async def test_search_operational_error(mocker: Mocker):
     spy = mocker.patch(SEARCH_RES, wraps=validate_search_response)
     fix = search_fix(MORE_PAGES_PARTIAL_RESULTS)
-    mocker.patch(**STEP(TASKS_COMMON_ERROR))
+    mocker.patch(PBAR, MockProgressBar(TASKS_COMMON_ERROR))
     with raises(InternalError) as info:
         await fix.api.search_articles(None)
     assert_http_error(info, HTTP_500, ExcMsg.CANCELLED_ERROR)

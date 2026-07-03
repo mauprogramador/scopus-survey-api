@@ -7,8 +7,8 @@ from pytest import mark, raises
 from pytest_mock import MockerFixture as Mocker
 
 from src.adapters.gateway.scopus_abstract_retrieval_api import (
-    ProgressBar,
     ScopusAbstractRetrievalAPI,
+    progress_bar,
     validate_abstract_response,
 )
 from src.core.common.types import ResponseBundle
@@ -24,7 +24,13 @@ from tests.mocks.errors import (
     TASKS_COMMON_ERROR,
     TASKS_HTTP_ERROR,
 )
-from tests.mocks.helpers import MockState, Patch, abstract_fix, fqn, search_raw
+from tests.mocks.helpers import (
+    MockProgressBar,
+    MockState,
+    abstract_fix,
+    fqn,
+    search_raw,
+)
 from tests.mocks.raw import API_KEY, HTTP_400, HTTP_429, HTTP_500, HTTP_502
 from tests.mocks.unitary import (
     ABSTRACT_EXACT_QUOTA_MORE_RESULTS,
@@ -40,7 +46,7 @@ from tests.mocks.unitary import (
 
 
 ABSTRACT_RES = fqn(ScopusAbstractRetrievalAPI, validate_abstract_response)
-STEP = Patch(ScopusAbstractRetrievalAPI, ProgressBar.step, "ProgressBar")
+PBAR = fqn(ScopusAbstractRetrievalAPI, progress_bar)
 
 
 @mark.asyncio
@@ -161,7 +167,7 @@ async def test_retrieve_no_tasks(mocker: Mocker):
 async def test_retrieve_http_error(mocker: Mocker):
     spy = mocker.patch(ABSTRACT_RES, wraps=validate_abstract_response)
     fix = abstract_fix(ONE_ABSTRACT, search_raw(7))
-    mocker.patch(**STEP(TASKS_HTTP_ERROR))
+    mocker.patch(PBAR, MockProgressBar(TASKS_HTTP_ERROR))
     with raises(HTTPError) as info:
         await fix.api.retrieve_abstracts(API_KEY)
     assert_http_error(info, HTTP_400, ExcMsg.INTERNAL_ERROR)
@@ -175,7 +181,7 @@ async def test_retrieve_http_error(mocker: Mocker):
 async def test_retrieve_cancelled_error(mocker: Mocker):
     spy = mocker.patch(ABSTRACT_RES, wraps=validate_abstract_response)
     fix = abstract_fix(ONE_ABSTRACT, search_raw(7))
-    mocker.patch(**STEP(TASKS_CANCELLED_ERROR))
+    mocker.patch(PBAR, MockProgressBar(TASKS_CANCELLED_ERROR))
     with raises(InternalError) as info:
         await fix.api.retrieve_abstracts(API_KEY)
     assert_http_error(info, HTTP_500, ExcMsg.CANCELLED_ERROR)
@@ -189,7 +195,7 @@ async def test_retrieve_cancelled_error(mocker: Mocker):
 async def test_retrieve_operational_error(mocker: Mocker):
     spy = mocker.patch(ABSTRACT_RES, wraps=validate_abstract_response)
     fix = abstract_fix(ONE_ABSTRACT, search_raw(7))
-    mocker.patch(**STEP(TASKS_COMMON_ERROR))
+    mocker.patch(PBAR, MockProgressBar(TASKS_COMMON_ERROR))
     with raises(InternalError) as info:
         await fix.api.retrieve_abstracts(API_KEY)
     assert_http_error(info, HTTP_500, ExcMsg.CANCELLED_ERROR)

@@ -1,16 +1,8 @@
-from typing import Self
+from typing import Literal, Self
 
 from tqdm import tqdm
 
 from src.core.config.config import ENV
-
-
-class _DisabledProgressBar:
-    def step(self):
-        pass
-
-    def close(self):
-        pass
 
 
 class ProgressBar:
@@ -20,12 +12,6 @@ class ProgressBar:
         "{rate_fmt}]"
     )
     _PREFIX = "\x1b[93m[\x1b[92mPROGRESS\x1b[93m]\x1b[m"
-
-    def __new__(cls, *args) -> Self | _DisabledProgressBar:  # type: ignore
-        if not ENV.progress_bar:
-            return super().__new__(_DisabledProgressBar)
-
-        return super().__new__(cls)
 
     def __init__(
         self, total: int, step: int = None, start: int = None
@@ -51,5 +37,23 @@ class ProgressBar:
         step = self._step if fits else (self._total - progress)
         self._progress_bar.update(step)
 
-    def close(self):
+    def __enter__(self) -> Self:
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb) -> Literal[False]:
         self._progress_bar.close()
+        return False
+
+
+class _DisabledProgressBar(ProgressBar):
+    def step(self):
+        pass
+
+
+def progress_bar(
+    total: int, step: int = None, start: int = None
+) -> ProgressBar | _DisabledProgressBar:
+    if not ENV.progress_bar:
+        return _DisabledProgressBar(total, step, start)
+
+    return ProgressBar(total, step, start)

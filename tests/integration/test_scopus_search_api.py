@@ -15,7 +15,7 @@ from src.core.data.enums import ExcMsg
 from src.core.data.survey_state import SurveyState
 from src.core.domain.factory import make_aggregator
 from src.core.use_cases.keyword_scouter import KeywordsScouter
-from src.utils.progress_bar import ProgressBar
+from src.utils.progress_bar import progress_bar
 from tests.conftest import assert_error_json
 from tests.mocks.errors import (
     SCOPUS_API_QUOTA_ERROR,
@@ -24,8 +24,8 @@ from tests.mocks.errors import (
     TASKS_HTTP_ERROR,
 )
 from tests.mocks.helpers import (
+    MockProgressBar,
     MockState,
-    Patch,
     fqn,
     get_patch,
     load_csv_from_response,
@@ -66,7 +66,7 @@ from tests.mocks.raw import (
 
 STATE = fqn(make_aggregator, SurveyState)
 SEARCH_RES = fqn(ScopusSearchAPI, validate_search_response)
-STEP = Patch(ScopusSearchAPI, ProgressBar.step, "ProgressBar")
+PBAR = fqn(ScopusSearchAPI, progress_bar)
 CHAIN = fqn(KeywordsScouter, itertools.chain, "itertools")
 
 
@@ -118,7 +118,7 @@ async def test_survey_no_tasks(mocker: Mocker, client: Client):
 async def test_survey_http_error(mocker: Mocker, client: Client):
     spy = mocker.patch(SEARCH_RES, wraps=validate_search_response)
     mock = mocker.patch(*get_patch(SURVEY_THREE_KEYWORDS))
-    mocker.patch(**STEP(TASKS_HTTP_ERROR))
+    mocker.patch(PBAR, MockProgressBar(TASKS_HTTP_ERROR))
     mocker.patch.dict(COMBINATION_PARAMS, {"keywords": KEYWORDS[:3]})
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
     details = assert_error_json(res, HTTP_400, ExcMsg.INTERNAL_ERROR)
@@ -132,7 +132,7 @@ async def test_survey_http_error(mocker: Mocker, client: Client):
 async def test_survey_cancelled_error(mocker: Mocker, client: Client):
     spy = mocker.patch(SEARCH_RES, wraps=validate_search_response)
     mock = mocker.patch(*get_patch(SURVEY_THREE_KEYWORDS))
-    mocker.patch(**STEP(TASKS_CANCELLED_ERROR))
+    mocker.patch(PBAR, MockProgressBar(TASKS_CANCELLED_ERROR))
     mocker.patch.dict(COMBINATION_PARAMS, {"keywords": KEYWORDS[:3]})
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
     details = assert_error_json(res, HTTP_500, ExcMsg.CANCELLED_ERROR)
@@ -146,7 +146,7 @@ async def test_survey_cancelled_error(mocker: Mocker, client: Client):
 async def test_survey_operational_error(mocker: Mocker, client: Client):
     spy = mocker.patch(SEARCH_RES, wraps=validate_search_response)
     mock = mocker.patch(*get_patch(SURVEY_THREE_KEYWORDS))
-    mocker.patch(**STEP(TASKS_COMMON_ERROR))
+    mocker.patch(PBAR, MockProgressBar(TASKS_COMMON_ERROR))
     mocker.patch.dict(COMBINATION_PARAMS, {"keywords": KEYWORDS[:3]})
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
     details = assert_error_json(res, HTTP_500, ExcMsg.CANCELLED_ERROR)
@@ -322,7 +322,7 @@ async def test_search_no_tasks(mocker: Mocker, client: Client):
 async def test_search_http_error(mocker: Mocker, client: Client):
     spy = mocker.patch(SEARCH_RES, wraps=validate_search_response)
     mock = mocker.patch(*get_patch(SEARCH_MORE_PAGES_PARTIAL_RESULTS))
-    mocker.patch(**STEP(TASKS_HTTP_ERROR))
+    mocker.patch(PBAR, MockProgressBar(TASKS_HTTP_ERROR))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     details = assert_error_json(res, HTTP_400, ExcMsg.INTERNAL_ERROR)
     # _get_article has less CPU executions
@@ -334,7 +334,7 @@ async def test_search_http_error(mocker: Mocker, client: Client):
 @mark.asyncio
 async def test_search_cancelled_error(mocker: Mocker, client: Client):
     spy = mocker.patch(SEARCH_RES, wraps=validate_search_response)
-    mocker.patch(**STEP(TASKS_CANCELLED_ERROR))
+    mocker.patch(PBAR, MockProgressBar(TASKS_CANCELLED_ERROR))
     mock = mocker.patch(*get_patch(SEARCH_MORE_PAGES_PARTIAL_RESULTS))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     details = assert_error_json(res, HTTP_500, ExcMsg.CANCELLED_ERROR)
@@ -348,7 +348,7 @@ async def test_search_cancelled_error(mocker: Mocker, client: Client):
 async def test_search_operational_error(mocker: Mocker, client: Client):
     spy = mocker.patch(SEARCH_RES, wraps=validate_search_response)
     mock = mocker.patch(*get_patch(SEARCH_MORE_PAGES_PARTIAL_RESULTS))
-    mocker.patch(**STEP(TASKS_COMMON_ERROR))
+    mocker.patch(PBAR, MockProgressBar(TASKS_COMMON_ERROR))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     details = assert_error_json(res, HTTP_500, ExcMsg.CANCELLED_ERROR)
     # _get_article has less CPU executions
