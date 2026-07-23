@@ -53,7 +53,6 @@ async def test_scopus_api_error(mocker: Mocker, client: Client):
     details = assert_error_json(res, HTTP_502, trans(SCOPUS_API_ERROR))
     assert details[0]["status_code"] == HTTP_500.value
     assert details[0]["error_code"] == "ANY"
-    assert details[1]["any"] == "any"
 
 
 @mark.asyncio
@@ -83,7 +82,7 @@ async def test_fastapi_request_validation_error(
     details = assert_error_json(res, HTTP_422, trans(REQUEST_VALIDATION_ERROR))
     assert details[0]["type"] == fqn(RequestValidationError)
     assert details[0]["message"] == "any"
-    assert details[1]["msg"] == "any"
+    assert details[0]["errors"][0]["msg"] == "any"
 
 
 @mark.asyncio
@@ -97,7 +96,7 @@ async def test_fastapi_response_validation_error(
     )
     assert details[0]["type"] == fqn(ResponseValidationError)
     assert details[0]["message"] == "any"
-    assert details[1]["msg"] == "any"
+    assert details[0]["errors"][0]["msg"] == "any"
 
 
 @mark.asyncio
@@ -108,9 +107,9 @@ async def test_pydantic_validation_error(mocker: Mocker, client: Client):
     details = assert_error_json(res, HTTP_500, msg)
     assert details[0]["type"] == fqn(ValidationError)
     assert details[0]["message"] == "Field required"
-    assert details[1]["type"] == "missing"
-    assert details[1]["msg"] == "Field required"
-    assert details[1]["input"] == "any"
+    assert details[0]["errors"][0]["type"] == "missing"
+    assert details[0]["errors"][0]["msg"] == "Field required"
+    assert details[0]["errors"][0]["input"] == "any"
 
 
 @mark.asyncio
@@ -120,5 +119,6 @@ async def test_rate_limit_error(mocker: Mocker, client: Client):
     details = assert_error_json(res, HTTP_429, trans(RATE_LIMIT_ERROR))
     assert details[0]["type"] == fqn(RateLimitExceeded)
     assert details[0]["message"] == ExcMsg.SLOWAPI_RATE_ERROR
-    assert URL_CSV in details[1]["path"]
-    assert details[1]["rate"] == RATE_LIMIT_ERROR.detail
+    assert details[0]["error"]["status_code"] == HTTP_429
+    assert URL_CSV in details[0]["error"]["resource"]
+    assert details[0]["error"]["rate"] == RATE_LIMIT_ERROR.detail

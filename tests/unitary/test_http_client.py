@@ -104,12 +104,11 @@ async def test_content_type_error(mocker: Mocker, client: HTTPClient):
     with raises(BadGatewayContent) as info:
         await client.api_call("any")
     assert_http_error(info, HTTP_502, ExcMsg.INVALID_JSON_ERROR)
-    assert len(info.value.details) == 2
     assert info.value.details[0]["type"] == fqn(aiohttp.ContentTypeError)
     assert info.value.details[0]["message"] == "any"
-    assert info.value.details[1]["raw_body"] is not None
-    assert info.value.details[1]["message"] == "any"
-    assert info.value.details[1]["status_code"] == 400
+    assert info.value.details[0]["body"] is not None
+    assert info.value.details[0]["error"]["message"] == "any"
+    assert info.value.details[0]["error"]["status_code"] == 400
     mock.assert_awaited_once()
 
 
@@ -121,9 +120,9 @@ async def test_no_data_error(mocker: Mocker, client: HTTPClient):
     assert_http_error(info, HTTP_502, ExcMsg.INVALID_JSON_ERROR)
     assert info.value.details[0]["type"] == fqn(JSONDecodeError)
     assert info.value.details[0]["message"] is not None
-    assert info.value.details[1]["raw_body"] is not None
-    assert info.value.details[1]["message"] == "Expecting value"
-    assert info.value.details[1]["doc"] == "Scopus JSON"
+    assert info.value.details[0]["body"] is not None
+    assert info.value.details[0]["error"]["message"] == "Expecting value"
+    assert info.value.details[0]["error"]["pos"] is not None
     mock.assert_awaited_once()
 
 
@@ -135,9 +134,9 @@ async def test_json_decode_error(mocker: Mocker, client: HTTPClient):
     assert_http_error(info, HTTP_502, ExcMsg.INVALID_JSON_ERROR)
     assert info.value.details[0]["type"] == fqn(JSONDecodeError)
     assert info.value.details[0]["message"] is not None
-    assert info.value.details[1]["raw_body"] is not None
-    assert info.value.details[1]["message"] == "any"
-    assert info.value.details[1]["doc"] == "any"
+    assert info.value.details[0]["body"] is not None
+    assert info.value.details[0]["error"]["message"] == "any"
+    assert info.value.details[0]["error"]["pos"] is not None
     mock.assert_awaited_once()
 
 

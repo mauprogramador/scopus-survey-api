@@ -39,12 +39,11 @@ def _validate[T: BaseModel](model: type[T], res: ResponseBundle) -> T:
                 res.code,
                 quota.model_dump(),
                 error_res.model_dump(),
-                res.data,
             )
 
         return model.model_validate(res.data)
 
-    except (ValidationError, KeyError) as exc:
+    except ValidationError as exc:
         raise InternalError(ExcMsg.VALIDATE_ERROR, exc) from exc
 
 

@@ -47,7 +47,7 @@ def test_form_template(mocker: Mocker):
     assert res.headers["Content-Language"] == Lang.EN_US
     assert res.headers["X-CSRF-Token"] == CSRF_TOKEN
     assert res.headers["Cache-Control"]
-    assert res.headers["Content-Type"]
+    assert "text/html" in res.headers["Content-Type"]
 
     ctx: dict = spy_jinja.call_args_list[0].args[3]
     assert ctx["csrf_token"] == CSRF_TOKEN
@@ -64,6 +64,7 @@ def test_not_found_template(mocker: Mocker):
     assert res.headers["Cache-Control"]
     assert res.headers["Pragma"] == "no-cache"
     assert res.headers["Expires"] == "0"
+    assert "text/html" in res.headers["Content-Type"]
 
     ctx: dict = spy_jinja.call_args_list[0].args[3]
     assert ctx["status"] and ctx["prefix"] and ctx["timestamp"]

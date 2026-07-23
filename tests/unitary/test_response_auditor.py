@@ -35,7 +35,6 @@ def test_status_error():
     with raises(ScopusAPIError) as info:
         validate_search_response(res)
     assert_http_error(info, HTTP_502, "any")
-    assert len(info.value.details) == 2 and info.value.details[1]
     assert info.value.details[0]["error_code"] == "INVALID_INPUT"
     assert info.value.details[0]["status_code"] == HTTP_400
 
@@ -46,7 +45,6 @@ def test_quota_exceeded():
     with raises(ScopusAPIError) as info:
         validate_search_response(res)
     assert_http_error(info, HTTP_502, "any")
-    assert len(info.value.details) and info.value.details[1]
     assert info.value.details[0]["error_code"] == QUOTA_ERROR_CODE
     assert info.value.details[0]["status_code"] == HTTP_429
 
@@ -57,7 +55,6 @@ def test_rate_limit_exceeded():
     with raises(ScopusAPIError) as info:
         validate_search_response(res)
     assert_http_error(info, HTTP_502, "any")
-    assert len(info.value.details) and info.value.details[1]
     assert info.value.details[0]["error_code"] == RATE_LIMIT_ERROR_CODE
     assert info.value.details[0]["status_code"] == HTTP_429
 
@@ -69,7 +66,7 @@ def test_json_validation_error():
     assert_http_error(info, HTTP_500, ExcMsg.VALIDATE_ERROR)
     assert info.value.details[0]["type"] == fqn(ValidationError)
     assert info.value.details[0]["message"]
-    assert info.value.details[1]["type"] == "model_type"
+    assert info.value.details[0]["errors"][0]["type"] == "model_type"
 
 
 def test_json_key_error():
@@ -77,5 +74,7 @@ def test_json_key_error():
     with raises(InternalError) as info:
         validate_search_response(res)
     assert_http_error(info, HTTP_500, ExcMsg.VALIDATE_ERROR)
-    assert info.value.details[0]["type"] == fqn(KeyError)
+    print(info.value.details)
+    assert info.value.details[0]["type"] == fqn(ValidationError)
     assert info.value.details[0]["message"]
+    assert info.value.details[0]["errors"][0]["type"] == "missing"

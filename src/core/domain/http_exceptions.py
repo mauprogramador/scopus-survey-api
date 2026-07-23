@@ -1,11 +1,10 @@
-import asyncio
 from datetime import datetime, timezone
 from http import HTTPStatus
 from json import JSONDecodeError
 
 import aiohttp
 from fastapi.exceptions import HTTPException as FastAPIHTTPException
-from itsdangerous import BadData, BadSignature, SignatureExpired
+from itsdangerous import BadSignature, SignatureExpired
 from pydantic import ValidationError
 
 from src.core.common.types import Json
@@ -14,26 +13,35 @@ from src.core.data.enums import ExcMsg
 
 
 def get_error_message(exc: Exception) -> str:
-    if exc.args and exc.args[0] and isinstance(exc.args[0], str):
-        return exc.args[0]
     if getattr(exc, "message", None) is not None:
         return getattr(exc, "message")
     if getattr(exc, "detail", None) is not None:
         return getattr(exc, "detail")
+    if exc.args and exc.args[0] and isinstance(exc.args[0], str):
+        return exc.args[0]
     return repr(exc)
 
 
-def get_error_details(exc: Exception) -> list[Json]:
-    base_error = {
+def _error_details(exc: Exception) -> Json:
+    details = {
         "type": f"{type(exc).__module__}.{type(exc).__qualname__}",
         "message": get_error_message(exc),
     }
-    details = [base_error]
 
     if isinstance(exc, ValidationError):
         pydantic_errors = exc.errors(include_url=False)
-        details[0]["message"] = pydantic_errors[0].get("msg", exc.title)
-        details.extend(pydantic_errors)
+        details["message"] = pydantic_errors[0].get("msg", exc.title)
+        details["errors"] = pydantic_errors
+
+    return details
+
+
+def get_error_details(exc: Exception) -> Json:
+    details = _error_details(exc)
+
+    cause = exc.__cause__ or exc.__context__
+    if cause:
+        details["cause"] = _error_details(cause)
 
     return details
 
@@ -49,7 +57,7 @@ class HTTPError(FastAPIHTTPException):
         self.message = message
 
         if exc is not None:
-            self.details = get_error_details(exc)
+            self.details = [get_error_details(exc)]
         else:
             self.details = None
 
@@ -63,20 +71,18 @@ class Unauthorized(HTTPError):
         """HTTP error status code 401"""
         super().__init__(HTTPStatus.UNAUTHORIZED, message, exc)
 
-        if isinstance(exc, (SignatureExpired, BadSignature, BadData)):
-            self.details[0]["message"] = exc.message
-            date_signed = getattr(exc, "date_signed", None)
+        if isinstance(exc, BadSignature):
+            self.details[0]["signature"] = {"payload": exc.payload}
+
+        if isinstance(exc, SignatureExpired):
+            date_signed = exc.date_signed
 
             if isinstance(date_signed, datetime):
                 date_signed = date_signed.replace(
                     tzinfo=timezone.utc  # e.g. 2026-01-01T00:00:00Z
                 ).isoformat(timespec="seconds")
 
-            signature_detail = {
-                "payload": getattr(exc, "payload", None),
-                "date_signed": date_signed,
-            }
-            self.details.append(signature_detail)
+            self.details[0]["signature"]["date_signed"] = date_signed
 
 
 class NotFound(HTTPError):
@@ -110,38 +116,37 @@ class GatewayTimeout(HTTPError):
         """HTTP error status code 504"""
         super().__init__(HTTPStatus.GATEWAY_TIMEOUT, message, exc)
 
-        if isinstance(exc, asyncio.TimeoutError):
-            timeout_detail = {"strerror": exc.strerror, "errno": exc.errno}
-            self.details.append(timeout_detail)
-
 
 class BadGatewayContent(HTTPError):
     """HTTP error status code 502"""
 
+    _TRUNCATE_SIZE = 1000
+
     def __init__(self, message: ExcMsg, exc: Exception, body: str) -> None:
         """HTTP error status code 502"""
         super().__init__(HTTPStatus.BAD_GATEWAY, message, exc)
-        body_detail: Json = {"raw_body": body}
+
+        if len(body) > self._TRUNCATE_SIZE:
+            self.details[0]["body"] = body[:997] + "..."  # truncate
+        else:
+            self.details[0]["body"] = body
 
         if isinstance(exc, aiohttp.ContentTypeError):
             content_type_detail: Json = {
                 "message": exc.message,
                 "status_code": exc.status,
-                "path": exc.request_info.url.path,
+                "resource": exc.request_info.url.path,
             }
-            body_detail.update(content_type_detail)
+            self.details[0]["error"] = content_type_detail
 
         elif isinstance(exc, JSONDecodeError):
             json_decode_detail: Json = {
                 "message": exc.msg,
-                "doc": exc.doc,
                 "pos": exc.pos,
                 "lineno": exc.lineno,
                 "colno": exc.colno,
             }
-            body_detail.update(json_decode_detail)
-
-        self.details.append(body_detail)
+            self.details[0]["error"] = json_decode_detail
 
 
 class ScopusAPIError(HTTPError):
@@ -152,7 +157,6 @@ class ScopusAPIError(HTTPError):
         code: int,
         headers: Json,
         scopus_error: Json,
-        body: Json,
     ) -> None:
         """Scopus API HTTP status error 502 exception"""
         # Use ExcMsg as a mock replacement only
@@ -160,12 +164,11 @@ class ScopusAPIError(HTTPError):
         self.message = scopus_error["text"]
         self.detail = scopus_error["text"]
 
-        scopus_api_detail = {
+        scopus_details = {
             **headers,
             "status_code": code,
-            "status": HTTPStatus(code).phrase,
             "error_code": scopus_error["code"],
             "error_text": scopus_error["text"],
             "docs": SCOPUS_DOCS,
         }
-        self.details: list[Json] = [scopus_api_detail, body]
+        self.details = [scopus_details]

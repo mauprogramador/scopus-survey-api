@@ -19,14 +19,11 @@ from tests.mocks.helpers import (
     search_raw,
 )
 from tests.mocks.raw import (
-    CSV_CONTENT_TYPE,
-    HTML_CONTENT_TYPE,
     HTTP_200,
     HTTP_404,
-    JSON_CONTENT_TYPE,
     RAW_ABSTRACT_OK,
     RAW_SEARCH_OK,
-    RESET_DATETIME,
+    RESET,
     URL_COMBINATION,
     URL_CSV,
     URL_SEARCH,
@@ -56,10 +53,10 @@ class TestEndpointsSequenceFlow:
 
         res = await client.get(URL_WEB)
         assert res.status_code == HTTP_200
-        assert res.headers.get("Content-Type") == HTML_CONTENT_TYPE
+        assert "text/html" in res.headers["Content-Type"]
 
-        cls.token_header = res.headers.get("X-CSRF-Token")
-        cls.token_cookie = res.cookies.get("csrf-token")
+        cls.token_header = res.headers["X-CSRF-Token"]
+        cls.token_cookie = res.cookies["csrf-token"]
 
         assert cls.token_header is not None
         assert cls.token_cookie is not None
@@ -83,7 +80,7 @@ class TestEndpointsSequenceFlow:
             headers={"X-CSRF-Token": cls.token_header},
         )
         assert res.status_code == HTTP_404
-        assert res.headers.get("Content-Type") in JSON_CONTENT_TYPE
+        assert "application/json" in res.headers["Content-Type"]
         assert_error_json(res, HTTP_404, ExcMsg.CSV_NOT_FOUND)
 
     @mark.asyncio
@@ -106,12 +103,12 @@ class TestEndpointsSequenceFlow:
             headers={"X-CSRF-Token": cls.token_header},
         )
         assert res.status_code == HTTP_200
-        assert res.headers.get("Content-Type") == JSON_CONTENT_TYPE
-        assert res.headers.get("X-API-Key") == cls.api_key
-        assert res.headers.get("X-Keywords") == "FastAPI; API"
-        assert res.headers.get("X-Search-Limit") == "20000"
-        assert res.headers.get("X-Search-Remaining") == "20000"
-        assert res.headers.get("X-Search-Reset") == RESET_DATETIME
+        assert "application/json" in res.headers["Content-Type"]
+        assert res.headers["X-API-Key"] == cls.api_key
+        assert res.headers["X-Keywords"] == "FastAPI; API"
+        assert res.headers["X-Search-Limit"] == "20000"
+        assert res.headers["X-Search-Remaining"] == "20000"
+        assert res.headers["X-Search-Reset"] == str(RESET)
         assert len(res.json()["result"]["combinations"]) == 3
 
         cls.combination = res.json()["result"]["combinations"][0][
@@ -139,22 +136,22 @@ class TestEndpointsSequenceFlow:
             headers={"X-CSRF-Token": cls.token_header},
         )
         assert res.status_code == HTTP_200
-        assert res.headers.get("Content-Type") == CSV_CONTENT_TYPE
-        assert res.headers.get("X-API-Key") == cls.api_key
-        assert res.headers.get("X-Combination") == cls.combination
-        assert res.headers.get("X-Total") == "1"
-        assert res.headers.get("X-Items-Per-Page") == "1"
-        assert res.headers.get("X-Pages-Count") == "1"
-        assert res.headers.get("X-Search-Limit") == "20000"
-        assert res.headers.get("X-Search-Remaining") == "20000"
-        assert res.headers.get("X-Search-Reset") == RESET_DATETIME
-        assert res.headers.get("X-Abstract-Limit") == "20000"
-        assert res.headers.get("X-Abstract-Remaining") == "20000"
-        assert res.headers.get("X-Abstract-Reset") == RESET_DATETIME
-        assert res.headers.get("X-Results") == "1 / 1"
-        assert res.headers.get("X-Loss") == "0 (0.00%)"
+        assert "text/csv" in res.headers["Content-Type"]
+        assert res.headers["X-API-Key"] == cls.api_key
+        assert res.headers["X-Combination"] == cls.combination
+        assert res.headers["X-Scopus-Total"] == "1"
+        assert res.headers["X-Total-Retrieved"] == "1"
+        assert res.headers["X-Total-Final"] == "1"
+        assert res.headers["X-Items-Per-Page"] == "1"
+        assert res.headers["X-Pages-Count"] == "1"
+        assert res.headers["X-Search-Limit"] == "20000"
+        assert res.headers["X-Search-Remaining"] == "20000"
+        assert res.headers["X-Search-Reset"] == str(RESET)
+        assert res.headers["X-Abstract-Limit"] == "20000"
+        assert res.headers["X-Abstract-Remaining"] == "20000"
+        assert res.headers["X-Abstract-Reset"] == str(RESET)
 
-        filename: str | None = res.headers.get("X-CSV-Filename")
+        filename: str | None = res.headers["X-CSV-Filename"]
         assert filename == f"{cls.api_key}_{cls.combination.lower()}_{FILE}"
 
         df = load_csv_from_response(res)
@@ -199,9 +196,9 @@ class TestEndpointsSequenceFlow:
             headers={"X-CSRF-Token": cls.token_header},
         )
         assert res.status_code == HTTP_200
-        assert res.headers.get("Content-Type") == CSV_CONTENT_TYPE
-        assert res.headers.get("X-API-Key") == cls.api_key
-        assert res.headers.get("X-CSV-Filename") is not None
+        assert "text/csv" in res.headers["Content-Type"]
+        assert res.headers["X-API-Key"] == cls.api_key
+        assert res.headers["X-CSV-Filename"] is not None
 
         df = load_csv_from_response(res)
         assert df.shape == (1, 11)

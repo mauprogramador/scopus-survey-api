@@ -42,7 +42,7 @@ def test_invalid_token():
         verify_csrf_token(SIGNED_TOKEN, "any")
     assert_http_error(info, HTTP_401, ExcMsg.INVALID_TOKEN)
     assert info.value.details[0]["type"] == fqn(ValidationError)
-    assert info.value.details[0]["message"] and info.value.details[1]
+    assert info.value.details[0]["message"]
 
 
 def test_signature_expired(mocker: Mocker):

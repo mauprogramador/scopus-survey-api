@@ -49,7 +49,8 @@ async def test_invalid_token(client: Client):
     res = await client.get(URL_CSV, params=CSV_PARAMS)
     details = assert_error_json(res, HTTP_401, ExcMsg.INVALID_TOKEN)
     assert details[0]["type"] == fqn(ValidationError)
-    assert details[0]["message"] and details[1]
+    assert details[0]["message"]
+    assert details[0]["errors"][0]["type"] == "string_too_short"
 
 
 @mark.asyncio
@@ -64,6 +65,8 @@ async def test_signature_expired(mocker: Mocker, client: Client):
     details = assert_error_json(res, HTTP_401, ExcMsg.EXPIRED_TOKEN)
     assert details[0]["type"] == fqn(SignatureExpired)
     assert details[0]["message"] == "any"
+    assert details[0]["signature"]["payload"] is None
+    assert details[0]["signature"]["date_signed"] is None
 
 
 @mark.asyncio
@@ -73,6 +76,7 @@ async def test_bad_signature(client: Client):
     details = assert_error_json(res, HTTP_401, ExcMsg.TOKEN_SIGNATURE_ERROR)
     assert details[0]["type"] == fqn(BadSignature)
     assert details[0]["message"]
+    assert details[0]["signature"]["payload"] is None
 
 
 @mark.asyncio

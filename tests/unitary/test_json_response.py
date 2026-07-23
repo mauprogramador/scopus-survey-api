@@ -12,7 +12,12 @@ from src.adapters.presenters.json_response import (
 from src.core.common.types import Json
 from src.core.data.enums import ExcMsg
 from tests.mocks.helpers import fqn
-from tests.mocks.raw import HTTP_200, HTTP_500, REQUEST
+from tests.mocks.raw import (
+    HTTP_200,
+    HTTP_400,
+    HTTP_500,
+    REQUEST,
+)
 
 
 JSONABLE = fqn(ErrorJSON, to_jsonable_python)
@@ -88,15 +93,17 @@ def test_error_json_serialize_fallback():
 
 def test_error_json_serialize_error(mocker: Mocker):
     mocker.patch(JSONABLE, side_effect=ValueError("any"))
-    model = ErrorJSON(REQUEST, HTTP_500, "any", "any", [{"any": "any"}])
+    message, details = "Ops!", [{"any": "any"}]
+    model = ErrorJSON(REQUEST, HTTP_400, message, "any", details)
     raw: Json = json.loads(model.body.decode())  # type: ignore
 
-    assert not raw["success"] and raw["message"] == "any"
+    assert not raw["success"] and raw["message"] == ExcMsg.SERIALIZE_ERROR
     assert raw["status_code"] == HTTP_500
     assert raw["details"][0]["type"] == fqn(ValueError)
     assert raw["details"][0]["message"] == "any"
-    assert raw["details"][1]["desc"] == ExcMsg.SERIALIZE_ERROR
-    assert raw["details"][1]["raw_repr"]
+    assert raw["details"][0]["original_error"]["message"] == message
+    assert raw["details"][0]["original_error"]["status_code"] == HTTP_400
+    assert raw["details"][0]["original_error"]["raw_details"] == repr(details)
 
 
 def test_success_response():

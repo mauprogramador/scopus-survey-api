@@ -63,10 +63,10 @@ async def test_status_error(
         HTTPStatus(status),
         {"status": "any"},
         {"code": "ANY", "text": "any"},
-        {"any": "any"},
     )
     details = assert_error_json(res, HTTP_502, trans(exc))
-    assert details[0]["status"] and details[1]["error"] == "any"
+    assert details[0]["status"] == "ERROR"
+    assert details[0]["error_code"] == "any"
     assert details[0]["status_code"] == status
 
 
@@ -77,7 +77,6 @@ async def test_quota_exceeded(mocker: Mocker, client: Client):
     details = assert_error_json(res, HTTP_502, trans(SCOPUS_API_QUOTA_ERROR))
     assert details[0]["error_code"] == QUOTA_ERROR_CODE
     assert details[0]["status_code"] == HTTP_429
-    assert details[1] == RAW_SERVICE_ERROR_QUOTA
 
 
 @mark.asyncio
@@ -87,7 +86,6 @@ async def test_rate_limit_exceeded(mocker: Mocker, client: Client):
     details = assert_error_json(res, HTTP_502, trans(SCOPUS_API_RATE_ERROR))
     assert details[0]["error_code"] == RATE_LIMIT_ERROR_CODE
     assert details[0]["status_code"] == HTTP_429
-    assert details[1] == RAW_ERROR_RESPONSE_RATE_LIMIT
 
 
 @mark.asyncio
@@ -97,7 +95,7 @@ async def test_json_validation_error(mocker: Mocker, client: Client):
     details = assert_error_json(res, HTTP_500, ExcMsg.VALIDATE_ERROR)
     assert details[0]["type"] == fqn(ValidationError)
     assert details[0]["message"]
-    assert details[1]["type"] == "model_type"
+    assert details[0]["errors"][0]["type"] == "model_type"
 
 
 @mark.asyncio
@@ -105,5 +103,6 @@ async def test_json_key_error(mocker: Mocker, client: Client):
     mocker.patch(*get_patch(RESPONSE_KEY_ERROR))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     details = assert_error_json(res, HTTP_500, ExcMsg.VALIDATE_ERROR)
-    assert details[0]["type"] == fqn(KeyError)
+    assert details[0]["type"] == fqn(ValidationError)
     assert details[0]["message"]
+    assert details[0]["errors"][0]["type"] == "missing"

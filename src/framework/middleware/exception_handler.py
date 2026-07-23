@@ -65,7 +65,6 @@ async def starlette_http_exception(
     tracking_id = _get_tracking_id(exc)
 
     details = get_error_details(exc)
-    details[0]["message"] = exc.detail
 
     if not logger.excluded_routes(request.url.path):
         logger.error(exc.detail, tracking_id)
@@ -90,8 +89,8 @@ async def fastapi_validation_error(
     validation_errors: list[Json] = exc.errors()
     message = validation_errors[0].get("msg", ExcMsg.INTERNAL_ERROR)
 
-    details[0]["message"] = message
-    details.extend(validation_errors)
+    details["message"] = message
+    details["errors"] = validation_errors
 
     logger.error(message, tracking_id)
     logger.exception(exc)
@@ -116,7 +115,7 @@ async def pydantic_validation_error(
     tracking_id = _get_tracking_id(exc)
     details = get_error_details(exc)
 
-    logger.error(details[0]["message"], tracking_id)
+    logger.error(details["message"], tracking_id)
     logger.exception(exc)
 
     return ErrorJSON(
@@ -134,14 +133,12 @@ async def rate_limit_error(
     tracking_id = _get_tracking_id(exc)
     details = get_error_details(exc)
 
-    rate_limit_detail = {
+    details["error"] = {
         "status_code": exc.status_code,
-        "path": request.url.path,
+        "resource": request.url.path,
         "rate": exc.detail,
     }
-    details.append(rate_limit_detail)
-
-    details[0]["message"] = ExcMsg.SLOWAPI_RATE_ERROR
+    details["message"] = ExcMsg.SLOWAPI_RATE_ERROR
 
     logger.error(ExcMsg.SLOWAPI_RATE_ERROR, tracking_id)
     logger.exception(exc)

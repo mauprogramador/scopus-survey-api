@@ -9,12 +9,9 @@ from tests.mocks.helpers import get_patch
 from tests.mocks.integration import COMBINATION_RESPONSES, SURVEY_RESPONSES
 from tests.mocks.raw import (
     COMBINATION_PARAMS,
-    CSV_CONTENT_TYPE,
     CSV_PARAMS,
-    HTML_CONTENT_TYPE,
     HTTP_200,
     HTTP_404,
-    JSON_CONTENT_TYPE,
     SEARCH_PARAMS,
     URL_COMBINATION,
     URL_CSV,
@@ -29,7 +26,7 @@ async def test_favicon(client: Client):
     res = await client.get("/favicon.ico")
     assert res.status_code == HTTP_200
     assert res.headers["Cache-Control"]
-    assert res.headers["Content-Disposition"].count("favicon.ico")
+    assert "favicon.ico" in res.headers["Content-Disposition"]
     assert res.headers["Content-Type"] == "image/x-icon"
 
 
@@ -39,8 +36,8 @@ async def test_web_search_articles_en_us(client: Client):
     client.headers.clear()
     res = await client.get(URL_WEB)
     assert res.status_code == HTTP_200 and res.text
-    assert res.cookies.get("csrf-token") is not None
-    assert res.headers.get("Content-Type") == HTML_CONTENT_TYPE
+    assert res.cookies["csrf-token"] is not None
+    assert "text/html" in res.headers["Content-Type"]
 
 
 @mark.asyncio
@@ -49,8 +46,8 @@ async def test_web_search_articles_pt_br(client: Client):
     client.headers.clear()
     res = await client.get(f"/web/{Lang.PT_BR}/survey-bibliographies")
     assert res.status_code == HTTP_200 and res.text
-    assert res.cookies.get("csrf-token") is not None
-    assert res.headers.get("Content-Type") == HTML_CONTENT_TYPE
+    assert res.cookies["csrf-token"] is not None
+    assert "text/html" in res.headers["Content-Type"]
 
 
 @mark.asyncio
@@ -58,7 +55,7 @@ async def test_api_combination(mocker: Mocker, client: Client):
     mocker.patch(*get_patch(COMBINATION_RESPONSES))
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
     assert res.status_code == HTTP_200 and res.text
-    assert res.headers.get("Content-Type") == JSON_CONTENT_TYPE
+    assert "application/json" in res.headers["Content-Type"]
 
 
 @mark.asyncio
@@ -66,14 +63,14 @@ async def test_api_survey(mocker: Mocker, client: Client):
     mocker.patch(*get_patch(SURVEY_RESPONSES))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     assert res.status_code == HTTP_200 and res.text
-    assert res.headers.get("Content-Type") == CSV_CONTENT_TYPE
+    assert "text/csv" in res.headers["Content-Type"]
 
 
 @mark.asyncio
 async def test_api_csv_success(client: Client):
     res = await client.get(URL_CSV, params=CSV_PARAMS)
     assert res.status_code == HTTP_200 and res.text
-    assert res.headers.get("Content-Type") == CSV_CONTENT_TYPE
+    assert "text/csv" in res.headers["Content-Type"]
 
 
 @mark.asyncio
@@ -81,4 +78,4 @@ async def test_api_csv_not_found(mocker: Mocker, client: Client):
     mocker.patch.dict(CSV_PARAMS, {"apiKey": secrets.token_hex(16)})
     res = await client.get(URL_CSV, params=CSV_PARAMS)
     assert res.status_code == HTTP_404
-    assert res.headers.get("Content-Type") in JSON_CONTENT_TYPE
+    assert "application/json" in res.headers["Content-Type"]

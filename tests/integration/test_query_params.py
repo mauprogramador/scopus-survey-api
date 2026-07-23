@@ -59,7 +59,9 @@ async def test_csv_params_valid_data(client: Client):
 async def test_csv_params_raise_errors(client: Client):
     res = await client.get(URL_CSV)
     details = assert_error_json(res, HTTP_422, trans(REQUEST_VALIDATION_ERROR))
-    assert len(details) == 3
+    assert details[0]["type"] == fqn(RequestValidationError)
+    assert details[0]["message"] == "Field required"
+    assert details[0]["errors"][0]["type"] == "missing"
 
 
 @mark.asyncio
@@ -96,7 +98,10 @@ async def test_combination_params_overridden_default(
 async def test_combination_params_raise_errors(client: Client):
     res = await client.get(URL_COMBINATION)
     details = assert_error_json(res, HTTP_422, trans(REQUEST_VALIDATION_ERROR))
-    assert len(details) == 4
+    assert details[0]["type"] == fqn(RequestValidationError)
+    assert details[0]["message"] == "Field required"
+    assert len(details[0]["errors"]) == 3
+    assert details[0]["errors"][0]["type"] == "missing"
 
 
 @mark.asyncio
@@ -129,11 +134,15 @@ async def test_combination_params_keywords(mocker: Mocker, client: Client):
 
     params.update({"keywords": ["any,any,any,any,any"]})
     res = await client.get(URL_COMBINATION, params=params)
-    assert res.status_code == HTTP_422
+    details = assert_error_json(res, HTTP_422, trans(REQUEST_VALIDATION_ERROR))
+    assert details[0]["type"] == fqn(RequestValidationError)
+    assert details[0]["errors"][0]["type"] == "too_long"
 
     params.update({"keywords": ["any"]})
     res = await client.get(URL_COMBINATION, params=params)
-    assert res.status_code == HTTP_422
+    details = assert_error_json(res, HTTP_422, trans(REQUEST_VALIDATION_ERROR))
+    assert details[0]["type"] == fqn(RequestValidationError)
+    assert details[0]["errors"][0]["type"] == "too_short"
 
 
 @mark.asyncio
@@ -164,7 +173,10 @@ async def test_search_params_raise_errors(mocker: Mocker, client: Client):
     mocker.patch(**MAKE_AGGREGATOR(RETRIEVE_ARTICLES))
     res = await client.get(URL_SEARCH)
     details = assert_error_json(res, HTTP_422, trans(REQUEST_VALIDATION_ERROR))
-    assert len(details) == 5
+    assert details[0]["type"] == fqn(RequestValidationError)
+    assert details[0]["message"] == "Field required"
+    assert len(details[0]["errors"]) == 4
+    assert details[0]["errors"][0]["type"] == "missing"
 
 
 @mark.asyncio

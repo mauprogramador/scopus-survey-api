@@ -23,19 +23,16 @@ SCOPUS_API_ERROR = ScopusAPIError(
     HTTPStatus.INTERNAL_SERVER_ERROR,
     {"status": "any"},
     {"code": "ANY", "text": "any"},
-    {"any": "any"},
 )
 SCOPUS_API_QUOTA_ERROR = ScopusAPIError(
     HTTPStatus.TOO_MANY_REQUESTS,
     {"status": "any"},
     {"code": QUOTA_ERROR_CODE, "text": "any"},
-    {"any": "any"},
 )
 SCOPUS_API_RATE_ERROR = ScopusAPIError(
     HTTPStatus.TOO_MANY_REQUESTS,
     {"status": "any"},
     {"code": RATE_LIMIT_ERROR_CODE, "text": "any"},
-    {"any": "any"},
 )
 
 STARLETTE_HTTP_EXCEPTION = StarletteHTTPException(

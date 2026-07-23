@@ -78,9 +78,9 @@ async def test_slowapi_rate_limit_exceed(mocker: Mocker, client: Client):
     details = assert_error_json(res, HTTP_429, trans(RATE_LIMIT_ERROR))
     assert details[0]["type"] == fqn(RateLimitExceeded)
     assert details[0]["message"] == ExcMsg.SLOWAPI_RATE_ERROR
-    assert details[1]["status_code"] == 429
-    assert URL_CSV in details[1]["path"]
-    assert details[1]["rate"] == "60 per 2 second"
+    assert details[0]["error"]["status_code"] == HTTP_429
+    assert URL_CSV in details[0]["error"]["resource"]
+    assert details[0]["error"]["rate"] == "60 per 2 second"
 
 
 @mark.asyncio
