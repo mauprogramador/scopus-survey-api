@@ -12,7 +12,7 @@ from pydantic import (
     model_validator,
 )
 
-from src.adapters.helpers.url_builder import URLBuilder
+from src.adapters.helpers.url_builder import build_article_page_url
 from src.core.common.types import Json
 from src.core.config.scopus import EMPTY_RESULT, NULL
 
@@ -124,8 +124,8 @@ class ScopusAbstract(BaseModel):
 
     @model_validator(mode="after")
     def set_article_page_url(self) -> Self:
-        scopus_id: str = self.scopus_id.split(":")[1]  # pylint: disable=E1101
-        self.url = URLBuilder.article_page_url(scopus_id)
+        scopus_id = self.scopus_id.split(":")[1]  # pylint: disable=E1101
+        self.url = build_article_page_url(scopus_id)
         return self
 
 

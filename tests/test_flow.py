@@ -7,7 +7,7 @@ from pytest import mark
 from pytest_mock import MockerFixture as Mocker
 from thefuzz.fuzz import partial_ratio as fuzz_partial_ratio
 
-from src.adapters.helpers.url_builder import URLBuilder
+from src.adapters.helpers.url_builder import build_article_page_url
 from src.core.config.config import DIRECTORY, FILE
 from src.core.config.scopus import DATA_SOURCE_NOTE
 from src.core.data.enums import ExcMsg
@@ -159,7 +159,7 @@ class TestEndpointsSequenceFlow:
 
         df = load_csv_from_response(res)
         assert df.shape == (1, 11)
-        url = URLBuilder.article_page_url("0123456789")
+        url = build_article_page_url("0123456789")
         assert df["Article Preview Page URL"].iloc[0] == url
         assert df["Authors"].iloc[0] == "any_author"
         assert df["Title"].iloc[0] == "any_title"
@@ -205,7 +205,7 @@ class TestEndpointsSequenceFlow:
 
         df = load_csv_from_response(res)
         assert df.shape == (1, 11)
-        url = URLBuilder.article_page_url("0123456789")
+        url = build_article_page_url("0123456789")
         assert df["Article Preview Page URL"].iloc[0] == url
         assert df["Authors"].iloc[0] == "any_author"
         assert df["Title"].iloc[0] == "any_title"

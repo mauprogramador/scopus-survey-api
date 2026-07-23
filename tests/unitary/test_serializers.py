@@ -1,7 +1,7 @@
 from pydantic import ValidationError
 from pytest import raises
 
-from src.adapters.helpers.url_builder import URLBuilder
+from src.adapters.helpers.url_builder import build_article_page_url
 from src.core.config.scopus import (
     NULL,
     QUOTA_ERROR_CODE,
@@ -68,7 +68,7 @@ def test_scopus_search_empty_result():
 
 def test_scopus_abstract_valid_data():
     model = ScopusAbstract(**RAW_ABSTRACT_OK)
-    assert model.url == URLBuilder.article_page_url("0123456789")
+    assert model.url == build_article_page_url("0123456789")
     assert model.scopus_id == SCOPUS_ID
     assert model.authors == "any_author" and model.title == "any_title"
     assert model.publication_name == NULL and model.abstract == NULL
@@ -78,7 +78,7 @@ def test_scopus_abstract_valid_data():
 
 def test_scopus_abstract_overridden_default():
     model = ScopusAbstract(**RAW_ABSTRACT_FULL)
-    assert model.url == URLBuilder.article_page_url("0123456789")
+    assert model.url == build_article_page_url("0123456789")
     assert model.scopus_id == SCOPUS_ID
     assert model.authors == "any_author" and model.title == "any_title"
     assert model.publication_name == "any_publication_name"
@@ -121,14 +121,14 @@ def test_scopus_abstract_no_author():
         }
     }
     model = ScopusAbstract(**raw)
-    assert model.url == URLBuilder.article_page_url("0123456789")
+    assert model.url == build_article_page_url("0123456789")
     assert model.scopus_id == SCOPUS_ID
     assert model.title == "any_title" and model.authors == NULL
 
 
 def test_scopus_abstract_authors():
     model = ScopusAbstract(**RAW_ABSTRACT_AUTHORS)
-    assert model.url == URLBuilder.article_page_url("0123456789")
+    assert model.url == build_article_page_url("0123456789")
     assert model.scopus_id == SCOPUS_ID
     assert model.authors == "any_author_1, any_author_2"
 
