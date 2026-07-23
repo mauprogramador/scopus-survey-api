@@ -6,7 +6,7 @@ from fastapi.responses import JSONResponse
 from pydantic import BaseModel, ConfigDict
 from pydantic_core import PydanticSerializationError, to_jsonable_python
 
-from src.core.common.types import Json
+from src.core.common.types import CombinationParams, Json, ScopusHeaders
 from src.core.data.enums import ExcMsg
 from src.core.domain.http_exceptions import get_error_details
 from src.utils import logger
@@ -96,3 +96,22 @@ class SuccessJSON(JSONResponse):
             result=result,
         )
         super().__init__(success_response.model_dump(), HTTPStatus.OK, headers)
+
+
+def json_response(
+    params: CombinationParams,
+    quota_headers: ScopusHeaders,
+    results: list[Json],
+) -> SuccessJSON:
+    headers = {
+        "X-API-Key": params.api_key,
+        "X-Keywords": "; ".join(params.keywords),
+        "X-Search-Limit": str(quota_headers.limit),
+        "X-Search-Remaining": str(quota_headers.remaining),
+        "X-Search-Reset": str(quota_headers.reset),
+    }
+    return SuccessJSON(
+        result={"combinations": results},
+        message="Combination totals survey successfully",
+        headers=headers,
+    )
