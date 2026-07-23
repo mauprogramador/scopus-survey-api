@@ -1,6 +1,5 @@
-import math
 from datetime import datetime
-from typing import Literal, Self
+from typing import Any, Literal, Self
 
 from pydantic import (
     AliasChoices,
@@ -61,21 +60,24 @@ class ScopusPage(BaseModel):
 
     @model_validator(mode="before")
     @classmethod
-    def flatten_json(cls, data: Json) -> Json:
-        return data["search-results"]
+    def flatten_json(cls, data: Any) -> Any | Json:
+        try:
+            return data["search-results"]
+
+        except (KeyError, TypeError):
+            return data
 
     @field_validator("entry", mode="before")
     @classmethod
-    def validate_entry(cls, data: list[Json]) -> list[Json]:
-        if len(data) == 1 and data[0].get("error") == EMPTY_RESULT:
-            return []
-        return data
+    def validate_entry(cls, value: Any) -> Any | list:
+        try:
+            if value[0]["error"] == EMPTY_RESULT:
+                return []
 
-    @property
-    def pages_count(self) -> int:
-        if self.total_results == 0:
-            return 0
-        return math.ceil(self.total_results / self.items_per_page)
+        except (KeyError, TypeError):
+            pass
+
+        return value
 
 
 class ScopusAbstract(BaseModel):
@@ -108,23 +110,27 @@ class ScopusAbstract(BaseModel):
 
     @model_validator(mode="before")
     @classmethod
-    def flatten_json_and_set_authors(cls, data: Json) -> Json:
-        data: dict[str, Json] = data["abstracts-retrieval-response"]
+    def flatten_json_and_set_authors(cls, data: Any) -> Any | Json:
+        try:
+            res: dict[str, Json] = data["abstracts-retrieval-response"]
+            core_data = res["coredata"]
 
-        if data.get("authors") is None:
-            coredata = data["coredata"]
+            if "authors" in res:
+                authors: list[Json] = res["authors"]["author"]
 
-            if coredata.get("dc:creator") is None:
-                authors = [{"ce:indexed-name": NULL}]
+            elif "dc:creator" in core_data:
+                authors: list[Json] = core_data["dc:creator"]["author"]
+
             else:
-                authors: list[Json] = coredata["dc:creator"]["author"]
-        else:
-            authors: list[Json] = data["authors"]["author"]
+                return core_data
 
-        authors_names = [author["ce:indexed-name"] for author in authors]
-        data["coredata"].setdefault("authors", ", ".join(authors_names))
+            authors_names = [author["ce:indexed-name"] for author in authors]
+            core_data["authors"] = ", ".join(authors_names)
 
-        return data["coredata"]
+            return core_data
+
+        except (KeyError, TypeError):
+            return data
 
     @model_validator(mode="after")
     def set_article_page_url(self) -> Self:
@@ -172,11 +178,15 @@ class ScopusError(BaseModel):
 
     @model_validator(mode="before")
     @classmethod
-    def flatten_json(cls, data: Json) -> dict[str, str]:
-        if data.get("error-response") is not None:
-            return data["error-response"]
+    def flatten_json(cls, data: Any) -> dict[str, str]:
+        try:
+            if "error-response" in data:
+                return data["error-response"]
 
-        if data.get("service-error") is not None:
-            return data["service-error"]["status"]
+            if "service-error" in data:
+                return data["service-error"]["status"]
+
+        except (KeyError, TypeError):
+            pass
 
         return data

@@ -44,7 +44,7 @@ def test_scopus_entry_raise_errors():
 def test_scopus_search_valid_data():
     model = ScopusPage(**search_raw(156, 1))
     assert model.total_results == 156 and model.items_per_page == 25
-    assert model.pages_count == 7 and len(model.entry) == 1
+    assert len(model.entry) == 1
 
 
 def test_scopus_search_raise_errors():
@@ -54,9 +54,9 @@ def test_scopus_search_raise_errors():
 
 
 def test_scopus_search_key_error():
-    with raises(KeyError) as info:
-        ScopusPage(**{"any": "any"})
-    assert info.value.args[0] == "search-results"
+    with raises(ValidationError) as info:
+        ScopusPage(**{})
+    assert info.value.error_count() == 3
 
 
 def test_scopus_search_empty_result():
@@ -88,26 +88,20 @@ def test_scopus_abstract_overridden_default():
 
 
 def test_scopus_abstract_raise_errors():
-    raw = {
-        "abstracts-retrieval-response": {
-            "coredata": {
-                "dc:creator": {"author": [{"ce:indexed-name": "any_author"}]}
-            }
-        }
-    }
+    raw = {"abstracts-retrieval-response": {"coredata": {}}}
     with raises(ValidationError) as info:
         ScopusAbstract(**raw)
     assert len(info.value.errors()) == 2
 
 
 def test_scopus_abstract_key_error():
-    with raises(KeyError) as info:
+    with raises(ValidationError) as info:
         ScopusAbstract(**{})
-    assert info.value.args[0] == "abstracts-retrieval-response"
+    assert info.value.error_count() == 2
 
-    with raises(KeyError) as info:
+    with raises(ValidationError) as info:
         ScopusAbstract(**{"abstracts-retrieval-response": {}})
-    assert info.value.args[0] == "coredata"
+    assert info.value.error_count() == 2
 
 
 def test_scopus_abstract_no_author():
@@ -161,6 +155,6 @@ def test_scopus_error_overridden_default():
 
 
 def test_scopus_error_key_error():
-    with raises(KeyError) as info:
-        ScopusError(**{"service-error": {"any": "any"}})
-    assert info.value.args[0] == "status"
+    with raises(ValidationError) as info:
+        ScopusError(**{"service-error": {}})
+    assert info.value.error_count() == 2

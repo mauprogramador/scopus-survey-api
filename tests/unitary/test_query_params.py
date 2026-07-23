@@ -84,6 +84,14 @@ def test_combination_params_empty_to_default():
 def test_combination_params_keywords():
     raw = {
         "api_key": API_KEY,
+        "keywords": "any,any",
+        "button": Button.COMBINATION.value,
+    }
+    model = CombinationParams(**raw)
+    assert model.keywords == ["any", "any"]
+
+    raw = {
+        "api_key": API_KEY,
         "keywords": ["any,any"],
         "button": Button.COMBINATION.value,
     }

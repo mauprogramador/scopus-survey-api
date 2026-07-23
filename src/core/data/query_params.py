@@ -4,12 +4,11 @@ from pydantic import (
     BaseModel,
     ConfigDict,
     Field,
-    ValidationError,
     ValidationInfo,
     computed_field,
     field_validator,
 )
-from pydantic_core import InitErrorDetails, PydanticUseDefault
+from pydantic_core import PydanticUseDefault
 
 from src.core.common.types import Keyword
 from src.core.config.scopus import (
@@ -143,7 +142,7 @@ class CombinationParams(CSVParams):
         description="The Keywords in the documents you are searching for",
         examples=["Python", "Scopus", "Web API", "Bibliographic Survey"],
         exclude=True,
-        min_length=1,
+        min_length=2,
         max_length=4,
     )
     button: Literal[Button.COMBINATION] = Field(
@@ -156,37 +155,28 @@ class CombinationParams(CSVParams):
     @classmethod
     def empty_str_to_default(cls, value: Any, info: ValidationInfo) -> Any:
         field = cls.model_fields.get(info.field_name)
+
         if field:
-            invalid_value = isinstance(value, str) and value.strip() == ""
-            if not field.is_required() and invalid_value:
+            is_invalid_value = isinstance(value, str) and value.strip() == ""
+
+            if not field.is_required() and is_invalid_value:
                 raise PydanticUseDefault()
+
         return value
 
     @field_validator("keywords", mode="before")
     @classmethod
-    def keywords_length(cls, value: Any) -> Any | list[str]:
-        if (
-            isinstance(value, list)
-            and len(value) == 1
-            and isinstance(value[0], str)
-        ):
-            keywords = value[0].split(",")
-            if len(keywords) < 2:
-                raise ValidationError.from_exception_data(
-                    "Keywords length too short",
-                    [
-                        InitErrorDetails(
-                            type="too_short",
-                            input=value,
-                            ctx={
-                                "field_type": "List",
-                                "min_length": 2,
-                                "actual_length": len(keywords),
-                            },
-                        )
-                    ],
-                )
-            return keywords
+    def handle_keywords_length(cls, value: Any) -> Any | list[str]:
+        if isinstance(value, str):
+            return value.split(",")
+
+        try:
+            if len(value) == 1:
+                return value[0].split(",")
+
+        except (KeyError, TypeError):
+            pass
+
         return value
 
     @computed_field(return_type=str)  # type: ignore[prop-decorator]
