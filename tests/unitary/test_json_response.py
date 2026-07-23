@@ -8,14 +8,20 @@ from src.adapters.presenters.json_response import (
     ErrorResponse,
     SuccessJSON,
     SuccessResponse,
+    json_response,
 )
 from src.core.common.types import Json
 from src.core.data.enums import ExcMsg
+from src.core.data.query_params import CombinationParams
+from src.core.data.serializers import ScopusHeaders
 from tests.mocks.helpers import fqn
 from tests.mocks.raw import (
+    ALIAS_COMBINATION_PARAMS,
+    API_KEY,
     HTTP_200,
     HTTP_400,
     HTTP_500,
+    RAW_HEADERS_OK,
     REQUEST,
 )
 
@@ -132,3 +138,20 @@ def test_success_json():
     assert raw["status"] == HTTP_200.phrase
     assert raw["status_code"] == HTTP_200
     assert raw["message"] == "any" and raw["result"] is not None
+
+
+def test_json_response():
+    params = CombinationParams(**ALIAS_COMBINATION_PARAMS)
+    quota_headers = ScopusHeaders(**RAW_HEADERS_OK)
+    res = json_response(params, quota_headers, [{"any": "any"}])
+    body: Json = json.loads(res.body.decode())  # type: ignore
+
+    assert "application/json" in res.headers["Content-Type"]
+    assert res.headers["X-API-Key"] == API_KEY
+    assert res.headers["X-Keywords"]
+    assert res.headers["X-Search-Limit"]
+    assert res.headers["X-Search-Remaining"]
+    assert res.headers["X-Search-Reset"]
+    assert body["success"] and body["status_code"] == HTTP_200
+    assert "Combination totals survey successfully" in body["message"]
+    assert body["result"]["combinations"][0]["any"] == "any"
