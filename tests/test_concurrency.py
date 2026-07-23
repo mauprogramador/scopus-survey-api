@@ -1,7 +1,7 @@
 # mypy: disable-error-code="index"
 import asyncio
 import threading
-from typing import Any
+from typing import Any, Literal
 
 from httpx import AsyncClient as Client
 from pytest import mark
@@ -9,12 +9,12 @@ from pytest_mock import MockerFixture as Mocker
 from slowapi.errors import RateLimitExceeded
 
 from src.adapters.gateway.scopus_abstract_retrieval_api import (
-    ScopusAbstractRetrievalAPI,
+    ScopusDatasetGatherer,
 )
-from src.adapters.gateway.scopus_search_api import ScopusSearchAPI
-from src.core.common.types import SurveyState
+from src.adapters.gateway.scopus_search_api import ScopusVolumeScouter
+from src.adapters.helpers.context import ScopusContext
+from src.core.common.types import Json
 from src.core.data.enums import ExcMsg
-from src.core.domain.factory import make_aggregator
 from src.framework.fastapi.main import app
 from src.framework.middleware.flow_guarding_monitor import (
     FlowGuardingMonitorMiddleware,
@@ -45,7 +45,9 @@ from tests.mocks.raw import (
 )
 
 
-TO_THREAD = spec(ScopusSearchAPI, asyncio.to_thread, "asyncio")
+CONTEXT = fqn(ScopusDatasetGatherer, ScopusContext)
+SCOUTER_TO_THREAD = spec(ScopusVolumeScouter, asyncio.to_thread, "asyncio")
+GATHERER_TO_THREAD = spec(ScopusDatasetGatherer, asyncio.to_thread, "asyncio")
 
 
 def _task_name(task: asyncio.Task) -> str:
@@ -84,12 +86,12 @@ async def test_slowapi_rate_limit_exceed(mocker: Mocker, client: Client):
 async def test_async_tasks_api_combination(mocker: Mocker, client: Client):
     running_tasks: set[asyncio.Task[Any]] = set()
 
-    def _retrieve_tasks(func, *args):
+    async def _retrieve_tasks(func, *args):
         loop = asyncio.get_running_loop()
         running_tasks.update(asyncio.all_tasks(loop))
-        return func(*args)  # Call validate_search_response passing res
+        return func(*args)  # Call validate response
 
-    mocker.patch(**TO_THREAD, side_effect=_retrieve_tasks)
+    mocker.patch(**SCOUTER_TO_THREAD, side_effect=_retrieve_tasks)
     mock = mocker.patch(*get_patch([response_mock(RAW_SEARCH_OK)] * 3))
 
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
@@ -99,7 +101,7 @@ async def test_async_tasks_api_combination(mocker: Mocker, client: Client):
 
     task_names = ":".join(_task_name(task) for task in running_tasks)
     # pylint: disable=W0212
-    assert task_names.count(ScopusSearchAPI._get_article.__qualname__) == 3
+    assert task_names.count(ScopusVolumeScouter._fetch_total.__qualname__) == 3
     assert task_names.count(fqn(FlowGuardingMonitorMiddleware.__call__)) == 2
     assert task_names.count("test_async_tasks_api_combination") == 1
 
@@ -107,26 +109,32 @@ async def test_async_tasks_api_combination(mocker: Mocker, client: Client):
 @mark.asyncio
 async def test_async_tasks_api_survey(mocker: Mocker, client: Client):
     running_tasks: set[asyncio.Task[Any]] = set()
+    recorded_calls: list[str] = []
 
-    def _retrieve_tasks(func, *args):
+    async def _retrieve_tasks(func, *args):
         loop = asyncio.get_running_loop()
+        recorded_calls.append(func.__name__)
         running_tasks.update(asyncio.all_tasks(loop))
-        return func(*args)  # Call validate_search_response passing res
+        return func(*args)  # Call validate response
 
     ctx = ScopusContext()
     mocker.patch(CONTEXT, return_value=ctx)
-    mocker.patch(**TO_THREAD, side_effect=_retrieve_tasks)
+    mocker.patch(**GATHERER_TO_THREAD, side_effect=_retrieve_tasks)
     mock = mocker.patch(
         *get_patch(
             [
-                *[response_mock(search_raw(51, 1))] * 3,
+                response_mock(search_raw(3)),
                 *[response_mock(RAW_ABSTRACT_OK)] * 3,
             ]
         )
     )
 
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
-    assert res.status_code == HTTP_200 and mock.call_count == 6
+    assert res.status_code == HTTP_200 and mock.call_count == 4
+
+    assert len(recorded_calls) == 4
+    assert recorded_calls.count("validate_search_response") == 1
+    assert recorded_calls.count("validate_abstract_response") == 3
 
     assert len(ctx.entry) == 3 and ctx.total_results == 3
     assert ctx.pages_count == 1 and len(running_tasks) == 5
@@ -134,11 +142,12 @@ async def test_async_tasks_api_survey(mocker: Mocker, client: Client):
     task_names = ":".join(_task_name(task) for task in running_tasks)
 
     # pylint: disable=W0212
-    method = ScopusSearchAPI._get_by_pagination.__qualname__
-    assert task_names.count(method) == 2
+    method = ScopusDatasetGatherer._fetch_page.__qualname__
+    # the first two awaits are counted as from the middleware
+    assert task_names.count(method) == 0
 
     # pylint: disable=W0212
-    method = ScopusAbstractRetrievalAPI._get_abstract.__qualname__
+    method = ScopusDatasetGatherer._fetch_abstract.__qualname__
     assert task_names.count(method) == 2
 
     assert task_names.count(fqn(FlowGuardingMonitorMiddleware.__call__)) == 2
