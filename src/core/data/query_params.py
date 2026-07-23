@@ -84,7 +84,7 @@ class CombinationParams(CSVParams):
         ge=(MAX_RECENT_PUBLICATIONS + 1),
         le=CURRENT_YEAR,
     )
-    doctype: DocType = Field(
+    doctype: DocType | None = Field(
         default=None,
         alias="docType",
         validation_alias="doctype",
@@ -92,7 +92,7 @@ class CombinationParams(CSVParams):
         description="The Document Type in which the document is classified",
         examples=[DocType.AR],
     )
-    pubstage: PubStage = Field(
+    pubstage: PubStage | None = Field(
         default=None,
         alias="pubStage",
         validation_alias="pubstage",
@@ -100,7 +100,7 @@ class CombinationParams(CSVParams):
         description="The Publication Stage of the document",
         examples=[PubStage.FINAL],
     )
-    language: str = Field(
+    language: str | None = Field(
         default=None,
         serialization_alias="LANGUAGE",
         description="The Language in which the document was written",
@@ -109,7 +109,7 @@ class CombinationParams(CSVParams):
         min_length=3,
         max_length=50,
     )
-    open_access: Literal["0", "1"] = Field(
+    open_access: Literal["0", "1"] | None = Field(
         default=None,
         alias="openAccess",
         validation_alias="open_access",
@@ -117,7 +117,7 @@ class CombinationParams(CSVParams):
         description="Whether the indexed content is Open Access or not",
         examples=[0],
     )
-    source_type: SrcType = Field(
+    source_type: SrcType | None = Field(
         default=None,
         alias="srcType",
         validation_alias="source_type",
@@ -125,7 +125,7 @@ class CombinationParams(CSVParams):
         description="The Source Type the document comes from",
         examples=[SrcType.J],
     )
-    subject_area: SubjArea = Field(
+    subject_area: SubjArea | None = Field(
         default=None,
         alias="subjArea",
         validation_alias="subject_area",
@@ -133,7 +133,7 @@ class CombinationParams(CSVParams):
         description="The Subject Area in which the document is classified",
         examples=[SubjArea.COMP],
     )
-    page_range: PageRange = Field(
+    page_range: PageRange | None = Field(
         default=None,
         serialization_alias="PAGES",
         description="The documents' size by Page Count",

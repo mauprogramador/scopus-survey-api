@@ -14,7 +14,7 @@ from pydantic import (
 
 from src.adapters.helpers.url_builder import build_article_page_url
 from src.core.common.types import Json
-from src.core.config.scopus import EMPTY_RESULT, NULL
+from src.core.config.scopus import EMPTY_RESULT
 
 
 # e.g. http://api.elsevier.com/content/abstract/scopus_id/0123456789
@@ -83,24 +83,28 @@ class ScopusAbstract(BaseModel):
 
     model_config = ConfigDict(str_strip_whitespace=True)
 
-    url: str = Field(default=NULL)
+    url: str = Field(default=None)
     scopus_id: str = Field(
         validation_alias="dc:identifier",
         pattern=_SCOPUS_ID_PATTERN,
         min_length=20,
         max_length=29,
     )
-    authors: str = Field()
+    authors: str | None = Field(default=None)
     title: str = Field(validation_alias="dc:title")
-    publication_name: str = Field(
-        default=NULL, validation_alias="prism:publicationName"
+    publication_name: str | None = Field(
+        default=None, validation_alias="prism:publicationName"
     )
-    abstract: str = Field(default=NULL, validation_alias="dc:description")
-    date: str = Field(default=NULL, validation_alias="prism:coverDate")
-    eid: str = Field(default=NULL)
-    doi: str = Field(default=NULL, validation_alias="prism:doi")
-    volume: str = Field(default=NULL, validation_alias="prism:volume")
-    citations: str = Field(default=NULL, validation_alias="citedby-count")
+    abstract: str | None = Field(
+        default=None, validation_alias="dc:description"
+    )
+    date: str | None = Field(default=None, validation_alias="prism:coverDate")
+    eid: str | None = Field(default=None)
+    doi: str | None = Field(default=None, validation_alias="prism:doi")
+    volume: str | None = Field(default=None, validation_alias="prism:volume")
+    citations: str | None = Field(
+        default=None, validation_alias="citedby-count"
+    )
 
     @model_validator(mode="before")
     @classmethod
@@ -134,12 +138,16 @@ class ScopusHeaders(BaseModel):
 
     model_config = ConfigDict(str_strip_whitespace=True)
 
-    limit: int = Field(default=None, validation_alias="X-RateLimit-Limit")
-    remaining: int = Field(
+    limit: int | None = Field(
+        default=None, validation_alias="X-RateLimit-Limit"
+    )
+    remaining: int | None = Field(
         default=None, validation_alias="X-RateLimit-Remaining"
     )
-    reset: int = Field(default=None, validation_alias="X-RateLimit-Reset")
-    status: str = Field(default=None, validation_alias="X-ELS-Status")
+    reset: int | None = Field(
+        default=None, validation_alias="X-RateLimit-Reset"
+    )
+    status: str | None = Field(default=None, validation_alias="X-ELS-Status")
 
     @computed_field(return_type=str)  # type: ignore[prop-decorator]
     @property
@@ -156,12 +164,10 @@ class ScopusError(BaseModel):
     model_config = ConfigDict(str_strip_whitespace=True)
 
     code: str = Field(
-        default=NULL,
-        validation_alias=AliasChoices("error-code", "statusCode"),
+        validation_alias=AliasChoices("error-code", "statusCode")
     )
     text: str = Field(
-        default=NULL,
-        validation_alias=AliasChoices("error-message", "statusText"),
+        validation_alias=AliasChoices("error-message", "statusText")
     )
 
     @model_validator(mode="before")

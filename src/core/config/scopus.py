@@ -8,7 +8,6 @@ LAST_THREE_YEARS = CURRENT_YEAR - 3
 MAX_RECENT_PUBLICATIONS = CURRENT_YEAR - 15
 
 BOOLEAN_OPERATOR = " AND "
-NULL = "null"
 
 # Scopus Search API response standard
 # https://dev.elsevier.com/documentation/ScopusSearchAPI.wadl

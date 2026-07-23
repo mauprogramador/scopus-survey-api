@@ -3,7 +3,6 @@ from pytest import raises
 
 from src.adapters.helpers.url_builder import build_article_page_url
 from src.core.config.scopus import (
-    NULL,
     QUOTA_ERROR_CODE,
     RATE_LIMIT_ERROR_CODE,
 )
@@ -71,9 +70,9 @@ def test_scopus_abstract_valid_data():
     assert model.url == build_article_page_url("0123456789")
     assert model.scopus_id == SCOPUS_ID
     assert model.authors == "any_author" and model.title == "any_title"
-    assert model.publication_name == NULL and model.abstract == NULL
-    assert model.date == NULL and model.eid == NULL and model.doi == NULL
-    assert model.volume == NULL and model.citations == NULL
+    assert model.publication_name is None and model.abstract is None
+    assert model.date is None and model.eid is None and model.doi is None
+    assert model.volume is None and model.citations is None
 
 
 def test_scopus_abstract_overridden_default():
@@ -123,7 +122,7 @@ def test_scopus_abstract_no_author():
     model = ScopusAbstract(**raw)
     assert model.url == build_article_page_url("0123456789")
     assert model.scopus_id == SCOPUS_ID
-    assert model.title == "any_title" and model.authors == NULL
+    assert model.title == "any_title" and model.authors is None
 
 
 def test_scopus_abstract_authors():
@@ -148,8 +147,9 @@ def test_scopus_headers_overridden_default():
 
 
 def test_scopus_error_valid_data():
-    model = ScopusError(**{})
-    assert model.code == NULL
+    with raises(ValidationError) as info:
+        ScopusError(**{})
+    assert info.value.error_count() == 2
 
 
 def test_scopus_error_overridden_default():

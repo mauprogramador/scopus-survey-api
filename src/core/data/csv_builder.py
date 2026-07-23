@@ -56,6 +56,7 @@ def write_csv_file(
         docs.rename(columns=_COLUMN_TRANSLATION).to_csv(
             file,
             sep=";",
+            na_rep="",
             header=True,
             index=False,
             encoding="utf-8",
