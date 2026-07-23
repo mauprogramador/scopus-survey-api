@@ -10,12 +10,14 @@ from http import HTTPStatus
 from logging.config import dictConfig
 from logging.handlers import RotatingFileHandler
 from pathlib import Path
+from typing import Any
 
 import gunicorn.glogging
 import uvicorn.logging
 from fastapi.requests import Request as FastAPIRequest
 from pydantic_core import to_jsonable_python
 from starlette.types import Scope as StarletteScope
+from tqdm.std import tqdm as std_tqdm
 
 from src.core.common.types import Json, Quota
 from src.core.config.config import ENV
@@ -110,6 +112,23 @@ class _FileHandler(RotatingFileHandler):
         return Path(path).with_name(_filename(count)).as_posix()
 
 
+class _TQDMLoggingHandler(logging.StreamHandler):
+
+    def __init__(self, stream: Any = None) -> None:
+        super().__init__(stream)
+        self.tqdm_class = std_tqdm
+
+    def emit(self, record) -> None:
+        try:
+            msg = self.format(record)
+            self.tqdm_class.write(msg, file=self.stream)
+            self.flush()
+        except (KeyboardInterrupt, SystemExit):
+            raise
+        except:  # noqa pylint: disable=bare-except
+            self.handleError(record)
+
+
 _METHOD_COLOR = {"GET": "94", "POST": "92", "PUT": "93", "DELETE": "91"}
 _UVICORN_FMT = "%(asctime)s %(levelprefix)-19s %(message)s"
 _FRAME = traceback.FrameSummary(
@@ -151,7 +170,11 @@ _LOGGING_CONFIG: Json = {
     },
     "handlers": {
         "console": {
-            "class": logging.StreamHandler,
+            "class": (
+                _TQDMLoggingHandler
+                if ENV.progress_bar
+                else logging.StreamHandler
+            ),
             "formatter": "default",
             "stream": "ext://sys.stdout",
         },

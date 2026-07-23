@@ -3,7 +3,6 @@ import contextlib
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from tqdm.contrib.logging import logging_redirect_tqdm
 
 from src import __version__
 from src.adapters.presenters.jinja_response import build_all_templates
@@ -33,11 +32,7 @@ async def lifespan(app: FastAPI):  # pylint: disable=W0621,W0613
     if ENV.host == "0.0.0.0":
         logger.localhost(ENV.port)
 
-    if ENV.progress_bar:
-        with logging_redirect_tqdm([logger.LOGGER]):
-            yield
-    else:
-        yield
+    yield
 
 
 app = FastAPI(
