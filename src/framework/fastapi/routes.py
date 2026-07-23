@@ -6,8 +6,9 @@ from fastapi.requests import Request as FastAPIRequest
 from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
 from fastapi.routing import APIRouter
 
-from src.adapters.presenters.csv_response import retrieve_csv
+from src.adapters.presenters.csv_response import csv_response, retrieve_csv
 from src.adapters.presenters.jinja_response import get_web_form_template
+from src.adapters.presenters.json_response import json_response
 from src.core.config.config import (
     FAVICON_HEADERS,
     FAVICON_PATH,
@@ -16,6 +17,7 @@ from src.core.config.config import (
     MAX_AGE,
     PREFIX,
 )
+from src.core.data.csv_builder import write_csv_file
 from src.core.data.enums import Lang
 from src.core.data.query_params import (
     CombinationParams,
@@ -27,6 +29,7 @@ from src.framework.fastapi.csrf_token import (
     generate_csrf_token,
     verify_csrf_token,
 )
+from src.framework.fastapi.details import extract_survey_details
 from src.framework.fastapi.swagger import (
     CSV_RESPONSES,
     JSON_RESPONSES,
@@ -104,9 +107,9 @@ async def survey_total_combinations(
     logger.debug(params.model_dump())
 
     use_case = make_combinator()
-    res = await use_case.survey_combinations(params)
+    results, quota_headers = await use_case.process(params)
 
-    return res
+    return json_response(params, quota_headers, results)
 
 
 @router.get(
@@ -128,9 +131,12 @@ async def survey_bibliographic_data(
     logger.debug(params.model_dump())
 
     use_case = make_aggregator()
-    res = await use_case.retrieve_articles(params)
+    dataset, details = await use_case.process(params)
 
-    return res
+    headers, metadata = extract_survey_details(params, details)
+    filename = write_csv_file(dataset, params, metadata)
+
+    return csv_response(filename, params.api_key, headers)
 
 
 @router.get(
@@ -151,6 +157,4 @@ async def download_csv(
 ) -> FileResponse:
     logger.debug(params.model_dump())
 
-    res = retrieve_csv(params.api_key)
-
-    return res
+    return retrieve_csv(params.api_key)
