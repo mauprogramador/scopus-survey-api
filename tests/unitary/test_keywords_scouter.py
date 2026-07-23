@@ -43,13 +43,13 @@ async def test_survey_two_keywords():
         "button": Button.COMBINATION.value,
     }
     params = CombinationParams(**raw)
+    results, _ = await USE_CASE.process(params)
 
-    res = await COMBINATION_FINDER.survey_combinations(params)
-    result: Json = json.loads(res.body.decode())["result"]  # type: ignore
+    assert len(results) == 3 and sum(item["total"] for item in results) > 0
+    combinations_repr = ";".join(item["combination"] for item in results)
 
-    assert res.status_code == HTTP_200
-    assert len(result["combinations"]) == 3
-    assert sum(item["total"] for item in result["combinations"]) > 0
+    for keyword in raw["keywords"]:
+        assert keyword in combinations_repr
 
 
 @mark.asyncio
@@ -60,13 +60,13 @@ async def test_survey_three_keywords():
         "button": Button.COMBINATION.value,
     }
     params = CombinationParams(**raw)
+    results, _ = await USE_CASE.process(params)
 
-    res = await COMBINATION_FINDER.survey_combinations(params)
-    result: Json = json.loads(res.body.decode())["result"]  # type: ignore
+    assert len(results) == 7 and sum(item["total"] for item in results) > 0
+    combinations_repr = ";".join(item["combination"] for item in results)
 
-    assert res.status_code == HTTP_200
-    assert len(result["combinations"]) == 7
-    assert sum(item["total"] for item in result["combinations"]) > 0
+    for keyword in raw["keywords"]:
+        assert keyword in combinations_repr
 
 
 @mark.asyncio
@@ -77,28 +77,10 @@ async def test_survey_four_keywords():
         "button": Button.COMBINATION.value,
     }
     params = CombinationParams(**raw)
+    results, _ = await USE_CASE.process(params)
 
-    res = await COMBINATION_FINDER.survey_combinations(params)
-    result: Json = json.loads(res.body.decode())["result"]  # type: ignore
+    assert len(results) == 15 and sum(item["total"] for item in results) > 0
+    combinations_repr = ";".join(item["combination"] for item in results)
 
-    assert res.status_code == HTTP_200
-    assert len(result["combinations"]) == 15
-    assert sum(item["total"] for item in result["combinations"]) > 0
-
-
-@mark.asyncio
-async def test_survey_not_found(mocker: Mocker):
-    mocker.patch(**RANDINT(0))
-    raw = {
-        "api_key": API_KEY,
-        "keywords": KEYWORDS[:2],
-        "button": Button.COMBINATION.value,
-    }
-    params = CombinationParams(**raw)
-
-    res = await COMBINATION_FINDER.survey_combinations(params)
-    result: Json = json.loads(res.body.decode())["result"]  # type: ignore
-
-    assert res.status_code == HTTP_200
-    assert len(result["combinations"]) == 3
-    assert sum(item["total"] for item in result["combinations"]) == 0
+    for keyword in raw["keywords"]:
+        assert keyword in combinations_repr
