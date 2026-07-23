@@ -13,6 +13,7 @@ from src.core.common.types import Json
 from src.core.data.enums import ExcMsg
 from src.core.domain.http_exceptions import (
     HTTPError,
+    InternalError,
     ScopusAPIError,
     get_error_details,
 )
@@ -22,6 +23,31 @@ from src.utils import logger
 
 def _get_tracking_id(exc: Exception) -> str:
     return f"ERR:{type(exc).__name__}:{uuid.uuid4().hex}"
+
+
+def common_error(request: FastAPIRequest, exc: Exception) -> ErrorJSON:
+    tracking_id = _get_tracking_id(exc)
+    details = [get_error_details(exc)]
+
+    if isinstance(exc, ExceptionGroup):
+        for exc_item in exc.exceptions:
+            if isinstance(exc_item, ScopusAPIError):
+                details.extend(exc_item.details)
+            else:
+                details.append(get_error_details(exc_item))
+
+    logger.error(details[0]["message"], tracking_id)
+    logger.exception(exc)
+
+    exc = InternalError(ExcMsg.INTERNAL_ERROR, exc)  # for translation only
+
+    return ErrorJSON(
+        request,
+        HTTPStatus.INTERNAL_SERVER_ERROR,
+        translate_error(request, exc),
+        tracking_id,
+        details,
+    )
 
 
 async def custom_http_error(

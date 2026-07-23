@@ -21,9 +21,7 @@ from src.core.config.config import (
     SERVER,
     TRACE_ID_CTX,
 )
-from src.core.data.enums import ExcMsg
-from src.core.domain.http_exceptions import InternalError
-from src.framework.middleware.exception_handler import custom_http_error
+from src.framework.middleware.exception_handler import common_error
 from src.utils import logger
 
 
@@ -53,8 +51,7 @@ class FlowGuardingMonitorMiddleware(BaseHTTPMiddleware):
 
         except Exception as exc:  # pylint: disable=W0718
             trace_id = TRACE_ID_CTX.get()
-            exc = InternalError(ExcMsg.INTERNAL_ERROR, exc)
-            res = await custom_http_error(request, exc)
+            res = common_error(request, exc)
 
         finally:
             TRACE_ID_CTX.reset(token)

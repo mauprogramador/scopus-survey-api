@@ -10,13 +10,17 @@ from src.core.data.enums import ExcMsg
 from src.framework.middleware import exception_handler as handler
 from tests.conftest import assert_error_json
 from tests.mocks.errors import (
+    COMMON_ERROR_EXC_GROUP,
     FASTAPI_HTTP_EXCEPTION,
     HTTP_ERROR,
+    HTTP_ERROR_EXC_GROUP,
+    PYDANTIC_ERROR_EXC_GROUP,
     PYDANTIC_VALIDATION_ERROR,
     RATE_LIMIT_ERROR,
     REQUEST_VALIDATION_ERROR,
     RESPONSE_VALIDATION_ERROR,
     SCOPUS_API_ERROR,
+    SCOPUS_API_ERROR_EXC_GROUP,
     STARLETTE_HTTP_EXCEPTION,
 )
 from tests.mocks.helpers import fqn, trans
@@ -28,6 +32,36 @@ from tests.mocks.raw import (
     HTTP_502,
     REQUEST,
 )
+
+
+def test_common_error():
+    res = handler.common_error(REQUEST, KeyError("any"))
+    details = assert_error_json(res, HTTP_500, ExcMsg.INTERNAL_ERROR)
+    assert details[0]["type"] == fqn(KeyError)
+    assert details[0]["message"] == "any"
+
+
+@mark.parametrize(
+    "exc_group,details_count",
+    [
+        (COMMON_ERROR_EXC_GROUP, 3),
+        (HTTP_ERROR_EXC_GROUP, 3),
+        (PYDANTIC_ERROR_EXC_GROUP, 3),
+        (SCOPUS_API_ERROR_EXC_GROUP, 3),
+    ],
+    ids=["Common", "HTTP", "Pydantic", "Scopus API"],
+)
+def test_common_error_exc_group(exc_group: ExceptionGroup, details_count: int):
+    res = handler.common_error(REQUEST, exc_group)
+    details = assert_error_json(res, HTTP_500, ExcMsg.INTERNAL_ERROR)
+    assert details[0]["type"] == fqn(ExceptionGroup)
+    assert details[0]["message"] == "any"
+    assert len(details) == details_count
+
+    if "type" in details[1]:
+        assert details[1]["type"] == fqn(type(exc_group.exceptions[0]))
+    else:
+        assert details[1]["error_code"] == "ANY"
 
 
 @mark.asyncio

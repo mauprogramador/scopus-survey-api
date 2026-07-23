@@ -68,8 +68,8 @@ CONTENT_TYPE_ERROR = aiohttp.ContentTypeError(
 )
 
 TASKS_CANCELLED_ERROR = [
-    None,
-    None,
+    (None, None),
+    (None, None),
     asyncio.CancelledError("any"),
     None,
     None,
@@ -77,8 +77,8 @@ TASKS_CANCELLED_ERROR = [
 ]
 
 TASKS_HTTP_ERROR = [
-    None,
-    None,
+    (None, None),
+    (None, None),
     HTTP_ERROR,
     None,
     None,
@@ -86,10 +86,25 @@ TASKS_HTTP_ERROR = [
 ]
 
 TASKS_COMMON_ERROR = [
-    None,
-    None,
+    (None, None),
+    (None, None),
     PYDANTIC_VALIDATION_ERROR,
     None,
     None,
     None,
 ]
+
+COMMON_ERROR_EXC_GROUP = ExceptionGroup(
+    "any", [KeyError("any"), KeyError("any")]
+)
+
+HTTP_ERROR_EXC_GROUP = ExceptionGroup("any", [HTTP_ERROR, HTTP_ERROR])
+
+PYDANTIC_ERROR_EXC_GROUP = ExceptionGroup(
+    "any",
+    [PYDANTIC_VALIDATION_ERROR, PYDANTIC_VALIDATION_ERROR],
+)
+
+SCOPUS_API_ERROR_EXC_GROUP = ExceptionGroup(
+    "any", [SCOPUS_API_ERROR, SCOPUS_API_ERROR]
+)
