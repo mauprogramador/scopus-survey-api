@@ -63,12 +63,6 @@ SEARCH_PARAMS = {
     "button": Button.SURVEY.value,
 }
 
-CSV_MEDIA = "text/csv"
-HTML_MEDIA = "text/html"
-CSV_CONTENT_TYPE = f"{CSV_MEDIA}; charset=utf-8"
-HTML_CONTENT_TYPE = f"{HTML_MEDIA}; charset=utf-8"
-JSON_CONTENT_TYPE = "application/json; charset=utf-8"
-
 # Scopus APIs responses
 
 ABSTRACT_URL = "https://api.elsevier.com/content/abstract/scopus_id/0123456789"

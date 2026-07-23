@@ -86,7 +86,6 @@ def get_web_form_template(
         "Content-Language": lang.value,
         "X-CSRF-Token": csrf_token,
         "Cache-Control": f"public, max-age={MAX_AGE}, must-revalidate",
-        "Content-Type": "text/html; charset=utf-8",
     }
 
     return _TEMPLATES.TemplateResponse(

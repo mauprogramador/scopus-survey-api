@@ -15,7 +15,7 @@ from src.adapters.presenters.json_response import ErrorJSON
 from src.core.config.config import META_INFO
 from src.core.data.enums import ExcMsg, Lang
 from src.core.domain.translations import load_translations
-from tests.mocks.raw import CSRF_TOKEN, HTML_MEDIA, HTTP_200, HTTP_404, REQUEST
+from tests.mocks.raw import CSRF_TOKEN, HTTP_200, HTTP_404, REQUEST
 
 
 def test_build_all(mocker: Mocker):
@@ -43,7 +43,7 @@ def test_form_template(mocker: Mocker):
     res = get_web_form_template(REQUEST, CSRF_TOKEN, Lang.EN_US)
 
     assert res.status_code == HTTP_200
-    assert res.media_type == HTML_MEDIA and res.body
+    assert res.media_type == "text/html" and res.body
     assert res.headers["Content-Language"] == Lang.EN_US
     assert res.headers["X-CSRF-Token"] == CSRF_TOKEN
     assert res.headers["Cache-Control"]
@@ -59,7 +59,7 @@ def test_not_found_template(mocker: Mocker):
     res = get_not_found_template(REQUEST, error_json)
 
     assert res.status_code == HTTP_404
-    assert res.media_type == HTML_MEDIA and res.body
+    assert res.media_type == "text/html" and res.body
     assert res.headers["Content-Language"] == Lang.EN_US
     assert res.headers["Cache-Control"]
     assert res.headers["Pragma"] == "no-cache"

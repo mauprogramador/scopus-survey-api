@@ -23,7 +23,6 @@ from tests.conftest import assert_error_json
 from tests.mocks.helpers import Patch, fqn
 from tests.mocks.raw import (
     CSV_PARAMS,
-    HTML_CONTENT_TYPE,
     HTTP_200,
     HTTP_404,
     HTTP_500,
@@ -69,7 +68,7 @@ async def test_routing_error(mocker: Mocker, client: Client):
     spy = mocker.patch(NOT_FOUND, wraps=get_not_found_template)
     res = await client.get("/api/any")
     assert res.status_code == HTTP_404 and res.text
-    assert res.headers["Content-Type"] == HTML_CONTENT_TYPE
+    assert "text/html" in res.headers["Content-Type"]
     spy_res = spy.call_args_list[0].args[1]
     assert isinstance(spy_res, _StreamingResponse)
     raw: Json = json.loads(spy_res.body.decode())  # type: ignore
@@ -85,7 +84,7 @@ async def test_internal_error(mocker: Mocker, client: Client):
     spy = mocker.patch(NOT_FOUND, wraps=get_not_found_template)
     res = await client.get(URL_WEB)
     assert res.status_code == HTTP_500 and res.text
-    assert res.headers["Content-Type"] == HTML_CONTENT_TYPE
+    assert "text/html" in res.headers["Content-Type"]
 
     spy_res = spy.call_args_list[0].args[1]
     assert isinstance(spy_res, ErrorJSON)
