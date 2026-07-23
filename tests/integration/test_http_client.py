@@ -16,7 +16,7 @@ from src.adapters.helpers.http_client import HTTPClient
 from src.core.data.enums import ExcMsg
 from src.core.use_cases.keyword_scouter import KeywordsScouter
 from tests.conftest import assert_error_json
-from tests.mocks.helpers import fqn, get_patch, mock_from_iterable
+from tests.mocks.helpers import fqn, get_patch
 from tests.mocks.integration import (
     GET_CONTENT_TYPE_ERROR,
     GET_EMPTY_RESPONSE,
@@ -40,6 +40,10 @@ from tests.mocks.raw import (
 CHAIN = fqn(KeywordsScouter, itertools.chain, "itertools")
 REQUEST = fqn(aiohttp.ClientSession.request)
 SLEEP = fqn(HTTPClient, asyncio.sleep, "asyncio")
+
+
+def _mock_from_iterable(*_) -> tuple[str, ...]:
+    return ("Python",)
 
 
 @mark.asyncio
@@ -117,7 +121,7 @@ async def test_json_decode_error(mocker: Mocker, client: Client):
 @mark.asyncio
 async def test_request_retry(mocker: Mocker, client: Client):
     from_iterable = Mock(
-        itertools.chain.from_iterable, side_effect=mock_from_iterable
+        itertools.chain.from_iterable, side_effect=_mock_from_iterable
     )
     mocker.patch(
         CHAIN, MagicMock(itertools.chain, from_iterable=from_iterable)

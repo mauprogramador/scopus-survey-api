@@ -1,22 +1,22 @@
+# mypy: disable-error-code="index"
 from unittest.mock import AsyncMock, MagicMock
 
+from fastapi.exceptions import RequestValidationError
 from httpx import AsyncClient as Client
+from pandas import DataFrame
 from pytest import mark
 from pytest_mock import MockerFixture as Mocker
 
+from src.core.common.types import Json, SurveyDetails
 from src.core.data.enums import Button
+from src.core.data.serializers import ScopusAbstract, ScopusHeaders, ScopusPage
 from src.core.domain.factory import make_aggregator, make_combinator
-from src.core.use_cases.keyword_scouter import KeywordsScouter
-from src.core.use_cases.survey_orchestrator import SurveyOrchestrator
-from src.framework.fastapi.routes import survey_bibliographic_data
+from src.core.use_cases.survey_aggregator import SurveyAggregator
+from src.core.use_cases.survey_combinations import SurveyCombinations
+from src.framework.fastapi.routes import favicon
 from tests.conftest import assert_error_json
 from tests.mocks.errors import REQUEST_VALIDATION_ERROR
-from tests.mocks.helpers import (
-    Patch,
-    mock_retrieve_articles,
-    mock_survey_combinations,
-    trans,
-)
+from tests.mocks.helpers import Patch, fqn, trans
 from tests.mocks.raw import (
     API_KEY,
     COMBINATION_PARAMS,
@@ -24,6 +24,9 @@ from tests.mocks.raw import (
     HTTP_200,
     HTTP_422,
     KEYWORDS,
+    RAW_ABSTRACT_OK,
+    RAW_HEADERS_OK,
+    RAW_SEARCH_OK,
     SEARCH_PARAMS,
     URL_COMBINATION,
     URL_CSV,
@@ -31,20 +34,37 @@ from tests.mocks.raw import (
 )
 
 
-MAKE_COMBINATOR = Patch(survey_bibliographic_data, make_combinator)
-MAKE_AGGREGATOR = Patch(survey_bibliographic_data, make_aggregator)
+MAKE_COMBINATOR = Patch(favicon, make_combinator)
+MAKE_AGGREGATOR = Patch(favicon, make_aggregator)
+DATASET = DataFrame([ScopusAbstract(**RAW_ABSTRACT_OK).model_dump()])
+DETAILS = SurveyDetails(
+    ScopusPage(**RAW_SEARCH_OK),
+    1,
+    7,
+    ScopusHeaders(**RAW_HEADERS_OK),
+    ScopusHeaders(**RAW_HEADERS_OK),
+    5,
+)
+
+
+async def _mock_combinations_process(*_) -> tuple[list[Json], ScopusHeaders]:
+    return [{"Any": "any"}], ScopusHeaders(**RAW_HEADERS_OK)
+
+
+async def _mock_aggregator_process(*_) -> tuple[DataFrame, SurveyDetails]:
+    return DATASET, DETAILS
+
+
 SURVEY_COMBINATIONS = MagicMock(
-    KeywordsScouter,
-    survey_combinations=AsyncMock(
-        KeywordsScouter.survey_combinations,
-        side_effect=mock_survey_combinations,
+    SurveyCombinations,
+    process=AsyncMock(
+        SurveyCombinations.process, side_effect=_mock_combinations_process
     ),
 )
-RETRIEVE_ARTICLES = MagicMock(
-    SurveyOrchestrator,
-    retrieve_articles=AsyncMock(
-        SurveyOrchestrator.retrieve_articles,
-        side_effect=mock_retrieve_articles,
+SURVEY_AGGREGATOR = MagicMock(
+    SurveyAggregator,
+    process=AsyncMock(
+        SurveyAggregator.process, side_effect=_mock_aggregator_process
     ),
 )
 
@@ -147,7 +167,7 @@ async def test_combination_params_keywords(mocker: Mocker, client: Client):
 
 @mark.asyncio
 async def test_search_params_valid_data(mocker: Mocker, client: Client):
-    mocker.patch(**MAKE_AGGREGATOR(RETRIEVE_ARTICLES))
+    mocker.patch(**MAKE_AGGREGATOR(SURVEY_AGGREGATOR))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     assert res.status_code == HTTP_200
 
@@ -156,7 +176,7 @@ async def test_search_params_valid_data(mocker: Mocker, client: Client):
 async def test_search_params_overridden_default(
     mocker: Mocker, client: Client
 ):
-    mocker.patch(**MAKE_AGGREGATOR(RETRIEVE_ARTICLES))
+    mocker.patch(**MAKE_AGGREGATOR(SURVEY_AGGREGATOR))
     params = {
         "apiKey": API_KEY,
         "keywords": KEYWORDS,
@@ -170,7 +190,7 @@ async def test_search_params_overridden_default(
 
 @mark.asyncio
 async def test_search_params_raise_errors(mocker: Mocker, client: Client):
-    mocker.patch(**MAKE_AGGREGATOR(RETRIEVE_ARTICLES))
+    mocker.patch(**MAKE_AGGREGATOR(SURVEY_AGGREGATOR))
     res = await client.get(URL_SEARCH)
     details = assert_error_json(res, HTTP_422, trans(REQUEST_VALIDATION_ERROR))
     assert details[0]["type"] == fqn(RequestValidationError)
@@ -181,7 +201,7 @@ async def test_search_params_raise_errors(mocker: Mocker, client: Client):
 
 @mark.asyncio
 async def test_search_params_empty_to_default(mocker: Mocker, client: Client):
-    mocker.patch(**MAKE_AGGREGATOR(RETRIEVE_ARTICLES))
+    mocker.patch(**MAKE_AGGREGATOR(SURVEY_AGGREGATOR))
     params = {
         "apiKey": API_KEY,
         "docType": "",

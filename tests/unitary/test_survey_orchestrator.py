@@ -1,12 +1,17 @@
+from unittest.mock import ANY, AsyncMock, MagicMock, Mock
+
 from pandas import DataFrame
 from pytest import mark
 from pytest_mock import MockerFixture as Mocker
 
-from src.core.data.csv_builder import write_csv_file
+from src.adapters.gateway.scopus_abstract_retrieval_api import (
+    ScopusDatasetGatherer,
+)
+from src.core.common.types import Json, ScopusDetails
 from src.core.data.query_params import SurveyParams
-from src.core.use_cases.survey_orchestrator import SurveyOrchestrator
-from tests.mocks.helpers import aggregator_fix, fqn
-from tests.mocks.raw import ALIAS_SEARCH_PARAMS, HTTP_200
+from src.core.use_cases.similarity_filter import SimilarityFilter
+from src.core.use_cases.survey_aggregator import SurveyAggregator
+from tests.mocks.raw import ALIAS_SEARCH_PARAMS
 from tests.mocks.unitary import (
     DIFFERENT_ARTICLES,
     EXACT_DUPLICATES,
@@ -15,7 +20,21 @@ from tests.mocks.unitary import (
 
 
 PARAMS = SurveyParams(**ALIAS_SEARCH_PARAMS)
-WRITE_CSV = fqn(SurveyOrchestrator, write_csv_file)
+
+
+def _mock_filter(dataframe: DataFrame, *_) -> DataFrame:
+    return dataframe
+
+
+def _fixt(raw_dataset: list[Json]) -> tuple[SurveyAggregator, Mock]:
+    value = (raw_dataset, ScopusDetails(ANY, ANY, ANY, ANY, ANY))
+    mock_fetch = AsyncMock(ScopusDatasetGatherer.fetch, return_value=value)
+    mock_filter = Mock(SimilarityFilter.filter, side_effect=_mock_filter)
+    use_case = SurveyAggregator(
+        AsyncMock(ScopusDatasetGatherer, fetch=mock_fetch),
+        MagicMock(SimilarityFilter, filter=mock_filter),
+    )
+    return use_case, mock_filter
 
 
 @mark.asyncio

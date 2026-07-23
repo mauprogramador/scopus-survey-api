@@ -1,43 +1,38 @@
-import json
-from random import Random
-from unittest.mock import AsyncMock, MagicMock, Mock
+import random
+from unittest.mock import AsyncMock
 
 from pytest import mark
-from pytest_mock import MockerFixture as Mocker
 
-from src.adapters.gateway.scopus_search_api import ScopusSearchAPI
-from src.adapters.helpers.url_builder import URLBuilder
-from src.core.common.types import Json
+from src.adapters.gateway.scopus_search_api import ScopusVolumeScouter
+from src.core.common.types import TotalBundle
 from src.core.data.enums import Button
 from src.core.data.query_params import CombinationParams
-from src.core.data.survey_details import SurveyDetails
-from src.core.use_cases.keyword_scouter import KeywordsScouter
-from tests.mocks.helpers import (
-    Patch,
-    mock_combination_url,
-    mock_survey_totals_found,
-)
-from tests.mocks.raw import API_KEY, HTTP_200, KEYWORDS, LOG_QUOTA
+from src.core.data.serializers import ScopusHeaders
+from src.core.use_cases.survey_combinations import SurveyCombinations
+from tests.mocks.raw import API_KEY, KEYWORDS, RAW_HEADERS_OK
 
 
-COMBINATION_FINDER = KeywordsScouter(
-    MagicMock(
-        URLBuilder,
-        combination_url=Mock(
-            URLBuilder.combination_url,
-            side_effect=mock_combination_url,
-        ),
-    ),
+async def _mock_fetch(
+    params: CombinationParams,  # pylint: disable=w0613
+    combinations: list[str],
+) -> tuple[list[TotalBundle], ScopusHeaders]:
+    results: list[TotalBundle] = []
+    for index, combination in enumerate(combinations, start=1):
+        data: TotalBundle = {
+            "index": index,
+            "combination": combination,
+            "total": random.randint(0, 256),
+        }
+        results.append(data)
+    return results, ScopusHeaders(**RAW_HEADERS_OK)
+
+
+USE_CASE = SurveyCombinations(
     AsyncMock(
-        ScopusSearchAPI,
-        survey_totals_found=AsyncMock(
-            ScopusSearchAPI.survey_totals_found,
-            side_effect=mock_survey_totals_found,
-        ),
+        ScopusVolumeScouter,
+        fetch=AsyncMock(ScopusVolumeScouter.fetch, side_effect=_mock_fetch),
     ),
-    MagicMock(SurveyDetails, search_quota=LOG_QUOTA, headers={}),
 )
-RANDINT = Patch(mock_survey_totals_found, Random.randint, "random")
 
 
 @mark.asyncio

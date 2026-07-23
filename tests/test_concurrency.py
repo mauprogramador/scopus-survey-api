@@ -22,7 +22,6 @@ from src.framework.middleware.flow_guarding_monitor import (
 from tests.conftest import SEMAPHORE, assert_error_json
 from tests.mocks.errors import RATE_LIMIT_ERROR
 from tests.mocks.helpers import (
-    MockSemaphore,
     fqn,
     get_patch,
     response_mock,
@@ -144,6 +143,30 @@ async def test_async_tasks_api_survey(mocker: Mocker, client: Client):
 
     assert task_names.count(fqn(FlowGuardingMonitorMiddleware.__call__)) == 2
     assert task_names.count("test_async_tasks_api_survey") == 1
+
+
+class MockSemaphore(asyncio.Semaphore):
+    def __init__(self, value: int = 1) -> None:
+        super().__init__(value)
+        self.acquires: list[Json] = []
+        self.releases: list[Json] = []
+
+    def __call__(self) -> Any:
+        return self
+
+    async def acquire(self) -> Literal[True]:
+        self.acquires.append(
+            # pylint: disable=W0212
+            {"value": self._value, "waiters": len(self._waiters or [])}
+        )
+        return await super().acquire()
+
+    def release(self) -> None:
+        self.releases.append(
+            # pylint: disable=W0212
+            {"value": self._value, "waiters": len(self._waiters or [])}
+        )
+        return super().release()
 
 
 @mark.asyncio
