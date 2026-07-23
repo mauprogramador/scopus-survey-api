@@ -1,6 +1,12 @@
 from typing import Any, Self, Tuple, Type
 
-from pydantic import Field, field_validator, model_validator
+from pydantic import (
+    Field,
+    ValidationError,
+    ValidatorFunctionWrapHandler,
+    field_validator,
+    model_validator,
+)
 from pydantic_settings import (
     BaseSettings,
     PydanticBaseSettingsSource,
@@ -22,7 +28,6 @@ class EnvConfig(BaseSettings):
     )
 
     secret_key: str = Field(
-        default=None,
         exclude=True,
         frozen=True,
         repr=False,
@@ -62,17 +67,15 @@ class EnvConfig(BaseSettings):
             )
         return self
 
-    @field_validator("secret_key", mode="before")
+    @field_validator("secret_key", mode="wrap")
     @classmethod
-    def validate_secret_key(cls, value: Any) -> str:
-        if (
-            value is None
-            or not isinstance(value, str)
-            or value.strip() == ""
-            or 128 < len(value) < 32
-        ):
+    def validate_secret_key(
+        cls, value: Any, handler: ValidatorFunctionWrapHandler
+    ) -> Any:
+        try:
+            return handler(value)
+        except ValidationError as exc:
             raise ValueError(
                 "\033[33mSecret Key error:\033[31m You must set a valid "
                 "SECRET_KEY in .env with 32-128 characters\033[m"
-            )
-        return value
+            ) from exc
