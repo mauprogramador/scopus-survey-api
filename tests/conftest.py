@@ -8,21 +8,29 @@ from urllib.parse import urljoin
 import aiolimiter
 import httpx
 import uvloop
-from pytest import ExceptionInfo, LogCaptureFixture, fixture
+from pytest import ExceptionInfo, LogCaptureFixture, MonkeyPatch, fixture
 from pytest_asyncio import fixture as async_fixture
 from pytest_mock import MockerFixture as Mocker
 
 from src.adapters.helpers.http_client import HTTPClient
+from src.adapters.presenters import csv_response as csv_response_module
 from src.adapters.presenters.jinja_response import build_all_templates
 from src.adapters.presenters.json_response import ErrorJSON, ErrorResponse
 from src.core.common.types import Json
-from src.core.config.config import DIRECTORY, PREFIX, SERVER
+from src.core.config.config import PREFIX, SERVER
+from src.core.data import csv_builder as csv_builder_module
 from src.core.domain.http_exceptions import HTTPError
 from src.core.domain.translations import load_translations
 from src.framework.fastapi.main import app
 from src.utils.logger import TEST_FORMATTER
 from tests.mocks.helpers import MockAsyncContext, fqn
-from tests.mocks.raw import CSRF_TOKEN, CSV_FILE_NAME, SIGNED_TOKEN
+from tests.mocks.raw import (
+    CSRF_TOKEN,
+    CSV_FILE_NAME,
+    DIRECTORY,
+    SIGNED_TOKEN,
+    TEMP_DIR,
+)
 
 
 uvloop.install()
@@ -63,14 +71,17 @@ def lifespan():
     build_all_templates(*load_translations())
     csv_file_path = DIRECTORY / CSV_FILE_NAME
 
-    DIRECTORY.mkdir(parents=True, exist_ok=True)
     csv_file_path.write_text("any")
-
     print("\033[93mPytest Session Start\033[m", flush=True)
 
-    yield
+    with MonkeyPatch.context() as mp:
+        mp.setattr(f"{csv_builder_module.__name__}.DIRECTORY", DIRECTORY)
+        mp.setattr(f"{csv_response_module.__name__}.DIRECTORY", DIRECTORY)
+
+        yield
 
     csv_file_path.unlink(missing_ok=True)
+    TEMP_DIR.cleanup()
     print("\033[93mPytest Session Finish\033[m", flush=True)
 
 

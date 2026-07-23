@@ -9,7 +9,7 @@ from itsdangerous import SignatureExpired
 from pytest import mark
 from pytest_mock import MockerFixture as Mocker
 
-from src.core.config.config import DIRECTORY, PREFIX
+from src.core.config.config import PREFIX
 from src.core.data.enums import ExcMsg
 from src.framework.fastapi import csrf_token as csrf_token_module
 from src.framework.fastapi import routes as routes_module
@@ -20,6 +20,7 @@ from tests.mocks.raw import (
     CSRF_TOKEN,
     CSV_FILE_NAME,
     CSV_PARAMS,
+    DIRECTORY,
     HTTP_200,
     HTTP_401,
     SIGNED_TOKEN,

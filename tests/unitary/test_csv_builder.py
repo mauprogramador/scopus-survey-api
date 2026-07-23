@@ -1,7 +1,7 @@
 from pandas import DataFrame
 from thefuzz.fuzz import partial_ratio as fuzz_partial_ratio
 
-from src.core.config.config import DIRECTORY, FILE
+from src.core.config.config import FILE
 from src.core.config.scopus import DATA_SOURCE_NOTE
 from src.core.data.csv_builder import write_csv_file
 from src.core.data.query_params import SurveyParams
@@ -9,6 +9,7 @@ from tests.mocks.raw import (
     ALIAS_SEARCH_PARAMS,
     ALIAS_SEARCH_PARAMS_FULL,
     API_KEY,
+    DIRECTORY,
 )
 
 

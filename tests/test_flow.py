@@ -8,7 +8,7 @@ from pytest_mock import MockerFixture as Mocker
 from thefuzz.fuzz import partial_ratio as fuzz_partial_ratio
 
 from src.adapters.helpers.url_builder import build_article_page_url
-from src.core.config.config import DIRECTORY, FILE
+from src.core.config.config import FILE
 from src.core.config.scopus import DATA_SOURCE_NOTE
 from src.core.data.enums import ExcMsg
 from tests.conftest import assert_error_json
@@ -19,6 +19,7 @@ from tests.mocks.helpers import (
     search_raw,
 )
 from tests.mocks.raw import (
+    DIRECTORY,
     HTTP_200,
     HTTP_404,
     RAW_ABSTRACT_OK,

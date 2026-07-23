@@ -1,7 +1,9 @@
 import secrets
+import tempfile
 import time
 from datetime import datetime
 from http import HTTPMethod, HTTPStatus
+from pathlib import Path
 from unittest.mock import Mock
 
 from fastapi.datastructures import URL, Headers, QueryParams
@@ -35,6 +37,10 @@ HTTP_504 = HTTPStatus.GATEWAY_TIMEOUT
 API_KEY = secrets.token_hex(16)
 CSRF_TOKEN, SIGNED_TOKEN = generate_csrf_token()
 KEYWORDS = ["Python", "AI", "Automation", "Web"]
+
+# pylint: disable=R1732
+TEMP_DIR = tempfile.TemporaryDirectory("_csv", "pytest_")
+DIRECTORY = Path(TEMP_DIR.name)
 CSV_FILE_NAME = f"{API_KEY}_{FILE}"
 
 URL_WEB = f"/web/{Lang.EN_US}/survey-bibliographies"
