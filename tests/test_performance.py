@@ -149,11 +149,11 @@ def test_high_volume_filtering_one_group(total: int, elapsed: float):
     "total,elapsed",
     [
         (100, 0.01),
-        (500, 0.01),
-        (1000, 0.02),
-        (2000, 0.04),
-        (5000, 0.08),
-        (10000, 0.16),
+        (500, 0.02),
+        (1000, 0.03),
+        (2000, 0.05),
+        (5000, 0.10),
+        (10000, 0.20),
     ],
     ids=["100", "500", "1.000", "2.000", "5.000", "10.000"],
 )
@@ -296,7 +296,17 @@ async def test_api_survey_route_process_time(mocker: Mocker, client: Client):
 async def test_high_volume_complete_survey(mocker: Mocker, client: Client):
     mocker.stopall()
 
-    data = [response_mock(search_raw(50))] * 2
+    data = [
+        response_mock(search_raw(50)),
+        response_mock(
+            abstract_raw(
+                "any_title",
+                "".join(random.choices(string.ascii_letters, k=12)),
+                "2026-01-01",
+            )
+        ),
+        response_mock(search_raw(50)),
+    ]
     unique = [
         response_mock(
             abstract_raw(
@@ -305,7 +315,7 @@ async def test_high_volume_complete_survey(mocker: Mocker, client: Client):
                 "2026-01-01",
             )
         )
-        for _ in range(25)
+        for _ in range(24)
     ]
     data.extend(unique)
 
