@@ -35,7 +35,6 @@ class ExcMsg(StrEnum):
     SCOPUS_API_ERROR = "Scopus API error"
     DATA_MISMATCH_ERROR = "Data sum mismatch in response"
     # Application errors
-    CANCELLED_ERROR = "Unexpected cancellation of tasks"
     INTERNAL_ERROR = "Unexpected internal error occurred"
     SERIALIZE_ERROR = "Error serializing error details"
     ARTICLES_NOT_FOUND = "No articles found"

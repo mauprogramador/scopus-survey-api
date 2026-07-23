@@ -52,9 +52,6 @@ msgstr "Resposta JSON inválida da API da Scopus"
 msgid "api.data_mismatch_error"
 msgstr "Incompatibilidade no total de resultados obtidos"
 
-msgid "api.cancelled_error"
-msgstr "Cancelamento inesperado das tarefas"
-
 msgid "api.articles_not_found"
 msgstr "Nenhum artigo encontrado"
 
