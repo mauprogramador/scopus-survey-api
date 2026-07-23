@@ -43,7 +43,7 @@ class ErrorJSON(JSONResponse):
         status_code: int,
         message: str,
         tracking_id: str,
-        details: list[Json] | Json | None = None,
+        details: Json | list[Json] | None = None,
     ) -> None:
         """Builds JSON error response and validates details"""
 
@@ -57,12 +57,16 @@ class ErrorJSON(JSONResponse):
                 logger.error(ExcMsg.SERIALIZE_ERROR)
                 logger.exception(exc)
 
-                serialize_detail = {
-                    "desc": ExcMsg.SERIALIZE_ERROR,
-                    "raw_repr": repr(details),
+                serialize_detail = get_error_details(exc)
+                serialize_detail["original_error"] = {
+                    "message": message,
+                    "status_code": status_code,
+                    "raw_details": repr(details),
                 }
-                details = get_error_details(exc)
-                details.append(serialize_detail)
+
+                message = ExcMsg.SERIALIZE_ERROR
+                status_code = HTTPStatus.INTERNAL_SERVER_ERROR
+                details = [serialize_detail]
 
         error_response = ErrorResponse(
             success=False,
