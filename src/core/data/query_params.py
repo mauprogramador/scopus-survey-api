@@ -179,7 +179,7 @@ class CombinationParams(CSVParams):
 
         return value
 
-    @computed_field(return_type=str)  # type: ignore[prop-decorator]
+    @computed_field  # type: ignore[prop-decorator]
     @property
     def date(self) -> str:
         return f"{self.start_year}-{self.end_year}"

@@ -1,4 +1,5 @@
 import contextlib
+from collections.abc import AsyncGenerator
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -25,7 +26,9 @@ from src.utils import logger
 
 
 @contextlib.asynccontextmanager
-async def lifespan(app: FastAPI):  # pylint: disable=W0621,W0613
+async def lifespan(
+    app: FastAPI,  # pylint: disable=W0621,W0613
+) -> AsyncGenerator[None, None]:
     DIRECTORY.mkdir(parents=True, exist_ok=True)
     build_all_templates(*load_translations())
 

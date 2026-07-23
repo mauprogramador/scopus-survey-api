@@ -17,7 +17,7 @@ from src.core.domain.http_exceptions import Unauthorized
 
 
 _SERIALIZER = URLSafeTimedSerializer(ENV.secret_key, SALT)
-_TOKEN_ADAPTER = TypeAdapter(Token)
+_TOKEN_ADAPTER: TypeAdapter[Token] = TypeAdapter(Token)
 
 _COOKIE = fastapi.Cookie(
     alias="csrf-token",

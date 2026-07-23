@@ -1,8 +1,16 @@
+from collections.abc import Callable
 from gettext import GNUTranslations
-from typing import Annotated, Any, NamedTuple, Protocol, TypeAlias
+from typing import (
+    Annotated,
+    Any,
+    Literal,
+    NamedTuple,
+    Protocol,
+    TypedDict,
+)
 
 from pandas import DataFrame
-from pydantic import BaseModel, Field
+from pydantic import Field
 
 from src.core.data.enums import (
     DocType,
@@ -21,26 +29,37 @@ _KEYWORD_PATTERN = r"^[a-zA-Z0-9\{\}\?\"\*\-\_ ]{2,120}$"
 _TOKEN_PATTERN = r"^[a-zA-Z0-9\-\_]{64}$"
 
 
-Keyword: TypeAlias = Annotated[
+type Keyword = Annotated[
     str, Field(pattern=_KEYWORD_PATTERN, min_length=2, max_length=120)
 ]
 
-Json: TypeAlias = dict[str, Any]
+type Json = dict[str, Any]
 
-Articles: TypeAlias = list[dict[str, str]]
+type Translations = dict[Lang, GNUTranslations]
 
-Translations: TypeAlias = dict[Lang, GNUTranslations]
-
-Token: TypeAlias = Annotated[
+type Token = Annotated[
     str, Field(pattern=_TOKEN_PATTERN, min_length=64, max_length=64)
 ]
 
+type URLBuilder = Callable[[str | int], str]
 
-class Quota(Protocol):
-    limit: int
-    remaining: int
-    reset_datetime: str
-    status: str
+type Headers = dict[str, str]
+
+type APIName = Literal["search", "abstract"]
+
+
+class ScopusEntry(Protocol):
+    url: str
+    scopus_id: str
+
+
+class ScopusPage(Protocol):
+    total_results: int
+    items_per_page: int
+    entry: list[ScopusEntry]
+
+    def details(self) -> dict[str, Any]:
+        pass
 
 
 class CombinationParams(Protocol):
@@ -54,7 +73,7 @@ class CombinationParams(Protocol):
     source_type: SrcType
     subject_area: SubjArea
     page_range: PageRange
-    keywords: list[Keyword]
+    keywords: list[str]
 
     def model_dump(self, **kwargs) -> dict[str, Any]:
         pass
@@ -69,89 +88,44 @@ class SurveyParams(CombinationParams):
     ratio: int
 
 
+class ScopusHeaders(Protocol):
+    limit: int | None
+    remaining: int | None
+    reset: int | None
+    status: str | None
+
+    @property
+    def reset_datetime(self) -> str | None:
+        pass
+
+
+class TotalBundle(TypedDict):
+    index: int
+    combination: str
+    total: int
+
+
 class ResponseBundle(NamedTuple):
     code: int
     headers: dict[str, str]
-    data: Json
+    data: dict[str, Any]
 
 
-class CombinationBundle(BaseModel):
-    index: int = Field(default=None)
-    combination: str = Field()
-    url: str = Field(exclude=True)
-    total: int = Field(default=None)
-
-
-class ScopusEntry(Protocol):
-    url: str
-    scopus_id: str
-
-
-class ScopusPage(Protocol):
-    total_results: int
-    items_per_page: int
-    entry: list[ScopusEntry]
-
-    @property
-    def pages_count(self) -> int:
-        pass
-
-
-class SurveyDetails(Protocol):
-    search_quota: tuple[Quota, int]
-    abstract_quota: tuple[Quota, int]
-    headers: dict[str, str]
-    metadata: list[str]
-
-    def set_keywords(self, keywords: list[str]) -> None:
-        pass
-
-    def set_combination(self, combination: str) -> None:
-        pass
-
-    def set_search_data(self, scopus_search: ScopusPage) -> None:
-        pass
-
-    def set_search_quota(self, res: ResponseBundle) -> None:
-        pass
-
-    def set_abstract_quota(self, res: ResponseBundle) -> None:
-        pass
-
-    def set_results(self, retrieved: int) -> None:
-        pass
-
-    def set_loss(self, loss_amount: int, loss_percent: float) -> None:
-        pass
-
-
-class SurveyState(Protocol):
-    total_results: int
-    items_per_page: int
-    entry: list[ScopusEntry]
+class ScopusDetails(NamedTuple):
+    search_result: ScopusPage
     pages_count: int
-    total_abstracts: int
-    abstracts: list[Json]
-    pages_to_fetch: int
-    pages_to_fetch_range: range
-    pages_to_fetch_progress: tuple[int, int, int]
-    abstracts_to_fetch: int
-    abstracts_to_fetch_range: range
+    total_retrieved: int
+    search_headers: ScopusHeaders
+    abstract_headers: ScopusHeaders
 
-    def set_first_search(self, first_search: ScopusPage) -> None:
-        pass
 
-    def validate_integrity(self) -> None:
-        pass
-
-    def fix_total(self) -> None:
-        pass
-
-    def handle_search_quota(self, quota: tuple[Quota, int]) -> None:
-        pass
-
-    def handle_abstract_quota(self, quota: tuple[Quota, int]) -> None:
-        pass
+class SurveyDetails(NamedTuple):
+    search_result: ScopusPage
+    pages_count: int
+    total_retrieved: int
+    search_headers: ScopusHeaders
+    abstract_headers: ScopusHeaders
+    total_final: int
 
 
 class HTTPClient(Protocol):
@@ -163,48 +137,19 @@ class HTTPClient(Protocol):
         pass
 
 
-class URLBuilder(Protocol):
+class VolumeScouter(Protocol):
 
-    @staticmethod
-    def article_page_url(scopus_id: str) -> str:
-        pass
-
-    def set_combination_query(self, params: CombinationParams) -> None:
-        pass
-
-    def combination_url(
-        self, arrangement: tuple[Keyword, ...]
-    ) -> CombinationBundle:
-        pass
-
-    def search_url(self, params: SurveyParams) -> str:
-        pass
-
-    def pagination_url(self, page: int) -> str:
-        pass
-
-    def set_abstract_query(self, api_key: str) -> None:
-        pass
-
-    def abstract_url(self, abstract_url: str) -> str:
+    async def fetch(
+        self, params: CombinationParams, combinations: list[str]
+    ) -> tuple[list[Json], ScopusHeaders]:
         pass
 
 
-class SearchAPI(Protocol):
-    http_client: HTTPClient
+class DatasetGatherer(Protocol):
 
-    async def survey_totals_found(
-        self, bundles_map: dict[int, CombinationBundle]
-    ) -> list[Json]:
-        pass
-
-    async def search_articles(self, params: SurveyParams) -> None:
-        pass
-
-
-class AbstractAPI(Protocol):
-
-    async def retrieve_abstracts(self, api_key: str) -> DataFrame:
+    async def fetch(
+        self, params: SurveyParams
+    ) -> tuple[list[Json], ScopusDetails]:
         pass
 
 

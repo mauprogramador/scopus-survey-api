@@ -19,7 +19,7 @@ from pydantic_core import to_jsonable_python
 from starlette.types import Scope as StarletteScope
 from tqdm.std import tqdm as std_tqdm
 
-from src.core.common.types import Json, Quota
+from src.core.common.types import APIName, Json, ScopusHeaders
 from src.core.config.config import ENV
 from src.core.config.scopus import MAX_SEARCH_QUOTA, NO_RESULTS, SEARCH_API_URL
 
@@ -102,7 +102,7 @@ class _ANSIFormatter(logging.Formatter):
 
 class _FileHandler(RotatingFileHandler):
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.namer = self._namer
 

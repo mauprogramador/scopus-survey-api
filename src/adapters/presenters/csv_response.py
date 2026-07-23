@@ -2,13 +2,16 @@ from http import HTTPStatus
 
 from fastapi.responses import FileResponse
 
+from src.core.common.types import Headers
 from src.core.config.config import DIRECTORY, FILE
 from src.core.data.enums import ExcMsg
 from src.core.domain.http_exceptions import NotFound
 
 
 def csv_response(
-    filename: str, api_key: str, details_headers: dict[str, str]
+    filename: str,
+    api_key: str,
+    headers: Headers,
 ) -> FileResponse:
     file_path = DIRECTORY / f"{api_key}_{FILE}"
 

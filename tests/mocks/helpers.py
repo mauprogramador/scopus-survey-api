@@ -1,9 +1,10 @@
 import asyncio
 import io
 import random
+from collections.abc import Callable
 from http import HTTPMethod, HTTPStatus
 from types import FunctionType
-from typing import Any, Callable, Literal, Self, Type, TypeAlias
+from typing import Any, Literal, Self
 from unittest.mock import AsyncMock, MagicMock, Mock
 
 import aiohttp
@@ -41,7 +42,7 @@ from tests.mocks.raw import (
 )
 
 
-Target: TypeAlias = Type | FunctionType | Callable
+Target = type | FunctionType | Callable
 
 
 def fqn(target: Target, method: Target = None, altname: str = None) -> str:

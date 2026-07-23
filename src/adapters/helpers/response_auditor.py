@@ -16,7 +16,7 @@ from src.core.domain.http_exceptions import InternalError, ScopusAPIError
 from src.utils import logger
 
 
-def _validate(model: BaseModel, res: ResponseBundle) -> BaseModel:
+def _validate[T: BaseModel](model: type[T], res: ResponseBundle) -> T:
     try:
         if res.code >= HTTPStatus.BAD_REQUEST:
             quota = ScopusHeaders.model_validate(res.headers)

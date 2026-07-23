@@ -1,7 +1,6 @@
 import asyncio
 from http import HTTPStatus
 from json import JSONDecodeError
-from typing import Tuple
 from unittest.mock import MagicMock, Mock
 
 import aiohttp
@@ -66,7 +65,7 @@ JSON_DECODE_ERROR = JSONDecodeError("any", "any", 0)
 
 CONTENT_TYPE_ERROR = aiohttp.ContentTypeError(
     MagicMock(aiohttp.RequestInfo),
-    MagicMock(Tuple[aiohttp.ClientResponse, ...]),
+    MagicMock(tuple[aiohttp.ClientResponse, ...]),
     status=HTTPStatus.BAD_REQUEST,
     message="any",
 )

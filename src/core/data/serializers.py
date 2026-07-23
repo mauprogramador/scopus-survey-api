@@ -155,9 +155,9 @@ class ScopusHeaders(BaseModel):
     )
     status: str | None = Field(default=None, validation_alias="X-ELS-Status")
 
-    @computed_field(return_type=str)  # type: ignore[prop-decorator]
+    @computed_field  # type: ignore[prop-decorator]
     @property
-    def reset_datetime(self) -> str:
+    def reset_datetime(self) -> str | None:
         if self.reset is None:
             return None
         epoch = datetime.fromtimestamp(self.reset)
