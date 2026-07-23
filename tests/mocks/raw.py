@@ -16,7 +16,6 @@ from src.core.config.scopus import (
     RATE_LIMIT_ERROR_CODE,
 )
 from src.core.data.enums import Button, Lang
-from src.core.data.serializers import ScopusHeaders
 from src.framework.fastapi.csrf_token import generate_csrf_token
 
 
@@ -174,9 +173,6 @@ RAW_SERVICE_ERROR_INVALID_INPUT = {
         }
     }
 }
-LOG_QUOTA = (ScopusHeaders(**RAW_HEADERS_OK), HTTPStatus.OK.value)
-LOG_ONE_QUOTA = (ScopusHeaders(**RAW_HEADERS_ONE_QUOTA), HTTPStatus.OK.value)
-LOG_NO_QUOTA = (ScopusHeaders(**RAW_HEADERS_NO_QUOTA), HTTPStatus.OK.value)
 
 # Models params
 

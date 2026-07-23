@@ -1,11 +1,8 @@
-from unittest.mock import ANY
-
 from httpx import AsyncClient as Client
 from pandas import DataFrame
 from pytest import mark
 from pytest_mock import MockerFixture as Mocker
 
-from src.core.data.survey_details import SurveyDetails
 from src.core.use_cases.similarity_filter import SimilarityFilter
 from tests.mocks.helpers import get_patch, load_csv_from_response
 from tests.mocks.integration import (
@@ -22,7 +19,6 @@ async def test_one_row(mocker: Mocker, client: Client):
     mock = mocker.patch(*get_patch(ONE_DIFFERENT_ARTICLE))
     spy_drop = mocker.spy(DataFrame, "drop_duplicates")
     spy_filter = mocker.spy(SimilarityFilter, "filter")
-    spy_loss = mocker.spy(SurveyDetails, "set_loss")
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
 
     df = load_csv_from_response(res)
@@ -30,7 +26,6 @@ async def test_one_row(mocker: Mocker, client: Client):
     assert df.shape[0] == 1
     spy_drop.assert_not_called()
     spy_filter.assert_not_called()
-    spy_loss.assert_called_once_with(ANY, 0, 0.0)
 
 
 @mark.asyncio
@@ -38,7 +33,6 @@ async def test_more_rows(mocker: Mocker, client: Client):
     mock = mocker.patch(*get_patch(MORE_DIFFERENT_ARTICLES))
     spy_drop = mocker.spy(DataFrame, "drop_duplicates")
     spy_filter = mocker.spy(SimilarityFilter, "filter")
-    spy_loss = mocker.spy(SurveyDetails, "set_loss")
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
 
     df = load_csv_from_response(res)
@@ -46,7 +40,6 @@ async def test_more_rows(mocker: Mocker, client: Client):
     assert df.shape[0] == 7
     spy_drop.assert_called()
     spy_filter.assert_called()
-    spy_loss.assert_called_once_with(ANY, 0, 0.0)
 
 
 @mark.asyncio
@@ -55,7 +48,6 @@ async def test_drop_exact_duplicates(mocker: Mocker, client: Client):
     spy_drop = mocker.spy(DataFrame, "drop_duplicates")
     spy_reset = mocker.spy(DataFrame, "reset_index")
     spy_filter = mocker.spy(SimilarityFilter, "filter")
-    spy_loss = mocker.spy(SurveyDetails, "set_loss")
 
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     df = load_csv_from_response(res)
@@ -67,7 +59,6 @@ async def test_drop_exact_duplicates(mocker: Mocker, client: Client):
     assert df.shape[0] == 1
     spy_drop.assert_called()
     spy_filter.assert_not_called()
-    spy_loss.assert_called_once_with(ANY, 1, 50.0)
 
 
 @mark.asyncio
@@ -76,7 +67,6 @@ async def test_drop_same_title_and_authors(mocker: Mocker, client: Client):
     spy_drop = mocker.spy(DataFrame, "drop_duplicates")
     spy_reset = mocker.spy(DataFrame, "reset_index")
     spy_filter = mocker.spy(SimilarityFilter, "filter")
-    spy_loss = mocker.spy(SurveyDetails, "set_loss")
 
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     df = load_csv_from_response(res)
@@ -88,7 +78,6 @@ async def test_drop_same_title_and_authors(mocker: Mocker, client: Client):
     assert df.shape[0] == 1
     spy_drop.assert_called()
     spy_filter.assert_not_called()
-    spy_loss.assert_called_once_with(ANY, 1, 50.0)
 
 
 @mark.asyncio

@@ -195,32 +195,6 @@ RESPONSE_RATE_LIMIT_EXCEEDED = response_mock(
 RESPONSE_JSON_ERROR = response_mock({"search-results": ""})
 RESPONSE_KEY_ERROR = response_mock({"any": "any"})
 
-# SurveyDetails.set_
-
-RESET = int(time.time() + 60)
-RESET_DATETIME = datetime.fromtimestamp(RESET).strftime("%Y-%m-%d %H:%M:%S")
-HEADERS = {
-    "X-RateLimit-Limit": "20000",
-    "X-RateLimit-Remaining": "12345",
-    "X-RateLimit-Reset": str(RESET),
-    "X-ELS-Status": "OK",
-}
-COMBINATION_DETAILS = [
-    response_mock(RAW_SEARCH_OK),
-    response_mock(RAW_SEARCH_OK),
-    response_mock(RAW_SEARCH_OK, headers=HEADERS),
-]
-SEARCH_DETAILS_ONE_RESULT = [
-    response_mock(RAW_SEARCH_OK, headers=HEADERS),
-    response_mock(RAW_ABSTRACT_OK, headers=HEADERS),
-]
-SEARCH_DETAILS_MORE_RESULTS = [
-    response_mock(search_raw(3), headers=HEADERS),
-    response_mock(RAW_ABSTRACT_OK, headers=HEADERS),
-    response_mock(RAW_ABSTRACT_OK, headers=HEADERS),
-    response_mock(RAW_ABSTRACT_OK, headers=HEADERS),
-]
-
 # SimilarityFilter.filter
 
 ONE_GROUP_TWO_SIMILAR = [

@@ -23,7 +23,6 @@ from tests.conftest import SEMAPHORE, assert_error_json
 from tests.mocks.errors import RATE_LIMIT_ERROR
 from tests.mocks.helpers import (
     MockSemaphore,
-    MockState,
     fqn,
     get_patch,
     response_mock,
@@ -48,7 +47,6 @@ from tests.mocks.raw import (
 
 
 TO_THREAD = spec(ScopusSearchAPI, asyncio.to_thread, "asyncio")
-STATE = fqn(make_aggregator, SurveyState)
 
 
 def _task_name(task: asyncio.Task) -> str:
@@ -116,7 +114,8 @@ async def test_async_tasks_api_survey(mocker: Mocker, client: Client):
         running_tasks.update(asyncio.all_tasks(loop))
         return func(*args)  # Call validate_search_response passing res
 
-    state = mocker.patch(STATE, MockState(3, 51))
+    ctx = ScopusContext()
+    mocker.patch(CONTEXT, return_value=ctx)
     mocker.patch(**TO_THREAD, side_effect=_retrieve_tasks)
     mock = mocker.patch(
         *get_patch(
@@ -130,8 +129,8 @@ async def test_async_tasks_api_survey(mocker: Mocker, client: Client):
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     assert res.status_code == HTTP_200 and mock.call_count == 6
 
-    assert len(state.entry) == 3 and state.total_results == 51
-    assert state.pages_count == 3 and len(running_tasks) == 7
+    assert len(ctx.entry) == 3 and ctx.total_results == 3
+    assert ctx.pages_count == 1 and len(running_tasks) == 5
 
     task_names = ":".join(_task_name(task) for task in running_tasks)
 

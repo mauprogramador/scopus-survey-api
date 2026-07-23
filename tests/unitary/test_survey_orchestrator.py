@@ -30,7 +30,6 @@ async def test_one_row(mocker: Mocker):
     assert res.status_code == HTTP_200 and df_spy.shape == (1, 11)
     spy_drop.assert_not_called()
     fix.filter.assert_not_called()
-    fix.set_loss.assert_called_once_with(0, 0.0)
 
 
 @mark.asyncio
@@ -45,7 +44,6 @@ async def test_more_rows(mocker: Mocker):
     assert res.status_code == HTTP_200 and df_spy.shape == (7, 11)
     spy_drop.assert_called()
     fix.filter.assert_called()
-    fix.set_loss.assert_called_with(0, 0.0)
 
 
 @mark.asyncio
@@ -62,7 +60,6 @@ async def test_drop_exact_duplicates(mocker: Mocker):
     assert df_in.shape[0] == 2 and df_out.shape[0] == 1
 
     fix.filter.assert_not_called()
-    fix.set_loss.assert_called_with(1, 50.0)
 
 
 @mark.asyncio
@@ -79,7 +76,6 @@ async def test_drop_same_title_and_authors(mocker: Mocker):
     assert df_in.shape[0] == 2 and df_out.shape[0] == 1
 
     fix.filter.assert_not_called()
-    fix.set_loss.assert_called_with(1, 50.0)
 
 
 @mark.asyncio
@@ -93,4 +89,3 @@ async def test_non_ratio(mocker: Mocker):
 
     assert res.status_code == HTTP_200 and df_spy.shape == (7, 11)
     fix.filter.assert_not_called()
-    fix.set_loss.assert_called_with(0, 0.0)

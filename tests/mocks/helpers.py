@@ -24,15 +24,12 @@ from src.core.common.types import CombinationBundle, Json, ResponseBundle
 from src.core.config.config import DIRECTORY
 from src.core.config.scopus import MAX_ITEMS_PER_PAGE
 from src.core.data.serializers import ScopusPage
-from src.core.data.survey_details import SurveyDetails
-from src.core.data.survey_state import SurveyState
 from src.core.domain.translations import translate_error
 from src.core.use_cases.similarity_filter import SimilarityFilter
 from src.core.use_cases.survey_orchestrator import SurveyOrchestrator
 from tests.mocks.raw import (
     CSV_FILE_NAME,
     HTTP_200,
-    LOG_QUOTA,
     RAW_ENTRY,
     RAW_HEADERS_OK,
     REQUEST,
