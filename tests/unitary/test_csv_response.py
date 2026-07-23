@@ -27,27 +27,27 @@ def test_build_response():
     file_path = DIRECTORY / CSV_FILE_NAME
     res = csv_response(CSV_FILE_NAME, API_KEY, {"X-any": "any"})
     assert res.status_code == HTTP_200
-    assert res.media_type == CSV_MEDIA
-    assert res.path == file[0] and res.filename == file[1]
+    assert res.media_type == "text/csv"
+    assert res.path == file_path and res.filename == CSV_FILE_NAME
 
-    assert res.headers.get("Content-Disposition")
-    assert res.headers.get("Content-Type")
-    assert res.headers.get("X-CSV-Filename") == file[1]
-    assert res.headers.get("X-API-Key") == "any"
-    assert res.headers.get("X-any") == "any"
+    assert "attachment; filename" in res.headers["Content-Disposition"]
+    assert "text/csv" in res.headers["Content-Type"]
+    assert res.headers["X-CSV-Filename"] == CSV_FILE_NAME
+    assert res.headers["X-API-Key"] == API_KEY
+    assert res.headers["X-any"]
 
 
 def test_retrieve_csv():
     file_path = DIRECTORY / CSV_FILE_NAME
     res = retrieve_csv(API_KEY)
     assert res.status_code == HTTP_200
-    assert res.media_type == CSV_MEDIA
-    assert res.path == file[0] and res.filename == file[1]
+    assert res.media_type == "text/csv"
+    assert res.path == file_path and res.filename == CSV_FILE_NAME
 
-    assert res.headers.get("Content-Disposition")
-    assert res.headers.get("Content-Type")
-    assert res.headers.get("X-CSV-Filename") == file[1]
-    assert res.headers.get("X-API-Key") == "any"
+    assert "attachment; filename" in res.headers["Content-Disposition"]
+    assert "text/csv" in res.headers["Content-Type"]
+    assert res.headers["X-CSV-Filename"] == CSV_FILE_NAME
+    assert res.headers["X-API-Key"] == API_KEY
 
 
 def test_csv_not_found():
