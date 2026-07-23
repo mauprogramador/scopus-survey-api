@@ -36,8 +36,6 @@ _API_ROUTES_PATTERN = re.compile(
 class FlowGuardingMonitorMiddleware(BaseHTTPMiddleware):
     """Middleware for tracing, process time and uncaught errors"""
 
-    _ONE_MINUTE = 60
-
     def __init__(self, app: FastAPI):
         """Middleware for tracing, process time and uncaught errors"""
         self._server = {"Server": SERVER.get()}
@@ -62,16 +60,11 @@ class FlowGuardingMonitorMiddleware(BaseHTTPMiddleware):
             TRACE_ID_CTX.reset(token)
 
         process_time = time.perf_counter() - start_time
-        if process_time > self._ONE_MINUTE:
-            minutes = process_time / self._ONE_MINUTE
-            duration = f"{process_time:.2f}s ({minutes:.2f}m)"
-        else:
-            duration = f"{process_time:.2f}s"
 
-        logger.trace(request, res.status_code, duration)
+        logger.trace(request, res.status_code, process_time)
 
         res.headers["X-Trace-ID"] = trace_id
-        res.headers["X-Process-Time"] = duration
+        res.headers["X-Process-Time"] = str(process_time)
 
         res.headers.update(HEADERS)
         res.headers["X-RateLimit-Policy"] = RATELIMIT_POLICY

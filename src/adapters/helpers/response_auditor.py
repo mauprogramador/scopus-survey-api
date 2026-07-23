@@ -20,7 +20,9 @@ def _validate[T: BaseModel](model: type[T], res: ResponseBundle) -> T:
     try:
         if res.code >= HTTPStatus.BAD_REQUEST:
             quota = ScopusHeaders.model_validate(res.headers)
-            logger.quota(quota, res.code)
+
+            api = "search" if isinstance(model, ScopusPage) else "abstract"
+            logger.quota(quota, api)
 
             error_res = ScopusError.model_validate(res.data)
 

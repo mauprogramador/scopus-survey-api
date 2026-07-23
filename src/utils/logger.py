@@ -234,9 +234,9 @@ LOGGER = logging.getLogger(_LOGGER_NAME)
 
 
 _QUOTA = (
-    "Scopus API: \033[32m%(api)s\033[m. Limit: \033[33m%(limit)s\033[m. "
+    "Scopus API: \033[32m%(api_name)s\033[m. Limit: \033[33m%(limit)s\033[m. "
     "Remaining: \033[33m%(remaining)s\033[m. Reset: \033[33m%(reset)s"
-    "\033[m. ELS-Status: \033[%(color)sm%(status)s\033[m"
+    "\033[m. ELS-Status: \033[33m%(status)s\033[m"
 )
 _TRACE = (
     "[\033[36m%(host)s\033[m:\033[36m%(port)d\033[m] \033[%(method_color)sm"
@@ -245,12 +245,12 @@ _TRACE = (
 )
 _COMBINATIONS = (
     "Keywords: \033[33m%(keywords)d\033[m. Combinations: \033[33m"
-    "%(combinations)d\033[m. Total-Sum: \033[33m%(total)s\033[m"
+    "%(combinations)d\033[m"
 )
 _LOSS = (
     "Initial: \033[33m%(initial)d\033[m. Final: \033[33m%(final)d"
-    "\033[m. Loss: \033[33m%(loss_amount)ddoc \033[m/ \033[33m"
-    "%(loss_percent).2f%%\033[m"
+    "\033[m. Loss: \033[33m%(loss_amount)d \033[m(\033[33m"
+    "%(loss_percent).2f%%\033[m)"
 )
 _EXCEPTION = (
     '\033[31m%(qualname)s\033[m: File "%(filepath)s", line %(line)d, col '
@@ -269,38 +269,33 @@ def info(message: str) -> None:
     LOGGER.info("%s\033[m", message, stacklevel=2)
 
 
-def loss(initial: int, final: int, loss: float) -> None:
+def loss(initial: int, final: int) -> None:
+    loss_value = initial - final
+    loss_percent = 0.0 if loss_value == 0 else (loss_value / initial) * 100.0
     args = {
         "initial": initial,
-        "final": (initial - final),
-        "loss_amount": final,
-        "loss_percent": loss,
+        "final": final,
+        "loss_amount": loss_value,
+        "loss_percent": loss_percent,
     }
     LOGGER.info(_LOSS, args, stacklevel=2)
 
 
-def combinations(keywords_count: int, totals: list[int]) -> None:
+def combinations(keywords_count: int) -> None:
     args = {
         "keywords": keywords_count,
-        "combinations": len(totals),
-        "total": f"{sum(totals):,}",
+        "combinations": 2**keywords_count - 1,
     }
     LOGGER.info(_COMBINATIONS, args, stacklevel=2)
 
 
-def quota(quota: Quota, code: int) -> None:
-    api = "Search" if quota.limit == MAX_SEARCH_QUOTA else "Abstract"
-
-    if quota.status.startswith(NO_RESULTS):
-        code = HTTPStatus.NOT_FOUND.value
-
+def quota(headers: ScopusHeaders, api_name: APIName) -> None:
     args = {
-        "api": api,
-        "limit": quota.limit,
-        "remaining": quota.remaining,
-        "reset": quota.reset_datetime,
-        "color": _STATUS_COLOR[(code // 100)],
-        "status": quota.status,
+        "api_name": api_name.capitalize(),
+        "limit": headers.limit,
+        "remaining": headers.remaining,
+        "reset": headers.reset_datetime,
+        "status": headers.status,
     }
     LOGGER.log(_Level.QUOTA, _QUOTA, args, stacklevel=2)
 
@@ -380,8 +375,13 @@ def _trace(
     LOGGER.log(prefix, _TRACE, args, stacklevel=3)
 
 
-def trace(req: FastAPIRequest, code: int, time: str) -> None:
-    _trace(_Level.TRACE, req, code, time)
+def trace(req: FastAPIRequest, code: int, process_time: float) -> None:
+    if process_time > 60.0:
+        minutes = process_time / 60.0
+        duration = f"{process_time:.2f}s ({minutes:.2f}m)"
+    else:
+        duration = f"{process_time:.2f}s"
+    _trace(_Level.TRACE, req, code, duration)
 
 
 def api_call(url: str, code: int, time: float) -> None:
