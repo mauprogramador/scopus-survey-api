@@ -7,9 +7,9 @@ from fastapi.exceptions import HTTPException as FastAPIHTTPException
 from itsdangerous import BadSignature, SignatureExpired
 from pydantic import ValidationError
 
-from src.core.common.types import Json
-from src.core.config.scopus import SCOPUS_DOCS
-from src.core.data.enums import ExcMsg
+from src.core.domain.enums import ExcMsg
+from src.core.domain.types import Json
+from src.infra.config.scopus import SCOPUS_DOCS
 
 
 def get_error_message(exc: Exception) -> str:

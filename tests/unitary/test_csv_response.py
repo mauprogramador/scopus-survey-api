@@ -1,9 +1,10 @@
 from pytest import fixture, raises
 
 from src.adapters.presenters.csv_response import csv_response, retrieve_csv
-from src.core.config.config import FILE
-from src.core.data.enums import ExcMsg
-from src.core.domain.http_exceptions import NotFound
+from src.adapters.serializers.query_params import SurveyParams
+from src.core.domain.enums import ExcMsg
+from src.core.domain.exceptions import NotFound
+from src.infra.config.config import FILE
 from tests.conftest import assert_http_error
 from tests.mocks.raw import (
     API_KEY,

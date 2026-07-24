@@ -1,7 +1,7 @@
 import math
 from dataclasses import dataclass, field
 
-from src.core.common.types import Headers, Json, ScopusEntry, ScopusPage
+from src.core.domain.types import Headers, Json, ScopusEntry, ScopusPage
 
 
 @dataclass

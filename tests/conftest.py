@@ -12,17 +12,17 @@ from pytest import ExceptionInfo, LogCaptureFixture, MonkeyPatch, fixture
 from pytest_asyncio import fixture as async_fixture
 from pytest_mock import MockerFixture as Mocker
 
-from src.adapters.helpers.http_client import HTTPClient
+from src.adapters.persistence import csv_builder as csv_builder_module
 from src.adapters.presenters import csv_response as csv_response_module
 from src.adapters.presenters.jinja_response import build_all_templates
 from src.adapters.presenters.json_response import ErrorJSON, ErrorResponse
-from src.core.common.types import Json
-from src.core.config.config import PREFIX, SERVER
-from src.core.data import csv_builder as csv_builder_module
-from src.core.domain.http_exceptions import HTTPError
-from src.core.domain.translations import load_translations
-from src.framework.fastapi.main import app
-from src.utils.logger import TEST_FORMATTER
+from src.core.domain.exceptions import HTTPError
+from src.core.domain.types import Json
+from src.infra.config.config import PREFIX, SERVER
+from src.infra.fastapi.main import app
+from src.infra.http.http_client import HTTPClient
+from src.infra.i18n.translations import load_translations
+from src.infra.utils.logger import TEST_FORMATTER
 from tests.mocks.helpers import MockAsyncContext, fqn
 from tests.mocks.raw import (
     CSRF_TOKEN,

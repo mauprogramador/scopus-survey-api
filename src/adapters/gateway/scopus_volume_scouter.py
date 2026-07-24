@@ -1,9 +1,6 @@
 import asyncio
 
-from src.adapters.helpers.fetch_multiple_concurrent import fetch_multiple
-from src.adapters.helpers.response_auditor import validate_search_response
-from src.adapters.helpers.url_builder import build_combination_urls
-from src.core.common.types import (
+from src.core.domain.types import (
     CombinationParams,
     Headers,
     HTTPClient,
@@ -11,7 +8,10 @@ from src.core.common.types import (
     TotalBundle,
     URLBuilder,
 )
-from src.utils import logger
+from src.infra.http.fetch_multiple_concurrent import fetch_multiple
+from src.infra.http.response_auditor import validate_search_response
+from src.infra.http.url_builder import build_combination_urls
+from src.infra.utils import logger
 
 
 class ScopusVolumeScouter:

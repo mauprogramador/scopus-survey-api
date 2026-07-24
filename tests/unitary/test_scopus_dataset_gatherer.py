@@ -4,18 +4,18 @@ from unittest.mock import AsyncMock
 
 from pytest import mark, raises
 
+from src.adapters.gateway.context import ScopusContext
 from src.adapters.gateway.scopus_dataset_gatherer import (
     ScopusDatasetGatherer,
     fetch_multiple,
     validate_abstract_response,
 )
-from src.adapters.helpers.context import ScopusContext
-from src.adapters.helpers.http_client import HTTPClient
-from src.core.common.types import ResponseBundle
-from src.core.config.scopus import MAX_ITEMS_PER_PAGE, QUOTA_ERROR_CODE
-from src.core.data.enums import ExcMsg
-from src.core.data.query_params import SurveyParams
-from src.core.domain.http_exceptions import NotFound, ScopusAPIError
+from src.adapters.serializers.query_params import SurveyParams
+from src.core.domain.enums import ExcMsg
+from src.core.domain.exceptions import NotFound, ScopusAPIError
+from src.core.domain.types import ResponseBundle
+from src.infra.config.scopus import MAX_ITEMS_PER_PAGE, QUOTA_ERROR_CODE
+from src.infra.http.http_client import HTTPClient
 from tests.conftest import assert_http_error
 from tests.mocks.helpers import fqn
 from tests.mocks.raw import ALIAS_SEARCH_PARAMS, HTTP_404, HTTP_429, HTTP_502

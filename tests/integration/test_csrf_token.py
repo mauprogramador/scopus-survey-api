@@ -5,8 +5,8 @@ from pydantic_core import ValidationError
 from pytest import mark
 from pytest_mock import MockerFixture as Mocker
 
-from src.core.config.config import MAX_AGE
-from src.core.data.enums import ExcMsg
+from src.core.domain.enums import ExcMsg
+from src.infra.config.config import MAX_AGE
 from tests.conftest import assert_error_json
 from tests.mocks.helpers import fqn
 from tests.mocks.raw import (

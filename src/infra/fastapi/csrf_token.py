@@ -10,10 +10,10 @@ from itsdangerous import (
 )
 from pydantic import TypeAdapter, ValidationError
 
-from src.core.common.types import Token
-from src.core.config.config import ENV, MAX_AGE, SALT
-from src.core.data.enums import ExcMsg
-from src.core.domain.http_exceptions import Unauthorized
+from src.core.domain.enums import ExcMsg
+from src.core.domain.exceptions import Unauthorized
+from src.core.domain.types import Token
+from src.infra.config.config import ENV, MAX_AGE, SALT
 
 
 _SERIALIZER = URLSafeTimedSerializer(ENV.secret_key, SALT)

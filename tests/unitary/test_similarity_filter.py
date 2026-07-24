@@ -6,7 +6,7 @@ from pandas.api.typing import DataFrameGroupBy
 from pytest_mock import MockerFixture as Mocker
 
 from src.core.use_cases.similarity_filter import SimilarityFilter
-from src.utils import logger
+from src.infra.utils import logger
 from tests.mocks.helpers import fqn, spec
 from tests.mocks.unitary import (
     MORE_GROUPS_MORE_SIMILAR,

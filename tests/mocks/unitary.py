@@ -4,7 +4,7 @@ import string
 
 from pandas import DataFrame
 
-from src.core.data.serializers import ScopusAbstract
+from src.adapters.serializers.scopus_data import ScopusAbstract
 from tests.mocks.errors import CONTENT_TYPE_ERROR, JSON_DECODE_ERROR
 from tests.mocks.helpers import (
     abstract_raw,

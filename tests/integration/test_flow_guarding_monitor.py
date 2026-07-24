@@ -11,12 +11,12 @@ from starlette.middleware.base import _StreamingResponse
 from src.adapters.presenters.csv_response import retrieve_csv
 from src.adapters.presenters.jinja_response import get_not_found_template
 from src.adapters.presenters.json_response import ErrorJSON
-from src.core.common.types import Json
-from src.core.config.config import HEADERS, RATELIMIT_POLICY, SERVER
-from src.core.data.enums import ExcMsg
-from src.framework.fastapi.csrf_token import generate_csrf_token
-from src.framework.fastapi.routes import favicon
-from src.framework.middleware.flow_guarding_monitor import (
+from src.core.domain.enums import ExcMsg
+from src.core.domain.types import Json
+from src.infra.config.config import HEADERS, RATELIMIT_POLICY, SERVER
+from src.infra.fastapi.csrf_token import generate_csrf_token
+from src.infra.fastapi.routes import favicon
+from src.infra.middleware.flow_guarding_monitor import (
     FlowGuardingMonitorMiddleware,
 )
 from tests.conftest import assert_error_json

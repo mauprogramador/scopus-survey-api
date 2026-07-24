@@ -7,13 +7,13 @@ from pytest import fixture, mark, raises
 from pytest_asyncio import fixture as async_fixture
 from pytest_mock import MockerFixture as Mocker
 
-from src.adapters.helpers.http_client import HTTPClient
-from src.core.data.enums import ExcMsg
-from src.core.domain.http_exceptions import (
+from src.core.domain.enums import ExcMsg
+from src.core.domain.exceptions import (
     BadGateway,
     BadGatewayContent,
     GatewayTimeout,
 )
+from src.infra.http.http_client import HTTPClient
 from tests.conftest import LIMITER, SEMAPHORE, assert_http_error
 from tests.mocks.helpers import MockAsyncContext, fqn, get_patch
 from tests.mocks.raw import HTTP_200, HTTP_502, HTTP_504

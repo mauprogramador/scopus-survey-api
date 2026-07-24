@@ -8,13 +8,13 @@ from pytest import mark
 from pytest_mock import MockerFixture as Mocker
 from slowapi.errors import RateLimitExceeded
 
+from src.adapters.gateway.context import ScopusContext
 from src.adapters.gateway.scopus_dataset_gatherer import ScopusDatasetGatherer
 from src.adapters.gateway.scopus_volume_scouter import ScopusVolumeScouter
-from src.adapters.helpers.context import ScopusContext
-from src.core.common.types import Json
-from src.core.data.enums import ExcMsg
-from src.framework.fastapi.main import app
-from src.framework.middleware.flow_guarding_monitor import (
+from src.core.domain.enums import ExcMsg
+from src.core.domain.types import Json
+from src.infra.fastapi.main import app
+from src.infra.middleware.flow_guarding_monitor import (
     FlowGuardingMonitorMiddleware,
 )
 from tests.conftest import SEMAPHORE, assert_error_json

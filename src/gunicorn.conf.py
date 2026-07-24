@@ -15,8 +15,8 @@ import uvloop  # pylint: disable=w0611 # noqa: F401
 from gunicorn.arbiter import Arbiter
 from uvicorn_worker import UvicornWorker
 
-from src.core.config.config import APP, ENV, SERVER
-from src.utils import logger
+from src.infra.config.config import APP, ENV, SERVER
+from src.infra.utils import logger
 
 
 SERVER.set(f"Gunicorn/{gunicorn.__version__}")

@@ -1,11 +1,11 @@
 from src.adapters.gateway.scopus_dataset_gatherer import ScopusDatasetGatherer
 from src.adapters.gateway.scopus_volume_scouter import ScopusVolumeScouter
-from src.adapters.helpers.http_client import HTTPClient
 from src.core.use_cases import (
     SimilarityFilter,
     SurveyAggregator,
 )
 from src.core.use_cases.survey_combinations import SurveyCombinations
+from src.infra.http.http_client import HTTPClient
 
 
 def make_combinator() -> SurveyCombinations:

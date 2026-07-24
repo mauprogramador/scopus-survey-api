@@ -6,10 +6,18 @@ from fastapi.requests import Request as FastAPIRequest
 from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
 from fastapi.routing import APIRouter
 
+from src.adapters.persistence.csv_builder import write_csv_file
 from src.adapters.presenters.csv_response import csv_response, retrieve_csv
 from src.adapters.presenters.jinja_response import get_web_form_template
 from src.adapters.presenters.json_response import json_response
-from src.core.config.config import (
+from src.adapters.serializers.query_params import (
+    CombinationParams,
+    CSVParams,
+    SurveyParams,
+)
+from src.core.domain.enums import Lang
+from src.core.domain.factory import make_aggregator, make_combinator
+from src.infra.config.config import (
     FAVICON_HEADERS,
     FAVICON_PATH,
     LIMIT,
@@ -17,27 +25,18 @@ from src.core.config.config import (
     MAX_AGE,
     PREFIX,
 )
-from src.core.data.csv_builder import write_csv_file
-from src.core.data.enums import Lang
-from src.core.data.query_params import (
-    CombinationParams,
-    CSVParams,
-    SurveyParams,
-)
-from src.core.domain.factory import make_aggregator, make_combinator
-from src.framework.fastapi.csrf_token import (
+from src.infra.fastapi.csrf_token import (
     generate_csrf_token,
     verify_csrf_token,
 )
-from src.framework.fastapi.details import extract_survey_details
-from src.framework.fastapi.swagger import (
+from src.infra.fastapi.swagger import (
     CSV_RESPONSES,
     JSON_RESPONSES,
     OPENAPI_EXTRA,
     ROUTE_DESCRIPTION,
     WEB_FORM_RESPONSES,
 )
-from src.utils import logger
+from src.infra.utils import logger
 
 
 favicon_router = APIRouter()
@@ -133,10 +132,9 @@ async def survey_bibliographic_data(
     use_case = make_aggregator()
     dataset, details = await use_case.process(params)
 
-    headers, metadata = extract_survey_details(params, details)
-    filename = write_csv_file(dataset, params, metadata)
+    filename = write_csv_file(dataset, params, details)
 
-    return csv_response(filename, params.api_key, headers)
+    return csv_response(filename, params, details)
 
 
 @router.get(

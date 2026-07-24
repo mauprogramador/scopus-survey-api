@@ -8,15 +8,15 @@ import aiohttp
 import aiohttp_retry as aioretry
 import aiolimiter
 
-from src.core.common.types import Json, ResponseBundle
-from src.core.config.scopus import RATE_LIMIT_ERROR_CODE, SCOPUS_HEADERS
-from src.core.data.enums import ExcMsg
-from src.core.domain.http_exceptions import (
+from src.core.domain.enums import ExcMsg
+from src.core.domain.exceptions import (
     BadGateway,
     BadGatewayContent,
     GatewayTimeout,
 )
-from src.utils import logger
+from src.core.domain.types import Json, ResponseBundle
+from src.infra.config.scopus import RATE_LIMIT_ERROR_CODE, SCOPUS_HEADERS
+from src.infra.utils import logger
 
 
 # Scopus API Rate Limit: 9 requests per second

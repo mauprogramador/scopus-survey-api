@@ -6,9 +6,9 @@ from pydantic_core import ValidationError
 from pytest import mark
 from pytest_mock import MockerFixture as Mocker
 
-from src.core.config.scopus import QUOTA_ERROR_CODE, RATE_LIMIT_ERROR_CODE
-from src.core.data.enums import ExcMsg
-from src.core.domain.http_exceptions import ScopusAPIError
+from src.core.domain.enums import ExcMsg
+from src.core.domain.exceptions import ScopusAPIError
+from src.infra.config.scopus import QUOTA_ERROR_CODE, RATE_LIMIT_ERROR_CODE
 from tests.conftest import assert_error_json
 from tests.mocks.errors import SCOPUS_API_QUOTA_ERROR, SCOPUS_API_RATE_ERROR
 from tests.mocks.helpers import fqn, get_patch, trans

@@ -7,10 +7,10 @@ from pytest import mark
 from pytest_mock import MockerFixture as Mocker
 from thefuzz.fuzz import partial_ratio as fuzz_partial_ratio
 
-from src.adapters.helpers.url_builder import build_article_page_url
-from src.core.config.config import FILE
-from src.core.config.scopus import DATA_SOURCE_NOTE
-from src.core.data.enums import ExcMsg
+from src.core.domain.enums import ExcMsg
+from src.infra.config.config import FILE
+from src.infra.config.scopus import DATA_SOURCE_NOTE
+from src.infra.http.url_builder import build_article_page_url
 from tests.conftest import assert_error_json
 from tests.mocks.helpers import (
     get_patch,

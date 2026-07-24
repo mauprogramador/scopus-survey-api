@@ -8,10 +8,10 @@ from pydantic_core import ValidationError
 from slowapi.errors import RateLimitExceeded
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
-from src.core.common.types import Translations
-from src.core.data.enums import ExcMsg, Lang
-from src.core.domain.http_exceptions import HTTPError, ScopusAPIError
-from src.utils import logger
+from src.core.domain.enums import ExcMsg, Lang
+from src.core.domain.exceptions import HTTPError, ScopusAPIError
+from src.core.domain.types import Translations
+from src.infra.utils import logger
 
 
 _LOCALEDIR = Path("locales")

@@ -6,10 +6,10 @@ from httpx import AsyncClient as Client
 from pytest import mark
 from pytest_mock import MockerFixture as Mocker
 
+from src.adapters.gateway.context import ScopusContext
 from src.adapters.gateway.scopus_dataset_gatherer import ScopusDatasetGatherer
-from src.adapters.helpers.context import ScopusContext
-from src.core.config.scopus import MAX_ITEMS_PER_PAGE, QUOTA_ERROR_CODE
-from src.core.data.enums import ExcMsg
+from src.core.domain.enums import ExcMsg
+from src.infra.config.scopus import MAX_ITEMS_PER_PAGE, QUOTA_ERROR_CODE
 from tests.conftest import assert_error_json
 from tests.mocks.errors import SCOPUS_API_QUOTA_ERROR
 from tests.mocks.helpers import fqn, get_patch, load_csv_from_response, trans

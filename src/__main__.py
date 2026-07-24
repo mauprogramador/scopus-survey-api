@@ -12,8 +12,8 @@ import tqdm  # pylint: disable=w0611 # noqa: F401
 import uvicorn
 import uvloop
 
-from src.core.config.config import APP, ENV, SERVER
-from src.utils import logger
+from src.infra.config.config import APP, ENV, SERVER
+from src.infra.utils import logger
 
 
 if __name__ == "__main__":

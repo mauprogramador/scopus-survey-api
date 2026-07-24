@@ -12,7 +12,7 @@ from typing import (
 from pandas import DataFrame
 from pydantic import Field
 
-from src.core.data.enums import (
+from src.core.domain.enums import (
     DocType,
     Lang,
     PageRange,

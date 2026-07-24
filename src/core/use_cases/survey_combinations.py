@@ -1,13 +1,13 @@
 import itertools
 
-from src.core.common.types import (
+from src.core.domain.types import (
     CombinationParams,
     Json,
     ScopusHeaders,
     VolumeScouter,
 )
-from src.core.config.scopus import BOOLEAN_OPERATOR
-from src.utils import logger
+from src.infra.config.scopus import BOOLEAN_OPERATOR
+from src.infra.utils import logger
 
 
 class SurveyCombinations:

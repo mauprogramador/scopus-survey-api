@@ -7,13 +7,13 @@ from pandas import DataFrame
 from pytest import mark
 from pytest_mock import MockerFixture as Mocker
 
-from src.core.common.types import Json, SurveyDetails
-from src.core.data.enums import Button
-from src.core.data.serializers import ScopusAbstract, ScopusHeaders, ScopusPage
+from src.adapters.serializers.scopus_data import ScopusAbstract, ScopusHeaders
+from src.core.domain.enums import Button
 from src.core.domain.factory import make_aggregator, make_combinator
+from src.core.domain.types import Json, SurveyDetails
 from src.core.use_cases.survey_aggregator import SurveyAggregator
 from src.core.use_cases.survey_combinations import SurveyCombinations
-from src.framework.fastapi.routes import favicon
+from src.infra.fastapi.routes import favicon
 from tests.conftest import assert_error_json
 from tests.mocks.errors import REQUEST_VALIDATION_ERROR
 from tests.mocks.helpers import Patch, fqn, trans
@@ -21,12 +21,12 @@ from tests.mocks.raw import (
     API_KEY,
     COMBINATION_PARAMS,
     CSV_PARAMS,
+    DETAILS,
     HTTP_200,
     HTTP_422,
     KEYWORDS,
     RAW_ABSTRACT_OK,
     RAW_HEADERS_OK,
-    RAW_SEARCH_OK,
     SEARCH_PARAMS,
     URL_COMBINATION,
     URL_CSV,
@@ -37,14 +37,6 @@ from tests.mocks.raw import (
 MAKE_COMBINATOR = Patch(favicon, make_combinator)
 MAKE_AGGREGATOR = Patch(favicon, make_aggregator)
 DATASET = DataFrame([ScopusAbstract(**RAW_ABSTRACT_OK).model_dump()])
-DETAILS = SurveyDetails(
-    ScopusPage(**RAW_SEARCH_OK),
-    1,
-    7,
-    ScopusHeaders(**RAW_HEADERS_OK),
-    ScopusHeaders(**RAW_HEADERS_OK),
-    5,
-)
 
 
 async def _mock_combinations_process(*_) -> tuple[list[Json], ScopusHeaders]:

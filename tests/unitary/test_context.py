@@ -1,7 +1,7 @@
 from unittest.mock import ANY
 
-from src.adapters.helpers.context import ScopusContext
-from src.core.data.serializers import ScopusPage
+from src.adapters.gateway.context import ScopusContext
+from src.adapters.serializers.scopus_data import ScopusPage
 from tests.mocks.raw import RAW_SEARCH_OK
 
 

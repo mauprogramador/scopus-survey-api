@@ -8,13 +8,16 @@ from httpx import AsyncClient as Client
 from pytest import mark, param
 from pytest_mock import MockerFixture as Mocker
 
-from src.core.config.config import DIRECTORY, FILE
-from src.core.config.scopus import MAX_ITEMS_PER_PAGE
-from src.core.data.csv_builder import _COLUMN_TRANSLATION, write_csv_file
-from src.core.data.enums import Button, Lang
-from src.core.data.query_params import SurveyParams
-from src.core.data.serializers import ScopusAbstract, ScopusPage
+from src.adapters.persistence.csv_builder import (
+    _COLUMN_TRANSLATION,
+    write_csv_file,
+)
+from src.adapters.serializers.query_params import SurveyParams
+from src.adapters.serializers.scopus_data import ScopusAbstract, ScopusPage
+from src.core.domain.enums import Button, Lang
 from src.core.use_cases.similarity_filter import SimilarityFilter
+from src.infra.config.config import DIRECTORY, FILE
+from src.infra.config.scopus import MAX_ITEMS_PER_PAGE
 from tests.mocks.helpers import (
     abstract_raw,
     get_patch,
@@ -26,6 +29,7 @@ from tests.mocks.raw import (
     ALIAS_SEARCH_PARAMS,
     API_KEY,
     CSV_PARAMS,
+    DETAILS,
     HTTP_200,
     KEYWORDS,
     RAW_ABSTRACT_OK,
@@ -207,7 +211,7 @@ async def test_high_volume_csv_download(
     df = pd.DataFrame([data] * total)
     assert df.shape[0] == total
 
-    write_csv_file(df, SurveyParams(**ALIAS_SEARCH_PARAMS), ["any"])
+    write_csv_file(df, SurveyParams(**ALIAS_SEARCH_PARAMS), DETAILS)
 
     with _assert_time(elapsed):
         res = await client.get(URL_CSV, params=CSV_PARAMS)

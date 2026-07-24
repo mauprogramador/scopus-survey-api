@@ -4,10 +4,10 @@ from pathlib import Path
 from slowapi import Limiter
 from slowapi.util import get_remote_address
 
-from src.core.config.env import EnvConfig
+from src.infra.config.env import EnvConfig
 
 
-APP = "src.framework.fastapi.main:app"
+APP = "src.infra.fastapi.main:app"
 PREFIX = "/v2/scopus-survey"
 
 TRACE_ID_CTX: ContextVar[str] = ContextVar("trace_id")

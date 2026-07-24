@@ -5,7 +5,7 @@ from typing import Any, Literal
 
 from tqdm import tqdm
 
-from src.core.config.config import ENV
+from src.infra.config.config import ENV
 
 
 _FORMAT = (

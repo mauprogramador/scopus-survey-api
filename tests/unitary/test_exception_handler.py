@@ -6,8 +6,8 @@ from pytest import mark
 from slowapi.errors import RateLimitExceeded
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
-from src.core.data.enums import ExcMsg
-from src.framework.middleware import exception_handler as handler
+from src.core.domain.enums import ExcMsg
+from src.infra.middleware import exception_handlers as handler
 from tests.conftest import assert_error_json
 from tests.mocks.errors import (
     COMMON_ERROR_EXC_GROUP,

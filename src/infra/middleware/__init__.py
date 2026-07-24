@@ -1,4 +1,4 @@
-from .exception_handler import HANDLERS
+from .exception_handlers import HANDLERS
 from .flow_guarding_monitor import FlowGuardingMonitorMiddleware
 from .proxy_forwarded_resolver import ProxyForwardedResolverMiddleware
 

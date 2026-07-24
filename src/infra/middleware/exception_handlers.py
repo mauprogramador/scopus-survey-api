@@ -9,16 +9,16 @@ from slowapi.errors import RateLimitExceeded
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from src.adapters.presenters.json_response import ErrorJSON
-from src.core.common.types import Json
-from src.core.data.enums import ExcMsg
-from src.core.domain.http_exceptions import (
+from src.core.domain.enums import ExcMsg
+from src.core.domain.exceptions import (
     HTTPError,
     InternalError,
     ScopusAPIError,
     get_error_details,
 )
-from src.core.domain.translations import translate_error
-from src.utils import logger
+from src.core.domain.types import Json
+from src.infra.i18n.translations import translate_error
+from src.infra.utils import logger
 
 
 def _get_tracking_id(exc: Exception) -> str:

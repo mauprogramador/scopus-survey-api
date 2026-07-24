@@ -1,18 +1,18 @@
 from pydantic import ValidationError
 from pytest import raises
 
-from src.adapters.helpers.url_builder import build_article_page_url
-from src.core.config.scopus import (
-    QUOTA_ERROR_CODE,
-    RATE_LIMIT_ERROR_CODE,
-)
-from src.core.data.serializers import (
+from src.adapters.serializers.scopus_data import (
     ScopusAbstract,
     ScopusEntry,
     ScopusError,
     ScopusHeaders,
     ScopusPage,
 )
+from src.infra.config.scopus import (
+    QUOTA_ERROR_CODE,
+    RATE_LIMIT_ERROR_CODE,
+)
+from src.infra.http.url_builder import build_article_page_url
 from tests.mocks.helpers import search_raw
 from tests.mocks.raw import (
     ABSTRACT_URL,

@@ -1,12 +1,12 @@
 from pandas import DataFrame
 
-from src.core.common.types import (
+from src.core.domain.types import (
     DatasetGatherer,
     SimilarityFilter,
     SurveyDetails,
     SurveyParams,
 )
-from src.utils import logger
+from src.infra.utils import logger
 
 
 class SurveyAggregator:

@@ -9,10 +9,10 @@ from itsdangerous import SignatureExpired
 from pytest import mark
 from pytest_mock import MockerFixture as Mocker
 
-from src.core.config.config import PREFIX
-from src.core.data.enums import ExcMsg
-from src.framework.fastapi import csrf_token as csrf_token_module
-from src.framework.fastapi import routes as routes_module
+from src.core.domain.enums import ExcMsg
+from src.infra.config.config import PREFIX
+from src.infra.fastapi import csrf_token as csrf_token_module
+from src.infra.fastapi import routes as routes_module
 from tests.conftest import SLEEP, assert_error_json
 from tests.mocks.errors import STARLETTE_HTTP_EXCEPTION
 from tests.mocks.helpers import fqn, trans

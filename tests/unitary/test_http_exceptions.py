@@ -7,9 +7,8 @@ from itsdangerous import SignatureExpired
 from pydantic import ValidationError
 from pytest import mark, raises
 
-from src.core.config.scopus import RATE_LIMIT_ERROR_CODE
-from src.core.data.enums import ExcMsg
-from src.core.domain.http_exceptions import (
+from src.core.domain.enums import ExcMsg
+from src.core.domain.exceptions import (
     BadGatewayContent,
     HTTPError,
     ScopusAPIError,
@@ -17,6 +16,7 @@ from src.core.domain.http_exceptions import (
     get_error_details,
     get_error_message,
 )
+from src.infra.config.scopus import RATE_LIMIT_ERROR_CODE
 from tests.conftest import assert_http_error
 from tests.mocks.errors import (
     CONTENT_TYPE_ERROR,

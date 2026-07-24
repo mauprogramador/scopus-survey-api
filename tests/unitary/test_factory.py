@@ -1,13 +1,13 @@
 from pytest import mark
 
+from src.adapters.gateway.context import ScopusContext
 from src.adapters.gateway.scopus_dataset_gatherer import ScopusDatasetGatherer
 from src.adapters.gateway.scopus_volume_scouter import ScopusVolumeScouter
-from src.adapters.helpers.context import ScopusContext
-from src.adapters.helpers.http_client import HTTPClient
 from src.core.domain.factory import make_aggregator, make_combinator
 from src.core.use_cases.similarity_filter import SimilarityFilter
 from src.core.use_cases.survey_aggregator import SurveyAggregator
 from src.core.use_cases.survey_combinations import SurveyCombinations
+from src.infra.http.http_client import HTTPClient
 
 
 @mark.asyncio

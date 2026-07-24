@@ -1,11 +1,11 @@
 from collections.abc import Callable
 from urllib.parse import urlencode
 
-from src.core.common.types import (
+from src.core.domain.types import (
     CombinationParams,
     SurveyParams,
 )
-from src.core.config.scopus import (
+from src.infra.config.scopus import (
     ARTICLE_PAGE_URL,
     BOOLEAN_OPERATOR,
     QUERY_FIELDS,

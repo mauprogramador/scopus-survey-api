@@ -8,14 +8,16 @@ from unittest.mock import Mock
 from fastapi.datastructures import URL, Headers, QueryParams
 from fastapi.requests import Request as FastAPIRequest
 
-from src.core.config.config import FILE, MAX_AGE
-from src.core.config.scopus import (
+from src.adapters.serializers.scopus_data import ScopusHeaders, ScopusPage
+from src.core.domain.enums import Button, Lang
+from src.core.domain.types import SurveyDetails
+from src.infra.config.config import FILE, MAX_AGE
+from src.infra.config.scopus import (
     EMPTY_RESULT,
     QUOTA_ERROR_CODE,
     RATE_LIMIT_ERROR_CODE,
 )
-from src.core.data.enums import Button, Lang
-from src.framework.fastapi.csrf_token import generate_csrf_token
+from src.infra.fastapi.csrf_token import generate_csrf_token
 
 
 # HTTP Status code
@@ -223,4 +225,13 @@ REQUEST = Mock(
     query={},
     query_params=QueryParams({}),
     client=None,
+)
+
+DETAILS = SurveyDetails(
+    ScopusPage(**RAW_SEARCH_OK),
+    1,
+    7,
+    ScopusHeaders(**RAW_HEADERS_OK),
+    ScopusHeaders(**RAW_HEADERS_OK),
+    5,
 )

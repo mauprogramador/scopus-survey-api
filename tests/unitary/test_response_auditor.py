@@ -1,11 +1,11 @@
 from pydantic_core import ValidationError
 from pytest import raises
 
-from src.adapters.helpers.response_auditor import validate_search_response
-from src.core.common.types import ResponseBundle
-from src.core.config.scopus import QUOTA_ERROR_CODE, RATE_LIMIT_ERROR_CODE
-from src.core.data.enums import ExcMsg
-from src.core.domain.http_exceptions import InternalError, ScopusAPIError
+from src.core.domain.enums import ExcMsg
+from src.core.domain.exceptions import InternalError, ScopusAPIError
+from src.core.domain.types import ResponseBundle
+from src.infra.config.scopus import QUOTA_ERROR_CODE, RATE_LIMIT_ERROR_CODE
+from src.infra.http.response_auditor import validate_search_response
 from tests.conftest import assert_http_error
 from tests.mocks.helpers import fqn
 from tests.mocks.raw import (

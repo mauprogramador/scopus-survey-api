@@ -7,7 +7,7 @@ from starlette.middleware.base import RequestResponseEndpoint
 from starlette.testclient import TestClient
 from starlette.types import Scope as StarletteScope
 
-from src.framework.middleware.proxy_forwarded_resolver import (
+from src.infra.middleware.proxy_forwarded_resolver import (
     ProxyForwardedResolverMiddleware,
 )
 from tests.mocks.raw import HTTP_200

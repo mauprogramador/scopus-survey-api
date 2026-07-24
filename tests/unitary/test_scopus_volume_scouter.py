@@ -4,8 +4,8 @@ from unittest.mock import AsyncMock
 from pytest import mark
 
 from src.adapters.gateway.scopus_volume_scouter import ScopusVolumeScouter
-from src.adapters.helpers.http_client import HTTPClient
-from src.core.data.query_params import CombinationParams
+from src.adapters.serializers.query_params import CombinationParams
+from src.infra.http.http_client import HTTPClient
 from tests.mocks.raw import ALIAS_COMBINATION_PARAMS
 from tests.mocks.unitary import SURVEY_MAP, SURVEY_NOT_FOUND, SURVEY_RESULTS
 

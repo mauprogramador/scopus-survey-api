@@ -5,7 +5,7 @@ import pandas as pd
 from pandas import DataFrame
 from thefuzz.fuzz import ratio as fuzz_ratio  # type: ignore
 
-from src.utils import logger
+from src.infra.utils import logger
 
 
 class SimilarityFilter:

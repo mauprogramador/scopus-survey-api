@@ -19,9 +19,9 @@ from pydantic_core import to_jsonable_python
 from starlette.types import Scope as StarletteScope
 from tqdm.std import tqdm as std_tqdm
 
-from src.core.common.types import APIName, Json, ScopusHeaders
-from src.core.config.config import ENV
-from src.core.config.scopus import SEARCH_API_URL
+from src.core.domain.types import APIName, Json, ScopusHeaders
+from src.infra.config.config import ENV
+from src.infra.config.scopus import SEARCH_API_URL
 
 
 # e.g. \033[35;1m, \033[m

@@ -1,8 +1,12 @@
 from pydantic_core import ValidationError
 from pytest import raises
 
-from src.core.config.scopus import CURRENT_YEAR, LAST_THREE_YEARS
-from src.core.data.enums import (
+from src.adapters.serializers.query_params import (
+    CombinationParams,
+    CSVParams,
+    SurveyParams,
+)
+from src.core.domain.enums import (
     Button,
     DocType,
     PageRange,
@@ -10,11 +14,7 @@ from src.core.data.enums import (
     SrcType,
     SubjArea,
 )
-from src.core.data.query_params import (
-    CombinationParams,
-    CSVParams,
-    SurveyParams,
-)
+from src.infra.config.scopus import CURRENT_YEAR, LAST_THREE_YEARS
 from tests.mocks.raw import (
     ALIAS_COMBINATION_PARAMS,
     ALIAS_COMBINATION_PARAMS_FULL,

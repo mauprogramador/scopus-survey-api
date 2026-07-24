@@ -10,9 +10,9 @@ from starlette.responses import Response as StarletteResponse
 
 from src import __contact__, __version__
 from src.adapters.presenters.json_response import ErrorJSON
-from src.core.common.types import Translations
-from src.core.config.config import MAX_AGE, META_INFO, PREFIX
-from src.core.data.enums import ExcMsg, Lang
+from src.core.domain.enums import ExcMsg, Lang
+from src.core.domain.types import Translations
+from src.infra.config.config import MAX_AGE, META_INFO, PREFIX
 
 
 _ERROR_PAGE_HEADERS = {

@@ -5,8 +5,8 @@ from pytest import mark
 from pytest_mock import MockerFixture as Mocker
 
 from src.adapters.gateway.scopus_dataset_gatherer import ScopusDatasetGatherer
-from src.core.common.types import Json, ScopusDetails
-from src.core.data.query_params import SurveyParams
+from src.adapters.serializers.query_params import SurveyParams
+from src.core.domain.types import Json, ScopusDetails
 from src.core.use_cases.similarity_filter import SimilarityFilter
 from src.core.use_cases.survey_aggregator import SurveyAggregator
 from tests.mocks.raw import ALIAS_SEARCH_PARAMS

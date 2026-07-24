@@ -3,10 +3,10 @@ from pydantic_core import ValidationError
 from pytest import raises
 from pytest_mock import MockerFixture as Mocker
 
-from src.core.config.config import MAX_AGE
-from src.core.data.enums import ExcMsg
-from src.core.domain.http_exceptions import Unauthorized
-from src.framework.fastapi.csrf_token import (
+from src.core.domain.enums import ExcMsg
+from src.core.domain.exceptions import Unauthorized
+from src.infra.config.config import MAX_AGE
+from src.infra.fastapi.csrf_token import (
     generate_csrf_token,
     verify_csrf_token,
 )

@@ -1,16 +1,10 @@
 import asyncio
 
-from src.adapters.helpers.context import ScopusContext
-from src.adapters.helpers.fetch_multiple_concurrent import fetch_multiple
-from src.adapters.helpers.response_auditor import (
-    validate_abstract_response,
-    validate_search_response,
-)
-from src.adapters.helpers.url_builder import (
-    build_abstract_urls,
-    build_search_urls,
-)
-from src.core.common.types import (
+from src.adapters.gateway.context import ScopusContext
+from src.adapters.serializers.scopus_data import ScopusHeaders
+from src.core.domain.enums import ExcMsg
+from src.core.domain.exceptions import BadGateway, NotFound
+from src.core.domain.types import (
     Headers,
     HTTPClient,
     Json,
@@ -19,10 +13,16 @@ from src.core.common.types import (
     SurveyParams,
     URLBuilder,
 )
-from src.core.data.enums import ExcMsg
-from src.core.data.serializers import ScopusHeaders
-from src.core.domain.http_exceptions import BadGateway, NotFound
-from src.utils import logger
+from src.infra.http.fetch_multiple_concurrent import fetch_multiple
+from src.infra.http.response_auditor import (
+    validate_abstract_response,
+    validate_search_response,
+)
+from src.infra.http.url_builder import (
+    build_abstract_urls,
+    build_search_urls,
+)
+from src.infra.utils import logger
 
 
 class ScopusDatasetGatherer:

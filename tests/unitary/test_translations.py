@@ -4,8 +4,8 @@ from unittest.mock import MagicMock, Mock
 from pytest import fixture, mark, raises
 from pytest_mock import MockerFixture as Mocker
 
-from src.core.data.enums import ExcMsg, Lang
-from src.core.domain.translations import (
+from src.core.domain.enums import ExcMsg, Lang
+from src.infra.i18n.translations import (
     _ERRORS,
     _get_lang,
     load_translations,

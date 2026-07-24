@@ -4,7 +4,7 @@ from httpx import AsyncClient as Client
 from pytest import mark
 from pytest_mock import MockerFixture as Mocker
 
-from src.core.data.enums import Lang
+from src.core.domain.enums import Lang
 from tests.mocks.helpers import get_patch
 from tests.mocks.integration import COMBINATION_RESPONSES, SURVEY_RESPONSES
 from tests.mocks.raw import (

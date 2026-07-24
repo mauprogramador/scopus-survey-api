@@ -7,22 +7,22 @@ from fastapi.staticfiles import StaticFiles
 
 from src import __version__
 from src.adapters.presenters.jinja_response import build_all_templates
-from src.core.config.config import DIRECTORY, ENV, LIMITER
-from src.core.domain.translations import load_translations
-from src.framework.fastapi.routes import favicon_router, router
-from src.framework.fastapi.swagger import (
+from src.infra.config.config import DIRECTORY, ENV, LIMITER
+from src.infra.fastapi.routes import favicon_router, router
+from src.infra.fastapi.swagger import (
     APP_DESCRIPTION,
     CONTACT,
     LICENSE,
     RESPONSES,
     TERMS_OF_SERVICE,
 )
-from src.framework.middleware import (
+from src.infra.i18n.translations import load_translations
+from src.infra.middleware import (
     HANDLERS,
     FlowGuardingMonitorMiddleware,
     ProxyForwardedResolverMiddleware,
 )
-from src.utils import logger
+from src.infra.utils import logger
 
 
 @contextlib.asynccontextmanager

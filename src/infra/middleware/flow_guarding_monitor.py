@@ -15,14 +15,14 @@ from starlette.responses import Response as StarletteResponse
 
 from src.adapters.presenters.jinja_response import get_not_found_template
 from src.adapters.presenters.json_response import ErrorJSON
-from src.core.config.config import (
+from src.infra.config.config import (
     HEADERS,
     RATELIMIT_POLICY,
     SERVER,
     TRACE_ID_CTX,
 )
-from src.framework.middleware.exception_handler import common_error
-from src.utils import logger
+from src.infra.middleware.exception_handlers import common_error
+from src.infra.utils import logger
 
 
 # e.g. /v2/scopus-survey/api

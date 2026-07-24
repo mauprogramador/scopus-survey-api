@@ -1,14 +1,23 @@
 from urllib.parse import unquote_plus
 
-from src.adapters.helpers.url_builder import (
+from src.adapters.serializers.query_params import (
+    CombinationParams,
+    SurveyParams,
+)
+from src.core.domain.enums import (
+    DocType,
+    PageRange,
+    PubStage,
+    SrcType,
+    SubjArea,
+)
+from src.infra.config.scopus import ARTICLE_PAGE_URL, SEARCH_FIELDS
+from src.infra.http.url_builder import (
     build_abstract_urls,
     build_article_page_url,
     build_combination_urls,
     build_search_urls,
 )
-from src.core.config.scopus import ARTICLE_PAGE_URL, SEARCH_FIELDS
-from src.core.data.enums import DocType, PageRange, PubStage, SrcType, SubjArea
-from src.core.data.query_params import CombinationParams, SurveyParams
 from tests.mocks.raw import (
     ALIAS_COMBINATION_PARAMS_FULL,
     ALIAS_SEARCH_PARAMS_FULL,

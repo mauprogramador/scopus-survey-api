@@ -2,17 +2,17 @@ from http import HTTPStatus
 
 from pydantic import BaseModel, ValidationError
 
-from src.core.common.types import ResponseBundle
-from src.core.config.scopus import QUOTA_ERROR_CODE, RATE_LIMIT_ERROR_CODE
-from src.core.data.enums import ExcMsg
-from src.core.data.serializers import (
+from src.adapters.serializers.scopus_data import (
     ScopusAbstract,
     ScopusError,
     ScopusHeaders,
     ScopusPage,
 )
-from src.core.domain.http_exceptions import InternalError, ScopusAPIError
-from src.utils import logger
+from src.core.domain.enums import ExcMsg
+from src.core.domain.exceptions import InternalError, ScopusAPIError
+from src.core.domain.types import ResponseBundle
+from src.infra.config.scopus import QUOTA_ERROR_CODE, RATE_LIMIT_ERROR_CODE
+from src.infra.utils import logger
 
 
 def _validate[T: BaseModel](model: type[T], res: ResponseBundle) -> T:

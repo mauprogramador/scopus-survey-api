@@ -2,9 +2,9 @@ from datetime import datetime
 
 from pandas import DataFrame
 
-from src.core.common.types import SurveyParams
-from src.core.config.config import DIRECTORY, FILE
-from src.core.config.scopus import BOOLEAN_OPERATOR, DATA_SOURCE_NOTE
+from src.core.domain.types import SurveyDetails, SurveyParams
+from src.infra.config.config import DIRECTORY, FILE
+from src.infra.config.scopus import BOOLEAN_OPERATOR, DATA_SOURCE_NOTE
 
 
 _GENERATED_BY = (
@@ -26,10 +26,8 @@ _COLUMN_TRANSLATION = {
 
 
 def write_csv_file(
-    dataset: DataFrame, params: SurveyParams, metadata: list[str]
+    dataset: DataFrame, params: SurveyParams, details: SurveyDetails
 ) -> str:
-    csv_metadata = {"GeneratedBy": _GENERATED_BY}
-
     params_obj = params.model_dump(exclude_none=True)
     params_obj.update(
         {
@@ -39,6 +37,20 @@ def write_csv_file(
         }
     )
 
+    loss = details.total_retrieved - details.total_final
+    loss_percent = (
+        0.0 if loss == 0 else (loss / details.total_retrieved) * 100.0
+    )
+    metadata = [
+        f"scopus_total={details.search_result.total_results}",
+        f"items_per_page={details.search_result.items_per_page}",
+        f"pages_count={details.pages_count}",
+        f"total_retrieved={details.total_retrieved}",
+        f"total_final={details.total_final}",
+        f"loss={loss} ({loss_percent:.2f}%)",
+    ]
+
+    csv_metadata = {"GeneratedBy": _GENERATED_BY}
     csv_metadata["Params"] = ", ".join(
         [f"{field}={value}" for field, value in params_obj.items()]
     )

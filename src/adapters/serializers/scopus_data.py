@@ -11,9 +11,9 @@ from pydantic import (
     model_validator,
 )
 
-from src.adapters.helpers.url_builder import build_article_page_url
-from src.core.common.types import Json
-from src.core.config.scopus import EMPTY_RESULT
+from src.core.domain.types import Json
+from src.infra.config.scopus import EMPTY_RESULT
+from src.infra.http.url_builder import build_article_page_url
 
 
 # e.g. http://api.elsevier.com/content/abstract/scopus_id/0123456789

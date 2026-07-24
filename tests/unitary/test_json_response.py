@@ -10,10 +10,10 @@ from src.adapters.presenters.json_response import (
     SuccessResponse,
     json_response,
 )
-from src.core.common.types import Json
-from src.core.data.enums import ExcMsg
-from src.core.data.query_params import CombinationParams
-from src.core.data.serializers import ScopusHeaders
+from src.adapters.serializers.query_params import CombinationParams
+from src.adapters.serializers.scopus_data import ScopusHeaders
+from src.core.domain.enums import ExcMsg
+from src.core.domain.types import Json
 from tests.mocks.helpers import fqn
 from tests.mocks.raw import (
     ALIAS_COMBINATION_PARAMS,

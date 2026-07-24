@@ -6,10 +6,10 @@ from fastapi.responses import JSONResponse
 from pydantic import BaseModel, ConfigDict
 from pydantic_core import PydanticSerializationError, to_jsonable_python
 
-from src.core.common.types import CombinationParams, Json, ScopusHeaders
-from src.core.data.enums import ExcMsg
-from src.core.domain.http_exceptions import get_error_details
-from src.utils import logger
+from src.core.domain.enums import ExcMsg
+from src.core.domain.exceptions import get_error_details
+from src.core.domain.types import CombinationParams, Json, ScopusHeaders
+from src.infra.utils import logger
 
 
 class BaseResponse(BaseModel):
