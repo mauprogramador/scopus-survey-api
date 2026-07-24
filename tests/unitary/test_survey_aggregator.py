@@ -4,9 +4,7 @@ from pandas import DataFrame
 from pytest import mark
 from pytest_mock import MockerFixture as Mocker
 
-from src.adapters.gateway.scopus_abstract_retrieval_api import (
-    ScopusDatasetGatherer,
-)
+from src.adapters.gateway.scopus_dataset_gatherer import ScopusDatasetGatherer
 from src.core.common.types import Json, ScopusDetails
 from src.core.data.query_params import SurveyParams
 from src.core.use_cases.similarity_filter import SimilarityFilter

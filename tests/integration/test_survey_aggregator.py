@@ -21,9 +21,8 @@ async def test_one_row(mocker: Mocker, client: Client):
     spy_filter = mocker.spy(SimilarityFilter, "filter")
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
 
-    df = load_csv_from_response(res)
+    assert load_csv_from_response(res).shape[0] == 1
     assert res.status_code == HTTP_200 and mock.call_count == 2
-    assert df.shape[0] == 1
     spy_drop.assert_not_called()
     spy_filter.assert_not_called()
 
@@ -35,9 +34,8 @@ async def test_more_rows(mocker: Mocker, client: Client):
     spy_filter = mocker.spy(SimilarityFilter, "filter")
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
 
-    df = load_csv_from_response(res)
+    assert load_csv_from_response(res).shape[0] == 7
     assert res.status_code == HTTP_200 and mock.call_count == 8
-    assert df.shape[0] == 7
     spy_drop.assert_called()
     spy_filter.assert_called()
 
