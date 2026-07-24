@@ -6,7 +6,7 @@ from pydantic import ValidationError
 from pytest import mark
 from pytest_mock import MockerFixture as Mocker
 
-from src.adapters.gateway.scopus_search_api import ScopusVolumeScouter
+from src.adapters.gateway.scopus_volume_scouter import ScopusVolumeScouter
 from src.adapters.helpers.response_auditor import validate_search_response
 from src.core.data.enums import ExcMsg
 from src.core.domain.http_exceptions import HTTPError

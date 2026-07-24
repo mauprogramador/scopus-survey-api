@@ -11,7 +11,7 @@ from slowapi.errors import RateLimitExceeded
 from src.adapters.gateway.scopus_abstract_retrieval_api import (
     ScopusDatasetGatherer,
 )
-from src.adapters.gateway.scopus_search_api import ScopusVolumeScouter
+from src.adapters.gateway.scopus_volume_scouter import ScopusVolumeScouter
 from src.adapters.helpers.context import ScopusContext
 from src.core.common.types import Json
 from src.core.data.enums import ExcMsg
