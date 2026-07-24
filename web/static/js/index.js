@@ -20,8 +20,9 @@ const detailsCache = {
   'x-abstract-reset': null,
   'x-keywords': null,
   'x-combination': null,
-  'x-total': null,
-  'x-results': null,
+  'x-scopus-total': null,
+  'x-total-retrieved': null,
+  'x-total-final': null,
   'x-pages-count': null,
   'x-items-per-page': null,
   'x-loss': null,
@@ -36,7 +37,9 @@ const apiKeyQuota = [
 ];
 
 function updateDetails(headers) {
-  detailsCache['x-total'] = null;
+  detailsCache['x-scopus-total'] = null;
+  detailsCache['x-total-retrieved'] = null;
+  detailsCache['x-total-final'] = null;
   detailsCache['x-pages-count'] = null;
   detailsCache['x-items-per-page'] = null;
   detailsCache['x-loss'] = null;
