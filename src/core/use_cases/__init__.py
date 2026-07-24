@@ -1,8 +1,8 @@
 from .similarity_filter import SimilarityFilter
-from .survey_orchestrator import SurveyOrchestrator
+from .survey_aggregator import SurveyAggregator
 
 
 __all__ = [
     "SimilarityFilter",
-    "SurveyOrchestrator",
+    "SurveyAggregator",
 ]

@@ -21,7 +21,7 @@ from tqdm.std import tqdm as std_tqdm
 
 from src.core.common.types import APIName, Json, ScopusHeaders
 from src.core.config.config import ENV
-from src.core.config.scopus import MAX_SEARCH_QUOTA, NO_RESULTS, SEARCH_API_URL
+from src.core.config.scopus import SEARCH_API_URL
 
 
 # e.g. \033[35;1m, \033[m

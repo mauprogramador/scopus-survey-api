@@ -26,7 +26,7 @@ _COLUMN_TRANSLATION = {
 
 
 def write_csv_file(
-    docs: DataFrame, params: SurveyParams, metadata: list[str]
+    dataset: DataFrame, params: SurveyParams, metadata: list[str]
 ) -> str:
     csv_metadata = {"GeneratedBy": _GENERATED_BY}
 
@@ -53,7 +53,7 @@ def write_csv_file(
         for field, value in csv_metadata.items():
             file.write(f"# {field}: {value}\n")
 
-        docs.rename(columns=_COLUMN_TRANSLATION).to_csv(
+        dataset.rename(columns=_COLUMN_TRANSLATION).to_csv(
             file,
             sep=";",
             na_rep="",

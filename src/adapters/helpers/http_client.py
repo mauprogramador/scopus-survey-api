@@ -149,11 +149,13 @@ class HTTPClient:  # pylint: disable=R0902
 
             try:
                 data: Json | None = await res.json()
+
                 if data is None:
                     raise self._JSON_ERROR
 
             except (aiohttp.ContentTypeError, JSONDecodeError) as exc:
                 body = await res.text()
+
                 raise BadGatewayContent(
                     ExcMsg.INVALID_JSON_ERROR, exc, body
                 ) from exc

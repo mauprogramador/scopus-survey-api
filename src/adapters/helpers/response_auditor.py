@@ -1,4 +1,3 @@
-# mypy: disable-error-code="return-value"
 from http import HTTPStatus
 
 from pydantic import BaseModel, ValidationError

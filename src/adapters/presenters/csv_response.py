@@ -14,12 +14,7 @@ def csv_response(
     headers: Headers,
 ) -> FileResponse:
     file_path = DIRECTORY / f"{api_key}_{FILE}"
-
-    headers = {
-        "X-CSV-Filename": filename,
-        "X-API-Key": api_key,
-    }
-    headers.update(details_headers)
+    headers.update({"X-CSV-Filename": filename, "X-API-Key": api_key})
 
     return FileResponse(
         path=file_path,
@@ -37,10 +32,7 @@ def retrieve_csv(api_key: str) -> FileResponse:
     if not file_path.exists():
         raise NotFound(ExcMsg.CSV_NOT_FOUND)
 
-    headers = {
-        "X-CSV-Filename": filename,
-        "X-API-Key": api_key,
-    }
+    headers = {"X-CSV-Filename": filename, "X-API-Key": api_key}
 
     return FileResponse(
         path=file_path,

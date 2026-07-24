@@ -17,7 +17,6 @@ MAX_ITEMS_PER_PAGE = 25
 # https://dev.elsevier.com/api_key_settings.html
 MAX_SEARCH_QUOTA = 20000
 
-NO_RESULTS = "NO_SEARCH_RESULTS"
 EMPTY_RESULT = "Result set was empty"
 
 QUOTA_ERROR_CODE = "QUOTA_EXCEEDED"
