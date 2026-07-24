@@ -1,7 +1,5 @@
 import itertools
 import string
-import time
-from datetime import datetime
 
 from src.core.config.scopus import QUOTA_ERROR_CODE, RATE_LIMIT_ERROR_CODE
 from tests.mocks.errors import CONTENT_TYPE_ERROR, JSON_DECODE_ERROR
@@ -14,8 +12,6 @@ from tests.mocks.helpers import (
 from tests.mocks.raw import (
     HTTP_429,
     HTTP_500,
-    RAW_ABSTRACT_AUTHORS,
-    RAW_ABSTRACT_FULL,
     RAW_ABSTRACT_OK,
     RAW_ERROR_RESPONSE_RATE_LIMIT,
     RAW_HEADERS_NO_QUOTA,
@@ -34,7 +30,7 @@ SURVEY_RESPONSES = [
     response_mock(RAW_ABSTRACT_OK),
 ]
 
-# HTTPClient.request
+# HTTPClient.api_call (aioretry.RetryClient.get)
 
 GET_SUCCESS = [response_mock(RAW_SEARCH_OK)] * 3
 GET_CONTENT_TYPE_ERROR = response_mock(CONTENT_TYPE_ERROR)
@@ -52,137 +48,179 @@ GET_RATE_LIMIT = [
     *GET_SUCCESS,
 ]
 
-# ScopusSearchAPI.survey_totals_found
+# ScopusVolumeScouter.fetch
 
 SURVEY_TWO_KEYWORDS = [response_mock(RAW_SEARCH_OK)] * 3
 SURVEY_THREE_KEYWORDS = [response_mock(RAW_SEARCH_OK)] * 7
 SURVEY_FOUR_KEYWORDS = [response_mock(RAW_SEARCH_OK)] * 15
 SURVEY_NOT_FOUND = [response_mock(RAW_SEARCH_NOT_FOUND)] * 3
 
-# ScopusSearchAPI.search_articles
+# ScopusDatasetGatherer.fetch
 
-SEARCH_ONE_PAGE_ONE_RESULT = [
-    response_mock(RAW_SEARCH_OK),
-    response_mock(RAW_ABSTRACT_OK),
-]
-SEARCH_ONE_PAGE_FULL_RESULTS = [
-    response_mock(search_raw(25, 1)),
-    response_mock(RAW_ABSTRACT_OK),
-]
-SEARCH_TWO_PAGES_PARTIAL_RESULTS = [
-    response_mock(search_raw(30, 1)),
-    response_mock(search_raw(30, 1)),
-    response_mock(RAW_ABSTRACT_OK),
-    response_mock(RAW_ABSTRACT_OK),
-]
-SEARCH_TWO_PAGES_FULL_RESULTS = [
-    response_mock(search_raw(50, 1)),
-    response_mock(search_raw(50, 1)),
-    response_mock(RAW_ABSTRACT_OK),
-    response_mock(RAW_ABSTRACT_OK),
-]
-SEARCH_MORE_PAGES_PARTIAL_RESULTS = [
-    *[response_mock(search_raw(151, 1))] * 7,
-    *[response_mock(RAW_ABSTRACT_OK)] * 7,
-]
-SEARCH_MORE_PAGES_FULL_RESULTS = [
-    *[response_mock(search_raw(175, 1))] * 7,
-    *[response_mock(RAW_ABSTRACT_OK)] * 7,
-]
 SEARCH_NOT_FOUND = response_mock(RAW_SEARCH_NOT_FOUND)
-SEARCH_EXACT_QUOTA_ONE_RESULT = [
-    response_mock(search_raw(1), headers=RAW_HEADERS_NO_QUOTA),
-    response_mock(RAW_ABSTRACT_OK),
-]
-SEARCH_EXACT_QUOTA_TWO_RESULTS = [
-    response_mock(search_raw(26, 1), headers=RAW_HEADERS_ONE_QUOTA),
-    response_mock(search_raw(26, 1), headers=RAW_HEADERS_NO_QUOTA),
-    *[response_mock(RAW_ABSTRACT_OK)] * 2,
-]
-SEARCH_EXACT_QUOTA_MORE_RESULTS = [
-    *[
-        response_mock(search_raw(151, 1), headers=headers_raw(index))
-        for index in range(6, 0, -1)
-    ],
-    response_mock(search_raw(151, 1), headers=RAW_HEADERS_NO_QUOTA),
-    *[response_mock(RAW_ABSTRACT_OK)] * 7,
-]
-SEARCH_NO_QUOTA_TWO_RESULTS = [
-    response_mock(search_raw(26, 1), headers=RAW_HEADERS_NO_QUOTA),
-    response_mock(RAW_ABSTRACT_OK),
-]
-SEARCH_NO_QUOTA_MORE_RESULTS = [
-    *[
-        response_mock(search_raw(151, 1), headers=headers_raw(index))
-        for index in range(3, 0, -1)
-    ],
-    response_mock(search_raw(151, 1), headers=RAW_HEADERS_NO_QUOTA),
-    *[response_mock(RAW_ABSTRACT_OK)] * 4,
-]
-SEARCH_QUOTA_EXCEEDED = response_mock(
-    RAW_SERVICE_ERROR_QUOTA, HTTP_429, RAW_HEADERS_NO_QUOTA
-)
-
-# ScopusabstractRetrievalAPI.retrieve_abstracts
-
-RETRIEVE_ONE_PARTIAL_ABSTRACT = [
+ONE_PAGE_ONE_ABSTRACT = [
     response_mock(RAW_SEARCH_OK),
     response_mock(RAW_ABSTRACT_OK),
 ]
-RETRIEVE_ONE_ABSTRACT_AUTHORS = [
-    response_mock(RAW_SEARCH_OK),
-    response_mock(RAW_ABSTRACT_AUTHORS),
-]
-RETRIEVE_ONE_ABSTRACT_FULL = [
-    response_mock(RAW_SEARCH_OK),
-    response_mock(RAW_ABSTRACT_FULL),
-]
-RETRIEVE_TWO_ABSTRACTS = [
+ONE_PAGE_TWO_ABSTRACTS = [
     response_mock(search_raw(2)),
-    *[response_mock(RAW_ABSTRACT_OK)] * 2,
+    response_mock(RAW_ABSTRACT_OK),
+    response_mock(RAW_ABSTRACT_OK),
 ]
-RETRIEVE_MORE_ABSTRACTS = [
-    response_mock(search_raw(7)),
-    *[response_mock(RAW_ABSTRACT_OK)] * 7,
+ONE_PAGE_FULL_ABSTRACTS = [
+    response_mock(search_raw(25)),
+    *[response_mock(RAW_ABSTRACT_OK)] * 25,
 ]
-ABSTRACT_EXACT_QUOTA_ONE_RESULT = [
+TWO_PARTIAL_PAGES_ABSTRACTS = [
+    response_mock(search_raw(30)),
+    response_mock(RAW_ABSTRACT_OK),
+    response_mock(search_raw(30, 5)),
+    *[response_mock(RAW_ABSTRACT_OK)] * 29,
+]
+TWO_PAGES_FULL_ABSTRACTS = [
+    response_mock(search_raw(50)),
+    response_mock(RAW_ABSTRACT_OK),
+    response_mock(search_raw(50)),
+    *[response_mock(RAW_ABSTRACT_OK)] * 49,
+]
+MORE_PARTIAL_PAGES_ABSTRACTS = [
+    response_mock(search_raw(151)),
+    response_mock(RAW_ABSTRACT_OK),
+    *[response_mock(search_raw(151))] * 5,
+    response_mock(search_raw(151, 1)),
+    *[response_mock(RAW_ABSTRACT_OK)] * 150,
+]
+MORE_PAGES_FULL_ABSTRACTS = [
+    response_mock(search_raw(175)),
+    response_mock(RAW_ABSTRACT_OK),
+    *[response_mock(search_raw(175))] * 6,
+    *[response_mock(RAW_ABSTRACT_OK)] * 174,
+]
+EXACT_QUOTA_ONE_ABSTRACT = [
     response_mock(search_raw(1)),
     response_mock(RAW_ABSTRACT_OK, headers=RAW_HEADERS_NO_QUOTA),
 ]
-ABSTRACT_EXACT_QUOTA_TWO_RESULTS = [
+EXACT_QUOTA_ONE_PAGE = [
+    response_mock(search_raw(1), headers=RAW_HEADERS_NO_QUOTA),
+    response_mock(RAW_ABSTRACT_OK),
+]
+EXACT_QUOTA_ONE_RESULT = [
+    response_mock(search_raw(1), headers=RAW_HEADERS_NO_QUOTA),
+    response_mock(RAW_ABSTRACT_OK, headers=RAW_HEADERS_NO_QUOTA),
+]
+EXACT_QUOTA_TWO_ABSTRACTS = [
     response_mock(search_raw(2)),
     response_mock(RAW_ABSTRACT_OK, headers=RAW_HEADERS_ONE_QUOTA),
     response_mock(RAW_ABSTRACT_OK, headers=RAW_HEADERS_NO_QUOTA),
 ]
-ABSTRACT_EXACT_QUOTA_MORE_RESULTS = [
-    response_mock(search_raw(7)),
+EXACT_QUOTA_TWO_PAGES = [
+    response_mock(search_raw(26), headers=RAW_HEADERS_ONE_QUOTA),
+    response_mock(RAW_ABSTRACT_OK),
+    response_mock(search_raw(26, 1), headers=RAW_HEADERS_NO_QUOTA),
+    *[response_mock(RAW_ABSTRACT_OK)] * 25,
+]
+EXACT_QUOTA_TWO_RESULTS = [
+    response_mock(search_raw(26), headers=RAW_HEADERS_ONE_QUOTA),
+    response_mock(RAW_ABSTRACT_OK, headers=headers_raw(25)),
+    response_mock(search_raw(26, 1), headers=RAW_HEADERS_NO_QUOTA),
     *[
         response_mock(RAW_ABSTRACT_OK, headers=headers_raw(index))
-        for index in range(6, 0, -1)
+        for index in range(24, 0, -1)
     ],
     response_mock(RAW_ABSTRACT_OK, headers=RAW_HEADERS_NO_QUOTA),
 ]
-ABSTRACT_NO_QUOTA_TWO_RESULTS = [
+EXACT_QUOTA_MORE_ABSTRACTS = [
+    response_mock(search_raw(151)),
+    response_mock(RAW_ABSTRACT_OK, headers=headers_raw(150)),
+    *[response_mock(search_raw(151))] * 5,
+    response_mock(search_raw(151, 1)),
+    *[
+        response_mock(RAW_ABSTRACT_OK, headers=headers_raw(index))
+        for index in range(149, 0, -1)
+    ],
+    response_mock(RAW_ABSTRACT_OK, headers=RAW_HEADERS_NO_QUOTA),
+]
+EXACT_QUOTA_MORE_PAGES = [
+    response_mock(search_raw(151), headers=headers_raw(6)),
+    response_mock(RAW_ABSTRACT_OK),
+    *[
+        response_mock(search_raw(151), headers=headers_raw(index))
+        for index in range(5, 0, -1)
+    ],
+    response_mock(search_raw(151, 1), headers=RAW_HEADERS_NO_QUOTA),
+    *[response_mock(RAW_ABSTRACT_OK)] * 150,
+]
+EXACT_QUOTA_MORE_RESULTS = [
+    response_mock(search_raw(151), headers=headers_raw(6)),
+    response_mock(RAW_ABSTRACT_OK, headers=headers_raw(150)),
+    *[
+        response_mock(search_raw(151), headers=headers_raw(index))
+        for index in range(5, 0, -1)
+    ],
+    response_mock(search_raw(151, 1), headers=RAW_HEADERS_NO_QUOTA),
+    *[
+        response_mock(RAW_ABSTRACT_OK, headers=headers_raw(index))
+        for index in range(149, 0, -1)
+    ],
+    response_mock(RAW_ABSTRACT_OK, headers=RAW_HEADERS_NO_QUOTA),
+]
+NO_QUOTA_TWO_ABSTRACTS = [
     response_mock(search_raw(2)),
     response_mock(RAW_ABSTRACT_OK, headers=RAW_HEADERS_NO_QUOTA),
 ]
-ABSTRACT_NO_QUOTA_MORE_RESULTS = [
+NO_QUOTA_TWO_PAGES = [
+    response_mock(search_raw(26), headers=RAW_HEADERS_NO_QUOTA),
+    *[response_mock(RAW_ABSTRACT_OK)] * 25,
+]
+NO_QUOTA_TWO_RESULTS = [
+    response_mock(search_raw(26), headers=RAW_HEADERS_NO_QUOTA),
+    response_mock(RAW_ABSTRACT_OK, headers=RAW_HEADERS_NO_QUOTA),
+]
+NO_QUOTA_MORE_ABSTRACTS = [
     response_mock(search_raw(7)),
+    response_mock(RAW_ABSTRACT_OK, headers=headers_raw(3)),
+    response_mock(RAW_ABSTRACT_OK, headers=headers_raw(2)),
+    response_mock(RAW_ABSTRACT_OK, headers=headers_raw(1)),
+    response_mock(RAW_ABSTRACT_OK, headers=RAW_HEADERS_NO_QUOTA),
+]
+NO_QUOTA_MORE_PAGES = [
+    response_mock(search_raw(151), headers=headers_raw(3)),
+    response_mock(RAW_ABSTRACT_OK),
+    response_mock(search_raw(151), headers=headers_raw(2)),
+    response_mock(search_raw(151), headers=headers_raw(1)),
+    response_mock(search_raw(151), headers=RAW_HEADERS_NO_QUOTA),
+    *[response_mock(RAW_ABSTRACT_OK)] * 99,
+]
+NO_QUOTA_MORE_RESULTS = [
+    response_mock(search_raw(151), headers=headers_raw(3)),
+    response_mock(RAW_ABSTRACT_OK, headers=headers_raw(99)),
+    response_mock(search_raw(151), headers=headers_raw(2)),
+    response_mock(search_raw(151), headers=headers_raw(1)),
+    response_mock(search_raw(151), headers=RAW_HEADERS_NO_QUOTA),
     *[
         response_mock(RAW_ABSTRACT_OK, headers=headers_raw(index))
-        for index in range(3, 0, -1)
+        for index in range(98, 0, -1)
     ],
     response_mock(RAW_ABSTRACT_OK, headers=RAW_HEADERS_NO_QUOTA),
 ]
+SEARCH_QUOTA_EXCEEDED = response_mock(
+    RAW_SERVICE_ERROR_QUOTA, HTTP_429, RAW_HEADERS_NO_QUOTA
+)
 ABSTRACT_QUOTA_EXCEEDED = [
     response_mock(search_raw(1)),
     response_mock(RAW_SERVICE_ERROR_QUOTA, HTTP_429, RAW_HEADERS_NO_QUOTA),
 ]
 
-# ScopusResponse.validate_
+# response_auditor.validate_*
 
 RESPONSE_STATUS_ERROR = response_mock(
-    {"error": "any"}, headers={"X-ELS-Status": "ERROR"}
+    {
+        "error-response": {
+            "error-code": "any",
+            "error-message": "any",
+        }
+    },
+    headers={"X-ELS-Status": "ERROR"},
 )
 RESPONSE_QUOTA_EXCEEDED = response_mock(
     RAW_SERVICE_ERROR_QUOTA, HTTP_429, {"X-ELS-Status": QUOTA_ERROR_CODE}
@@ -264,7 +302,7 @@ NO_REPEATED_AUTHORS = [
     response_mock(abstract_raw("any", "b", "2025-06-01")),
 ]
 
-# SurveyOrchestrator.retrieve_articles
+# SurveyAggregator.process
 
 ONE_DIFFERENT_ARTICLE = [
     response_mock(RAW_SEARCH_OK),

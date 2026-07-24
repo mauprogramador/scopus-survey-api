@@ -4,7 +4,6 @@ import string
 
 from pandas import DataFrame
 
-from src.core.common.types import CombinationBundle
 from src.core.data.serializers import ScopusAbstract
 from tests.mocks.errors import CONTENT_TYPE_ERROR, JSON_DECODE_ERROR
 from tests.mocks.helpers import (
@@ -17,8 +16,6 @@ from tests.mocks.helpers import (
 from tests.mocks.raw import (
     HTTP_429,
     HTTP_500,
-    RAW_ABSTRACT_AUTHORS,
-    RAW_ABSTRACT_FULL,
     RAW_ABSTRACT_OK,
     RAW_ERROR_RESPONSE_RATE_LIMIT,
     RAW_HEADERS_NO_QUOTA,
@@ -29,7 +26,7 @@ from tests.mocks.raw import (
 )
 
 
-# HTTPClient.request
+# HTTPClient.api_call (aioretry.RetryClient.get)
 
 GET_SUCCESS = response_mock(RAW_SEARCH_OK)
 GET_CONTENT_TYPE_ERROR = response_mock(CONTENT_TYPE_ERROR)
@@ -47,14 +44,7 @@ GET_RATE_LIMIT = [
     GET_SUCCESS,
 ]
 
-# ScopusSearchAPI.survey_totals_found
-
-_COMBINATIONS = [
-    (index, CombinationBundle(index=index, combination="any", url="any"))
-    for index in range(1, 16)
-]
-TWO_KEYWORDS = dict(_COMBINATIONS[0:3])
-FOUR_KEYWORDS = dict(_COMBINATIONS)
+# ScopusVolumeScouter.fetch
 
 SURVEY_MAP = {
     index: bundle_mock(search_raw(random.randint(16, 256), 1))
@@ -63,75 +53,161 @@ SURVEY_MAP = {
 SURVEY_RESULTS = list(SURVEY_MAP.values())
 SURVEY_NOT_FOUND = [bundle_mock(RAW_SEARCH_NOT_FOUND)] * 3
 
-# ScopusSearchAPI.search_articles
+# ScopusDatasetGatherer.fetch
 
-ONE_PAGE_ONE_RESULT = bundle_mock(RAW_SEARCH_OK)
-ONE_PAGE_FULL_RESULTS = bundle_mock(search_raw(25, 1))
-TWO_PAGES_PARTIAL_RESULTS = [bundle_mock(search_raw(30, 1))] * 2
-TWO_PAGES_FULL_RESULTS = [bundle_mock(search_raw(50, 1))] * 2
-MORE_PAGES_PARTIAL_RESULTS = [bundle_mock(search_raw(151, 1))] * 7
-MORE_PAGES_FULL_RESULTS = [bundle_mock(search_raw(175, 1))] * 7
 SEARCH_NOT_FOUND = bundle_mock(RAW_SEARCH_NOT_FOUND)
-SEARCH_EXACT_QUOTA_ONE_RESULT = [
-    bundle_mock(search_raw(1), headers=RAW_HEADERS_NO_QUOTA)
+ONE_PAGE_ONE_ABSTRACT = [
+    bundle_mock(RAW_SEARCH_OK),
+    bundle_mock(RAW_ABSTRACT_OK),
 ]
-SEARCH_EXACT_QUOTA_TWO_RESULTS = [
-    bundle_mock(search_raw(26, 1), headers=RAW_HEADERS_ONE_QUOTA),
+ONE_PAGE_TWO_ABSTRACTS = [
+    bundle_mock(search_raw(2)),
+    bundle_mock(RAW_ABSTRACT_OK),
+    bundle_mock(RAW_ABSTRACT_OK),
+]
+ONE_PAGE_FULL_ABSTRACTS = [
+    bundle_mock(search_raw(25)),
+    *[bundle_mock(RAW_ABSTRACT_OK)] * 25,
+]
+TWO_PARTIAL_PAGES_ABSTRACTS = [
+    bundle_mock(search_raw(30)),
+    bundle_mock(RAW_ABSTRACT_OK),
+    bundle_mock(search_raw(30, 5)),
+    *[bundle_mock(RAW_ABSTRACT_OK)] * 29,
+]
+TWO_PAGES_FULL_ABSTRACTS = [
+    bundle_mock(search_raw(50)),
+    bundle_mock(RAW_ABSTRACT_OK),
+    bundle_mock(search_raw(50)),
+    *[bundle_mock(RAW_ABSTRACT_OK)] * 49,
+]
+MORE_PARTIAL_PAGES_ABSTRACTS = [
+    bundle_mock(search_raw(151)),
+    bundle_mock(RAW_ABSTRACT_OK),
+    *[bundle_mock(search_raw(151))] * 5,
+    bundle_mock(search_raw(151, 1)),
+    *[bundle_mock(RAW_ABSTRACT_OK)] * 150,
+]
+MORE_PAGES_FULL_ABSTRACTS = [
+    bundle_mock(search_raw(175)),
+    bundle_mock(RAW_ABSTRACT_OK),
+    *[bundle_mock(search_raw(175))] * 6,
+    *[bundle_mock(RAW_ABSTRACT_OK)] * 174,
+]
+EXACT_QUOTA_ONE_ABSTRACT = [
+    bundle_mock(search_raw(1)),
+    bundle_mock(RAW_ABSTRACT_OK, headers=RAW_HEADERS_NO_QUOTA),
+]
+EXACT_QUOTA_ONE_PAGE = [
+    bundle_mock(search_raw(1), headers=RAW_HEADERS_NO_QUOTA),
+    bundle_mock(RAW_ABSTRACT_OK),
+]
+EXACT_QUOTA_ONE_RESULT = [
+    bundle_mock(search_raw(1), headers=RAW_HEADERS_NO_QUOTA),
+    bundle_mock(RAW_ABSTRACT_OK, headers=RAW_HEADERS_NO_QUOTA),
+]
+EXACT_QUOTA_TWO_ABSTRACTS = [
+    bundle_mock(search_raw(2)),
+    bundle_mock(RAW_ABSTRACT_OK, headers=RAW_HEADERS_ONE_QUOTA),
+    bundle_mock(RAW_ABSTRACT_OK, headers=RAW_HEADERS_NO_QUOTA),
+]
+EXACT_QUOTA_TWO_PAGES = [
+    bundle_mock(search_raw(26), headers=RAW_HEADERS_ONE_QUOTA),
+    bundle_mock(RAW_ABSTRACT_OK),
     bundle_mock(search_raw(26, 1), headers=RAW_HEADERS_NO_QUOTA),
+    *[bundle_mock(RAW_ABSTRACT_OK)] * 25,
 ]
-SEARCH_EXACT_QUOTA_MORE_RESULTS = [
+EXACT_QUOTA_TWO_RESULTS = [
+    bundle_mock(search_raw(26), headers=RAW_HEADERS_ONE_QUOTA),
+    bundle_mock(RAW_ABSTRACT_OK, headers=headers_raw(25)),
+    bundle_mock(search_raw(26, 1), headers=RAW_HEADERS_NO_QUOTA),
     *[
-        bundle_mock(search_raw(151, 1), headers=headers_raw(index))
-        for index in range(6, 0, -1)
+        bundle_mock(RAW_ABSTRACT_OK, headers=headers_raw(index))
+        for index in range(24, 0, -1)
+    ],
+    bundle_mock(RAW_ABSTRACT_OK, headers=RAW_HEADERS_NO_QUOTA),
+]
+EXACT_QUOTA_MORE_ABSTRACTS = [
+    bundle_mock(search_raw(151)),
+    bundle_mock(RAW_ABSTRACT_OK, headers=headers_raw(150)),
+    *[bundle_mock(search_raw(151))] * 5,
+    bundle_mock(search_raw(151, 1)),
+    *[
+        bundle_mock(RAW_ABSTRACT_OK, headers=headers_raw(index))
+        for index in range(149, 0, -1)
+    ],
+    bundle_mock(RAW_ABSTRACT_OK, headers=RAW_HEADERS_NO_QUOTA),
+]
+EXACT_QUOTA_MORE_PAGES = [
+    bundle_mock(search_raw(151), headers=headers_raw(6)),
+    bundle_mock(RAW_ABSTRACT_OK),
+    *[
+        bundle_mock(search_raw(151), headers=headers_raw(index))
+        for index in range(5, 0, -1)
     ],
     bundle_mock(search_raw(151, 1), headers=RAW_HEADERS_NO_QUOTA),
+    *[bundle_mock(RAW_ABSTRACT_OK)] * 150,
 ]
-SEARCH_NO_QUOTA_TWO_RESULTS = [
-    bundle_mock(search_raw(26, 1), headers=RAW_HEADERS_NO_QUOTA)
-]
-SEARCH_NO_QUOTA_MORE_RESULTS = [
+EXACT_QUOTA_MORE_RESULTS = [
+    bundle_mock(search_raw(151), headers=headers_raw(6)),
+    bundle_mock(RAW_ABSTRACT_OK, headers=headers_raw(150)),
     *[
-        bundle_mock(search_raw(151, 1), headers=headers_raw(index))
-        for index in range(3, 0, -1)
+        bundle_mock(search_raw(151), headers=headers_raw(index))
+        for index in range(5, 0, -1)
     ],
     bundle_mock(search_raw(151, 1), headers=RAW_HEADERS_NO_QUOTA),
+    *[
+        bundle_mock(RAW_ABSTRACT_OK, headers=headers_raw(index))
+        for index in range(149, 0, -1)
+    ],
+    bundle_mock(RAW_ABSTRACT_OK, headers=RAW_HEADERS_NO_QUOTA),
+]
+NO_QUOTA_TWO_ABSTRACTS = [
+    bundle_mock(search_raw(2)),
+    bundle_mock(RAW_ABSTRACT_OK, headers=RAW_HEADERS_NO_QUOTA),
+]
+NO_QUOTA_TWO_PAGES = [
+    bundle_mock(search_raw(26), headers=RAW_HEADERS_NO_QUOTA),
+    *[bundle_mock(RAW_ABSTRACT_OK)] * 25,
+]
+NO_QUOTA_TWO_RESULTS = [
+    bundle_mock(search_raw(26), headers=RAW_HEADERS_NO_QUOTA),
+    bundle_mock(RAW_ABSTRACT_OK, headers=RAW_HEADERS_NO_QUOTA),
+]
+NO_QUOTA_MORE_ABSTRACTS = [
+    bundle_mock(search_raw(7)),
+    bundle_mock(RAW_ABSTRACT_OK, headers=headers_raw(3)),
+    bundle_mock(RAW_ABSTRACT_OK, headers=headers_raw(2)),
+    bundle_mock(RAW_ABSTRACT_OK, headers=headers_raw(1)),
+    bundle_mock(RAW_ABSTRACT_OK, headers=RAW_HEADERS_NO_QUOTA),
+]
+NO_QUOTA_MORE_PAGES = [
+    bundle_mock(search_raw(151), headers=headers_raw(3)),
+    bundle_mock(RAW_ABSTRACT_OK),
+    bundle_mock(search_raw(151), headers=headers_raw(2)),
+    bundle_mock(search_raw(151), headers=headers_raw(1)),
+    bundle_mock(search_raw(151), headers=RAW_HEADERS_NO_QUOTA),
+    *[bundle_mock(RAW_ABSTRACT_OK)] * 99,
+]
+NO_QUOTA_MORE_RESULTS = [
+    bundle_mock(search_raw(151), headers=headers_raw(3)),
+    bundle_mock(RAW_ABSTRACT_OK, headers=headers_raw(99)),
+    bundle_mock(search_raw(151), headers=headers_raw(2)),
+    bundle_mock(search_raw(151), headers=headers_raw(1)),
+    bundle_mock(search_raw(151), headers=RAW_HEADERS_NO_QUOTA),
+    *[
+        bundle_mock(RAW_ABSTRACT_OK, headers=headers_raw(index))
+        for index in range(98, 0, -1)
+    ],
+    bundle_mock(RAW_ABSTRACT_OK, headers=RAW_HEADERS_NO_QUOTA),
 ]
 SEARCH_QUOTA_EXCEEDED = bundle_mock(
     RAW_SERVICE_ERROR_QUOTA, HTTP_429, RAW_HEADERS_NO_QUOTA
 )
-
-# ScopusabstractRetrievalAPI.retrieve_abstracts
-
-ONE_ABSTRACT = bundle_mock(RAW_ABSTRACT_OK)
-ONE_ABSTRACT_AUTHORS = bundle_mock(RAW_ABSTRACT_AUTHORS)
-ONE_ABSTRACT_FULL = bundle_mock(RAW_ABSTRACT_FULL)
-ABSTRACT_EXACT_QUOTA_ONE_RESULT = [
-    bundle_mock(RAW_ABSTRACT_OK, headers=RAW_HEADERS_NO_QUOTA)
+ABSTRACT_QUOTA_EXCEEDED = [
+    bundle_mock(search_raw(1)),
+    bundle_mock(RAW_SERVICE_ERROR_QUOTA, HTTP_429, RAW_HEADERS_NO_QUOTA),
 ]
-ABSTRACT_EXACT_QUOTA_TWO_RESULTS = [
-    bundle_mock(RAW_ABSTRACT_OK, headers=RAW_HEADERS_ONE_QUOTA),
-    bundle_mock(RAW_ABSTRACT_OK, headers=RAW_HEADERS_NO_QUOTA),
-]
-ABSTRACT_EXACT_QUOTA_MORE_RESULTS = [
-    *[
-        bundle_mock(RAW_ABSTRACT_OK, headers=headers_raw(index))
-        for index in range(6, 0, -1)
-    ],
-    bundle_mock(RAW_ABSTRACT_OK, headers=RAW_HEADERS_NO_QUOTA),
-]
-ABSTRACT_NO_QUOTA_TWO_RESULTS = [
-    bundle_mock(RAW_ABSTRACT_OK, headers=RAW_HEADERS_NO_QUOTA)
-]
-ABSTRACT_NO_QUOTA_MORE_RESULTS = [
-    *[
-        bundle_mock(RAW_ABSTRACT_OK, headers=headers_raw(index))
-        for index in range(3, 0, -1)
-    ],
-    bundle_mock(RAW_ABSTRACT_OK, headers=RAW_HEADERS_NO_QUOTA),
-]
-ABSTRACT_QUOTA_EXCEEDED = bundle_mock(
-    RAW_SERVICE_ERROR_QUOTA, HTTP_429, RAW_HEADERS_NO_QUOTA
-)
 
 # SimilarityFilter.filter
 
@@ -225,22 +301,18 @@ NO_REPEATED_AUTHORS = DataFrame(
     }
 )
 
-# SurveyOrchestrator.retrieve_articles
+# SurveyAggregator.process
 
-DIFFERENT_ARTICLES = DataFrame(
-    [
-        ScopusAbstract(
-            **abstract_raw(f"any_{letter}", letter, f"2025-06-0{index}")
-        ).model_dump(by_alias=True)
-        for index, letter in enumerate("abcdefg", 1)
-    ]
-)
-EXACT_DUPLICATES = DataFrame(
-    [ScopusAbstract(**RAW_ABSTRACT_OK).model_dump(by_alias=True)] * 2
-)
-SAME_TITLE_AND_AUTHORS = DataFrame(
-    [
-        ScopusAbstract(**abstract_raw()).model_dump(by_alias=True),
-        ScopusAbstract(**abstract_raw()).model_dump(by_alias=True),
-    ]
-)
+DIFFERENT_ARTICLES = [
+    ScopusAbstract(
+        **abstract_raw(f"any_{letter}", letter, f"2025-06-0{index}")
+    ).model_dump(by_alias=True)
+    for index, letter in enumerate("abcdefg", 1)
+]
+EXACT_DUPLICATES = [
+    ScopusAbstract(**RAW_ABSTRACT_OK).model_dump(by_alias=True)
+] * 2
+SAME_TITLE_AND_AUTHORS = [
+    ScopusAbstract(**abstract_raw()).model_dump(by_alias=True),
+    ScopusAbstract(**abstract_raw()).model_dump(by_alias=True),
+]
