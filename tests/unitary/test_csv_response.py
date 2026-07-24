@@ -7,8 +7,10 @@ from src.core.domain.exceptions import NotFound
 from src.infra.config.config import FILE
 from tests.conftest import assert_http_error
 from tests.mocks.raw import (
+    ALIAS_SEARCH_PARAMS,
     API_KEY,
     CSV_FILE_NAME,
+    DETAILS,
     DIRECTORY,
     HTTP_200,
     HTTP_404,
@@ -26,7 +28,8 @@ def file_path_fixture():
 
 def test_build_response():
     file_path = DIRECTORY / CSV_FILE_NAME
-    res = csv_response(CSV_FILE_NAME, API_KEY, {"X-any": "any"})
+    params = SurveyParams(**ALIAS_SEARCH_PARAMS)
+    res = csv_response(CSV_FILE_NAME, params, DETAILS)
     assert res.status_code == HTTP_200
     assert res.media_type == "text/csv"
     assert res.path == file_path and res.filename == CSV_FILE_NAME
@@ -35,7 +38,18 @@ def test_build_response():
     assert "text/csv" in res.headers["Content-Type"]
     assert res.headers["X-CSV-Filename"] == CSV_FILE_NAME
     assert res.headers["X-API-Key"] == API_KEY
-    assert res.headers["X-any"]
+    assert res.headers["X-Combination"]
+    assert res.headers["X-Scopus-Total"]
+    assert res.headers["X-Total-Retrieved"]
+    assert res.headers["X-Total-Final"]
+    assert res.headers["X-Pages-Count"]
+    assert res.headers["X-Items-Per-Page"]
+    assert res.headers["X-Search-Limit"]
+    assert res.headers["X-Search-Remaining"]
+    assert res.headers["X-Search-Reset"]
+    assert res.headers["X-Abstract-Limit"]
+    assert res.headers["X-Abstract-Remaining"]
+    assert res.headers["X-Abstract-Reset"]
 
 
 def test_retrieve_csv():
