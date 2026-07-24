@@ -14,7 +14,7 @@ from pytest_mock import MockerFixture as Mocker
 
 from src.adapters.helpers.http_client import HTTPClient
 from src.core.data.enums import ExcMsg
-from src.core.use_cases.keyword_scouter import KeywordsScouter
+from src.core.use_cases.survey_combinations import SurveyCombinations
 from tests.conftest import assert_error_json
 from tests.mocks.helpers import fqn, get_patch
 from tests.mocks.integration import (
@@ -37,7 +37,7 @@ from tests.mocks.raw import (
 )
 
 
-CHAIN = fqn(KeywordsScouter, itertools.chain, "itertools")
+CHAIN = fqn(SurveyCombinations, itertools.chain, "itertools")
 REQUEST = fqn(aiohttp.ClientSession.request)
 SLEEP = fqn(HTTPClient, asyncio.sleep, "asyncio")
 

@@ -3,7 +3,7 @@ from unittest.mock import AsyncMock
 
 from pytest import mark
 
-from src.adapters.gateway.scopus_search_api import ScopusVolumeScouter
+from src.adapters.gateway.scopus_volume_scouter import ScopusVolumeScouter
 from src.core.common.types import TotalBundle
 from src.core.data.enums import Button
 from src.core.data.query_params import CombinationParams
