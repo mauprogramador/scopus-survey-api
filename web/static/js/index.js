@@ -36,6 +36,41 @@ const apiKeyQuota = [
   'x-abstract-reset',
 ];
 
+function formatDetail(headerName) {
+  switch (headerName) {
+    case 'x-keywords':
+      return detailsCache[headerName].replace(/;/g, '\n');
+    case 'x-loss':
+      let totalRetrieved = parseInt(detailsCache['x-total-retrieved']);
+      let totalFinal = parseInt(detailsCache['x-total-final']);
+      let lossAmount = totalRetrieved - totalFinal;
+      let lossPercent =
+        lossAmount !== 0 ? (lossAmount / totalRetrieved) * 100 : 0;
+      return `${lossAmount} (${lossPercent.toFixed(2)}%)`;
+    case 'x-process-time':
+      let duration = parseFloat(detailsCache[headerName]);
+      if (duration > 60.0) {
+        return `${duration.toFixed(2)}s (${(duration / 60.0).toFixed(2)}m)`;
+      } else {
+        return `${duration.toFixed(2)}s`;
+      }
+    case 'x-search-reset':
+    case 'x-abstract-reset':
+      let epoch = parseFloat(detailsCache[headerName]) * 1000;
+      return new Date(epoch).toLocaleString();
+    case 'x-search-limit':
+    case 'x-search-remaining':
+    case 'x-abstract-limit':
+    case 'x-abstract-remaining':
+    case 'x-scopus-total':
+    case 'x-total-retrieved':
+    case 'x-total-final':
+      return parseInt(detailsCache[headerName]).toLocaleString();
+    default:
+      return detailsCache[headerName];
+  }
+}
+
 function updateDetails(headers) {
   detailsCache['x-scopus-total'] = null;
   detailsCache['x-total-retrieved'] = null;
@@ -65,20 +100,13 @@ function updateDetails(headers) {
       detailsTbody.appendChild(trGroupLabel);
 
       Object.entries(groupLabels)
-        .filter((item) => detailsCache[item[0]] !== null)
+        .filter((headerItem) => detailsCache[headerItem[0]] !== null)
         .forEach(([headerName, headerLabel]) => {
           let tdHeaderName = document.createElement('td');
           tdHeaderName.innerText = headerLabel;
 
           let tdHeaderValue = document.createElement('td');
-          tdHeaderValue.innerText = detailsCache[headerName];
-
-          if (headerName === 'x-keywords') {
-            tdHeaderValue.innerText = detailsCache[headerName].replace(
-              /;/g,
-              '\n',
-            );
-          }
+          tdHeaderValue.innerText = formatDetail(headerName);
 
           let tr = document.createElement('tr');
           tr.appendChild(tdHeaderName);
