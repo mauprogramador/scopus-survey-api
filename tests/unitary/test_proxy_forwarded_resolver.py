@@ -53,12 +53,10 @@ def sub_app_test_client():
 
 
 def test_proxy_headers_updates_url_for(client: TestClient):
-
     headers = {
         "X-Forwarded-Proto": "https",
         "X-Forwarded-Host": "any.com.br",
     }
-
     res = client.get("/test", headers=headers)
     assert res.status_code == HTTP_200
     assert res.json()["url"] == "https://any.com.br/test"
@@ -66,6 +64,5 @@ def test_proxy_headers_updates_url_for(client: TestClient):
 
 def test_no_proxy_headers_uses_default(client: TestClient):
     res = client.get("/test")
-
     assert res.status_code == HTTP_200
     assert res.json()["url"].startswith("http://testserver")

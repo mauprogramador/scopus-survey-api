@@ -22,7 +22,6 @@ from tests.mocks.raw import (
     REQUEST,
     RESET,
     SCOPUS_ID,
-    SKIPROWS,
 )
 
 
@@ -55,7 +54,7 @@ def load_csv_from_response(res: httpx.Response) -> DataFrame:
     """Load DataFrame from CSV file response ignoring metadata"""
     buffer_data = io.StringIO(res.content.decode())
     return pd.read_csv(
-        buffer_data, sep=";", skiprows=SKIPROWS, keep_default_na=False
+        buffer_data, sep=";", skiprows=(0, 1, 2, 3), keep_default_na=False
     )
 
 

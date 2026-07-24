@@ -13,12 +13,12 @@ from tests.conftest import assert_error_json
 from tests.mocks.errors import SCOPUS_API_QUOTA_ERROR, SCOPUS_API_RATE_ERROR
 from tests.mocks.helpers import fqn, get_patch, trans
 from tests.mocks.integration import (
+    ONE_PAGE_ONE_ABSTRACT,
     RESPONSE_JSON_ERROR,
     RESPONSE_KEY_ERROR,
     RESPONSE_QUOTA_EXCEEDED,
     RESPONSE_RATE_LIMIT_EXCEEDED,
     RESPONSE_STATUS_ERROR,
-    SEARCH_ONE_PAGE_ONE_RESULT,
 )
 from tests.mocks.raw import (
     COMBINATION_PARAMS,
@@ -26,8 +26,6 @@ from tests.mocks.raw import (
     HTTP_429,
     HTTP_500,
     HTTP_502,
-    RAW_ERROR_RESPONSE_RATE_LIMIT,
-    RAW_SERVICE_ERROR_QUOTA,
     SEARCH_PARAMS,
     URL_COMBINATION,
     URL_SEARCH,
@@ -36,7 +34,7 @@ from tests.mocks.raw import (
 
 @mark.asyncio
 async def test_scopus_response(mocker: Mocker, client: Client):
-    mocker.patch(*get_patch(SEARCH_ONE_PAGE_ONE_RESULT))
+    mocker.patch(*get_patch(ONE_PAGE_ONE_ABSTRACT))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     assert res.status_code == HTTP_200
 

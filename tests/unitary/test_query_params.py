@@ -34,7 +34,7 @@ def test_csv_params_valid_data():
 def test_csv_params_raise_errors():
     with raises(ValidationError) as info:
         CSVParams(**{})
-    assert len(info.value.errors()) == 2
+    assert info.value.error_count() == 2
 
 
 def test_combination_params_valid_data():
@@ -66,7 +66,7 @@ def test_combination_params_overridden_default():
 def test_combination_params_raise_errors():
     with raises(ValidationError) as info:
         CombinationParams(**{})
-    assert len(info.value.errors()) == 3
+    assert info.value.error_count() == 3
 
 
 def test_combination_params_empty_to_default():

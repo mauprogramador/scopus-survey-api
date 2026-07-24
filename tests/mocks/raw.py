@@ -1,7 +1,6 @@
 import secrets
 import tempfile
 import time
-from datetime import datetime
 from http import HTTPMethod, HTTPStatus
 from pathlib import Path
 from unittest.mock import Mock
@@ -68,7 +67,6 @@ SEARCH_PARAMS = {
 ABSTRACT_URL = "https://api.elsevier.com/content/abstract/scopus_id/0123456789"
 SCOPUS_ID = "SCOPUS_ID:0123456789"
 RESET = int(time.time()) + MAX_AGE
-RESET_DATETIME = datetime.fromtimestamp(RESET).strftime("%Y-%m-%d %H:%M:%S")
 RAW_HEADERS_OK = {
     "X-RateLimit-Limit": "20000",
     "X-RateLimit-Remaining": "20000",
@@ -215,7 +213,6 @@ ALIAS_SEARCH_PARAMS_FULL = {
 
 # Mocks
 
-SKIPROWS = (0, 1, 2, 3)  # CSV metadata rows
 REQUEST = Mock(
     spec=FastAPIRequest,
     url=URL("http://any.com/mock"),

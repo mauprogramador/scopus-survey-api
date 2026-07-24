@@ -38,7 +38,7 @@ def test_scopus_entry_valid_data():
 def test_scopus_entry_raise_errors():
     with raises(ValidationError) as info:
         ScopusEntry(**{})
-    assert len(info.value.errors()) == 3
+    assert info.value.error_count() == 3
 
 
 def test_scopus_search_valid_data():
@@ -50,7 +50,7 @@ def test_scopus_search_valid_data():
 def test_scopus_search_raise_errors():
     with raises(ValidationError) as info:
         ScopusPage(**{"search-results": {}})
-    assert len(info.value.errors()) == 3
+    assert info.value.error_count() == 3
 
 
 def test_scopus_search_key_error():
@@ -91,7 +91,7 @@ def test_scopus_abstract_raise_errors():
     raw = {"abstracts-retrieval-response": {"coredata": {}}}
     with raises(ValidationError) as info:
         ScopusAbstract(**raw)
-    assert len(info.value.errors()) == 2
+    assert info.value.error_count() == 2
 
 
 def test_scopus_abstract_key_error():

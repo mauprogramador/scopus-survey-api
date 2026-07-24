@@ -38,7 +38,7 @@ def test_build_all(mocker: Mocker):
     assert META_INFO.items() <= ctx.items()
 
 
-def test_form_template(mocker: Mocker):
+def test_web_form_template(mocker: Mocker):
     spy_jinja = mocker.spy(Jinja2Templates, "TemplateResponse")
     res = get_web_form_template(REQUEST, CSRF_TOKEN, Lang.EN_US)
 
