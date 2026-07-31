@@ -34,14 +34,8 @@ def _filename(count: int) -> str:
     return f"log_{count}_{datetime.now().strftime("%Y%m%d_%H%M%S")}.log"
 
 
-_CHROME_DEVTOOLS_URL = ".well-known/appspecific/com.chrome.devtools.json"
-_LIVERELOAD_ROUTE = "/livereload"
-
-
-def excluded_routes(path: str) -> bool:
-    is_devtools = path.endswith(_CHROME_DEVTOOLS_URL)
-    is_livereload = path.count(_LIVERELOAD_ROUTE) == 1
-    return is_devtools and is_livereload
+def noisy_route_access(path: str) -> bool:
+    return "devtools" in path or "livereload" in path
 
 
 class _Level(IntEnum):
