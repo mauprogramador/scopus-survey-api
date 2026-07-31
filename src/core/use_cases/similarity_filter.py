@@ -3,7 +3,7 @@ import os
 
 import pandas as pd
 from pandas import DataFrame
-from thefuzz.fuzz import ratio as fuzz_ratio
+from thefuzz.fuzz import token_sort_ratio
 
 from src.infra.utils import logger
 
@@ -38,7 +38,7 @@ class SimilarityFilter:
         dates = group["date"].to_numpy()
 
         if num_rows == self._SIZE:
-            if fuzz_ratio(titles[0], titles[1]) > self._ratio:
+            if token_sort_ratio(titles[0], titles[1]) > self._ratio:
                 min_date_idx = 0 if dates[0] <= dates[1] else 1
                 return int(indexes[min_date_idx])
             return None
@@ -47,7 +47,7 @@ class SimilarityFilter:
         arrangements = itertools.combinations(range(num_rows), self._SIZE)
 
         for idx1, idx2 in arrangements:
-            if fuzz_ratio(titles[idx1], titles[idx2]) > self._ratio:
+            if token_sort_ratio(titles[idx1], titles[idx2]) > self._ratio:
                 rows_indexes.add(int(indexes[idx1]))
                 rows_indexes.add(int(indexes[idx2]))
 
