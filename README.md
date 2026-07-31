@@ -264,14 +264,15 @@ Since the result of the survey is a CSV file, which is essentially a dataset obt
 
 ### 5.3. Performance (v3.2.6)
 
-| Total gather | Process time    | Throughput   | Latency      |
-| ------------ | --------------- | ------------ | ------------ |
-| 8            | 2.36s           | 0.295 s/item | 3.39 items/s |
-| 36           | 5.92s           | 0.164 s/item | 6.08 items/s |
-| 284          | 37.92s          | 0.134 s/item | 7.49 items/s |
-| 307          | 69.49s (1.15m)  | 0.226 s/item | 4.42 items/s |
-| 966          | 128.06s (2.13m) | 0.133 s/item | 7.54 items/s |
-| 3,126        | 412.03s (6.86m) | 0.132 s/item | 7.59 items/s |
+| Total gather | Process time    | Loss      | Throughput   | Latency      |
+| ------------ | --------------- | --------- | ------------ | ------------ |
+| 8            | 2.36s           | 0 (0.00%) | 0.295 s/item | 3.39 items/s |
+| 36           | 5.92s           | 0 (0.00%) | 0.164 s/item | 6.08 items/s |
+| 106          | 18.70s          | 1 (0.93%) | 0.174 s/item | 5,72 items/s |
+| 284          | 38.47s          | 2 (0.70%) | 0.134 s/item | 7.43 items/s |
+| 307          | 42.92s          | 2 (0.65%) | 0.139 s/item | 7.15 items/s |
+| 966          | 128.06s (2.13m) | 0 (0.00%) | 0.133 s/item | 7.54 items/s |
+| 3,126        | 412.03s (6.86m) | 0 (0.00%) | 0.132 s/item | 7.59 items/s |
 
 Overall performance improved **significantly at scale** compare to the last release, yielding a **~1.75x speedup (73% increase in throughput)** and a **~42-45% reduction in processing time per item** for large batches.
 
