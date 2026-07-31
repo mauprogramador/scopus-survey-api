@@ -35,7 +35,6 @@ help:
 
 venv:
 	@bash venv.sh
-	@cp .env.example .env
 
 install-dev:
 	@pip install --no-cache-dir poetry==$(POETRY_VERSION)
