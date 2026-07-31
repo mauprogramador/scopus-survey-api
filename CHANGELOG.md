@@ -1,515 +1,996 @@
-# 📜 Changelog (2025-08-09)
-
-> *In development since: February 26, 2024.*
-
-**Tags: [`v1.0.0`](#v1.0.0), [`v2.0.0`](#v2.0.0), [`v3.0.0`](#v3.0.0), [`v3.1.0`](#v3.1.0), [`v3.2.0`](#v3.2.0), [`v3.2.5`](#v3.2.5).**
-
-## 🔖 Release [`v3.2.5`](https://github.com/mauprogramador/scopus-survey-api/releases/tag/v3.2.5) (2025-08-09) <span id='v3.2.5'></span>
-
-> See the [comparison ⟲ history](https://github.com/mauprogramador/scopus-survey-api/compare/v3.2.0...v3.2.5) with the previous tag.
-
-## 🔨 Builds
-
-- Update all packages. [#81e38b2](/81e38b283bec2f17d68c526acfe88b63ae9f4760) (2025-08-09)
-- Rename venv builder. [#e5f5c9c](/e5f5c9c80faf38e00bedcffc184869867d571723) (2025-07-21)
-- Remove application section and dependencies. [#6c1a220](/6c1a2207faa7ba9967efa503864e7be435c1a9e4) (2025-01-17)
-
-## ✨ Features
-
-- Add E2E test. [#9cce9ad](/9cce9ad89e52b2b2b1b978f89c445cb5c0977bfd) (2025-08-09)
-- Get single group indexes. [#ad861e6](/ad861e6e9549701f66d7fc690da1513b651e796c) (2025-08-09)
-- Set filtered df as instance attr. [#c765ec2](/c765ec2a169f27268e12d9762a082688ee7e107c) (2025-08-09)
-- Rename and pass size to process method. [#b5a005a](/b5a005a68b2a4c8df25d9524a814f5f676d2902e) (2025-08-09)
-- Rename main df to docs and check for single row df. [#3fe5166](/3fe5166152150e35ed0a6e1f3a4f9993e72b9a73) (2025-08-09)
-- Add service unavailable http error. [#a9e04f2](/a9e04f26a7e0a198870120ca819860c5cfc11521) (2025-08-09)
-- Validate json as request data directly. [#04a2d99](/04a2d99d7186fedf50f27c94cc8626559068a724) (2025-08-09)
-- Get client response error message. [#1ce9f69](/1ce9f6920d11f255d6962f20a2d52e62d74b842c) (2025-07-25)
-- Update fields validations. [#e874e30](/e874e30b360b2ff6e3b23581f7cf32630ac1e7bb) (2025-07-23)
-- Add articles loss response header. [#83aa8f1](/83aa8f18431a9f863c602c14f1fcf86f321e53ce) (2025-07-22)
-- Add terms of service and make swagger read only. [#3737ed4](/3737ed4c35ce0282d042595e33776e52f53d2d26) (2025-07-21)
-- Update aggregator and add data source footnote. [#f94fd2d](/f94fd2d0ca8a6cb1847d4f825e8af99cdded885f) (2025-07-21)
-- Add survey combinations use case. [#b7e8709](/b7e870982d13422ebfcf97eb572bbeef6ac5f2d4) (2025-07-21)
-- Add combinator factory. [#ea56a44](/ea56a448e0c7934dde51c99b101d898cdd66445e) (2025-07-21)
-- Update serializers validation. [#9ec0470](/9ec04703705ac21271eb0257ea5bb4f09485fa0f) (2025-07-21)
-- Update query params validation. [#920406c](/920406c76927ceddd34216e55510c63286786645) (2025-07-21)
-- Use asyncio to search and survey. [#b1fba63](/b1fba63216bea10926ef710c1a806e1366c3b9fa) (2025-07-21)
-- Use asyncio to gather abstracts. [#e49fcc8](/e49fcc87621e9c2b751946defecfc4a6e7f54cea) (2025-07-21)
-- Update trace and info logs. [#90f73b9](/90f73b98ecee4ad45a408627ff95e0a4230a7092) (2025-07-21)
-- Add cache control and content type header. [#918045b](/918045b0edaaed5f527b533da1c558ef956ee66f) (2025-07-21)
-- Use urllib in urlbuilder. [#ef567f6](/ef567f6f436bc80d15bbe6aa2f0261a417c499ad) (2025-07-21)
-- Add error messages. [#08bda77](/08bda7795097265935c71b827bf7c3b73583af62) (2025-07-21)
-- Update scopus config. [#cd116aa](/cd116aac933617e01892712fcf4c8ae12ca9b5f3) (2025-07-21)
-- Exchange interfaces to protocols only for typing. [#3d106ee](/3d106ee3f4f3ba6d2339852b619f629299e06082) (2025-07-21)
-- Add scopus docs and terms of services to swagger. [#81b318c](/81b318cd704656d17024f006a34df2387c94b9b6) (2025-07-21)
-- Add new types. [#6015f87](/6015f87161f30381365ff16f70f0df924883b44d) (2025-07-21)
-- Add new patterns. [#b08c1b9](/b08c1b9dde366a9bae0f57d8f0cfac5cf358470e) (2025-07-21)
-- Add new dependencies and install uvloop in entrypoint. [#c232eb3](/c232eb3c5f096f9c7a4067c52190c3ff3e3eecc4) (2025-07-21)
-- Add search param page range. [#21911f5](/21911f511cb2b888e4337ddfd7a6ac3bd77c540c) (2025-07-21)
-- Update http client using aiohttp. [#06b47c9](/06b47c91f87409d70bea33391c840143c1409099) (2025-07-21)
-- Update all source files. [#e4bd844](/e4bd84473321e0f5b8ed57bb67ba3643b51d1473) (2025-06-16)
-- Update all tests files. [#3d29dc0](/3d29dc0f894d983d59f75d05d6fae6acd1d93e51) (2025-06-16)
-- Update all web files. [#d6b197a](/d6b197ad81fb7cb3b9ba31a0f3ff6e1d38205750) (2025-06-16)
-- Update config files and update python to 3.12. [#f89f7a2](/f89f7a244be82427599543206783ee2c4411665e) (2025-06-16)
-- Update entrypoint. [#fd77252](/fd77252ea2c39a63fdd4435aded503fc8c3f73f4) (2025-01-17)
-- Update utils. [#96b8548](/96b8548a2419a2029597201de861406c498ad11d) (2025-01-17)
-- Update middleware. [#aab74de](/aab74dea16566792164bb05d736ac1d1a23ba288) (2025-01-17)
-- Update fastapi. [#b942af2](/b942af209d66f5353b48f0ab2744e8ac22e25774) (2025-01-17)
-- Update exceptions. [#e5a4643](/e5a46431dec09e3f3b88891a44ea6ba50965df6d) (2025-01-17)
-- Update dependencies. [#fc35794](/fc35794a9b1b2fdf22c9dd031355af70afe9c1ea) (2025-01-17)
-- Update use cases. [#be93d83](/be93d83f3f8a4076818f433b97b9c466a6879e6f) (2025-01-17)
-- Update domain. [#97ed882](/97ed882e11dfea05131dd7eb70912ba760ff87a2) (2025-01-17)
-- Update data. [#10d3655](/10d365579591b54a7700fea2a1a7a02aee0faa76) (2025-01-17)
-- Update config. [#59f336d](/59f336d01cd06010a27e0dac03e842c015c26ec9) (2025-01-17)
-- Update common. [#deafe61](/deafe610440b5cbb1a2e9abf8fbc671191f76c51) (2025-01-17)
-- Update adapters. [#598b076](/598b076719dfe1dc0fa0af4c42619310aebc07b0) (2025-01-17)
-- Update helpers. [#ec43ca1](/ec43ca1b2ceb4963262c832f1d03b32ee38d6721) (2025-01-17)
-- Update gateway. [#820194e](/820194eef644eef5ae32cd710f1b1737cdd7123f) (2025-01-17)
-
-## 🔧 Fixes
-
-- Remove invalid dates and check for single row df. [#6fdb898](/6fdb89872cfc71cd8ecdc8a8167426360adc8201) (2025-08-09)
-- Get correct most recent dates. [#693a1ca](/693a1ca4821567d535d49774e3ddaa4aec3e7875) (2025-08-09)
-- Re-raise http errors from client directly and raise custom error. [#2feec7b](/2feec7b89b5339b57a10e1854bf04e70c787ed97) (2025-08-09)
-- No reset datetime if no reset header. [#70bc690](/70bc690b3e67760422b9ada69d205f2586e385e2) (2025-08-09)
-- All headers fields must have a default. [#ba4c32b](/ba4c32bb6ffdab9d105d48eee191f0221a7b55fe) (2025-08-09)
-- Set default page count for empty result. [#c457dbd](/c457dbda97b8b1d6c9c6ef6c0d3a49a9b8fa8b7d) (2025-08-09)
-- Check type correctly before validation. [#6b99162](/6b991626cfb60bf938f95c31bec3b8c730ce11ec) (2025-08-09)
-- Pop out dependency token query before validation. [#016b932](/016b932e349477680fc322416818d60cf96111dd) (2025-08-09)
-- Load streaming response on http status error. [#3109586](/31095864c9ed0b5344150792a91ee2c7ee2eaad0) (2025-08-09)
-- Open csv as normal file and update the footnote writing. [#b2dc471](/b2dc471b3bdbc5e81e1ff04c8dd4fb75e07606a5) (2025-07-25)
-- Correct loss percentage math. [#337d600](/337d60025b425e9bb25b035d3791620c9d13c575) (2025-07-25)
-- Make process group method pickled for executor. [#5246c7f](/5246c7f73ad44753ad26056863eedbc905b7ede9) (2025-07-25)
-- Correct max workers, disable max count, and awaits method. [#8386148](/8386148cc0dc4e6f2e7c934c1faf9f9f6ea164e1) (2025-07-25)
-- Change combination string min length. [#31d828c](/31d828c5deb2139b42b36b119bb532191819c522) (2025-07-23)
-
-## ♻️ Refactors
-
-- Set error detail from pydantic error msg or title. [#769dfd8](/769dfd8f18d1833f15186a600f47f15606c34221) (2025-08-09)
-- Remove unnecessary type alias. [#375377f](/375377f17fd1da62f7535729450aed2fa1653f45) (2025-08-09)
-- Use pydantic validation and custom serializer. [#62de51a](/62de51ab83e54078f989cd3b72279e63b69a8670) (2025-08-09)
-- Errors always list and get dump error detail. [#d9205f9](/d9205f94b0f92b5f79dcd5ac2533288daa795f08) (2025-08-09)
-- Remove errors types. [#b670e6c](/b670e6c15d17cc888986252dbbc12e85f8525b09) (2025-08-09)
-- Create dir and load translations in lifespan. [#18f98de](/18f98de3535dc927cd550218d54cce631786afb6) (2025-08-09)
-- Set token session in routes. [#bd55905](/bd55905044514a827ac2cbb709cc7996b6106432) (2025-08-09)
-- Update retry attempts to 3. [#6c0e51e](/6c0e51ef114943034ce03e352edc6eaf9fb7b980) (2025-08-09)
-- Use pydantic error title as default. [#302b069](/302b069904fd00beb472f9693d122969e54b2f78) (2025-08-09)
-- Return empty list when error. [#7f7cb71](/7f7cb7131b66e19850504b25376204e3c871024c) (2025-07-25)
-- Remove unnecessary validation rules. [#0b40b4b](/0b40b4b9e91fdc3e52aec07514c793e2d8b1212d) (2025-07-25)
-- Use enumerate instead of count. [#558412a](/558412a16d07a823c4ceb103b8cc33a7f203712e) (2025-07-25)
-- Start abstracts list on the method. [#439678a](/439678a8f5674ee26db3c6a79d370d7d4157c15a) (2025-07-25)
-- Remove json decode error. [#256cc63](/256cc63b5666192e839d93091409370610cbf4c1) (2025-07-23)
-- Join custom middlewares in one. [#7b0df95](/7b0df95fc63e4bcddf2cea2d8d17ea5f98994526) (2025-07-22)
-- Rename messages to error messages. [#2a7178e](/2a7178e83bc3a7b8b30543de3b5fe8154172587e) (2025-07-22)
-- Wrap logging redirect in progress bar. [#c4b189d](/c4b189dd6791982e4696320da973d169892ae049) (2025-07-21)
-- Make verify token a dependency and update survey combinations route. [#6b14479](/6b14479ae3fe9fdcf6f40e899b6f251b8b46ee57) (2025-07-21)
-- Turn the csrf token verification a dependency. [#2267e03](/2267e038530f3c6e5a00d01868ef813b02c978b4) (2025-07-21)
-- Use process pool to filter multiple groups. [#879c27f](/879c27f4a5e31c9294cb7a34c4fdc93176fde64a) (2025-07-21)
-- Move get error message to logging. [#fde2406](/fde24060bb7ad5391144779d11f33553a6ca2dec) (2025-07-21)
-- Upgrade get error details. [#15df751](/15df7516e4a91764fb6a517a258af9ba03993cc4) (2025-07-21)
-- Add two separeted validations. [#11a3d7b](/11a3d7be83f65413aa0f1e79799a5429310ca73a) (2025-07-21)
-- Remove interface inheritance. [#00f6250](/00f6250631aa8f08bde41e8f687808b447f4b94b) (2025-07-21)
-- Build headers in each method. [#61d6e31](/61d6e31dd958767f62909506a851151eeafad62a) (2025-07-21)
-- Change root dir to src. [#fefd019](/fefd019bb203d10603c97a4ae50d84ed55e76314) (2025-06-16)
-
-## 🧪 Tests
-
-- Load translations in session. [#43446fc](/43446fc36003445d620d62cd55cd944d27d1873d) (2025-08-09)
-- Add all integration tests. [#2abbc0f](/2abbc0f48fc9aaefcef2b081b0f398282d3c69db) (2025-08-09)
-- Add all unitary tests. [#9c1d91a](/9c1d91aeb31947883f9b877ae6362214a3addb99) (2025-08-09)
-- Update conftest fixtures and settings. [#448cb6a](/448cb6abf0200fff3f475a297fc7b2c96d4274fb) (2025-08-09)
-- Add and update all mocks. [#58c2eec](/58c2eec0d533e1435842eb14a75714d4e9347d08) (2025-08-09)
-- Refactor and rename. [#7f99dd5](/7f99dd500d2ec82bed110fc3af40efeba0bac94f) (2025-08-09)
-- Remove integration tests tree structure. [#18e1ff5](/18e1ff5c35b4b59087731217837247e4b6b7292d) (2025-07-26)
-- Remove unitary tests tree structure. [#66e40ce](/66e40ce8c873d92853e92023c35d13cb5181cf71) (2025-07-25)
-
-## 📝 Chores
-
-- Changelog. [#d8d9eee](/d8d9eee549848e2f543037054f72ef02ca47562f) (2025-08-09)
-- Add terms of service and privacy policy. [#c133327](/c13332713f1d62b28d499304ef21b2fd869a2b8d) (2025-07-21)
-- Update readme. [#5aca4f1](/5aca4f18677cf66e3ff50c9b66aa133f6a92fa7a) (2025-01-17)
-- Update web files. [#3b2e548](/3b2e548439c2b9e105d46c80d60c88aa17856c8d) (2025-01-17)
-
-## 🎨 Styles
-
-- Update rules. [#45bdd9c](/45bdd9c9fd5c3d54cf41bbe7cdd45faeadf60cc8) (2025-08-09)
-- Format. [#025b0b6](/025b0b6156d91819368b56e479c012d403e6558c) (2025-08-09)
-- Rename before validation value to data. [#9c2a43f](/9c2a43fd90d11af437399d33b25f330d9f677aca) (2025-08-09)
-- Update docstring and errors type. [#b8bc0bf](/b8bc0bf5f7f2921146c2177bff1c92c0dbbdaf07) (2025-08-09)
-- Rename method. [#a24f847](/a24f8474304edaab1bd83c3938b4bc54837963f7) (2025-08-09)
-- Update pattern examples. [#9e07f17](/9e07f1707033d656625879408fc900ba04f3d2d5) (2025-08-09)
-- Rename headers and errors validators. [#5b7b02c](/5b7b02ca1e92674e317e75a440d192b977187a97) (2025-07-25)
-- Renaming classes for internal use only. [#dc88223](/dc8822370530ab027d5d638f24d515aba446f9e3) (2025-07-25)
-- Change order and move footnote. [#d21b090](/d21b090168b8a8ba38d14476f0612d6d5eabfd3c) (2025-07-25)
-- Remove prints and rename attrs. [#a607602](/a607602e8e0efc2e832c423da1e922e8cfe73950) (2025-07-23)
-- Format. [#bad2f84](/bad2f84bb64ae26d061f936d61ca6cc6dc5edfbe) (2025-07-22)
-- Add max age duration comment. [#7aeefd4](/7aeefd4758c63690a4c015f6b3c8276819b1f3a2) (2025-07-21)
-
-## 🔖 Release [`v3.2.0`](https://github.com/mauprogramador/scopus-survey-api/releases/tag/v3.2.0) (2024-12-27) <span id='v3.2.0'></span>
-
-> See the [comparison ⟲ history](https://github.com/mauprogramador/scopus-survey-api/compare/v3.1.0...v3.2.0) with the previous tag.
-
-## ✨ Features
-
-- Update main. [#e9b8545](/e9b8545cdb7474ab0d6baa183fc983b8848a6348) (2024-12-27)
-- Update use case. [#91fffa9](/91fffa902c8dca85493a134f4c108a124df1bcf7) (2024-12-27)
-- Add new query params and csv route. [#90c56f1](/90c56f1f0725f23818cf0502f50fa914bd0e1840) (2024-12-27)
-- Update and add middlewares. [#d210eab](/d210eab5d7d24cdadbdc6e7f0eb60b22747d179b) (2024-12-27)
-- Update logger. [#45b669a](/45b669a7e169f37bffc434e3649bca7d6ae7c4e5) (2024-12-27)
-- Update config and toml env loads. [#7eae94e](/7eae94ee35970ac053f1fba7e4d1f51abd9d23f5) (2024-12-27)
-- Add csv response, enums, serializer and validator. [#db82c5e](/db82c5ef42976921d9f63082d90b810021bd8770) (2024-12-27)
-- Renaming classes. [#4764538](/47645380cc48b54e0a52ae5987c0a9ab0c976f1a) (2024-12-27)
-- Update patterns and types. [#1ec5904](/1ec59048978c33fe18a55ed531d5a9674e21a408) (2024-12-27)
-- Update dependencies. [#8174270](/81742701ddbdd27715ee68cbcee449317e70708a) (2024-12-27)
-- Update helpers. [#b33a33f](/b33a33f933d9d8ddf4ae47253e06bd844d8ee632) (2024-12-27)
-
-## ♻️ Refactors
-
-- Rename signal handler. [#879538f](/879538f3e4cb402875b0c590c76c8f9709e3e955) (2024-12-27)
-- Use built-in http status. [#a1a8e26](/a1a8e265a98b40fb6d037c1f518e40eadc103ba8) (2024-12-27)
-
-## 🧪 Tests
-
-- Update some tests. [#2eae89b](/2eae89b3f13eed821dcc8dc0439ba6cd29fd8454) (2024-12-27)
-
-## 🔖 Release [`v3.1.0`](https://github.com/mauprogramador/scopus-survey-api/releases/tag/v3.1.0) (2024-12-27) <span id='v3.1.0'></span>
-
-> See the [comparison ⟲ history](https://github.com/mauprogramador/scopus-survey-api/compare/v3.0.0...v3.1.0) with the previous tag.
-
-## 🔨 Builds
-
-- Add rate-limit asgi middleware. [#6df4935](/6df493518f27bb61e1bab1b422ca75bc4d3918f0) (2024-12-27)
-
-## ✨ Features
-
-- Add metadata to the web pages. [#edd382c](/edd382c9f136496d02e06f2be4cd144448861fcf) (2024-10-08)
-- Update logo img. [#57de642](/57de642ffe1266521f7158aaee146d282dceb66c) (2024-10-08)
-
-## 🔧 Fixes
-
-- Delete unnecessary or renamed stuff. [#ed76adc](/ed76adc829c66b10e1d8e2d6522ab4d92f33efbb) (2024-12-27)
-
-## ♻️ Refactors
-
-- Stop creating .env. [#5abe15d](/5abe15d7dcf5c5492337f8388bda703f839fa6af) (2024-12-27)
-
-## 📝 Chores
-
-- Add workers config. [#343900c](/343900c8cae51503d74d6944c08281b3d100dffd) (2024-12-27)
-- Update styles. [#5c42165](/5c42165bd2a746c304d9ff69ff57ac8763a0ff9d) (2024-12-27)
-- Update scripts. [#e8f4e62](/e8f4e62e8fc22383d5c1f6d10e0f525ae92bc8f2) (2024-12-27)
-- Update templates. [#988eeda](/988eeda79b419bcd4bfdf0677446b70e9abe4399) (2024-12-27)
-- Add inputs validation icons. [#b03ed1f](/b03ed1f99dc37ee3eb88d495a72932a06edb08ec) (2024-12-27)
-- Add logos. [#f48f48e](/f48f48efa8f12afd2f026710cbbc73fa5c97a15d) (2024-12-27)
-- Clean git ignore. [#a0999e0](/a0999e09c92831db4ea19aea351086bb93c4a194) (2024-12-27)
-- Update changelog to v3. [#b6efb33](/b6efb33c24645477ff2927706421ec17cab3294a) (2024-10-06)
-
-## 📄 Docs
-
-- Update releases for v3. [#aa167b1](/aa167b11cd7046d8d919c8a69fe04db1bb640522) (2024-10-07)
-
-## 🎨 Styles
-
-- Change web api repository name. [#09d1d76](/09d1d76d8692a9cbfe6a15aa1eaf23f4af1097c0) (2024-10-08)
-
-## 🔖 Release [`v3.0.0`](https://github.com/mauprogramador/scopus-survey-api/releases/tag/v3.0.0) (2024-10-06) <span id='v3.0.0'></span>
-
-> See the [comparison ⟲ history](https://github.com/mauprogramador/scopus-survey-api/compare/v2.0.0...v3.0.0) with the previous tag.
-
-## 🔨 Builds
-
-- Remove beautifulsoup. [#a454dcd](/a454dcdd2504b7fc853bf6590effa2887ff6a269) (2024-10-05)
-- Set env port and change main start point. [#02b5d95](/02b5d95da73be7346aea6452bbed1c9a904dbbb2) (2024-09-15)
-- Move and update docker. [#51fd015](/51fd015581c491ee99d2609037dce186fb2f0f4b) (2024-09-15)
-- Add dotenv to use env variables. [#d1631ff](/d1631ffda0a0dc3154c561896996f7cb68214d93) (2024-09-14)
-
-## ✨ Features
-
-- Update version to v3. [#3b85b8e](/3b85b8e9acbc5df33479583f15ce4f4501fd5b44) (2024-10-06)
-- Handle scopus quota and rate errors. [#0cbac67](/0cbac67502eea94f6babb527d67b785c639c7f51) (2024-10-05)
-- Update serializer. [#6eadde2](/6eadde2dd9ed8bfdf6f70adee0d089b8d9127315) (2024-10-05)
-- Add article page ur and rate limit. [#5ed73e5](/5ed73e5048736b28bb2aff78668d3f605edd6698) (2024-10-05)
-- Update sleep rate factor. [#8b22ea6](/8b22ea69809ac4c6bda04df9ad87438129d5707c) (2024-10-05)
-- Remove livereload logs. [#0da82c8](/0da82c8c46adfa79fb0a58944ebb7896c17bb01f) (2024-10-05)
-- Only shows the qrcode when the host is open. [#087c927](/087c927a51a2c2eaffaf9de7ee54d881b9a40436) (2024-10-05)
-- Add repository url in template context. [#32332bb](/32332bb9bce7c93872bb1e76ea523d0cf503ced7) (2024-10-05)
-- Change article page to abstract api removing web scrapping. [#e432d4c](/e432d4c43680768fffb07c47e2fd73b273641a90) (2024-09-22)
-- Serialize data from abstract api. [#7d62c1b](/7d62c1bc73e793482627aa3235369fc392c9812c) (2024-09-22)
-- Scopus api error for the two apis. [#48198d8](/48198d81ba9524ec1d940e2b38403ec076a619ce) (2024-09-22)
-- Update scopus configs and urls for abstract api. [#81067c8](/81067c8fee0f8fbdadcdb725036c1545754af8de) (2024-09-22)
-- Search params as a dto. [#f3ef5ea](/f3ef5ea63f3a75e97071bcb1afeedd2b5cd37c23) (2024-09-22)
-- Update log message prefix for the api requests. [#8fb9b19](/8fb9b1930e7d4401b8e0576a1eee078350c2d90c) (2024-09-22)
-- Remove ArticlesPageScraper. [#6dccc8c](/6dccc8c93269d7fda1a7b286d83020ca03f5599a) (2024-09-22)
-- Set new start point. [#29e784b](/29e784b971debff20c8194b7e364f57e8d54f98c) (2024-09-15)
-- Include env and set container port. [#cd225f4](/cd225f4f0cefdde3e250cc6190ce419e27356bd0) (2024-09-15)
-- Assure correct types of env and toml settings. [#538186c](/538186c2518eb4aecdbcf5a6d48f75dd9d755026) (2024-09-15)
-- Remove unnecessary type. [#4ce4ca5](/4ce4ca5e1250c15ec5413698df7407dd4a8b2f54) (2024-09-15)
-- Load env variables to override app toml configuration. [#74147b6](/74147b63edc49f8189eaa5f9a2dd6825849fb98d) (2024-09-14)
-- Change fuzzywuzzy to thefuzz. [#69143fa](/69143faacf18570421285c299c1e8121d09b660c) (2024-09-08)
-- Use partial_ratio to verify quota exceeded header. [#e39895e](/e39895ef7d27512c2b95aed140f12d6459c44ffc) (2024-09-08)
-- Add framework unit tests. [#3c117f6](/3c117f6fcc28fab14619e6104d2d25643ee00c97) (2024-08-21)
-- Add core unit tests. [#c415e0c](/c415e0c871406d864e6c31d5997ca4565b9aef9c) (2024-08-21)
-- Add adapters unit tests. [#461fd62](/461fd624e5bf9b724434e44ee196dd067540b3ad) (2024-08-21)
-- Add framewok integration tests. [#c595474](/c595474cbf678e212cc601e5df3627b4c44407b7) (2024-08-21)
-- Add core integration tests. [#5f3fc18](/5f3fc182f97ec6ce8af017b6b19c477a971e3594) (2024-08-21)
-- Add adapters integration tests. [#7849d81](/7849d81b59c56b1a70e8b238eaf437f64894bd93) (2024-08-21)
-- Add tests mocks. [#e26bea1](/e26bea17c4bc5e3279cc096ca32eff610e2d51d2) (2024-08-21)
-- Add tests helpers. [#e996293](/e996293ab79a28b65d23b7fc2f8569a7bd756a92) (2024-08-21)
-- Add middlewares and mobile qrcode. [#c8c30db](/c8c30dbabfd25e610efdc4dc10ed48c3d0f0e9d2) (2024-08-21)
-- Add header and query types. [#6e101a3](/6e101a3ac3ee02de834ed7dcf615b926ff2f27ee) (2024-08-21)
-- Add usecases. [#635cf50](/635cf508dc2957df086dcd6cadcabc1b2d074b55) (2024-08-20)
-- Add gateway. [#53b85f6](/53b85f610bd2f59d43153fb73e37ccca239302e2) (2024-08-20)
-- Add middlewares. [#0369ad9](/0369ad97aacd14c735bf8da1f15efdae38e947f4) (2024-08-20)
-- Add http retry request. [#555073b](/555073b7e4721a19b4ac3ce9361c3e0ae3c66b26) (2024-08-20)
-- Add url builder. [#69bfea5](/69bfea581311c7c28a87ddf94a4c226a783ba6b6) (2024-08-20)
-- Add template context builder. [#0c39a6a](/0c39a6a662571d047599c6ccf3fda80dab76c2d5) (2024-08-20)
-- Add abstract metaclasses. [#8e1c133](/8e1c1332b88a6eea65be15a96f50ef39968bfdc7) (2024-08-20)
-- Add dtos. [#25e1b7f](/25e1b7f64df8046d9c276663a1c49055e4625e14) (2024-08-20)
-- Add serializer. [#fa8e1d8](/fa8e1d85155f2deacec4ee50a2e54cded9ee1684) (2024-08-20)
-- Add data. [#45af7c2](/45af7c25e99c747ae40430f3aa540880d0d9ece9) (2024-08-20)
-- Add app exceptions. [#3be17d5](/3be17d5578f7ddad2c235a1a2d7a3d42667f4329) (2024-08-20)
-- Add domain. [#f7d9c60](/f7d9c60eff4d2a3ee73c7642c143b5409f7ad9d2) (2024-08-20)
-- Add exception json response serializer. [#a18ff7c](/a18ff7c735e9022dba8faa712b53342ca3a680b8) (2024-08-20)
-- Add progress bar. [#271c09c](/271c09c3879f9c2e0cf57ee589a7f0cff6260cf9) (2024-08-20)
-- Add mobile qrcode. [#2253d54](/2253d54749b9448ab085c4f59b600b1ed0de9867) (2024-08-20)
-- Add shutdown signal handler. [#bcbfaa1](/bcbfaa1c2a1c3cb5c8e895df595a1cc78a2f6fff) (2024-08-20)
-- Add types. [#3ff97c0](/3ff97c05cfbf8e8982a5b62125a202d61822c1bb) (2024-08-20)
-- Add regex patterns. [#ac912fa](/ac912fa0617882b343143d7817a3ac9f5452f127) (2024-08-20)
-- Add standard exception and error messages. [#3262ff3](/3262ff3497ca27b7973446a5101d58f952b75a32) (2024-08-20)
-- Add common directory. [#3c79960](/3c7996056fa8ca70ebe68be054b5b851e2a93d73) (2024-08-20)
-- Pagination to get all articles. [#8417907](/8417907430128fce0ef3e80831b4129121ad5152) (2024-04-30)
-- Stop multi threads on app interruption. [#150619c](/150619c96b9eae9bf2de9de3d058d9d112bc1560) (2024-04-30)
-- Add articles scraping progress log. [#742f10a](/742f10a9cdc37cb58a96608f6a72f0c0a6e5700d) (2024-04-27)
-- Make scraping data in multi thread. [#ffb634b](/ffb634b32e752e919402c68a11ad24f0a0c03593) (2024-04-27)
-- Customize log prefix when requesting. [#06a4a3f](/06a4a3f88848248ffe717e8421996f253b35a3a1) (2024-04-27)
-- Implement debug logs with json data. [#701807f](/701807fa9b625b3c66d5db8ae8aa52477c6855d2) (2024-04-25)
-- Disable uvicorn access logging. [#398f013](/398f013af8b6ea218ac8408ed7a75d9cd97c8f3a) (2024-04-25)
-- Set single logger instance to replace singleton. [#6c518f1](/6c518f17276220a71ab1f18661e68ffdf493f3d7) (2024-04-25)
-- Update validation token generator. [#508ca82](/508ca822eb3999e4d7b6ce33473438fafef19ca8) (2024-04-25)
-- Update pyproject toml class and interface names. [#f2d08cf](/f2d08cf5d8018e67346b7985de297aba5ff88852) (2024-04-25)
-- Add application configuration section. [#a3e61ac](/a3e61acfd7f00786a494fa00cfc8f5a17a4cb563) (2024-04-24)
-- Update templates and context with pyproject data. [#f731cde](/f731cde85a80c951393c944855b4362674c40b43) (2024-04-24)
-- Run app directly from the module with pyproject configuration. [#9cd8e28](/9cd8e2807ade761fa24672752b95c63e00661aef) (2024-04-24)
-- Load pyproject application configuration. [#deed15c](/deed15cb9c69f8a443854e58db09c129f4261edd) (2024-04-24)
-- Scopus api error as application exception. [#846d14b](/846d14ba59bd41ab7278e8542a138ef9fe1483f7) (2024-04-24)
-- Pass status code directly and control logging in file. [#9b3b0a4](/9b3b0a435048d410d60680dcf4cec8fa924a255d) (2024-04-24)
-- Integrate models in api config. [#20469c5](/20469c557479cefc5ed82efa8bf9ce93c2881fa8) (2024-04-24)
-- Rename and remap folders to clean architecture. [#c7c2661](/c7c2661338ceb98aa6b09e3abe5860ea959efa19) (2024-04-23)
-- Upgrade logger and implement logging instead of print. [#23d6fe7](/23d6fe77a19e90436da4ac5a7856f82a036b537a) (2024-04-23)
-- Set date year automatically. [#0690985](/0690985cd49df46d16a11ab87699475891536167) (2024-04-22)
-- Change license and add zero-width space symbol. [#61a9b64](/61a9b64d53fc3cabae33e8ec52886f9b2e4c8f23) (2024-04-22)
-- Remove python version for venv. [#a9f5129](/a9f51298def1f661cc4955f8e359721743718b71) (2024-04-22)
-- Upgrade venv script. [#805289a](/805289aee84f09a82f17fbc45dfe5f7699f3ec5c) (2024-04-22)
-- Update project keywords. [#d19adb1](/d19adb18099303ceb713ad4bde98d06deca806cc) (2024-04-22)
-- Update client test data. [#888ce08](/888ce08f01364ce3b4a516273564228ac723337f) (2024-04-22)
-- Update favicon. [#2c10ff3](/2c10ff3a275821680a1c860041486fe9bb9607b8) (2024-03-11)
-
-## 🔧 Fixes
-
-- Separe host and port from url in trace log. [#65f8308](/65f8308602b8332507aa01b02271d9c4ba244435) (2024-04-27)
-
-## ♻️ Refactors
-
-- Rename module and class. [#057f9e4](/057f9e41d7c150b396c69b5117569dd724349432) (2024-10-05)
-- Remove handle quota and set default workers. [#4d8ed21](/4d8ed21110008bc7e7e4ad8e9c309890d37282bf) (2024-10-05)
-- Remove scrapping parts. [#4acc267](/4acc267b9e0ae1604e028fd7b6d268852073237e) (2024-09-22)
-- Update serializers and return. [#4974203](/4974203cb921bfbb7ca92a6d3ac5b32028ff78dd) (2024-09-22)
-- Update contracts. [#ffd82c9](/ffd82c950dc94c92a371faf160e09b059b4a6144) (2024-09-22)
-- Update progress bar format. [#48a1b43](/48a1b4338a2a5cef6f1be7d2f144da683245bc50) (2024-09-10)
-- Update logger. [#45aaed5](/45aaed5caa0a5197190390b8c9032498b693d8c8) (2024-09-10)
-- Update error logging. [#17df0eb](/17df0eb9f9f5255072698a5b76030d07b92787da) (2024-09-10)
-- Change instance name. [#019f580](/019f5805512e3d98c7c616118f76fa2f5a71755e) (2024-09-09)
-- Update scrape data dto parameters and method. [#49cca65](/49cca650603a000d977064e71fd2895e473587a4) (2024-09-08)
-- Rename column from template to page. [#1b6cf14](/1b6cf14ae4ce5b9ad017c1e7b299bb65c6228dbf) (2024-09-08)
-- Rename docstrings. [#8ddb085](/8ddb0856e4eb746f163751d51f872b856e8c403d) (2024-09-08)
-- Update names with acronyms. [#22607ba](/22607ba52c876845eb656f968b833c2681196fc5) (2024-09-08)
-- Remove old tests. [#2bedd9c](/2bedd9ce643fc6b42a1bb01cfe15d68aecda5e45) (2024-08-21)
-- Move and update css styles. [#f8bcebe](/f8bcebe6f86f1c4c4315078ddf44af99d09faa97) (2024-08-21)
-- Move and add images. [#69c10a9](/69c10a932bbc4d0c0a316e9513ba74c41a944a09) (2024-08-21)
-- Update javascripts. [#47f3a4b](/47f3a4b77842b5e9d8f7864f52d3dc930f24dc3c) (2024-08-21)
-- Update svgs. [#c6415c1](/c6415c126db58b403f967d93da2c34caae0994bb) (2024-08-21)
-- Update templates. [#beba284](/beba28463f4b248a640ee39d5575a9ea0533eff2) (2024-08-21)
-- Deleted files. [#9f74e82](/9f74e829a601f607e01fd41ba2e7aa66ada25028) (2024-08-21)
-- Update differences. [#25552db](/25552dba1507a05a7efb10f84ed24ff31b9e8289) (2024-08-21)
-- Update logger. [#e9b9345](/e9b93457fd2e7bfef7a7ff6b038cf1f1aa429e4c) (2024-08-21)
-- Remove old code. [#0df9bd4](/0df9bd40970257da06f9f8624b49a369c9261b44) (2024-08-21)
-- Update context and routes metadata. [#b8be4ad](/b8be4ad7f9a0d16903e235131f4281da6a49ff91) (2024-08-21)
-- Update dependencies. [#8eb1f2c](/8eb1f2c4f07524832bd9fac33814fcc59c849005) (2024-08-21)
-- Update fastapi config. [#8fb757d](/8fb757ddeac2e3f03dda0dddde5fde2fa4d4a65b) (2024-08-21)
-- Update factory. [#67c155f](/67c155f295c31fc006004698b27682d97b18544a) (2024-08-20)
-- Update exception handler. [#8795fbe](/8795fbef8970649fe2a2df3ccb3a90df5a7ed270) (2024-08-20)
-- Update http exceptions. [#54249bf](/54249bfe153f609fe43967c7a5bc15aab66ee557) (2024-08-20)
-- Update multiple properties. [#cd9ed28](/cd9ed28be34e3c2f8d7cee1c46bd783ddbba077b) (2024-08-20)
-- Add app and scopus config. [#0cc2cbc](/0cc2cbcdc13e463cb44e09d7c96723d1780e160c) (2024-08-20)
-- Build scopus api error attributes in class itself. [#17bf03e](/17bf03ef239be163ac275a5528f56bac9e049ee1) (2024-04-30)
-- Search articles as instance method. [#e8992c7](/e8992c7c356c2f4ff77d692aed5e81071dda059e) (2024-04-30)
-- Decouple and inject usecase dependency. [#9e4eaf9](/9e4eaf91d8b3c0342368e20c85870b254b6a43c2) (2024-04-30)
-- Unify gateway interfaces. [#987e471](/987e471014c9332861c7a465a4cb4e6d83c1b075) (2024-04-30)
-- Line space on logs. [#225f2f2](/225f2f21e1fd042dcce8db6e015abed95d2636ff) (2024-04-30)
-
-## 🧪 Tests
-
-- Update tests. [#d688408](/d68840809048c098e8cbdee285c24204d510ee33) (2024-10-05)
-- Set results mock data. [#649ace1](/649ace1ad34297403f9750c82f35d6d46eb33eaa) (2024-09-23)
-- Add abstract api tests. [#5bcb828](/5bcb82803cf43220e33db7f2ea88e309991db85e) (2024-09-22)
-- Update integration tests. [#2a32941](/2a32941dc6e5125d9a516f75b38f0e04d858873d) (2024-09-22)
-- Remove scraping code parts. [#1b10989](/1b109899be353f86261c708b9f0cfe749e5868db) (2024-09-22)
-- Add new serializers tests. [#8621002](/8621002d13c5945f15e9308301c1ff1ebaa14c5a) (2024-09-22)
-- Update unitaries tests. [#d797822](/d7978226d8830db79f5d27d82e9a6aaddae05a9e) (2024-09-22)
-- Remove unnecessary tests. [#c1e73fa](/c1e73fafd252b11df2a6a19b33192236efc388fe) (2024-09-22)
-- Update mocks and set static data instead using functions. [#21f42de](/21f42de2d495964745c47e8b1167b21d2c6d7b5a) (2024-09-22)
-- Remove scraper mock and move code from data to utils. [#196507f](/196507fa5b26ecc136674748f11621cfb1eedd8b) (2024-09-22)
-- Update response in tests. [#bad8d26](/bad8d26c27c109badcefcf5bc2c9c6602c90c388) (2024-08-20)
-- Add unit tests on dependencies. [#0d588ae](/0d588aefd637cd9fbd1b797dccd9f3435658e54c) (2024-04-30)
-- Pagination to get all articles. [#2d42ceb](/2d42ceb55478487d759df55b28fd31105019ebdf) (2024-04-30)
-- Build scopus api error attributes in class itself. [#eb51422](/eb51422cbc5f0e24d6f38ed0194d3f075108ece2) (2024-04-30)
-- Search articles as instance method. [#20ee2f0](/20ee2f05ab4cbf2c90904696811c5e0bce9de6e9) (2024-04-30)
-- Decouple and inject usecase dependency. [#7fd9680](/7fd96802686ab4be255cb1aa6d3ca8bd350f0567) (2024-04-30)
-- Renaming and refactor for dataframe as class attribute. [#f35d43e](/f35d43e352ec2833632fe5f86f1831828836834a) (2024-04-27)
-
-## 📝 Chores
-
-- Update changelog. [#bd292a8](/bd292a83566c458fe875ecbf4d911c67a5b0fa49) (2024-10-06)
-- Update info in readme. [#c08183d](/c08183d69ba02c5419ded84c72d1ef0f12fe5379) (2024-10-06)
-- Update text, table columns, and context values. [#6d11baa](/6d11baa3f4179263e311071c8ec7683cb12eeaac) (2024-10-05)
-- Change favicon. [#ddba934](/ddba9342fd7a37a608891ab1a36e79ce4133fb83) (2024-10-05)
-- Update responsibility and showned columns. [#8ed2457](/8ed2457e370743241923dad46c69f56295471324) (2024-10-05)
-- Update abbr hover color and index css. [#33e3187](/33e3187dddaeacdf1489e13697e3df25d24dbbbd) (2024-10-05)
-- Update client. [#8b39775](/8b39775caec823b391456749996c334a40652c07) (2024-10-05)
-- Ignore errors for not found thefuzz stubs. [#acc9772](/acc9772bbe7c128822f51f1b270f908855937dfd) (2024-09-22)
-- Check if .env exists before include it. [#d23cf0f](/d23cf0fbcb4efc94f1dd68e6352063aedbeaf86a) (2024-09-22)
-- Update exit status. [#b556250](/b5562500f3d8854b52ec1539102dc6f5eca71874) (2024-09-22)
-- Only run docs workflow when docs files are updated. [#d50bc4c](/d50bc4c40e213b0ec46060bb2e1c05aa8f5362e2) (2024-09-22)
-- Add example of a env config file. [#49a5649](/49a5649951ac8879b2ee15a456687f4e8049dcb8) (2024-09-14)
-- Update setup. [#bed7cd6](/bed7cd6002f06101a4b18adc4a9b0bce75a8cb09) (2024-09-13)
-- Move client from tests. [#088a629](/088a62951a7c8d65aa995152d76f8bc3b6570bf5) (2024-09-13)
-- Remove docker docs. [#32bb11e](/32bb11ed4933192b7fa0c241bcdb2858445d3e30) (2024-09-13)
-- Rename from venv to setup. [#8f0f7ac](/8f0f7ac0846c2f20a9a91a429df337456ebd71c9) (2024-09-13)
-- Rename requirements files. [#e10eee8](/e10eee811638538bd2baffdeaa20e368acf48bb7) (2024-09-13)
-- Update dockerfile. [#07fe18d](/07fe18dd109ca3f8e4d860c29a80c3513acc7935) (2024-08-23)
-- Add toml as app dependency. [#eb58aa9](/eb58aa9de70d1578f1d2d1c6e3474728de10b7ad) (2024-08-23)
-- Update dependencies requirements. [#ad38924](/ad389243e231e915f10335d085c0dd5c23947fb9) (2024-08-20)
-- Update dependencies metadata. [#56e10ae](/56e10ae5c8ebd29db6c7e41101d5a3dc6b7ac141) (2024-08-20)
-- Add language and extra data docs dependencies. [#b83c6d0](/b83c6d0191e2e356d5143a6766dbbc16fb7f49af) (2024-08-20)
-- Add new dependencies and types stubs. [#326c6a3](/326c6a339c2a93114c22a343113b3ed99e428389) (2024-08-20)
-- Update metadata. [#c672f24](/c672f243a6679840e91d9f85cbc26a87877942ac) (2024-08-20)
-- Update formatter to black. [#c3cb5df](/c3cb5df5201590875cc590a8a4afdacb310587c5) (2024-08-20)
-- Add new words. [#675e316](/675e316e5b12816e6274c235ae180a4a713b87f7) (2024-08-20)
-- Ignore logs generated folder. [#12bf57e](/12bf57e1091f2d29fc93d414471563381314a8f0) (2024-04-25)
-- Add toml types. [#4753d1a](/4753d1a1ad6b6f612e43d30d2f059767e7b191cb) (2024-04-24)
-- Add uvicorn word. [#916e625](/916e625cad2ed39e26b43f57de316f84458cfe10) (2024-04-23)
-- Update changelog. [#1411c3b](/1411c3b846cc0601e1cc69b2bd1d83cfaf0481fb) (2024-03-11)
-
-## 📄 Docs
-
-- Update releases notes to v3. [#8f56b06](/8f56b0661ed1cacd43e89820e75a94b9c2375cb1) (2024-10-06)
-- Update version to v3. [#5069e99](/5069e99e90c9acd16954cc7e83482aafaec77876) (2024-10-06)
-- Change application to web api. [#68ec65f](/68ec65f8070a3d613e774b485d13369a407bcd90) (2024-10-06)
-- Add rest abbr. [#8365a52](/8365a5279ada8fa30a265422b5c14faae74532ad) (2024-10-06)
-- Update mkdocs config and metadata. [#e89c9ff](/e89c9ffad21ef5099da1c2b356912846e94925e4) (2024-10-05)
-- Update and add more pt-br docs. [#02e7df4](/02e7df4cbc25f89dafbbca6869e297539ecc784c) (2024-10-05)
-- Update and add more en-us docs. [#9fc2597](/9fc2597a152dd8d428b4f7e3b66615d312fa8b43) (2024-10-05)
-- Add overrides icons and partials html. [#e18d156](/e18d156a7ad186d6dc99edbe9b5f33a66de6f84f) (2024-10-05)
-- Add all images. [#1aaff5a](/1aaff5a58e590b167db23e52c5a67991657498b6) (2024-10-05)
-- Add assets data, and custom css. [#821bfe3](/821bfe380cfd888c5363a830896dcad2661f4045) (2024-10-05)
-- Add pyproject configuration. [#127aadf](/127aadf174eba84d189ba90a10817958a754bf0f) (2024-04-24)
-- Fix translation alternate url error. [#6e9bc23](/6e9bc23b8c6673cd1d6854bc763f307b61ccaba8) (2024-04-24)
-- Add fields examples, response body and count field config. [#8d1dd34](/8d1dd34b5404fd9997deb88ff38754e84e0f993b) (2024-04-22)
-- Add notes and remove count field config. [#1965b0a](/1965b0a4be25248768c9ab9491fa41d1b6b1ca0e) (2024-04-22)
-- Upgrade article preview page example URL. [#d8f4cc3](/d8f4cc3ccd95d32453a833a0797cfee210d7c0a7) (2024-04-22)
-- Change poetry order and add note to get started. [#003f03f](/003f03f40c96e599d2a24c507ea0c413cf457dff) (2024-04-22)
-- Remove release date. [#8f541b1](/8f541b1e073e46555eaf2338c93e75489ac34cab) (2024-04-22)
-- Add description for scopus id and volume. [#b1a73d6](/b1a73d65c15cc8697dc80419f136be364bb36e5b) (2024-04-22)
-- Change environment section order. [#df69924](/df6992433aa83512e58f68a022b576d3a3a1b50b) (2024-04-22)
-
-## 🎨 Styles
-
-- Update swagger route description. [#2a8fa12](/2a8fa12ddaf45e03c043b36f57a7a3ab2c78c294) (2024-10-05)
-- Update docstrings, messages and descriptions. [#5944f54](/5944f54d0af803a11505fc6ca727322554ea2d8a) (2024-10-05)
-- Rename for use env. [#19be6fd](/19be6fda3520e1bae32b87888e6ec5e0365fbd36) (2024-09-14)
-- Formatting. [#635b96b](/635b96bde155b1383402b229af4a925b08c8999d) (2024-09-14)
-- Formating. [#634ba7a](/634ba7a3ff08dfdfe5db7c3fdcd975c52c6cf4a6) (2024-09-10)
-- Rename venv setup shell script. [#aa3439a](/aa3439aa4bf8009260d1cea66ba07fd0750128e7) (2024-08-20)
-
-## 🔖 Release [`v2.0.0`](https://github.com/mauprogramador/scopus-survey-api/releases/tag/v2.0.0) (2024-03-11) <span id='v2.0.0'></span>
-
-> See the [comparison ⟲ history](https://github.com/mauprogramador/scopus-survey-api/compare/v1.0.0...v2.0.0) with the previous tag.
-
-## ✨ Features
-
-- Update api version and metadata. [#a5a6249](/a5a62495e8279c1da265393ef47d757242431c78) (2024-03-11)
-- Update readme. [#8dca155](/8dca155b6f036c6eebad04aa7b2b50c0f63aa188) (2024-03-11)
-- Add csv table web page. [#38d3d34](/38d3d3434a4b5e4aafe323f0e98aae28e5e50d90) (2024-03-11)
-- Add similarity filter. [#a866ce5](/a866ce5993adf372ba924f87cd60ad8d4b250994) (2024-03-11)
-- Add request retriever. [#fc6f515](/fc6f515a5f84265ec5add3d45a1a314f79625c6f) (2024-03-11)
-- Update interfaces and add new route. [#c1d359c](/c1d359c365586e9377f119800fa4227dc2125468) (2024-03-11)
-- Add table route, descriptions and web tag. [#6015603](/6015603691f22da43aa0e290b92437e1867ffd5f) (2024-03-11)
-- Update info log method. [#2e2b52a](/2e2b52a6b88a00783ef3bdf51bcc1fb84693b8d2) (2024-03-11)
-- Add fuzzywuzzy library. [#9a0f568](/9a0f5687781e718ddc22e5e851669c06ecc7c652) (2024-03-11)
-- Update commands and metadata. [#ae30c01](/ae30c01e1f49bc296b27fbe00298d51dfaa25f77) (2024-03-11)
-
-## 🔧 Fixes
-
-- Fix branch to master in workflows. [#d12d403](/d12d403fccbec8bc333d589f522bf02447ad7916) (2024-03-11)
-
-## 🧪 Tests
-
-- Update and add app. [#c37bd71](/c37bd71c5f1acc0ea67c5b03b99d6b02a0d831c3) (2024-03-11)
-- Update and add data. [#2378c93](/2378c934221ecf8df866e27c0ac472bccfb20bde) (2024-03-11)
-
-## 📄 Docs
-
-- Add permission note. [#7e931cd](/7e931cd827f129229c76d6334090abfa9901a05c) (2024-03-11)
-- Update and add images assets. [#fc023d6](/fc023d668570fcf3ba9e60e51b542018d7662988) (2024-03-11)
-- Update nav and add csv asset. [#3059752](/30597529f7610e7e3cb2c16adf94384eda68ae12) (2024-03-11)
-- Update order and add table page. [#1b9141d](/1b9141d0735858acd1718709ecb008482e6fdcb4) (2024-03-11)
-- Add similarity filter. [#09134f6](/09134f6ba5d89a22c6107dcaa686085578ea1d58) (2024-03-11)
-- Add similarity technology. [#39e8327](/39e8327eb60af69820be83b09a75ff0a3863a344) (2024-03-11)
-- Add hooks, actions and new error. [#a7c91c5](/a7c91c5efe28af64c0abf7d2fefd6b900cf401c7) (2024-03-11)
-- Update links and strong API. [#8ee58e8](/8ee58e8d5bf252724b92445ae60337145518cd84) (2024-03-11)
-
-## 🔖 Release [`v1.0.0`](https://github.com/mauprogramador/scopus-survey-api/releases/tag/v1.0.0) (2024-02-27) <span id='v1.0.0'></span>
-
-## ✨ Features
-
-- Update version. [#cdcc1a4](/cdcc1a4a5ff97c2507f7ef943fcd2023cdf08af1) (2024-02-27)
-- Update version. [#457da7f](/457da7f48a85739a7a8002f939e48e2b8be11365) (2024-02-27)
-- Update actions versions. [#91159fc](/91159fcd41da2a925c1ec37144402669716d96f9) (2024-02-26)
-- Add github action documentation url. [#f985147](/f98514742c8977b4544788ab4a9bef88fd7c08fe) (2024-02-26)
-- Add githubworkflows. [#faebc92](/faebc92327c14bbc30a2f52f38cdf54d9f4d6d3f) (2024-02-26)
-- Update scopus search api url. [#a21f5b0](/a21f5b029b922dbed6d41d60ce489ae9b698a240) (2024-02-26)
-- Update name in template. [#d6a4689](/d6a468937280e67c321f35f38687fd8bf41560a4) (2024-02-26)
-- Update repository url and date. [#864d98a](/864d98a3b648b9cd12b48a3a7daa71f3d1045c7d) (2024-02-26)
-- Add web application javascript. [#8673384](/8673384611223524449e39ffd44c5d4266e0e701) (2024-02-26)
-- Add static css styles files. [#8f2b1ff](/8f2b1ffffaf3809543259597cb7697b4f20bc613) (2024-02-26)
-- Add static icons and images. [#a2a8432](/a2a84324aba4ba87ee2b2b0c94b0506014ec3f75) (2024-02-26)
-- Add svg icons. [#5c30dcd](/5c30dcd5aaa2dfa2ab55dfe9681dd72517eb95df) (2024-02-26)
-- Add web application template. [#2f4d91c](/2f4d91c61239ea78288a6d1432edd6590192969d) (2024-02-26)
-- Add application app and main configuration. [#07dae0c](/07dae0c7a29579518d3c3372458f240f7684b750) (2024-02-26)
-- Add application api. [#2c9f501](/2c9f501120ef7a816259316920c47da58bea1a38) (2024-02-26)
-- Add api dependencies. [#3832289](/3832289feaaf26c1855ed12584de88bb8b91ddb6) (2024-02-26)
-- Add gateway for scopus search api. [#74465e9](/74465e927c7e501b4083a51ba3855cda8a8de964) (2024-02-26)
-- Add logger and lifespan. [#6dce64f](/6dce64fe003cfa28cb82ca738ac422a2a34e5e70) (2024-02-26)
-- Add application core. [#a36e346](/a36e346a6f36500a83f64a0918c57aa5751e6dff) (2024-02-26)
-- Add exceptions and handler. [#c41ecbd](/c41ecbd458231a52b011c4c9e580e178f8723757) (2024-02-26)
-
-## 🧪 Tests
-
-- Add application tests files. [#0cfc0a7](/0cfc0a761d8cf15f943679bb0f790925510461bf) (2024-02-26)
-- Add tests helpers and mock data. [#e4925ea](/e4925eac144366b436e81ead6661174947a91caa) (2024-02-26)
-- Add rest client file. [#7eee681](/7eee681672eb20859b99cf0377226a03424ad7b7) (2024-02-26)
-- Add tests package. [#6e31933](/6e3193342ecb9b2fd5508e6e331ccfd4f9ec71a3) (2024-02-26)
-
-## 📄 Docs
-
-- Add changelog. [#5177dae](/5177dae7b7d74bf1609798ec7658c9bc374ceb2c) (2024-02-27)
-- Update repository url. [#8f37bde](/8f37bdeb750980e42566ddb664e5e98635d97a8a) (2024-02-26)
-- Add portuguese documentation. [#dc54d32](/dc54d3281bc240134b0f8ef345d2c32b0e865dbc) (2024-02-26)
-- Add english documentation. [#fbcad81](/fbcad81e16d5b4f098931493dc6448d44d622a43) (2024-02-26)
-- Add index and static images. [#8c7b616](/8c7b6169cc968c761ebed93170362e2c42cdf264) (2024-02-26)
-- Add configuration file. [#898fd16](/898fd1612a0461ae45796e9791b24d6aee9b4668) (2024-02-26)
-
-## 📌 Others
-
-- Add configuration files. [#b2a7605](/b2a7605272ee1e76bf01ab7298dd3f2ea10cc333) (2024-02-26)
-- Add requirements files. [#67a48f9](/67a48f9c29b43a1d85295b19ce62462a4a9ac508) (2024-02-26)
-- Add configuration files. [#f06224c](/f06224cd8dd135ee5849eaaa13c80b9625290750) (2024-02-26)
+# 📜 Changelog (2026-07-31) <span id='start'></span>
+
+> In development since: **February 26, 2024**.
+
+**Tags: [`v1.0.0`](#v1.0.0), [`v2.0.0`](#v2.0.0), [`v3.0.0`](#v3.0.0), [`v3.1.0`](#v3.1.0), [`v3.2.0`](#v3.2.0), [`v3.2.5`](#v3.2.5), [`v3.2.6`](#v3.2.6).**
+
+<br>
+
+## 🔥 Latest Unreleased
+
+### ✨ Features
+
+- Show status ok for combination empty result. [#0eeeb69](https://github.com/mauprogramador/scopus-survey-api/commit/0eeeb697791cbc8ec80946bba4cf769151b9078f) (2026-07-31)
+- Use token sort ratio for title similarity fuzz matching. [#8b16b32](https://github.com/mauprogramador/scopus-survey-api/commit/8b16b323a5a23349725f44cecbdc1131d3481812) (2026-07-31)
+
+### 🔧 Fixes
+
+- Initialize loss detail manually. [#f278e4a](https://github.com/mauprogramador/scopus-survey-api/commit/f278e4a954b9500f190bf003c3c5975630830713) (2026-07-31)
+
+### ♻️ Refactors
+
+- Update log access filter. [#817088e](https://github.com/mauprogramador/scopus-survey-api/commit/817088e64b43f71f16f818d9423d9f88f7f5abab) (2026-07-31)
+
+### ⏪ Revert
+
+- Remove previous details method signature. [#757e204](https://github.com/mauprogramador/scopus-survey-api/commit/757e2046e535a0a72e511b85502c6ab68d017505) (2026-07-31)
+
+### 📝 Chores
+
+- Ignore errors when linting. [#8b9343c](https://github.com/mauprogramador/scopus-survey-api/commit/8b9343cb890012cc8d77a2a10f6e6659185f580a) (2026-07-31)
+- Replace dummy secret key with a placeholder. [#41e0693](https://github.com/mauprogramador/scopus-survey-api/commit/41e069308acda28de5c4c77dae582d72c3653c5f) (2026-07-31)
+- No more set up .env when creating venv. [#fbd99d9](https://github.com/mauprogramador/scopus-survey-api/commit/fbd99d9c276a328009e236619b4b932cf14d5c89) (2026-07-31)
+- Update performance table data and add loss. [#f135e7c](https://github.com/mauprogramador/scopus-survey-api/commit/f135e7ccf29c53ac596375fb7b1da182a4172c9e) (2026-07-31)
+- Fix similarity ratio field pt-br translation. [#f0e0fa6](https://github.com/mauprogramador/scopus-survey-api/commit/f0e0fa6a01b5f2bf8d720606ff9409d6544659ff) (2026-07-31)
+- Add secret key env example. [#50e8899](https://github.com/mauprogramador/scopus-survey-api/commit/50e8899b8a95b05b5963bd40ddc6fa117f68c64a) (2026-07-31)
+- Update version to 3.2.6. [#7ebd453](https://github.com/mauprogramador/scopus-survey-api/commit/7ebd453500bd994286e642e30376a39950642d5b) (2026-07-31)
+
+### 🎨 Styles
+
+- Add contextual comments and remove unnecessary ones. [#9cd1827](https://github.com/mauprogramador/scopus-survey-api/commit/9cd182707c52635f45acbe45b93498f26d95b477) (2026-07-31)
+
+<br>
+
+## 🔖 Release [`v3.2.6`](https://github.com/mauprogramador/scopus-survey-api/releases/tag/v3.2.6) (2026-07-24) <span id='v3.2.6'></span> [`▴`](#start)
+
+See the [⇅ comparison history](https://github.com/mauprogramador/scopus-survey-api/compare/v3.2.5...v3.2.6) with the previous tag.
+
+### 📦 Builds
+
+- Add command to generate new secret key. [#0ddb9f5](https://github.com/mauprogramador/scopus-survey-api/commit/0ddb9f5d7c39e296228889b5959a4cd634a32e9e) (2026-06-03)
+- Add complete error locales. [#bb6a0ad](https://github.com/mauprogramador/scopus-survey-api/commit/bb6a0ad2a613b177b682f09fd2e4d0bbe04dfce7) (2026-06-03)
+- Add dependencies settings. [#9d804d5](https://github.com/mauprogramador/scopus-survey-api/commit/9d804d50fb157856c2f7a67d09156f6c3d9c0fdf) (2026-05-10)
+- Update commands, add help, install and run in dev and prod. [#e965952](https://github.com/mauprogramador/scopus-survey-api/commit/e965952c197961c279c7f3f6886c5879cedfadfc) (2025-12-05)
+- Update Dockerfile, add labels and env variables, only run dev not test. [#2f15b2b](https://github.com/mauprogramador/scopus-survey-api/commit/2f15b2b121f8b0ded19aa87df87bff721535cf96) (2025-12-05)
+- Split environment requirements in dev and prod. [#0023fb0](https://github.com/mauprogramador/scopus-survey-api/commit/0023fb010583b235c4b45754f584af77c00b0169) (2025-12-05)
+- Add gunicorn and uvicorn-worker for production. [#1e4c7d0](https://github.com/mauprogramador/scopus-survey-api/commit/1e4c7d083c58a7ae4e5a08fee1c6cb8dafc11d5b) (2025-12-05)
+- Update venv script and make it strict. [#7b3aa81](https://github.com/mauprogramador/scopus-survey-api/commit/7b3aa81c80acd2f7d8946ea87a283314c9a0c0d0) (2025-12-05)
+- Remove poetry export as required plugin. [#d295249](https://github.com/mauprogramador/scopus-survey-api/commit/d29524902ba0f6f8a22e3e3ba194388ae49bc534) (2025-09-14)
+- Use python 3.12 on docker container. [#0153b62](https://github.com/mauprogramador/scopus-survey-api/commit/0153b628079be84711fe2bad1f94ac7655344a31) (2025-09-12)
+- Update all requirements. [#b9154e8](https://github.com/mauprogramador/scopus-survey-api/commit/b9154e87dda6f460b84f25954000d7d430f0d8eb) (2025-09-12)
+
+### ✨ Features
+
+- Update dir tree following clean arch. [#c69f564](https://github.com/mauprogramador/scopus-survey-api/commit/c69f564d4143da8ee76cf5d795855586b0edc5f1) (2026-07-24)
+- Format details for display. [#74674e1](https://github.com/mauprogramador/scopus-survey-api/commit/74674e101f5ad680b3fd6dbd3e741d445e6f2d0d) (2026-07-23)
+- Add more details for totals. [#43dcb72](https://github.com/mauprogramador/scopus-survey-api/commit/43dcb72143d77613ab880e5bbb8a9f51f7eff18f) (2026-07-23)
+- Split scopus apis while merging search and abstract. [#d9f9675](https://github.com/mauprogramador/scopus-survey-api/commit/d9f96752d6db0a770c1f27391d05755a244dec47) (2026-07-23)
+- Split search api to only survey combinations. [#a94229c](https://github.com/mauprogramador/scopus-survey-api/commit/a94229cf436a2a0aa2e0af9233038f78891e1d2e) (2026-07-23)
+- Remove survey details and state. [#c482c12](https://github.com/mauprogramador/scopus-survey-api/commit/c482c123763ad058d1491c91aeb0b7fc9dd35def) (2026-07-23)
+- Add common error and exc group handler. [#760bca9](https://github.com/mauprogramador/scopus-survey-api/commit/760bca998ffa2e73d4aa04550b318424eac79a43) (2026-07-23)
+- Add fetch multiple helper method. [#c90b5a7](https://github.com/mauprogramador/scopus-survey-api/commit/c90b5a76008364fe020f88a4545473d61ffe1508) (2026-07-23)
+- Add dtos. [#6f7fd4f](https://github.com/mauprogramador/scopus-survey-api/commit/6f7fd4f1245d88ecb9b18d9fa5df70995b0160e5) (2026-07-23)
+- Add details formatter. [#e8159cb](https://github.com/mauprogramador/scopus-survey-api/commit/e8159cb2bad0ea15d7c081fab1c1932535a5fa2f) (2026-07-23)
+- Add context object to replace state. [#2f403b5](https://github.com/mauprogramador/scopus-survey-api/commit/2f403b5fb2efc17a35ef4b8c4756d981bb877669) (2026-07-23)
+- Update all types for v3.12. [#f5de2fb](https://github.com/mauprogramador/scopus-survey-api/commit/f5de2fbe9def5a06444aa547b17e5d5ccbde9cfb) (2026-07-23)
+- Set up tqdm logging directly. [#8738d9b](https://github.com/mauprogramador/scopus-survey-api/commit/8738d9b050c9ea06cf9845e260b4d52bf62a97aa) (2026-07-23)
+- Progress bar as context closure. [#99c24f0](https://github.com/mauprogramador/scopus-survey-api/commit/99c24f0f15896a2009b04d3b5f9bb629c53f4d73) (2026-07-23)
+- Use none as default instead of null. [#2ffa939](https://github.com/mauprogramador/scopus-survey-api/commit/2ffa9392f03f55e102a05992417997493acb2267) (2026-07-23)
+- Add json response builder. [#f7c84e1](https://github.com/mauprogramador/scopus-survey-api/commit/f7c84e105ebeba8ebb9e610b08dffa206a7712d3) (2026-07-23)
+- Url builder as closures. [#f425543](https://github.com/mauprogramador/scopus-survey-api/commit/f4255435cd302945352e728507d6f6e587378dda) (2026-07-23)
+- Remove cancelled error msg and translation. [#3200808](https://github.com/mauprogramador/scopus-survey-api/commit/320080840d517363ecc03a40974e32783ffeb734) (2026-07-23)
+- Use wrap validator for secrect key. [#86be582](https://github.com/mauprogramador/scopus-survey-api/commit/86be5824b5facae7451ba605224516c523ae4814) (2026-07-23)
+- Add progress bar factory and use it with context. [#ad1c855](https://github.com/mauprogramador/scopus-survey-api/commit/ad1c855ec10793b1919fd31175918bb51611e55f) (2026-07-03)
+- Move task final process inside loop. [#693d074](https://github.com/mauprogramador/scopus-survey-api/commit/693d074f87150aa8c071d0722386b4147bb5ea90) (2026-07-03)
+- Update retrieve lang mechanism. [#e679822](https://github.com/mauprogramador/scopus-survey-api/commit/e6798225d532ea816bb6462b03bf2bec0ac1394b) (2026-07-02)
+- Update details display. [#520c78c](https://github.com/mauprogramador/scopus-survey-api/commit/520c78cffe8742bdb100f4508608140ce8ffde9a) (2026-07-02)
+- Remove duplicate headers assignment. [#c3325d0](https://github.com/mauprogramador/scopus-survey-api/commit/c3325d0f031134308f0f3f5a694d2d864d010677) (2026-07-02)
+- Remove average and els status headers. [#c56258a](https://github.com/mauprogramador/scopus-survey-api/commit/c56258a15dcf875bb1bec4219189f18f0771395a) (2026-07-02)
+- Update slowapi error details. [#ed89a75](https://github.com/mauprogramador/scopus-survey-api/commit/ed89a75a40a8c8cdf0bf4c73a6075bf8723a42dd) (2026-06-29)
+- Translate df columns when dump to csv. [#772492a](https://github.com/mauprogramador/scopus-survey-api/commit/772492afc23d34b8ebbfddb003c78bf38e09f4cb) (2026-06-08)
+- Update logger file and log info. [#145617e](https://github.com/mauprogramador/scopus-survey-api/commit/145617e6a0db71359eb2a660fc999af6cb632bd4) (2026-06-08)
+- Update log config and message padding. [#eac1f32](https://github.com/mauprogramador/scopus-survey-api/commit/eac1f328ba9a2c1a8fe4755edb547283059e2389) (2026-06-07)
+- Remove unnecessary and update docstrings. [#396d2cd](https://github.com/mauprogramador/scopus-survey-api/commit/396d2cd738371ca70174cbcd6138e88ab147da2a) (2026-06-07)
+- Convert date signed to utc iso format. [#79909c3](https://github.com/mauprogramador/scopus-survey-api/commit/79909c32d034e013c345d8b3127db84139540fc3) (2026-06-07)
+- Add tracking id for errors. [#052a72d](https://github.com/mauprogramador/scopus-survey-api/commit/052a72d35531ef9b77cc05dbb2d26d1e4e65e732) (2026-06-07)
+- Update Swagger metadata. [#827364a](https://github.com/mauprogramador/scopus-survey-api/commit/827364a7cbe4013e85bee89d155f9cbe5d675f6b) (2026-06-07)
+- Send accept language header for translations. [#49cd93c](https://github.com/mauprogramador/scopus-survey-api/commit/49cd93cd837d8820eaad09b2fac8f5d194175e4a) (2026-06-03)
+- Remove scopus default error status descriptions. [#51e9dec](https://github.com/mauprogramador/scopus-survey-api/commit/51e9dec238db64e68a4eeebfe5b77098d98dc7c8) (2026-06-03)
+- Ignore any extra env variable. [#1826615](https://github.com/mauprogramador/scopus-survey-api/commit/1826615eeb24cf4b82b42346f8afb1e79f880c30) (2026-06-03)
+- Use custom exc and handler to format error to response. [#4e9d959](https://github.com/mauprogramador/scopus-survey-api/commit/4e9d959c9414d9041b8613d36ee14adbd70dc606) (2026-06-03)
+- Use pydantic jsonable to serialize error response. [#2845cc7](https://github.com/mauprogramador/scopus-survey-api/commit/2845cc7cdf3086785ffb775193490ddd0d08aa03) (2026-06-03)
+- Update exception handler as module. [#4550477](https://github.com/mauprogramador/scopus-survey-api/commit/4550477f4699ca44d4ed7e6e63d1e0c62e78a1e4) (2026-06-03)
+- Pass error response data and headers to scopus error. [#7903a7d](https://github.com/mauprogramador/scopus-survey-api/commit/7903a7df93f91f5aaa1c1ced18c78b17f96d579a) (2026-06-03)
+- Update exceptions to serialize error details internally. [#a0e9e61](https://github.com/mauprogramador/scopus-survey-api/commit/a0e9e6152ed1d1a497c9d819ee0a5e096dbe4993) (2026-06-03)
+- Update translations as module and load only errors translations in memory. [#1cda978](https://github.com/mauprogramador/scopus-survey-api/commit/1cda978f42e6b2d4b6e8f1ae453f9e0200f9da2c) (2026-06-03)
+- Serialize error text for scopus error responses. [#fa3c49f](https://github.com/mauprogramador/scopus-survey-api/commit/fa3c49fcffa1dae9da936554382764094bb1e5cf) (2026-06-03)
+- Update input text params max length. [#06b2eea](https://github.com/mauprogramador/scopus-survey-api/commit/06b2eea1a06eae7378e96ff7f8bf74be68590120) (2026-06-03)
+- Get fully qualified names for the classes directly. [#24cb38e](https://github.com/mauprogramador/scopus-survey-api/commit/24cb38eac0bab962cc1634440f900be1b43ad2b3) (2026-06-03)
+- Update logging system and config. [#2bc0ffd](https://github.com/mauprogramador/scopus-survey-api/commit/2bc0ffd9d9d6234eec0849f10a2b914ce6aebdf0) (2026-06-03)
+- Add exception for response content error. [#d65b8e3](https://github.com/mauprogramador/scopus-survey-api/commit/d65b8e333a0074e21cb9f7b1875f662e6d9659e7) (2026-05-19)
+- Use none as default and make reset datetime a computed field. [#94e2882](https://github.com/mauprogramador/scopus-survey-api/commit/94e288259c7c08baa27a5e4e8677b73de6643678) (2026-05-19)
+- Retrieve task exception. [#460ed19](https://github.com/mauprogramador/scopus-survey-api/commit/460ed19270ccf4518b55d416df1c282aad1e8042) (2026-05-19)
+- Use vscode format in exception log. [#6475422](https://github.com/mauprogramador/scopus-survey-api/commit/6475422d69d8bf820cc3e46c19f164604dc18ec1) (2026-05-19)
+- Only loads error translations in memory. [#20b299e](https://github.com/mauprogramador/scopus-survey-api/commit/20b299e9bac097f89b83da4ed5ae31ab040750d4) (2026-05-14)
+- Update state to handle all results data and quota exceeded without error. [#7cbaaed](https://github.com/mauprogramador/scopus-survey-api/commit/7cbaaed6edd28c0797623e0f5caaab196ca865cc) (2026-05-10)
+- Move slowapi error message. [#051a37a](https://github.com/mauprogramador/scopus-survey-api/commit/051a37af5fdff8cfa4be78d7b06c29d9a557b054) (2026-05-10)
+- Use env secret key and generate token per request. [#395ed85](https://github.com/mauprogramador/scopus-survey-api/commit/395ed85b89495c5493ffdc8fb781b923c2484592) (2026-05-10)
+- Inject state as dependency and share its instance. [#64eecdc](https://github.com/mauprogramador/scopus-survey-api/commit/64eecdcaa26a8ffda5b1544a1b4cfc93ff1c9f3b) (2026-05-04)
+- Use path for the templates. [#740e4de](https://github.com/mauprogramador/scopus-survey-api/commit/740e4de2a8643b9abae7cf1396da987ba0d4d7a9) (2026-05-04)
+- Upgrade security from SHA1 to Blake2s. [#dfbb29e](https://github.com/mauprogramador/scopus-survey-api/commit/dfbb29e5e566a8f7b15a3117ea8a442411ad3a6a) (2026-05-04)
+- Rename all template files to HTML Jinja. [#ebbf384](https://github.com/mauprogramador/scopus-survey-api/commit/ebbf384f344cf7fea8f0abffd9d07d387cb50e7c) (2026-04-30)
+- Remove source meta tag. [#ebfe8f4](https://github.com/mauprogramador/scopus-survey-api/commit/ebfe8f4f50f92ea55920576304f74ccbaa4b0931) (2026-04-29)
+- Add twitter img, alternate, identifier, and holder meta tags. [#48b2f89](https://github.com/mauprogramador/scopus-survey-api/commit/48b2f89bb272838063625d2fb37bad6624dc34c6) (2026-04-29)
+- Use jinja to prebuild spa template page. [#ed94fc9](https://github.com/mauprogramador/scopus-survey-api/commit/ed94fc99405cd5f388f7d4f7575134bd03bc9876) (2026-04-29)
+- Update meta bibtex and biblatex formats. [#9fec6d4](https://github.com/mauprogramador/scopus-survey-api/commit/9fec6d4f11e159420f6a97c91e5342bdc9c6c53f) (2026-04-11)
+- Fix version name and update title. [#af595db](https://github.com/mauprogramador/scopus-survey-api/commit/af595db6e75c7b0aa47f8520e26be8778ec50e70) (2026-04-11)
+- Change search to survey. [#bd4028c](https://github.com/mauprogramador/scopus-survey-api/commit/bd4028c23079ffe21b506bd3c9827b61688de5f9) (2026-04-11)
+- Update routes summary and description. [#f40d59e](https://github.com/mauprogramador/scopus-survey-api/commit/f40d59e83bbbcd716effc7ca099aa861209aa00a) (2026-04-11)
+- Add and update .po headers and remove images labels. [#8a2eab0](https://github.com/mauprogramador/scopus-survey-api/commit/8a2eab09aa8e6fc6eb752fac2204d2cd92cc7a98) (2026-04-09)
+- Add rdfa and microdata meta tags and fix schemas. [#4848121](https://github.com/mauprogramador/scopus-survey-api/commit/48481214aa19b9fa4f864a0bd87bb3929bdacd01) (2026-04-09)
+- Translate keywords and load social-card in absolute url. [#9fbd2b3](https://github.com/mauprogramador/scopus-survey-api/commit/9fbd2b3643fdcb6b3a34f30b657ef9dfb776a8fc) (2026-04-09)
+- Add and update meta information on context and swagger. [#81104f1](https://github.com/mauprogramador/scopus-survey-api/commit/81104f180122ccbeb6c69ccf211c8c8c78b527a0) (2026-04-09)
+- Add meta tags. [#2747094](https://github.com/mauprogramador/scopus-survey-api/commit/274709434a877f05829fd0e9ce281deff70588aa) (2026-04-07)
+- Update index structure and add meta tags. [#6c75795](https://github.com/mauprogramador/scopus-survey-api/commit/6c75795a6de584aadf727da5baa8ed83906092c6) (2026-04-07)
+- Update error page structure and add meta tags. [#13b9168](https://github.com/mauprogramador/scopus-survey-api/commit/13b91682b4fd52c80eb1522d4a2ab450e7b1e5a5) (2026-04-07)
+- Add proxy forwarded headers middleware. [#64691f5](https://github.com/mauprogramador/scopus-survey-api/commit/64691f582b5ac7a4b06b7a0e1957c678a951368f) (2026-04-07)
+- Add meta gettext translations. [#c424ee3](https://github.com/mauprogramador/scopus-survey-api/commit/c424ee3b2e8441c967371d347db9fee3991adfa0) (2026-04-07)
+- Add social card and apple icon. [#7cc7563](https://github.com/mauprogramador/scopus-survey-api/commit/7cc756327f6fdf91991865cf244b233c8138198d) (2026-04-01)
+- Add skip to content link. [#ab1518a](https://github.com/mauprogramador/scopus-survey-api/commit/ab1518a4e724a3891a800916e3004e2e68fa8c2e) (2026-04-01)
+- Filter out livereload logs. [#7ece87e](https://github.com/mauprogramador/scopus-survey-api/commit/7ece87ea5df787fca60b1598280ad02edf866d62) (2026-03-29)
+- Add global uncaught exception handler. [#b148083](https://github.com/mauprogramador/scopus-survey-api/commit/b1480837b23bbdc40c85f443c4b273b29aa91afc) (2026-03-24)
+- Move and update focus mechanism. [#e8bc4a4](https://github.com/mauprogramador/scopus-survey-api/commit/e8bc4a44c11cf3c3b3b4d59b216ecc56a344e092) (2026-03-24)
+- Move and update details translations. [#fa637c9](https://github.com/mauprogramador/scopus-survey-api/commit/fa637c91f256119112551375a84fcc074f776e61) (2026-03-24)
+- Add bootstrap callout. [#4933e6b](https://github.com/mauprogramador/scopus-survey-api/commit/4933e6b4c342f3b4b5bfee7ad46d24a1e4544362) (2026-03-23)
+- Add web partials with translations. [#bac1ae7](https://github.com/mauprogramador/scopus-survey-api/commit/bac1ae7880889a03a907f1f73ff0de89028d89c4) (2026-03-23)
+- Add all gettext web translations. [#8c82bba](https://github.com/mauprogramador/scopus-survey-api/commit/8c82bbae1f0ad0e3d3f22043a129d881293e1d94) (2026-03-23)
+- Disable chromes devtools logs. [#d15cd3a](https://github.com/mauprogramador/scopus-survey-api/commit/d15cd3ab5a4b8592854f6f061d0208c678b00607) (2026-03-23)
+- Cache load translations. [#bdf90a1](https://github.com/mauprogramador/scopus-survey-api/commit/bdf90a1ed65e839aee84f77161a0c8b7d8c181b2) (2026-03-23)
+- Update validation using event propagation. [#18f4ebb](https://github.com/mauprogramador/scopus-survey-api/commit/18f4ebbf2082c77cec86939e5bd627b8fd2ec3ee) (2026-01-10)
+- Update details and quota management. [#727570d](https://github.com/mauprogramador/scopus-survey-api/commit/727570d79dda5ecb4f44071b753876709b27cd56) (2026-01-10)
+- Centralize all overlay widgets. [#26c7bf3](https://github.com/mauprogramador/scopus-survey-api/commit/26c7bf322cb9859b2987d0925794fbc6c08e2e59) (2026-01-10)
+- Centralize all and update translations. [#4c48402](https://github.com/mauprogramador/scopus-survey-api/commit/4c48402a3d467cc03b14e1c20a03140d74541fdb) (2026-01-10)
+- Show warnings in a list group and show resume in a table in footer. [#9dd57b6](https://github.com/mauprogramador/scopus-survey-api/commit/9dd57b63dd35fca72dcb6b32a77f5a48953c42c0) (2026-01-10)
+- Make alerts dismiss by attrs. [#0c3b627](https://github.com/mauprogramador/scopus-survey-api/commit/0c3b627888e11564c1d52740ce52fa240a31c458) (2026-01-10)
+- Remove autocomplete and add wai-aria attrs. [#af8fe1b](https://github.com/mauprogramador/scopus-survey-api/commit/af8fe1b94ae701aff28f6d7ccfd2251db8c9474c) (2026-01-09)
+- Use original intitution and course names and add en-us titles. [#f79a26c](https://github.com/mauprogramador/scopus-survey-api/commit/f79a26cf8ae9fdc5795256c623289dd6b04ea76b) (2026-01-09)
+- Add min and max length. [#3f83c42](https://github.com/mauprogramador/scopus-survey-api/commit/3f83c42e2d9b7e8492fa69540a0390cabbf0cde9) (2026-01-09)
+- Update form items style and colors. [#25d46ca](https://github.com/mauprogramador/scopus-survey-api/commit/25d46cab837999d1f88165630ae7101d6ddedef9) (2026-01-09)
+- Update styles. [#eeb21d5](https://github.com/mauprogramador/scopus-survey-api/commit/eeb21d5eb6ef4d1815baab847b76f04b121cc484) (2026-01-09)
+- Add handler to manage quotas while managing scopus data. [#b9a61db](https://github.com/mauprogramador/scopus-survey-api/commit/b9a61db078b0fc1bfb8d567b7b4e279f285d353e) (2026-01-09)
+- Return how many results were retrieved from the total. [#489f3a1](https://github.com/mauprogramador/scopus-survey-api/commit/489f3a15ba66847d75fb5dd33b42f6f9c339b11d) (2026-01-09)
+- Add http 429 error exception. [#5298deb](https://github.com/mauprogramador/scopus-survey-api/commit/5298debec3569aad7c75f704b1343a3f5630400d) (2026-01-09)
+- Load server context var in the constructor. [#0c03f5e](https://github.com/mauprogramador/scopus-survey-api/commit/0c03f5eb2cfbc90f27260a1b600ef2d6edf0ffff) (2025-12-05)
+- Add prod entrypoint with gunicorn. [#ea3d7f7](https://github.com/mauprogramador/scopus-survey-api/commit/ea3d7f778352f04f03c5ebbc67d33a687e273aab) (2025-12-05)
+- Update process time header to also show minutes. [#7802306](https://github.com/mauprogramador/scopus-survey-api/commit/7802306f4dcddf6928edf54ff4f9ed8a43a460fa) (2025-12-05)
+- Add trace id. [#0594ed7](https://github.com/mauprogramador/scopus-survey-api/commit/0594ed7960c58bde5322a652ed361c6fcead8314) (2025-12-01)
+- Return keywords and combination details. [#178f58b](https://github.com/mauprogramador/scopus-survey-api/commit/178f58b0e90b7c6b0b40316cde1e376cbd49e765) (2025-10-05)
+- Log the two apis quotas. [#c018c44](https://github.com/mauprogramador/scopus-survey-api/commit/c018c4403e290dd075ab67c3ae773491ceb99c32) (2025-10-05)
+- Log app url with localhost for open host. [#1b6e872](https://github.com/mauprogramador/scopus-survey-api/commit/1b6e8727bb5d7c2e5c869b1c77b83874f59b3650) (2025-10-04)
+- Add csv builder and insert metadata. [#4ecab8c](https://github.com/mauprogramador/scopus-survey-api/commit/4ecab8c608f56f8214cf1bc678cb009f9f72c855) (2025-10-04)
+- Add metadata to details. [#5860eb7](https://github.com/mauprogramador/scopus-survey-api/commit/5860eb7c1b1a2b376f99ac620d34b394e3950d0d) (2025-10-04)
+- Adjust and set max items per page. [#067d958](https://github.com/mauprogramador/scopus-survey-api/commit/067d958259bf8354810eab96deaaa5c1f91f2a83) (2025-10-04)
+- Update data source note. [#8a08acb](https://github.com/mauprogramador/scopus-survey-api/commit/8a08acb1af916232b417b2f32f59481af3bec64f) (2025-10-04)
+- Rename file suffix to docs.csv. [#395499c](https://github.com/mauprogramador/scopus-survey-api/commit/395499c9040086198532edaf569049852429117d) (2025-10-04)
+- Add disable progress bar option. [#c54af24](https://github.com/mauprogramador/scopus-survey-api/commit/c54af247e41bb64cf9d7f4fcb73215a68bc85cfc) (2025-10-03)
+- Rename to json response and add success  response. [#f68f6c5](https://github.com/mauprogramador/scopus-survey-api/commit/f68f6c519b9bb9ae99031a956db6ec40e5be82b4) (2025-09-28)
+- Run uvicorn with uvloop loop. [#ba8acb1](https://github.com/mauprogramador/scopus-survey-api/commit/ba8acb114e60acb3709139baee5fb2d287c688c2) (2025-09-28)
+- Remove files static mount. [#a1c8d44](https://github.com/mauprogramador/scopus-survey-api/commit/a1c8d44d1e38d659afa92f3139e92950fe70f3b4) (2025-09-12)
+- Add quota details for both apis. [#fff3e3a](https://github.com/mauprogramador/scopus-survey-api/commit/fff3e3ac4bae3c95796ae3c900a9051e402021d0) (2025-09-12)
+- Remove max count param. [#17d4a43](https://github.com/mauprogramador/scopus-survey-api/commit/17d4a43752437e9fce0f600e2b9475bdf0711577) (2025-09-12)
+- Add progressive rate limiting strategy. [#89f06bf](https://github.com/mauprogramador/scopus-survey-api/commit/89f06bf729b9886dd5495fdd5dca6c3eebeefcad) (2025-09-12)
+- Add ubuntu self-hosted fonts. [#7a0240d](https://github.com/mauprogramador/scopus-survey-api/commit/7a0240d3b90a47ba7eac7e0a21195f47f08f62bc) (2025-09-12)
+- Update total found log msg. [#d06a780](https://github.com/mauprogramador/scopus-survey-api/commit/d06a780269fdc57b7a47111b8dabcacb3c35d567) (2025-09-12)
+- Update loss info and return average found. [#fb88539](https://github.com/mauprogramador/scopus-survey-api/commit/fb885395f7ac0dca11c965ed061fde94a2fad592) (2025-09-12)
+- Return formatted datetime. [#4435e84](https://github.com/mauprogramador/scopus-survey-api/commit/4435e84ad42f9f8d13166f6eecb74d6f7beb6eb5) (2025-09-12)
+- Increase keywords length to 70 chars. [#68443c3](https://github.com/mauprogramador/scopus-survey-api/commit/68443c36954ed2ffcb570c690a444f654d36c7cd) (2025-09-12)
+- Log exception for all handlers. [#0fba38a](https://github.com/mauprogramador/scopus-survey-api/commit/0fba38a7f8ac1db65f36d1cfaeea5e3c9f9fe2bf) (2025-09-12)
+- Add rate limit headers. [#b506d49](https://github.com/mauprogramador/scopus-survey-api/commit/b506d49cb4c0833645bb923ed82fb6b28c1bf482) (2025-09-12)
+- Update csp headers. [#f07b627](https://github.com/mauprogramador/scopus-survey-api/commit/f07b6275499a5020e48faad966bb63ed05f5c4f8) (2025-09-12)
+- Format error file path to root. [#ad9aab7](https://github.com/mauprogramador/scopus-survey-api/commit/ad9aab70c7c2bafb546c5647ba517e902c2eecf2) (2025-09-12)
+- Add max count and ratio alias. [#ad0a470](https://github.com/mauprogramador/scopus-survey-api/commit/ad0a47048beb7c395a074f7d00dd9c5cf8c19b3f) (2025-09-12)
+- Add favicon endpoint. [#271ccaa](https://github.com/mauprogramador/scopus-survey-api/commit/271ccaa1874943678dc5eb210b7f595115890756) (2025-09-12)
+- Pass current year in template context. [#b74c886](https://github.com/mauprogramador/scopus-survey-api/commit/b74c8864e79503e1c0e601621e02973df081f76a) (2025-09-12)
+- Add translations using gettext. [#e5c4dc5](https://github.com/mauprogramador/scopus-survey-api/commit/e5c4dc53c923b7598417b99612afbc540cbc9fc5) (2025-09-12)
+
+### 🔧 Fixes
+
+- Disable cors credentials. [#99f7281](https://github.com/mauprogramador/scopus-survey-api/commit/99f728165f0400ee722c24e681f2bcddf3237429) (2026-06-29)
+- Verify livereload count. [#698dce1](https://github.com/mauprogramador/scopus-survey-api/commit/698dce12daeb1fdf581db3ebd06dce20d470cf9a) (2026-06-29)
+- Add logger warning. [#c8f3620](https://github.com/mauprogramador/scopus-survey-api/commit/c8f362012ff4483212514886181808abbf135603) (2026-06-29)
+- Incorrect details order to get original repr. [#593fd5d](https://github.com/mauprogramador/scopus-survey-api/commit/593fd5df37443e12687197cad0b42a99357ea47b) (2026-06-08)
+- Remove sensitive information  from error response. [#832debb](https://github.com/mauprogramador/scopus-survey-api/commit/832debb54a4ae6be3dfdf9b8af173649836b0402) (2026-06-07)
+- Reset custom validity. [#b7cc0b0](https://github.com/mauprogramador/scopus-survey-api/commit/b7cc0b048647d3ebcd8a4f640b987539b0834abc) (2026-05-12)
+- Configure autoescape for security. [#bbb762e](https://github.com/mauprogramador/scopus-survey-api/commit/bbb762efdc52a38496a0d2e26529aedf84542049) (2026-05-04)
+- Remove spaces and meta lang. [#cafe63c](https://github.com/mauprogramador/scopus-survey-api/commit/cafe63c6c5d77f2daf1c1a29390937acd06a9657) (2026-04-11)
+- Change error timestamp to w3 standard. [#e50ac4f](https://github.com/mauprogramador/scopus-survey-api/commit/e50ac4f15d2398e432fd85d75f2b6ccffbd5760b) (2026-04-07)
+- Add labels and standard size for images and icons. [#8c5cb60](https://github.com/mauprogramador/scopus-survey-api/commit/8c5cb605c346afecc3ff0f3f35677e2529f0c4d8) (2026-04-07)
+- Add apostrophe to language pattern. [#5bffe58](https://github.com/mauprogramador/scopus-survey-api/commit/5bffe588f9a097cebc7747a47c429587b207bc63) (2026-03-25)
+- Fix field feedback padding. [#e6e340d](https://github.com/mauprogramador/scopus-survey-api/commit/e6e340d303ed3d99cefcabd4cf5dcee62fc88b20) (2025-12-01)
+- Select rows indexes by labels. [#2e348cc](https://github.com/mauprogramador/scopus-survey-api/commit/2e348cc2f9b56d0eec03c766487f21e1dcd1a035) (2025-10-05)
+- Select rows by indexes labels. [#e54d2f2](https://github.com/mauprogramador/scopus-survey-api/commit/e54d2f2dbdae54f956e469578b94c5ffd22305f8) (2025-10-04)
+- Check fot root path in error file path. [#5d59b98](https://github.com/mauprogramador/scopus-survey-api/commit/5d59b9835b0b2cba92a9a6bf8a90841dbd928e70) (2025-09-14)
+- Remove default none params. [#1af4a67](https://github.com/mauprogramador/scopus-survey-api/commit/1af4a6739e745e6b14b414a35f3749067ea1393d) (2025-09-12)
+- Use different http client instances for unique sessions. [#80c8b07](https://github.com/mauprogramador/scopus-survey-api/commit/80c8b0745147b0e01a2b83c8a49b6ee60ef867d1) (2025-09-12)
+- Return none if no similar titles found. [#362291f](https://github.com/mauprogramador/scopus-survey-api/commit/362291f6633ec9c28ef8c67df82db430c9d7dd67) (2025-09-12)
+- Check for no author and set default. [#72eea69](https://github.com/mauprogramador/scopus-survey-api/commit/72eea699c4ea867253cc8a0a66231d8170ed0b1f) (2025-09-12)
+- Correct citations field. [#e2b08ce](https://github.com/mauprogramador/scopus-survey-api/commit/e2b08cea7248ad54b74bca542930d0722c4407f7) (2025-08-10)
+
+### ♻️ Refactors
+
+- Update code. [#d4566bc](https://github.com/mauprogramador/scopus-survey-api/commit/d4566bcf660fc7403b195f5d19e6c836796d66a6) (2026-07-23)
+- Update factory dependencies. [#4345358](https://github.com/mauprogramador/scopus-survey-api/commit/4345358b8063893f9071f37b5854b4b9c1027dfa) (2026-07-23)
+- Remove misplaced gateway and presenter code. [#a30c9c5](https://github.com/mauprogramador/scopus-survey-api/commit/a30c9c5f902f5b5fe5054a6c6970d3fb4a338d1a) (2026-07-23)
+- Simplify process while removing misplaced code. [#4fb2074](https://github.com/mauprogramador/scopus-survey-api/commit/4fb20742cb95b5b9e884115f610d5e98580d79e2) (2026-07-23)
+- Move presenters to the endpoints. [#042d04b](https://github.com/mauprogramador/scopus-survey-api/commit/042d04b3909ec52c56c6b995c386a47b0ec0377c) (2026-07-23)
+- Update error details. [#81bdd8c](https://github.com/mauprogramador/scopus-survey-api/commit/81bdd8c03982ac488c3ea4bfe4d9dae610c7bbd2) (2026-07-23)
+- Update logs to process raw data. [#6a8a4f3](https://github.com/mauprogramador/scopus-survey-api/commit/6a8a4f30257a50929259cd18b20c31ba1a660874) (2026-07-23)
+- Update validators and remove pages count. [#6165bb6](https://github.com/mauprogramador/scopus-survey-api/commit/6165bb67d3eef213e619fc57a05e7f74b27794d7) (2026-07-23)
+- Update details of serializing error. [#1fa277c](https://github.com/mauprogramador/scopus-survey-api/commit/1fa277cae8058dc50d0ac2795567cfac94d541bb) (2026-07-23)
+- Rename classes and modules. [#6c7df31](https://github.com/mauprogramador/scopus-survey-api/commit/6c7df312eebc724c863eb50ad41e487acd23c137) (2026-07-01)
+- Change thread executor to task group. [#fcb4bbb](https://github.com/mauprogramador/scopus-survey-api/commit/fcb4bbbd4c936098286527fc8463bf6f4d5ad94d) (2026-06-29)
+- Remove process executor and update to vectorized. [#d186d67](https://github.com/mauprogramador/scopus-survey-api/commit/d186d67dc51847539a2f53eac1e7f1c2a16690df) (2026-06-29)
+- Update client o single rate, add batch sleep, and remove strategies. [#a3055d5](https://github.com/mauprogramador/scopus-survey-api/commit/a3055d5ca8527d48ea42e68095216b18dd26f3c5) (2026-06-29)
+- Remove http 503 error. [#cebd722](https://github.com/mauprogramador/scopus-survey-api/commit/cebd7220eafcf43dcdb00ea963cea4df3a25d5cb) (2026-06-29)
+- Update error translations. [#35e5f03](https://github.com/mauprogramador/scopus-survey-api/commit/35e5f03d955fc9f1d4cf5cce7fa1a586cbf41337) (2026-06-29)
+- Use progress bar without a context. [#d873243](https://github.com/mauprogramador/scopus-survey-api/commit/d873243ef11154d0b3abdfe1c04ff7f30dded498) (2026-06-29)
+- Change exc msg from unexpected to internal error. [#e312655](https://github.com/mauprogramador/scopus-survey-api/commit/e3126550afd735327e058e7cde3870eaa9435914) (2026-06-29)
+- Re add logger info. [#9be219e](https://github.com/mauprogramador/scopus-survey-api/commit/9be219e94a6c52e349d997dc4ff7d58e4976c27e) (2026-06-29)
+- Convert not instantiated classes to modules. [#807d5af](https://github.com/mauprogramador/scopus-survey-api/commit/807d5af6ef2f26c952fd3d0470934ed5b6a185f7) (2026-06-09)
+- Update code. [#9fb1ccf](https://github.com/mauprogramador/scopus-survey-api/commit/9fb1ccf336b4426da3ef53176ebc7438d96e9e85) (2026-06-08)
+- Update use of constants. [#674daa6](https://github.com/mauprogramador/scopus-survey-api/commit/674daa63f7f6f80029264667013180410a9de85b) (2026-06-08)
+- Rename response fields and variables. [#9354c26](https://github.com/mauprogramador/scopus-survey-api/commit/9354c267dcfbd5b4164c5573c2ef86b1377db467) (2026-06-08)
+- Rename threshold to ratio in query params. [#db5f431](https://github.com/mauprogramador/scopus-survey-api/commit/db5f4317400d89bbe922e4f5498cc730a4db907b) (2026-06-08)
+- Use page range enum directly in query params. [#58e3097](https://github.com/mauprogramador/scopus-survey-api/commit/58e3097a59a4f860bfee94b7f05333bb117ef8fb) (2026-06-07)
+- Move favicon route data to config. [#8905b86](https://github.com/mauprogramador/scopus-survey-api/commit/8905b86d3796531b960b89e6668f2619fdbbd005) (2026-06-06)
+- Make imports more explicit and readable. [#cc0124b](https://github.com/mauprogramador/scopus-survey-api/commit/cc0124b34d3a382b11870d1f2e744faca5ab5a0d) (2026-06-06)
+- Rename translation type. [#86d5d23](https://github.com/mauprogramador/scopus-survey-api/commit/86d5d23c8324b125d5a38f2ca61fdd5a313658eb) (2026-06-03)
+- Remove log params and use env directly. [#65617af](https://github.com/mauprogramador/scopus-survey-api/commit/65617af8d26bbddfa4d9d8533a99a886ef7a6825) (2026-06-03)
+- Move token type adapter to csrf dep class. [#9182f6a](https://github.com/mauprogramador/scopus-survey-api/commit/9182f6ab258efcf11b2d407237c986d05b7287fe) (2026-06-03)
+- Move protocols to types. [#d4947a0](https://github.com/mauprogramador/scopus-survey-api/commit/d4947a065d0fc17787ac2e11f851de3f6a7d0c64) (2026-06-03)
+- Move error messages to enum class. [#5a4a1c8](https://github.com/mauprogramador/scopus-survey-api/commit/5a4a1c8abe51c805290284fbed8fef0560c8c27c) (2026-06-03)
+- Move regex patterns to where they are used. [#2b06c3a](https://github.com/mauprogramador/scopus-survey-api/commit/2b06c3a0a5821d5b7252721751d0b55ef458db3e) (2026-06-02)
+- Move error codes to scopus. [#828d2a3](https://github.com/mauprogramador/scopus-survey-api/commit/828d2a3449d605c34e089b3a2ce321a9c9859a34) (2026-06-02)
+- Update constructor and pass headers to errors. [#2731a07](https://github.com/mauprogramador/scopus-survey-api/commit/2731a07f80f37d30d8fc0cb798076ad8f788ef3b) (2026-05-19)
+- Pass slowapi rate in errors. [#fa186ba](https://github.com/mauprogramador/scopus-survey-api/commit/fa186baf01692d9d95f2e833da19dfc17854e55d) (2026-05-19)
+- Use the same http client instance and move its clause to aggregator.. [#4e10e7a](https://github.com/mauprogramador/scopus-survey-api/commit/4e10e7a06fcc69c92da8330813240f441b248fcb) (2026-05-04)
+- Nest conditions and update logical flow. [#f60d511](https://github.com/mauprogramador/scopus-survey-api/commit/f60d511ff02ee9fc2e79f842a8176a542f5d670d) (2026-05-04)
+- Renaming. [#6e202c5](https://github.com/mauprogramador/scopus-survey-api/commit/6e202c5be79c557e2b58a508134361fa5fcd012d) (2026-05-04)
+- Remove unnecessary session. [#921b171](https://github.com/mauprogramador/scopus-survey-api/commit/921b1718f096489f9e201dd3b03dafca847908db) (2026-04-29)
+- Pass els status as error message. [#32eb66e](https://github.com/mauprogramador/scopus-survey-api/commit/32eb66ee611b122916b626feef083805c0fbf6b5) (2026-04-29)
+- Remove double server header. [#e336bbe](https://github.com/mauprogramador/scopus-survey-api/commit/e336bbe13579a760c2784e9e1cadb69960b74ac4) (2026-04-29)
+- Remove csrf token from query params. [#934a854](https://github.com/mauprogramador/scopus-survey-api/commit/934a854fd19274967f080deaa7dffd7acbce8e34) (2026-04-29)
+- Inject csrf token in meta tag and get lang from html tag. [#e62fc57](https://github.com/mauprogramador/scopus-survey-api/commit/e62fc574fd96b12519c7cf0d4d7939b1bac43d67) (2026-04-29)
+- Use url_for. [#de6a785](https://github.com/mauprogramador/scopus-survey-api/commit/de6a785904178efc2e5ead24904ec8578f248854) (2026-04-01)
+- Move locales to root dir. [#dd58342](https://github.com/mauprogramador/scopus-survey-api/commit/dd58342b23eafd22c20c8cebe98917d8d864173a) (2026-03-29)
+- Disable bootstrap and use native close. [#099f6b3](https://github.com/mauprogramador/scopus-survey-api/commit/099f6b3ff4f6e30cd096ca0cafd69ea7b2389773) (2026-03-24)
+- Update abbr and alert animation. [#c1bd26a](https://github.com/mauprogramador/scopus-survey-api/commit/c1bd26a64236e46a2d9b1dd063fa1862e4e061ec) (2026-03-23)
+- Update horizontal rule. [#8a956bd](https://github.com/mauprogramador/scopus-survey-api/commit/8a956bd5bb5cc1e6497421648c628fa265575706) (2026-03-23)
+- No more pass copyright current year. [#540390a](https://github.com/mauprogramador/scopus-survey-api/commit/540390ae376610f72d63e164e687befc5efd4dc8) (2026-03-23)
+- Turn all properties into public attributes. [#58a970d](https://github.com/mauprogramador/scopus-survey-api/commit/58a970d922652d841b01be4068e58600deb2011f) (2026-01-09)
+- Return zero simply if the total is zero and remove count limit. [#b4ffe0c](https://github.com/mauprogramador/scopus-survey-api/commit/b4ffe0cc5d9cc7f693e03601922df6283bf1fbaf) (2026-01-09)
+- Increase max recent publications date to last 15 years. [#fb2a742](https://github.com/mauprogramador/scopus-survey-api/commit/fb2a742e50cc1fcf598cc714595154be4c99d829) (2026-01-09)
+- Insert server and csp headers in middleware. [#a24e3ec](https://github.com/mauprogramador/scopus-survey-api/commit/a24e3eca0d4d010363fb6504ed862333d8b51fa6) (2025-12-05)
+- Use context var for trace id. [#36d2bac](https://github.com/mauprogramador/scopus-survey-api/commit/36d2bac42f9d050d49bfd4c7b14ab5d2af2b29e4) (2025-12-05)
+- Split csv response method. [#24c78aa](https://github.com/mauprogramador/scopus-survey-api/commit/24c78aa2871eba7e71bf88ed21c5a345eeb06b7e) (2025-10-04)
+- Rename detail to details. [#962ad75](https://github.com/mauprogramador/scopus-survey-api/commit/962ad753e3599c781d1433265414dbf4273845ca) (2025-09-28)
+- Rename template builder to template response. [#850d953](https://github.com/mauprogramador/scopus-survey-api/commit/850d953feb269e374c667e879cc5ab5bb805e094) (2025-09-28)
+- Move close client session. [#a6aa41f](https://github.com/mauprogramador/scopus-survey-api/commit/a6aa41f031633d788b5faf1c97394bbe696efa73) (2025-09-14)
+- Move set search quota. [#19d4aa4](https://github.com/mauprogramador/scopus-survey-api/commit/19d4aa4f4415a1dc11af2169991d464edb3bafcc) (2025-09-14)
+- Change private to protected. [#3a3faf5](https://github.com/mauprogramador/scopus-survey-api/commit/3a3faf514e74247a60800b38ff5df2ba29c27dda) (2025-08-10)
+
+### 🧪 Tests
+
+- Update tests. [#f576616](https://github.com/mauprogramador/scopus-survey-api/commit/f576616b36925ed9a5d5b233d3688c7519086b90) (2026-07-23)
+- Update all mock data. [#790c715](https://github.com/mauprogramador/scopus-survey-api/commit/790c715067b4f4ac8b429ac689c97b8e902e4f1e) (2026-07-23)
+- Refactor. [#1021b2a](https://github.com/mauprogramador/scopus-survey-api/commit/1021b2a5800acb3d5f13d71db6cc44df7fca3224) (2026-07-23)
+- Refactor to match task group. [#89af5c4](https://github.com/mauprogramador/scopus-survey-api/commit/89af5c4146732b48063bcb82c1e06797043675f0) (2026-07-23)
+- Remove unit survey details and state. [#610a750](https://github.com/mauprogramador/scopus-survey-api/commit/610a7507e7d019df4a50c8b6ca2b8098e793e85c) (2026-07-23)
+- Refactor and remove unnecessary not found. [#2b99c14](https://github.com/mauprogramador/scopus-survey-api/commit/2b99c1430d8d5e45a04952a69ae60a0722e4811f) (2026-07-23)
+- Use str as media type. [#bf8355c](https://github.com/mauprogramador/scopus-survey-api/commit/bf8355c5739b9b787646d7cc52a6ae6eff80d00a) (2026-07-23)
+- Increase time and fix response call order. [#0e18d97](https://github.com/mauprogramador/scopus-survey-api/commit/0e18d97cf54a98ab9bc21d78db8fd4fb8112fc84) (2026-07-23)
+- Refactor details verification. [#81ce62f](https://github.com/mauprogramador/scopus-survey-api/commit/81ce62f7684e438b9e0f0f9756c42267ed22d6f8) (2026-07-23)
+- Move helpers to where they are being used. [#bbf0e12](https://github.com/mauprogramador/scopus-survey-api/commit/bbf0e12294f26ed00eeed99267c10b237c8c5886) (2026-07-23)
+- Add tempdir to save csvs from tests. [#aa3017f](https://github.com/mauprogramador/scopus-survey-api/commit/aa3017f3857e5acc194560459ac2a015c070047a) (2026-07-23)
+- Add json response builder test. [#e0cccec](https://github.com/mauprogramador/scopus-survey-api/commit/e0cccecd32f556579e2a69e6f810af2fde9b98b8) (2026-07-23)
+- Update performance tests by executions report. [#146b5cc](https://github.com/mauprogramador/scopus-survey-api/commit/146b5cc77bd63430cfd514b3705747d366679c50) (2026-07-02)
+- Rename classes and modules. [#8dba914](https://github.com/mauprogramador/scopus-survey-api/commit/8dba914778602a1d956cb59c418ff58599a47d3a) (2026-07-01)
+- Update tests. [#8c40d68](https://github.com/mauprogramador/scopus-survey-api/commit/8c40d68dbd4ae961f2281d984d324a9e5fba1393) (2026-06-29)
+- Patch dict params. [#9b54845](https://github.com/mauprogramador/scopus-survey-api/commit/9b54845e8491fe50d3fa7426c750277a5b2a2eef) (2026-06-29)
+- Mock client mechanisms. [#3348c33](https://github.com/mauprogramador/scopus-survey-api/commit/3348c330dca47e1252b66a7ec09749540aaf86d5) (2026-06-29)
+- Add concurrent, performance, and security tests. [#798e8cf](https://github.com/mauprogramador/scopus-survey-api/commit/798e8cf1a871dcd7d93f943d949d31a79fcf9232) (2026-06-29)
+- Remove deprecated method. [#874612c](https://github.com/mauprogramador/scopus-survey-api/commit/874612cc2688c0e9b33f944515f56918483c8eaf) (2026-06-29)
+- Remove cookie flow. [#afc7ceb](https://github.com/mauprogramador/scopus-survey-api/commit/afc7cebdfdb7bb1b238067428292ebfa8bcec4b0) (2026-06-29)
+- Make class attributes public. [#1f26097](https://github.com/mauprogramador/scopus-survey-api/commit/1f26097ff8300066a4fef5d7de79823c9c7781dc) (2026-06-29)
+- Update test. [#9c543d0](https://github.com/mauprogramador/scopus-survey-api/commit/9c543d06c542a443864a6998feac902fdb9f3a90) (2026-06-07)
+- Update fqn logic and add spec helper. [#7fee091](https://github.com/mauprogramador/scopus-survey-api/commit/7fee091882673238135f045b45f4f145daf1276c) (2026-06-06)
+- Update. [#08e696b](https://github.com/mauprogramador/scopus-survey-api/commit/08e696be945ed9aea9d1f7e9f7bc8d6d5eba1e4a) (2026-06-03)
+- Update tests. [#71c135f](https://github.com/mauprogramador/scopus-survey-api/commit/71c135fc88642fe175452ea2a4604cbf36b71c4d) (2026-05-10)
+- Use patch to set spec and values. [#e5adff0](https://github.com/mauprogramador/scopus-survey-api/commit/e5adff052cbe0e8172d4defe16318cc040cc6c7f) (2026-05-10)
+- Parametrize quota tests. [#9de600e](https://github.com/mauprogramador/scopus-survey-api/commit/9de600ec5b6e2d04473cffd0521c3bf5eadb14e6) (2026-05-10)
+- Use helper fixtures to load and build mock data. [#68aeb5c](https://github.com/mauprogramador/scopus-survey-api/commit/68aeb5c7e3d5ae661bf8ad0a4fb300cca371076c) (2026-05-10)
+- Update all state tests for new method and to handle quota. [#5541ad8](https://github.com/mauprogramador/scopus-survey-api/commit/5541ad8ddafade7f5894020a5fe0c5278b009822) (2026-05-10)
+- Mock total results, mock response bundle, and update mocks for quota. [#a8db425](https://github.com/mauprogramador/scopus-survey-api/commit/a8db4252acd856eeb0d298dd515bf2e0eed285d4) (2026-05-10)
+- Mock total results and update mocks for quota. [#966c588](https://github.com/mauprogramador/scopus-survey-api/commit/966c5889bc1078a64057964ae0e905bcb77ef7cb) (2026-05-10)
+- Add helpers for mock, patches, contexts, and fixtures. [#c27c780](https://github.com/mauprogramador/scopus-survey-api/commit/c27c780dd26c82bf77af721f88769fbf88e9df1e) (2026-05-10)
+- Add headers builder helper. [#886810d](https://github.com/mauprogramador/scopus-survey-api/commit/886810df721730ae554d1665e7abe91e992b5b8a) (2026-05-10)
+- Update fqn helper. [#91c1f8b](https://github.com/mauprogramador/scopus-survey-api/commit/91c1f8bc9578f71a32c32662b4c4b43e0e285095) (2026-05-10)
+- Set mocks as class attrs. [#2c07341](https://github.com/mauprogramador/scopus-survey-api/commit/2c0734193662a868dc8fb74adaef5e49552ba60a) (2026-05-10)
+- Check default headers, rename and fix internal error test. [#948f3a3](https://github.com/mauprogramador/scopus-survey-api/commit/948f3a39d3bcb90968e8f6f86b447e8bf0486b64) (2026-05-04)
+- Add factory test. [#46f0406](https://github.com/mauprogramador/scopus-survey-api/commit/46f0406a63ddbeb73d5ff0e011880f373f4ff767) (2026-05-04)
+- Use real els status header. [#131e24b](https://github.com/mauprogramador/scopus-survey-api/commit/131e24bae8bcea05b785a680a2b82c7210f8f2bf) (2026-05-04)
+- Update scopus api error message. [#34275ab](https://github.com/mauprogramador/scopus-survey-api/commit/34275abdec3edbf7a479491789619324831c653b) (2026-05-04)
+- Update verify token test. [#b846288](https://github.com/mauprogramador/scopus-survey-api/commit/b8462887b0bbd66e25fd5d78ac42f3d056222add) (2026-05-04)
+- Add check to cookie flow. [#2ed5bba](https://github.com/mauprogramador/scopus-survey-api/commit/2ed5bba8a847a30be73441f535f376003afff7d8) (2026-04-29)
+- Update to invalid token test. [#3a4f086](https://github.com/mauprogramador/scopus-survey-api/commit/3a4f0866d53e9528a2bacc3680813b3b63b22369) (2026-04-29)
+- Update to check set-cookie header. [#2a43d60](https://github.com/mauprogramador/scopus-survey-api/commit/2a43d60f45f364df2ae78f42cb0b1c49a0cf6c52) (2026-04-29)
+- Clear and inject directly cookies and headers. [#9cacfbf](https://github.com/mauprogramador/scopus-survey-api/commit/9cacfbf24f75682cd64292d610a1bd5952f26518) (2026-04-29)
+- Add proxy forwarded headers middleware unit test. [#0c967e5](https://github.com/mauprogramador/scopus-survey-api/commit/0c967e5257a97d1824532bbcc51d22f6bf7f2c04) (2026-04-09)
+- Remove skip pt-br mark and remove current year. [#0a132f4](https://github.com/mauprogramador/scopus-survey-api/commit/0a132f4de0c5657c9ee2cd3122df75c417bc2434) (2026-04-07)
+- Update tests. [#d716ec7](https://github.com/mauprogramador/scopus-survey-api/commit/d716ec77576f61c52df461ecc9fd8c4f589d0bef) (2026-01-09)
+- Add quota handler tests. [#9325721](https://github.com/mauprogramador/scopus-survey-api/commit/9325721eaabccfd805b6277f3329455822f20065) (2026-01-09)
+- Add results details. [#dfb4a81](https://github.com/mauprogramador/scopus-survey-api/commit/dfb4a81b840042686e205d0677e323b68f7dccf2) (2026-01-09)
+- Test new middleware headers. [#6b83cfb](https://github.com/mauprogramador/scopus-survey-api/commit/6b83cfb29122f014be44247e16ae0a98ba7150e2) (2025-12-05)
+- Rename e2e to user flow. [#cb931ff](https://github.com/mauprogramador/scopus-survey-api/commit/cb931ffae12e47a9b627a27de4a3842ad5fc3256) (2025-12-05)
+- Return keywords and combination details. [#43c63e8](https://github.com/mauprogramador/scopus-survey-api/commit/43c63e8a99426ae6dd8b113460e092279c4acf59) (2025-10-05)
+- Log the two apis quotas. [#9c056a2](https://github.com/mauprogramador/scopus-survey-api/commit/9c056a2660d53f8ceac0be57571a50cb092df980) (2025-10-05)
+- Csv builder. [#c9010ba](https://github.com/mauprogramador/scopus-survey-api/commit/c9010ba8079ac36c68eebb726032fd8f914eccc2) (2025-10-04)
+- Split csv response method. [#1124106](https://github.com/mauprogramador/scopus-survey-api/commit/1124106cd044a8efe2f4055eafac455c9ec03143) (2025-10-04)
+- Verify metadata. [#a4859a3](https://github.com/mauprogramador/scopus-survey-api/commit/a4859a3c8a6f4485a9b754a06cfe67b13b4a04cc) (2025-10-04)
+- Load ignoring metadata. [#29b9469](https://github.com/mauprogramador/scopus-survey-api/commit/29b946941306c8af2dd67e7442247a7c70a1cfb6) (2025-10-04)
+- Rename to json response and add success  response. [#d9b0135](https://github.com/mauprogramador/scopus-survey-api/commit/d9b0135877604f3af25bae04875f0b7f875fefd9) (2025-09-28)
+- Add rate limit retry, strategy and sleep to http client. [#9bb0093](https://github.com/mauprogramador/scopus-survey-api/commit/9bb0093a53e6803167b00e6b24ebfabb2910c7b4) (2025-09-14)
+- Update survey details headers. [#ba8ce09](https://github.com/mauprogramador/scopus-survey-api/commit/ba8ce09a6c40710ea2822d5cec16cb780def26fe) (2025-09-14)
+- Check favicon route. [#962f127](https://github.com/mauprogramador/scopus-survey-api/commit/962f127781a842d6b2fe169e5607040a866358ca) (2025-09-14)
+- Rename param ratio to threshold. [#d031f86](https://github.com/mauprogramador/scopus-survey-api/commit/d031f866f9e00fb7d4c5ed80d75b6ffe164b2cd9) (2025-09-14)
+- Check templates context params. [#9921e39](https://github.com/mauprogramador/scopus-survey-api/commit/9921e3990985d56480b72dd560e879a10fde4466) (2025-09-14)
+- Handle no author in abstract. [#04348ac](https://github.com/mauprogramador/scopus-survey-api/commit/04348ac79978cc030dc3d7a77394be14304d6621) (2025-09-14)
+- Remove count limit. [#3b87b20](https://github.com/mauprogramador/scopus-survey-api/commit/3b87b20ba999d1c81340b4ea47f3c78779fdd3e2) (2025-09-14)
+- Similarity of more groups with no similar titles. [#e706500](https://github.com/mauprogramador/scopus-survey-api/commit/e7065001800f75bfdff1516e6599ea466db2ff99) (2025-09-14)
+- Add new translations. [#33b1706](https://github.com/mauprogramador/scopus-survey-api/commit/33b1706f48cb45a33a6b82e4fe6dc240032946e2) (2025-09-14)
+- Check rate limit policy header. [#bc9767c](https://github.com/mauprogramador/scopus-survey-api/commit/bc9767c58ad31ecb1af496cd3a9b73fddfc3bd79) (2025-09-14)
+
+### 📚 Docs
+
+- Update app logo. [#561c4f7](https://github.com/mauprogramador/scopus-survey-api/commit/561c4f757b322048c44f54b2180a4ab96bae3d42) (2025-09-14)
+
+### 🔁 CI
+
+- Add dummy secret key. [#c87dfcf](https://github.com/mauprogramador/scopus-survey-api/commit/c87dfcfd942fcbff705eacb5e4e01acf36e9dec9) (2026-07-01)
+- Remove poetry duplication call. [#4e50a9a](https://github.com/mauprogramador/scopus-survey-api/commit/4e50a9ade0cc36f690121eafbd75aa0148c2e81d) (2026-07-01)
+- Fix python version in command. [#bdd14ec](https://github.com/mauprogramador/scopus-survey-api/commit/bdd14ec787daaedcb2a247da042b402ce05d96d5) (2025-11-27)
+- Update cache key and restore templates. [#2dcdaec](https://github.com/mauprogramador/scopus-survey-api/commit/2dcdaec46e8c0da2a5aef7529fd40d55bf3d18f6) (2025-10-05)
+- Fix poetry command. [#c1b6ac9](https://github.com/mauprogramador/scopus-survey-api/commit/c1b6ac914fcdb31fa60d750f9de5bec93d7e17a5) (2025-10-04)
+- Fix install option. [#84806dd](https://github.com/mauprogramador/scopus-survey-api/commit/84806dd7d650421c24583578e7dfe0e37abcb7e1) (2025-10-04)
+- Fix id for set up python step. [#df47c1c](https://github.com/mauprogramador/scopus-survey-api/commit/df47c1cdd14dc7939af2923ac04df4001de194a6) (2025-09-28)
+- Run mkdocs with poetry. [#f8e90d5](https://github.com/mauprogramador/scopus-survey-api/commit/f8e90d5799bbb459a9c21267e0cb9c8c88cc81f9) (2025-09-14)
+- Install only dev and test groups. [#1f8c175](https://github.com/mauprogramador/scopus-survey-api/commit/1f8c175dcff0a47009d612ad673b92fc4385c7cd) (2025-09-14)
+- Install poetry before set up python. [#7585733](https://github.com/mauprogramador/scopus-survey-api/commit/7585733d1994fa27c1a25396d0b2acc85598c3ae) (2025-09-14)
+- Update github workflows. [#e45317f](https://github.com/mauprogramador/scopus-survey-api/commit/e45317fc39ab8a2eaf6b0ae3aa196d24f9cd3bd8) (2025-09-12)
+
+### ⏪ Revert
+
+- Reintegrate details into csv builder and response. [#c47e8ab](https://github.com/mauprogramador/scopus-survey-api/commit/c47e8abcc4da02d016114b9c79ec83540273857e) (2026-07-24)
+
+### 📝 Chores
+
+- Update readme. [#98933db](https://github.com/mauprogramador/scopus-survey-api/commit/98933db63e4f5f1b90eada44510d4f96545e92ae) (2026-07-24)
+- Fix pytest log format. [#8385835](https://github.com/mauprogramador/scopus-survey-api/commit/8385835d6ebc18d2090b3d1a2a107ae030f40144) (2026-07-01)
+- Ask confirmation before clearing files. [#c17c050](https://github.com/mauprogramador/scopus-survey-api/commit/c17c0500c2b7e401890c6b79df95728cf5d8c10b) (2026-07-01)
+- Add command names. [#879e908](https://github.com/mauprogramador/scopus-survey-api/commit/879e90828df77787455eb4e3442fb118ad82dc62) (2026-07-01)
+- Add quotes commit. [#8df5051](https://github.com/mauprogramador/scopus-survey-api/commit/8df50516f1b2e4a184851f083a35dd7d30998102) (2026-05-13)
+- Fix footnote format. [#3b312cf](https://github.com/mauprogramador/scopus-survey-api/commit/3b312cf043d0548f63e17e89ff72d115926a76af) (2026-05-13)
+- Add 3rd updated version of legal dos. [#b2b9823](https://github.com/mauprogramador/scopus-survey-api/commit/b2b9823d4c6a46aba38bd88eb5ed23ab69b5cac1) (2026-05-13)
+- Remove session and use footnotes for references. [#f62a0d2](https://github.com/mauprogramador/scopus-survey-api/commit/f62a0d2170b73518a542bf282849a4ec9a631482) (2026-05-13)
+- Add sub and built-in app dependencies. [#a6c31ce](https://github.com/mauprogramador/scopus-survey-api/commit/a6c31ceb53b5d4bb7b71ef7487ac68ae2379c9da) (2026-05-13)
+- Create command for radon and add mi metric. [#f30fc50](https://github.com/mauprogramador/scopus-survey-api/commit/f30fc50483c2a369689e304a6cffe4941a9d2c78) (2026-05-10)
+- Add log format for pytest and update pip-audit cli. [#a082ffb](https://github.com/mauprogramador/scopus-survey-api/commit/a082ffb8899e579303b40f6de99cc2ebc57e8852) (2026-05-10)
+- Update author name and short copyright notice. [#372d198](https://github.com/mauprogramador/scopus-survey-api/commit/372d19879dfbabd13f7cd5741f939a47555cd89d) (2026-04-11)
+- Update citation file. [#14b270d](https://github.com/mauprogramador/scopus-survey-api/commit/14b270dde5c1510ab62fb827d054a74fdf058854) (2026-04-10)
+- Add results field csv metadata. [#70e6bd3](https://github.com/mauprogramador/scopus-survey-api/commit/70e6bd380d62407d1f5d8e1de1788a42dcded991) (2026-03-24)
+- Update attributions and set up and run intructions. [#1d5f98f](https://github.com/mauprogramador/scopus-survey-api/commit/1d5f98f5e6b705684dc14674db487fa2ce879aa0) (2025-12-05)
+- Update readme and add pt-br version. [#65d82a5](https://github.com/mauprogramador/scopus-survey-api/commit/65d82a583229c73e7cf7d0d9c5c72252e5d057a2) (2025-12-01)
+- Add legal info doc. [#b73dcb7](https://github.com/mauprogramador/scopus-survey-api/commit/b73dcb7718fc1381c6e73a7601d1ac117183b898) (2025-11-30)
+- Remove translations from legal docs. [#4d15794](https://github.com/mauprogramador/scopus-survey-api/commit/4d15794ecd0811cf5480749a9b83ed1afc689e63) (2025-11-30)
+- Update dates. [#5fad846](https://github.com/mauprogramador/scopus-survey-api/commit/5fad846d287b65decd1625aa63e7489b5d61c31a) (2025-11-30)
+- Update overview and add DoS and legal info links. [#9808bf0](https://github.com/mauprogramador/scopus-survey-api/commit/9808bf03a55aeb9f9ec28afe560cf03231e21c59) (2025-11-30)
+- Update pt-br translations. [#07c4f21](https://github.com/mauprogramador/scopus-survey-api/commit/07c4f21dcd309417178df0326b5b1d87c8bfab43) (2025-11-30)
+- Add terms of service pt-br version. [#fe6b90d](https://github.com/mauprogramador/scopus-survey-api/commit/fe6b90da702b6ee014686c07b8ba866d618c460c) (2025-11-29)
+- Add privacy policy pt-br version. [#7ce69e2](https://github.com/mauprogramador/scopus-survey-api/commit/7ce69e23763740d923cefeef2729489cfca871d6) (2025-11-28)
+- Add cookie policy pt-br version. [#d606ec8](https://github.com/mauprogramador/scopus-survey-api/commit/d606ec82bf0cfa4f4032cfb6d3ee0854fa92cbae) (2025-11-28)
+- Add attributions pt-br version. [#cae0ced](https://github.com/mauprogramador/scopus-survey-api/commit/cae0ced5f409076bd3b99a3a0efa051d6e43e212) (2025-11-28)
+- Add translations pt-br version. [#9446984](https://github.com/mauprogramador/scopus-survey-api/commit/9446984473ba48caae64a0312d73f8e8206727ce) (2025-11-28)
+- Update root init file headers. [#f23f457](https://github.com/mauprogramador/scopus-survey-api/commit/f23f457294a3cdbde1d6d8dc25031871df39bb57) (2025-11-28)
+- Update version to latest release. [#6966925](https://github.com/mauprogramador/scopus-survey-api/commit/6966925151a8944fca0c51892bf7fbcde3ed2862) (2025-11-28)
+- Rename institution to the official name and add copyright. [#35bdd68](https://github.com/mauprogramador/scopus-survey-api/commit/35bdd685155acbc3ce2b99353292bf6706a294d0) (2025-11-28)
+- Add citation file. [#7c6b94e](https://github.com/mauprogramador/scopus-survey-api/commit/7c6b94e90d40c7f570f767dd2f62911611a0f791) (2025-11-27)
+- Move legal docs to legal folder. [#6d8f00b](https://github.com/mauprogramador/scopus-survey-api/commit/6d8f00b497a69441d9830a63d7bf69fa7346d4d8) (2025-11-27)
+- Remove tip. [#4bc9b88](https://github.com/mauprogramador/scopus-survey-api/commit/4bc9b88d8c6ef682809980f9bcef5b3fdb0fc8d5) (2025-10-06)
+- Add progressive rate strategies and visualization. [#538b7ad](https://github.com/mauprogramador/scopus-survey-api/commit/538b7ad0c44591ff701149c4239c440ceae73991) (2025-10-06)
+- Show title for totals beyond max quota. [#598d204](https://github.com/mauprogramador/scopus-survey-api/commit/598d204fd78e28a49d9cf17438f8fa7f3a0eec9f) (2025-10-06)
+- Set examples. [#556afb5](https://github.com/mauprogramador/scopus-survey-api/commit/556afb55f853e79224fb76e629964d2da23a8c58) (2025-10-05)
+- Alert for totals beyond the max request quota. [#31d63b9](https://github.com/mauprogramador/scopus-survey-api/commit/31d63b932768478a73334ff55911230690687fe7) (2025-10-05)
+- Display keywords and combination details. [#14885d3](https://github.com/mauprogramador/scopus-survey-api/commit/14885d3d829f9167e97a16f8fd8e7e784d756fc2) (2025-10-05)
+- Clean details cache after each request. [#7d158c0](https://github.com/mauprogramador/scopus-survey-api/commit/7d158c0ef033d7b7bfec6cec44919889c54b5b72) (2025-10-05)
+- Separate details table in groups and update headers labels. [#e1c995e](https://github.com/mauprogramador/scopus-survey-api/commit/e1c995ed19d0579248703fa27b487c501d383703) (2025-10-05)
+- Update project keywords. [#427e451](https://github.com/mauprogramador/scopus-survey-api/commit/427e451eec65c52fdad7d5bca6873d87e6bda92f) (2025-10-04)
+- Add disable progress bar option. [#202a7aa](https://github.com/mauprogramador/scopus-survey-api/commit/202a7aa54f6d9fbfe2d66a4f728d688780f6214c) (2025-10-03)
+- Format total column by thousand separator. [#c81561a](https://github.com/mauprogramador/scopus-survey-api/commit/c81561aebbd7c55d4119ae74471819869341aecf) (2025-10-03)
+- Move and not boolean operator example to the last field. [#bd8f4b1](https://github.com/mauprogramador/scopus-survey-api/commit/bd8f4b10eb636b6ca93861a3d3c1236d5430cd91) (2025-10-03)
+- Get combinations from data field. [#7f495d0](https://github.com/mauprogramador/scopus-survey-api/commit/7f495d07720d2187fc91f34a436c3a76edea8d50) (2025-09-28)
+- Uppercase env configs names. [#e948ef7](https://github.com/mauprogramador/scopus-survey-api/commit/e948ef7abd7f7392e67b9c077cb1dddaa4eff8b0) (2025-09-28)
+- Ignore todo and fix date format. [#d7715ba](https://github.com/mauprogramador/scopus-survey-api/commit/d7715ba78fa0e2122a05caa3a7c2decf5b5460fa) (2025-09-14)
+- Update readme alerts. [#86d6ed6](https://github.com/mauprogramador/scopus-survey-api/commit/86d6ed64d66121fe97756b53b28a35e68f25a1b2) (2025-09-14)
+- Update readme. [#d468b5b](https://github.com/mauprogramador/scopus-survey-api/commit/d468b5b26200b12718b036b7a3c3bf815d36d85f) (2025-09-14)
+- Update attributions text descriptions. [#2493a53](https://github.com/mauprogramador/scopus-survey-api/commit/2493a53fb40bda4ed54d656a348a8db1a68570db) (2025-09-14)
+- Simplify gitignore. [#9d298c5](https://github.com/mauprogramador/scopus-survey-api/commit/9d298c541b1990f59068a8d2736d71d268564103) (2025-09-13)
+- Add web libs. [#8f6a67e](https://github.com/mauprogramador/scopus-survey-api/commit/8f6a67e38a484ef50f7ba7c179d01f83bc32d9f2) (2025-09-13)
+- Correct docker container name. [#1b3109e](https://github.com/mauprogramador/scopus-survey-api/commit/1b3109e5643e8901562061db78ae2b59d655859d) (2025-09-12)
+- Add compile locales command. [#579716d](https://github.com/mauprogramador/scopus-survey-api/commit/579716d4e9cd539b664054311982d7593b5cf347) (2025-09-12)
+- Add export plugin. [#014ad23](https://github.com/mauprogramador/scopus-survey-api/commit/014ad23f83a3b9dc18598b04b96553371e794fdb) (2025-09-12)
+- Add more static dirs. [#1938d67](https://github.com/mauprogramador/scopus-survey-api/commit/1938d677bcd47404d2df9ba766db6c1698bf6534) (2025-09-12)
+- Ignore cspell, ssh_server, and test.py. [#5734a78](https://github.com/mauprogramador/scopus-survey-api/commit/5734a7844a6536937ec710578be0b7f40db19d99) (2025-09-12)
+- Update badges and margins. [#3c534fb](https://github.com/mauprogramador/scopus-survey-api/commit/3c534fb4e1db44d6df283979adfe58d055a443ea) (2025-09-12)
+- Update quota description and remove max count field. [#2eacf16](https://github.com/mauprogramador/scopus-survey-api/commit/2eacf169552ecfa54f46be8c2b02105d4dc40dd2) (2025-09-12)
+- Update pattern attr. [#69d885d](https://github.com/mauprogramador/scopus-survey-api/commit/69d885d8d597ba2b7e0bfc54d6885954c3523d02) (2025-09-12)
+- Update quota details headers and remove max count. [#df2f261](https://github.com/mauprogramador/scopus-survey-api/commit/df2f2618a211992fb542236b637a934979f4d491) (2025-09-12)
+- Update all css. [#f207cce](https://github.com/mauprogramador/scopus-survey-api/commit/f207cced6225546cbc14d56f08a7a5d6d540a1f0) (2025-09-12)
+- Update javascripts. [#4474cc2](https://github.com/mauprogramador/scopus-survey-api/commit/4474cc29ea4a8e739e8cf8a8f66e0db52ce1f655) (2025-09-12)
+- Update all templates. [#cf9b837](https://github.com/mauprogramador/scopus-survey-api/commit/cf9b837a33fe87c330f1b4474b473674e902d5b9) (2025-09-12)
+- Update images. [#1a4498a](https://github.com/mauprogramador/scopus-survey-api/commit/1a4498ae1d91e2030594cd4ca4ecb73135935834) (2025-09-12)
+- Update svgs. [#a1e8c48](https://github.com/mauprogramador/scopus-survey-api/commit/a1e8c484b46b5b90180bd378f1ec0a02b4b183d6) (2025-09-12)
+- Add locales. [#4140f18](https://github.com/mauprogramador/scopus-survey-api/commit/4140f18cbaade5561f9ed6a9be6c69b049d335fa) (2025-09-12)
+- Add attributions. [#70e5103](https://github.com/mauprogramador/scopus-survey-api/commit/70e510321e0980d10f0f14b3c8ede0016f86809b) (2025-09-12)
+- Update text. [#13858f6](https://github.com/mauprogramador/scopus-survey-api/commit/13858f67821c7887cbb5c1269294013452c712a9) (2025-09-12)
+- Add translations guide. [#17c1971](https://github.com/mauprogramador/scopus-survey-api/commit/17c197120875a125688bfe6919642bfeb5724fa0) (2025-08-10)
+- Simplify duration. [#8b3242f](https://github.com/mauprogramador/scopus-survey-api/commit/8b3242fa724caa1cb02c3610575ed93634f334e2) (2025-08-10)
+- Add cookie policy. [#4c1401b](https://github.com/mauprogramador/scopus-survey-api/commit/4c1401b9368d5092fa14c48c965f26e90cf9f7f6) (2025-08-10)
+- Finalize privacy policy. [#1831305](https://github.com/mauprogramador/scopus-survey-api/commit/183130533e92a86200da06f9ed174659fd5ae42b) (2025-08-10)
+- Add definition part. [#6c94baf](https://github.com/mauprogramador/scopus-survey-api/commit/6c94bafb03bc814eadbee2e87cbb482cef8de9e5) (2025-08-10)
+- Finalize terms of service. [#ef99240](https://github.com/mauprogramador/scopus-survey-api/commit/ef9924020177b684d8de197362c7b8cb758c48ef) (2025-08-10)
+- Changelog. [#8b6455b](https://github.com/mauprogramador/scopus-survey-api/commit/8b6455b10a80588ee5a7b92f597bf14bfaabe196) (2025-08-09)
+
+### 🎨 Styles
+
+- Add contextual comments. [#bdb2909](https://github.com/mauprogramador/scopus-survey-api/commit/bdb2909a9c6befc7678ff3af1be94468109d71d2) (2026-06-08)
+- Format, add comment, and remove old. [#d341c06](https://github.com/mauprogramador/scopus-survey-api/commit/d341c06af4bec7ea9ae1d3f72167fbffa046defe) (2026-06-03)
+- Add quotes. [#e2d667e](https://github.com/mauprogramador/scopus-survey-api/commit/e2d667e7b8859227f3b40ca022327d18e6b89137) (2026-05-13)
+- Update footnote format. [#de45140](https://github.com/mauprogramador/scopus-survey-api/commit/de4514024cc6bb67f277f991746231cdb1695717) (2026-05-13)
+- Add docs reference note for scopus errors. [#3d10cc3](https://github.com/mauprogramador/scopus-survey-api/commit/3d10cc304dd94ccea803598ab9cd2c2720688367) (2026-05-10)
+- Include trailing comma. [#c9683c8](https://github.com/mauprogramador/scopus-survey-api/commit/c9683c802ced59130f23f53c7ac17e5724c13637) (2026-05-04)
+- Format. [#4a98fe0](https://github.com/mauprogramador/scopus-survey-api/commit/4a98fe0a11f5c8e9d66ffd6c2b5cc4f9f46fa0ee) (2026-04-29)
+- Rename template name to form. [#0c883f5](https://github.com/mauprogramador/scopus-survey-api/commit/0c883f503b3f0eda160db97b19132b293dee6b81) (2026-04-07)
+- W3 validation and formatting. [#d6f138c](https://github.com/mauprogramador/scopus-survey-api/commit/d6f138cc47fda1abdd2a2c7bc08c0f4fce98b45a) (2026-04-01)
+- Format js. [#fe20a92](https://github.com/mauprogramador/scopus-survey-api/commit/fe20a921fadc7f475bf9f263a138ccab754d6d63) (2026-03-24)
+- Rename dialogs to overlays. [#6c2b309](https://github.com/mauprogramador/scopus-survey-api/commit/6c2b309cec43bc62353c8b892707ac44f2bc135c) (2025-12-07)
+- Rename to details. [#5e15030](https://github.com/mauprogramador/scopus-survey-api/commit/5e1503095a83a8e9e945eeecf271c7b45d746476) (2025-10-05)
+- Rename file. [#d36aeca](https://github.com/mauprogramador/scopus-survey-api/commit/d36aecaaad44950bf742138580532d7acb0a9300) (2025-10-04)
+- Rename env config file. [#58fb79d](https://github.com/mauprogramador/scopus-survey-api/commit/58fb79dee9fd9242eb65ff87ffcf8f608e7a6703) (2025-10-03)
+- Formating. [#a7d845b](https://github.com/mauprogramador/scopus-survey-api/commit/a7d845b66866ab0913edd910a348384eff7cfbd6) (2025-09-14)
+- Add percentage in loss log. [#a1114ba](https://github.com/mauprogramador/scopus-survey-api/commit/a1114ba275d368a7cdb9a9710c84c02f69415e38) (2025-09-14)
+
+### 📌 Others
+
+- Update meta tags surnames, providers url, and gettex api ids. [#a6b4514](https://github.com/mauprogramador/scopus-survey-api/commit/a6b45144741d7d6927fd96b9ba1fe94e79f2e6ad) (2026-04-29)
+
+<br>
+
+## 🔖 Release [`v3.2.5`](https://github.com/mauprogramador/scopus-survey-api/releases/tag/v3.2.5) (2025-08-09) <span id='v3.2.5'></span> [`▴`](#start)
+
+See the [⇅ comparison history](https://github.com/mauprogramador/scopus-survey-api/compare/v3.2.0...v3.2.5) with the previous tag.
+
+### 📦 Builds
+
+- Update all packages. [#81e38b2](https://github.com/mauprogramador/scopus-survey-api/commit/81e38b283bec2f17d68c526acfe88b63ae9f4760) (2025-08-09)
+- Rename venv builder. [#e5f5c9c](https://github.com/mauprogramador/scopus-survey-api/commit/e5f5c9c80faf38e00bedcffc184869867d571723) (2025-07-21)
+- Remove application section and dependencies. [#6c1a220](https://github.com/mauprogramador/scopus-survey-api/commit/6c1a2207faa7ba9967efa503864e7be435c1a9e4) (2025-01-17)
+
+### ✨ Features
+
+- Add E2E test. [#9cce9ad](https://github.com/mauprogramador/scopus-survey-api/commit/9cce9ad89e52b2b2b1b978f89c445cb5c0977bfd) (2025-08-09)
+- Get single group indexes. [#ad861e6](https://github.com/mauprogramador/scopus-survey-api/commit/ad861e6e9549701f66d7fc690da1513b651e796c) (2025-08-09)
+- Set filtered df as instance attr. [#c765ec2](https://github.com/mauprogramador/scopus-survey-api/commit/c765ec2a169f27268e12d9762a082688ee7e107c) (2025-08-09)
+- Rename and pass size to process method. [#b5a005a](https://github.com/mauprogramador/scopus-survey-api/commit/b5a005a68b2a4c8df25d9524a814f5f676d2902e) (2025-08-09)
+- Rename main df to docs and check for single row df. [#3fe5166](https://github.com/mauprogramador/scopus-survey-api/commit/3fe5166152150e35ed0a6e1f3a4f9993e72b9a73) (2025-08-09)
+- Add service unavailable http error. [#a9e04f2](https://github.com/mauprogramador/scopus-survey-api/commit/a9e04f26a7e0a198870120ca819860c5cfc11521) (2025-08-09)
+- Validate json as request data directly. [#04a2d99](https://github.com/mauprogramador/scopus-survey-api/commit/04a2d99d7186fedf50f27c94cc8626559068a724) (2025-08-09)
+- Get client response error message. [#1ce9f69](https://github.com/mauprogramador/scopus-survey-api/commit/1ce9f6920d11f255d6962f20a2d52e62d74b842c) (2025-07-25)
+- Update fields validations. [#e874e30](https://github.com/mauprogramador/scopus-survey-api/commit/e874e30b360b2ff6e3b23581f7cf32630ac1e7bb) (2025-07-23)
+- Add articles loss response header. [#83aa8f1](https://github.com/mauprogramador/scopus-survey-api/commit/83aa8f18431a9f863c602c14f1fcf86f321e53ce) (2025-07-22)
+- Add terms of service and make swagger read only. [#3737ed4](https://github.com/mauprogramador/scopus-survey-api/commit/3737ed4c35ce0282d042595e33776e52f53d2d26) (2025-07-21)
+- Update aggregator and add data source footnote. [#f94fd2d](https://github.com/mauprogramador/scopus-survey-api/commit/f94fd2d0ca8a6cb1847d4f825e8af99cdded885f) (2025-07-21)
+- Add survey combinations use case. [#b7e8709](https://github.com/mauprogramador/scopus-survey-api/commit/b7e870982d13422ebfcf97eb572bbeef6ac5f2d4) (2025-07-21)
+- Add combinator factory. [#ea56a44](https://github.com/mauprogramador/scopus-survey-api/commit/ea56a448e0c7934dde51c99b101d898cdd66445e) (2025-07-21)
+- Update serializers validation. [#9ec0470](https://github.com/mauprogramador/scopus-survey-api/commit/9ec04703705ac21271eb0257ea5bb4f09485fa0f) (2025-07-21)
+- Update query params validation. [#920406c](https://github.com/mauprogramador/scopus-survey-api/commit/920406c76927ceddd34216e55510c63286786645) (2025-07-21)
+- Use asyncio to search and survey. [#b1fba63](https://github.com/mauprogramador/scopus-survey-api/commit/b1fba63216bea10926ef710c1a806e1366c3b9fa) (2025-07-21)
+- Use asyncio to gather abstracts. [#e49fcc8](https://github.com/mauprogramador/scopus-survey-api/commit/e49fcc87621e9c2b751946defecfc4a6e7f54cea) (2025-07-21)
+- Update trace and info logs. [#90f73b9](https://github.com/mauprogramador/scopus-survey-api/commit/90f73b98ecee4ad45a408627ff95e0a4230a7092) (2025-07-21)
+- Add cache control and content type header. [#918045b](https://github.com/mauprogramador/scopus-survey-api/commit/918045b0edaaed5f527b533da1c558ef956ee66f) (2025-07-21)
+- Use urllib in urlbuilder. [#ef567f6](https://github.com/mauprogramador/scopus-survey-api/commit/ef567f6f436bc80d15bbe6aa2f0261a417c499ad) (2025-07-21)
+- Add error messages. [#08bda77](https://github.com/mauprogramador/scopus-survey-api/commit/08bda7795097265935c71b827bf7c3b73583af62) (2025-07-21)
+- Update scopus config. [#cd116aa](https://github.com/mauprogramador/scopus-survey-api/commit/cd116aac933617e01892712fcf4c8ae12ca9b5f3) (2025-07-21)
+- Exchange interfaces to protocols only for typing. [#3d106ee](https://github.com/mauprogramador/scopus-survey-api/commit/3d106ee3f4f3ba6d2339852b619f629299e06082) (2025-07-21)
+- Add scopus docs and terms of services to swagger. [#81b318c](https://github.com/mauprogramador/scopus-survey-api/commit/81b318cd704656d17024f006a34df2387c94b9b6) (2025-07-21)
+- Add new types. [#6015f87](https://github.com/mauprogramador/scopus-survey-api/commit/6015f87161f30381365ff16f70f0df924883b44d) (2025-07-21)
+- Add new patterns. [#b08c1b9](https://github.com/mauprogramador/scopus-survey-api/commit/b08c1b9dde366a9bae0f57d8f0cfac5cf358470e) (2025-07-21)
+- Add new dependencies and install uvloop in entrypoint. [#c232eb3](https://github.com/mauprogramador/scopus-survey-api/commit/c232eb3c5f096f9c7a4067c52190c3ff3e3eecc4) (2025-07-21)
+- Add search param page range. [#21911f5](https://github.com/mauprogramador/scopus-survey-api/commit/21911f511cb2b888e4337ddfd7a6ac3bd77c540c) (2025-07-21)
+- Update http client using aiohttp. [#06b47c9](https://github.com/mauprogramador/scopus-survey-api/commit/06b47c91f87409d70bea33391c840143c1409099) (2025-07-21)
+- Update all source files. [#e4bd844](https://github.com/mauprogramador/scopus-survey-api/commit/e4bd84473321e0f5b8ed57bb67ba3643b51d1473) (2025-06-16)
+- Update all tests files. [#3d29dc0](https://github.com/mauprogramador/scopus-survey-api/commit/3d29dc0f894d983d59f75d05d6fae6acd1d93e51) (2025-06-16)
+- Update all web files. [#d6b197a](https://github.com/mauprogramador/scopus-survey-api/commit/d6b197ad81fb7cb3b9ba31a0f3ff6e1d38205750) (2025-06-16)
+- Update config files and update python to 3.12. [#f89f7a2](https://github.com/mauprogramador/scopus-survey-api/commit/f89f7a244be82427599543206783ee2c4411665e) (2025-06-16)
+- Update entrypoint. [#fd77252](https://github.com/mauprogramador/scopus-survey-api/commit/fd77252ea2c39a63fdd4435aded503fc8c3f73f4) (2025-01-17)
+- Update utils. [#96b8548](https://github.com/mauprogramador/scopus-survey-api/commit/96b8548a2419a2029597201de861406c498ad11d) (2025-01-17)
+- Update middleware. [#aab74de](https://github.com/mauprogramador/scopus-survey-api/commit/aab74dea16566792164bb05d736ac1d1a23ba288) (2025-01-17)
+- Update fastapi. [#b942af2](https://github.com/mauprogramador/scopus-survey-api/commit/b942af209d66f5353b48f0ab2744e8ac22e25774) (2025-01-17)
+- Update exceptions. [#e5a4643](https://github.com/mauprogramador/scopus-survey-api/commit/e5a46431dec09e3f3b88891a44ea6ba50965df6d) (2025-01-17)
+- Update dependencies. [#fc35794](https://github.com/mauprogramador/scopus-survey-api/commit/fc35794a9b1b2fdf22c9dd031355af70afe9c1ea) (2025-01-17)
+- Update use cases. [#be93d83](https://github.com/mauprogramador/scopus-survey-api/commit/be93d83f3f8a4076818f433b97b9c466a6879e6f) (2025-01-17)
+- Update domain. [#97ed882](https://github.com/mauprogramador/scopus-survey-api/commit/97ed882e11dfea05131dd7eb70912ba760ff87a2) (2025-01-17)
+- Update data. [#10d3655](https://github.com/mauprogramador/scopus-survey-api/commit/10d365579591b54a7700fea2a1a7a02aee0faa76) (2025-01-17)
+- Update config. [#59f336d](https://github.com/mauprogramador/scopus-survey-api/commit/59f336d01cd06010a27e0dac03e842c015c26ec9) (2025-01-17)
+- Update common. [#deafe61](https://github.com/mauprogramador/scopus-survey-api/commit/deafe610440b5cbb1a2e9abf8fbc671191f76c51) (2025-01-17)
+- Update adapters. [#598b076](https://github.com/mauprogramador/scopus-survey-api/commit/598b076719dfe1dc0fa0af4c42619310aebc07b0) (2025-01-17)
+- Update helpers. [#ec43ca1](https://github.com/mauprogramador/scopus-survey-api/commit/ec43ca1b2ceb4963262c832f1d03b32ee38d6721) (2025-01-17)
+- Update gateway. [#820194e](https://github.com/mauprogramador/scopus-survey-api/commit/820194eef644eef5ae32cd710f1b1737cdd7123f) (2025-01-17)
+
+### 🔧 Fixes
+
+- Remove invalid dates and check for single row df. [#6fdb898](https://github.com/mauprogramador/scopus-survey-api/commit/6fdb89872cfc71cd8ecdc8a8167426360adc8201) (2025-08-09)
+- Get correct most recent dates. [#693a1ca](https://github.com/mauprogramador/scopus-survey-api/commit/693a1ca4821567d535d49774e3ddaa4aec3e7875) (2025-08-09)
+- Re-raise http errors from client directly and raise custom error. [#2feec7b](https://github.com/mauprogramador/scopus-survey-api/commit/2feec7b89b5339b57a10e1854bf04e70c787ed97) (2025-08-09)
+- No reset datetime if no reset header. [#70bc690](https://github.com/mauprogramador/scopus-survey-api/commit/70bc690b3e67760422b9ada69d205f2586e385e2) (2025-08-09)
+- All headers fields must have a default. [#ba4c32b](https://github.com/mauprogramador/scopus-survey-api/commit/ba4c32bb6ffdab9d105d48eee191f0221a7b55fe) (2025-08-09)
+- Set default page count for empty result. [#c457dbd](https://github.com/mauprogramador/scopus-survey-api/commit/c457dbda97b8b1d6c9c6ef6c0d3a49a9b8fa8b7d) (2025-08-09)
+- Check type correctly before validation. [#6b99162](https://github.com/mauprogramador/scopus-survey-api/commit/6b991626cfb60bf938f95c31bec3b8c730ce11ec) (2025-08-09)
+- Pop out dependency token query before validation. [#016b932](https://github.com/mauprogramador/scopus-survey-api/commit/016b932e349477680fc322416818d60cf96111dd) (2025-08-09)
+- Load streaming response on http status error. [#3109586](https://github.com/mauprogramador/scopus-survey-api/commit/31095864c9ed0b5344150792a91ee2c7ee2eaad0) (2025-08-09)
+- Open csv as normal file and update the footnote writing. [#b2dc471](https://github.com/mauprogramador/scopus-survey-api/commit/b2dc471b3bdbc5e81e1ff04c8dd4fb75e07606a5) (2025-07-25)
+- Correct loss percentage math. [#337d600](https://github.com/mauprogramador/scopus-survey-api/commit/337d60025b425e9bb25b035d3791620c9d13c575) (2025-07-25)
+- Make process group method pickled for executor. [#5246c7f](https://github.com/mauprogramador/scopus-survey-api/commit/5246c7f73ad44753ad26056863eedbc905b7ede9) (2025-07-25)
+- Correct max workers, disable max count, and awaits method. [#8386148](https://github.com/mauprogramador/scopus-survey-api/commit/8386148cc0dc4e6f2e7c934c1faf9f9f6ea164e1) (2025-07-25)
+- Change combination string min length. [#31d828c](https://github.com/mauprogramador/scopus-survey-api/commit/31d828c5deb2139b42b36b119bb532191819c522) (2025-07-23)
+
+### ♻️ Refactors
+
+- Set error detail from pydantic error msg or title. [#769dfd8](https://github.com/mauprogramador/scopus-survey-api/commit/769dfd8f18d1833f15186a600f47f15606c34221) (2025-08-09)
+- Remove unnecessary type alias. [#375377f](https://github.com/mauprogramador/scopus-survey-api/commit/375377f17fd1da62f7535729450aed2fa1653f45) (2025-08-09)
+- Use pydantic validation and custom serializer. [#62de51a](https://github.com/mauprogramador/scopus-survey-api/commit/62de51ab83e54078f989cd3b72279e63b69a8670) (2025-08-09)
+- Errors always list and get dump error detail. [#d9205f9](https://github.com/mauprogramador/scopus-survey-api/commit/d9205f94b0f92b5f79dcd5ac2533288daa795f08) (2025-08-09)
+- Remove errors types. [#b670e6c](https://github.com/mauprogramador/scopus-survey-api/commit/b670e6c15d17cc888986252dbbc12e85f8525b09) (2025-08-09)
+- Create dir and load translations in lifespan. [#18f98de](https://github.com/mauprogramador/scopus-survey-api/commit/18f98de3535dc927cd550218d54cce631786afb6) (2025-08-09)
+- Set token session in routes. [#bd55905](https://github.com/mauprogramador/scopus-survey-api/commit/bd55905044514a827ac2cbb709cc7996b6106432) (2025-08-09)
+- Update retry attempts to 3. [#6c0e51e](https://github.com/mauprogramador/scopus-survey-api/commit/6c0e51ef114943034ce03e352edc6eaf9fb7b980) (2025-08-09)
+- Use pydantic error title as default. [#302b069](https://github.com/mauprogramador/scopus-survey-api/commit/302b069904fd00beb472f9693d122969e54b2f78) (2025-08-09)
+- Return empty list when error. [#7f7cb71](https://github.com/mauprogramador/scopus-survey-api/commit/7f7cb7131b66e19850504b25376204e3c871024c) (2025-07-25)
+- Remove unnecessary validation rules. [#0b40b4b](https://github.com/mauprogramador/scopus-survey-api/commit/0b40b4b9e91fdc3e52aec07514c793e2d8b1212d) (2025-07-25)
+- Use enumerate instead of count. [#558412a](https://github.com/mauprogramador/scopus-survey-api/commit/558412a16d07a823c4ceb103b8cc33a7f203712e) (2025-07-25)
+- Start abstracts list on the method. [#439678a](https://github.com/mauprogramador/scopus-survey-api/commit/439678a8f5674ee26db3c6a79d370d7d4157c15a) (2025-07-25)
+- Remove json decode error. [#256cc63](https://github.com/mauprogramador/scopus-survey-api/commit/256cc63b5666192e839d93091409370610cbf4c1) (2025-07-23)
+- Join custom middlewares in one. [#7b0df95](https://github.com/mauprogramador/scopus-survey-api/commit/7b0df95fc63e4bcddf2cea2d8d17ea5f98994526) (2025-07-22)
+- Rename messages to error messages. [#2a7178e](https://github.com/mauprogramador/scopus-survey-api/commit/2a7178e83bc3a7b8b30543de3b5fe8154172587e) (2025-07-22)
+- Wrap logging redirect in progress bar. [#c4b189d](https://github.com/mauprogramador/scopus-survey-api/commit/c4b189dd6791982e4696320da973d169892ae049) (2025-07-21)
+- Make verify token a dependency and update survey combinations route. [#6b14479](https://github.com/mauprogramador/scopus-survey-api/commit/6b14479ae3fe9fdcf6f40e899b6f251b8b46ee57) (2025-07-21)
+- Turn the csrf token verification a dependency. [#2267e03](https://github.com/mauprogramador/scopus-survey-api/commit/2267e038530f3c6e5a00d01868ef813b02c978b4) (2025-07-21)
+- Use process pool to filter multiple groups. [#879c27f](https://github.com/mauprogramador/scopus-survey-api/commit/879c27f4a5e31c9294cb7a34c4fdc93176fde64a) (2025-07-21)
+- Move get error message to logging. [#fde2406](https://github.com/mauprogramador/scopus-survey-api/commit/fde24060bb7ad5391144779d11f33553a6ca2dec) (2025-07-21)
+- Upgrade get error details. [#15df751](https://github.com/mauprogramador/scopus-survey-api/commit/15df7516e4a91764fb6a517a258af9ba03993cc4) (2025-07-21)
+- Add two separeted validations. [#11a3d7b](https://github.com/mauprogramador/scopus-survey-api/commit/11a3d7be83f65413aa0f1e79799a5429310ca73a) (2025-07-21)
+- Remove interface inheritance. [#00f6250](https://github.com/mauprogramador/scopus-survey-api/commit/00f6250631aa8f08bde41e8f687808b447f4b94b) (2025-07-21)
+- Build headers in each method. [#61d6e31](https://github.com/mauprogramador/scopus-survey-api/commit/61d6e31dd958767f62909506a851151eeafad62a) (2025-07-21)
+- Change root dir to src. [#fefd019](https://github.com/mauprogramador/scopus-survey-api/commit/fefd019bb203d10603c97a4ae50d84ed55e76314) (2025-06-16)
+
+### 🧪 Tests
+
+- Load translations in session. [#43446fc](https://github.com/mauprogramador/scopus-survey-api/commit/43446fc36003445d620d62cd55cd944d27d1873d) (2025-08-09)
+- Add all integration tests. [#2abbc0f](https://github.com/mauprogramador/scopus-survey-api/commit/2abbc0f48fc9aaefcef2b081b0f398282d3c69db) (2025-08-09)
+- Add all unitary tests. [#9c1d91a](https://github.com/mauprogramador/scopus-survey-api/commit/9c1d91aeb31947883f9b877ae6362214a3addb99) (2025-08-09)
+- Update conftest fixtures and settings. [#448cb6a](https://github.com/mauprogramador/scopus-survey-api/commit/448cb6abf0200fff3f475a297fc7b2c96d4274fb) (2025-08-09)
+- Add and update all mocks. [#58c2eec](https://github.com/mauprogramador/scopus-survey-api/commit/58c2eec0d533e1435842eb14a75714d4e9347d08) (2025-08-09)
+- Refactor and rename. [#7f99dd5](https://github.com/mauprogramador/scopus-survey-api/commit/7f99dd500d2ec82bed110fc3af40efeba0bac94f) (2025-08-09)
+- Remove integration tests tree structure. [#18e1ff5](https://github.com/mauprogramador/scopus-survey-api/commit/18e1ff5c35b4b59087731217837247e4b6b7292d) (2025-07-26)
+- Remove unitary tests tree structure. [#66e40ce](https://github.com/mauprogramador/scopus-survey-api/commit/66e40ce8c873d92853e92023c35d13cb5181cf71) (2025-07-25)
+
+### 📝 Chores
+
+- Changelog. [#d8d9eee](https://github.com/mauprogramador/scopus-survey-api/commit/d8d9eee549848e2f543037054f72ef02ca47562f) (2025-08-09)
+- Add terms of service and privacy policy. [#c133327](https://github.com/mauprogramador/scopus-survey-api/commit/c13332713f1d62b28d499304ef21b2fd869a2b8d) (2025-07-21)
+- Update readme. [#5aca4f1](https://github.com/mauprogramador/scopus-survey-api/commit/5aca4f18677cf66e3ff50c9b66aa133f6a92fa7a) (2025-01-17)
+- Update web files. [#3b2e548](https://github.com/mauprogramador/scopus-survey-api/commit/3b2e548439c2b9e105d46c80d60c88aa17856c8d) (2025-01-17)
+
+### 🎨 Styles
+
+- Update rules. [#45bdd9c](https://github.com/mauprogramador/scopus-survey-api/commit/45bdd9c9fd5c3d54cf41bbe7cdd45faeadf60cc8) (2025-08-09)
+- Format. [#025b0b6](https://github.com/mauprogramador/scopus-survey-api/commit/025b0b6156d91819368b56e479c012d403e6558c) (2025-08-09)
+- Rename before validation value to data. [#9c2a43f](https://github.com/mauprogramador/scopus-survey-api/commit/9c2a43fd90d11af437399d33b25f330d9f677aca) (2025-08-09)
+- Update docstring and errors type. [#b8bc0bf](https://github.com/mauprogramador/scopus-survey-api/commit/b8bc0bf5f7f2921146c2177bff1c92c0dbbdaf07) (2025-08-09)
+- Rename method. [#a24f847](https://github.com/mauprogramador/scopus-survey-api/commit/a24f8474304edaab1bd83c3938b4bc54837963f7) (2025-08-09)
+- Update pattern examples. [#9e07f17](https://github.com/mauprogramador/scopus-survey-api/commit/9e07f1707033d656625879408fc900ba04f3d2d5) (2025-08-09)
+- Rename headers and errors validators. [#5b7b02c](https://github.com/mauprogramador/scopus-survey-api/commit/5b7b02ca1e92674e317e75a440d192b977187a97) (2025-07-25)
+- Renaming classes for internal use only. [#dc88223](https://github.com/mauprogramador/scopus-survey-api/commit/dc8822370530ab027d5d638f24d515aba446f9e3) (2025-07-25)
+- Change order and move footnote. [#d21b090](https://github.com/mauprogramador/scopus-survey-api/commit/d21b090168b8a8ba38d14476f0612d6d5eabfd3c) (2025-07-25)
+- Remove prints and rename attrs. [#a607602](https://github.com/mauprogramador/scopus-survey-api/commit/a607602e8e0efc2e832c423da1e922e8cfe73950) (2025-07-23)
+- Format. [#bad2f84](https://github.com/mauprogramador/scopus-survey-api/commit/bad2f84bb64ae26d061f936d61ca6cc6dc5edfbe) (2025-07-22)
+- Add max age duration comment. [#7aeefd4](https://github.com/mauprogramador/scopus-survey-api/commit/7aeefd4758c63690a4c015f6b3c8276819b1f3a2) (2025-07-21)
+
+<br>
+
+## 🔖 Release [`v3.2.0`](https://github.com/mauprogramador/scopus-survey-api/releases/tag/v3.2.0) (2024-12-27) <span id='v3.2.0'></span> [`▴`](#start)
+
+See the [⇅ comparison history](https://github.com/mauprogramador/scopus-survey-api/compare/v3.1.0...v3.2.0) with the previous tag.
+
+### ✨ Features
+
+- Update main. [#e9b8545](https://github.com/mauprogramador/scopus-survey-api/commit/e9b8545cdb7474ab0d6baa183fc983b8848a6348) (2024-12-27)
+- Update use case. [#91fffa9](https://github.com/mauprogramador/scopus-survey-api/commit/91fffa902c8dca85493a134f4c108a124df1bcf7) (2024-12-27)
+- Add new query params and csv route. [#90c56f1](https://github.com/mauprogramador/scopus-survey-api/commit/90c56f1f0725f23818cf0502f50fa914bd0e1840) (2024-12-27)
+- Update and add middlewares. [#d210eab](https://github.com/mauprogramador/scopus-survey-api/commit/d210eab5d7d24cdadbdc6e7f0eb60b22747d179b) (2024-12-27)
+- Update logger. [#45b669a](https://github.com/mauprogramador/scopus-survey-api/commit/45b669a7e169f37bffc434e3649bca7d6ae7c4e5) (2024-12-27)
+- Update config and toml env loads. [#7eae94e](https://github.com/mauprogramador/scopus-survey-api/commit/7eae94ee35970ac053f1fba7e4d1f51abd9d23f5) (2024-12-27)
+- Add csv response, enums, serializer and validator. [#db82c5e](https://github.com/mauprogramador/scopus-survey-api/commit/db82c5ef42976921d9f63082d90b810021bd8770) (2024-12-27)
+- Renaming classes. [#4764538](https://github.com/mauprogramador/scopus-survey-api/commit/47645380cc48b54e0a52ae5987c0a9ab0c976f1a) (2024-12-27)
+- Update patterns and types. [#1ec5904](https://github.com/mauprogramador/scopus-survey-api/commit/1ec59048978c33fe18a55ed531d5a9674e21a408) (2024-12-27)
+- Update dependencies. [#8174270](https://github.com/mauprogramador/scopus-survey-api/commit/81742701ddbdd27715ee68cbcee449317e70708a) (2024-12-27)
+- Update helpers. [#b33a33f](https://github.com/mauprogramador/scopus-survey-api/commit/b33a33f933d9d8ddf4ae47253e06bd844d8ee632) (2024-12-27)
+
+### ♻️ Refactors
+
+- Rename signal handler. [#879538f](https://github.com/mauprogramador/scopus-survey-api/commit/879538f3e4cb402875b0c590c76c8f9709e3e955) (2024-12-27)
+- Use built-in http status. [#a1a8e26](https://github.com/mauprogramador/scopus-survey-api/commit/a1a8e265a98b40fb6d037c1f518e40eadc103ba8) (2024-12-27)
+
+### 🧪 Tests
+
+- Update some tests. [#2eae89b](https://github.com/mauprogramador/scopus-survey-api/commit/2eae89b3f13eed821dcc8dc0439ba6cd29fd8454) (2024-12-27)
+
+<br>
+
+## 🔖 Release [`v3.1.0`](https://github.com/mauprogramador/scopus-survey-api/releases/tag/v3.1.0) (2024-12-27) <span id='v3.1.0'></span> [`▴`](#start)
+
+See the [⇅ comparison history](https://github.com/mauprogramador/scopus-survey-api/compare/v3.0.0...v3.1.0) with the previous tag.
+
+### 📦 Builds
+
+- Add rate-limit asgi middleware. [#6df4935](https://github.com/mauprogramador/scopus-survey-api/commit/6df493518f27bb61e1bab1b422ca75bc4d3918f0) (2024-12-27)
+
+### ✨ Features
+
+- Add metadata to the web pages. [#edd382c](https://github.com/mauprogramador/scopus-survey-api/commit/edd382c9f136496d02e06f2be4cd144448861fcf) (2024-10-08)
+- Update logo img. [#57de642](https://github.com/mauprogramador/scopus-survey-api/commit/57de642ffe1266521f7158aaee146d282dceb66c) (2024-10-08)
+
+### 🔧 Fixes
+
+- Delete unnecessary or renamed stuff. [#ed76adc](https://github.com/mauprogramador/scopus-survey-api/commit/ed76adc829c66b10e1d8e2d6522ab4d92f33efbb) (2024-12-27)
+
+### ♻️ Refactors
+
+- Stop creating .env. [#5abe15d](https://github.com/mauprogramador/scopus-survey-api/commit/5abe15d7dcf5c5492337f8388bda703f839fa6af) (2024-12-27)
+
+### 📚 Docs
+
+- Update releases for v3. [#aa167b1](https://github.com/mauprogramador/scopus-survey-api/commit/aa167b11cd7046d8d919c8a69fe04db1bb640522) (2024-10-07)
+
+### 📝 Chores
+
+- Add workers config. [#343900c](https://github.com/mauprogramador/scopus-survey-api/commit/343900c8cae51503d74d6944c08281b3d100dffd) (2024-12-27)
+- Update styles. [#5c42165](https://github.com/mauprogramador/scopus-survey-api/commit/5c42165bd2a746c304d9ff69ff57ac8763a0ff9d) (2024-12-27)
+- Update scripts. [#e8f4e62](https://github.com/mauprogramador/scopus-survey-api/commit/e8f4e62e8fc22383d5c1f6d10e0f525ae92bc8f2) (2024-12-27)
+- Update templates. [#988eeda](https://github.com/mauprogramador/scopus-survey-api/commit/988eeda79b419bcd4bfdf0677446b70e9abe4399) (2024-12-27)
+- Add inputs validation icons. [#b03ed1f](https://github.com/mauprogramador/scopus-survey-api/commit/b03ed1f99dc37ee3eb88d495a72932a06edb08ec) (2024-12-27)
+- Add logos. [#f48f48e](https://github.com/mauprogramador/scopus-survey-api/commit/f48f48efa8f12afd2f026710cbbc73fa5c97a15d) (2024-12-27)
+- Clean git ignore. [#a0999e0](https://github.com/mauprogramador/scopus-survey-api/commit/a0999e09c92831db4ea19aea351086bb93c4a194) (2024-12-27)
+- Update changelog to v3. [#b6efb33](https://github.com/mauprogramador/scopus-survey-api/commit/b6efb33c24645477ff2927706421ec17cab3294a) (2024-10-06)
+
+### 🎨 Styles
+
+- Change web api repository name. [#09d1d76](https://github.com/mauprogramador/scopus-survey-api/commit/09d1d76d8692a9cbfe6a15aa1eaf23f4af1097c0) (2024-10-08)
+
+<br>
+
+## 🔖 Release [`v3.0.0`](https://github.com/mauprogramador/scopus-survey-api/releases/tag/v3.0.0) (2024-10-06) <span id='v3.0.0'></span> [`▴`](#start)
+
+See the [⇅ comparison history](https://github.com/mauprogramador/scopus-survey-api/compare/v2.0.0...v3.0.0) with the previous tag.
+
+### 📦 Builds
+
+- Remove beautifulsoup. [#a454dcd](https://github.com/mauprogramador/scopus-survey-api/commit/a454dcdd2504b7fc853bf6590effa2887ff6a269) (2024-10-05)
+- Set env port and change main start point. [#02b5d95](https://github.com/mauprogramador/scopus-survey-api/commit/02b5d95da73be7346aea6452bbed1c9a904dbbb2) (2024-09-15)
+- Move and update docker. [#51fd015](https://github.com/mauprogramador/scopus-survey-api/commit/51fd015581c491ee99d2609037dce186fb2f0f4b) (2024-09-15)
+- Add dotenv to use env variables. [#d1631ff](https://github.com/mauprogramador/scopus-survey-api/commit/d1631ffda0a0dc3154c561896996f7cb68214d93) (2024-09-14)
+
+### ✨ Features
+
+- Update version to v3. [#3b85b8e](https://github.com/mauprogramador/scopus-survey-api/commit/3b85b8e9acbc5df33479583f15ce4f4501fd5b44) (2024-10-06)
+- Handle scopus quota and rate errors. [#0cbac67](https://github.com/mauprogramador/scopus-survey-api/commit/0cbac67502eea94f6babb527d67b785c639c7f51) (2024-10-05)
+- Update serializer. [#6eadde2](https://github.com/mauprogramador/scopus-survey-api/commit/6eadde2dd9ed8bfdf6f70adee0d089b8d9127315) (2024-10-05)
+- Add article page ur and rate limit. [#5ed73e5](https://github.com/mauprogramador/scopus-survey-api/commit/5ed73e5048736b28bb2aff78668d3f605edd6698) (2024-10-05)
+- Update sleep rate factor. [#8b22ea6](https://github.com/mauprogramador/scopus-survey-api/commit/8b22ea69809ac4c6bda04df9ad87438129d5707c) (2024-10-05)
+- Remove livereload logs. [#0da82c8](https://github.com/mauprogramador/scopus-survey-api/commit/0da82c8c46adfa79fb0a58944ebb7896c17bb01f) (2024-10-05)
+- Only shows the qrcode when the host is open. [#087c927](https://github.com/mauprogramador/scopus-survey-api/commit/087c927a51a2c2eaffaf9de7ee54d881b9a40436) (2024-10-05)
+- Add repository url in template context. [#32332bb](https://github.com/mauprogramador/scopus-survey-api/commit/32332bb9bce7c93872bb1e76ea523d0cf503ced7) (2024-10-05)
+- Change article page to abstract api removing web scrapping. [#e432d4c](https://github.com/mauprogramador/scopus-survey-api/commit/e432d4c43680768fffb07c47e2fd73b273641a90) (2024-09-22)
+- Serialize data from abstract api. [#7d62c1b](https://github.com/mauprogramador/scopus-survey-api/commit/7d62c1bc73e793482627aa3235369fc392c9812c) (2024-09-22)
+- Scopus api error for the two apis. [#48198d8](https://github.com/mauprogramador/scopus-survey-api/commit/48198d81ba9524ec1d940e2b38403ec076a619ce) (2024-09-22)
+- Update scopus configs and urls for abstract api. [#81067c8](https://github.com/mauprogramador/scopus-survey-api/commit/81067c8fee0f8fbdadcdb725036c1545754af8de) (2024-09-22)
+- Search params as a dto. [#f3ef5ea](https://github.com/mauprogramador/scopus-survey-api/commit/f3ef5ea63f3a75e97071bcb1afeedd2b5cd37c23) (2024-09-22)
+- Update log message prefix for the api requests. [#8fb9b19](https://github.com/mauprogramador/scopus-survey-api/commit/8fb9b1930e7d4401b8e0576a1eee078350c2d90c) (2024-09-22)
+- Remove ArticlesPageScraper. [#6dccc8c](https://github.com/mauprogramador/scopus-survey-api/commit/6dccc8c93269d7fda1a7b286d83020ca03f5599a) (2024-09-22)
+- Set new start point. [#29e784b](https://github.com/mauprogramador/scopus-survey-api/commit/29e784b971debff20c8194b7e364f57e8d54f98c) (2024-09-15)
+- Include env and set container port. [#cd225f4](https://github.com/mauprogramador/scopus-survey-api/commit/cd225f4f0cefdde3e250cc6190ce419e27356bd0) (2024-09-15)
+- Assure correct types of env and toml settings. [#538186c](https://github.com/mauprogramador/scopus-survey-api/commit/538186c2518eb4aecdbcf5a6d48f75dd9d755026) (2024-09-15)
+- Remove unnecessary type. [#4ce4ca5](https://github.com/mauprogramador/scopus-survey-api/commit/4ce4ca5e1250c15ec5413698df7407dd4a8b2f54) (2024-09-15)
+- Load env variables to override app toml configuration. [#74147b6](https://github.com/mauprogramador/scopus-survey-api/commit/74147b63edc49f8189eaa5f9a2dd6825849fb98d) (2024-09-14)
+- Change fuzzywuzzy to thefuzz. [#69143fa](https://github.com/mauprogramador/scopus-survey-api/commit/69143faacf18570421285c299c1e8121d09b660c) (2024-09-08)
+- Use partial_ratio to verify quota exceeded header. [#e39895e](https://github.com/mauprogramador/scopus-survey-api/commit/e39895ef7d27512c2b95aed140f12d6459c44ffc) (2024-09-08)
+- Add framework unit tests. [#3c117f6](https://github.com/mauprogramador/scopus-survey-api/commit/3c117f6fcc28fab14619e6104d2d25643ee00c97) (2024-08-21)
+- Add core unit tests. [#c415e0c](https://github.com/mauprogramador/scopus-survey-api/commit/c415e0c871406d864e6c31d5997ca4565b9aef9c) (2024-08-21)
+- Add adapters unit tests. [#461fd62](https://github.com/mauprogramador/scopus-survey-api/commit/461fd624e5bf9b724434e44ee196dd067540b3ad) (2024-08-21)
+- Add framewok integration tests. [#c595474](https://github.com/mauprogramador/scopus-survey-api/commit/c595474cbf678e212cc601e5df3627b4c44407b7) (2024-08-21)
+- Add core integration tests. [#5f3fc18](https://github.com/mauprogramador/scopus-survey-api/commit/5f3fc182f97ec6ce8af017b6b19c477a971e3594) (2024-08-21)
+- Add adapters integration tests. [#7849d81](https://github.com/mauprogramador/scopus-survey-api/commit/7849d81b59c56b1a70e8b238eaf437f64894bd93) (2024-08-21)
+- Add tests mocks. [#e26bea1](https://github.com/mauprogramador/scopus-survey-api/commit/e26bea17c4bc5e3279cc096ca32eff610e2d51d2) (2024-08-21)
+- Add tests helpers. [#e996293](https://github.com/mauprogramador/scopus-survey-api/commit/e996293ab79a28b65d23b7fc2f8569a7bd756a92) (2024-08-21)
+- Add middlewares and mobile qrcode. [#c8c30db](https://github.com/mauprogramador/scopus-survey-api/commit/c8c30dbabfd25e610efdc4dc10ed48c3d0f0e9d2) (2024-08-21)
+- Add header and query types. [#6e101a3](https://github.com/mauprogramador/scopus-survey-api/commit/6e101a3ac3ee02de834ed7dcf615b926ff2f27ee) (2024-08-21)
+- Add usecases. [#635cf50](https://github.com/mauprogramador/scopus-survey-api/commit/635cf508dc2957df086dcd6cadcabc1b2d074b55) (2024-08-20)
+- Add gateway. [#53b85f6](https://github.com/mauprogramador/scopus-survey-api/commit/53b85f610bd2f59d43153fb73e37ccca239302e2) (2024-08-20)
+- Add middlewares. [#0369ad9](https://github.com/mauprogramador/scopus-survey-api/commit/0369ad97aacd14c735bf8da1f15efdae38e947f4) (2024-08-20)
+- Add http retry request. [#555073b](https://github.com/mauprogramador/scopus-survey-api/commit/555073b7e4721a19b4ac3ce9361c3e0ae3c66b26) (2024-08-20)
+- Add url builder. [#69bfea5](https://github.com/mauprogramador/scopus-survey-api/commit/69bfea581311c7c28a87ddf94a4c226a783ba6b6) (2024-08-20)
+- Add template context builder. [#0c39a6a](https://github.com/mauprogramador/scopus-survey-api/commit/0c39a6a662571d047599c6ccf3fda80dab76c2d5) (2024-08-20)
+- Add abstract metaclasses. [#8e1c133](https://github.com/mauprogramador/scopus-survey-api/commit/8e1c1332b88a6eea65be15a96f50ef39968bfdc7) (2024-08-20)
+- Add dtos. [#25e1b7f](https://github.com/mauprogramador/scopus-survey-api/commit/25e1b7f64df8046d9c276663a1c49055e4625e14) (2024-08-20)
+- Add serializer. [#fa8e1d8](https://github.com/mauprogramador/scopus-survey-api/commit/fa8e1d85155f2deacec4ee50a2e54cded9ee1684) (2024-08-20)
+- Add data. [#45af7c2](https://github.com/mauprogramador/scopus-survey-api/commit/45af7c25e99c747ae40430f3aa540880d0d9ece9) (2024-08-20)
+- Add app exceptions. [#3be17d5](https://github.com/mauprogramador/scopus-survey-api/commit/3be17d5578f7ddad2c235a1a2d7a3d42667f4329) (2024-08-20)
+- Add domain. [#f7d9c60](https://github.com/mauprogramador/scopus-survey-api/commit/f7d9c60eff4d2a3ee73c7642c143b5409f7ad9d2) (2024-08-20)
+- Add exception json response serializer. [#a18ff7c](https://github.com/mauprogramador/scopus-survey-api/commit/a18ff7c735e9022dba8faa712b53342ca3a680b8) (2024-08-20)
+- Add progress bar. [#271c09c](https://github.com/mauprogramador/scopus-survey-api/commit/271c09c3879f9c2e0cf57ee589a7f0cff6260cf9) (2024-08-20)
+- Add mobile qrcode. [#2253d54](https://github.com/mauprogramador/scopus-survey-api/commit/2253d54749b9448ab085c4f59b600b1ed0de9867) (2024-08-20)
+- Add shutdown signal handler. [#bcbfaa1](https://github.com/mauprogramador/scopus-survey-api/commit/bcbfaa1c2a1c3cb5c8e895df595a1cc78a2f6fff) (2024-08-20)
+- Add types. [#3ff97c0](https://github.com/mauprogramador/scopus-survey-api/commit/3ff97c05cfbf8e8982a5b62125a202d61822c1bb) (2024-08-20)
+- Add regex patterns. [#ac912fa](https://github.com/mauprogramador/scopus-survey-api/commit/ac912fa0617882b343143d7817a3ac9f5452f127) (2024-08-20)
+- Add standard exception and error messages. [#3262ff3](https://github.com/mauprogramador/scopus-survey-api/commit/3262ff3497ca27b7973446a5101d58f952b75a32) (2024-08-20)
+- Add common directory. [#3c79960](https://github.com/mauprogramador/scopus-survey-api/commit/3c7996056fa8ca70ebe68be054b5b851e2a93d73) (2024-08-20)
+- Pagination to get all articles. [#8417907](https://github.com/mauprogramador/scopus-survey-api/commit/8417907430128fce0ef3e80831b4129121ad5152) (2024-04-30)
+- Stop multi threads on app interruption. [#150619c](https://github.com/mauprogramador/scopus-survey-api/commit/150619c96b9eae9bf2de9de3d058d9d112bc1560) (2024-04-30)
+- Add articles scraping progress log. [#742f10a](https://github.com/mauprogramador/scopus-survey-api/commit/742f10a9cdc37cb58a96608f6a72f0c0a6e5700d) (2024-04-27)
+- Make scraping data in multi thread. [#ffb634b](https://github.com/mauprogramador/scopus-survey-api/commit/ffb634b32e752e919402c68a11ad24f0a0c03593) (2024-04-27)
+- Customize log prefix when requesting. [#06a4a3f](https://github.com/mauprogramador/scopus-survey-api/commit/06a4a3f88848248ffe717e8421996f253b35a3a1) (2024-04-27)
+- Implement debug logs with json data. [#701807f](https://github.com/mauprogramador/scopus-survey-api/commit/701807fa9b625b3c66d5db8ae8aa52477c6855d2) (2024-04-25)
+- Disable uvicorn access logging. [#398f013](https://github.com/mauprogramador/scopus-survey-api/commit/398f013af8b6ea218ac8408ed7a75d9cd97c8f3a) (2024-04-25)
+- Set single logger instance to replace singleton. [#6c518f1](https://github.com/mauprogramador/scopus-survey-api/commit/6c518f17276220a71ab1f18661e68ffdf493f3d7) (2024-04-25)
+- Update validation token generator. [#508ca82](https://github.com/mauprogramador/scopus-survey-api/commit/508ca822eb3999e4d7b6ce33473438fafef19ca8) (2024-04-25)
+- Update pyproject toml class and interface names. [#f2d08cf](https://github.com/mauprogramador/scopus-survey-api/commit/f2d08cf5d8018e67346b7985de297aba5ff88852) (2024-04-25)
+- Add application configuration section. [#a3e61ac](https://github.com/mauprogramador/scopus-survey-api/commit/a3e61acfd7f00786a494fa00cfc8f5a17a4cb563) (2024-04-24)
+- Update templates and context with pyproject data. [#f731cde](https://github.com/mauprogramador/scopus-survey-api/commit/f731cde85a80c951393c944855b4362674c40b43) (2024-04-24)
+- Run app directly from the module with pyproject configuration. [#9cd8e28](https://github.com/mauprogramador/scopus-survey-api/commit/9cd8e2807ade761fa24672752b95c63e00661aef) (2024-04-24)
+- Load pyproject application configuration. [#deed15c](https://github.com/mauprogramador/scopus-survey-api/commit/deed15cb9c69f8a443854e58db09c129f4261edd) (2024-04-24)
+- Scopus api error as application exception. [#846d14b](https://github.com/mauprogramador/scopus-survey-api/commit/846d14ba59bd41ab7278e8542a138ef9fe1483f7) (2024-04-24)
+- Pass status code directly and control logging in file. [#9b3b0a4](https://github.com/mauprogramador/scopus-survey-api/commit/9b3b0a435048d410d60680dcf4cec8fa924a255d) (2024-04-24)
+- Integrate models in api config. [#20469c5](https://github.com/mauprogramador/scopus-survey-api/commit/20469c557479cefc5ed82efa8bf9ce93c2881fa8) (2024-04-24)
+- Rename and remap folders to clean architecture. [#c7c2661](https://github.com/mauprogramador/scopus-survey-api/commit/c7c2661338ceb98aa6b09e3abe5860ea959efa19) (2024-04-23)
+- Upgrade logger and implement logging instead of print. [#23d6fe7](https://github.com/mauprogramador/scopus-survey-api/commit/23d6fe77a19e90436da4ac5a7856f82a036b537a) (2024-04-23)
+- Set date year automatically. [#0690985](https://github.com/mauprogramador/scopus-survey-api/commit/0690985cd49df46d16a11ab87699475891536167) (2024-04-22)
+- Change license and add zero-width space symbol. [#61a9b64](https://github.com/mauprogramador/scopus-survey-api/commit/61a9b64d53fc3cabae33e8ec52886f9b2e4c8f23) (2024-04-22)
+- Remove python version for venv. [#a9f5129](https://github.com/mauprogramador/scopus-survey-api/commit/a9f51298def1f661cc4955f8e359721743718b71) (2024-04-22)
+- Upgrade venv script. [#805289a](https://github.com/mauprogramador/scopus-survey-api/commit/805289aee84f09a82f17fbc45dfe5f7699f3ec5c) (2024-04-22)
+- Update project keywords. [#d19adb1](https://github.com/mauprogramador/scopus-survey-api/commit/d19adb18099303ceb713ad4bde98d06deca806cc) (2024-04-22)
+- Update client test data. [#888ce08](https://github.com/mauprogramador/scopus-survey-api/commit/888ce08f01364ce3b4a516273564228ac723337f) (2024-04-22)
+- Update favicon. [#2c10ff3](https://github.com/mauprogramador/scopus-survey-api/commit/2c10ff3a275821680a1c860041486fe9bb9607b8) (2024-03-11)
+
+### 🔧 Fixes
+
+- Separe host and port from url in trace log. [#65f8308](https://github.com/mauprogramador/scopus-survey-api/commit/65f8308602b8332507aa01b02271d9c4ba244435) (2024-04-27)
+
+### ♻️ Refactors
+
+- Rename module and class. [#057f9e4](https://github.com/mauprogramador/scopus-survey-api/commit/057f9e41d7c150b396c69b5117569dd724349432) (2024-10-05)
+- Remove handle quota and set default workers. [#4d8ed21](https://github.com/mauprogramador/scopus-survey-api/commit/4d8ed21110008bc7e7e4ad8e9c309890d37282bf) (2024-10-05)
+- Remove scrapping parts. [#4acc267](https://github.com/mauprogramador/scopus-survey-api/commit/4acc267b9e0ae1604e028fd7b6d268852073237e) (2024-09-22)
+- Update serializers and return. [#4974203](https://github.com/mauprogramador/scopus-survey-api/commit/4974203cb921bfbb7ca92a6d3ac5b32028ff78dd) (2024-09-22)
+- Update contracts. [#ffd82c9](https://github.com/mauprogramador/scopus-survey-api/commit/ffd82c950dc94c92a371faf160e09b059b4a6144) (2024-09-22)
+- Update progress bar format. [#48a1b43](https://github.com/mauprogramador/scopus-survey-api/commit/48a1b4338a2a5cef6f1be7d2f144da683245bc50) (2024-09-10)
+- Update logger. [#45aaed5](https://github.com/mauprogramador/scopus-survey-api/commit/45aaed5caa0a5197190390b8c9032498b693d8c8) (2024-09-10)
+- Update error logging. [#17df0eb](https://github.com/mauprogramador/scopus-survey-api/commit/17df0eb9f9f5255072698a5b76030d07b92787da) (2024-09-10)
+- Change instance name. [#019f580](https://github.com/mauprogramador/scopus-survey-api/commit/019f5805512e3d98c7c616118f76fa2f5a71755e) (2024-09-09)
+- Update scrape data dto parameters and method. [#49cca65](https://github.com/mauprogramador/scopus-survey-api/commit/49cca650603a000d977064e71fd2895e473587a4) (2024-09-08)
+- Rename column from template to page. [#1b6cf14](https://github.com/mauprogramador/scopus-survey-api/commit/1b6cf14ae4ce5b9ad017c1e7b299bb65c6228dbf) (2024-09-08)
+- Rename docstrings. [#8ddb085](https://github.com/mauprogramador/scopus-survey-api/commit/8ddb0856e4eb746f163751d51f872b856e8c403d) (2024-09-08)
+- Update names with acronyms. [#22607ba](https://github.com/mauprogramador/scopus-survey-api/commit/22607ba52c876845eb656f968b833c2681196fc5) (2024-09-08)
+- Remove old tests. [#2bedd9c](https://github.com/mauprogramador/scopus-survey-api/commit/2bedd9ce643fc6b42a1bb01cfe15d68aecda5e45) (2024-08-21)
+- Move and update css styles. [#f8bcebe](https://github.com/mauprogramador/scopus-survey-api/commit/f8bcebe6f86f1c4c4315078ddf44af99d09faa97) (2024-08-21)
+- Move and add images. [#69c10a9](https://github.com/mauprogramador/scopus-survey-api/commit/69c10a932bbc4d0c0a316e9513ba74c41a944a09) (2024-08-21)
+- Update javascripts. [#47f3a4b](https://github.com/mauprogramador/scopus-survey-api/commit/47f3a4b77842b5e9d8f7864f52d3dc930f24dc3c) (2024-08-21)
+- Update svgs. [#c6415c1](https://github.com/mauprogramador/scopus-survey-api/commit/c6415c126db58b403f967d93da2c34caae0994bb) (2024-08-21)
+- Update templates. [#beba284](https://github.com/mauprogramador/scopus-survey-api/commit/beba28463f4b248a640ee39d5575a9ea0533eff2) (2024-08-21)
+- Deleted files. [#9f74e82](https://github.com/mauprogramador/scopus-survey-api/commit/9f74e829a601f607e01fd41ba2e7aa66ada25028) (2024-08-21)
+- Update differences. [#25552db](https://github.com/mauprogramador/scopus-survey-api/commit/25552dba1507a05a7efb10f84ed24ff31b9e8289) (2024-08-21)
+- Update logger. [#e9b9345](https://github.com/mauprogramador/scopus-survey-api/commit/e9b93457fd2e7bfef7a7ff6b038cf1f1aa429e4c) (2024-08-21)
+- Remove old code. [#0df9bd4](https://github.com/mauprogramador/scopus-survey-api/commit/0df9bd40970257da06f9f8624b49a369c9261b44) (2024-08-21)
+- Update context and routes metadata. [#b8be4ad](https://github.com/mauprogramador/scopus-survey-api/commit/b8be4ad7f9a0d16903e235131f4281da6a49ff91) (2024-08-21)
+- Update dependencies. [#8eb1f2c](https://github.com/mauprogramador/scopus-survey-api/commit/8eb1f2c4f07524832bd9fac33814fcc59c849005) (2024-08-21)
+- Update fastapi config. [#8fb757d](https://github.com/mauprogramador/scopus-survey-api/commit/8fb757ddeac2e3f03dda0dddde5fde2fa4d4a65b) (2024-08-21)
+- Update factory. [#67c155f](https://github.com/mauprogramador/scopus-survey-api/commit/67c155f295c31fc006004698b27682d97b18544a) (2024-08-20)
+- Update exception handler. [#8795fbe](https://github.com/mauprogramador/scopus-survey-api/commit/8795fbef8970649fe2a2df3ccb3a90df5a7ed270) (2024-08-20)
+- Update http exceptions. [#54249bf](https://github.com/mauprogramador/scopus-survey-api/commit/54249bfe153f609fe43967c7a5bc15aab66ee557) (2024-08-20)
+- Update multiple properties. [#cd9ed28](https://github.com/mauprogramador/scopus-survey-api/commit/cd9ed28be34e3c2f8d7cee1c46bd783ddbba077b) (2024-08-20)
+- Add app and scopus config. [#0cc2cbc](https://github.com/mauprogramador/scopus-survey-api/commit/0cc2cbcdc13e463cb44e09d7c96723d1780e160c) (2024-08-20)
+- Build scopus api error attributes in class itself. [#17bf03e](https://github.com/mauprogramador/scopus-survey-api/commit/17bf03ef239be163ac275a5528f56bac9e049ee1) (2024-04-30)
+- Search articles as instance method. [#e8992c7](https://github.com/mauprogramador/scopus-survey-api/commit/e8992c7c356c2f4ff77d692aed5e81071dda059e) (2024-04-30)
+- Decouple and inject usecase dependency. [#9e4eaf9](https://github.com/mauprogramador/scopus-survey-api/commit/9e4eaf91d8b3c0342368e20c85870b254b6a43c2) (2024-04-30)
+- Unify gateway interfaces. [#987e471](https://github.com/mauprogramador/scopus-survey-api/commit/987e471014c9332861c7a465a4cb4e6d83c1b075) (2024-04-30)
+- Line space on logs. [#225f2f2](https://github.com/mauprogramador/scopus-survey-api/commit/225f2f21e1fd042dcce8db6e015abed95d2636ff) (2024-04-30)
+
+### 🧪 Tests
+
+- Update tests. [#d688408](https://github.com/mauprogramador/scopus-survey-api/commit/d68840809048c098e8cbdee285c24204d510ee33) (2024-10-05)
+- Set results mock data. [#649ace1](https://github.com/mauprogramador/scopus-survey-api/commit/649ace1ad34297403f9750c82f35d6d46eb33eaa) (2024-09-23)
+- Add abstract api tests. [#5bcb828](https://github.com/mauprogramador/scopus-survey-api/commit/5bcb82803cf43220e33db7f2ea88e309991db85e) (2024-09-22)
+- Update integration tests. [#2a32941](https://github.com/mauprogramador/scopus-survey-api/commit/2a32941dc6e5125d9a516f75b38f0e04d858873d) (2024-09-22)
+- Remove scraping code parts. [#1b10989](https://github.com/mauprogramador/scopus-survey-api/commit/1b109899be353f86261c708b9f0cfe749e5868db) (2024-09-22)
+- Add new serializers tests. [#8621002](https://github.com/mauprogramador/scopus-survey-api/commit/8621002d13c5945f15e9308301c1ff1ebaa14c5a) (2024-09-22)
+- Update unitaries tests. [#d797822](https://github.com/mauprogramador/scopus-survey-api/commit/d7978226d8830db79f5d27d82e9a6aaddae05a9e) (2024-09-22)
+- Remove unnecessary tests. [#c1e73fa](https://github.com/mauprogramador/scopus-survey-api/commit/c1e73fafd252b11df2a6a19b33192236efc388fe) (2024-09-22)
+- Update mocks and set static data instead using functions. [#21f42de](https://github.com/mauprogramador/scopus-survey-api/commit/21f42de2d495964745c47e8b1167b21d2c6d7b5a) (2024-09-22)
+- Remove scraper mock and move code from data to utils. [#196507f](https://github.com/mauprogramador/scopus-survey-api/commit/196507fa5b26ecc136674748f11621cfb1eedd8b) (2024-09-22)
+- Update response in tests. [#bad8d26](https://github.com/mauprogramador/scopus-survey-api/commit/bad8d26c27c109badcefcf5bc2c9c6602c90c388) (2024-08-20)
+- Add unit tests on dependencies. [#0d588ae](https://github.com/mauprogramador/scopus-survey-api/commit/0d588aefd637cd9fbd1b797dccd9f3435658e54c) (2024-04-30)
+- Pagination to get all articles. [#2d42ceb](https://github.com/mauprogramador/scopus-survey-api/commit/2d42ceb55478487d759df55b28fd31105019ebdf) (2024-04-30)
+- Build scopus api error attributes in class itself. [#eb51422](https://github.com/mauprogramador/scopus-survey-api/commit/eb51422cbc5f0e24d6f38ed0194d3f075108ece2) (2024-04-30)
+- Search articles as instance method. [#20ee2f0](https://github.com/mauprogramador/scopus-survey-api/commit/20ee2f05ab4cbf2c90904696811c5e0bce9de6e9) (2024-04-30)
+- Decouple and inject usecase dependency. [#7fd9680](https://github.com/mauprogramador/scopus-survey-api/commit/7fd96802686ab4be255cb1aa6d3ca8bd350f0567) (2024-04-30)
+- Renaming and refactor for dataframe as class attribute. [#f35d43e](https://github.com/mauprogramador/scopus-survey-api/commit/f35d43e352ec2833632fe5f86f1831828836834a) (2024-04-27)
+
+### 📚 Docs
+
+- Update releases notes to v3. [#8f56b06](https://github.com/mauprogramador/scopus-survey-api/commit/8f56b0661ed1cacd43e89820e75a94b9c2375cb1) (2024-10-06)
+- Update version to v3. [#5069e99](https://github.com/mauprogramador/scopus-survey-api/commit/5069e99e90c9acd16954cc7e83482aafaec77876) (2024-10-06)
+- Change application to web api. [#68ec65f](https://github.com/mauprogramador/scopus-survey-api/commit/68ec65f8070a3d613e774b485d13369a407bcd90) (2024-10-06)
+- Add rest abbr. [#8365a52](https://github.com/mauprogramador/scopus-survey-api/commit/8365a5279ada8fa30a265422b5c14faae74532ad) (2024-10-06)
+- Update mkdocs config and metadata. [#e89c9ff](https://github.com/mauprogramador/scopus-survey-api/commit/e89c9ffad21ef5099da1c2b356912846e94925e4) (2024-10-05)
+- Update and add more pt-br docs. [#02e7df4](https://github.com/mauprogramador/scopus-survey-api/commit/02e7df4cbc25f89dafbbca6869e297539ecc784c) (2024-10-05)
+- Update and add more en-us docs. [#9fc2597](https://github.com/mauprogramador/scopus-survey-api/commit/9fc2597a152dd8d428b4f7e3b66615d312fa8b43) (2024-10-05)
+- Add overrides icons and partials html. [#e18d156](https://github.com/mauprogramador/scopus-survey-api/commit/e18d156a7ad186d6dc99edbe9b5f33a66de6f84f) (2024-10-05)
+- Add all images. [#1aaff5a](https://github.com/mauprogramador/scopus-survey-api/commit/1aaff5a58e590b167db23e52c5a67991657498b6) (2024-10-05)
+- Add assets data, and custom css. [#821bfe3](https://github.com/mauprogramador/scopus-survey-api/commit/821bfe380cfd888c5363a830896dcad2661f4045) (2024-10-05)
+- Add pyproject configuration. [#127aadf](https://github.com/mauprogramador/scopus-survey-api/commit/127aadf174eba84d189ba90a10817958a754bf0f) (2024-04-24)
+- Fix translation alternate url error. [#6e9bc23](https://github.com/mauprogramador/scopus-survey-api/commit/6e9bc23b8c6673cd1d6854bc763f307b61ccaba8) (2024-04-24)
+- Add fields examples, response body and count field config. [#8d1dd34](https://github.com/mauprogramador/scopus-survey-api/commit/8d1dd34b5404fd9997deb88ff38754e84e0f993b) (2024-04-22)
+- Add notes and remove count field config. [#1965b0a](https://github.com/mauprogramador/scopus-survey-api/commit/1965b0a4be25248768c9ab9491fa41d1b6b1ca0e) (2024-04-22)
+- Upgrade article preview page example URL. [#d8f4cc3](https://github.com/mauprogramador/scopus-survey-api/commit/d8f4cc3ccd95d32453a833a0797cfee210d7c0a7) (2024-04-22)
+- Change poetry order and add note to get started. [#003f03f](https://github.com/mauprogramador/scopus-survey-api/commit/003f03f40c96e599d2a24c507ea0c413cf457dff) (2024-04-22)
+- Remove release date. [#8f541b1](https://github.com/mauprogramador/scopus-survey-api/commit/8f541b1e073e46555eaf2338c93e75489ac34cab) (2024-04-22)
+- Add description for scopus id and volume. [#b1a73d6](https://github.com/mauprogramador/scopus-survey-api/commit/b1a73d65c15cc8697dc80419f136be364bb36e5b) (2024-04-22)
+- Change environment section order. [#df69924](https://github.com/mauprogramador/scopus-survey-api/commit/df6992433aa83512e58f68a022b576d3a3a1b50b) (2024-04-22)
+
+### 📝 Chores
+
+- Update changelog. [#bd292a8](https://github.com/mauprogramador/scopus-survey-api/commit/bd292a83566c458fe875ecbf4d911c67a5b0fa49) (2024-10-06)
+- Update info in readme. [#c08183d](https://github.com/mauprogramador/scopus-survey-api/commit/c08183d69ba02c5419ded84c72d1ef0f12fe5379) (2024-10-06)
+- Update text, table columns, and context values. [#6d11baa](https://github.com/mauprogramador/scopus-survey-api/commit/6d11baa3f4179263e311071c8ec7683cb12eeaac) (2024-10-05)
+- Change favicon. [#ddba934](https://github.com/mauprogramador/scopus-survey-api/commit/ddba9342fd7a37a608891ab1a36e79ce4133fb83) (2024-10-05)
+- Update responsibility and showned columns. [#8ed2457](https://github.com/mauprogramador/scopus-survey-api/commit/8ed2457e370743241923dad46c69f56295471324) (2024-10-05)
+- Update abbr hover color and index css. [#33e3187](https://github.com/mauprogramador/scopus-survey-api/commit/33e3187dddaeacdf1489e13697e3df25d24dbbbd) (2024-10-05)
+- Update client. [#8b39775](https://github.com/mauprogramador/scopus-survey-api/commit/8b39775caec823b391456749996c334a40652c07) (2024-10-05)
+- Ignore errors for not found thefuzz stubs. [#acc9772](https://github.com/mauprogramador/scopus-survey-api/commit/acc9772bbe7c128822f51f1b270f908855937dfd) (2024-09-22)
+- Check if .env exists before include it. [#d23cf0f](https://github.com/mauprogramador/scopus-survey-api/commit/d23cf0fbcb4efc94f1dd68e6352063aedbeaf86a) (2024-09-22)
+- Update exit status. [#b556250](https://github.com/mauprogramador/scopus-survey-api/commit/b5562500f3d8854b52ec1539102dc6f5eca71874) (2024-09-22)
+- Only run docs workflow when docs files are updated. [#d50bc4c](https://github.com/mauprogramador/scopus-survey-api/commit/d50bc4c40e213b0ec46060bb2e1c05aa8f5362e2) (2024-09-22)
+- Add example of a env config file. [#49a5649](https://github.com/mauprogramador/scopus-survey-api/commit/49a5649951ac8879b2ee15a456687f4e8049dcb8) (2024-09-14)
+- Update setup. [#bed7cd6](https://github.com/mauprogramador/scopus-survey-api/commit/bed7cd6002f06101a4b18adc4a9b0bce75a8cb09) (2024-09-13)
+- Move client from tests. [#088a629](https://github.com/mauprogramador/scopus-survey-api/commit/088a62951a7c8d65aa995152d76f8bc3b6570bf5) (2024-09-13)
+- Remove docker docs. [#32bb11e](https://github.com/mauprogramador/scopus-survey-api/commit/32bb11ed4933192b7fa0c241bcdb2858445d3e30) (2024-09-13)
+- Rename from venv to setup. [#8f0f7ac](https://github.com/mauprogramador/scopus-survey-api/commit/8f0f7ac0846c2f20a9a91a429df337456ebd71c9) (2024-09-13)
+- Rename requirements files. [#e10eee8](https://github.com/mauprogramador/scopus-survey-api/commit/e10eee811638538bd2baffdeaa20e368acf48bb7) (2024-09-13)
+- Update dockerfile. [#07fe18d](https://github.com/mauprogramador/scopus-survey-api/commit/07fe18dd109ca3f8e4d860c29a80c3513acc7935) (2024-08-23)
+- Add toml as app dependency. [#eb58aa9](https://github.com/mauprogramador/scopus-survey-api/commit/eb58aa9de70d1578f1d2d1c6e3474728de10b7ad) (2024-08-23)
+- Update dependencies requirements. [#ad38924](https://github.com/mauprogramador/scopus-survey-api/commit/ad389243e231e915f10335d085c0dd5c23947fb9) (2024-08-20)
+- Update dependencies metadata. [#56e10ae](https://github.com/mauprogramador/scopus-survey-api/commit/56e10ae5c8ebd29db6c7e41101d5a3dc6b7ac141) (2024-08-20)
+- Add language and extra data docs dependencies. [#b83c6d0](https://github.com/mauprogramador/scopus-survey-api/commit/b83c6d0191e2e356d5143a6766dbbc16fb7f49af) (2024-08-20)
+- Add new dependencies and types stubs. [#326c6a3](https://github.com/mauprogramador/scopus-survey-api/commit/326c6a339c2a93114c22a343113b3ed99e428389) (2024-08-20)
+- Update metadata. [#c672f24](https://github.com/mauprogramador/scopus-survey-api/commit/c672f243a6679840e91d9f85cbc26a87877942ac) (2024-08-20)
+- Update formatter to black. [#c3cb5df](https://github.com/mauprogramador/scopus-survey-api/commit/c3cb5df5201590875cc590a8a4afdacb310587c5) (2024-08-20)
+- Add new words. [#675e316](https://github.com/mauprogramador/scopus-survey-api/commit/675e316e5b12816e6274c235ae180a4a713b87f7) (2024-08-20)
+- Ignore logs generated folder. [#12bf57e](https://github.com/mauprogramador/scopus-survey-api/commit/12bf57e1091f2d29fc93d414471563381314a8f0) (2024-04-25)
+- Add toml types. [#4753d1a](https://github.com/mauprogramador/scopus-survey-api/commit/4753d1a1ad6b6f612e43d30d2f059767e7b191cb) (2024-04-24)
+- Add uvicorn word. [#916e625](https://github.com/mauprogramador/scopus-survey-api/commit/916e625cad2ed39e26b43f57de316f84458cfe10) (2024-04-23)
+- Update changelog. [#1411c3b](https://github.com/mauprogramador/scopus-survey-api/commit/1411c3b846cc0601e1cc69b2bd1d83cfaf0481fb) (2024-03-11)
+
+### 🎨 Styles
+
+- Update swagger route description. [#2a8fa12](https://github.com/mauprogramador/scopus-survey-api/commit/2a8fa12ddaf45e03c043b36f57a7a3ab2c78c294) (2024-10-05)
+- Update docstrings, messages and descriptions. [#5944f54](https://github.com/mauprogramador/scopus-survey-api/commit/5944f54d0af803a11505fc6ca727322554ea2d8a) (2024-10-05)
+- Rename for use env. [#19be6fd](https://github.com/mauprogramador/scopus-survey-api/commit/19be6fda3520e1bae32b87888e6ec5e0365fbd36) (2024-09-14)
+- Formatting. [#635b96b](https://github.com/mauprogramador/scopus-survey-api/commit/635b96bde155b1383402b229af4a925b08c8999d) (2024-09-14)
+- Formating. [#634ba7a](https://github.com/mauprogramador/scopus-survey-api/commit/634ba7a3ff08dfdfe5db7c3fdcd975c52c6cf4a6) (2024-09-10)
+- Rename venv setup shell script. [#aa3439a](https://github.com/mauprogramador/scopus-survey-api/commit/aa3439aa4bf8009260d1cea66ba07fd0750128e7) (2024-08-20)
+
+<br>
+
+## 🔖 Release [`v2.0.0`](https://github.com/mauprogramador/scopus-survey-api/releases/tag/v2.0.0) (2024-03-11) <span id='v2.0.0'></span> [`▴`](#start)
+
+See the [⇅ comparison history](https://github.com/mauprogramador/scopus-survey-api/compare/v1.0.0...v2.0.0) with the previous tag.
+
+### ✨ Features
+
+- Update api version and metadata. [#a5a6249](https://github.com/mauprogramador/scopus-survey-api/commit/a5a62495e8279c1da265393ef47d757242431c78) (2024-03-11)
+- Update readme. [#8dca155](https://github.com/mauprogramador/scopus-survey-api/commit/8dca155b6f036c6eebad04aa7b2b50c0f63aa188) (2024-03-11)
+- Add csv table web page. [#38d3d34](https://github.com/mauprogramador/scopus-survey-api/commit/38d3d3434a4b5e4aafe323f0e98aae28e5e50d90) (2024-03-11)
+- Add similarity filter. [#a866ce5](https://github.com/mauprogramador/scopus-survey-api/commit/a866ce5993adf372ba924f87cd60ad8d4b250994) (2024-03-11)
+- Add request retriever. [#fc6f515](https://github.com/mauprogramador/scopus-survey-api/commit/fc6f515a5f84265ec5add3d45a1a314f79625c6f) (2024-03-11)
+- Update interfaces and add new route. [#c1d359c](https://github.com/mauprogramador/scopus-survey-api/commit/c1d359c365586e9377f119800fa4227dc2125468) (2024-03-11)
+- Add table route, descriptions and web tag. [#6015603](https://github.com/mauprogramador/scopus-survey-api/commit/6015603691f22da43aa0e290b92437e1867ffd5f) (2024-03-11)
+- Update info log method. [#2e2b52a](https://github.com/mauprogramador/scopus-survey-api/commit/2e2b52a6b88a00783ef3bdf51bcc1fb84693b8d2) (2024-03-11)
+- Add fuzzywuzzy library. [#9a0f568](https://github.com/mauprogramador/scopus-survey-api/commit/9a0f5687781e718ddc22e5e851669c06ecc7c652) (2024-03-11)
+- Update commands and metadata. [#ae30c01](https://github.com/mauprogramador/scopus-survey-api/commit/ae30c01e1f49bc296b27fbe00298d51dfaa25f77) (2024-03-11)
+
+### 🔧 Fixes
+
+- Fix branch to master in workflows. [#d12d403](https://github.com/mauprogramador/scopus-survey-api/commit/d12d403fccbec8bc333d589f522bf02447ad7916) (2024-03-11)
+
+### 🧪 Tests
+
+- Update and add app. [#c37bd71](https://github.com/mauprogramador/scopus-survey-api/commit/c37bd71c5f1acc0ea67c5b03b99d6b02a0d831c3) (2024-03-11)
+- Update and add data. [#2378c93](https://github.com/mauprogramador/scopus-survey-api/commit/2378c934221ecf8df866e27c0ac472bccfb20bde) (2024-03-11)
+
+### 📚 Docs
+
+- Add permission note. [#7e931cd](https://github.com/mauprogramador/scopus-survey-api/commit/7e931cd827f129229c76d6334090abfa9901a05c) (2024-03-11)
+- Update and add images assets. [#fc023d6](https://github.com/mauprogramador/scopus-survey-api/commit/fc023d668570fcf3ba9e60e51b542018d7662988) (2024-03-11)
+- Update nav and add csv asset. [#3059752](https://github.com/mauprogramador/scopus-survey-api/commit/30597529f7610e7e3cb2c16adf94384eda68ae12) (2024-03-11)
+- Update order and add table page. [#1b9141d](https://github.com/mauprogramador/scopus-survey-api/commit/1b9141d0735858acd1718709ecb008482e6fdcb4) (2024-03-11)
+- Add similarity filter. [#09134f6](https://github.com/mauprogramador/scopus-survey-api/commit/09134f6ba5d89a22c6107dcaa686085578ea1d58) (2024-03-11)
+- Add similarity technology. [#39e8327](https://github.com/mauprogramador/scopus-survey-api/commit/39e8327eb60af69820be83b09a75ff0a3863a344) (2024-03-11)
+- Add hooks, actions and new error. [#a7c91c5](https://github.com/mauprogramador/scopus-survey-api/commit/a7c91c5efe28af64c0abf7d2fefd6b900cf401c7) (2024-03-11)
+- Update links and strong API. [#8ee58e8](https://github.com/mauprogramador/scopus-survey-api/commit/8ee58e8d5bf252724b92445ae60337145518cd84) (2024-03-11)
+
+<br>
+
+## 🔖 Release [`v1.0.0`](https://github.com/mauprogramador/scopus-survey-api/releases/tag/v1.0.0) (2024-02-27) <span id='v1.0.0'></span> [`▴`](#start)
+
+### ✨ Features
+
+- Update version. [#cdcc1a4](https://github.com/mauprogramador/scopus-survey-api/commit/cdcc1a4a5ff97c2507f7ef943fcd2023cdf08af1) (2024-02-27)
+- Update version. [#457da7f](https://github.com/mauprogramador/scopus-survey-api/commit/457da7f48a85739a7a8002f939e48e2b8be11365) (2024-02-27)
+- Update actions versions. [#91159fc](https://github.com/mauprogramador/scopus-survey-api/commit/91159fcd41da2a925c1ec37144402669716d96f9) (2024-02-26)
+- Add github action documentation url. [#f985147](https://github.com/mauprogramador/scopus-survey-api/commit/f98514742c8977b4544788ab4a9bef88fd7c08fe) (2024-02-26)
+- Add githubworkflows. [#faebc92](https://github.com/mauprogramador/scopus-survey-api/commit/faebc92327c14bbc30a2f52f38cdf54d9f4d6d3f) (2024-02-26)
+- Update scopus search api url. [#a21f5b0](https://github.com/mauprogramador/scopus-survey-api/commit/a21f5b029b922dbed6d41d60ce489ae9b698a240) (2024-02-26)
+- Update name in template. [#d6a4689](https://github.com/mauprogramador/scopus-survey-api/commit/d6a468937280e67c321f35f38687fd8bf41560a4) (2024-02-26)
+- Update repository url and date. [#864d98a](https://github.com/mauprogramador/scopus-survey-api/commit/864d98a3b648b9cd12b48a3a7daa71f3d1045c7d) (2024-02-26)
+- Add web application javascript. [#8673384](https://github.com/mauprogramador/scopus-survey-api/commit/8673384611223524449e39ffd44c5d4266e0e701) (2024-02-26)
+- Add static css styles files. [#8f2b1ff](https://github.com/mauprogramador/scopus-survey-api/commit/8f2b1ffffaf3809543259597cb7697b4f20bc613) (2024-02-26)
+- Add static icons and images. [#a2a8432](https://github.com/mauprogramador/scopus-survey-api/commit/a2a84324aba4ba87ee2b2b0c94b0506014ec3f75) (2024-02-26)
+- Add svg icons. [#5c30dcd](https://github.com/mauprogramador/scopus-survey-api/commit/5c30dcd5aaa2dfa2ab55dfe9681dd72517eb95df) (2024-02-26)
+- Add web application template. [#2f4d91c](https://github.com/mauprogramador/scopus-survey-api/commit/2f4d91c61239ea78288a6d1432edd6590192969d) (2024-02-26)
+- Add application app and main configuration. [#07dae0c](https://github.com/mauprogramador/scopus-survey-api/commit/07dae0c7a29579518d3c3372458f240f7684b750) (2024-02-26)
+- Add application api. [#2c9f501](https://github.com/mauprogramador/scopus-survey-api/commit/2c9f501120ef7a816259316920c47da58bea1a38) (2024-02-26)
+- Add api dependencies. [#3832289](https://github.com/mauprogramador/scopus-survey-api/commit/3832289feaaf26c1855ed12584de88bb8b91ddb6) (2024-02-26)
+- Add gateway for scopus search api. [#74465e9](https://github.com/mauprogramador/scopus-survey-api/commit/74465e927c7e501b4083a51ba3855cda8a8de964) (2024-02-26)
+- Add logger and lifespan. [#6dce64f](https://github.com/mauprogramador/scopus-survey-api/commit/6dce64fe003cfa28cb82ca738ac422a2a34e5e70) (2024-02-26)
+- Add application core. [#a36e346](https://github.com/mauprogramador/scopus-survey-api/commit/a36e346a6f36500a83f64a0918c57aa5751e6dff) (2024-02-26)
+- Add exceptions and handler. [#c41ecbd](https://github.com/mauprogramador/scopus-survey-api/commit/c41ecbd458231a52b011c4c9e580e178f8723757) (2024-02-26)
+
+### 🧪 Tests
+
+- Add application tests files. [#0cfc0a7](https://github.com/mauprogramador/scopus-survey-api/commit/0cfc0a761d8cf15f943679bb0f790925510461bf) (2024-02-26)
+- Add tests helpers and mock data. [#e4925ea](https://github.com/mauprogramador/scopus-survey-api/commit/e4925eac144366b436e81ead6661174947a91caa) (2024-02-26)
+- Add rest client file. [#7eee681](https://github.com/mauprogramador/scopus-survey-api/commit/7eee681672eb20859b99cf0377226a03424ad7b7) (2024-02-26)
+- Add tests package. [#6e31933](https://github.com/mauprogramador/scopus-survey-api/commit/6e3193342ecb9b2fd5508e6e331ccfd4f9ec71a3) (2024-02-26)
+
+### 📚 Docs
+
+- Add changelog. [#5177dae](https://github.com/mauprogramador/scopus-survey-api/commit/5177dae7b7d74bf1609798ec7658c9bc374ceb2c) (2024-02-27)
+- Update repository url. [#8f37bde](https://github.com/mauprogramador/scopus-survey-api/commit/8f37bdeb750980e42566ddb664e5e98635d97a8a) (2024-02-26)
+- Add portuguese documentation. [#dc54d32](https://github.com/mauprogramador/scopus-survey-api/commit/dc54d3281bc240134b0f8ef345d2c32b0e865dbc) (2024-02-26)
+- Add english documentation. [#fbcad81](https://github.com/mauprogramador/scopus-survey-api/commit/fbcad81e16d5b4f098931493dc6448d44d622a43) (2024-02-26)
+- Add index and static images. [#8c7b616](https://github.com/mauprogramador/scopus-survey-api/commit/8c7b6169cc968c761ebed93170362e2c42cdf264) (2024-02-26)
+- Add configuration file. [#898fd16](https://github.com/mauprogramador/scopus-survey-api/commit/898fd1612a0461ae45796e9791b24d6aee9b4668) (2024-02-26)
+
+### 📌 Others
+
+- Add configuration files. [#b2a7605](https://github.com/mauprogramador/scopus-survey-api/commit/b2a7605272ee1e76bf01ab7298dd3f2ea10cc333) (2024-02-26)
+- Add requirements files. [#67a48f9](https://github.com/mauprogramador/scopus-survey-api/commit/67a48f9c29b43a1d85295b19ce62462a4a9ac508) (2024-02-26)
+- Add configuration files. [#f06224c](https://github.com/mauprogramador/scopus-survey-api/commit/f06224cd8dd135ee5849eaaa13c80b9625290750) (2024-02-26)
