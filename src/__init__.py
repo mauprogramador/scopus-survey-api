@@ -20,7 +20,7 @@
 _Web API for bibliographic survey of Scopus articles_
 """
 
-__version__ = "3.2.5"
+__version__ = "3.2.6"
 __license__ = "MIT"
 __copyright__ = (
     "Copyright (C) 2024 Maurício da Silva Batista and Instituto"

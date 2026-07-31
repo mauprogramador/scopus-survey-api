@@ -288,13 +288,13 @@ If scopus-survey-pi helped you getting data for research, please cite it:
 📝 **APA**
 
 ```text
-Batista, M. d. S. (2025). Scopus Survey API: Web API for bibliographic survey of Scopus articles (Version 3.2.5) [Web API]. GitHub. https://github.com/mauprogramador/scopus-survey-api.
+Batista, M. d. S. (2025). Scopus Survey API: Web API for bibliographic survey of Scopus articles (Version 3.2.6) [Web API]. GitHub. https://github.com/mauprogramador/scopus-survey-api.
 ```
 
 📝 **ABNT** &nbsp; `pt-BR`
 
 ```text
-BATISTA, Maurício da Silva. Scopus Survey API: API da Web para levantamento bibliográfico de artigos da Scopus. Versão 3.2.5. [Web API]. GitHub, 2025. Disponível em: https://github.com/mauprogramador/scopus-survey-api. Acesso em: DD MMM. YYYY.
+BATISTA, Maurício da Silva. Scopus Survey API: API da Web para levantamento bibliográfico de artigos da Scopus. Versão 3.2.6. [Web API]. GitHub, 2025. Disponível em: https://github.com/mauprogramador/scopus-survey-api. Acesso em: DD MMM. YYYY.
 ```
 
 <br>
