@@ -58,9 +58,6 @@ class ScopusPage(Protocol):
     items_per_page: int
     entry: list[ScopusEntry]
 
-    def details(self) -> dict[str, Any]:
-        pass
-
 
 class CombinationParams(Protocol):
     api_key: str
