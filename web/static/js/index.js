@@ -87,6 +87,10 @@ function updateDetails(headers) {
     }
   });
 
+  if (headers.has('x-total-retrieved') && headers.has('x-total-final')) {
+    detailsCache['x-loss'] = 'FOO'; // Inserted later
+  }
+
   Object.entries(detailsGroupLabels[lang]).forEach(
     ([groupName, groupLabels]) => {
       let thGroupLabel = document.createElement('th');
