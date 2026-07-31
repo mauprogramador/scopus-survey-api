@@ -52,7 +52,7 @@ class ScopusVolumeScouter:
         )
         results.sort(key=self._key)
 
-        logger.quota(quota_headers, "search")
+        logger.quota(quota_headers, "search", allow_empty=True)
 
         return results, quota_headers
 

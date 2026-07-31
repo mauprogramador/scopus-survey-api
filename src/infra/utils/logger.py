@@ -20,7 +20,7 @@ from tqdm.std import tqdm as std_tqdm
 
 from src.core.domain.types import APIName, Json, ScopusHeaders
 from src.infra.config.config import ENV
-from src.infra.config.scopus import SEARCH_API_URL
+from src.infra.config.scopus import EMPTY_RESULT, SEARCH_API_URL
 
 
 # e.g. \033[35;1m, \033[m
@@ -282,7 +282,12 @@ def combinations(keywords_count: int) -> None:
     LOGGER.info(_COMBINATIONS, args, stacklevel=2)
 
 
-def quota(headers: ScopusHeaders, api_name: APIName) -> None:
+def quota(
+    headers: ScopusHeaders, api_name: APIName, allow_empty: bool = None
+) -> None:
+    if allow_empty and headers.status and EMPTY_RESULT in headers.status:
+        headers.status = "OK"
+
     args = {
         "api_name": api_name.capitalize(),
         "limit": headers.limit,
