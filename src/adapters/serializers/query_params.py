@@ -168,11 +168,11 @@ class CombinationParams(CSVParams):
     @classmethod
     def handle_keywords_length(cls, value: Any) -> Any | list[str]:
         if isinstance(value, str):
-            return value.split(",")
+            return [keyword.strip() for keyword in value.split(",")]
 
         try:
             if len(value) == 1:
-                return value[0].split(",")
+                return [keyword.strip() for keyword in value[0].split(",")]
 
         except (KeyError, TypeError):
             pass
