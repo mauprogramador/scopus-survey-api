@@ -23,7 +23,7 @@ from src.infra.utils import logger
 # https://dev.elsevier.com/api_key_settings.html
 
 
-class HTTPClient:  # pylint: disable=R0902
+class HTTPClient:
     """Make async HTTP requests with throttling and retry mechanisms
 
     **Note:** This client must be initialized within an async **event loop**
@@ -54,7 +54,7 @@ class HTTPClient:  # pylint: disable=R0902
             headers=SCOPUS_HEADERS,
             timeout=self._TIMEOUT,
         )
-        self._retry_options = aioretry.JitterRetry(
+        retry_options = aioretry.JitterRetry(
             attempts=3,
             start_timeout=1.5,
             max_timeout=8.0,
@@ -64,7 +64,7 @@ class HTTPClient:  # pylint: disable=R0902
         )
         self._client = aioretry.RetryClient(
             client_session=self._session,
-            retry_options=self._retry_options,
+            retry_options=retry_options,
         )
         self._rate_limit_holder = asyncio.Event()
         self._rate_limit_holder.set()  # Procced

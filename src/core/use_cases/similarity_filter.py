@@ -3,7 +3,7 @@ import os
 
 import pandas as pd
 from pandas import DataFrame
-from thefuzz.fuzz import ratio as fuzz_ratio  # type: ignore
+from thefuzz.fuzz import ratio as fuzz_ratio
 
 from src.infra.utils import logger
 

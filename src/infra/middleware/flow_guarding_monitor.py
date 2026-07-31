@@ -49,6 +49,7 @@ class FlowGuardingMonitorMiddleware(BaseHTTPMiddleware):
             res = await call_next(request)
             trace_id = TRACE_ID_CTX.get()
 
+        # Global generic exception handler needs to catch 'Exception'
         except Exception as exc:  # pylint: disable=W0718
             trace_id = TRACE_ID_CTX.get()
             res = common_error(request, exc)

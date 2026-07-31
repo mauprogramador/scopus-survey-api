@@ -109,7 +109,7 @@ def get_not_found_template(
         "timestamp": datetime.now(timezone.utc).isoformat(
             timespec="seconds"  # e.g. 2026-01-01T00:00:00Z
         ),
-        "error_json": res.body.decode(),  # type: ignore
+        "error_json": res.body.decode(),  # type: ignore[union-attr]
     }
 
     return _TEMPLATES.TemplateResponse(

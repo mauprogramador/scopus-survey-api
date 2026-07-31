@@ -134,6 +134,7 @@ class ScopusAbstract(BaseModel):
 
     @model_validator(mode="after")
     def set_article_page_url(self) -> Self:
+        # Pylint gets 'FieldInfo' instead of 'str'
         scopus_id = self.scopus_id.split(":")[1]  # pylint: disable=E1101
         self.url = build_article_page_url(scopus_id)
         return self

@@ -1,4 +1,3 @@
-# pylint: disable=W0621
 import logging
 import os
 import re
@@ -390,7 +389,7 @@ def api_call(url: str, code: int, time: float) -> None:
     else:
         prefix = _Level.ABSTRACT
 
-    scope: StarletteScope = {  # type: ignore
+    scope: StarletteScope = {
         "type": "http",
         "method": "GET",
         "path": url,

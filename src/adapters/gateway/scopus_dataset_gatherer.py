@@ -46,6 +46,7 @@ class ScopusDatasetGatherer:
         res = await self._http_client.api_call(url)
         page = await asyncio.to_thread(validate_search_response, res)
 
+        # Interface Segregation for ScopusPage
         return page, res.headers  # type: ignore[return-value]
 
     async def _fetch_abstract(self, index: int) -> tuple[Json, Headers]:

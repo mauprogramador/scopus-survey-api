@@ -25,6 +25,7 @@ FAVICON_HEADERS = {
 SALT = "scopus-survey-csrf-token"
 MAX_AGE = 3600  # 1 hour
 
+# Built from env
 ENV = EnvConfig()  # type: ignore[call-arg]
 
 LIMITER = Limiter(key_func=get_remote_address, headers_enabled=True)

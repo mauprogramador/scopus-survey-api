@@ -29,6 +29,7 @@ async def fetch_multiple[T](
         logger.error(exc_gp.message)
         logger.exception(exc_gp)
 
+        # Propagate the first caught error instead
         raise exc_gp.exceptions[0]
 
     if not tasks:
