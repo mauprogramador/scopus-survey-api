@@ -130,9 +130,8 @@
   color: var(--focus-color) !important;
 }
 .field-wrapper:has(
-  select[data-checked='true'][aria-invalid='false']:valid:not(
-      :has(option:first-child:checked)
-    )
+  select[data-checked='true'][aria-invalid='false']:valid
+    option:not([value='']):checked
 ) {
   border-color: var(--valid-color) !important;
 }
