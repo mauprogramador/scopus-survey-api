@@ -32,8 +32,8 @@
   display: flex;
 }
 .field-icon:has(
-    + :is(input:not([type='radio']), select):is(:focus, :focus-visible)
-  ) {
+  + :is(input:not([type='radio']), select):is(:focus, :focus-visible)
+) {
   color: var(--focus-color) !important;
 }
 
@@ -71,16 +71,16 @@
   border-color: var(--primary-color) !important;
 }
 .field-wrapper:has(
-    input[data-checked='true'][aria-invalid='false']:valid:not(
-        [type='radio'],
-        :placeholder-shown
-      )
-  ) {
+  input[data-checked='true'][aria-invalid='false']:valid:not(
+      [type='radio'],
+      :placeholder-shown
+    )
+) {
   border-color: var(--valid-color) !important;
 }
 .field-wrapper:has(
-    input[data-checked='true'][aria-invalid='true']:invalid:not([type='radio'])
-  ) {
+  input[data-checked='true'][aria-invalid='true']:invalid:not([type='radio'])
+) {
   border-color: var(--invalid-color) !important;
 }
 .field-wrapper:has(input:not([type='radio']), select):focus-within {
@@ -97,11 +97,11 @@
   outline-color: var(--valid-color);
 }
 .field-wrapper:has(
-    :is(
-        input:not([type='radio']),
-        select
-      )[data-checked='true'][aria-invalid='true']:invalid
-  ) {
+  :is(
+      input:not([type='radio']),
+      select
+    )[data-checked='true'][aria-invalid='true']:invalid
+) {
   outline-color: var(--invalid-color);
 }
 
@@ -130,10 +130,10 @@
   color: var(--focus-color) !important;
 }
 .field-wrapper:has(
-    select[data-checked='true'][aria-invalid='false']:valid:not(
-        :has(option:first-child:checked)
-      )
-  ) {
+  select[data-checked='true'][aria-invalid='false']:valid:not(
+      :has(option:first-child:checked)
+    )
+) {
   border-color: var(--valid-color) !important;
 }
 .field-wrapper:has(select[data-checked='true'][aria-invalid='true']:invalid) {

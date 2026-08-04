@@ -37,12 +37,8 @@ function fieldsValidity(fields) {
 
 // Year Range
 function validateYearRange(field) {
-  console.log(field);
-
   let startYearChange = startYearField.value === startYearField.defaultValue;
   let endYearChange = endYearField.value === endYearField.defaultValue;
-
-  console.log(startYearChange, endYearChange);
 
   if (startYearChange && endYearChange) {
     return '';
@@ -145,6 +141,7 @@ function showErrorFeedback(field, feedback = '') {
     field.ariaInvalid = 'true';
 
     console.error(`${field.name}: ${feedback}`);
+
     fieldFeedback.innerText = feedback;
     fieldFeedback.toggleAttribute('hidden', false);
   } else {
