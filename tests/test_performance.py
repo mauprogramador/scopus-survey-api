@@ -2,10 +2,11 @@ import contextlib
 import random
 import string
 import time
+from typing import cast
 
 import pandas as pd
 from httpx import AsyncClient as Client
-from pytest import mark
+from pytest import FixtureRequest, Mark, fixture, mark, skip
 from pytest_mock import MockerFixture as Mocker
 
 from src.adapters.persistence.csv_builder import (
@@ -44,6 +45,26 @@ from tests.mocks.raw import (
 
 
 # Base duration is the P95 time based on a summary report of 50x executions
+REASON = "Performance tests must be run individually to ensure clean metrics"
+
+
+@fixture(autouse=True, scope="function")
+def enforce_performance_isolation(request: FixtureRequest):
+    if request.session.testscollected == 1:
+        return
+
+    if request.session.testscollected > 7:
+        skip(REASON)
+
+    parametrize_mark = cast(Mark | None, request.keywords.get("parametrize"))
+
+    if not parametrize_mark:
+        skip(REASON)
+
+    names = {item.name.rsplit("[", 1)[0] for item in request.session.items}
+
+    if len(names) > 1:
+        skip(REASON)
 
 
 @contextlib.contextmanager
