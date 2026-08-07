@@ -10,12 +10,13 @@ import aiolimiter
 
 from src.adapters.types import ResponseBundle
 from src.core.domain.types import ExcMsg, Json
-from src.core.domain.exceptions import (
-    BadGateway,
-    BadGatewayContent,
-    GatewayTimeout,
-)
 from src.infra.config.scopus import RATE_LIMIT_ERROR_CODE, SCOPUS_HEADERS
+from src.infra.exceptions import (
+    APIConnectionError,
+    APIContentError,
+    APIRequestError,
+    APITimeoutError,
+)
 from src.infra.utils import logger
 
 
@@ -139,13 +140,13 @@ class HTTPClient:
                 raise exc
 
             except asyncio.TimeoutError as exc:
-                raise GatewayTimeout(ExcMsg.CONNECTION_TIMEOUT, exc) from exc
+                raise APITimeoutError(ExcMsg.CONNECTION_TIMEOUT, exc) from exc
 
             except aiohttp.ClientConnectionError as exc:
-                raise BadGateway(ExcMsg.CONNECTION_ERROR, exc) from exc
+                raise APIConnectionError(ExcMsg.CONNECTION_ERROR, exc) from exc
 
             except Exception as exc:
-                raise BadGateway(ExcMsg.REQUEST_EXCEPTION, exc) from exc
+                raise APIRequestError(ExcMsg.REQUEST_EXCEPTION, exc) from exc
 
             try:
                 data: Json | None = await res.json()
@@ -156,7 +157,7 @@ class HTTPClient:
             except (aiohttp.ContentTypeError, JSONDecodeError) as exc:
                 body = await res.text()
 
-                raise BadGatewayContent(
+                raise APIContentError(
                     ExcMsg.INVALID_JSON_ERROR, exc, body
                 ) from exc
 

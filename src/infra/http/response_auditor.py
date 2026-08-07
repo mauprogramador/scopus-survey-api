@@ -10,8 +10,8 @@ from src.adapters.serializers.scopus_data import (
 )
 from src.adapters.types import ResponseBundle
 from src.core.domain.types import ExcMsg
-from src.core.domain.exceptions import InternalError, ScopusAPIError
 from src.infra.config.scopus import QUOTA_ERROR_CODE, RATE_LIMIT_ERROR_CODE
+from src.infra.exceptions import APIResponseError, APIValidationError
 from src.infra.utils import logger
 
 
@@ -34,7 +34,7 @@ def _validate[T: BaseModel](model: type[T], res: ResponseBundle) -> T:
                 elif error_res.code == RATE_LIMIT_ERROR_CODE:
                     logger.error(ExcMsg.RATE_LIMIT_EXCEEDED)
 
-            raise ScopusAPIError(
+            raise APIResponseError(
                 res.code,
                 quota.model_dump(),
                 error_res.model_dump(),
@@ -43,7 +43,7 @@ def _validate[T: BaseModel](model: type[T], res: ResponseBundle) -> T:
         return model.model_validate(res.data)
 
     except ValidationError as exc:
-        raise InternalError(ExcMsg.VALIDATE_ERROR, exc) from exc
+        raise APIValidationError(ExcMsg.VALIDATE_ERROR, exc) from exc
 
 
 def validate_search_response(res: ResponseBundle) -> ScopusPage:

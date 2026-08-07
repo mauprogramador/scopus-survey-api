@@ -8,10 +8,11 @@ from pytest_asyncio import fixture as async_fixture
 from pytest_mock import MockerFixture as Mocker
 
 from src.core.domain.types import ExcMsg
-from src.core.domain.exceptions import (
-    BadGateway,
-    BadGatewayContent,
-    GatewayTimeout,
+from src.infra.exceptions import (
+    APIConnectionError,
+    APIContentError,
+    APIRequestError,
+    APITimeoutError,
 )
 from src.infra.http.http_client import HTTPClient
 from tests.conftest import LIMITER, SEMAPHORE, assert_http_error
@@ -68,7 +69,7 @@ async def test_cancelled_error(mocker: Mocker, client: HTTPClient):
 @mark.asyncio
 async def test_timeout_error(mocker: Mocker, client: HTTPClient):
     mock = mocker.patch(*get_patch(asyncio.TimeoutError("any")))
-    with raises(GatewayTimeout) as info:
+    with raises(APITimeoutError) as info:
         await client.api_call("any")
     assert_http_error(info, HTTP_504, ExcMsg.CONNECTION_TIMEOUT)
     assert info.value.details[0]["type"] == fqn(asyncio.TimeoutError)
@@ -79,7 +80,7 @@ async def test_timeout_error(mocker: Mocker, client: HTTPClient):
 @mark.asyncio
 async def test_client_connection_error(mocker: Mocker, client: HTTPClient):
     mock = mocker.patch(*get_patch(aiohttp.ClientConnectionError("any")))
-    with raises(BadGateway) as info:
+    with raises(APIConnectionError) as info:
         await client.api_call("any")
     assert_http_error(info, HTTP_502, ExcMsg.CONNECTION_ERROR)
     assert info.value.details[0]["type"] == fqn(aiohttp.ClientConnectionError)
@@ -90,7 +91,7 @@ async def test_client_connection_error(mocker: Mocker, client: HTTPClient):
 @mark.asyncio
 async def test_uncaught_exception(mocker: Mocker, client: HTTPClient):
     mock = mocker.patch(*get_patch(RuntimeError("any")))
-    with raises(BadGateway) as info:
+    with raises(APIRequestError) as info:
         await client.api_call("any")
     assert_http_error(info, HTTP_502, ExcMsg.REQUEST_EXCEPTION)
     assert info.value.details[0]["type"] == fqn(RuntimeError)
@@ -101,7 +102,7 @@ async def test_uncaught_exception(mocker: Mocker, client: HTTPClient):
 @mark.asyncio
 async def test_content_type_error(mocker: Mocker, client: HTTPClient):
     mock = mocker.patch(*get_patch(GET_CONTENT_TYPE_ERROR))
-    with raises(BadGatewayContent) as info:
+    with raises(APIContentError) as info:
         await client.api_call("any")
     assert_http_error(info, HTTP_502, ExcMsg.INVALID_JSON_ERROR)
     assert info.value.details[0]["type"] == fqn(aiohttp.ContentTypeError)
@@ -115,7 +116,7 @@ async def test_content_type_error(mocker: Mocker, client: HTTPClient):
 @mark.asyncio
 async def test_no_data_error(mocker: Mocker, client: HTTPClient):
     mock = mocker.patch(*get_patch(GET_EMPTY_RESPONSE))
-    with raises(BadGatewayContent) as info:
+    with raises(APIContentError) as info:
         await client.api_call("any")
     assert_http_error(info, HTTP_502, ExcMsg.INVALID_JSON_ERROR)
     assert info.value.details[0]["type"] == fqn(JSONDecodeError)
@@ -129,7 +130,7 @@ async def test_no_data_error(mocker: Mocker, client: HTTPClient):
 @mark.asyncio
 async def test_json_decode_error(mocker: Mocker, client: HTTPClient):
     mock = mocker.patch(*get_patch(GET_JSON_DECODE_ERROR))
-    with raises(BadGatewayContent) as info:
+    with raises(APIContentError) as info:
         await client.api_call("any")
     assert_http_error(info, HTTP_502, ExcMsg.INVALID_JSON_ERROR)
     assert info.value.details[0]["type"] == fqn(JSONDecodeError)

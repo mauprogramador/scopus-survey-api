@@ -8,14 +8,11 @@ from pydantic_core import ValidationError
 from slowapi.errors import RateLimitExceeded
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
+from src.adapters.exceptions import BaseHTTPError
+from src.adapters.formatters import get_error_details
 from src.adapters.presenters.json_response import ErrorJSON
 from src.core.domain.types import ExcMsg, Json
-from src.core.domain.exceptions import (
-    HTTPError,
-    InternalError,
-    ScopusAPIError,
-    get_error_details,
-)
+from src.infra.exceptions import APIResponseError, UncaughtError
 from src.infra.i18n.translations import translate_error
 from src.infra.utils import logger
 
@@ -30,7 +27,7 @@ def common_error(request: FastAPIRequest, exc: Exception) -> ErrorJSON:
 
     if isinstance(exc, ExceptionGroup):
         for exc_item in exc.exceptions:
-            if isinstance(exc_item, ScopusAPIError):
+            if isinstance(exc_item, APIResponseError):
                 details.extend(exc_item.details)
             else:
                 details.append(get_error_details(exc_item))
@@ -38,7 +35,7 @@ def common_error(request: FastAPIRequest, exc: Exception) -> ErrorJSON:
     logger.error(details[0]["message"], tracking_id)
     logger.exception(exc)
 
-    exc = InternalError(ExcMsg.INTERNAL_ERROR, exc)  # for translation only
+    exc = UncaughtError(ExcMsg.INTERNAL_ERROR, exc)  # for translation only
 
     return ErrorJSON(
         request,
@@ -50,11 +47,11 @@ def common_error(request: FastAPIRequest, exc: Exception) -> ErrorJSON:
 
 
 async def custom_http_error(
-    request: FastAPIRequest, exc: HTTPError
+    request: FastAPIRequest, exc: BaseHTTPError
 ) -> ErrorJSON:
     tracking_id = _get_tracking_id(exc)
 
-    logger.error(exc.detail, tracking_id)
+    logger.error(exc.message, tracking_id)
     logger.exception(exc)
 
     return ErrorJSON(
@@ -67,7 +64,7 @@ async def custom_http_error(
 
 
 async def scopus_api_error(
-    request: FastAPIRequest, exc: ScopusAPIError
+    request: FastAPIRequest, exc: APIResponseError
 ) -> ErrorJSON:
     tracking_id = _get_tracking_id(exc)
 
@@ -178,8 +175,8 @@ async def rate_limit_error(
 
 
 HANDLERS = {
-    HTTPError: custom_http_error,
-    ScopusAPIError: scopus_api_error,
+    BaseHTTPError: custom_http_error,
+    APIResponseError: scopus_api_error,
     StarletteHTTPException: starlette_http_exception,
     FastAPIHTTPException: starlette_http_exception,
     RequestValidationError: fastapi_validation_error,

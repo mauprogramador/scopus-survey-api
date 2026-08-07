@@ -11,8 +11,8 @@ from itsdangerous import (
 from pydantic import TypeAdapter, ValidationError
 
 from src.core.domain.types import ExcMsg
-from src.core.domain.exceptions import Unauthorized
 from src.infra.config.config import ENV, MAX_AGE, SALT
+from src.infra.exceptions import CSRFAuthenticationError
 from src.infra.types import CSRFToken
 
 
@@ -43,24 +43,26 @@ def verify_csrf_token(
 ) -> None:
 
     if signed_token is None:
-        raise Unauthorized(ExcMsg.TOKEN_COOKIE_ERROR)
+        raise CSRFAuthenticationError(ExcMsg.TOKEN_COOKIE_ERROR)
 
     if header_token is None:
-        raise Unauthorized(ExcMsg.TOKEN_HEADER_ERROR)
+        raise CSRFAuthenticationError(ExcMsg.TOKEN_HEADER_ERROR)
 
     try:
         _TOKEN_ADAPTER.validate_strings(header_token, strict=True)
     except ValidationError as exc:
-        raise Unauthorized(ExcMsg.INVALID_TOKEN, exc) from exc
+        raise CSRFAuthenticationError(ExcMsg.INVALID_TOKEN, exc) from exc
 
     try:
         cookie_token: str = _SERIALIZER.loads(signed_token, MAX_AGE)
 
     except SignatureExpired as exc:
-        raise Unauthorized(ExcMsg.EXPIRED_TOKEN, exc) from exc
+        raise CSRFAuthenticationError(ExcMsg.EXPIRED_TOKEN, exc) from exc
 
     except (BadSignature, BadData) as exc:
-        raise Unauthorized(ExcMsg.TOKEN_SIGNATURE_ERROR, exc) from exc
+        raise CSRFAuthenticationError(
+            ExcMsg.TOKEN_SIGNATURE_ERROR, exc
+        ) from exc
 
     if header_token != cookie_token:
-        raise Unauthorized(ExcMsg.INVALID_TOKEN)
+        raise CSRFAuthenticationError(ExcMsg.INVALID_TOKEN)

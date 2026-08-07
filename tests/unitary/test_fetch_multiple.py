@@ -4,9 +4,10 @@ from unittest.mock import AsyncMock
 from pydantic import ValidationError
 from pytest import mark, raises
 
+from src.adapters.exceptions import BaseHTTPError
 from src.adapters.types import Headers
 from src.core.domain.types import ExcMsg
-from src.core.domain.exceptions import HTTPError, InternalError
+from src.infra.exceptions import TasksCancellationError
 from src.infra.http.fetch_multiple_concurrent import fetch_multiple
 from tests.conftest import assert_http_error
 from tests.mocks.errors import (
@@ -37,7 +38,7 @@ async def test_fetch_multiple_task_error():
 
 @mark.asyncio
 async def test_fetch_multiple_no_tasks():
-    with raises(InternalError) as info:
+    with raises(TasksCancellationError) as info:
         await fetch_multiple(AsyncMock(), range(0), range(0))
     assert info.value.message == ExcMsg.INTERNAL_ERROR
 
@@ -45,7 +46,7 @@ async def test_fetch_multiple_no_tasks():
 @mark.asyncio
 async def test_fetch_multiple_http_error():
     fetcher = AsyncMock(side_effect=TASKS_HTTP_ERROR)
-    with raises(HTTPError) as info:
+    with raises(BaseHTTPError) as info:
         await fetch_multiple(fetcher, range(6), range(6))
     assert_http_error(info, HTTP_400, ExcMsg.INTERNAL_ERROR)
     assert info.value.details[0]["type"] == fqn(ValueError)

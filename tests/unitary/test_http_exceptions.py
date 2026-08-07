@@ -7,16 +7,15 @@ from itsdangerous import SignatureExpired
 from pydantic import ValidationError
 from pytest import mark, raises
 
+from src.adapters.exceptions import BaseHTTPError
+from src.adapters.formatters import _get_error_message, get_error_details
 from src.core.domain.types import ExcMsg
-from src.core.domain.exceptions import (
-    BadGatewayContent,
-    HTTPError,
-    ScopusAPIError,
-    Unauthorized,
-    get_error_details,
-    get_error_message,
-)
 from src.infra.config.scopus import RATE_LIMIT_ERROR_CODE
+from src.infra.exceptions import (
+    APIContentError,
+    APIResponseError,
+    CSRFAuthenticationError,
+)
 from tests.conftest import assert_http_error
 from tests.mocks.errors import (
     CONTENT_TYPE_ERROR,
@@ -39,7 +38,7 @@ from tests.mocks.raw import HTTP_401, HTTP_429, HTTP_500, HTTP_502
     ids=["args", "message", "detail", "repr"],
 )
 def test_get_error_message(exc: Exception, msg: str):
-    assert get_error_message(exc) == msg
+    assert _get_error_message(exc) == msg
 
 
 @mark.xfail(reason="Data leak")
@@ -75,9 +74,9 @@ def test_get_error_details_with_cause():
 
 
 def test_http_error():
-    with raises(HTTPError) as info:
+    with raises(BaseHTTPError) as info:
         exc = ValueError("any")
-        raise HTTPError(HTTP_500, ExcMsg.INTERNAL_ERROR, exc)
+        raise BaseHTTPError(HTTP_500, ExcMsg.INTERNAL_ERROR, exc)
 
     assert_http_error(info, HTTP_500, trans(info.value))
     assert info.value.details[0]["type"] == fqn(ValueError)
@@ -86,9 +85,9 @@ def test_http_error():
 
 def test_signature_error():
     date_signed = datetime.now()
-    with raises(HTTPError) as info:
+    with raises(BaseHTTPError) as info:
         exc = SignatureExpired("any", "any", date_signed)
-        raise Unauthorized(ExcMsg.INVALID_TOKEN, exc)
+        raise CSRFAuthenticationError(ExcMsg.INVALID_TOKEN, exc)
 
     assert_http_error(info, HTTP_401, trans(info.value))
     assert info.value.details[0]["type"] == fqn(SignatureExpired)
@@ -102,9 +101,9 @@ def test_signature_error():
 
 
 def test_content_type_error():
-    with raises(HTTPError) as info:
+    with raises(BaseHTTPError) as info:
         exc = CONTENT_TYPE_ERROR
-        raise BadGatewayContent(ExcMsg.INVALID_JSON_ERROR, exc, "any")
+        raise APIContentError(ExcMsg.INVALID_JSON_ERROR, exc, "any")
 
     assert_http_error(info, HTTP_502, trans(info.value))
     assert info.value.details[0]["type"] == fqn(aiohttp.ContentTypeError)
@@ -117,9 +116,9 @@ def test_content_type_error():
 
 
 def test_content_type_error_truncate():
-    with raises(HTTPError) as info:
+    with raises(BaseHTTPError) as info:
         exc = CONTENT_TYPE_ERROR
-        raise BadGatewayContent(ExcMsg.INVALID_JSON_ERROR, exc, "any" * 1000)
+        raise APIContentError(ExcMsg.INVALID_JSON_ERROR, exc, "any" * 1000)
 
     assert_http_error(info, HTTP_502, trans(info.value))
     assert info.value.details[0]["type"] == fqn(aiohttp.ContentTypeError)
@@ -127,9 +126,9 @@ def test_content_type_error_truncate():
 
 
 def test_json_decode_error():
-    with raises(HTTPError) as info:
+    with raises(BaseHTTPError) as info:
         exc = JSON_DECODE_ERROR
-        raise BadGatewayContent(ExcMsg.INVALID_JSON_ERROR, exc, "any")
+        raise APIContentError(ExcMsg.INVALID_JSON_ERROR, exc, "any")
 
     assert_http_error(info, HTTP_502, trans(info.value))
     assert info.value.details[0]["type"] == fqn(JSONDecodeError)
@@ -143,8 +142,8 @@ def test_json_decode_error():
 
 
 def test_scopus_api_error():
-    with raises(ScopusAPIError) as info:
-        raise ScopusAPIError(
+    with raises(APIResponseError) as info:
+        raise APIResponseError(
             HTTP_429,
             {
                 "limit": 20000,

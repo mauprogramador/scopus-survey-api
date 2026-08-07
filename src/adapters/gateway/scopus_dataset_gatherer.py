@@ -1,9 +1,9 @@
 import asyncio
 
+from src.adapters.exceptions import DataSumMismatchError, ResourceNotFoundError
 from src.adapters.gateway.context import ScopusContext
 from src.adapters.serializers.scopus_data import ScopusHeaders
 from src.adapters.types import Headers, HTTPClient, URLBuilder
-from src.core.domain.exceptions import BadGateway, NotFound
 from src.core.domain.types import (
     ExcMsg,
     Json,
@@ -57,7 +57,7 @@ class ScopusDatasetGatherer:
 
     def _validate_results(self) -> tuple[list[Json], ScopusDetails]:
         if self._ctx.total_results != len(self._ctx.abstracts):
-            raise BadGateway(ExcMsg.DATA_MISMATCH_ERROR)
+            raise DataSumMismatchError(ExcMsg.DATA_MISMATCH_ERROR)
 
         search_headers = ScopusHeaders.model_validate(self._ctx.search_headers)
         abstract_headers = ScopusHeaders.model_validate(
@@ -111,7 +111,7 @@ class ScopusDatasetGatherer:
         logger.total_found(search_result.total_results)
 
         if search_result.total_results == 0:
-            raise NotFound(ExcMsg.ARTICLES_NOT_FOUND)
+            raise ResourceNotFoundError(ExcMsg.ARTICLES_NOT_FOUND)
 
         self._ctx.entry.extend(search_result.entry)
         self._ctx.search_result = search_result

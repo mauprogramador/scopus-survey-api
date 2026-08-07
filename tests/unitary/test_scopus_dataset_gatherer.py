@@ -4,6 +4,7 @@ from unittest.mock import AsyncMock
 
 from pytest import mark, raises
 
+from src.adapters.exceptions import ResourceNotFoundError
 from src.adapters.gateway.context import ScopusContext
 from src.adapters.gateway.scopus_dataset_gatherer import (
     ScopusDatasetGatherer,
@@ -13,8 +14,8 @@ from src.adapters.gateway.scopus_dataset_gatherer import (
 from src.adapters.serializers.query_params import SurveyParams
 from src.adapters.types import ResponseBundle
 from src.core.domain.types import ExcMsg
-from src.core.domain.exceptions import NotFound, ScopusAPIError
 from src.infra.config.scopus import MAX_ITEMS_PER_PAGE, QUOTA_ERROR_CODE
+from src.infra.exceptions import APIResponseError
 from src.infra.http.http_client import HTTPClient
 from tests.conftest import assert_http_error
 from tests.mocks.helpers import fqn
@@ -153,7 +154,7 @@ async def test_gather_not_found():
     gateway, api_call = _fixt(SEARCH_NOT_FOUND)
     ctx = gateway._ctx  # pylint: disable=w0212
 
-    with raises(NotFound) as info:
+    with raises(ResourceNotFoundError) as info:
         await gateway.fetch(PARAMS)
 
     assert info.value.status_code == HTTP_404 and api_call.call_count == 1
@@ -279,7 +280,7 @@ async def test_gather_search_quota_exceeded():
     gateway, api_call = _fixt(SEARCH_QUOTA_EXCEEDED)
     ctx = gateway._ctx  # pylint: disable=w0212
 
-    with raises(ScopusAPIError) as info:
+    with raises(APIResponseError) as info:
         await gateway.fetch(PARAMS)
 
     assert_http_error(info, HTTP_502, "any")
@@ -296,7 +297,7 @@ async def test_gather_abstract_quota_exceeded():
     gateway, api_call = _fixt(ABSTRACT_QUOTA_EXCEEDED)
     ctx = gateway._ctx  # pylint: disable=w0212
 
-    with raises(ScopusAPIError) as info:
+    with raises(APIResponseError) as info:
         await gateway.fetch(PARAMS)
 
     assert_http_error(info, HTTP_502, "any")

@@ -1,9 +1,9 @@
 from pytest import fixture, raises
 
+from src.adapters.exceptions import ResourceNotFoundError
 from src.adapters.presenters.csv_response import csv_response, retrieve_csv
 from src.adapters.serializers.query_params import SurveyParams
 from src.core.domain.types import ExcMsg
-from src.core.domain.exceptions import NotFound
 from src.infra.config.config import FILE
 from tests.conftest import assert_http_error
 from tests.mocks.raw import (
@@ -66,7 +66,7 @@ def test_retrieve_csv():
 
 
 def test_csv_not_found():
-    with raises(NotFound) as info:
+    with raises(ResourceNotFoundError) as info:
         retrieve_csv("any")
     assert_http_error(info, HTTP_404, ExcMsg.CSV_NOT_FOUND)
     assert info.value.details is None

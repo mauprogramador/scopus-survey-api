@@ -3,8 +3,8 @@ from pytest import raises
 
 from src.adapters.types import ResponseBundle
 from src.core.domain.types import ExcMsg
-from src.core.domain.exceptions import InternalError, ScopusAPIError
 from src.infra.config.scopus import QUOTA_ERROR_CODE, RATE_LIMIT_ERROR_CODE
+from src.infra.exceptions import APIResponseError, APIValidationError
 from src.infra.http.response_auditor import validate_search_response
 from tests.conftest import assert_http_error
 from tests.mocks.helpers import fqn
@@ -32,7 +32,7 @@ def test_scopus_response():
 def test_status_error():
     headers = {"X-ELS-Status": "INVALID_INPUT"}
     res = ResponseBundle(HTTP_400, headers, RAW_SERVICE_ERROR_INVALID_INPUT)
-    with raises(ScopusAPIError) as info:
+    with raises(APIResponseError) as info:
         validate_search_response(res)
     assert_http_error(info, HTTP_502, "any")
     assert info.value.details[0]["error_code"] == "INVALID_INPUT"
@@ -42,7 +42,7 @@ def test_status_error():
 def test_quota_exceeded():
     headers = {"X-ELS-Status": QUOTA_ERROR_CODE}
     res = ResponseBundle(HTTP_429, headers, RAW_SERVICE_ERROR_QUOTA)
-    with raises(ScopusAPIError) as info:
+    with raises(APIResponseError) as info:
         validate_search_response(res)
     assert_http_error(info, HTTP_502, "any")
     assert info.value.details[0]["error_code"] == QUOTA_ERROR_CODE
@@ -52,7 +52,7 @@ def test_quota_exceeded():
 def test_rate_limit_exceeded():
     headers = {"X-ELS-Status": RATE_LIMIT_ERROR_CODE}
     res = ResponseBundle(HTTP_429, headers, RAW_ERROR_RESPONSE_RATE_LIMIT)
-    with raises(ScopusAPIError) as info:
+    with raises(APIResponseError) as info:
         validate_search_response(res)
     assert_http_error(info, HTTP_502, "any")
     assert info.value.details[0]["error_code"] == RATE_LIMIT_ERROR_CODE
@@ -61,7 +61,7 @@ def test_rate_limit_exceeded():
 
 def test_json_validation_error():
     res = ResponseBundle(HTTP_200, RAW_HEADERS_OK, {"search-results": ""})
-    with raises(InternalError) as info:
+    with raises(APIValidationError) as info:
         validate_search_response(res)
     assert_http_error(info, HTTP_500, ExcMsg.VALIDATE_ERROR)
     assert info.value.details[0]["type"] == fqn(ValidationError)
@@ -71,7 +71,7 @@ def test_json_validation_error():
 
 def test_json_key_error():
     res = ResponseBundle(HTTP_200, RAW_HEADERS_OK, {"any": "any"})
-    with raises(InternalError) as info:
+    with raises(APIValidationError) as info:
         validate_search_response(res)
     assert_http_error(info, HTTP_500, ExcMsg.VALIDATE_ERROR)
     print(info.value.details)

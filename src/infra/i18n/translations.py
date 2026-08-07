@@ -8,9 +8,10 @@ from pydantic_core import ValidationError
 from slowapi.errors import RateLimitExceeded
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
+from src.adapters.exceptions import BaseHTTPError
 from src.adapters.types import Translations
 from src.core.domain.types import ExcMsg, Lang
-from src.core.domain.exceptions import HTTPError, ScopusAPIError
+from src.infra.exceptions import APIResponseError
 from src.infra.utils import logger
 
 
@@ -106,8 +107,8 @@ def _get_lang(request: FastAPIRequest) -> Lang:
 
 
 _PREFIXES = {
-    HTTPError: ("api", ""),
-    ScopusAPIError: ("scopus", ""),
+    BaseHTTPError: ("api", ""),
+    APIResponseError: ("scopus", ""),
     StarletteHTTPException: ("starlette", "unexpected_error"),
     FastAPIHTTPException: ("starlette", "unexpected_error"),
     RequestValidationError: ("fastapi", "request_validation_error"),
@@ -131,12 +132,12 @@ def translate_error(request: FastAPIRequest, exc: Exception) -> str:
 
     lang = _get_lang(request)
 
-    if isinstance(exc, ScopusAPIError):
+    if isinstance(exc, APIResponseError):
         status_code = str(exc.details[0]["status_code"])
         error_code = exc.details[0]["error_code"]
         suffixes = (f"{status_code}.{error_code}", status_code, "default")
 
-    elif isinstance(exc, HTTPError):
+    elif isinstance(exc, BaseHTTPError):
         suffixes = (exc.message.name.lower(), "default")
 
     for suffix in suffixes:

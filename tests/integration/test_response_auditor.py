@@ -7,8 +7,8 @@ from pytest import mark
 from pytest_mock import MockerFixture as Mocker
 
 from src.core.domain.types import ExcMsg
-from src.core.domain.exceptions import ScopusAPIError
 from src.infra.config.scopus import QUOTA_ERROR_CODE, RATE_LIMIT_ERROR_CODE
+from src.infra.exceptions import APIResponseError
 from tests.conftest import assert_error_json
 from tests.mocks.errors import SCOPUS_API_QUOTA_ERROR, SCOPUS_API_RATE_ERROR
 from tests.mocks.helpers import fqn, get_patch, trans
@@ -57,7 +57,7 @@ async def test_status_error(
     RESPONSE_STATUS_ERROR.configure_mock(status=status)
     mocker.patch(*get_patch(RESPONSE_STATUS_ERROR))
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
-    exc = ScopusAPIError(
+    exc = APIResponseError(
         HTTPStatus(status),
         {"status": "any"},
         {"code": "ANY", "text": "any"},

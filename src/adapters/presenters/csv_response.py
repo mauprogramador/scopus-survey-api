@@ -2,7 +2,7 @@ from http import HTTPStatus
 
 from fastapi.responses import FileResponse
 
-from src.core.domain.exceptions import NotFound
+from src.adapters.exceptions import ResourceNotFoundError
 from src.core.domain.types import ExcMsg, SurveyDetails, SurveyParams
 from src.infra.config.config import DIRECTORY, FILE
 
@@ -45,7 +45,7 @@ def retrieve_csv(api_key: str) -> FileResponse:
     file_path = DIRECTORY / filename
 
     if not file_path.exists():
-        raise NotFound(ExcMsg.CSV_NOT_FOUND)
+        raise ResourceNotFoundError(ExcMsg.CSV_NOT_FOUND)
 
     headers = {"X-CSV-Filename": filename, "X-API-Key": api_key}
 

@@ -5,7 +5,7 @@ from typing import Any
 from src.adapters.serializers.scopus_data import ScopusHeaders
 from src.adapters.types import Headers
 from src.core.domain.types import ExcMsg
-from src.core.domain.exceptions import InternalError
+from src.infra.exceptions import TasksCancellationError
 from src.infra.utils import logger
 from src.infra.utils.progress_bar import progress_bar
 
@@ -33,7 +33,7 @@ async def fetch_multiple[T](
         raise exc_gp.exceptions[0]
 
     if not tasks:
-        raise InternalError(ExcMsg.INTERNAL_ERROR)
+        raise TasksCancellationError(ExcMsg.INTERNAL_ERROR)
 
     quota_headers: Headers = None
     results: list[T] = []

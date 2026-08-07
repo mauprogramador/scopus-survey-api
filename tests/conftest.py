@@ -12,11 +12,11 @@ from pytest import ExceptionInfo, LogCaptureFixture, MonkeyPatch, fixture
 from pytest_asyncio import fixture as async_fixture
 from pytest_mock import MockerFixture as Mocker
 
+from src.adapters.exceptions import BaseHTTPError
 from src.adapters.persistence import csv_builder as csv_builder_module
 from src.adapters.presenters import csv_response as csv_response_module
 from src.adapters.presenters.jinja_response import build_all_templates
 from src.adapters.presenters.json_response import ErrorJSON, ErrorResponse
-from src.core.domain.exceptions import HTTPError
 from src.core.domain.types import Json
 from src.infra.config.config import PREFIX, SERVER
 from src.infra.fastapi.main import app
@@ -105,13 +105,14 @@ async def httpx_async_client(mocker: Mocker):
 
 
 def assert_http_error(
-    info: ExceptionInfo[HTTPError],
+    info: ExceptionInfo[BaseHTTPError],
     code: HTTPStatus,
     message: str,
-) -> None:
+) -> list[Json] | None:
     """Asserts HTTPError data"""
-    assert info.value.status == info.value.status_code == code
-    assert info.value.message == info.value.detail == message
+    assert info.value.status_code == code
+    assert info.value.message == message
+    return info.value.details
 
 
 def assert_error_json(
