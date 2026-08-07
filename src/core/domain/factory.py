@@ -1,9 +1,7 @@
 from src.adapters.gateway.scopus_dataset_gatherer import ScopusDatasetGatherer
 from src.adapters.gateway.scopus_volume_scouter import ScopusVolumeScouter
-from src.core.use_cases import (
-    SimilarityFilter,
-    SurveyAggregator,
-)
+from src.core.use_cases.similarity_filter import SimilarityFilter
+from src.core.use_cases.survey_aggregator import SurveyAggregator
 from src.core.use_cases.survey_combinations import SurveyCombinations
 from src.infra.http.http_client import HTTPClient
 
