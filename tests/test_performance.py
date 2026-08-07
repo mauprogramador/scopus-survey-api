@@ -5,7 +5,7 @@ import time
 
 import pandas as pd
 from httpx import AsyncClient as Client
-from pytest import mark, param
+from pytest import mark
 from pytest_mock import MockerFixture as Mocker
 
 from src.adapters.persistence.csv_builder import (
@@ -61,9 +61,9 @@ def _assert_time(elapsed: float):
         (100, 0.01),
         (500, 0.01),
         (1000, 0.01),
-        param(2000, 0.02, marks=mark.xfail(reason="Unstable latency")),
-        param(5000, 0.04, marks=mark.xfail(reason="Unstable latency")),
-        param(10000, 0.11, marks=mark.xfail(reason="Unstable latency")),
+        (2000, 0.02),
+        (5000, 0.04),
+        (10000, 0.11),
     ],
     ids=["100", "500", "1.000", "2.000", "5.000", "10.000"],
 )
