@@ -12,17 +12,18 @@ from src.adapters.types import ResponseBundle
 from src.core.domain.types import ExcMsg
 from src.infra.config.scopus import QUOTA_ERROR_CODE, RATE_LIMIT_ERROR_CODE
 from src.infra.exceptions import APIResponseError, APIValidationError
+from src.infra.types import APIName
 from src.infra.utils import logger
 
 
-def _validate[T: BaseModel](model: type[T], res: ResponseBundle) -> T:
+def _validate[T: BaseModel](
+    model: type[T], res: ResponseBundle, api_name: APIName
+) -> T:
     try:
         if res.code >= HTTPStatus.BAD_REQUEST:
             quota = ScopusHeaders.model_validate(res.headers)
 
-            api = "search" if isinstance(model, ScopusPage) else "abstract"
-            logger.quota(quota, api)
-
+            logger.quota(quota, api_name)
             error_res = ScopusError.model_validate(res.data)
 
             if res.code == HTTPStatus.TOO_MANY_REQUESTS:
@@ -47,8 +48,8 @@ def _validate[T: BaseModel](model: type[T], res: ResponseBundle) -> T:
 
 
 def validate_search_response(res: ResponseBundle) -> ScopusPage:
-    return _validate(ScopusPage, res)
+    return _validate(ScopusPage, res, "search")
 
 
 def validate_abstract_response(res: ResponseBundle) -> ScopusAbstract:
-    return _validate(ScopusAbstract, res)
+    return _validate(ScopusAbstract, res, "abstract")
