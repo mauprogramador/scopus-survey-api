@@ -7,7 +7,7 @@ from pytest import fixture, mark, raises
 from pytest_asyncio import fixture as async_fixture
 from pytest_mock import MockerFixture as Mocker
 
-from src.core.domain.enums import ExcMsg
+from src.core.domain.types import ExcMsg
 from src.core.domain.exceptions import (
     BadGateway,
     BadGatewayContent,

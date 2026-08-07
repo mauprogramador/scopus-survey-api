@@ -1,10 +1,6 @@
 from src.adapters.serializers.scopus_data import ScopusHeaders, ScopusPage
-from src.core.domain.types import (
-    ResponseBundle,
-    ScopusDetails,
-    SurveyDetails,
-    TotalBundle,
-)
+from src.adapters.types import ResponseBundle, TotalBundle
+from src.core.domain.types import ScopusDetails, SurveyDetails
 from tests.mocks.raw import HTTP_200, RAW_HEADERS_OK, RAW_SEARCH_OK
 
 

@@ -9,7 +9,7 @@ from pandas.api.typing import DataFrameGroupBy
 from pytest import mark
 from pytest_mock import MockerFixture as Mocker
 
-from src.core.domain.enums import ExcMsg
+from src.core.domain.types import ExcMsg
 from src.core.use_cases.similarity_filter import SimilarityFilter
 from src.infra.utils import logger
 from tests.conftest import assert_error_json

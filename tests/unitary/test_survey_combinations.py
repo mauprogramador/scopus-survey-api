@@ -6,8 +6,7 @@ from pytest import mark
 from src.adapters.gateway.scopus_volume_scouter import ScopusVolumeScouter
 from src.adapters.serializers.query_params import CombinationParams
 from src.adapters.serializers.scopus_data import ScopusHeaders
-from src.core.domain.enums import Button
-from src.core.domain.types import TotalBundle
+from src.adapters.types import Button, TotalBundle
 from src.core.use_cases.survey_combinations import SurveyCombinations
 from tests.mocks.raw import API_KEY, KEYWORDS, RAW_HEADERS_OK
 

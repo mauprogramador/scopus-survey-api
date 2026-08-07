@@ -7,7 +7,7 @@ from itsdangerous import SignatureExpired
 from pydantic import ValidationError
 from pytest import mark, raises
 
-from src.core.domain.enums import ExcMsg
+from src.core.domain.types import ExcMsg
 from src.core.domain.exceptions import (
     BadGatewayContent,
     HTTPError,

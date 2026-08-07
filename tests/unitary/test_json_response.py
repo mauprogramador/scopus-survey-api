@@ -12,8 +12,7 @@ from src.adapters.presenters.json_response import (
 )
 from src.adapters.serializers.query_params import CombinationParams
 from src.adapters.serializers.scopus_data import ScopusHeaders
-from src.core.domain.enums import ExcMsg
-from src.core.domain.types import Json
+from src.core.domain.types import ExcMsg, Json
 from tests.mocks.helpers import fqn
 from tests.mocks.raw import (
     ALIAS_COMBINATION_PARAMS,

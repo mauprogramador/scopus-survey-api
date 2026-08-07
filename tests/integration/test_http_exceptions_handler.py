@@ -9,7 +9,7 @@ from slowapi.errors import RateLimitExceeded
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from src.adapters.presenters.csv_response import retrieve_csv
-from src.core.domain.enums import ExcMsg
+from src.core.domain.types import ExcMsg
 from src.infra.fastapi.routes import favicon
 from tests.conftest import assert_error_json
 from tests.mocks.errors import (

@@ -15,8 +15,8 @@ from src.adapters.serializers.query_params import (
     CSVParams,
     SurveyParams,
 )
-from src.core.domain.enums import Lang
 from src.core.domain.factory import make_aggregator, make_combinator
+from src.core.domain.types import Lang
 from src.infra.config.config import (
     FAVICON_HEADERS,
     FAVICON_PATH,

@@ -7,7 +7,7 @@ from pytest import mark
 from pytest_mock import MockerFixture as Mocker
 
 from src.adapters.gateway.scopus_volume_scouter import ScopusVolumeScouter
-from src.core.domain.enums import ExcMsg
+from src.core.domain.types import ExcMsg
 from src.core.domain.exceptions import HTTPError
 from src.infra.http.response_auditor import validate_search_response
 from tests.conftest import assert_error_json

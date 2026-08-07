@@ -11,9 +11,9 @@ from src.adapters.gateway.scopus_dataset_gatherer import (
     validate_abstract_response,
 )
 from src.adapters.serializers.query_params import SurveyParams
-from src.core.domain.enums import ExcMsg
+from src.adapters.types import ResponseBundle
+from src.core.domain.types import ExcMsg
 from src.core.domain.exceptions import NotFound, ScopusAPIError
-from src.core.domain.types import ResponseBundle
 from src.infra.config.scopus import MAX_ITEMS_PER_PAGE, QUOTA_ERROR_CODE
 from src.infra.http.http_client import HTTPClient
 from tests.conftest import assert_http_error

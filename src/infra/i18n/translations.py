@@ -8,9 +8,9 @@ from pydantic_core import ValidationError
 from slowapi.errors import RateLimitExceeded
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
-from src.core.domain.enums import ExcMsg, Lang
+from src.adapters.types import Translations
+from src.core.domain.types import ExcMsg, Lang
 from src.core.domain.exceptions import HTTPError, ScopusAPIError
-from src.core.domain.types import Translations
 from src.infra.utils import logger
 
 

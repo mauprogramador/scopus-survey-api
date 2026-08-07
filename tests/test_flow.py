@@ -7,7 +7,7 @@ from pytest import mark
 from pytest_mock import MockerFixture as Mocker
 from thefuzz.fuzz import partial_ratio as fuzz_partial_ratio
 
-from src.core.domain.enums import ExcMsg
+from src.core.domain.types import ExcMsg
 from src.infra.config.config import FILE
 from src.infra.config.scopus import DATA_SOURCE_NOTE
 from src.infra.http.url_builder import build_article_page_url

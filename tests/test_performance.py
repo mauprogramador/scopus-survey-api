@@ -14,7 +14,8 @@ from src.adapters.persistence.csv_builder import (
 )
 from src.adapters.serializers.query_params import SurveyParams
 from src.adapters.serializers.scopus_data import ScopusAbstract, ScopusPage
-from src.core.domain.enums import Button, Lang
+from src.adapters.types import Button
+from src.core.domain.types import Lang
 from src.core.use_cases.similarity_filter import SimilarityFilter
 from src.infra.config.config import DIRECTORY, FILE
 from src.infra.config.scopus import MAX_ITEMS_PER_PAGE

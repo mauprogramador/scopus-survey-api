@@ -1,45 +1,25 @@
+from collections.abc import Callable
 from enum import StrEnum, auto, unique
+from gettext import GNUTranslations
+from typing import Annotated, Any, NamedTuple, Protocol, TypedDict
+
+from pydantic import Field
+
+from src.core.domain.types import Lang
 
 
-@unique
-class Lang(StrEnum):
-    EN_US = "en-US"
-    PT_BR = "pt-BR"
+# e.g. Python, "Data Science", COVID-19, H2O2
+_KEYWORD_PATTERN = r"^[a-zA-Z0-9\{\}\?\"\*\-\_ ]{2,120}$"
 
-    @property
-    def snake_case(self) -> str:
-        return self.value.replace("-", "_")
+type Keyword = Annotated[
+    str, Field(pattern=_KEYWORD_PATTERN, min_length=2, max_length=120)
+]
 
-    @property
-    def short(self) -> str:
-        return self.value.split("-", maxsplit=1)[0]
+type URLBuilder = Callable[[str | int], str]
 
+type Translations = dict[Lang, GNUTranslations]
 
-@unique
-class ExcMsg(StrEnum):
-    # HTTP client errors
-    CONNECTION_ERROR = "Connection error in request"
-    CONNECTION_TIMEOUT = "Request connection timeout"
-    REQUEST_EXCEPTION = "Unexpected error from request"
-    # CSRF Token errors
-    INVALID_TOKEN = "Invalid CSRF Token"
-    TOKEN_COOKIE_ERROR = "Missing CSRF Token Cookie"
-    TOKEN_HEADER_ERROR = "Missing CSRF Token Header"
-    TOKEN_SIGNATURE_ERROR = "CSRF Token signatures do not match"
-    EXPIRED_TOKEN = "CSRF token has expired"
-    # Scopus API errors
-    QUOTA_EXCEEDED = "API Key has exceeded the request quota"
-    RATE_LIMIT_EXCEEDED = "Request rate limit per second exceeded"
-    VALIDATE_ERROR = "Error in validate response from Scopus API"
-    INVALID_JSON_ERROR = "Invalid JSON response from Scopus API"
-    SCOPUS_API_ERROR = "Scopus API error"
-    DATA_MISMATCH_ERROR = "Data sum mismatch in response"
-    # Application errors
-    INTERNAL_ERROR = "Unexpected internal error occurred"
-    SERIALIZE_ERROR = "Error serializing error details"
-    ARTICLES_NOT_FOUND = "No articles found"
-    CSV_NOT_FOUND = "No CSV file found"
-    SLOWAPI_RATE_ERROR = "Request rate limit exceeded"
+type Headers = dict[str, str]
 
 
 @unique
@@ -119,3 +99,24 @@ class SubjArea(StrEnum):
 class PageRange(StrEnum):
     SHORT = "0-4"  # Short paper
     LONG = "5-"  # Long paper
+
+
+class TotalBundle(TypedDict):
+    index: int
+    combination: str
+    total: int
+
+
+class ResponseBundle(NamedTuple):
+    code: int
+    headers: dict[str, str]
+    data: dict[str, Any]
+
+
+class HTTPClient(Protocol):
+
+    async def api_call(self, url: str) -> ResponseBundle:
+        pass
+
+    async def close(self) -> None:
+        pass

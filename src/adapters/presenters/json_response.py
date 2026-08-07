@@ -6,9 +6,13 @@ from fastapi.responses import JSONResponse
 from pydantic import BaseModel, ConfigDict
 from pydantic_core import PydanticSerializationError, to_jsonable_python
 
-from src.core.domain.enums import ExcMsg
 from src.core.domain.exceptions import get_error_details
-from src.core.domain.types import CombinationParams, Json, ScopusHeaders
+from src.core.domain.types import (
+    CombinationParams,
+    ExcMsg,
+    Json,
+    ScopusHeaders,
+)
 from src.infra.utils import logger
 
 

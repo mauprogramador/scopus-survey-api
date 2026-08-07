@@ -11,8 +11,7 @@ from slowapi.errors import RateLimitExceeded
 from src.adapters.gateway.context import ScopusContext
 from src.adapters.gateway.scopus_dataset_gatherer import ScopusDatasetGatherer
 from src.adapters.gateway.scopus_volume_scouter import ScopusVolumeScouter
-from src.core.domain.enums import ExcMsg
-from src.core.domain.types import Json
+from src.core.domain.types import ExcMsg, Json
 from src.infra.fastapi.main import app
 from src.infra.middleware.flow_guarding_monitor import (
     FlowGuardingMonitorMiddleware,

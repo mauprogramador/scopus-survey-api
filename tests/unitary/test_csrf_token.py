@@ -3,7 +3,7 @@ from pydantic_core import ValidationError
 from pytest import raises
 from pytest_mock import MockerFixture as Mocker
 
-from src.core.domain.enums import ExcMsg
+from src.core.domain.types import ExcMsg
 from src.core.domain.exceptions import Unauthorized
 from src.infra.config.config import MAX_AGE
 from src.infra.fastapi.csrf_token import (

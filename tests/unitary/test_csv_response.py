@@ -2,7 +2,7 @@ from pytest import fixture, raises
 
 from src.adapters.presenters.csv_response import csv_response, retrieve_csv
 from src.adapters.serializers.query_params import SurveyParams
-from src.core.domain.enums import ExcMsg
+from src.core.domain.types import ExcMsg
 from src.core.domain.exceptions import NotFound
 from src.infra.config.config import FILE
 from tests.conftest import assert_http_error

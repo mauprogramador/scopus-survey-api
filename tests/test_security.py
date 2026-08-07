@@ -9,7 +9,7 @@ from itsdangerous import SignatureExpired
 from pytest import mark
 from pytest_mock import MockerFixture as Mocker
 
-from src.core.domain.enums import ExcMsg
+from src.core.domain.types import ExcMsg
 from src.infra.config.config import PREFIX
 from src.infra.fastapi import csrf_token as csrf_token_module
 from src.infra.fastapi import routes as routes_module

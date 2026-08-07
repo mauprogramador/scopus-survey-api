@@ -1,13 +1,12 @@
 import asyncio
 
-from src.core.domain.types import (
-    CombinationParams,
+from src.adapters.types import (
     Headers,
     HTTPClient,
-    ScopusHeaders,
     TotalBundle,
     URLBuilder,
 )
+from src.core.domain.types import CombinationParams, ScopusHeaders
 from src.infra.http.fetch_multiple_concurrent import fetch_multiple
 from src.infra.http.response_auditor import validate_search_response
 from src.infra.http.url_builder import build_combination_urls

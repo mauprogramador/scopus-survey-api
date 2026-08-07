@@ -10,8 +10,8 @@ from starlette.responses import Response as StarletteResponse
 
 from src import __contact__, __version__
 from src.adapters.presenters.json_response import ErrorJSON
-from src.core.domain.enums import ExcMsg, Lang
-from src.core.domain.types import Translations
+from src.adapters.types import Translations
+from src.core.domain.types import ExcMsg, Lang
 from src.infra.config.config import MAX_AGE, META_INFO, PREFIX
 
 

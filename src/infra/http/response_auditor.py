@@ -8,9 +8,9 @@ from src.adapters.serializers.scopus_data import (
     ScopusHeaders,
     ScopusPage,
 )
-from src.core.domain.enums import ExcMsg
+from src.adapters.types import ResponseBundle
+from src.core.domain.types import ExcMsg
 from src.core.domain.exceptions import InternalError, ScopusAPIError
-from src.core.domain.types import ResponseBundle
 from src.infra.config.scopus import QUOTA_ERROR_CODE, RATE_LIMIT_ERROR_CODE
 from src.infra.utils import logger
 

@@ -8,7 +8,7 @@ from pytest import mark
 from pytest_mock import MockerFixture as Mocker
 
 from src.adapters.serializers.scopus_data import ScopusAbstract, ScopusHeaders
-from src.core.domain.enums import Button
+from src.adapters.types import Button
 from src.core.domain.factory import make_aggregator, make_combinator
 from src.core.domain.types import Json, SurveyDetails
 from src.core.use_cases.survey_aggregator import SurveyAggregator

@@ -8,13 +8,13 @@ import aiohttp
 import aiohttp_retry as aioretry
 import aiolimiter
 
-from src.core.domain.enums import ExcMsg
+from src.adapters.types import ResponseBundle
+from src.core.domain.types import ExcMsg, Json
 from src.core.domain.exceptions import (
     BadGateway,
     BadGatewayContent,
     GatewayTimeout,
 )
-from src.core.domain.types import Json, ResponseBundle
 from src.infra.config.scopus import RATE_LIMIT_ERROR_CODE, SCOPUS_HEADERS
 from src.infra.utils import logger
 

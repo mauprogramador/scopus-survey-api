@@ -12,7 +12,7 @@ from src.adapters.presenters.jinja_response import (
     get_web_form_template,
 )
 from src.adapters.presenters.json_response import ErrorJSON
-from src.core.domain.enums import ExcMsg, Lang
+from src.core.domain.types import ExcMsg, Lang
 from src.infra.config.config import META_INFO
 from src.infra.i18n.translations import load_translations
 from tests.mocks.raw import CSRF_TOKEN, HTTP_200, HTTP_404, REQUEST

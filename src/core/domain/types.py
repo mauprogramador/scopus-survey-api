@@ -1,75 +1,64 @@
-from collections.abc import Callable
-from gettext import GNUTranslations
-from typing import (
-    Annotated,
-    Any,
-    Literal,
-    NamedTuple,
-    Protocol,
-    TypedDict,
-)
+from enum import StrEnum, unique
+from typing import Any, NamedTuple, Protocol
 
 from pandas import DataFrame
-from pydantic import Field
 
-from src.core.domain.enums import (
-    DocType,
-    Lang,
-    PageRange,
-    PubStage,
-    SrcType,
-    SubjArea,
-)
-
-
-# e.g. Python, "Data Science", COVID-19, H2O2
-_KEYWORD_PATTERN = r"^[a-zA-Z0-9\{\}\?\"\*\-\_ ]{2,120}$"
-
-# e.g. 989a5e2a50389ae6a5faf4c271d8bfb30cbbd88c  (Random Hash)
-_TOKEN_PATTERN = r"^[a-zA-Z0-9\-\_]{64}$"
-
-
-type Keyword = Annotated[
-    str, Field(pattern=_KEYWORD_PATTERN, min_length=2, max_length=120)
-]
 
 type Json = dict[str, Any]
 
-type Translations = dict[Lang, GNUTranslations]
 
-type Token = Annotated[
-    str, Field(pattern=_TOKEN_PATTERN, min_length=64, max_length=64)
-]
+@unique
+class Lang(StrEnum):
+    EN_US = "en-US"
+    PT_BR = "pt-BR"
 
-type URLBuilder = Callable[[str | int], str]
+    @property
+    def snake_case(self) -> str:
+        return self.value.replace("-", "_")
 
-type Headers = dict[str, str]
-
-type APIName = Literal["search", "abstract"]
-
-
-class ScopusEntry(Protocol):
-    url: str
-    scopus_id: str
+    @property
+    def short(self) -> str:
+        return self.value.split("-", maxsplit=1)[0]
 
 
-class ScopusPage(Protocol):
-    total_results: int
-    items_per_page: int
-    entry: list[ScopusEntry]
+@unique
+class ExcMsg(StrEnum):
+    # HTTP client errors
+    CONNECTION_ERROR = "Connection error in request"
+    CONNECTION_TIMEOUT = "Request connection timeout"
+    REQUEST_EXCEPTION = "Unexpected error from request"
+    # CSRF Token errors
+    INVALID_TOKEN = "Invalid CSRF Token"
+    TOKEN_COOKIE_ERROR = "Missing CSRF Token Cookie"
+    TOKEN_HEADER_ERROR = "Missing CSRF Token Header"
+    TOKEN_SIGNATURE_ERROR = "CSRF Token signatures do not match"
+    EXPIRED_TOKEN = "CSRF token has expired"
+    # Scopus API errors
+    QUOTA_EXCEEDED = "API Key has exceeded the request quota"
+    RATE_LIMIT_EXCEEDED = "Request rate limit per second exceeded"
+    VALIDATE_ERROR = "Error in validate response from Scopus API"
+    INVALID_JSON_ERROR = "Invalid JSON response from Scopus API"
+    SCOPUS_API_ERROR = "Scopus API error"
+    DATA_MISMATCH_ERROR = "Data sum mismatch in response"
+    # Application errors
+    INTERNAL_ERROR = "Unexpected internal error occurred"
+    SERIALIZE_ERROR = "Error serializing error details"
+    ARTICLES_NOT_FOUND = "No articles found"
+    CSV_NOT_FOUND = "No CSV file found"
+    SLOWAPI_RATE_ERROR = "Request rate limit exceeded"
 
 
 class CombinationParams(Protocol):
     api_key: str
     start_year: int
     end_year: int
-    doctype: DocType
-    pubstage: PubStage
+    doctype: str
+    pubstage: str
     language: str
     open_access: int
-    source_type: SrcType
-    subject_area: SubjArea
-    page_range: PageRange
+    source_type: str
+    subject_area: str
+    page_range: str
     keywords: list[str]
 
     def model_dump(self, **kwargs) -> dict[str, Any]:
@@ -85,6 +74,17 @@ class SurveyParams(CombinationParams):
     ratio: int
 
 
+class ScopusEntry(Protocol):
+    url: str
+    scopus_id: str
+
+
+class ScopusPage(Protocol):
+    total_results: int
+    items_per_page: int
+    entry: list[ScopusEntry]
+
+
 class ScopusHeaders(Protocol):
     limit: int | None
     remaining: int | None
@@ -94,18 +94,6 @@ class ScopusHeaders(Protocol):
     @property
     def reset_datetime(self) -> str | None:
         pass
-
-
-class TotalBundle(TypedDict):
-    index: int
-    combination: str
-    total: int
-
-
-class ResponseBundle(NamedTuple):
-    code: int
-    headers: dict[str, str]
-    data: dict[str, Any]
 
 
 class ScopusDetails(NamedTuple):
@@ -123,15 +111,6 @@ class SurveyDetails(NamedTuple):
     search_headers: ScopusHeaders
     abstract_headers: ScopusHeaders
     total_final: int
-
-
-class HTTPClient(Protocol):
-
-    async def api_call(self, url: str) -> ResponseBundle:
-        pass
-
-    async def close(self) -> None:
-        pass
 
 
 class VolumeScouter(Protocol):

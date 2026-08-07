@@ -12,7 +12,7 @@ from httpx import AsyncClient as Client
 from pytest import mark
 from pytest_mock import MockerFixture as Mocker
 
-from src.core.domain.enums import ExcMsg
+from src.core.domain.types import ExcMsg
 from src.core.use_cases.survey_combinations import SurveyCombinations
 from src.infra.http.http_client import HTTPClient
 from tests.conftest import assert_error_json

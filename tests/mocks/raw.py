@@ -9,8 +9,8 @@ from fastapi.datastructures import URL, Headers, QueryParams
 from fastapi.requests import Request as FastAPIRequest
 
 from src.adapters.serializers.scopus_data import ScopusHeaders, ScopusPage
-from src.core.domain.enums import Button, Lang
-from src.core.domain.types import SurveyDetails
+from src.adapters.types import Button
+from src.core.domain.types import Lang, SurveyDetails
 from src.infra.config.config import FILE, MAX_AGE
 from src.infra.config.scopus import (
     EMPTY_RESULT,

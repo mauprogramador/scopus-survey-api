@@ -4,9 +4,9 @@ from unittest.mock import AsyncMock
 from pydantic import ValidationError
 from pytest import mark, raises
 
-from src.core.domain.enums import ExcMsg
+from src.adapters.types import Headers
+from src.core.domain.types import ExcMsg
 from src.core.domain.exceptions import HTTPError, InternalError
-from src.core.domain.types import Headers
 from src.infra.http.fetch_multiple_concurrent import fetch_multiple
 from tests.conftest import assert_http_error
 from tests.mocks.errors import (

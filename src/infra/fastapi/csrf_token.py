@@ -10,14 +10,14 @@ from itsdangerous import (
 )
 from pydantic import TypeAdapter, ValidationError
 
-from src.core.domain.enums import ExcMsg
+from src.core.domain.types import ExcMsg
 from src.core.domain.exceptions import Unauthorized
-from src.core.domain.types import Token
 from src.infra.config.config import ENV, MAX_AGE, SALT
+from src.infra.types import CSRFToken
 
 
 _SERIALIZER = URLSafeTimedSerializer(ENV.secret_key, SALT)
-_TOKEN_ADAPTER: TypeAdapter[Token] = TypeAdapter(Token)
+_TOKEN_ADAPTER: TypeAdapter[CSRFToken] = TypeAdapter(CSRFToken)
 
 _COOKIE = fastapi.Cookie(
     alias="csrf-token",

@@ -11,8 +11,7 @@ from starlette.middleware.base import _StreamingResponse
 from src.adapters.presenters.csv_response import retrieve_csv
 from src.adapters.presenters.jinja_response import get_not_found_template
 from src.adapters.presenters.json_response import ErrorJSON
-from src.core.domain.enums import ExcMsg
-from src.core.domain.types import Json
+from src.core.domain.types import ExcMsg, Json
 from src.infra.config.config import HEADERS, RATELIMIT_POLICY, SERVER
 from src.infra.fastapi.csrf_token import generate_csrf_token
 from src.infra.fastapi.routes import favicon

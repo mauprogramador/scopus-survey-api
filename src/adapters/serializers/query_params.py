@@ -10,15 +10,15 @@ from pydantic import (
 )
 from pydantic_core import PydanticUseDefault
 
-from src.core.domain.enums import (
+from src.adapters.types import (
     Button,
     DocType,
+    Keyword,
     PageRange,
     PubStage,
     SrcType,
     SubjArea,
 )
-from src.core.domain.types import Keyword
 from src.infra.config.scopus import (
     CURRENT_YEAR,
     LAST_THREE_YEARS,

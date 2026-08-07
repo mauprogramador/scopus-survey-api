@@ -3,9 +3,9 @@ from collections.abc import Callable, Coroutine
 from typing import Any
 
 from src.adapters.serializers.scopus_data import ScopusHeaders
-from src.core.domain.enums import ExcMsg
+from src.adapters.types import Headers
+from src.core.domain.types import ExcMsg
 from src.core.domain.exceptions import InternalError
-from src.core.domain.types import Headers
 from src.infra.utils import logger
 from src.infra.utils.progress_bar import progress_bar
 

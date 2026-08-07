@@ -9,14 +9,13 @@ from slowapi.errors import RateLimitExceeded
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from src.adapters.presenters.json_response import ErrorJSON
-from src.core.domain.enums import ExcMsg
+from src.core.domain.types import ExcMsg, Json
 from src.core.domain.exceptions import (
     HTTPError,
     InternalError,
     ScopusAPIError,
     get_error_details,
 )
-from src.core.domain.types import Json
 from src.infra.i18n.translations import translate_error
 from src.infra.utils import logger
 

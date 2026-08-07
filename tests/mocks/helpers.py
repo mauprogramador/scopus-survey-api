@@ -12,7 +12,8 @@ import httpx
 import pandas as pd
 from pandas import DataFrame
 
-from src.core.domain.types import Json, ResponseBundle
+from src.adapters.types import ResponseBundle
+from src.core.domain.types import Json
 from src.infra.config.scopus import MAX_ITEMS_PER_PAGE
 from src.infra.i18n.translations import translate_error
 from tests.mocks.raw import (

@@ -4,7 +4,7 @@ from src.adapters.serializers.query_params import (
     CombinationParams,
     SurveyParams,
 )
-from src.core.domain.enums import (
+from src.adapters.types import (
     DocType,
     PageRange,
     PubStage,

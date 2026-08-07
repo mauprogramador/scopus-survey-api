@@ -2,16 +2,14 @@ import asyncio
 
 from src.adapters.gateway.context import ScopusContext
 from src.adapters.serializers.scopus_data import ScopusHeaders
-from src.core.domain.enums import ExcMsg
+from src.adapters.types import Headers, HTTPClient, URLBuilder
 from src.core.domain.exceptions import BadGateway, NotFound
 from src.core.domain.types import (
-    Headers,
-    HTTPClient,
+    ExcMsg,
     Json,
     ScopusDetails,
     ScopusPage,
     SurveyParams,
-    URLBuilder,
 )
 from src.infra.http.fetch_multiple_concurrent import fetch_multiple
 from src.infra.http.response_auditor import (

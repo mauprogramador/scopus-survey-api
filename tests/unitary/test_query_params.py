@@ -6,7 +6,7 @@ from src.adapters.serializers.query_params import (
     CSVParams,
     SurveyParams,
 )
-from src.core.domain.enums import (
+from src.adapters.types import (
     Button,
     DocType,
     PageRange,

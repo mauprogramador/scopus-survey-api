@@ -8,7 +8,7 @@ from pytest_mock import MockerFixture as Mocker
 
 from src.adapters.gateway.context import ScopusContext
 from src.adapters.gateway.scopus_dataset_gatherer import ScopusDatasetGatherer
-from src.core.domain.enums import ExcMsg
+from src.core.domain.types import ExcMsg
 from src.infra.config.scopus import MAX_ITEMS_PER_PAGE, QUOTA_ERROR_CODE
 from tests.conftest import assert_error_json
 from tests.mocks.errors import SCOPUS_API_QUOTA_ERROR
