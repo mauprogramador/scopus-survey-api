@@ -154,6 +154,7 @@ document.querySelectorAll('.alert').forEach((alert) => {
 
 // Loader
 const loader = document.getElementById('loader-dialog');
+const timerDisplay = document.getElementById('timer-display');
 
 function showLoader() {
   requestAnimationFrame(() => {
@@ -164,9 +165,23 @@ function showLoader() {
     loader.focus();
     loader.showModal();
   });
+
+  const startTime = performance.now();
+  let animationFrameId;
+
+  function updateDisplay() {
+    const elapsedMs = performance.now() - startTime;
+    timerDisplay.textContent = new Date(elapsedMs).toISOString().slice(11, 23);
+    animationFrameId = requestAnimationFrame(updateDisplay);
+  }
+  updateDisplay();
+
+  return animationFrameId;
 }
 
-function hideLoader() {
+function hideLoader(animationFrameId) {
+  cancelAnimationFrame(animationFrameId);
+
   requestAnimationFrame(() => {
     loader.close();
     loader.toggleAttribute('hidden', true);
@@ -265,6 +280,13 @@ function showErrorAlert(message, rawJson) {
     errorAlert.show();
   });
 }
+
+let animationFrameId = showLoader();
+console.log(animationFrameId);
+
+setInterval(() => {
+  hideLoader(animationFrameId);
+}, 15000);
 
 export {
   closeDialog,

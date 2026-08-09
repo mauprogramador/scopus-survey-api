@@ -102,6 +102,16 @@
   }
 }
 
+/* Timer */
+#timer-display {
+  text-shadow: 2px 2px 2px #000000;
+  color: var(--white);
+  text-align: center;
+  font-size: 1.25rem;
+  font-weight: 400;
+  cursor: progress;
+}
+
 /* Alerts */
 .alert {
   --bs-alert-margin-bottom: 0;

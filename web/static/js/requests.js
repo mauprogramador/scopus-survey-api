@@ -72,12 +72,12 @@ function request(url, callback) {
   });
 
   window.addEventListener('beforeunload', showWarningAlert);
-  showLoader();
+  let animationFrameId = showLoader();
 
   return fetch(request)
     .then((response) => {
       window.removeEventListener('beforeunload', showWarningAlert);
-      hideLoader();
+      hideLoader(animationFrameId);
 
       if (response.ok) {
         updateDetails(response.headers);
@@ -114,7 +114,7 @@ function request(url, callback) {
     })
     .catch((error) => {
       window.removeEventListener('beforeunload', showWarningAlert);
-      hideLoader();
+      hideLoader(animationFrameId);
 
       console.error(error);
       showErrorAlert(error.message, errorToJSON(error));
