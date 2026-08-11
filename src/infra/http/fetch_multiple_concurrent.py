@@ -16,6 +16,7 @@ async def fetch_multiple[T](
     progress: range,
 ) -> tuple[list[T], ScopusHeaders]:
     tasks: list[asyncio.Task[tuple[T, Headers]]] = []
+    logger.multiple(progress)
 
     try:
         with progress_bar(progress) as pbar_step:
