@@ -14,6 +14,8 @@ from typing import Any
 import gunicorn.glogging
 import uvicorn.logging
 from fastapi.requests import Request as FastAPIRequest
+from pandas import DataFrame
+from pydantic import BaseModel
 from pydantic_core import to_jsonable_python
 from starlette.types import Scope as StarletteScope
 from tqdm.std import tqdm as std_tqdm
@@ -333,6 +335,15 @@ def error(message: str, tracking_id: str = None) -> None:
 
 
 def debug(**kwargs) -> None:
+    if not LOGGER.isEnabledFor(logging.DEBUG):
+        return
+
+    for key, value in kwargs.items():
+        if isinstance(value, BaseModel):
+            kwargs[key] = value.model_dump()
+        if isinstance(value, DataFrame):
+            kwargs[key] = value.to_dict(orient="records")
+
     LOGGER.debug(
         "\033[33mKWARGS:\033[m %s\033[m",
         to_jsonable_python(kwargs, fallback=repr),

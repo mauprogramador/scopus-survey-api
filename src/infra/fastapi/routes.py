@@ -97,7 +97,7 @@ async def survey_total_combinations(
     request: FastAPIRequest,  # pylint: disable=W0613
     params: Annotated[CombinationParams, fastapi.Query()],
 ) -> JSONResponse:
-    logger.debug(query_params=params.model_dump())
+    logger.debug(query_params=params)
 
     use_case = make_combinator()
     results, quota_headers = await use_case.process(params)
@@ -121,7 +121,7 @@ async def survey_bibliographic_data(
     request: FastAPIRequest,  # pylint: disable=W0613
     params: Annotated[SurveyParams, fastapi.Query()],
 ) -> FileResponse:
-    logger.debug(query_params=params.model_dump())
+    logger.debug(query_params=params)
 
     use_case = make_aggregator()
     dataset, details = await use_case.process(params)
@@ -147,6 +147,6 @@ async def download_csv(
     request: FastAPIRequest,  # pylint: disable=W0613
     params: Annotated[CSVParams, fastapi.Query()],
 ) -> FileResponse:
-    logger.debug(query_params=params.model_dump())
+    logger.debug(query_params=params)
 
     return retrieve_csv(params.api_key)
