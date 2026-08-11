@@ -1,4 +1,4 @@
-from typing import Any, Literal
+from typing import Any, Literal, cast
 
 from pydantic import (
     BaseModel,
@@ -157,9 +157,9 @@ class CombinationParams(CSVParams):
         field = cls.model_fields.get(info.field_name)
 
         if field:
-            is_invalid_value = isinstance(value, str) and value.strip() == ""
+            has_empty_value = isinstance(value, str) and value.strip() == ""
 
-            if not field.is_required() and is_invalid_value:
+            if not field.is_required() and has_empty_value:
                 raise PydanticUseDefault()
 
         return value
@@ -171,6 +171,8 @@ class CombinationParams(CSVParams):
             return [keyword.strip() for keyword in value.split(",")]
 
         try:
+            value: list[str] = cast(list[str], value)
+
             if len(value) == 1:
                 return [keyword.strip() for keyword in value[0].split(",")]
 
