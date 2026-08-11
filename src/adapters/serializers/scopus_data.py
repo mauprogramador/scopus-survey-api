@@ -6,6 +6,7 @@ from pydantic import (
     BaseModel,
     ConfigDict,
     Field,
+    ValidationInfo,
     computed_field,
     field_validator,
     model_validator,
@@ -69,7 +70,10 @@ class ScopusPage(BaseModel):
 
     @field_validator("entry", mode="before")
     @classmethod
-    def validate_entry(cls, value: Any) -> Any | list:
+    def validate_entry(cls, value: Any, info: ValidationInfo) -> Any | list:
+        if info.data["total_results"] != 0:
+            return value
+
         try:
             if value[0]["error"] == EMPTY_RESULT:
                 return []
