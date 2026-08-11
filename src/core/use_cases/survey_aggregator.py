@@ -33,12 +33,25 @@ class SurveyAggregator:
         dataset = DataFrame(raw_dataset)
         initial_row_count = dataset.shape[0]
 
-        if initial_row_count != self._SINGLE_ROW:
-            dataset = dataset.drop_duplicates()
-            dataset = dataset.reset_index(drop=True)
+        if dataset.shape[0] != self._SINGLE_ROW:
+            dup_mask_full = dataset.duplicated(keep="first")
 
-            dataset = dataset.drop_duplicates(self._COLUMNS)
-            dataset = dataset.reset_index(drop=True)
+            dropped_full = dataset[dup_mask_full]
+            logger.debug(dropped_full=dropped_full)
+
+            dataset = dataset[~dup_mask_full]
+
+        if dataset.shape[0] != self._SINGLE_ROW:
+            dup_mask_sub = dataset.duplicated(
+                subset=self._COLUMNS, keep="first"
+            )
+
+            dropped_sub = dataset[dup_mask_sub]
+            logger.debug(dropped_sub=dropped_sub)
+
+            dataset = dataset[~dup_mask_sub]
+
+        dataset = dataset.reset_index(drop=True)
 
         if (
             dataset.shape[0] != self._SINGLE_ROW

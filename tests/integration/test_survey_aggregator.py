@@ -30,7 +30,7 @@ async def test_one_row(mocker: Mocker, client: Client):
 @mark.asyncio
 async def test_more_rows(mocker: Mocker, client: Client):
     mock = mocker.patch(*get_patch(MORE_DIFFERENT_ARTICLES))
-    spy_drop = mocker.spy(DataFrame, "drop_duplicates")
+    spy_drop = mocker.spy(DataFrame, "duplicated")
     spy_filter = mocker.spy(SimilarityFilter, "filter")
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
 
@@ -43,7 +43,7 @@ async def test_more_rows(mocker: Mocker, client: Client):
 @mark.asyncio
 async def test_drop_exact_duplicates(mocker: Mocker, client: Client):
     mock = mocker.patch(*get_patch(EXACT_DUPLICATES))
-    spy_drop = mocker.spy(DataFrame, "drop_duplicates")
+    spy_drop = mocker.spy(DataFrame, "duplicated")
     spy_reset = mocker.spy(DataFrame, "reset_index")
     spy_filter = mocker.spy(SimilarityFilter, "filter")
 
@@ -62,14 +62,14 @@ async def test_drop_exact_duplicates(mocker: Mocker, client: Client):
 @mark.asyncio
 async def test_drop_same_title_and_authors(mocker: Mocker, client: Client):
     mock = mocker.patch(*get_patch(SAME_TITLE_AND_AUTHORS))
-    spy_drop = mocker.spy(DataFrame, "drop_duplicates")
+    spy_drop = mocker.spy(DataFrame, "duplicated")
     spy_reset = mocker.spy(DataFrame, "reset_index")
     spy_filter = mocker.spy(SimilarityFilter, "filter")
 
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     df = load_csv_from_response(res)
     df_in: DataFrame = spy_drop.call_args_list[1].args[0]
-    df_out: DataFrame = spy_reset.call_args_list[1].args[0]
+    df_out: DataFrame = spy_reset.call_args_list[0].args[0]
 
     assert res.status_code == HTTP_200 and mock.call_count == 3
     assert df_in.shape[0] == 2 and df_out.shape[0] == 1

@@ -38,7 +38,7 @@ def _fixt(raw_dataset: list[Json]) -> tuple[SurveyAggregator, Mock]:
 @mark.asyncio
 async def test_one_row(mocker: Mocker):
     use_case, mock_filter = _fixt(DIFFERENT_ARTICLES[0:1])
-    spy_drop = mocker.spy(DataFrame, "drop_duplicates")
+    spy_drop = mocker.spy(DataFrame, "duplicated")
     dataset, _ = await use_case.process(PARAMS)
 
     assert dataset.shape[0] == len(DIFFERENT_ARTICLES[0:1]) == 1
@@ -49,7 +49,7 @@ async def test_one_row(mocker: Mocker):
 @mark.asyncio
 async def test_more_rows(mocker: Mocker):
     use_case, mock_filter = _fixt(DIFFERENT_ARTICLES)
-    spy_drop = mocker.spy(DataFrame, "drop_duplicates")
+    spy_drop = mocker.spy(DataFrame, "duplicated")
     dataset, _ = await use_case.process(PARAMS)
 
     assert dataset.shape[0] == len(DIFFERENT_ARTICLES) == 7
@@ -60,7 +60,7 @@ async def test_more_rows(mocker: Mocker):
 @mark.asyncio
 async def test_drop_exact_duplicates(mocker: Mocker):
     use_case, mock_filter = _fixt(EXACT_DUPLICATES)
-    spy_drop = mocker.spy(DataFrame, "drop_duplicates")
+    spy_drop = mocker.spy(DataFrame, "duplicated")
     spy_reset = mocker.spy(DataFrame, "reset_index")
 
     dataset, _ = await use_case.process(PARAMS)
@@ -75,12 +75,12 @@ async def test_drop_exact_duplicates(mocker: Mocker):
 @mark.asyncio
 async def test_drop_same_title_and_authors(mocker: Mocker):
     use_case, mock_filter = _fixt(SAME_TITLE_AND_AUTHORS)
-    spy_drop = mocker.spy(DataFrame, "drop_duplicates")
+    spy_drop = mocker.spy(DataFrame, "duplicated")
     spy_reset = mocker.spy(DataFrame, "reset_index")
 
     dataset, _ = await use_case.process(PARAMS)
     df_in: DataFrame = spy_drop.call_args_list[1].args[0]
-    df_out: DataFrame = spy_reset.call_args_list[1].args[0]
+    df_out: DataFrame = spy_reset.call_args_list[0].args[0]
 
     assert dataset.shape[0] == 1 and len(SAME_TITLE_AND_AUTHORS) == 2
     assert df_in.shape[0] == 2 and df_out.shape[0] == 1
