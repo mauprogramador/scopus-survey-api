@@ -74,11 +74,13 @@ class HTTPClient:
 
     def _rate_limit_exceeded(self, res: ResponseBundle) -> bool:
         if res.code == HTTPStatus.TOO_MANY_REQUESTS:
-            error_res: Json | None = res.data.get("error-response")
-            logger.debug({"scopus-error-response": error_res})
+            try:
+                error_code: str = res.data["error-response"]["error-code"]
+                return error_code == RATE_LIMIT_ERROR_CODE
 
-            if error_res and error_res.get("error-code"):
-                return error_res["error-code"] == RATE_LIMIT_ERROR_CODE
+            except (KeyError, TypeError):
+                logger.debug(scopus_error_response=res.data)
+                return False
 
         return False
 
