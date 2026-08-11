@@ -1,5 +1,4 @@
 import itertools
-import os
 
 import pandas as pd
 from pandas import DataFrame
@@ -19,11 +18,6 @@ class SimilarityFilter:
         """Filter articles from identical authors with similar titles"""
         self._filtered_df: DataFrame = None
         self._ratio: int = None
-        try:
-            self._workers = min(len(os.sched_getaffinity(0)) - 1, 4)
-        except AttributeError:
-            cpu_cores = os.cpu_count()
-            self._workers = cpu_cores - 1 if cpu_cores else 4
 
     def _drop_singles(self, group: DataFrame) -> bool:
         return group.shape[0] > self._SINGLE_ROW
@@ -79,11 +73,7 @@ class SimilarityFilter:
             single_group = next(iter(grouped_df))[1]
             return self._get_single_group_index(single_group)
 
-        max_workers = min(self._filtered_df.shape[0], self._workers)
-        logger.debug({"max_workers": max_workers})
-
         for _, group in grouped_df:
-
             rows_indexes = self._get_similar_title_indexes(group)
 
             if rows_indexes is None:
@@ -101,8 +91,8 @@ class SimilarityFilter:
 
         return similar_titles
 
-    def filter(self, dataframe: DataFrame, similarity_ratio: int) -> DataFrame:
-        df_subset = dataframe.loc[:, self._COLUMNS].copy()
+    def filter(self, dataset: DataFrame, similarity_ratio: int) -> DataFrame:
+        df_subset = dataset.loc[:, self._COLUMNS].copy()
         self._ratio = similarity_ratio
 
         df_subset["date"] = pd.to_datetime(
@@ -116,23 +106,23 @@ class SimilarityFilter:
         logger.debug(invalid_datetimes=self._filtered_df.shape[0])
 
         if self._filtered_df.shape[0] <= self._SINGLE_ROW:
-            return dataframe
+            return dataset
 
         grouped_df = self._filtered_df.groupby("authors")
 
         logger.debug(same_authors_count=grouped_df.ngroups)
-        if grouped_df.ngroups == dataframe.shape[0]:
-            return dataframe
+        if grouped_df.ngroups == dataset.shape[0]:
+            return dataset
 
         self._filtered_df = grouped_df.filter(self._drop_singles)
         similar_titles = self._handle_groups_similarity()
 
         if not similar_titles:
-            return dataframe
+            return dataset
 
         logger.debug(similar_titles=similar_titles)
 
-        dataframe = dataframe.drop(list(similar_titles))
-        dataframe = dataframe.reset_index(drop=True)
+        dataset = dataset.drop(index=list(similar_titles))
+        dataset = dataset.reset_index(drop=True)
 
-        return dataframe
+        return dataset
