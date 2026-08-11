@@ -327,10 +327,10 @@ def error(message: str, tracking_id: str = None) -> None:
         LOGGER.error("\033[31m%s\033[m", message, stacklevel=2)
 
 
-def debug(data: Json) -> None:
+def debug(**kwargs) -> None:
     LOGGER.debug(
-        "\033[33mJSON:\033[m %s\033[m",
-        to_jsonable_python(data, fallback=repr),
+        "\033[33mKWARGS:\033[m %s\033[m",
+        to_jsonable_python(kwargs, fallback=repr),
         stacklevel=2,
     )
 

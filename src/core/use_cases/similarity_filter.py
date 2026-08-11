@@ -113,14 +113,14 @@ class SimilarityFilter:
         )
 
         self._filtered_df = df_subset.dropna(subset=["date"])
-        logger.debug({"invalids_datetime": self._filtered_df.shape[0]})
+        logger.debug(invalid_datetimes=self._filtered_df.shape[0])
 
         if self._filtered_df.shape[0] <= self._SINGLE_ROW:
             return dataframe
 
         grouped_df = self._filtered_df.groupby("authors")
 
-        logger.debug({"same_authors_count": grouped_df.ngroups})
+        logger.debug(same_authors_count=grouped_df.ngroups)
         if grouped_df.ngroups == dataframe.shape[0]:
             return dataframe
 
@@ -130,7 +130,7 @@ class SimilarityFilter:
         if not similar_titles:
             return dataframe
 
-        logger.debug({"similar_titles": similar_titles})
+        logger.debug(similar_titles=similar_titles)
 
         dataframe = dataframe.drop(list(similar_titles))
         dataframe = dataframe.reset_index(drop=True)

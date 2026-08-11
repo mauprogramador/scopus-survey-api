@@ -73,13 +73,7 @@ async def web_form_page(
 ) -> HTMLResponse:
 
     csrf_token, signed_token = generate_csrf_token()
-    logger.debug(
-        {
-            "search_page_lang": lang,
-            "csrf_token": csrf_token,
-            "signed_token": signed_token,
-        }
-    )
+    logger.debug(lang=lang, csrf_token=csrf_token, signed_token=signed_token)
 
     res = get_web_form_template(request, csrf_token, lang)
     res.set_cookie("csrf-token", signed_token, MAX_AGE, httponly=True)
@@ -103,7 +97,7 @@ async def survey_total_combinations(
     request: FastAPIRequest,  # pylint: disable=W0613
     params: Annotated[CombinationParams, fastapi.Query()],
 ) -> JSONResponse:
-    logger.debug(params.model_dump())
+    logger.debug(query_params=params.model_dump())
 
     use_case = make_combinator()
     results, quota_headers = await use_case.process(params)
@@ -127,7 +121,7 @@ async def survey_bibliographic_data(
     request: FastAPIRequest,  # pylint: disable=W0613
     params: Annotated[SurveyParams, fastapi.Query()],
 ) -> FileResponse:
-    logger.debug(params.model_dump())
+    logger.debug(query_params=params.model_dump())
 
     use_case = make_aggregator()
     dataset, details = await use_case.process(params)
@@ -153,6 +147,6 @@ async def download_csv(
     request: FastAPIRequest,  # pylint: disable=W0613
     params: Annotated[CSVParams, fastapi.Query()],
 ) -> FileResponse:
-    logger.debug(params.model_dump())
+    logger.debug(query_params=params.model_dump())
 
     return retrieve_csv(params.api_key)

@@ -136,7 +136,7 @@ async def test_to_datetime_no_left(mocker: Mocker, client: Client):
     df_to_datetime: Series = spy_to_datetime.call_args_list[0].args[0]
     df_dropna: DataFrame = spy_dropna.call_args_list[0].args[0]
 
-    assert spy_log_debug.call_args_list[1].args[0]["invalids_datetime"] == 0
+    assert spy_log_debug.call_args_list[8].kwargs["invalid_datetimes"] == 0
     spy_to_datetime.assert_called_once()
     spy_dropna.assert_called_once()
 
@@ -159,7 +159,7 @@ async def test_to_datetime_one_left(mocker: Mocker, client: Client):
     df_to_datetime: DataFrame = spy_to_datetime.call_args_list[0].args[0]
     df_dropna: DataFrame = spy_dropna.call_args_list[0].args[0]
 
-    assert spy_log_debug.call_args_list[1].args[0]["invalids_datetime"] == 1
+    assert spy_log_debug.call_args_list[8].kwargs["invalid_datetimes"] == 1
     spy_to_datetime.assert_called_once()
     spy_dropna.assert_called_once()
 
@@ -241,7 +241,7 @@ async def test_drop_similar(mocker: Mocker, client: Client):
 
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     df_in: DataFrame = spy_drop.call_args_list[0].args[0]
-    similar_titles: set = spy_drop.call_args_list[0].args[1]
+    similar_titles: set = spy_drop.call_args_list[0].kwargs["index"]
 
     assert res.status_code == HTTP_200 and mock.call_count == 6
     df = load_csv_from_response(res)
