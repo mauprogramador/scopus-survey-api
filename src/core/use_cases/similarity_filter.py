@@ -122,6 +122,9 @@ class SimilarityFilter:
 
         logger.debug(similar_titles=similar_titles)
 
+        dropped_df = dataset.loc[list(similar_titles)]
+        logger.debug(dropped_similar=dropped_df.to_dict(orient="records"))
+
         dataset = dataset.drop(index=list(similar_titles))
         dataset = dataset.reset_index(drop=True)
 
