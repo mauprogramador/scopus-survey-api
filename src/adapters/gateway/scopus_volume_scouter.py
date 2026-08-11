@@ -53,7 +53,8 @@ class ScopusVolumeScouter:
 
         logger.quota(quota_headers, "search", allow_empty=True)
 
-        return results, quota_headers
+        # Interface Segregation for ScopusHeaders
+        return results, quota_headers  # type: ignore[return-value]
 
     async def fetch(
         self, params: CombinationParams, combinations: list[str]
