@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 
 from pandas import DataFrame
 
@@ -28,42 +28,35 @@ _COLUMN_TRANSLATION = {
 def write_csv_file(
     dataset: DataFrame, params: SurveyParams, details: SurveyDetails
 ) -> str:
-    params_obj = params.model_dump(exclude_none=True)
-    params_obj.update(
-        {
-            "keywords": params.keywords,
-            "combination": params.combination,
-            "ratio": params.ratio,
-        }
+    meta_params = ", ".join(
+        f"{field}={value}"
+        for field, value in params.model_dump(exclude_none=True).items()
     )
-
     loss = details.total_retrieved - details.total_final
     loss_percent = (
         0.0 if loss == 0 else (loss / details.total_retrieved) * 100.0
     )
-    metadata = [
-        f"scopus_total={details.search_result.total_results}",
-        f"items_per_page={details.search_result.items_per_page}",
-        f"pages_count={details.pages_count}",
-        f"total_retrieved={details.total_retrieved}",
-        f"total_final={details.total_final}",
-        f"loss={loss} ({loss_percent:.2f}%)",
-    ]
-
-    csv_metadata = {"GeneratedBy": _GENERATED_BY}
-    csv_metadata["Params"] = ", ".join(
-        [f"{field}={value}" for field, value in params_obj.items()]
+    meta_survey = (
+        f"scopus_total={details.search_result.total_results}, "
+        f"items_per_page={details.search_result.items_per_page}, "
+        f"pages_count={details.pages_count}, "
+        f"total_retrieved={details.total_retrieved}, "
+        f"total_final={details.total_final}, "
+        f"loss={loss} ({loss_percent:.2f}%)"
     )
-    csv_metadata["Survey"] = ", ".join(metadata)
+    date = datetime.now(timezone.utc).strftime("%Y-%m-%d")  # e.g. 2026-05-01
 
-    date = datetime.now().strftime("%B %d, %Y")  # e.g. May 01, 2026
-    csv_metadata["Source"] = DATA_SOURCE_NOTE.format(date=date)
+    csv_metadata = (
+        f"# GeneratedBy: {_GENERATED_BY}\n"
+        f"# Params: {meta_params}\n"
+        f"# Survey: {meta_survey}\n"
+        f"# Source: {DATA_SOURCE_NOTE.format(date=date)}\n"
+    )
 
     file_path = DIRECTORY / f"{params.api_key}_{FILE}"
 
     with file_path.open(mode="w", encoding="utf-8") as file:
-        for field, value in csv_metadata.items():
-            file.write(f"# {field}: {value}\n")
+        file.write(csv_metadata)
 
         dataset.rename(columns=_COLUMN_TRANSLATION).to_csv(
             file,
