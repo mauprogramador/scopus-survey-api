@@ -14,6 +14,7 @@ from src.core.domain.types import ExcMsg
 from src.infra.config.config import ENV, MAX_AGE, SALT
 from src.infra.exceptions import CSRFAuthenticationError
 from src.infra.types import CSRFToken
+from src.infra.utils import logger
 
 
 _SERIALIZER = URLSafeTimedSerializer(ENV.secret_key, SALT)
@@ -41,6 +42,7 @@ def verify_csrf_token(
     signed_token: Annotated[str | None, _COOKIE] = None,
     header_token: Annotated[str | None, _HEADER] = None,
 ) -> None:
+    logger.debug(signed_token=signed_token, header_token=header_token)
 
     if signed_token is None:
         raise CSRFAuthenticationError(ExcMsg.TOKEN_COOKIE_ERROR)

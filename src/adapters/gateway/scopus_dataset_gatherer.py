@@ -57,6 +57,10 @@ class ScopusDatasetGatherer:
 
     def _validate_results(self) -> tuple[list[Json], ScopusDetails]:
         if self._ctx.total_results != len(self._ctx.abstracts):
+            logger.debug(
+                total_results=self._ctx.total_results,
+                total_abstracts=len(self._ctx.abstracts),
+            )
             raise DataSumMismatchError(ExcMsg.DATA_MISMATCH_ERROR)
 
         search_headers = ScopusHeaders.model_validate(self._ctx.search_headers)
@@ -85,6 +89,12 @@ class ScopusDatasetGatherer:
         assert remaining_abstract_quota is not None
         abstracts_to_fetch = self._ctx.total_results - self._FIRST_PAGE
 
+        logger.debug(
+            remaining_abstract_quota=remaining_abstract_quota,
+            abstracts_to_fetch=abstracts_to_fetch,
+            total_results=self._ctx.total_results,
+        )
+
         if abstracts_to_fetch > remaining_abstract_quota:
             self._ctx.total_results = remaining_abstract_quota
             self._ctx.total_results += self._FIRST_PAGE
@@ -96,9 +106,17 @@ class ScopusDatasetGatherer:
         assert remaining_search_quota is not None
         pages_to_fetch = self._ctx.pages_count - self._FIRST_PAGE
 
+        logger.debug(
+            remaining_search_quota=remaining_search_quota,
+            pages_to_fetch=pages_to_fetch,
+            total_results=self._ctx.total_results,
+        )
+
         if pages_to_fetch > remaining_search_quota:
             pages_count = remaining_search_quota + self._FIRST_PAGE
             self._ctx.total_results = pages_count * self._ctx.items_per_page
+
+        logger.debug(total_results=self._ctx.total_results)
 
     async def _run(
         self, params: SurveyParams

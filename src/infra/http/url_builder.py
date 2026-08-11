@@ -12,6 +12,7 @@ from src.infra.config.scopus import (
     SEARCH_API_URL,
     SEARCH_FIELDS,
 )
+from src.infra.utils import logger
 
 
 _FIELDS = ",".join(SEARCH_FIELDS)
@@ -46,6 +47,8 @@ def build_combination_urls(params: CombinationParams) -> Callable[[str], str]:
     query_terms = {"TITLE-ABS-KEY": "{combination}"}
     query_terms.update(query_fields)
 
+    logger.debug(query_terms=query_terms)
+
     search_terms = BOOLEAN_OPERATOR.join(
         f"{field}({value})" for field, value in query_terms.items()
     )
@@ -71,6 +74,8 @@ def build_search_urls(params: SurveyParams) -> Callable[[int], str]:
     )
     query_terms = {"TITLE-ABS-KEY": params.combination}
     query_terms.update(query_fields)
+
+    logger.debug(query_terms=query_terms)
 
     search_terms = BOOLEAN_OPERATOR.join(
         f"{field}({value})" for field, value in query_terms.items()

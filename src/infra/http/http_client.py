@@ -89,6 +89,8 @@ class HTTPClient:
             should_sleep = self._request_count >= self._BATCH
 
             if should_sleep:
+                logger.debug(batch_sleep=self._request_count)
+
                 self._request_count = 0
                 self._rate_limit_holder.clear()  # Block
 
@@ -122,6 +124,8 @@ class HTTPClient:
             if self._rate_limit_holder.is_set():
 
                 self._rate_limit_holder.clear()  # Block
+                logger.debug(rate_limit_exceed=attempt)
+
                 await asyncio.sleep(2)
                 self._rate_limit_holder.set()  # Proceed
 

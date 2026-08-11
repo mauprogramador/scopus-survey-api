@@ -29,6 +29,8 @@ class SurveyCombinations:
             for pairs in itertools.chain.from_iterable(raw_combinations)
         ]
 
+        logger.debug(combinations=combinations)
+
         results, quota_headers = await self._api_gateway.fetch(
             params, combinations
         )
