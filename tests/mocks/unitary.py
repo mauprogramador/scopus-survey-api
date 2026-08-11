@@ -313,6 +313,6 @@ EXACT_DUPLICATES = [
     ScopusAbstract(**RAW_ABSTRACT_OK).model_dump(by_alias=True)
 ] * 2
 SAME_TITLE_AND_AUTHORS = [
-    ScopusAbstract(**abstract_raw()).model_dump(by_alias=True),
-    ScopusAbstract(**abstract_raw()).model_dump(by_alias=True),
+    ScopusAbstract(**abstract_raw(date="date_1")).model_dump(by_alias=True),
+    ScopusAbstract(**abstract_raw(date="date_2")).model_dump(by_alias=True),
 ]
