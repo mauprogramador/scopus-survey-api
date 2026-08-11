@@ -61,11 +61,11 @@ class CombinationParams(Protocol):
     page_range: str
     keywords: list[str]
 
-    def model_dump(self, **kwargs) -> dict[str, Any]:
-        pass
-
     @property
     def date(self) -> str:
+        pass
+
+    def model_dump(self, **kwargs) -> dict[str, Any]:
         pass
 
 
@@ -93,6 +93,9 @@ class ScopusHeaders(Protocol):
 
     @property
     def reset_datetime(self) -> str | None:
+        pass
+
+    def model_dump(self, **kwargs) -> dict[str, Any]:
         pass
 
 
