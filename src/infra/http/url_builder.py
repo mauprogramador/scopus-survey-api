@@ -8,7 +8,7 @@ from src.core.domain.types import (
 from src.infra.config.scopus import (
     ARTICLE_PAGE_URL,
     BOOLEAN_OPERATOR,
-    QUERY_FIELDS,
+    NO_QUERY_FIELDS,
     SEARCH_API_URL,
     SEARCH_FIELDS,
 )
@@ -39,10 +39,7 @@ def build_article_page_url(scopus_id: str) -> str:
 
 def build_combination_urls(params: CombinationParams) -> Callable[[str], str]:
     query_fields = params.model_dump(
-        by_alias=True,
-        exclude_unset=True,
-        exclude_none=True,
-        include=QUERY_FIELDS,
+        exclude=NO_QUERY_FIELDS, by_alias=True, exclude_none=True
     )
     query_terms = {"TITLE-ABS-KEY": "{combination}"}
     query_terms.update(query_fields)
@@ -67,10 +64,7 @@ def build_combination_urls(params: CombinationParams) -> Callable[[str], str]:
 
 def build_search_urls(params: SurveyParams) -> Callable[[int], str]:
     query_fields = params.model_dump(
-        by_alias=True,
-        exclude_unset=True,
-        exclude_none=True,
-        include=QUERY_FIELDS,
+        exclude=NO_QUERY_FIELDS, by_alias=True, exclude_none=True
     )
     query_terms = {"TITLE-ABS-KEY": params.combination}
     query_terms.update(query_fields)

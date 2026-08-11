@@ -141,7 +141,6 @@ class CombinationParams(CSVParams):
     keywords: list[Keyword] = Field(
         description="The Keywords in the documents you are searching for",
         examples=["Python", "Scopus", "Web API", "Bibliographic Survey"],
-        exclude=True,
         min_length=2,
         max_length=4,
     )
@@ -195,7 +194,6 @@ class SurveyParams(CombinationParams):
     combination: str = Field(
         description="The chosen Keyword Combination to refine the survey",
         examples=["Python AND Machine Learning"],
-        exclude=True,
         pattern=_KEYWORD_COMBINATION_PATTERN,
         min_length=2,
         max_length=510,
@@ -204,7 +202,6 @@ class SurveyParams(CombinationParams):
         default=80,
         description="The Filter Ratio used to remove similar documents",
         examples=[80],
-        exclude=True,
         ge=0,
         le=100,
     )

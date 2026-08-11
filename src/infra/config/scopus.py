@@ -31,14 +31,11 @@ DATA_SOURCE_NOTE = (
     "http://api.elsevier.com and http://www.scopus.com."
 )
 
-QUERY_FIELDS = {
-    "doctype",
-    "pubstage",
-    "language",
-    "open_access",
-    "source_type",
-    "subject_area",
-    "page_range",
+NO_QUERY_FIELDS = {
+    "api_key",
+    "keywords",
+    "combination",
+    "ratio",
 }
 
 SEARCH_FIELDS = (
