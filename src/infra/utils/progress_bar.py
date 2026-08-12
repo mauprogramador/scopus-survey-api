@@ -1,4 +1,3 @@
-import asyncio
 import contextlib
 from collections.abc import Callable, Generator
 from typing import Any, Literal
@@ -18,7 +17,7 @@ _PREFIX = "\x1b[93m[\x1b[92mPROGRESS\x1b[93m]\x1b[m"
 @contextlib.contextmanager
 def progress_bar(
     progress_range: range,
-) -> Generator[Callable[[asyncio.Task], None], Any, Literal[False]]:
+) -> Generator[Callable[..., None], Any, Literal[False]]:
     disable = None if ENV.progress_bar else False
 
     pbar = tqdm(
@@ -33,7 +32,7 @@ def progress_bar(
         colour="green",
     )
 
-    def _step(task: asyncio.Task) -> None:  # pylint: disable=W0613
+    def _step() -> None:
         pbar.update()
 
     yield _step

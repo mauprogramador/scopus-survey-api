@@ -56,9 +56,11 @@ async def test_fetch_multiple_http_error():
 @mark.asyncio
 async def test_fetch_multiple_cancelled_error():
     fetcher = AsyncMock(side_effect=TASKS_CANCELLED_ERROR)
-    with raises(asyncio.CancelledError) as info:
+    with raises(TasksCancellationError) as info:
         await fetch_multiple(fetcher, range(6), range(6))
-    assert info.value.args[0] == "any"
+    assert info.value.message == ExcMsg.INTERNAL_ERROR
+    assert info.value.details[0]["message"] == "any"
+    assert info.value.details[0]["type"] == fqn(asyncio.CancelledError)
 
 
 @mark.asyncio

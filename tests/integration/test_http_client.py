@@ -7,7 +7,6 @@ from typing import cast
 from unittest.mock import AsyncMock, MagicMock, Mock
 
 import aiohttp
-import anyio
 from httpx import AsyncClient as Client
 from pytest import mark
 from pytest_mock import MockerFixture as Mocker
@@ -59,9 +58,8 @@ async def test_cancelled_error(mocker: Mocker, client: Client):
     mock = mocker.patch(*get_patch(asyncio.CancelledError("any")))
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
     details = assert_error_json(res, HTTP_500, ExcMsg.INTERNAL_ERROR)
-    assert details[0]["type"] == fqn(RuntimeError)
+    assert details[0]["type"] == fqn(asyncio.CancelledError)
     assert details[0]["message"] and mock.call_count == 3
-    assert details[0]["cause"]["type"] == fqn(anyio.EndOfStream)
 
 
 @mark.asyncio

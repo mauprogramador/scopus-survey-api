@@ -68,13 +68,15 @@ CONTENT_TYPE_ERROR = aiohttp.ContentTypeError(
     message="any",
 )
 
+# Unpacking inside the worker task: TaskGroup swallows it up
 TASKS_CANCELLED_ERROR = [
     (None, None),
     (None, None),
+    (None, None),
     asyncio.CancelledError("any"),
-    None,
-    None,
-    None,
+    (None, None),
+    (None, None),
+    (None, None),
 ]
 
 TASKS_HTTP_ERROR = [

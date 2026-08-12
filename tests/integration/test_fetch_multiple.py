@@ -15,6 +15,7 @@ from tests.mocks.errors import HTTP_ERROR, PYDANTIC_VALIDATION_ERROR
 from tests.mocks.helpers import fqn, get_patch, response_mock
 from tests.mocks.raw import (
     COMBINATION_PARAMS,
+    HTTP_500,
     HTTP_502,
     KEYWORDS,
     RAW_SEARCH_OK,
@@ -83,12 +84,11 @@ async def test_fetch_multiple_cancelled_error(mocker: Mocker, client: Client):
     )
     mocker.patch.dict(COMBINATION_PARAMS, {"keywords": KEYWORDS[:3]})
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
-    details = assert_error_json(res, HTTP_502, ExcMsg.REQUEST_EXCEPTION)
+    details = assert_error_json(res, HTTP_500, ExcMsg.INTERNAL_ERROR)
     # TaskGroup swallows CancelledError
     assert mock.call_count == 7 and 4 > spy.call_count > 1
-    assert details[0]["type"] == fqn(StopAsyncIteration)
+    assert details[0]["type"] == fqn(asyncio.CancelledError)
     assert details[0]["message"]
-    assert details[0]["cause"]["type"] == fqn(StopIteration)
 
 
 @mark.asyncio

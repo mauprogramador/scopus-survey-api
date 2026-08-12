@@ -13,6 +13,7 @@ from src.adapters.gateway.scopus_dataset_gatherer import ScopusDatasetGatherer
 from src.adapters.gateway.scopus_volume_scouter import ScopusVolumeScouter
 from src.core.domain.types import ExcMsg, Json
 from src.infra.fastapi.main import app
+from src.infra.http.fetch_multiple_concurrent import _FetchMultiple
 from src.infra.middleware.flow_guarding_monitor import (
     FlowGuardingMonitorMiddleware,
 )
@@ -98,7 +99,15 @@ async def test_async_tasks_api_combination(mocker: Mocker, client: Client):
 
     task_names = ":".join(_task_name(task) for task in running_tasks)
     # pylint: disable=W0212
-    assert task_names.count(ScopusVolumeScouter._fetch_total.__qualname__) == 3
+
+    method = ScopusDatasetGatherer._fetch_page.__qualname__
+    assert task_names.count(method) == 0
+
+    method = ScopusDatasetGatherer._fetch_abstract.__qualname__
+    assert task_names.count(method) == 0
+
+    assert task_names.count(_FetchMultiple._worker.__qualname__) == 3
+    # the first two operations are counted as from the middleware
     assert task_names.count(fqn(FlowGuardingMonitorMiddleware.__call__)) == 2
     assert task_names.count("test_async_tasks_api_combination") == 1
 
@@ -137,16 +146,16 @@ async def test_async_tasks_api_survey(mocker: Mocker, client: Client):
     assert ctx.pages_count == 1 and len(running_tasks) == 5
 
     task_names = ":".join(_task_name(task) for task in running_tasks)
-
     # pylint: disable=W0212
+
     method = ScopusDatasetGatherer._fetch_page.__qualname__
-    # the first two awaits are counted as from the middleware
     assert task_names.count(method) == 0
 
-    # pylint: disable=W0212
     method = ScopusDatasetGatherer._fetch_abstract.__qualname__
-    assert task_names.count(method) == 2
+    assert task_names.count(method) == 0
 
+    assert task_names.count(_FetchMultiple._worker.__qualname__) == 2
+    # the first two operations are counted as from the middleware
     assert task_names.count(fqn(FlowGuardingMonitorMiddleware.__call__)) == 2
     assert task_names.count("test_async_tasks_api_survey") == 1
 
