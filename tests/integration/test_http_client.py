@@ -143,10 +143,10 @@ async def test_retry_on_rate_limit(mocker: Mocker, client: Client):
     mock = mocker.patch(*get_patch(GET_RATE_LIMIT))
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
     assert res.status_code == HTTP_200 and mock.call_count == 4
-    mock_sleep.assert_any_await(2)
     # filter retry calls = call(0)
     calls = [call for call in mock_sleep.call_args_list if call != call(0)]
     assert len(calls) == 4 * 2 + 1  # 8 req + 1 rate limit
+    assert any(call for call in calls if call.args[0] >= 1.0)
     assert len(res.json()["result"]["combinations"]) == 3
     mock.assert_awaited()
 

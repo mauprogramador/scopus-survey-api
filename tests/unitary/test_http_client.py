@@ -163,7 +163,8 @@ async def test_retry_on_rate_limit(
     assert bundle.data is not None and bundle.headers is not None
 
     mock_sleep.assert_awaited()
-    mock_sleep.assert_any_await(2)
+    assert mock_sleep.call_count == 5
+    assert mock_sleep.call_args_list[2].args[0] >= 1.0
     mock_sleep.reset_mock()
 
     spy_clear.assert_called_once()

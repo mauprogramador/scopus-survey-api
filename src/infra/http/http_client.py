@@ -31,6 +31,9 @@ class HTTPClient:
     """
 
     _JSON_ERROR = JSONDecodeError("Expecting value", "Scopus JSON", 0)
+    _JITTER_SLEEP = aioretry.JitterRetry(
+        attempts=5, start_timeout=1.0, max_timeout=2.5, factor=1.0
+    )
     _TIMEOUT = aiohttp.ClientTimeout(total=8.0)
     _RETRYABLE_STATUS_CODES = {
         HTTPStatus.INTERNAL_SERVER_ERROR.value,
@@ -116,7 +119,7 @@ class HTTPClient:
             if not self._rate_limit_exceeded(res):
                 return res
 
-            if attempt >= 5:
+            if attempt >= self._JITTER_SLEEP.attempts:
                 logger.error("Exhausted rate limit request retries")
                 return res
 
@@ -128,7 +131,7 @@ class HTTPClient:
                 self._rate_limit_holder.clear()  # Block
                 logger.debug(rate_limit_exceed=attempt)
 
-                await asyncio.sleep(2)
+                await asyncio.sleep(self._JITTER_SLEEP.get_timeout(attempt))
                 self._rate_limit_holder.set()  # Proceed
 
     async def _request(self, url: str) -> ResponseBundle:
