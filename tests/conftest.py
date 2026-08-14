@@ -72,7 +72,7 @@ def lifespan():
     csv_file_path = DIRECTORY / CSV_FILE_NAME
 
     csv_file_path.write_text("any")
-    print("\033[93mPytest Session Start\033[m", flush=True)
+    print("\033[93mSession Started\033[m")
 
     with MonkeyPatch.context() as mp:
         mp.setattr(f"{csv_builder_module.__name__}.DIRECTORY", DIRECTORY)
@@ -82,7 +82,7 @@ def lifespan():
 
     csv_file_path.unlink(missing_ok=True)
     TEMP_DIR.cleanup()
-    print("\033[93mPytest Session Finish\033[m", flush=True)
+    print("\033[93mSession Ended\033[m")
 
 
 @async_fixture(name="client")
