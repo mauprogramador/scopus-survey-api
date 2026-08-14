@@ -29,7 +29,7 @@ from tests.mocks.helpers import (
 )
 from tests.mocks.raw import (
     ALIAS_SEARCH_PARAMS,
-    API_KEY,
+    COMBINATION_PARAMS,
     CSV_PARAMS,
     DETAILS,
     HTTP_200,
@@ -257,65 +257,60 @@ async def test_web_form_route_process_time(mocker: Mocker, client: Client):
         assert res.status_code == HTTP_200
 
 
+@mark.parametrize(
+    "elapsed,count,index",
+    [(0.20, 3, 2), (0.20, 7, 3), (1.00, 15, 4)],
+    ids=["3 Combs", "7 Combs", "15 Combs"],
+)
 @mark.asyncio
 async def test_api_combination_route_process_time(
-    mocker: Mocker, client: Client
+    elapsed: float, count: int, index: int, mocker: Mocker, client: Client
 ):
     mocker.stopall()
-    mock = mocker.patch(*get_patch([response_mock(RAW_SEARCH_OK)] * 3))
-    params = {
-        "apiKey": API_KEY,
-        "keywords": KEYWORDS[:2],
-        "button": Button.COMBINATION.value,
-    }
+    mock = mocker.patch(*get_patch([response_mock(RAW_SEARCH_OK)] * count))
+    mocker.patch.dict(COMBINATION_PARAMS, {"keywords": KEYWORDS[:index]})
 
-    with _assert_time(0.20):
-        res = await client.get(URL_COMBINATION, params=params)
-        assert res.status_code == HTTP_200 and mock.call_count == 3
-
-    mocker.stop(mock)
-    mock = mocker.patch(*get_patch([response_mock(RAW_SEARCH_OK)] * 7))
-    params["keywords"] = KEYWORDS[:3]
-
-    with _assert_time(0.20):
-        res = await client.get(URL_COMBINATION, params=params)
-        assert res.status_code == HTTP_200 and mock.call_count == 7
-
-    mocker.stop(mock)
-    mock = mocker.patch(*get_patch([response_mock(RAW_SEARCH_OK)] * 15))
-    params["keywords"] = KEYWORDS
-
-    with _assert_time(1.00):
-        res = await client.get(URL_COMBINATION, params=params)
-        assert res.status_code == HTTP_200 and mock.call_count == 15
+    with _assert_time(elapsed):
+        res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
+        assert res.status_code == HTTP_200 and mock.call_count == count
 
 
+@mark.parametrize(
+    "elapsed,count,op_name,res_mock",
+    [
+        (
+            0.31,
+            2,
+            [
+                response_mock(RAW_SEARCH_OK),
+                response_mock(RAW_ABSTRACT_OK),
+            ],
+        ),
+        (
+            2.44,
+            26,
+            [
+                response_mock(search_raw(25)),
+                *[response_mock(RAW_ABSTRACT_OK)] * 25,
+            ],
+        ),
+    ],
+    ids=["One Result", "One Page Full"],
+)
 @mark.asyncio
-async def test_api_survey_route_process_time(mocker: Mocker, client: Client):
+async def test_api_survey_route_process_time(
+    elapsed: float,
+    count: int,
+    res_mock: list[MagicMock],
+    mocker: Mocker,
+    client: Client,
+):
     mocker.stopall()
-    res_mock = [response_mock(RAW_SEARCH_OK), response_mock(RAW_ABSTRACT_OK)]
-    mock = mocker.patch(*get_patch(res_mock))
-    params = {
-        "apiKey": API_KEY,
-        "keywords": KEYWORDS[:2],
-        "combination": "any",
-        "button": Button.SURVEY.value,
-    }
-
-    with _assert_time(0.31):
-        res = await client.get(URL_SEARCH, params=params)
-        assert res.status_code == HTTP_200 and mock.call_count == 2
-
-    mocker.stop(mock)
-    res_mock = [
-        response_mock(search_raw(25)),
-        *[response_mock(RAW_ABSTRACT_OK)] * 25,
-    ]
     mock = mocker.patch(*get_patch(res_mock))
 
-    with _assert_time(2.44):
-        res = await client.get(URL_SEARCH, params=params)
-        assert res.status_code == HTTP_200 and mock.call_count == 26
+    with _assert_time(elapsed):
+        res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
+        assert res.status_code == HTTP_200 and mock.call_count == count
 
 
 @mark.asyncio
