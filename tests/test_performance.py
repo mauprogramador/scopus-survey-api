@@ -3,6 +3,7 @@ import cProfile
 import io
 import pstats
 import random
+import re
 import shutil
 import string
 import time
@@ -50,7 +51,7 @@ from tests.mocks.raw import (
 
 
 # Base duration is the P95 time based on a summary report of 50x executions
-REASON = "Performance tests must be run individually to ensure clean metrics"
+_REASON = "Performance tests must be run individually to ensure clean metrics"
 
 
 @fixture(autouse=True, scope="function")
@@ -59,21 +60,24 @@ def enforce_performance_isolation(request: FixtureRequest):
         return
 
     if request.session.testscollected > 7:
-        skip(REASON)
+        skip(_REASON)
 
     parametrize_mark = cast(Mark | None, request.keywords.get("parametrize"))
 
     if not parametrize_mark:
-        skip(REASON)
+        skip(_REASON)
 
     names = {item.name.rsplit("[", 1)[0] for item in request.session.items}
 
     if len(names) > 1:
-        skip(REASON)
+        skip(_REASON)
 
 
 class _ReportTracker:
     _NOTE = "[{}] Duration ({:.4f}s) exceeded limit ({:.4f}s)"
+    # e.g. 45 function calls
+    _INDENT_PATTERN = re.compile(r"\n? *(\d* function calls)")
+    _FILTER = (tracemalloc.Filter(True, "/src"),)
     _TOP = 15  # Top bottlenecks functions
     _TOLERANCE = 0.30  # 30%
 
@@ -140,31 +144,55 @@ class _ReportTracker:
         self._header("Operational Metrics", "time.perf_counter")
 
         df = pd.DataFrame(self._metrics)
-        print(df.to_string(index=False), "\n")
+        print(df.to_string(index=False))
+
+        if not self._profiler and not self._snapshot:
+            print()
 
         if self._profiler is not None:
             buffer = io.StringIO()
+            stats = pstats.Stats(self._profiler, stream=buffer)
 
-            ps = pstats.Stats(self._profiler, stream=buffer)
-            ps.sort_stats("cumulative")
-            ps.print_stats(self._TOP)
+            stats.sort_stats("cumulative")
+            stats.print_stats("/src", self._TOP)
+
+            stats.sort_stats("tottime")
+            stats.print_stats("/src", self._TOP)
 
             self._header(f"Top {self._TOP} CPU Bottlenecks", "cProfile")
-            print(buffer.getvalue().strip(), "\n")
+            value = buffer.getvalue().strip()
+            print(self._INDENT_PATTERN.sub(r"   \1", value))
 
         if self._snapshot is not None:
             self._header(f"Top {self._TOP} Memory Allocations", "tracemalloc")
-            stats = self._snapshot.statistics("lineno")
+            total = len(self._snapshot.statistics("lineno"))
+
+            snapshot = self._snapshot.filter_traces(self._FILTER)
+            stats = snapshot.statistics("lineno")
+
+            print(
+                f"List reduced from {total} to {len(stats)} "
+                "due to restriction <'/src'>\n"
+            )
 
             for stat in stats[: self._TOP]:
                 print(
                     f"{stat.traceback[0]}: {stat.size / 1024:.1f} "
-                    "KiB ({stat.count} blocks)"
+                    f"KiB ({stat.count} blocks)"
                 )
 
             print()
+            other = stats[self._TOP :]
+
+            if other:
+                size = sum(stat.size for stat in other)
+                print(f"Other {len(other)} process: {(size / 1024):.1f} KiB")
+
+            total = sum(stat.size for stat in stats)
+            print(f"Total Allocated Size: {(total / 1024):.1f} KiB")
+
             if self._peak_bytes is not None:
-                print(f"\033[37;1mPeak Mem\033[m (MB): {self._peak_bytes}\n")
+                print(f"Peak Memory: {self._peak_bytes} MB\n")
 
 
 @mark.parametrize(
