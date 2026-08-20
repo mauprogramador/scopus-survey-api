@@ -14,6 +14,8 @@ from pydantic_settings import (
     SettingsConfigDict,
 )
 
+from src.infra.types import LogLevel
+
 
 # e.g. 127.0.0.1, 0.0.0.0
 _HOST_PATTERN = r"^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$"
@@ -45,7 +47,7 @@ class EnvConfig(BaseSettings):
     reload: bool = Field(default=False)
     workers: int = Field(default=1, gt=0, decimal_places=None)
     logging_file: bool = Field(default=False)
-    debug: bool = Field(default=False)
+    log_level: LogLevel = Field(default="INFO")
     progress_bar: bool = Field(default=True)
 
     @classmethod
@@ -90,3 +92,7 @@ class EnvConfig(BaseSettings):
             return (2 * len(os.sched_getaffinity(0))) + 1
         except AttributeError:
             return (2 * (os.cpu_count() or 2)) + 1
+
+    @property
+    def debug(self) -> bool:
+        return self.log_level == "DEBUG"

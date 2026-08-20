@@ -16,3 +16,14 @@ type CSRFToken = Annotated[
 type APIName = Literal["search", "abstract"]
 
 type FetcherTask[T] = Coroutine[Any, Any, tuple[T, Headers]]
+
+type LogLevel = Literal[
+    "DEBUG",
+    "API_CALL",
+    "INFO",
+    "ACCESS",
+    "QUOTA",
+    "WARNING",
+    "ERROR",
+    "EXCEPTION",
+]
