@@ -19,6 +19,7 @@ from src.adapters.types import (
     SrcType,
     SubjArea,
 )
+from src.core.domain.types import SecretKey
 from src.infra.config.scopus import (
     CURRENT_YEAR,
     LAST_THREE_YEARS,
@@ -42,7 +43,7 @@ class CSVParams(BaseModel):
 
     model_config = ConfigDict(extra="forbid", str_strip_whitespace=True)
 
-    api_key: str = Field(
+    api_key: SecretKey = Field(
         alias="apiKey",
         validation_alias="api_key",
         description="The Scopus API Key issued by Elsevier",
@@ -196,7 +197,7 @@ class SurveyParams(CombinationParams):
         examples=["Python AND Machine Learning"],
         pattern=_KEYWORD_COMBINATION_PATTERN,
         min_length=2,
-        max_length=510,
+        max_length=510,  # 4x Keywords + AND operator
     )
     ratio: int = Field(
         default=80,

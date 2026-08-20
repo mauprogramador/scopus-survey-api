@@ -2,6 +2,8 @@ from enum import StrEnum, unique
 from typing import Any, NamedTuple, Protocol
 
 from pandas import DataFrame
+from pydantic import GetCoreSchemaHandler
+from pydantic_core import CoreSchema, core_schema
 
 
 type Json = dict[str, Any]
@@ -48,8 +50,36 @@ class ExcMsg(StrEnum):
     SLOWAPI_RATE_ERROR = "Request rate limit exceeded"
 
 
+def mask_secret(secret_value: str) -> str:
+    if secret_value.strip() == "":
+        return "*" * 12
+    return secret_value[:5] + "*" * len(secret_value[5:])
+
+
+class SecretKey(str):
+    def __new__(cls, value: str = None):
+        return super().__new__(cls, value)
+
+    def __repr__(self) -> str:
+        return mask_secret(self)
+
+    @classmethod
+    def __get_pydantic_core_schema__(
+        cls,
+        source_type: Any,  #  pylint: disable=w0613
+        handler: GetCoreSchemaHandler,
+    ) -> CoreSchema:
+        return core_schema.no_info_after_validator_function(
+            function=cls,
+            schema=handler(str),
+            serialization=core_schema.plain_serializer_function_ser_schema(
+                repr, when_used="json"
+            ),
+        )
+
+
 class CombinationParams(Protocol):
-    api_key: str
+    api_key: SecretKey
     start_year: int
     end_year: int
     doctype: str

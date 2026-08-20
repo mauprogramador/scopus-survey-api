@@ -14,6 +14,7 @@ from pydantic_settings import (
     SettingsConfigDict,
 )
 
+from src.core.domain.types import SecretKey
 from src.infra.types import LogLevel
 
 
@@ -30,7 +31,7 @@ class EnvConfig(BaseSettings):
         env_ignore_empty=True,
     )
 
-    secret_key: str = Field(
+    secret_key: SecretKey = Field(
         exclude=True,
         frozen=True,
         repr=False,

@@ -365,6 +365,10 @@ def exception(exc: Exception) -> None:
     LOGGER.log(_Level.EXCEPTION, _EXCEPTION, args, exc_info=True, stacklevel=2)
 
 
+def _mask_api_key_param(match: re.Match[str]) -> str:
+    return f"apiKey={mask_secret(match.group(1))}"
+
+
 def _trace(
     prefix: _Level,
     req: FastAPIRequest,
@@ -381,7 +385,7 @@ def _trace(
         "port": port,
         "method_color": _METHOD_COLOR.get(req.method, "90"),
         "method": req.method,
-        "url": _API_KEY_PARAM_PATTERN.sub("apiKey=...", str(req.url)),
+        "url": _API_KEY_PARAM_PATTERN.sub(_mask_api_key_param, str(req.url)),
         "status_color": _STATUS_COLOR[(code // 100)],
         "code": code,
         "status_phrase": HTTPStatus(code).phrase,
