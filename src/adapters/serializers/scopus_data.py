@@ -98,7 +98,6 @@ class ScopusAbstract(BaseModel):
         validation_alias="dc:identifier",
         pattern=_SCOPUS_ID_PATTERN,
         min_length=20,
-        max_length=29,
     )
     authors: str | None = Field(default=None)
     title: str = Field(validation_alias="dc:title")
