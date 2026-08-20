@@ -1,3 +1,6 @@
+import logging
+from typing import Any
+
 import aiohttp  # pylint: disable=w0611 # noqa: F401
 import aiohttp_retry  # pylint: disable=w0611 # noqa: F401
 import aiolimiter  # pylint: disable=w0611 # noqa: F401
@@ -10,10 +13,45 @@ import slowapi  # pylint: disable=w0611 # noqa: F401
 import thefuzz  # pylint: disable=w0611 # noqa: F401
 import tqdm  # pylint: disable=w0611 # noqa: F401
 import uvicorn
+import uvicorn.logging
 import uvloop
 
 from src.infra.config.config import APP, ENV, SERVER
 from src.infra.utils import logger
+
+
+_UVICORN_LOGGING_CONFIG: dict[str, Any] = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "default": {
+            "()": uvicorn.logging.DefaultFormatter,
+            "fmt": "%(asctime)s %(levelprefix)-19s %(message)s",
+            "datefmt": "%Y-%m-%d %H:%M:%S",  # e.g. 2026-01-01 00:00:00
+            "use_colors": True,
+        },
+        "access": {},
+    },
+    "handlers": {
+        "default": {
+            "formatter": "default",
+            "class": logging.StreamHandler,
+            "stream": "ext://sys.stderr",
+        },
+    },
+    "loggers": {
+        "uvicorn": {
+            "handlers": ["default"],
+            "level": "INFO",
+            "propagate": False,
+        },
+        "uvicorn.error": {"level": "INFO"},
+    },
+}
+
+if ENV.logging_file:
+    _UVICORN_LOGGING_CONFIG["handlers"]["file"] = logger.FILE_HANDLER
+    _UVICORN_LOGGING_CONFIG["loggers"]["uvicorn"]["handlers"].append("file")
 
 
 if __name__ == "__main__":
@@ -28,7 +66,7 @@ if __name__ == "__main__":
         loop="uvloop",
         reload=ENV.reload,
         workers=ENV.workers,
-        log_config=logger.UVICORN_LOGGING_CONFIG,
+        log_config=_UVICORN_LOGGING_CONFIG,
         access_log=False,
         server_header=False,
         timeout_graceful_shutdown=5,

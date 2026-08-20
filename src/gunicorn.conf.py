@@ -3,6 +3,7 @@ import aiohttp_retry  # pylint: disable=w0611 # noqa: F401
 import aiolimiter  # pylint: disable=w0611 # noqa: F401
 import fastapi  # pylint: disable=w0611 # noqa: F401
 import gunicorn  # pylint: disable=w0611 # noqa: F401
+import gunicorn.glogging
 import itsdangerous  # pylint: disable=w0611 # noqa: F401
 import pandas  # pylint: disable=w0611 # noqa: F401
 import pydantic  # pylint: disable=w0611 # noqa: F401
@@ -22,6 +23,15 @@ from src.infra.utils import logger
 SERVER.set(f"Gunicorn/{gunicorn.__version__}")
 
 
+class _ProdLogger(gunicorn.glogging.Logger):
+    error_fmt = r"%(asctime)s %(levelname)-10s %(message)s"
+    datefmt = r"%Y-%m-%d %H:%M:%S"  # e.g. 2026-01-01 00:00:00
+    access_fmt = ""
+
+    def access(self, resp, req, environ, request_time):
+        pass
+
+
 def when_ready_hook(_: Arbiter) -> None:
     logger.debug(env_config=ENV)
     logger.gunicorn_running(ENV.port)
@@ -39,8 +49,6 @@ accesslog = "-"
 errorlog = "-"
 loglevel = "info"
 access_log_format = None
-logger_class = (
-    f"{logger.ProdLogger.__module__}.{logger.ProdLogger.__qualname__}"
-)
+logger_class = f"{_ProdLogger.__module__}.{_ProdLogger.__qualname__}"
 raw_env = ["PROGRESS_BAR=False"]
 when_ready = when_ready_hook

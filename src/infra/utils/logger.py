@@ -11,8 +11,6 @@ from logging.handlers import RotatingFileHandler
 from pathlib import Path
 from typing import Any
 
-import gunicorn.glogging
-import uvicorn.logging
 from fastapi.requests import Request as FastAPIRequest
 from pandas import DataFrame
 from pydantic import BaseModel
@@ -52,7 +50,7 @@ class _Level(IntEnum):
     EXCEPTION = 41
 
 
-class _ANSIFormatter(logging.Formatter):
+class ANSIFormatter(logging.Formatter):
 
     _LEVEL_COLOR = {
         _Level.DEBUG: "35",
@@ -124,7 +122,6 @@ class _TQDMLoggingHandler(logging.StreamHandler):
 
 
 _METHOD_COLOR = {"GET": "94", "POST": "92", "PUT": "93", "DELETE": "91"}
-_UVICORN_FMT = "%(asctime)s %(levelprefix)-19s %(message)s"
 _FRAME = traceback.FrameSummary(
     filename=__file__, lineno=1, name="<logging>", colno=1
 )
@@ -134,9 +131,7 @@ _FILENAME = Path(f".logs/{_filename(0)}")
 _LOGGER_NAME = "scopus.survey.api"
 _DATEFMT = "%Y-%m-%d %H:%M:%S"  # e.g. 2026-01-01 00:00:00
 
-TEST_FORMATTER = _ANSIFormatter(fmt=_FMT, datefmt=_DATEFMT, strip_ansi=False)
-
-_FILE_HANDLER: Json = {
+FILE_HANDLER: Json = {
     "()": _FileHandler,
     "formatter": "ansi_cleaner",
     "filename": _FILENAME,
@@ -150,13 +145,13 @@ _LOGGING_CONFIG: Json = {
     "disable_existing_loggers": False,
     "formatters": {
         "default": {
-            "()": _ANSIFormatter,
+            "()": ANSIFormatter,
             "format": _FMT,
             "datefmt": _DATEFMT,
             "strip_ansi": False,
         },
         "ansi_cleaner": {
-            "()": _ANSIFormatter,
+            "()": ANSIFormatter,
             "fmt": _FMT,
             "datefmt": _DATEFMT,
             "strip_ansi": True,
@@ -180,42 +175,12 @@ _LOGGING_CONFIG: Json = {
         }
     },
 }
-UVICORN_LOGGING_CONFIG: Json = {
-    "version": 1,
-    "disable_existing_loggers": False,
-    "formatters": {
-        "default": {
-            "()": uvicorn.logging.DefaultFormatter,
-            "fmt": _UVICORN_FMT,
-            "datefmt": _DATEFMT,
-            "use_colors": True,
-        },
-        "access": {},
-    },
-    "handlers": {
-        "default": {
-            "formatter": "default",
-            "class": logging.StreamHandler,
-            "stream": "ext://sys.stderr",
-        },
-    },
-    "loggers": {
-        "uvicorn": {
-            "handlers": ["default"],
-            "level": "INFO",
-            "propagate": False,
-        },
-        "uvicorn.error": {"level": "INFO"},
-    },
-}
 
 
 if ENV.logging_file:
     _FILENAME.parent.mkdir(exist_ok=True)
-    _LOGGING_CONFIG["handlers"].setdefault("file", _FILE_HANDLER)
+    _LOGGING_CONFIG["handlers"]["file"] = FILE_HANDLER
     _LOGGING_CONFIG["root"]["handlers"].append("file")
-    UVICORN_LOGGING_CONFIG["handlers"].setdefault("file", _FILE_HANDLER)
-    UVICORN_LOGGING_CONFIG["loggers"]["uvicorn"]["handlers"].append("file")
 
 logging.addLevelName(_Level.API_CALL, _Level.API_CALL.name)
 logging.addLevelName(_Level.ACCESS, _Level.ACCESS.name)
@@ -408,12 +373,3 @@ def api_call(url: str, code: int, time: float) -> None:
         "headers": {},
     }
     _trace(_Level.API_CALL, FastAPIRequest(scope), code, f"{time:.2f}s")
-
-
-class ProdLogger(gunicorn.glogging.Logger):
-    error_fmt = r"%(asctime)s %(levelname)-10s %(message)s"
-    datefmt = r"%Y-%m-%d %H:%M:%S"  # e.g. 2026-01-01 00:00:00
-    access_fmt = ""
-
-    def access(self, resp, req, environ, request_time):
-        pass

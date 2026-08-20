@@ -22,7 +22,7 @@ from src.infra.config.config import PREFIX, SERVER
 from src.infra.fastapi.main import app
 from src.infra.http.http_client import HTTPClient
 from src.infra.i18n.translations import load_translations
-from src.infra.utils.logger import TEST_FORMATTER
+from src.infra.utils.logger import ANSIFormatter
 from tests.mocks.helpers import MockAsyncContext, fqn
 from tests.mocks.raw import (
     CSRF_TOKEN,
@@ -56,10 +56,15 @@ def event_loop_policy():
 
 @fixture(autouse=True, scope="function")
 def apply_custom_logging_formatter_to_pytest(caplog: LogCaptureFixture):
-    caplog.handler.setFormatter(TEST_FORMATTER)
+    formatter = ANSIFormatter(
+        fmt="%(asctime)s %(levelname)-18s %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S",  # e.g. 2026-01-01 00:00:00
+        strip_ansi=False,
+    )
+    caplog.handler.setFormatter(formatter)
     # LogCaptureHandler of caplog and report handlers
-    logging.getLogger().handlers[-1].setFormatter(TEST_FORMATTER)
-    logging.getLogger().handlers[-2].setFormatter(TEST_FORMATTER)
+    logging.getLogger().handlers[-1].setFormatter(formatter)
+    logging.getLogger().handlers[-2].setFormatter(formatter)
     yield
 
 
