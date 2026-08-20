@@ -35,6 +35,7 @@ async def lifespan(
     if ENV.host == "0.0.0.0":
         logger.localhost(ENV.port)
 
+    logger.info("\033[33mScopus Survey API was initialized 🚀")
     yield
 
 

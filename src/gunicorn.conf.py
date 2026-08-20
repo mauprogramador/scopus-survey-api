@@ -23,7 +23,6 @@ SERVER.set(f"Gunicorn/{gunicorn.__version__}")
 
 
 def when_ready_hook(_: Arbiter) -> None:
-    logger.info("\033[33mScopus Survey API was initialized 🚀")
     logger.debug(env_config=ENV)
     logger.gunicorn_running(ENV.port)
 
