@@ -88,7 +88,7 @@ async def starlette_http_exception(
 
     details = get_error_details(exc)
 
-    if not logger.noisy_route_access(request.url.path):
+    if not logger.is_noisy_access(request.url.path):
         logger.error(exc.detail, tracking_id)
         logger.exception(exc)
 

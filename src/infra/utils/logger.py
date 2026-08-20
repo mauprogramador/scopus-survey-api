@@ -35,7 +35,7 @@ def _filename(count: int) -> str:
     return f"log_{count}_{datetime.now().strftime("%Y%m%d_%H%M%S")}.log"
 
 
-def noisy_route_access(path: str) -> bool:
+def is_noisy_access(path: str) -> bool:
     return "devtools" in path or "livereload" in path
 
 
