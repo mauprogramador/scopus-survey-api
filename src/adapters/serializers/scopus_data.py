@@ -55,8 +55,12 @@ class ScopusPage(BaseModel):
 
     model_config = ConfigDict(str_strip_whitespace=True)
 
-    total_results: int = Field(validation_alias="opensearch:totalResults")
-    items_per_page: int = Field(validation_alias="opensearch:itemsPerPage")
+    total_results: int = Field(
+        validation_alias="opensearch:totalResults", ge=0
+    )
+    items_per_page: int = Field(
+        validation_alias="opensearch:itemsPerPage", ge=0
+    )
     entry: list[ScopusEntry] = Field()
 
     @model_validator(mode="before")
