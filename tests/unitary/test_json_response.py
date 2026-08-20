@@ -6,6 +6,7 @@ from pytest_mock import MockerFixture as Mocker
 from src.adapters.presenters.json_response import (
     ErrorJSON,
     ErrorResponse,
+    RequestInfo,
     SuccessJSON,
     SuccessResponse,
     json_response,
@@ -28,6 +29,11 @@ from tests.mocks.raw import (
 JSONABLE = fqn(ErrorJSON, to_jsonable_python)
 
 
+def test_request_info():
+    model = RequestInfo(method="GET", path="/path")
+    assert model["method"] == "GET" and model["path"] == "/path"
+
+
 def test_error_response():
     model = ErrorResponse(
         success=False,
@@ -35,13 +41,12 @@ def test_error_response():
         status="any",
         message="any",
         tracking_id="any",
-        request={"any": "any"},
+        request=RequestInfo(method="GET", path="/path"),
     )
     assert not model.success and model.timestamp
     assert model.status_code == HTTP_500
     assert model.status == "any" and model.message == "any"
     assert model.details is None and model.request is not None
-    assert model.request["any"] == "any"
 
 
 def test_error_json():

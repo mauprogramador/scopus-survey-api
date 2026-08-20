@@ -1,5 +1,6 @@
 from datetime import datetime, timezone
 from http import HTTPStatus
+from typing import TypedDict
 
 from fastapi.requests import Request as FastAPIRequest
 from fastapi.responses import JSONResponse
@@ -16,6 +17,11 @@ from src.core.domain.types import (
 from src.infra.utils import logger
 
 
+class RequestInfo(TypedDict):
+    path: str
+    method: str
+
+
 class BaseResponse(BaseModel):
     model_config = ConfigDict(str_strip_whitespace=True)
 
@@ -29,7 +35,7 @@ class BaseResponse(BaseModel):
 
 
 class ErrorResponse(BaseResponse):
-    request: dict[str, str]
+    request: RequestInfo
     tracking_id: str
     details: list[Json] | None = None
 
@@ -77,10 +83,10 @@ class ErrorJSON(JSONResponse):
             status_code=status_code,
             status=HTTPStatus(status_code).phrase,
             message=message,
-            request={
-                "path": request.url.path,
-                "method": request.method,
-            },
+            request=RequestInfo(
+                path=request.url.path,
+                method=request.method,
+            ),
             tracking_id=tracking_id,
             details=details,
         )
