@@ -22,7 +22,7 @@ from tqdm.std import tqdm as std_tqdm
 
 from src.core.domain.types import Json, ScopusHeaders
 from src.infra.config.config import ENV
-from src.infra.config.scopus import EMPTY_RESULT, SEARCH_API_URL
+from src.infra.config.scopus import EMPTY_RESULT
 from src.infra.types import APIName
 
 
@@ -42,29 +42,27 @@ def noisy_route_access(path: str) -> bool:
 
 
 class _Level(IntEnum):
-    TRACE = 21
     DEBUG = 10
+    API_CALL = 15  # Search & Abstract API calls
     INFO = 20
-    QUOTA = 22
+    ACCESS = 21  # HTTP request/response summary
+    QUOTA = 22  # API Key quota consumption
+    WARNING = 30
     ERROR = 40
     EXCEPTION = 41
-    SEARCH = 23
-    ABSTRACT = 24
-    WARNING = 30
 
 
 class _ANSIFormatter(logging.Formatter):
 
     _LEVEL_COLOR = {
-        _Level.TRACE: "34",
         _Level.DEBUG: "35",
+        _Level.API_CALL: "36",
         _Level.INFO: "32",
+        _Level.ACCESS: "34",
         _Level.QUOTA: "35",
+        _Level.WARNING: "33",
         _Level.ERROR: "31",
         _Level.EXCEPTION: "31",
-        _Level.SEARCH: "36",
-        _Level.ABSTRACT: "36",
-        _Level.WARNING: "33",
     }
 
     def __init__(self, fmt: str, datefmt: str, strip_ansi: bool):
@@ -178,7 +176,7 @@ _LOGGING_CONFIG: Json = {
     "loggers": {
         _LOGGER_NAME: {
             "handlers": ["console"],
-            "level": logging.DEBUG if ENV.debug else logging.INFO,
+            "level": _Level[ENV.log_level],
         }
     },
 }
@@ -219,10 +217,9 @@ if ENV.logging_file:
     UVICORN_LOGGING_CONFIG["handlers"].setdefault("file", _FILE_HANDLER)
     UVICORN_LOGGING_CONFIG["loggers"]["uvicorn"]["handlers"].append("file")
 
-logging.addLevelName(_Level.TRACE, _Level.TRACE.name)
+logging.addLevelName(_Level.API_CALL, _Level.API_CALL.name)
+logging.addLevelName(_Level.ACCESS, _Level.ACCESS.name)
 logging.addLevelName(_Level.QUOTA, _Level.QUOTA.name)
-logging.addLevelName(_Level.SEARCH, _Level.SEARCH.name)
-logging.addLevelName(_Level.ABSTRACT, _Level.ABSTRACT.name)
 logging.addLevelName(_Level.EXCEPTION, _Level.EXCEPTION.name)
 
 dictConfig(_LOGGING_CONFIG)
@@ -400,22 +397,17 @@ def trace(req: FastAPIRequest, code: int, process_time: float) -> None:
         duration = f"{process_time:.2f}s ({minutes:.2f}m)"
     else:
         duration = f"{process_time:.2f}s"
-    _trace(_Level.TRACE, req, code, duration)
+    _trace(_Level.ACCESS, req, code, duration)
 
 
 def api_call(url: str, code: int, time: float) -> None:
-    if url.startswith(SEARCH_API_URL):
-        prefix = _Level.SEARCH
-    else:
-        prefix = _Level.ABSTRACT
-
     scope: StarletteScope = {
         "type": "http",
         "method": "GET",
         "path": url,
         "headers": {},
     }
-    _trace(prefix, FastAPIRequest(scope), code, f"{time:.2f}s")
+    _trace(_Level.API_CALL, FastAPIRequest(scope), code, f"{time:.2f}s")
 
 
 class ProdLogger(gunicorn.glogging.Logger):
