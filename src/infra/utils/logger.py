@@ -31,10 +31,6 @@ _ANSI_ESCAPE_PATTERN = re.compile(r"\x1b\[[0-9\;]*m")
 _API_KEY_PARAM_PATTERN = re.compile(r"apiKey\=[a-zA-Z0-9]{32}")
 
 
-def _filename(count: int) -> str:
-    return f"log_{count}_{datetime.now().strftime("%Y%m%d_%H%M%S")}.log"
-
-
 def is_noisy_access(path: str) -> bool:
     return "devtools" in path or "livereload" in path
 
@@ -98,10 +94,14 @@ class _FileHandler(RotatingFileHandler):
         super().__init__(*args, **kwargs)
         self.namer = self._namer
 
+    @classmethod
+    def filename(cls, count: int) -> str:
+        return f"log_{count}_{datetime.now().strftime("%Y%m%d_%H%M%S")}.log"
+
     def _namer(self, path: str) -> str:
         # From file.log.1 to file_1.log
         count = int(Path(path).suffixes[1].removeprefix("."))
-        return Path(path).with_name(_filename(count)).as_posix()
+        return Path(path).with_name(self.filename(count)).as_posix()
 
 
 class _TQDMLoggingHandler(logging.StreamHandler):
@@ -127,7 +127,7 @@ _FRAME = traceback.FrameSummary(
 )
 _STATUS_COLOR = {2: "32", 3: "33", 4: "31", 5: "31"}
 _FMT = "%(asctime)s %(levelname)-18s %(message)s"
-_FILENAME = Path(f".logs/{_filename(0)}")
+_FILENAME = Path(f".logs/{_FileHandler.filename(0)}")
 _LOGGER_NAME = "scopus.survey.api"
 _DATEFMT = "%Y-%m-%d %H:%M:%S"  # e.g. 2026-01-01 00:00:00
 
