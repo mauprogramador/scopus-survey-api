@@ -13,7 +13,7 @@ from typing import Any
 
 from fastapi.requests import Request as FastAPIRequest
 from pandas import DataFrame
-from pydantic import BaseModel
+from pydantic import BaseModel, TypeAdapter, ValidationError
 from pydantic_core import to_jsonable_python
 from starlette.types import Scope as StarletteScope
 from tqdm.std import tqdm as std_tqdm
@@ -48,6 +48,7 @@ class _Level(IntEnum):
 
 class ANSIFormatter(logging.Formatter):
 
+    _BOOLEAN_ADAPTER = TypeAdapter(bool)
     _LEVEL_COLOR = {
         _Level.DEBUG: "35",
         _Level.API_CALL: "36",
@@ -62,11 +63,39 @@ class ANSIFormatter(logging.Formatter):
     def __init__(self, fmt: str, datefmt: str, strip_ansi: bool):
         super().__init__(fmt, datefmt)
         self._strip_ansi = strip_ansi
+        self._color_supported = self._should_enable_colors()
 
-        if os.environ.get("PYTEST_VERSION") is None:
-            self._color_supported = sys.stdout.isatty()
-        else:
-            self._color_supported = True
+    def _get_env_option(self, env_name: str) -> bool | None:
+        value = os.environ.get(env_name)
+        if value is not None and value.strip() != "":
+            try:
+                return self._BOOLEAN_ADAPTER.validate_python(value)
+            except ValidationError:
+                pass
+        return None
+
+    def _should_enable_colors(self) -> bool:
+        # Universal standard (Highest Priority)
+        if os.environ.get("NO_COLOR"):
+            return False
+
+        # Universal CLI override
+        force_color = self._get_env_option("FORCE_COLOR")
+        if force_color is not None:
+            return force_color
+
+        # Python ecosystem override
+        py_colors = self._get_env_option("PY_COLORS")
+        if py_colors is not None:
+            return py_colors
+
+        # Test Runner Environments (VS Code Test Results & Pytest)
+        is_vscode_pytest = any("vscode_pytest" in arg for arg in sys.argv)
+        if is_vscode_pytest or os.environ.get("PYTEST_VERSION") is not None:
+            return True
+
+        # Default TTY Check
+        return sys.stdout.isatty()
 
     def format(self, record: logging.LogRecord) -> str:
         record.message = record.getMessage()
