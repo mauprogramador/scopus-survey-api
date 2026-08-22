@@ -46,7 +46,7 @@ class EnvConfig(BaseSettings):
     )
     port: int = Field(default=8000, gt=0, lt=65535, decimal_places=None)
     reload: bool = Field(default=False)
-    workers: int = Field(default=1, gt=0, decimal_places=None)
+    workers: int = Field(default=1, ge=-1, decimal_places=None)
     logging_file: bool = Field(default=False)
     log_level: LogLevel = Field(default="INFO")
     progress_bar: bool = Field(default=True)
@@ -84,15 +84,19 @@ class EnvConfig(BaseSettings):
                 "SECRET_KEY in .env with 32-128 characters\033[m"
             ) from exc
 
-    @field_validator("workers", mode="before")
     @classmethod
-    def ensure_default_workers(cls, value: Any) -> Any | int:
-        if value is not None:
-            return value
+    def _calculate_cpu_workers(cls) -> int:
         try:
             return (2 * len(os.sched_getaffinity(0))) + 1
         except AttributeError:
             return (2 * (os.cpu_count() or 2)) + 1
+
+    @field_validator("workers", mode="after")
+    @classmethod
+    def ensure_default_workers(cls, value: int) -> int:
+        if value == -1:
+            return cls._calculate_cpu_workers()
+        return value
 
     @property
     def debug(self) -> bool:
