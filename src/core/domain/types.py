@@ -57,11 +57,14 @@ def mask_secret(secret_value: str) -> str:
 
 
 class SecretKey(str):
-    def __new__(cls, value: str = None):
-        return super().__new__(cls, value)
+
+    def __new__(cls, value: str = None) -> "SecretKey":
+        instance = super().__new__(cls, value)
+        setattr(instance, "__mask__", mask_secret(value))
+        return instance
 
     def __repr__(self) -> str:
-        return mask_secret(self)
+        return getattr(self, "__mask__")
 
     @classmethod
     def __get_pydantic_core_schema__(
@@ -73,7 +76,7 @@ class SecretKey(str):
             function=cls,
             schema=handler(str),
             serialization=core_schema.plain_serializer_function_ser_schema(
-                repr, when_used="json"
+                repr, when_used="always"
             ),
         )
 
