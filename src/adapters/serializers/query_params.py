@@ -38,7 +38,7 @@ class CSVParams(BaseModel):
         validation_alias="api_key",
         description="The Scopus API Key issued by Elsevier",
         examples=["439f55d263cj..."],
-        pattern=r"^[a-zA-Z0-9]{32}$",
+        pattern=r"^[a-zA-Z0-9]+$",
         min_length=32,
         max_length=32,
     )
@@ -96,7 +96,7 @@ class CombinationParams(CSVParams):
         serialization_alias="LANGUAGE",
         description="The Language in which the document was written",
         examples=["english"],
-        pattern=r"^[a-z\-\' ]{3,50}$",
+        pattern=r"^[a-z\-\' ]+$",
         min_length=3,
         max_length=50,
     )
@@ -187,7 +187,7 @@ class SurveyParams(CombinationParams):
     combination: str = Field(
         description="The chosen Keyword Combination to refine the survey",
         examples=["Python AND Machine Learning"],
-        pattern=r"^[a-zA-Z0-9\{\}\?\"\*\-\_ ]{2,510}$",
+        pattern=r"^[a-zA-Z0-9\{\}\?\"\*\-\_ ]+$",
         min_length=2,
         max_length=510,  # 4x Keywords + AND operator
     )

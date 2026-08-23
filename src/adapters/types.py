@@ -12,7 +12,7 @@ from src.core.domain.types import Lang
 type Keyword = Annotated[
     str,
     Field(
-        pattern=r"^[a-zA-Z0-9\{\}\?\"\*\-\_ ]{2,120}$",
+        pattern=r"^[a-zA-Z0-9\{\}\?\"\*\-\_ ]+$",
         min_length=2,
         max_length=120,
     ),

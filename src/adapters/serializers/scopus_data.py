@@ -31,7 +31,7 @@ class ScopusEntry(BaseModel):
         validation_alias="prism:url",
         pattern=(
             r"^https\:\/\/api\.elsevier\.com\/content\/abstract"
-            r"\/scopus_id\/[0-9]{10,}$"
+            r"\/scopus_id\/[0-9]+$"
         ),
         min_length=61,
         max_length=70,
@@ -39,7 +39,7 @@ class ScopusEntry(BaseModel):
     # e.g. SCOPUS_ID:0123456789
     scopus_id: str = Field(
         validation_alias="dc:identifier",
-        pattern=r"^SCOPUS_ID\:[0-9]{10,}$",
+        pattern=r"^SCOPUS_ID\:[0-9]+$",
         min_length=20,
         max_length=29,
     )
@@ -92,8 +92,9 @@ class ScopusAbstract(BaseModel):
     # e.g. SCOPUS_ID:0123456789
     scopus_id: str = Field(
         validation_alias="dc:identifier",
-        pattern=r"^SCOPUS_ID\:[0-9]{10,}$",
+        pattern=r"^SCOPUS_ID\:[0-9]+$",
         min_length=20,
+        max_length=29,
     )
     authors: str | None = Field(default=None)
     title: str = Field(validation_alias="dc:title")
