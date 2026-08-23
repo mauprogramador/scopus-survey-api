@@ -38,8 +38,7 @@ class _ProdLogger(gunicorn.glogging.Logger):
 
 
 def when_ready_hook(_: Arbiter) -> None:
-    logger.debug(env_config=ENV)
-    logger.gunicorn_running(ENV.port)
+    logger.gunicorn_running(ENV.model_dump())
 
 
 # pylint: disable=C0103

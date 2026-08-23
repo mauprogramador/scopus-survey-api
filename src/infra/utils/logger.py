@@ -243,6 +243,9 @@ _EXCEPTION = (
     '\033[31m%(qualname)s\033[m: File "%(filepath)s", line %(line)d, col '
     "%(col)d, from \033[31m%(module)s.%(qualname)s\033[m"
 )
+_PROD_CONFIG = (
+    "Active Configuration (Production-only Forced Overrides Applied): %s\033[m"
+)
 _GUNICORN_RUNNING = (
     "Gunicorn running at\033[37;1m http://localhost:%d"
     "\033[m (Press CTRL+C to quit)\033[m"
@@ -309,8 +312,10 @@ def total_found(total_results: int) -> None:
     LOGGER.info(_TOTAL_FOUND, total_results, stacklevel=2)
 
 
-def gunicorn_running(port: int) -> None:
-    LOGGER.info(_GUNICORN_RUNNING, port, stacklevel=2)
+def gunicorn_running(env_config: Json) -> None:
+    prod_config = to_jsonable_python(env_config, fallback=repr)
+    LOGGER.info(_PROD_CONFIG, prod_config, stacklevel=2)
+    LOGGER.info(_GUNICORN_RUNNING, env_config["port"], stacklevel=2)
 
 
 def error(message: str, tracking_id: str = None) -> None:
