@@ -1,3 +1,5 @@
+import logging
+
 import aiohttp  # pylint: disable=w0611 # noqa: F401
 import aiohttp_retry  # pylint: disable=w0611 # noqa: F401
 import aiolimiter  # pylint: disable=w0611 # noqa: F401
@@ -22,6 +24,7 @@ from src.infra.utils import logger
 
 SERVER.set(f"Gunicorn/{gunicorn.__version__}")
 
+logger.LOGGER.setLevel(logging.INFO)  # No api call logs
 ENV.override_for_production()
 
 
