@@ -31,20 +31,17 @@ class EnvConfig(BaseSettings):
         env_ignore_empty=True,
     )
 
-    secret_key: SecretKey = Field(
-        exclude=True,
-        frozen=True,
-        repr=False,
-        min_length=32,
-        max_length=128,
-    )
+    secret_key: SecretKey = Field(frozen=True, min_length=32, max_length=128)
     host: str = Field(
         default="127.0.0.1",
+        frozen=True,
         pattern=_HOST_PATTERN,
         min_length=7,
         max_length=15,
     )
-    port: int = Field(default=8000, gt=0, lt=65535, decimal_places=None)
+    port: int = Field(
+        default=8000, frozen=True, gt=0, lt=65535, decimal_places=None
+    )
     reload: bool = Field(default=False)
     workers: int = Field(default=1, ge=-1, decimal_places=None)
     logging_file: bool = Field(default=False)
