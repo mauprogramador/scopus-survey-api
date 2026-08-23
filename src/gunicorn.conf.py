@@ -41,9 +41,9 @@ def when_ready_hook(_: Arbiter) -> None:
 
 # pylint: disable=C0103
 wsgi_app = APP
-reload = False
+reload = ENV.reload
 bind = f"0.0.0.0:{ENV.port}"
-workers = 4
+workers = ENV.workers
 worker_class = f"{UvicornWorker.__module__}.{UvicornWorker.__qualname__}"
 timeout = 120
 keepalive = 5
@@ -52,5 +52,4 @@ errorlog = "-"
 loglevel = "info"
 access_log_format = None
 logger_class = f"{_ProdLogger.__module__}.{_ProdLogger.__qualname__}"
-raw_env = ["PROGRESS_BAR=False"]
 when_ready = when_ready_hook
