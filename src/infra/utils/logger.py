@@ -1,4 +1,5 @@
 import logging
+import logging.config
 import os
 import re
 import sys
@@ -6,7 +7,6 @@ import traceback
 from datetime import datetime
 from enum import IntEnum
 from http import HTTPStatus
-from logging.config import dictConfig
 from logging.handlers import RotatingFileHandler
 from pathlib import Path
 from typing import Any
@@ -18,7 +18,7 @@ from pydantic_core import to_jsonable_python
 from starlette.types import Scope as StarletteScope
 from tqdm.std import tqdm as std_tqdm
 
-from src.core.domain.types import Json, ScopusHeaders
+from src.core.domain.types import Json, ScopusHeaders, mask_secret
 from src.infra.config.config import ENV
 from src.infra.config.scopus import EMPTY_RESULT
 from src.infra.types import APIName
@@ -28,7 +28,7 @@ from src.infra.types import APIName
 _ANSI_ESCAPE_PATTERN = re.compile(r"\x1b\[[0-9\;]*m")
 
 # e.g. apiKey=6bd9327547a3cf4c56586324df4b7d92  (Random Hash)
-_API_KEY_PARAM_PATTERN = re.compile(r"apiKey\=[a-zA-Z0-9]{32}")
+_API_KEY_PARAM_PATTERN = re.compile(r"apiKey\=([a-zA-Z0-9]{32})")
 
 
 def is_noisy_access(path: str) -> bool:
@@ -216,7 +216,7 @@ logging.addLevelName(_Level.ACCESS, _Level.ACCESS.name)
 logging.addLevelName(_Level.QUOTA, _Level.QUOTA.name)
 logging.addLevelName(_Level.EXCEPTION, _Level.EXCEPTION.name)
 
-dictConfig(_LOGGING_CONFIG)
+logging.config.dictConfig(_LOGGING_CONFIG)
 LOGGER = logging.getLogger(_LOGGER_NAME)
 
 
@@ -341,7 +341,7 @@ def debug(**kwargs) -> None:
             kwargs[key] = value.to_dict(orient="records")
 
     LOGGER.debug(
-        "\033[33mKWARGS:\033[m %s\033[m",
+        "\033[m%s\033[m",
         to_jsonable_python(kwargs, fallback=repr),
         stacklevel=2,
     )
