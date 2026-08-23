@@ -25,14 +25,13 @@ from src.infra.middleware.exception_handlers import common_error
 from src.infra.utils import logger
 
 
-# e.g. /v2/scopus-survey/api
-_API_ROUTES_PATTERN = re.compile(
-    r"^\/v2\/scopus-survey\/api\/(combination|survey|csv)"
-)
-
-
 class FlowGuardingMonitorMiddleware(BaseHTTPMiddleware):
     """Middleware for tracing, process time and uncaught errors"""
+
+    # e.g. /v2/scopus-survey/api
+    _API_ROUTES_RE = re.compile(
+        r"^\/v2\/scopus-survey\/api\/(combination|survey|csv)"
+    )
 
     def __init__(self, app: FastAPI):
         """Middleware for tracing, process time and uncaught errors"""
@@ -69,7 +68,7 @@ class FlowGuardingMonitorMiddleware(BaseHTTPMiddleware):
         res.headers.update(self._server)
 
         is_error = res.status_code >= HTTPStatus.BAD_REQUEST
-        if is_error and not _API_ROUTES_PATTERN.match(request.url.path):
+        if is_error and not self._API_ROUTES_RE.match(request.url.path):
 
             if isinstance(res, _StreamingResponse):
                 chunks = [chunk async for chunk in res.body_iterator]

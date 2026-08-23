@@ -17,16 +17,6 @@ from src.infra.config.scopus import EMPTY_RESULT
 from src.infra.http.url_builder import build_article_page_url
 
 
-# e.g. http://api.elsevier.com/content/abstract/scopus_id/0123456789
-_ABSTRACT_URL_PATTERN = (
-    r"^https\:\/\/api\.elsevier\.com\/content\/abstract"
-    r"\/scopus_id\/[0-9]{10,}$"
-)
-
-# e.g. SCOPUS_ID:0123456789
-_SCOPUS_ID_PATTERN = r"^SCOPUS_ID\:[0-9]{10,}$"
-
-
 class ScopusEntry(BaseModel):
     """Serialize the entry field in the JSON response"""
 
@@ -36,15 +26,20 @@ class ScopusEntry(BaseModel):
         validation_alias="@_fa",
         exclude=True,
     )
+    # e.g. http://api.elsevier.com/content/abstract/scopus_id/0123456789
     url: str = Field(
         validation_alias="prism:url",
-        pattern=_ABSTRACT_URL_PATTERN,
+        pattern=(
+            r"^https\:\/\/api\.elsevier\.com\/content\/abstract"
+            r"\/scopus_id\/[0-9]{10,}$"
+        ),
         min_length=61,
         max_length=70,
     )
+    # e.g. SCOPUS_ID:0123456789
     scopus_id: str = Field(
         validation_alias="dc:identifier",
-        pattern=_SCOPUS_ID_PATTERN,
+        pattern=r"^SCOPUS_ID\:[0-9]{10,}$",
         min_length=20,
         max_length=29,
     )
@@ -94,9 +89,10 @@ class ScopusAbstract(BaseModel):
     model_config = ConfigDict(str_strip_whitespace=True)
 
     url: str = Field(default=None)
+    # e.g. SCOPUS_ID:0123456789
     scopus_id: str = Field(
         validation_alias="dc:identifier",
-        pattern=_SCOPUS_ID_PATTERN,
+        pattern=r"^SCOPUS_ID\:[0-9]{10,}$",
         min_length=20,
     )
     authors: str | None = Field(default=None)

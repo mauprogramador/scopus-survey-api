@@ -9,10 +9,13 @@ from src.core.domain.types import Lang
 
 
 # e.g. Python, "Data Science", COVID-19, H2O2
-_KEYWORD_PATTERN = r"^[a-zA-Z0-9\{\}\?\"\*\-\_ ]{2,120}$"
-
 type Keyword = Annotated[
-    str, Field(pattern=_KEYWORD_PATTERN, min_length=2, max_length=120)
+    str,
+    Field(
+        pattern=r"^[a-zA-Z0-9\{\}\?\"\*\-\_ ]{2,120}$",
+        min_length=2,
+        max_length=120,
+    ),
 ]
 
 type URLBuilder = Callable[[str | int], str]

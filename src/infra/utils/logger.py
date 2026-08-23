@@ -24,13 +24,6 @@ from src.infra.config.scopus import EMPTY_RESULT
 from src.infra.types import APIName
 
 
-# e.g. \033[35;1m, \033[m
-_ANSI_ESCAPE_PATTERN = re.compile(r"\x1b\[[0-9\;]*m")
-
-# e.g. apiKey=6bd9327547a3cf4c56586324df4b7d92  (Random Hash)
-_API_KEY_PARAM_PATTERN = re.compile(r"apiKey\=([a-zA-Z0-9]{32})")
-
-
 def is_noisy_access(path: str) -> bool:
     return "devtools" in path or "livereload" in path
 
@@ -48,6 +41,8 @@ class _Level(IntEnum):
 
 class ANSIFormatter(logging.Formatter):
 
+    # e.g. \033[35;1m, \033[m
+    _ANSI_ESCAPE_RE = re.compile(r"\x1b\[[0-9\;]*m")
     _BOOLEAN_ADAPTER = TypeAdapter(bool)
     _LEVEL_COLOR = {
         _Level.DEBUG: "35",
@@ -102,7 +97,7 @@ class ANSIFormatter(logging.Formatter):
 
         if not self._color_supported or self._strip_ansi:
             log_message = super().format(record)
-            return _ANSI_ESCAPE_PATTERN.sub("", log_message)
+            return self._ANSI_ESCAPE_RE.sub("", log_message)
 
         levelname, message = record.levelname, record.message
 
@@ -373,6 +368,10 @@ def exception(exc: Exception) -> None:
     LOGGER.log(_Level.EXCEPTION, _EXCEPTION, args, exc_info=True, stacklevel=2)
 
 
+# e.g. apiKey=6bd9327547a3cf4c56586324df4b7d92  (Random Hash)
+_API_KEY_PARAM_RE = re.compile(r"apiKey\=([a-zA-Z0-9]{32})")
+
+
 def _mask_api_key_param(match: re.Match[str]) -> str:
     return f"apiKey={mask_secret(match.group(1))}"
 
@@ -393,7 +392,7 @@ def _trace(
         "port": port,
         "method_color": _METHOD_COLOR.get(req.method, "90"),
         "method": req.method,
-        "url": _API_KEY_PARAM_PATTERN.sub(_mask_api_key_param, str(req.url)),
+        "url": _API_KEY_PARAM_RE.sub(_mask_api_key_param, str(req.url)),
         "status_color": _STATUS_COLOR[(code // 100)],
         "code": code,
         "status_phrase": HTTPStatus(code).phrase,

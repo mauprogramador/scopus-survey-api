@@ -27,28 +27,18 @@ from src.infra.config.scopus import (
 )
 
 
-# e.g. 6bd9327547a3cf4c56586324df4b7d92  (Random Hash)
-_API_KEY_PATTERN = r"^[a-zA-Z0-9]{32}$"
-
-# e.g. english, portuguese
-_LANGUAGE_PATTERN = r"^[a-z\-\' ]{3,50}$"
-
-# e.g. Python AND "Data Science", COVID-19 OR H2O2
-# https://dev.elsevier.com/sc_search_tips.html
-_KEYWORD_COMBINATION_PATTERN = r"^[a-zA-Z0-9\{\}\?\"\*\-\_ ]{2,510}$"
-
-
 class CSVParams(BaseModel):
     """Validate query params for downloading CSV"""
 
     model_config = ConfigDict(extra="forbid", str_strip_whitespace=True)
 
+    # e.g. 6bd9327547a3cf4c56586324df4b7d92  (Random Hash)
     api_key: SecretKey = Field(
         alias="apiKey",
         validation_alias="api_key",
         description="The Scopus API Key issued by Elsevier",
         examples=["439f55d263cj..."],
-        pattern=_API_KEY_PATTERN,
+        pattern=r"^[a-zA-Z0-9]{32}$",
         min_length=32,
         max_length=32,
     )
@@ -100,12 +90,13 @@ class CombinationParams(CSVParams):
         description="The Publication Stage of the document",
         examples=[PubStage.FINAL],
     )
+    # e.g. english, portuguese
     language: str | None = Field(
         default=None,
         serialization_alias="LANGUAGE",
         description="The Language in which the document was written",
         examples=["english"],
-        pattern=_LANGUAGE_PATTERN,
+        pattern=r"^[a-z\-\' ]{3,50}$",
         min_length=3,
         max_length=50,
     )
@@ -192,10 +183,11 @@ class SurveyParams(CombinationParams):
 
     model_config = ConfigDict(extra="forbid", str_strip_whitespace=True)
 
+    # e.g. Python AND "Data Science", COVID-19 OR H2O2
     combination: str = Field(
         description="The chosen Keyword Combination to refine the survey",
         examples=["Python AND Machine Learning"],
-        pattern=_KEYWORD_COMBINATION_PATTERN,
+        pattern=r"^[a-zA-Z0-9\{\}\?\"\*\-\_ ]{2,510}$",
         min_length=2,
         max_length=510,  # 4x Keywords + AND operator
     )

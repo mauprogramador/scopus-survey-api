@@ -18,10 +18,6 @@ from src.core.domain.types import SecretKey
 from src.infra.types import LogLevel
 
 
-# e.g. 127.0.0.1, 0.0.0.0
-_HOST_PATTERN = r"^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$"
-
-
 class EnvConfig(BaseSettings):
     model_config = SettingsConfigDict(
         str_strip_whitespace=True,
@@ -32,10 +28,11 @@ class EnvConfig(BaseSettings):
     )
 
     secret_key: SecretKey = Field(frozen=True, min_length=32, max_length=128)
+    # e.g. 127.0.0.1, 0.0.0.0
     host: str = Field(
         default="127.0.0.1",
         frozen=True,
-        pattern=_HOST_PATTERN,
+        pattern=r"^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$",
         min_length=7,
         max_length=15,
     )
