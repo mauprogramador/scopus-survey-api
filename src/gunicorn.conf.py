@@ -22,6 +22,8 @@ from src.infra.utils import logger
 
 SERVER.set(f"Gunicorn/{gunicorn.__version__}")
 
+ENV.override_for_production()
+
 
 class _ProdLogger(gunicorn.glogging.Logger):
     error_fmt = r"%(asctime)s %(levelname)-10s %(message)s"

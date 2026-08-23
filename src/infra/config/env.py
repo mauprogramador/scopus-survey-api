@@ -98,3 +98,8 @@ class EnvConfig(BaseSettings):
     @property
     def debug(self) -> bool:
         return self.log_level == "DEBUG"
+
+    def override_for_production(self) -> None:
+        self.reload = False
+        self.log_level = "INFO"  # No api call logs
+        self.progress_bar = False
