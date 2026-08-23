@@ -252,7 +252,8 @@ _GUNICORN_RUNNING = (
 )
 _LOCALHOST_ACCESS = "Please access at \033[37;1mhttp://localhost:%d\033[m"
 _TRY_AGAIN = "Please try again on \033[37;1m%s\033[m"
-_MULTIPLE = "Total to Fetch: \033[33m%d\033[m"
+_BATCH_TO_FETCH = "Batch of \033[33m%d\033[m requests to fetch"
+_BATCH_COMPLETED = "Batch completed in \033[33m%s\033[m"
 _TOTAL_FOUND = "Total Found: \033[33m%d\033[m"
 
 
@@ -260,8 +261,19 @@ def info(message: str) -> None:
     LOGGER.info("%s\033[m", message, stacklevel=2)
 
 
-def multiple(progress: range) -> None:
-    LOGGER.info(_MULTIPLE, (progress.stop - progress.start), stacklevel=2)
+def batch_to_fetch(progress: range) -> None:
+    LOGGER.info(
+        _BATCH_TO_FETCH, (progress.stop - progress.start), stacklevel=2
+    )
+
+
+def batch_completed(process_time: float) -> None:
+    if process_time > 60.0:
+        minutes = process_time / 60.0
+        duration = f"{process_time:.2f}s ({minutes:.2f}m)"
+    else:
+        duration = f"{process_time:.2f}s"
+    LOGGER.info(_BATCH_COMPLETED, duration, stacklevel=2)
 
 
 def loss(initial: int, final: int) -> None:

@@ -1,4 +1,5 @@
 import asyncio
+import time
 from collections.abc import Callable
 from typing import Any
 
@@ -38,7 +39,8 @@ class _FetchMultiple[U]:
         params: range | enumerate,
         progress: range,
     ) -> tuple[list[U], ScopusHeaders]:
-        logger.multiple(progress)
+        logger.batch_to_fetch(progress)
+        start_time = time.perf_counter()
 
         with progress_bar(progress) as pbar_step:
             try:
@@ -55,6 +57,9 @@ class _FetchMultiple[U]:
 
         if not self._results:
             raise TasksCancellationError(ExcMsg.INTERNAL_ERROR)
+
+        process_time = time.perf_counter() - start_time
+        logger.batch_completed(process_time)
 
         quota_headers = ScopusHeaders.model_validate(self._headers)
 
