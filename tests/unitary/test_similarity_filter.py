@@ -21,15 +21,14 @@ from tests.mocks.unitary import (
 )
 
 
-SIMILARITY_FILTER = SimilarityFilter()
 TO_DATETIME = fqn(SimilarityFilter, pd.to_datetime, "pd")
 LOG_DEBUG = spec(SimilarityFilter, logger.debug, "logger")
 RATIO = 80
 
 
 def test_one_group_two_similar_titles(mocker: Mocker):
-    spy = mocker.spy(SimilarityFilter, "_get_single_group_index")
-    df = SIMILARITY_FILTER.filter(ONE_GROUP_TWO_SIMILAR, RATIO)
+    spy = mocker.spy(SimilarityFilter, "_get_group_similar_title_indices")
+    df = SimilarityFilter().filter(ONE_GROUP_TWO_SIMILAR, RATIO)
     spy.assert_called_once()
     assert df.shape[0] == 1
     assert df["authors"].iloc[0] == "a"
@@ -37,8 +36,8 @@ def test_one_group_two_similar_titles(mocker: Mocker):
 
 
 def test_one_group_more_similar_titles(mocker: Mocker):
-    spy = mocker.spy(SimilarityFilter, "_get_single_group_index")
-    df = SIMILARITY_FILTER.filter(ONE_GROUP_MORE_SIMILAR, RATIO)
+    spy = mocker.spy(SimilarityFilter, "_get_group_similar_title_indices")
+    df = SimilarityFilter().filter(ONE_GROUP_MORE_SIMILAR, RATIO)
     spy.assert_called_once()
     assert df.shape[0] == 1
     assert df["authors"].iloc[0] == "a"
@@ -46,36 +45,34 @@ def test_one_group_more_similar_titles(mocker: Mocker):
 
 
 def test_one_group_no_similar_titles(mocker: Mocker):
-    spy = mocker.spy(SimilarityFilter, "_get_single_group_index")
-    df = SIMILARITY_FILTER.filter(ONE_GROUP_NO_SIMILAR, RATIO)
+    spy = mocker.spy(SimilarityFilter, "_get_group_similar_title_indices")
+    df = SimilarityFilter().filter(ONE_GROUP_NO_SIMILAR, RATIO)
     spy.assert_called_once()
     assert df.equals(ONE_GROUP_NO_SIMILAR)
 
 
 def test_more_groups_two_similar_titles(mocker: Mocker):
-    spy = mocker.spy(SimilarityFilter, "_get_single_group_index")
-    df = SIMILARITY_FILTER.filter(MORE_GROUPS_TWO_SIMILAR, RATIO)
-    spy.assert_not_called()
-    assert df.shape[0] == 3
+    spy = mocker.spy(SimilarityFilter, "_get_group_similar_title_indices")
+    df = SimilarityFilter().filter(MORE_GROUPS_TWO_SIMILAR, RATIO)
+    assert df.shape[0] == 3 and spy.call_count == 2
     assert df["authors"].tolist() == ["a", "b", "c"]
     recent_dates = ["2025-06-01", "2025-06-01", "2025-06-01"]
     assert df["date"].tolist() == recent_dates
 
 
 def test_more_groups_more_similar_titles(mocker: Mocker):
-    spy = mocker.spy(SimilarityFilter, "_get_single_group_index")
-    df = SIMILARITY_FILTER.filter(MORE_GROUPS_MORE_SIMILAR, RATIO)
-    spy.assert_not_called()
-    assert df.shape[0] == 3
+    spy = mocker.spy(SimilarityFilter, "_get_group_similar_title_indices")
+    df = SimilarityFilter().filter(MORE_GROUPS_MORE_SIMILAR, RATIO)
+    assert df.shape[0] == 3 and spy.call_count == 3
     assert df["authors"].tolist() == ["a", "b", "c"]
     recent_dates = ["2025-06-04", "2025-05-03", "2025-04-02"]
     assert df["date"].tolist() == recent_dates
 
 
 def test_more_groups_no_similar_titles(mocker: Mocker):
-    spy = mocker.spy(SimilarityFilter, "_get_single_group_index")
-    df = SIMILARITY_FILTER.filter(MORE_GROUPS_NO_SIMILAR, RATIO)
-    spy.assert_not_called()
+    spy = mocker.spy(SimilarityFilter, "_get_group_similar_title_indices")
+    df = SimilarityFilter().filter(MORE_GROUPS_NO_SIMILAR, RATIO)
+    assert spy.call_count == 3
     assert df.shape[0] == 9 and df.equals(MORE_GROUPS_NO_SIMILAR)
 
 
@@ -84,7 +81,7 @@ def test_to_datetime_no_left(mocker: Mocker):
     spy_dropna = mocker.spy(DataFrame, "dropna")
     spy_log_debug = mocker.patch(**LOG_DEBUG)
 
-    df = SIMILARITY_FILTER.filter(NO_DATETIME_LEFT, RATIO)
+    df = SimilarityFilter().filter(NO_DATETIME_LEFT, RATIO)
     df_to_datetime: Series = spy_to_datetime.call_args_list[0].args[0]
     df_dropna: DataFrame = spy_dropna.call_args_list[0].args[0]
 
@@ -102,7 +99,7 @@ def test_to_datetime_one_left(mocker: Mocker):
     spy_dropna = mocker.spy(DataFrame, "dropna")
     spy_log_debug = mocker.patch(**LOG_DEBUG)
 
-    df = SIMILARITY_FILTER.filter(ONE_DATETIME_LEFT, RATIO)
+    df = SimilarityFilter().filter(ONE_DATETIME_LEFT, RATIO)
     df_to_datetime: DataFrame = spy_to_datetime.call_args_list[0].args[0]
     df_dropna: DataFrame = spy_dropna.call_args_list[0].args[0]
 
@@ -119,7 +116,7 @@ def test_to_datetime_one_left(mocker: Mocker):
 def test_no_repeated_authors(mocker: Mocker):
     spy_dropna = mocker.spy(DataFrame, "dropna")
     spy_filter = mocker.spy(DataFrameGroupBy, "filter")
-    df = SIMILARITY_FILTER.filter(NO_REPEATED_AUTHORS, RATIO)
+    df = SimilarityFilter().filter(NO_REPEATED_AUTHORS, RATIO)
     spy_dropna.assert_called_once()
     spy_filter.assert_not_called()
     assert df.equals(NO_REPEATED_AUTHORS)
@@ -129,7 +126,7 @@ def test_filter_drop_singles(mocker: Mocker):
     spy_groupby = mocker.spy(DataFrame, "groupby")
     spy_filter = mocker.spy(DataFrameGroupBy, "filter")
 
-    df = SIMILARITY_FILTER.filter(MORE_GROUPS_TWO_SIMILAR, RATIO)
+    df = SimilarityFilter().filter(MORE_GROUPS_TWO_SIMILAR, RATIO)
     df_filter: DataFrameGroupBy = spy_filter.call_args_list[0].args[0]
     df_group: DataFrame = spy_groupby.call_args_list[1].args[0]
 
@@ -139,13 +136,13 @@ def test_filter_drop_singles(mocker: Mocker):
 
 
 def test_discard_one_older_similar():
-    df = SIMILARITY_FILTER.filter(ONE_GROUP_TWO_SIMILAR, RATIO)
+    df = SimilarityFilter().filter(ONE_GROUP_TWO_SIMILAR, RATIO)
     assert df.shape[0] == 1 and ONE_GROUP_TWO_SIMILAR.shape[0] == 2
     assert df["date"].iloc[0] == "2025-06-01"
 
 
 def test_discard_all_older_similar():
-    df = SIMILARITY_FILTER.filter(ONE_GROUP_MORE_SIMILAR, RATIO)
+    df = SimilarityFilter().filter(ONE_GROUP_MORE_SIMILAR, RATIO)
     assert df.shape[0] == 1 and ONE_GROUP_MORE_SIMILAR.shape[0] == 5
     assert df["date"].iloc[0] == "2025-05-05"
 
@@ -154,7 +151,7 @@ def test_drop_similar(mocker: Mocker):
     spy_drop = mocker.spy(DataFrame, "drop")
     spy_reset = mocker.spy(DataFrame, "reset_index")
 
-    df = SIMILARITY_FILTER.filter(ONE_GROUP_MORE_SIMILAR, RATIO)
+    df = SimilarityFilter().filter(ONE_GROUP_MORE_SIMILAR, RATIO)
     df_drop: DataFrame = spy_drop.call_args_list[0].args[0]
     similar_titles: set = spy_drop.call_args_list[0].kwargs["index"]
     df_reset: DataFrame = spy_reset.call_args_list[0].args[0]

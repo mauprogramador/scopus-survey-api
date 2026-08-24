@@ -12,120 +12,95 @@ class SimilarityFilter:
 
     _COLUMNS = ["authors", "title", "date"]
     _SINGLE_ROW = 1
-    _SIZE = 2  # Two titles
+    _PAIR_SIZE = 2  # Two titles
 
     def __init__(self) -> None:
         """Filter articles from identical authors with similar titles"""
-        self._filtered_df: DataFrame = None
-        self._ratio: int = None
+        self._filtered_ds: DataFrame = None
+        self._similar_titles: set[int] = set()
 
-    def _drop_singles(self, group: DataFrame) -> bool:
+    def _drop_single_groups(self, group: DataFrame) -> bool:
         return group.shape[0] > self._SINGLE_ROW
 
-    def _get_similar_title_indexes(
-        self, group: DataFrame
-    ) -> int | set[int] | None:
-        indexes = group.index.to_numpy()
-        num_rows = len(indexes)
+    def _get_group_similar_title_indices(
+        self, group: DataFrame, sm_ratio: int
+    ) -> None:
+        gp_indices = group.index.to_numpy()
+        gp_rows_count = len(gp_indices)
 
         titles = group["title"].to_numpy()
         dates = group["date"].to_numpy()
 
-        if num_rows == self._SIZE:
-            if token_sort_ratio(titles[0], titles[1]) > self._ratio:
-                min_date_idx = 0 if dates[0] <= dates[1] else 1
-                return int(indexes[min_date_idx])
+        if gp_rows_count == 2:  # Two titles
+
+            if token_sort_ratio(titles[0], titles[1]) > sm_ratio:
+                # Get oldest publication to remove it
+                oldest_date_idx = 0 if dates[0] <= dates[1] else 1
+                self._similar_titles.add(int(gp_indices[oldest_date_idx]))
+
             return None
 
-        rows_indexes: set[int] = set()
-        arrangements = itertools.combinations(range(num_rows), self._SIZE)
+        gp_row_indices: set[int] = set()
+        index_pairs = itertools.combinations(
+            range(gp_rows_count), self._PAIR_SIZE
+        )
 
-        for idx1, idx2 in arrangements:
-            if token_sort_ratio(titles[idx1], titles[idx2]) > self._ratio:
-                rows_indexes.add(int(indexes[idx1]))
-                rows_indexes.add(int(indexes[idx2]))
+        for idx1, idx2 in index_pairs:
+            if token_sort_ratio(titles[idx1], titles[idx2]) > sm_ratio:
+                # Add both similar titles
+                gp_row_indices.add(int(gp_indices[idx1]))
+                gp_row_indices.add(int(gp_indices[idx2]))
 
-        if not rows_indexes:
+        if not gp_row_indices:
             return None
 
-        return rows_indexes
+        # Get latest publication to keep it
+        similar_titles_subset = self._filtered_ds.loc[list(gp_row_indices)]
+        latest_date_idx = similar_titles_subset["date"].idxmax()
 
-    def _get_single_group_index(self, grouped_df: DataFrame) -> set[int]:
-        rows_indexes = self._get_similar_title_indexes(grouped_df)
+        gp_row_indices.discard(latest_date_idx)
+        self._similar_titles.update(gp_row_indices)
 
-        if rows_indexes is None:
-            return set()
-
-        if isinstance(rows_indexes, int):
-            return {rows_indexes}
-
-        similar_titles_subset = self._filtered_df.loc[list(rows_indexes)]
-        latest_index = similar_titles_subset["date"].idxmax()
-        rows_indexes.discard(latest_index)
-
-        return rows_indexes
-
-    def _handle_groups_similarity(self) -> set[int]:
-        grouped_df = self._filtered_df.groupby("authors")
-        similar_titles: set[int] = set()
-
-        if grouped_df.ngroups == 1:
-            single_group = next(iter(grouped_df))[1]
-            return self._get_single_group_index(single_group)
-
-        for _, group in grouped_df:
-            rows_indexes = self._get_similar_title_indexes(group)
-
-            if rows_indexes is None:
-                continue
-
-            if isinstance(rows_indexes, int):
-                similar_titles.add(rows_indexes)
-                continue
-
-            similar_titles_subset = self._filtered_df.loc[list(rows_indexes)]
-            latest_index = similar_titles_subset["date"].idxmax()
-
-            rows_indexes.discard(latest_index)
-            similar_titles.update(rows_indexes)
-
-        return similar_titles
+        return None
 
     def filter(self, dataset: DataFrame, similarity_ratio: int) -> DataFrame:
-        df_subset = dataset.loc[:, self._COLUMNS].copy()
-        self._ratio = similarity_ratio
+        ds_subset = dataset.loc[:, self._COLUMNS].copy()
 
-        df_subset["date"] = pd.to_datetime(
-            df_subset["date"],
+        ds_subset["date"] = pd.to_datetime(
+            ds_subset["date"],
             yearfirst=True,
             format="%Y-%m-%d",  # e.g. 2026-01-01
             errors="coerce",
         )
 
-        self._filtered_df = df_subset.dropna(subset=["date"])
-        logger.debug(invalid_datetimes=self._filtered_df.shape[0])
+        self._filtered_ds = ds_subset.dropna(subset=["date"])
+        logger.debug(invalid_datetimes=self._filtered_ds.shape[0])
 
-        if self._filtered_df.shape[0] <= self._SINGLE_ROW:
+        if self._filtered_ds.shape[0] <= self._SINGLE_ROW:
             return dataset
 
-        grouped_df = self._filtered_df.groupby("authors")
+        grouped_ds = self._filtered_ds.groupby("authors")
 
-        logger.debug(same_authors_count=grouped_df.ngroups)
-        if grouped_df.ngroups == dataset.shape[0]:
+        logger.debug(same_authors_count=grouped_ds.ngroups)
+        if grouped_ds.ngroups == dataset.shape[0]:
             return dataset
 
-        self._filtered_df = grouped_df.filter(self._drop_singles)
-        similar_titles = self._handle_groups_similarity()
+        self._filtered_ds = grouped_ds.filter(self._drop_single_groups)
+        grouped_ds = self._filtered_ds.groupby("authors")
 
-        if not similar_titles:
+        for _, group in grouped_ds:
+            self._get_group_similar_title_indices(group, similarity_ratio)
+
+        if not self._similar_titles:
             return dataset
 
-        logger.debug(similar_titles=similar_titles)
+        logger.debug(similar_titles=self._similar_titles)
+        similar_titles = list(self._similar_titles)
 
-        dropped_df = dataset.loc[list(similar_titles)]
+        dropped_df = dataset.loc[similar_titles]
         logger.debug(dropped_similar=dropped_df)
 
-        dataset = dataset.drop(index=list(similar_titles))
+        dataset = dataset.drop(index=similar_titles)
         dataset = dataset.reset_index(drop=True)
 
         return dataset
