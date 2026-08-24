@@ -23,7 +23,7 @@ from tests.mocks.raw import (
 async def test_set_cookie(client: Client):
     client.cookies.delete("csrf-token")
     res = await client.get(URL_WEB)
-    assert res.headers.get("set-cookie") is not None
+    assert res.headers["set-cookie"] is not None
     assert res.status_code == HTTP_200
 
 

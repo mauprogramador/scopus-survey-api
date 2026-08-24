@@ -36,7 +36,7 @@ async def test_cors_headers(client: Client):
     headers = {"Origin": origin, "X-Any-Header": "any"}
     res = await client.get(URL_CSV, params=CSV_PARAMS, headers=headers)
     assert res.status_code == HTTP_200
-    assert res.headers.get("access-control-allow-origin") == origin
+    assert res.headers["access-control-allow-origin"] == origin
     assert "Access-Control-Allow-Credentials" not in res.headers
 
 
@@ -108,11 +108,11 @@ async def test_double_submit_csrf_flow(client: Client):
     assert res.status_code == HTTP_401
 
     res = await client.get(URL_WEB)
-    assert res.headers.get("set-cookie") is not None
+    assert res.headers["set-cookie"] is not None
     assert res.status_code == HTTP_200
 
-    signed_token = res.cookies.get("csrf-token")
-    csrf_token = res.headers.get("X-CSRF-Token")
+    signed_token = res.cookies["csrf-token"]
+    csrf_token = res.headers["X-CSRF-Token"]
     assert signed_token and csrf_token
 
     # Previous generate still not expired
@@ -146,10 +146,10 @@ async def test_csrf_token_expiry_and_refresh(mocker: Mocker, client: Client):
     assert "Max-Age=1" in res.headers["set-cookie"]
     assert res.status_code == HTTP_200
 
-    signed_token = res.cookies.get("csrf-token")
+    signed_token = res.cookies["csrf-token"]
     assert signed_token is not None
 
-    csrf_token = res.headers.get("X-CSRF-Token")
+    csrf_token = res.headers["X-CSRF-Token"]
     assert csrf_token is not None
 
     mocker.stop(mock_sleep)
@@ -174,5 +174,5 @@ async def test_csrf_token_expiry_and_refresh(mocker: Mocker, client: Client):
     assert "Max-Age=3600" in res.headers["set-cookie"]
     assert res.status_code == HTTP_200
 
-    assert signed_token != res.cookies.get("csrf-token")
-    assert csrf_token != res.headers.get("X-CSRF-Token")
+    assert signed_token != res.cookies["csrf-token"]
+    assert csrf_token != res.headers["X-CSRF-Token"]
