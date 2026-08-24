@@ -37,7 +37,7 @@ async def test_cors_headers(client: Client):
     res = await client.get(URL_CSV, params=CSV_PARAMS, headers=headers)
     assert res.status_code == HTTP_200
     assert res.headers.get("access-control-allow-origin") == origin
-    assert res.headers.get("Access-Control-Allow-Credentials") is None
+    assert "Access-Control-Allow-Credentials" not in res.headers
 
 
 @mark.asyncio

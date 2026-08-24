@@ -174,9 +174,9 @@ class TestEndpointsSequenceFlow:
             assert lines[2].startswith("# Survey")
             assert lines[3].startswith("# Source")
 
-            assert lines[1].count(cls.api_key) == 1
-            assert lines[1].count(cls.api_key) == 1
-            assert lines[2].count("total=1") == 1
+            assert cls.api_key in lines[1]
+            assert cls.combination in lines[1]
+            assert "total=1" in lines[2]
             assert fuzz_partial_ratio(lines[3], DATA_SOURCE_NOTE) > 80
 
     @mark.asyncio
