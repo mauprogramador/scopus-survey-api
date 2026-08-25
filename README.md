@@ -6,21 +6,21 @@
   <img src="./web/static/img/scopus.ico" width="16" alt="Scopus">
 </p>
 <p align="center">
-  <em>Web API for bibliographic survey of Scopus articles</em>
+  <em>API da Web para levantamento bibliográfico de artigos da Scopus</em>
 </p>
 <p align="center">
   <a href="https://github.com/mauprogramador/scopus-survey-api/actions/workflows/verification.yml">
-    <img src="https://img.shields.io/github/actions/workflow/status/mauprogramador/scopus-survey-api/verification.yml?branch=master&event=push&logo=github&label=Lint%26Test&color=C5362B" alt="Lint & Test">
+    <img src="https://img.shields.io/github/actions/workflow/status/mauprogramador/scopus-survey-api/verification.yml?branch=master&event=push&logo=github&label=Lint%26Teste&color=C5362B" alt="Lint & Teste">
   </a>
   <a href="https://github.com/mauprogramador/scopus-survey-api/actions/workflows/documentation.yml">
     <img src="https://img.shields.io/github/actions/workflow/status/mauprogramador/scopus-survey-api/documentation.yml?branch=master&event=push&logo=github&label=Docs&color=2196F3" alt="Documentation">
   </a>
-  <img src="https://img.shields.io/badge/Coverage-99%25-4CAF50" alt="Coverage">
+  <img src="https://img.shields.io/badge/Cobertura-99%25-4CAF50" alt="Cobertura">
   <a href="https://github.com/mauprogramador/scopus-survey-api/releases/latest">
-    <img src="https://img.shields.io/github/v/tag/mauprogramador/scopus-survey-api?logo=github&label=Release&color=E9711C" alt="Latest Release">
+    <img src="https://img.shields.io/github/v/tag/mauprogramador/scopus-survey-api?logo=github&label=Versão&color=E9711C" alt="Última Versão">
   </a>
   <a href="https://www.python.org/">
-    <img src="https://img.shields.io/badge/Python-v3.12-FBDA4E?logo=python&logoColor=FFF&labelColor=3776AB" alt="Python3 version">
+    <img src="https://img.shields.io/badge/Python-v3.12-FBDA4E?logo=python&logoColor=FFF&labelColor=3776AB" alt="Versão do Python3">
   </a>
 </p>
 <p align="center">
@@ -51,73 +51,72 @@
 </p>
 <p align="center">
   <a href="https://black.readthedocs.io/en/stable/">
-    <img src="https://img.shields.io/badge/code style-black-000" alt="Black">
+    <img src="https://img.shields.io/badge/estilo_de_código-black-000" alt="Black">
   </a>
   <a href="https://mypy.readthedocs.io/en/stable/">
-    <img src="https://img.shields.io/badge/mypy-checked-2A6DB2" alt="MyPy">
+    <img src="https://img.shields.io/badge/mypy-verificado-2A6DB2" alt="MyPy">
   </a>
   <a href="https://pylint.readthedocs.io/en/stable/">
     <img src="https://img.shields.io/badge/linting-pylint-yellowgreen" alt="Pylint">
   </a>
   <a href="https://bandit.readthedocs.io/en/latest/">
-    <img src="https://img.shields.io/badge/security-bandit-yellow" alt="Bandit">
+    <img src="https://img.shields.io/badge/segurança-bandit-yellow" alt="Bandit">
   </a>
   <a href="https://bandit.readthedocs.io/en/latest/">
-    <img src="https://img.shields.io/badge/audit-pip audit-3775A9" alt="Pip-Audit">
+    <img src="https://img.shields.io/badge/auditoria-pip audit-3775A9" alt="Pip-Audit">
   </a>
 </p>
 
 ---
 
-**🌐 Idiomas:** Leia em [**`Português [pt-BR]`**](./README.pt_BR.md)<br>
+> **Note:** This repository is documented in **Portuguese (Brazil)** for academic and accessibility purposes.<br>
+> 🌐 **Read in** [**English [`en-US`]**](README.en.md).
 
-Instituto Federal de Educação, Ciência e Tecnologia de Mato Grosso do Sul &nbsp;&#8226;&nbsp; [IFMS Campus Três Lagoas](https://www.ifms.edu.br/campi/campus-tres-lagoas)<br>
-Tecnologia em Análise e Desenvolvimento de Sistemas &nbsp;&#8226;&nbsp; [TADS](https://www.ifms.edu.br/campi/campus-tres-lagoas/cursos/graduacao/analise-e-desenvolvimento-de-sistemas)<br>
+<br>
 
-> _Federal Institute of Education, Science and Technology of Mato Grosso do Sul_ <br>
-> _Technology in Systems Analysis and Development_
+Instituto Federal de Educação, Ciência e Tecnologia de Mato Grosso do Sul &nbsp;&#8226;&nbsp; [IFMS Campus Três Lagoas](https://www.ifms.edu.br/campi/campus-tres-lagoas)<br/>
+Tecnologia em Análise e Desenvolvimento de Sistemas &nbsp;&#8226;&nbsp; [TADS](https://www.ifms.edu.br/campi/campus-tres-lagoas/cursos/graduacao/analise-e-desenvolvimento-de-sistemas)<br/>
+Dados fornecidos pela [Scopus](https://www.scopus.com)® &nbsp;&#8226;&nbsp; © [Elsevier](https://www.elsevier.com/pt-br)
 
-Data provided by [Scopus](https://www.scopus.com)® &nbsp;&#8226;&nbsp; © [Elsevier](https://www.elsevier.com)
-
-- Documentation: <https://mauprogramador.github.io/scopus-survey-api/>
-- Web API: <http://127.0.0.1:8000/v2/scopus-survey/en-US/survey-bibliographies>
+- Documentação: <https://mauprogramador.github.io/scopus-survey-api/>
+- API da Web: <http://127.0.0.1:8000/v2/scopus-survey/en-US/search-articles>
 - Swagger UI: <http://127.0.0.1:8000/>
 
 <br>
 
-## 1. Overview
+## 1. Visão Geral
 
-This **web API** is designed to perform **systematic bibliographic surveys using data from the [Scopus database](https://www.elsevier.com/products/scopus)**, promoting access to relevant and high-quality bibliographic sources through a simple and well-documented interface, thus reducing the initial barrier to entry for **students** and academics.
+Esta **API web** foi projetada para realizar **levantamentos bibliográficos sistemáticos utilizando dados da [base Scopus](https://www.elsevier.com/pt-br/products/scopus)**, promovendo o acesso a fontes bibliográficas relevantes e de alta qualidade por meio de uma interface simples e bem documentada, reduzindo assim a barreira inicial de entrada de **estudantes** e acadêmicos.
 
-As a [free academic](https://dev.elsevier.com/academic_research_scopus.html) automation tool, the application integrates **multiple selection criteria**, including multiple query parameters, keyword combinations, and [Boolean search](https://dev.elsevier.com/sc_search_tips.html), with **mechanisms** for retrieval, validation, serialization, and customized filtering of **large volumes of data** from the [Scopus APIs](https://dev.elsevier.com/sc_apis.html).
+Como uma ferramenta de automação [gratuita e acadêmica](https://dev.elsevier.com/academic_research_scopus.html), a aplicação integra **múltiplos critérios de seleção**, incluindo múltiplos parâmetros de consulta, combinações de palavras-chave e [busca booleana](https://dev.elsevier.com/sc_search_tips.html), com **mecanismos** para recuperação, validação, serialização e filtragem personalizada de **grandes volumes de dados** das [APIs Scopus](https://dev.elsevier.com/sc_apis.html).
 
-This way, only the **most relevant and recent data** will be retained and returned in a **CSV file**, making it suitable bibliometric studies and surveys, research, [systematic reviews](https://en.wikipedia.org/wiki/Systematic_review), etc., allowing students to quickly gather a set of peer-reviewed literature sources for a thesis or project.
+Dessa forma, apenas os **dados mais relevantes e recentes** serão mantidos e retornados em um **arquivo CSV**, tornando-os adequados para estudos e levantamentos bibliométricos, pesquisas, [revisões sistemáticas](https://pt.wikipedia.org/wiki/Revis%C3%A3o_sistem%C3%A1tica), etc., permitindo que estudantes reúnam rapidamente um conjunto de fontes de literatura revisadas por pares para uma tese ou projeto.
 
 <br>
 
-## 2. Configuration
+## 2. Configuração
 
-Create an `.env` file to configure the following options:
+Crie um arquivo `.env` para configurar as seguintes opções:
 
-| **Parameter**  | **Description**                                          | **Default** |
-| -------------- | -------------------------------------------------------- | ----------- |
-| `SECRET_KEY`   | Used to signed the CSRF Tokens                           |             |
-| `HOST`         | Sets the host address to listen on                       | `127.0.0.1` |
-| `PORT`         | Sets the server port on which the application will run   | `8000`      |
-| `RELOAD`       | Enable auto-reload on file changes for local development | `false`     |
-| `WORKERS`      | Sets multiple worker processes                           | `1`         |
-| `LOGGING_FILE` | Enable saving logs to files                              | `false`     |
-| `LOG_LEVEL`    | Enable the debug mode and debug logs                     | `INFO`      |
-| `PROGRESS_BAR` | Displays the progress bar of the request process         | `true`      |
+| **Parâmetro**  | **Descrição**                                                                                     | **_Default_** |
+| -------------- | ------------------------------------------------------------------------------------------------- | ------------- |
+| `SECRET_KEY`   | Usado para assinar (criptografia) os tokens CSRF                                                  |               |
+| `HOST`         | Define o endereço do host no qual a aplicação será executada                                      | `127.0.0.1`   |
+| `PORT`         | Define a porta do servidor na qual a aplicação será executada                                     | `8000`        |
+| `RELOAD`       | Ativa o recarregamento automático, em caso de alterações nos arquivos, para desenvolvimento local | `false`       |
+| `WORKERS`      | Define vários processos de trabalho                                                               | `1`           |
+| `LOG_LEVEL`    | Define o nível de log                                                                             | `false`       |
+| `PROGRESS_BAR` | Exibe a barra de progresso do processo do consumo de dados das APIs                               | `true`        |
+| `LOGGING_FILE` | Ativa o salvamento de logs em arquivo                                                             | `false`       |
 
-- The `RELOAD` and `WORKERS` options are **mutually exclusive**.
+- As opções `RELOAD` e `WORKERS` são **mutuamente exclusivas**.
 
-- Setting the `HOST` to `0.0.0.0` makes the application externally available.
+- Configurar o `HOST` para `0.0.0.0` torna a aplicação disponível externamente.
 
-  > [!NOTE]
-  > The address `0.0.0.0` is not a valid domain for the **Cross-Origin-Opener-Policy**, use `localhost` instead.
+> [!NOTE]
+> O endereço `0.0.0.0` não é um domínio válido para **Cross-Origin-Opener-Policy**, use `localhost` em vez disso.
 
-- Set `WORKERS` to start **multiple server processes**. `WORKERS` will automatically be set based on **CPU count** if `-1` is used.
+- Defina os `WORKERS` para iniciar **múltiplos processos do servidor**. Será definido automaticamente com base no **número de CPUs** se o valor `-1` for usado.
 
   ```py
   # Workers = (2 * CPU Cores) + 1
@@ -127,182 +126,185 @@ Create an `.env` file to configure the following options:
       return (2 * (os.cpu_count() or 2)) + 1
   ```
 
-- Available log levels: `DEBUG`, `API_CALL`, `INFO`, `ACCESS`, `QUOTA`, `WARNING`, `ERROR`, and `EXCEPTION`.
+- Níveis de log disponíveis: `DEBUG`, `API_CALL`, `INFO`, `ACCESS`, `QUOTA`, `WARNING`, `ERROR`, e `EXCEPTION`.
 
-- In production, `RELOAD` and `PROGRESS_BAR` are automatically disabled, and the `LOG_LEVEL` is automatically set to `INFO`.
+- Em produção, `RELOAD` e `PROGRESS_BAR` são desativados automaticamente, e o `LOG_LEVEL` é automaticamente definido para `INFO`.
 
-  > [!TIP]
-  > Take a look at the [`.env.example`](./.env.example) file.
+> [!TIP]
+> Dê uma olhada no arquivo [`.env.example`](./.env.example).
 
 <br>
 
-## 3. Run
+## 3. Execução
 
-### 3.1. Set Up a Python Venv
+### 3.1. Execute com um Ambiente Virtual (venv) do Python
 
-You will need [Python3.12](https://www.python.org/downloads/release/python-31211/) with [Pip](https://pip.pypa.io/en/stable/installation/) and [Venv](https://docs.python.org/3/library/venv.html) installed.
+Você precisará do [Python3.12](https://www.python.org/downloads/release/python-31211/) com o [Pip](https://pip.pypa.io/en/stable/installation/) e o [Venv](https://docs.python.org/3/library/venv.html) instalados.
 
 ```bash
-# Create new Venv (.venv)
+# Crie um novo ambiente virtal (.venv)
 make venv
 
-# Activate Venv
+# Ative o Venv
 source .venv/bin/activate
 ```
 
-### 3.2. Run in Development (Poetry)
+### 3.1.1. Execute em Ambiente de Desenvolvimento (Poetry)
 
-Install [Poetry](https://python-poetry.org/) with all dependencies: `app`, `dev`, `tests`, `docs`, and run with [Uvicorn](https://uvicorn.dev/).
+Instale o [Poetry](https://python-poetry.org/) com todas as dependências: `app`, `dev`, `tests`, `docs` e execute com o [Uvicorn](https://uvicorn.dev/).
 
 ```bash
-# Install all dependencies groups from pyproject.toml with Poetry
+# Instale todos os grupos de dependencias do pyproject.toml com o Poetry
 (.venv) make install-dev
 
-# Run with Poetry
+# Execute com o Poetry
 (.venv) make run-dev
 ```
 
-### 3.3. Run in Production (Pip)
+### 3.1.2. Execute em Ambiente de Produção (Pip)
 
-Install only the main dependencies: `app` and run with [Gunicorn](https://gunicorn.org/).
+Instale apenas as principais dependências, `app`, e execute com o [Gunicorn](https://gunicorn.org/).
 
 ```bash
-# Install only main dependencies from requirements.txt with Pip
+# Instale apenas as principais dependências do requirements.txt com o Pip
 (.venv) make install-prod
 
-# Run with Gunicorn
+# Execute com o Gunicorn
 (.venv) make run-prod
 ```
 
-### 3.4. Run in Docker
+### 3.2. Execute com o Docker
 
-You will need [Docker](https://www.docker.com/) installed. Build the `scopus-survey-api` image from the [Dockerfile](https://docs.docker.com/reference/dockerfile/), install only the main dependencies from `requirements.txt` with [Pip](https://pip.pypa.io/en/stable/installation/), and run with [Uvicorn](https://uvicorn.dev/).
+Você precisará ter o [Docker](https://www.docker.com/) instalado. Crie a imagem `scopus-survey-api` a partir do [Dockerfile](https://docs.docker.com/reference/dockerfile/), instale apenas as principais dependências do `requirements.txt` com o [Pip](https://pip.pypa.io/en/stable/installation/) e execute com o [Uvicorn](https://uvicorn.dev/).
 
 ```bash
-# Run in Docker Container from Dockerfile
+# Execute em um contêiner Docker a partir do Dockerfile
 make docker
 
-# Follow and show the last logs
+# Acompanhe e exiba os últimos logs
 make docker-logs
 ```
 
 <br>
 
-## 4. Important Information
+## 4. Informações Importantes
 
-### 4.1. Data Source
+### 4.1. Fonte de Dados
 
-We declare that all use of the [Scopus](https://www.scopus.com)® [database](https://www.elsevier.com/products/scopus) and its [APIs](https://dev.elsevier.com/sc_apis.html), owned and maintained by © [Elsevier B.V.](https://www.elsevier.com/), is intended only for [non-commercial academic research](https://dev.elsevier.com/academic_research_scopus.html), **without implying endorsement or affiliation**, and is subject to [our Terms](./legal/en_US/TERMS_OF_SERVICE.md), as well as [Elsevier's Terms](https://www.elsevier.com/legal/elsevier-website-terms-and-conditions) and [Scopus's Policy](https://dev.elsevier.com/academic_research_scopus.html). All data we handle is retrieved and obtained **"AS IS"** and, therefore, despite its known reliability, we do not guarantee or assume responsibility for any errors or inaccuracies in the data in the Scopus database.
+Declaramos que todo o uso do [banco de dados](https://www.elsevier.com/pt-br/products/scopus) [Scopus](https://www.scopus.com)® e suas [APIs](https://dev.elsevier.com/sc_apis.html), de propriedade e mantenabilidade da © [Elsevier B.V.](https://www.elsevier.com/pt-br), destina-se exclusivamente à [pesquisa acadêmica não comercial](https://dev.elsevier.com/academic_research_scopus.html), **sem implicar endosso ou afiliação**, e está sujeito aos [nossos Termos de Serviço](./legal/pt_BR/TERMS_OF_SERVICE.md), bem como aos [Termos da Elsevier](https://www.elsevier.com/pt-br/legal/elsevier-website-terms-and-conditions) e à [Política da Scopus](https://dev.elsevier.com/academic_research_scopus.html). Todos os dados que manipulamos são obtidos **"NO ESTADO EM QUE SE ENCONTRAM"** e, portanto, não garantimos nem assumimos responsabilidade por quaisquer erros ou imprecisões nos mesmos.
 
 > [!CAUTION]
-> **You are strictly prohibited from misuse or attempt to misuse data obtained from the Scopus APIs in violation of [Elsevier API Service Agreement](https://dev.elsevier.com/policy/API-service-agreement.pdf).**
+> **É estritamente proibido o uso indevido ou a tentativa de uso indevido de dados obtidos das APIs da Scopus, em violação ao [Contrato de Serviço de API da Elsevier](https://dev.elsevier.com/policy/API-service-agreement.pdf).**
 
-### 4.2. Data Manipulation
+### 4.2. Manipulação de Dados
 
-In general, the data will be preserved without any direct alteration. However, since they are obtained **"AS IS"**, it will need to be properly validated based on the response fields from the APIs:
+Em geral, os dados serão preservados sem qualquer alteração direta, necessitando apenas de serem devidamente validados com base nos campos de resposta das APIs:
 
-- Those that returned a value will be kept as is;
-- Those that did not return any value will be set to "`None`" by default;
-- The "`authors`" field will be set to the first author ("`dc:creator`") or all authors ("`authors`") concatenated, depending on what is returned.
+- Aqueles que retornaram algum valor serão mantidos como estão;
+- Aqueles que não retornaram valor algum serão definidos como "`None`" (ou "") por padão;
+- O campo "`autores`" será definido como o primeiro autor ("`dc:creator`") ou todos os autores ("`authors`") concatenados, dependendo do que for retornado.
 
-Finally, the documents will be **filtered and removed** in the following order:
+Por fim, os documentos serão **filtrados e removidos** na seguinte ordem:
 
-1. Exact duplicates, where the first one will be kept.
-2. Exactly the same title and same author(s), where the first one will be kept.
-3. Same author(s) with similar titles, where the one with the most recent publication date will be kept.
+1. Duplicatas exatas, sendo mantido o primeiro.
+2. Documentos com mesmo título e mesmo(s) autor(es), sendo mantido o primeiro.
+3. Documentos do mesmo(s) autor(es) com títulos semelhantes, sendo mantido o documento com a data de publicação mais recente.
 
-### 4.3. Search
+### 4.3. Busca
 
-We use the [combined field "`TITLE-ABS-KEY`"](https://dev.elsevier.com/sc_search_tips.html) to **simultaneously search for keyword combinations in abstracts, keywords, and titles, and retrieve the literature where they are found**. We also use the "`date`" and "`sort`" fields to delimit the period of interest for publications, and sort by year and date of publication and by relevance, alongside other **optional additional** fields in the search to produce more relevant results.
+Utilizamos o [campo combinado "`TITLE-ABS-KEY`"](https://dev.elsevier.com/sc_search_tips.html) para **buscar simultaneamente combinações de palavras-chave nos resumos, palavras-chave e títulos, e recuperar os documentos onde elas são encontradas**. Também utilizamos os campos "`date`" e "`sort`" para delimitar o período de interesse das publicações, e ordenar por ano e data de publicação e por relevância, além de outros campos **adicionais opcionais** na busca para produzir resultados mais relevantes.
 
-Regarding the survey flow, we first retrieve the total number of results found for each keyword combination, then perform the final survey with the selected combination to obtain the **Scopus ID** of all results, finally retrieving a complete dataset with comprehensive metadata, obtaining all fields with relevant bibliographic information.
+Em relação ao fluxo da pesquisa, primeiro recuperamos o número total de resultados encontrados para cada combinação de palavras-chave, depois realizamos a pesquisa final com a combinação selecionada para obter o **Scopus ID** de todos os resultados, recuperando por fim um conjunto de dados abrangente com metadados bibliográficos.
 
-### 4.3. API Key
+### 4.4. Chave de API
 
-In accordance with the [API Service Agreement](https://dev.elsevier.com/policy/API-service-agreement.pdf) and [Use Policies](https://dev.elsevier.com/policy.html), **Elsevier** will issue you an **API Key** that grants you a limited license to use the [Scopus APIs](https://dev.elsevier.com/sc_apis.html), so that you can properly authenticate to query the Scopus database. It can be obtained by accessing the [Elsevier Developer Portal](https://dev.elsevier.com/) and registering. If you are part of an **educational institution**, you can try to [signing in using your organization's or academic email](https://www.scopus.com/signin.uri).
+De acordo com o [Contrato de Serviço de API](https://dev.elsevier.com/policy/API-service-agreement.pdf) e as [Políticas de Uso](https://dev.elsevier.com/policy.html), a **Elsevier** emitirá a você uma **Chave de API** que lhe concede uma licença limitada para usar as [APIs da Scopus](https://dev.elsevier.com/sc_apis.html), para que você possa se autenticar adequadamente para consultar o banco de dados Scopus. Ela pode ser obtida acessando o [Portal do Desenvolvedor da Elsevier](https://dev.elsevier.com/) e realizando um cadastro. Se você faz parte de uma **instituição educacional**, pode tentar [fazer login usando o e-mail institucional ou acadêmico da sua organização](https://www.scopus.com/signin.uri).
 
-### 4.4. Institutional Network
+### 4.5. Rede Institucional
 
-Please be aware that the **API Key** will only authenticate correctly if you submit it while using your **academic institution's network**, which must be **registered with Elsevier**. This **does not include** <abbr title="Virtual Private Network">VPN</abbr> or proxy access. Therefore, if you are **fully remote** and **off-campus**, some data may **not be returned**.
+Esteja ciente de que a **Chave de API** só será autenticada corretamente se você a enviar enquanto estiver usando a **rede da sua instituição acadêmica**, que deve estar **registrada na Elsevier**. Isso **não inclui** acesso <abbr title="Rede Privada Virtual">VPN</abbr> ou proxy. Portanto, se você estiver **totalmente remoto** e **fora do campus**, alguns dados poderão **não ser retornados**.
 
-### 4.5. Quota and Rate Limits
+### 4.6. Cota e Taxa de Solicitação (_Rate Limit_)
 
-There's a **maximum limit to the number of requests** we can make to [Scopus APIs](https://dev.elsevier.com/sc_apis.html) using your **API Key**. This **request quota resets every seven days**, is **unique to each API**, and you can **check its availability** in the **details panel after each operation**. If requests **exceed the quota or throttling rate**, an **error will be returned**. See the [API Key Settings](https://dev.elsevier.com/api_key_settings.html).
+Há um **limite máximo para o número de solicitações** que podemos fazer às [APIs Scopus](https://dev.elsevier.com/sc_apis.html) usando sua **Chave de API**. Essa **cota de solicitações é redefinida a cada sete dias**, é **exclusiva para cada API** e você pode **verificar sua disponibilidade no painel de detalhes após cada operação**. Se as solicitações **excederem a cota ou a taxa de solicitação**, um **erro será retornado**. Veja as [Configurações da Chave de API](https://dev.elsevier.com/api_key_settings.html).
 
-| Scopus API             | Weekly Quota | Rate Limit |
-| ---------------------- | ------------ | ---------- |
-| Search API             | 20,000       | 9req/s     |
-| Abstract Retrieval API | 10,000       | 9req/s     |
+| API da Scopus          | Cota Semanal | _Rate Limit_ |
+| ---------------------- | ------------ | ------------ |
+| Search API             | 20,000       | 9req/s       |
+| Abstract Retrieval API | 10,000       | 9req/s       |
 
 <br>
 
-## 5. Results
+## 5. Resultados
 
-### 5.1. Fields Retrieved
+### 5.1. Campos Obtidos
 
-Mapped fields of the CSV file
+Campos mapeados no arquivo CSV
 
-| Field                     | Column                   | Description                                   |
-| :------------------------ | :----------------------- | :-------------------------------------------- |
-| link `ref=scopus`         | Article Preview Page URL | Scopus article preview page URL               |
-| `dc:identifier`           | Scopus ID                | Article Scopus ID                             |
-| `authors` or `dc:creator` | Authors                  | Complete author list or only the first author |
-| `dc:title`                | Title                    | Article title                                 |
-| `prism:publicationName`   | Publication Name         | Source title                                  |
-| `dc:description`          | Abstract                 | Article complete abstract                     |
-| `prism:coverDate`         | Date                     | Article complete abstract                     |
-| `eid`                     | Electronic ID            | Article Electronic ID                         |
-| `prism:doi`               | DOI                      | Document Object Identifier                    |
-| `prism:volume`            | Volume                   | Identifier for a serial publication           |
-| `citedby-count`           | Citations                | Cited-by count                                |
+| Campo                     | Coluna                   | Descrição                                      |
+| :------------------------ | :----------------------- | :--------------------------------------------- |
+| link `ref=scopus`         | Article Preview Page URL | URL da página de visualização do artigo Scopus |
+| `dc:identifier`           | Scopus ID                | ID Scopus do Artigo                            |
+| `authors` or `dc:creator` | Authors                  | Primeiro autor ou lista completa de autores    |
+| `dc:title`                | Title                    | Título do artigo                               |
+| `prism:publicationName`   | Publication Name         | Título da fonte / Nome de Publicação           |
+| `dc:description`          | Abstract                 | Resumo completo do artigo                      |
+| `prism:coverDate`         | Date                     | Data de publicação                             |
+| `eid`                     | Electronic ID            | ID Electrônico do Documento                    |
+| `prism:doi`               | DOI                      | Identificador de Objeto do Documento           |
+| `prism:volume`            | Volume                   | Identificador para uma publicação em série     |
+| `citedby-count`           | Citations                | Número de citações                             |
 
-### 5.2. CSV Metadada
+### 5.2. Metadados do CSV
 
-Since the result of the survey is a CSV file, which is essentially a dataset obtained from the Scopus APIs, we must [**acknowledge** both Scopus and Elsevier as **data sources**](https://dev.elsevier.com/tecdoc_attribution_scopus.html). Therefore, we will add some metadata at the **top of the file (4 lines) as comments** indicating the parameters used, survey details, and the date the data was obtained.
+Como o resultado do levantamento é um arquivo CSV, que é essencialmente um conjunto de dados obtido das APIs Scopus, devemos [**reconhecer** tanto o Scopus quanto a Elsevier como **fontes de dados**](https://dev.elsevier.com/tecdoc_attribution_scopus.html). Portanto, adicionaremos alguns metadados no **início do arquivo (4 linhas) como comentários** indicando os parâmetros utilizados, detalhes do levantamento e a data em que os dados foram obtidos.
 
-**Example:**
+**Exemplo:**
 
 ```txt
 # GeneratedBy: ScopusSurveyAPI https://github.com/mauprogramador/scopus-survey-api
 # Params: api_key=..., date=2023-2026, keywords=['Python', 'Web API', 'Scopus', 'bibliographic survey'], combination=Web API, ratio=80
 # Survey: scopus_total=3126, items_per_page=25, pages_count=126, total_retrieved=3126, total_final=3113, loss=13 (0.42%)
-# Source: data retrieved from Scopus APIs on 2026-08-23 via http://api.elsevier.com and http://www.scopus.com.
+# Source: data retrieved from Scopus APIs on 2026-08-03 via http://api.elsevier.com and http://www.scopus.com.
+```
+
+**Tradução do Exemplo:**
+
+```txt
+# Gerado Por: ...
+# Parâmetros: ...
+# Levantamento: ...
+# Fonte: os dados foram obtidos das APIs da Scopus em 2026-08-03 através de <http://api.elsevier.com> e <http://www.scopus.com>.
 ```
 
 > [!TIP]
-> <a href="./docs/assets/data/example.csv" download="example.csv">Download a sample survey <abbr title="Comma-Separated Values">CSV</abbr> file</a> and take a look.
+> <a href="./docs/assets/data/example.csv" download="example.csv">Baixe um arquivo CSV de exemplo de levantamento</a> e dê uma olhada.
 
 ### 5.3. Performance (v3.2.6)
 
-| Total gather | Process time    | Loss      | Throughput   | Latency      |
-| ------------ | --------------- | --------- | ------------ | ------------ |
-| 8            | 2.36s           | 0 (0.00%) | 0.295 s/item | 3.39 items/s |
-| 36           | 5.92s           | 0 (0.00%) | 0.164 s/item | 6.08 items/s |
-| 106          | 18.70s          | 1 (0.93%) | 0.174 s/item | 5,72 items/s |
-| 284          | 38.47s          | 2 (0.70%) | 0.134 s/item | 7.43 items/s |
-| 307          | 42.92s          | 2 (0.65%) | 0.139 s/item | 7.15 items/s |
-| 966          | 128.06s (2.13m) | 0 (0.00%) | 0.133 s/item | 7.54 items/s |
-| 3,126        | 412.03s (6.86m) | 0 (0.00%) | 0.132 s/item | 7.59 items/s |
+| Total | Tempo de processamento | Perda     | Vazão        | Latência     |
+| ----- | ---------------------- | --------- | ------------ | ------------ |
+| 8     | 2.36s                  | 0 (0.00%) | 0.295 s/item | 3.39 items/s |
+| 36    | 5.92s                  | 0 (0.00%) | 0.164 s/item | 6.08 items/s |
+| 106   | 18.70s                 | 1 (0.93%) | 0.174 s/item | 5,72 items/s |
+| 284   | 38.47s                 | 2 (0.70%) | 0.134 s/item | 7.43 items/s |
+| 307   | 42.92s                 | 2 (0.65%) | 0.139 s/item | 7.15 items/s |
+| 966   | 128.06s (2.13m)        | 0 (0.00%) | 0.133 s/item | 7.54 items/s |
+| 3,126 | 412.03s (6.86m)        | 0 (0.00%) | 0.132 s/item | 7.59 items/s |
 
-Overall performance improved **significantly at scale** compare to the last release, yielding a **~1.75x speedup (73% increase in throughput)** and a **~42-45% reduction in processing time per item** for large batches.
+O desempenho geral **melhorou significativamente em escala** em comparação com a última versão, gerando uma **aceleração de ~1,75x (aumento de 73% na vazão)** e uma **redução de ~42-45% no tempo de processamento por item** para lotes grandes.
 
-More importantly, the new implementation **eliminated scaling degradation**, so the throughput remains flat and stable at **~7.5 to 7.6 items/sec**, even when scaling up to **3,126 items**.
+Mais importante ainda, a nova implementação **eliminou a degradação do escalamento**, de modo que a vazão permanece estável em **~7,5 a 7,6 itens/s**, mesmo ao escalar até **3.126 itens**.
 
-Throughput at scale increased from **4.36 items/sec to ~7.59 items/sec** (a **+74.1% increase** in work done per second). It takes **~42% less time** to process the same dataset size now.
+O rendimento em escala aumentou de **4,36 itens/s para ~7,59 itens/s** (um **aumento de +74,1%** no trabalho realizado por segundo). Agora leva cerca de **~42% menos tempo** para processar o mesmo tamanho de conjunto de dados.
 
 <br>
 
-## Citation
+## Citação
 
-If scopus-survey-pi helped you getting data for research, please cite it:
+Se este trabalho o ajudou a obter dados relevantes para pesquisa, por favor cite-o:
 
-📝 **APA**
-
-```text
-Batista, M. d. S. (2025). Scopus Survey API: Web API for bibliographic survey of Scopus articles (Version 3.2.6) [Web API]. GitHub. https://github.com/mauprogramador/scopus-survey-api.
-```
-
-📝 **ABNT** &nbsp; `pt-BR`
+📝 **ABNT**
 
 ```text
 BATISTA, Maurício da Silva. Scopus Survey API: API da Web para levantamento bibliográfico de artigos da Scopus. Versão 3.2.6. [Web API]. GitHub, 2025. Disponível em: https://github.com/mauprogramador/scopus-survey-api. Acesso em: DD MMM. YYYY.
@@ -312,20 +314,20 @@ BATISTA, Maurício da Silva. Scopus Survey API: API da Web para levantamento bib
 
 ---
 
-For questions or concerns please contact me at <sir.silvabmauricio@gmail.com>.
+Para dúvidas ou questões, entre em contato comigo em <sir.silvabmauricio@gmail.com>.
 
-[Terms of Service](./legal/en_US/TERMS_OF_SERVICE.md)
+[Termos de Serviço](./legal/pt_BR/TERMS_OF_SERVICE.md)
 &nbsp;&#8226;&nbsp;
-[Privacy Policy](./legal/en_US/PRIVACY_POLICY.md)
+[Política de Privacidade](./legal/pt_BR/PRIVACY_POLICY.md)
 &nbsp;&#8226;&nbsp;
-[Cookie Policy](./legal/en_US/COOKIE_POLICY.md)
+[Política de Cookies](./legal/pt_BR/COOKIE_POLICY.md)
 &nbsp;&#8226;&nbsp;
-[Attributions](./legal/en_US/ATTRIBUTIONS.md)
+[Atribuições](./legal/pt_BR/ATTRIBUTIONS.md)
 
-[License](./LICENSE)
+[Licença](./LICENSE)
 &nbsp;&#8226;&nbsp;
-[Translations](./TRANSLATIONS.md)
+[Traduções](./TRANSLATIONS.md)
 &nbsp;&#8226;&nbsp;
-[Latest Release](https://github.com/mauprogramador/scopus-survey-api/releases/latest)
+[Última Versão](https://github.com/mauprogramador/scopus-survey-api/releases/latest)
 &nbsp;&#8226;&nbsp;
 [Changelog](./CHANGELOG.md)
