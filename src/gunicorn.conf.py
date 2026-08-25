@@ -44,7 +44,7 @@ def when_ready_hook(_: Arbiter) -> None:
 # pylint: disable=C0103
 wsgi_app = APP
 reload = ENV.reload
-bind = f"0.0.0.0:{ENV.port}"
+bind = f"{ENV.host}:{ENV.port}"
 workers = ENV.workers
 worker_class = f"{UvicornWorker.__module__}.{UvicornWorker.__qualname__}"
 timeout = 120
