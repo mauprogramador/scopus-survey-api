@@ -89,7 +89,7 @@ Data provided by [Scopus](https://www.scopus.com)® &nbsp;&#8226;&nbsp; © [Else
 
 This **web API** is designed to perform **systematic bibliographic surveys using data from the [Scopus database](https://www.elsevier.com/products/scopus)**, promoting access to relevant and high-quality bibliographic sources through a simple and well-documented interface, thus reducing the initial barrier to entry for **students** and academics.
 
-As a [free, non-commercial academic automation tool](https://dev.elsevier.com/academic_research_scopus.html), the application integrates **multiple selection criteria**, including multiple query parameters, keyword combinations, and [Boolean search](https://dev.elsevier.com/sc_search_tips.html), with **mechanisms** for retrieval, validation, serialization, and customized filtering of **large volumes of data** from the [Scopus APIs](https://dev.elsevier.com/sc_apis.html).
+As a [free academic](https://dev.elsevier.com/academic_research_scopus.html) automation tool, the application integrates **multiple selection criteria**, including multiple query parameters, keyword combinations, and [Boolean search](https://dev.elsevier.com/sc_search_tips.html), with **mechanisms** for retrieval, validation, serialization, and customized filtering of **large volumes of data** from the [Scopus APIs](https://dev.elsevier.com/sc_apis.html).
 
 This way, only the **most relevant and recent data** will be retained and returned in a **CSV file**, making it suitable bibliometric studies and surveys, research, [systematic reviews](https://en.wikipedia.org/wiki/Systematic_review), etc., allowing students to quickly gather a set of peer-reviewed literature sources for a thesis or project.
 
@@ -107,22 +107,32 @@ Create an `.env` file to configure the following options:
 | `RELOAD`       | Enable auto-reload on file changes for local development | `false`     |
 | `WORKERS`      | Sets multiple worker processes                           | `1`         |
 | `LOGGING_FILE` | Enable saving logs to files                              | `false`     |
-| `DEBUG`        | Enable the debug mode and debug logs                     | `false`     |
+| `LOG_LEVEL`    | Enable the debug mode and debug logs                     | `INFO`      |
 | `PROGRESS_BAR` | Displays the progress bar of the request process         | `true`      |
 
 - The `RELOAD` and `WORKERS` options are **mutually exclusive**.
 
 - Setting the `HOST` to `0.0.0.0` makes the application externally available.
 
-> [!NOTE]
-> The address `0.0.0.0` is not a valid domain for the **Cross-Origin-Opener-Policy**, use `localhost` instead.
+  > [!NOTE]
+  > The address `0.0.0.0` is not a valid domain for the **Cross-Origin-Opener-Policy**, use `localhost` instead.
 
-- Set `WORKERS`, **maximum 4**, to start **multiple server processes**.
+- Set `WORKERS` to start **multiple server processes**. `WORKERS` will automatically be set based on **CPU count** if `-1` is used.
 
-- In production, `RELOAD`, `DEBUG`, and `PROGRESS_BAR` are automatically disabled.
+  ```py
+  # Workers = (2 * CPU Cores) + 1
+  try:
+      return (2 * len(os.sched_getaffinity(0))) + 1
+  except AttributeError:
+      return (2 * (os.cpu_count() or 2)) + 1
+  ```
 
-> [!TIP]
-> Take a look at the [`.env.example`](./.env.example) file.
+- Available log levels: `DEBUG`, `API_CALL`, `INFO`, `ACCESS`, `QUOTA`, `WARNING`, `ERROR`, and `EXCEPTION`.
+
+- In production, `RELOAD` and `PROGRESS_BAR` are automatically disabled, and the `LOG_LEVEL` is automatically set to `INFO`.
+
+  > [!TIP]
+  > Take a look at the [`.env.example`](./.env.example) file.
 
 <br>
 
@@ -256,7 +266,7 @@ Since the result of the survey is a CSV file, which is essentially a dataset obt
 # GeneratedBy: ScopusSurveyAPI https://github.com/mauprogramador/scopus-survey-api
 # Params: api_key=..., date=2023-2026, keywords=['Python', 'Web API', 'Scopus', 'bibliographic survey'], combination=Web API, ratio=80
 # Survey: scopus_total=3126, items_per_page=25, pages_count=126, total_retrieved=3126, total_final=3113, loss=13 (0.42%)
-# Source: data retrieved from Scopus APIs on July 23, 2026 via http://api.elsevier.com and http://www.scopus.com.
+# Source: data retrieved from Scopus APIs on 2026-08-23 via http://api.elsevier.com and http://www.scopus.com.
 ```
 
 > [!TIP]
