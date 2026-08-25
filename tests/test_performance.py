@@ -76,9 +76,9 @@ def enforce_performance_isolation(request: FixtureRequest):
 class _ReportTracker:
     _NOTE = "[{}] Duration ({:.4f}s) exceeded limit ({:.4f}s)"
     # e.g. 45 function calls
-    _INDENT_PATTERN = re.compile(r"\n? *(\d* function calls)")
-    _FILTER = (tracemalloc.Filter(True, "/src"),)
-    _TOP = 15  # Top bottlenecks functions
+    _INDENT_RE = re.compile(r"\n? *(\d* function calls)")
+    _FILTER = (tracemalloc.Filter(True, "*/src*"),)
+    _TOP = 10  # Top bottlenecks functions
     _TOLERANCE = 0.30  # 30%
 
     def __init__(self) -> None:
@@ -132,7 +132,7 @@ class _ReportTracker:
         _, peak_bytes = tracemalloc.get_traced_memory()
 
         tracemalloc.stop()
-        self._peak_bytes = round(peak_bytes / (1024 * 1024), 2)
+        self._peak_bytes = round(peak_bytes / (1024**2), 2)
 
     def _header(self, title: str, lib: str) -> None:
         print(f"\n\033[37;1m{title}\033[m (\033[36m{lib}\033[m)\n")
@@ -160,8 +160,7 @@ class _ReportTracker:
             stats.print_stats("/src", self._TOP)
 
             self._header(f"Top {self._TOP} CPU Bottlenecks", "cProfile")
-            value = buffer.getvalue().strip()
-            print(self._INDENT_PATTERN.sub(r"   \1", value))
+            print(self._INDENT_RE.sub(r"   \1", buffer.getvalue().strip()))
 
         if self._snapshot is not None:
             self._header(f"Top {self._TOP} Memory Allocations", "tracemalloc")
@@ -173,6 +172,8 @@ class _ReportTracker:
             print(
                 f"List reduced from {total} to {len(stats)} "
                 "due to restriction <'/src'>\n"
+                f"List reduced from {len(stats)} to {self._TOP} "
+                f"due to restriction <{self._TOP}>\n"
             )
 
             for stat in stats[: self._TOP]:
@@ -181,18 +182,16 @@ class _ReportTracker:
                     f"KiB ({stat.count} blocks)"
                 )
 
-            print()
+            main_tsize = sum(stat.size for stat in stats) / 1024
+            print(f"\nTotal Allocated: {main_tsize:.1f} KiB")
+
             other = stats[self._TOP :]
-
             if other:
-                size = sum(stat.size for stat in other)
-                print(f"Other {len(other)} process: {(size / 1024):.1f} KiB")
-
-            total = sum(stat.size for stat in stats)
-            print(f"Total Allocated Size: {(total / 1024):.1f} KiB")
+                other_tsize = sum(stat.size for stat in other) / 1024
+                print(f"Other {len(other)} Processes: {other_tsize:.1f} KiB")
 
             if self._peak_bytes is not None:
-                print(f"Peak Memory: {self._peak_bytes} MB\n")
+                print(f"Peak Memory: {self._peak_bytes} MiB\n")
 
 
 @mark.parametrize(
