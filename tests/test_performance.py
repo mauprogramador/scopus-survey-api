@@ -1,6 +1,7 @@
 import contextlib
 import cProfile
 import io
+import logging
 import pstats
 import random
 import re
@@ -117,6 +118,8 @@ class _ReportTracker:
 
     @contextlib.contextmanager
     def measure(self):
+        logging.disable(logging.CRITICAL)
+
         if self._profiler is None:
             self._profiler = cProfile.Profile()
 
@@ -132,6 +135,7 @@ class _ReportTracker:
         _, peak_bytes = tracemalloc.get_traced_memory()
 
         tracemalloc.stop()
+        logging.disable(logging.NOTSET)
         self._peak_bytes = round(peak_bytes / (1024**2), 2)
 
     def _header(self, title: str, lib: str) -> None:
