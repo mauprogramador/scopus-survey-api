@@ -201,42 +201,42 @@ class _ReportTracker:
 @mark.parametrize(
     "total,duration",
     [
-        (100, 0.01),
-        (500, 0.01),
-        (1000, 0.01),
-        (2000, 0.02),
-        (5000, 0.04),
-        (10000, 0.11),
+        (100, (0.001, 0.001, 0.001, 0.001, 0.002, 0.001, 0.002)),
+        (500, (0.001, 0.003, 0.001, 0.001, 0.001, 0.001, 0.002)),
+        (1000, (0.001, 0.005, 0.002, 0.001, 0.001, 0.001, 0.003)),
+        (2000, (0.002, 0.009, 0.003, 0.002, 0.002, 0.001, 0.005)),
+        (5000, (0.003, 0.024, 0.006, 0.003, 0.002, 0.001, 0.097)),
+        (10000, (0.006, 0.075, 0.010, 0.005, 0.002, 0.001, 0.020)),
     ],
     ids=["100", "500", "1.000", "2.000", "5.000", "10.000"],
 )
-def test_high_volume_data_parsing(total: int, duration: float):
+def test_high_volume_data_parsing(total: int, duration: tuple[float, ...]):
     tracker = _ReportTracker()
 
     pages_count = int(total / MAX_ITEMS_PER_PAGE)
     raw_list = [search_raw(total)] * pages_count
     assert len(raw_list) == pages_count
 
-    with tracker.timeit(duration, "Parse ScopusPage"):
+    with tracker.timeit(duration[0], "Parse ScopusPage"):
         for raw in raw_list:
             ScopusPage(**raw)
 
     raw_list = [abstract_raw()] * total
     assert len(raw_list) == total
 
-    with tracker.timeit(duration, "Parse ScopusAbstract"):
+    with tracker.timeit(duration[1], "Parse ScopusAbstract"):
         models = [ScopusAbstract(**raw) for raw in raw_list]
         assert len(models) == total
 
-    with tracker.timeit(duration, "Dump ScopusAbstract"):
+    with tracker.timeit(duration[2], "Dump ScopusAbstract"):
         raw_list = [model.model_dump(by_alias=True) for model in models]
         assert len(raw_list) == total
 
-    with tracker.timeit(duration, "Build DataFrame"):
+    with tracker.timeit(duration[3], "Build DataFrame"):
         df = pd.DataFrame(raw_list)
         assert df.shape[0] == total
 
-    with tracker.timeit(duration, "Parse DateTime"):
+    with tracker.timeit(duration[4], "Parse DateTime"):
         # pylint: disable=W0212
         df_subset = df.loc[:, SimilarityFilter._COLUMNS].copy()
         assert df.shape[0] == total
@@ -248,13 +248,13 @@ def test_high_volume_data_parsing(total: int, duration: float):
             errors="coerce",
         )
 
-    with tracker.timeit(duration, "Renaming columns"):
+    with tracker.timeit(duration[5], "Renaming columns"):
         df = df.rename(columns=_COLUMN_TRANSLATION)
         assert df.shape[0] == total
 
     file_path = DIRECTORY / f"test_{FILE}"
 
-    with tracker.timeit(duration, "Write CSV"):
+    with tracker.timeit(duration[6], "Write CSV"):
         with file_path.open(mode="w", encoding="utf-8") as file:
             df.to_csv(
                 file,
@@ -271,12 +271,12 @@ def test_high_volume_data_parsing(total: int, duration: float):
 @mark.parametrize(
     "total,duration",
     [
-        (10, 0.01),
-        (30, 0.01),
-        (50, 0.01),
-        (70, 0.01),
-        (100, 0.01),
-        (150, 0.02),
+        (10, 0.004),
+        (30, 0.004),
+        (50, 0.005),
+        (70, 0.008),
+        (100, 0.013),
+        (150, 0.024),
     ],
     ids=["10", "30", "50", "70", "100", "150"],
 )
@@ -305,12 +305,12 @@ def test_high_volume_filtering_one_group(total: int, duration: float):
 @mark.parametrize(
     "total,duration",
     [
-        (100, 0.01),
-        (500, 0.03),
-        (1000, 0.05),
-        (2000, 0.08),
-        (5000, 0.20),
-        (10000, 0.50),
+        (100, 0.008),
+        (500, 0.0270),
+        (1000, 0.050),
+        (2000, 0.100),
+        (5000, 0.250),
+        (10000, 0.500),
     ],
     ids=["100", "500", "1.000", "2.000", "5.000", "10.000"],
 )
@@ -351,12 +351,12 @@ def test_high_volume_filtering_groups(total: int, duration: float):
 @mark.parametrize(
     "total,duration",
     [
-        (100, 0.01),
-        (500, 0.01),
-        (1000, 0.01),
-        (2000, 0.01),
-        (5000, 0.01),
-        (10000, 0.01),
+        (100, 0.009),
+        (500, 0.003),
+        (1000, 0.003),
+        (2000, 0.003),
+        (5000, 0.004),
+        (10000, 0.005),
     ],
     ids=["100", "500", "1.000", "2.000", "5.000", "10.000"],
 )
@@ -386,7 +386,7 @@ async def test_high_volume_csv_download(
 
 @mark.parametrize(
     "duration,lang",
-    [(0.02, Lang.EN_US), (0.02, Lang.PT_BR)],
+    [(0.014, Lang.EN_US), (0.010, Lang.PT_BR)],
     ids=["Web Form [en-US]", "Web Form [pt-BR]"],
 )
 @mark.asyncio
@@ -412,7 +412,7 @@ async def test_web_form_route_process_time(
 
 @mark.parametrize(
     "duration,count,index",
-    [(0.20, 3, 2), (0.20, 7, 3), (1.00, 15, 4)],
+    [(0.160, 3, 2), (0.200, 7, 3), (1.000, 15, 4)],
     ids=["3 Combs", "7 Combs", "15 Combs"],
 )
 @mark.asyncio
