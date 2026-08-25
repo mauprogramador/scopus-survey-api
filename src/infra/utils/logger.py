@@ -431,6 +431,8 @@ def trace(req: FastAPIRequest, code: int, process_time: float) -> None:
 
 
 def api_call(url: str, code: int, time: float) -> None:
+    if not LOGGER.isEnabledFor(_Level.API_CALL):
+        return
     scope: StarletteScope = {
         "type": "http",
         "method": "GET",
