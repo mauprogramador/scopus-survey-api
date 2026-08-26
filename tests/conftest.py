@@ -47,17 +47,6 @@ LIMITER = fqn(HTTPClient, aiolimiter.AsyncLimiter, "aiolimiter")
 SEMAPHORE = fqn(HTTPClient, asyncio.Semaphore, "asyncio")
 
 
-@fixture(scope="session")
-def session_data():
-    data = {"code": "None"}
-    yield data
-
-
-@fixture(scope="session")
-def event_loop_policy():
-    return uvloop.EventLoopPolicy()
-
-
 @fixture(autouse=True, scope="function")
 def apply_custom_logging_formatter_to_pytest(caplog: LogCaptureFixture):
     formatter = ANSIFormatter(
