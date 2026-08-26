@@ -19,7 +19,7 @@ from src.infra.middleware.flow_guarding_monitor import (
     FlowGuardingMonitorMiddleware,
 )
 from tests.conftest import assert_error_json
-from tests.mocks.helpers import Patch, fqn
+from tests.mocks.helpers import fqn, patch, spec
 from tests.mocks.raw import (
     CSV_PARAMS,
     HTTP_200,
@@ -30,8 +30,8 @@ from tests.mocks.raw import (
 )
 
 
-RETRIEVE = Patch(favicon, retrieve_csv)
-GENERATE = Patch(favicon, generate_csrf_token)
+RETRIEVE = spec(favicon, retrieve_csv)
+GENERATE = spec(favicon, generate_csrf_token)
 NOT_FOUND = fqn(FlowGuardingMonitorMiddleware, get_not_found_template)
 
 
@@ -52,7 +52,7 @@ async def test_success_headers(client: Client):
 
 @mark.asyncio
 async def test_uncaught_exception(mocker: Mocker, client: Client):
-    mocker.patch(**RETRIEVE(RuntimeError("any")))
+    mocker.patch(**patch(RETRIEVE, RuntimeError("any")))
     res = await client.get(URL_CSV, params=CSV_PARAMS)
     details = assert_error_json(res, HTTP_500, ExcMsg.INTERNAL_ERROR)
     assert details[0]["type"] == fqn(RuntimeError)
@@ -79,7 +79,7 @@ async def test_routing_error(mocker: Mocker, client: Client):
 async def test_internal_error(mocker: Mocker, client: Client):
     client.cookies.clear()
     client.headers.clear()
-    mocker.patch(**GENERATE(RuntimeError("any")))
+    mocker.patch(**patch(GENERATE, RuntimeError("any")))
     spy = mocker.patch(NOT_FOUND, wraps=get_not_found_template)
     res = await client.get(URL_WEB)
     assert res.status_code == HTTP_500 and res.text

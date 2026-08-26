@@ -14,10 +14,10 @@ from src.core.use_cases.similarity_filter import SimilarityFilter
 from src.infra.utils import logger
 from tests.conftest import assert_error_json
 from tests.mocks.helpers import (
-    Patch,
     fqn,
     get_patch,
     load_csv_from_response,
+    patch,
     spec,
 )
 from tests.mocks.integration import (
@@ -41,7 +41,7 @@ from tests.mocks.raw import (
 
 TO_DATETIME = fqn(SimilarityFilter, pd.to_datetime, "pd")
 LOG_DEBUG = spec(SimilarityFilter, logger.debug, "logger")
-IDXMAX = Patch(Series.idxmax)
+IDXMAX = spec(Series.idxmax)
 
 
 @mark.asyncio
@@ -226,7 +226,7 @@ async def test_discard_all_older_similar(mocker: Mocker, client: Client):
 @mark.asyncio
 async def test_cancelled_error(mocker: Mocker, client: Client):
     mock = mocker.patch(*get_patch(MORE_GROUPS_MORE_SIMILAR))
-    mocker.patch(**IDXMAX([1, concurrent.CancelledError("any")]))
+    mocker.patch(**patch(IDXMAX, [1, concurrent.CancelledError("any")]))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     assert mock.call_count == 10
     details = assert_error_json(res, HTTP_500, ExcMsg.INTERNAL_ERROR)

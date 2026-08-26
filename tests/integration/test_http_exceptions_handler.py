@@ -26,7 +26,7 @@ from tests.mocks.errors import (
     SCOPUS_API_ERROR_EXC_GROUP,
     STARLETTE_HTTP_EXCEPTION,
 )
-from tests.mocks.helpers import Patch, fqn, trans
+from tests.mocks.helpers import fqn, patch, spec, trans
 from tests.mocks.raw import (
     CSV_PARAMS,
     HTTP_400,
@@ -38,12 +38,12 @@ from tests.mocks.raw import (
 )
 
 
-RETRIEVE = Patch(favicon, retrieve_csv)
+RETRIEVE = spec(favicon, retrieve_csv)
 
 
 @mark.asyncio
 async def test_common_error(mocker: Mocker, client: Client):
-    mocker.patch(**RETRIEVE(KeyError("any")))
+    mocker.patch(**patch(RETRIEVE, KeyError("any")))
     res = await client.get(URL_CSV, params=CSV_PARAMS)
     details = assert_error_json(res, HTTP_500, ExcMsg.INTERNAL_ERROR)
     assert details[0]["type"] == fqn(KeyError)
@@ -67,7 +67,7 @@ async def test_common_error_exc_group(
     exc_group: ExceptionGroup,
     details_count: int,
 ):
-    mocker.patch(**RETRIEVE(exc_group))
+    mocker.patch(**patch(RETRIEVE, exc_group))
     res = await client.get(URL_CSV, params=CSV_PARAMS)
     details = assert_error_json(res, HTTP_500, ExcMsg.INTERNAL_ERROR)
     assert details[0]["type"] == fqn(ExceptionGroup)
@@ -82,7 +82,7 @@ async def test_common_error_exc_group(
 
 @mark.asyncio
 async def test_custom_http_error(mocker: Mocker, client: Client):
-    mocker.patch(**RETRIEVE(HTTP_ERROR))
+    mocker.patch(**patch(RETRIEVE, HTTP_ERROR))
     res = await client.get(URL_CSV, params=CSV_PARAMS)
     details = assert_error_json(res, HTTP_400, ExcMsg.INTERNAL_ERROR)
     assert details[0]["type"] == fqn(ValueError)
@@ -91,7 +91,7 @@ async def test_custom_http_error(mocker: Mocker, client: Client):
 
 @mark.asyncio
 async def test_scopus_api_error(mocker: Mocker, client: Client):
-    mocker.patch(**RETRIEVE(SCOPUS_API_ERROR))
+    mocker.patch(**patch(RETRIEVE, SCOPUS_API_ERROR))
     res = await client.get(URL_CSV, params=CSV_PARAMS)
     details = assert_error_json(res, HTTP_502, trans(SCOPUS_API_ERROR))
     assert details[0]["status_code"] == HTTP_500.value
@@ -100,7 +100,7 @@ async def test_scopus_api_error(mocker: Mocker, client: Client):
 
 @mark.asyncio
 async def test_starlette_http_exception(mocker: Mocker, client: Client):
-    mocker.patch(**RETRIEVE(STARLETTE_HTTP_EXCEPTION))
+    mocker.patch(**patch(RETRIEVE, STARLETTE_HTTP_EXCEPTION))
     res = await client.get(URL_CSV, params=CSV_PARAMS)
     details = assert_error_json(res, HTTP_500, trans(STARLETTE_HTTP_EXCEPTION))
     assert details[0]["type"] == fqn(StarletteHTTPException)
@@ -109,7 +109,7 @@ async def test_starlette_http_exception(mocker: Mocker, client: Client):
 
 @mark.asyncio
 async def test_fastapi_http_exception(mocker: Mocker, client: Client):
-    mocker.patch(**RETRIEVE(FASTAPI_HTTP_EXCEPTION))
+    mocker.patch(**patch(RETRIEVE, FASTAPI_HTTP_EXCEPTION))
     res = await client.get(URL_CSV, params=CSV_PARAMS)
     details = assert_error_json(res, HTTP_500, trans(FASTAPI_HTTP_EXCEPTION))
     assert details[0]["type"] == fqn(FastAPIHTTPException)
@@ -120,7 +120,7 @@ async def test_fastapi_http_exception(mocker: Mocker, client: Client):
 async def test_fastapi_request_validation_error(
     mocker: Mocker, client: Client
 ):
-    mocker.patch(**RETRIEVE(REQUEST_VALIDATION_ERROR))
+    mocker.patch(**patch(RETRIEVE, REQUEST_VALIDATION_ERROR))
     res = await client.get(URL_CSV, params=CSV_PARAMS)
     details = assert_error_json(res, HTTP_422, trans(REQUEST_VALIDATION_ERROR))
     assert details[0]["type"] == fqn(RequestValidationError)
@@ -132,7 +132,7 @@ async def test_fastapi_request_validation_error(
 async def test_fastapi_response_validation_error(
     mocker: Mocker, client: Client
 ):
-    mocker.patch(**RETRIEVE(RESPONSE_VALIDATION_ERROR))
+    mocker.patch(**patch(RETRIEVE, RESPONSE_VALIDATION_ERROR))
     res = await client.get(URL_CSV, params=CSV_PARAMS)
     details = assert_error_json(
         res, HTTP_500, trans(RESPONSE_VALIDATION_ERROR)
@@ -144,7 +144,7 @@ async def test_fastapi_response_validation_error(
 
 @mark.asyncio
 async def test_pydantic_validation_error(mocker: Mocker, client: Client):
-    mocker.patch(**RETRIEVE(PYDANTIC_VALIDATION_ERROR))
+    mocker.patch(**patch(RETRIEVE, PYDANTIC_VALIDATION_ERROR))
     res = await client.get(URL_CSV, params=CSV_PARAMS)
     msg = trans(PYDANTIC_VALIDATION_ERROR)
     details = assert_error_json(res, HTTP_500, msg)
@@ -157,7 +157,7 @@ async def test_pydantic_validation_error(mocker: Mocker, client: Client):
 
 @mark.asyncio
 async def test_rate_limit_error(mocker: Mocker, client: Client):
-    mocker.patch(**RETRIEVE(RATE_LIMIT_ERROR))
+    mocker.patch(**patch(RETRIEVE, RATE_LIMIT_ERROR))
     res = await client.get(URL_CSV, params=CSV_PARAMS)
     details = assert_error_json(res, HTTP_429, trans(RATE_LIMIT_ERROR))
     assert details[0]["type"] == fqn(RateLimitExceeded)

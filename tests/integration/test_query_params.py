@@ -16,7 +16,7 @@ from src.core.use_cases.survey_combinations import SurveyCombinations
 from src.infra.fastapi.routes import favicon
 from tests.conftest import assert_error_json
 from tests.mocks.errors import REQUEST_VALIDATION_ERROR
-from tests.mocks.helpers import Patch, fqn, trans
+from tests.mocks.helpers import fqn, patch, spec, trans
 from tests.mocks.raw import (
     API_KEY,
     COMBINATION_PARAMS,
@@ -34,8 +34,8 @@ from tests.mocks.raw import (
 )
 
 
-MAKE_COMBINATOR = Patch(favicon, make_combinator)
-MAKE_AGGREGATOR = Patch(favicon, make_aggregator)
+MAKE_COMBINATOR = spec(favicon, make_combinator)
+MAKE_AGGREGATOR = spec(favicon, make_aggregator)
 DATASET = DataFrame([ScopusAbstract(**RAW_ABSTRACT_OK).model_dump()])
 
 
@@ -78,7 +78,7 @@ async def test_csv_params_raise_errors(client: Client):
 
 @mark.asyncio
 async def test_combination_params_valid_data(mocker: Mocker, client: Client):
-    mocker.patch(**MAKE_COMBINATOR(SURVEY_COMBINATIONS))
+    mocker.patch(**patch(MAKE_COMBINATOR, SURVEY_COMBINATIONS))
     res = await client.get(URL_COMBINATION, params=COMBINATION_PARAMS)
     assert res.status_code == HTTP_200
 
@@ -87,7 +87,7 @@ async def test_combination_params_valid_data(mocker: Mocker, client: Client):
 async def test_combination_params_overridden_default(
     mocker: Mocker, client: Client
 ):
-    mocker.patch(**MAKE_COMBINATOR(SURVEY_COMBINATIONS))
+    mocker.patch(**patch(MAKE_COMBINATOR, SURVEY_COMBINATIONS))
     params = {
         "apiKey": API_KEY,
         "startYear": "2020",
@@ -120,7 +120,7 @@ async def test_combination_params_raise_errors(client: Client):
 async def test_combination_params_empty_to_default(
     mocker: Mocker, client: Client
 ):
-    mocker.patch(**MAKE_COMBINATOR(SURVEY_COMBINATIONS))
+    mocker.patch(**patch(MAKE_COMBINATOR, SURVEY_COMBINATIONS))
     params = {
         "apiKey": API_KEY,
         "docType": "",
@@ -134,7 +134,7 @@ async def test_combination_params_empty_to_default(
 
 @mark.asyncio
 async def test_combination_params_keywords(mocker: Mocker, client: Client):
-    mocker.patch(**MAKE_COMBINATOR(SURVEY_COMBINATIONS))
+    mocker.patch(**patch(MAKE_COMBINATOR, SURVEY_COMBINATIONS))
     params = {
         "apiKey": API_KEY,
         "keywords": ["any,any"],
@@ -159,7 +159,7 @@ async def test_combination_params_keywords(mocker: Mocker, client: Client):
 
 @mark.asyncio
 async def test_search_params_valid_data(mocker: Mocker, client: Client):
-    mocker.patch(**MAKE_AGGREGATOR(SURVEY_AGGREGATOR))
+    mocker.patch(**patch(MAKE_AGGREGATOR, SURVEY_AGGREGATOR))
     res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
     assert res.status_code == HTTP_200
 
@@ -168,7 +168,7 @@ async def test_search_params_valid_data(mocker: Mocker, client: Client):
 async def test_search_params_overridden_default(
     mocker: Mocker, client: Client
 ):
-    mocker.patch(**MAKE_AGGREGATOR(SURVEY_AGGREGATOR))
+    mocker.patch(**patch(MAKE_AGGREGATOR, SURVEY_AGGREGATOR))
     params = {
         "apiKey": API_KEY,
         "keywords": KEYWORDS,
@@ -182,7 +182,7 @@ async def test_search_params_overridden_default(
 
 @mark.asyncio
 async def test_search_params_raise_errors(mocker: Mocker, client: Client):
-    mocker.patch(**MAKE_AGGREGATOR(SURVEY_AGGREGATOR))
+    mocker.patch(**patch(MAKE_AGGREGATOR, SURVEY_AGGREGATOR))
     res = await client.get(URL_SEARCH)
     details = assert_error_json(res, HTTP_422, trans(REQUEST_VALIDATION_ERROR))
     assert details[0]["type"] == fqn(RequestValidationError)
@@ -193,7 +193,7 @@ async def test_search_params_raise_errors(mocker: Mocker, client: Client):
 
 @mark.asyncio
 async def test_search_params_empty_to_default(mocker: Mocker, client: Client):
-    mocker.patch(**MAKE_AGGREGATOR(SURVEY_AGGREGATOR))
+    mocker.patch(**patch(MAKE_AGGREGATOR, SURVEY_AGGREGATOR))
     params = {
         "apiKey": API_KEY,
         "docType": "",

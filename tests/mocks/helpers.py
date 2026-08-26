@@ -3,7 +3,7 @@ import random
 from collections.abc import Callable
 from http import HTTPMethod, HTTPStatus
 from types import FunctionType
-from typing import Any, Self
+from typing import Any
 from unittest.mock import AsyncMock, MagicMock
 
 import aiohttp
@@ -45,6 +45,15 @@ def spec(target: Target, method: Target = None, altname: str = None) -> Json:
     if method is None:
         return {"target": fqn(target), "spec": target}
     return {"target": fqn(target, method, altname), "spec": method}
+
+
+def patch(spec_data: Json, value: Exception | Any) -> Json:
+    patch_data = spec_data.copy()
+    if isinstance(value, (list, BaseException)):
+        patch_data["side_effect"] = value
+    else:
+        patch_data["return_value"] = value
+    return patch_data
 
 
 def trans(exc: Exception) -> str:
@@ -145,76 +154,3 @@ def get_patch(value: Any | list[Any] | Exception) -> tuple[str, AsyncMock]:
     else:
         new = AsyncMock(aiohttp.ClientResponse, return_value=value)
     return fqn(aioretry.RetryClient.get), new
-
-
-class Patch:
-    """Context for mocker.patch params
-    Args:
-        method: Type | FunctionType | Callable
-        altname: str
-        value: Exception | Any
-    """
-
-    _VALUE_KEYS = ("side_effect", "return_value")
-
-    def __init__(self, target: Target, *args: Any) -> None:
-        """Context for mocker.patch params
-        Args:
-            method: Type | FunctionType | Callable
-            altname: str
-            value: Exception | Any
-        """
-
-        self._keys = ["target", "spec"]
-        self.target: str = None
-        self.spec: Target = None
-        self.side_effect: Any = None
-        self.return_value: Any = None
-
-        method: Target | None = None
-        value: Exception | Any = None
-        altname: str | None = None
-
-        for arg in args:
-            if isinstance(arg, Target):
-                method = arg
-            elif isinstance(arg, str):
-                altname = arg
-            else:
-                value = arg
-
-        self.target = fqn(target, method, altname)
-        self.spec = target if method is None else method
-        self._handle_value(value)
-
-    def _handle_value(self, value: Exception | Any) -> None:
-        if value is None:
-            return None
-
-        if isinstance(value, (list, BaseException)):
-            self.side_effect = value
-            self.return_value = None
-        else:
-            self.return_value = value
-            self.side_effect = None
-
-        for key in self._VALUE_KEYS:
-            key_attr_value = getattr(self, key)
-
-            if key_attr_value is not None and key not in self._keys:
-                self._keys.append(key)
-
-            elif key_attr_value is None and key in self._keys:
-                self._keys.remove(key)
-
-        return None
-
-    def keys(self) -> list[str]:
-        return self._keys
-
-    def __getitem__(self, key: str) -> Any:
-        return getattr(self, key)
-
-    def __call__(self, value: Exception | Any) -> Self:
-        self._handle_value(value)
-        return self

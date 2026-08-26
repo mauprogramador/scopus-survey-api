@@ -11,11 +11,11 @@ from src.infra.fastapi.csrf_token import (
     verify_csrf_token,
 )
 from tests.conftest import assert_http_error
-from tests.mocks.helpers import Patch, fqn
+from tests.mocks.helpers import fqn, patch, spec
 from tests.mocks.raw import CSRF_TOKEN, HTTP_401, SIGNED_TOKEN
 
 
-LOADS = Patch(URLSafeTimedSerializer.loads)
+LOADS = spec(URLSafeTimedSerializer.loads)
 
 
 def test_generate_tokens():
@@ -46,7 +46,7 @@ def test_invalid_token():
 
 
 def test_signature_expired(mocker: Mocker):
-    mock = mocker.patch(**LOADS(SignatureExpired("any")))
+    mock = mocker.patch(**patch(LOADS, SignatureExpired("any")))
     with raises(CSRFAuthenticationError) as info:
         verify_csrf_token(SIGNED_TOKEN, CSRF_TOKEN)
     assert_http_error(info, HTTP_401, ExcMsg.EXPIRED_TOKEN)
@@ -64,7 +64,7 @@ def test_bad_signature():
 
 
 def test_incorrect(mocker: Mocker):
-    mock = mocker.patch(**LOADS("any"))
+    mock = mocker.patch(**patch(LOADS, "any"))
     with raises(CSRFAuthenticationError) as info:
         verify_csrf_token(SIGNED_TOKEN, CSRF_TOKEN)
     assert_http_error(info, HTTP_401, ExcMsg.INVALID_TOKEN)

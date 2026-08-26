@@ -16,11 +16,11 @@ from tests.mocks.errors import (
     SCOPUS_API_ERROR,
     STARLETTE_HTTP_EXCEPTION,
 )
-from tests.mocks.helpers import Patch
+from tests.mocks.helpers import patch, spec
 from tests.mocks.raw import REQUEST
 
 
-TRANSLATIONS = Patch(load_translations, gettext.translation, "gettext")
+TRANSLATIONS = spec(load_translations, gettext.translation, "gettext")
 _TRANSLATIONS = {
     "starlette.unexpected_error": "any",
     "starlette.default": "any",
@@ -43,7 +43,7 @@ def test_load_translations():
 
 
 def test_error_load_translations(mocker: Mocker):
-    mocker.patch(**TRANSLATIONS(FileNotFoundError("any")))
+    mocker.patch(**patch(TRANSLATIONS, FileNotFoundError("any")))
     with raises(FileNotFoundError) as info:
         load_translations()
     assert info.value.args[0] == "any"
