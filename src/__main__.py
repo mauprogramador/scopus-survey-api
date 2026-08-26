@@ -1,4 +1,5 @@
 import logging
+import sys
 from typing import Any
 
 import aiohttp  # pylint: disable=w0611 # noqa: F401
@@ -14,7 +15,6 @@ import thefuzz  # pylint: disable=w0611 # noqa: F401
 import tqdm  # pylint: disable=w0611 # noqa: F401
 import uvicorn
 import uvicorn.logging
-import uvloop
 
 from src.infra.config.config import APP, ENV, SERVER
 from src.infra.utils import logger
@@ -58,7 +58,11 @@ if __name__ == "__main__":
     SERVER.set(f"Uvicorn/{uvicorn.__version__}")
     logger.debug(env_config=ENV)
 
-    uvloop.install()
+    if sys.platform != "win32":
+        import uvloop
+
+        uvloop.install()
+
     uvicorn.run(
         app=APP,
         host=ENV.host,
