@@ -3,7 +3,7 @@ import secrets
 from pathlib import Path
 
 from httpx import AsyncClient as Client
-from pytest import mark
+from pytest import FixtureRequest, fail, fixture, mark
 from pytest_mock import MockerFixture as Mocker
 from thefuzz.fuzz import partial_ratio as fuzz_partial_ratio
 
@@ -33,6 +33,7 @@ from tests.mocks.raw import (
 
 
 class TestEndpointsSequenceFlow:
+    REASON = "Flow tests must be run all together in sequence"
     THREE_COMBINATIONS = [
         response_mock(search_raw(random.randint(16, 256)))
     ] * 3
@@ -45,6 +46,21 @@ class TestEndpointsSequenceFlow:
     api_key: str = None
     combination: str = None
     file_path: Path = None
+
+    @fixture(autouse=True, scope="class")
+    @classmethod
+    def enforce_sequence_flow(cls, request: FixtureRequest):
+        if request.session.testscollected < 5:
+            fail(cls.REASON, pytrace=False)
+
+        names = [
+            item.nodeid
+            for item in request.session.items
+            if cls.__name__ in item.nodeid
+        ]
+
+        if len(names) < 5:
+            fail(cls.REASON, pytrace=False)
 
     @mark.asyncio
     @classmethod
