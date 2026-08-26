@@ -218,19 +218,3 @@ class Patch:
     def __call__(self, value: Exception | Any) -> Self:
         self._handle_value(value)
         return self
-
-
-class MockAsyncContext:
-    """Mock async contexts `async with`"""
-
-    def __call__(self, *args: Any, **kwds: Any) -> Self:
-        return self
-
-    async def __await__(self):
-        pass
-
-    async def __aenter__(self):
-        pass
-
-    async def __aexit__(self, exc_type, exc_val, exc_tb):
-        pass

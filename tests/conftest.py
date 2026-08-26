@@ -23,7 +23,8 @@ from src.infra.fastapi.main import app
 from src.infra.http.http_client import HTTPClient
 from src.infra.i18n.translations import load_translations
 from src.infra.utils.logger import ANSIFormatter
-from tests.mocks.helpers import MockAsyncContext, fqn
+from tests.mocks.helpers import fqn
+from tests.mocks.models import MockAsyncContext
 from tests.mocks.raw import (
     CSRF_TOKEN,
     CSV_FILE_NAME,

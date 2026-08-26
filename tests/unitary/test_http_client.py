@@ -16,7 +16,8 @@ from src.infra.exceptions import (
 )
 from src.infra.http.http_client import HTTPClient
 from tests.conftest import LIMITER, SEMAPHORE, assert_http_error
-from tests.mocks.helpers import MockAsyncContext, fqn, get_patch
+from tests.mocks.helpers import fqn, get_patch
+from tests.mocks.models import MockAsyncContext
 from tests.mocks.raw import HTTP_200, HTTP_502, HTTP_504
 from tests.mocks.unitary import (
     GET_CONTENT_TYPE_ERROR,

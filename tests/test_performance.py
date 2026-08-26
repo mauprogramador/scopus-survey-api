@@ -1,14 +1,5 @@
-import contextlib
-import cProfile
-import io
-import logging
-import pstats
 import random
-import re
-import shutil
 import string
-import time
-import tracemalloc
 from typing import cast
 from unittest.mock import MagicMock
 
@@ -23,7 +14,7 @@ from src.adapters.persistence.csv_builder import (
 )
 from src.adapters.serializers.query_params import SurveyParams
 from src.adapters.serializers.scopus_data import ScopusAbstract, ScopusPage
-from src.core.domain.types import Json, Lang
+from src.core.domain.types import Lang
 from src.core.use_cases.similarity_filter import SimilarityFilter
 from src.infra.config.config import DIRECTORY, FILE
 from src.infra.config.scopus import MAX_ITEMS_PER_PAGE
@@ -34,6 +25,7 @@ from tests.mocks.helpers import (
     response_mock,
     search_raw,
 )
+from tests.mocks.models import ReportTracker
 from tests.mocks.raw import (
     ALIAS_SEARCH_PARAMS,
     COMBINATION_PARAMS,
@@ -74,130 +66,6 @@ def enforce_performance_isolation(request: FixtureRequest):
         skip(_REASON)
 
 
-class _ReportTracker:
-    _NOTE = "[{}] Duration ({:.4f}s) exceeded limit ({:.4f}s)"
-    # e.g. 45 function calls
-    _INDENT_RE = re.compile(r"\n? *(\d* function calls)")
-    _FILTER = (tracemalloc.Filter(True, "*/src*"),)
-    _TOP = 10  # Top bottlenecks functions
-    _TOLERANCE = 0.30  # 30%
-
-    def __init__(self) -> None:
-        self._metrics: list[Json] = []
-        self._profiler: cProfile.Profile | None = None
-        self._snapshot: tracemalloc.Snapshot | None = None
-        self._peak_bytes: float | None = None
-
-    @contextlib.contextmanager
-    def timeit(self, expected_time: float, op_name: str):
-        time_limit = expected_time * (1 + self._TOLERANCE)
-        half_limit = time_limit / 2.0
-
-        start_time = time.perf_counter()
-        yield
-        elapsed = time.perf_counter() - start_time
-
-        if elapsed > time_limit:
-            status = "FAILED (Too Slow)"
-        elif elapsed < half_limit:
-            status = "OPPORTUNITY (Fast)"
-        else:
-            status = "PASSED"
-
-        report = {
-            "Operation": op_name,
-            "Elapsed (s)": round(elapsed, 4),
-            "Target (s)": round(expected_time, 4),
-            "Limit (s)": round(time_limit, 4),
-            "Status": status,
-        }
-        self._metrics.append(report)
-
-        note = self._NOTE.format(op_name, elapsed, time_limit)
-        assert elapsed <= time_limit, note
-
-    @contextlib.contextmanager
-    def measure(self):
-        logging.disable(logging.CRITICAL)
-
-        if self._profiler is None:
-            self._profiler = cProfile.Profile()
-
-        tracemalloc.start()
-        self._profiler.enable()
-
-        try:
-            yield
-        finally:
-            self._profiler.disable()
-
-        self._snapshot = tracemalloc.take_snapshot()
-        _, peak_bytes = tracemalloc.get_traced_memory()
-
-        tracemalloc.stop()
-        logging.disable(logging.NOTSET)
-        self._peak_bytes = round(peak_bytes / (1024**2), 2)
-
-    def _header(self, title: str, lib: str) -> None:
-        print(f"\n\033[37;1m{title}\033[m (\033[36m{lib}\033[m)\n")
-
-    def show_report(self):
-        width = shutil.get_terminal_size(fallback=(80, 24)).columns
-        print()
-        print(" \033[93mReport\033[m ".center((width + 8), "-"))
-        self._header("Operational Metrics", "time.perf_counter")
-
-        df = pd.DataFrame(self._metrics)
-        print(df.to_string(index=False))
-
-        if not self._profiler and not self._snapshot:
-            print()
-
-        if self._profiler is not None:
-            buffer = io.StringIO()
-            stats = pstats.Stats(self._profiler, stream=buffer)
-
-            stats.sort_stats("cumulative")
-            stats.print_stats("/src", self._TOP)
-
-            stats.sort_stats("tottime")
-            stats.print_stats("/src", self._TOP)
-
-            self._header(f"Top {self._TOP} CPU Bottlenecks", "cProfile")
-            print(self._INDENT_RE.sub(r"   \1", buffer.getvalue().strip()))
-
-        if self._snapshot is not None:
-            self._header(f"Top {self._TOP} Memory Allocations", "tracemalloc")
-            total = len(self._snapshot.statistics("lineno"))
-
-            snapshot = self._snapshot.filter_traces(self._FILTER)
-            stats = snapshot.statistics("lineno")
-
-            print(
-                f"List reduced from {total} to {len(stats)} "
-                "due to restriction <'/src'>\n"
-                f"List reduced from {len(stats)} to {self._TOP} "
-                f"due to restriction <{self._TOP}>\n"
-            )
-
-            for stat in stats[: self._TOP]:
-                print(
-                    f"{stat.traceback[0]}: {stat.size / 1024:.1f} "
-                    f"KiB ({stat.count} blocks)"
-                )
-
-            main_tsize = sum(stat.size for stat in stats) / 1024
-            print(f"\nTotal Allocated: {main_tsize:.1f} KiB")
-
-            other = stats[self._TOP :]
-            if other:
-                other_tsize = sum(stat.size for stat in other) / 1024
-                print(f"Other {len(other)} Processes: {other_tsize:.1f} KiB")
-
-            if self._peak_bytes is not None:
-                print(f"Peak Memory: {self._peak_bytes} MiB\n")
-
-
 @mark.parametrize(
     "total,duration",
     [
@@ -211,7 +79,7 @@ class _ReportTracker:
     ids=["100", "500", "1.000", "2.000", "5.000", "10.000"],
 )
 def test_high_volume_data_parsing(total: int, duration: tuple[float, ...]):
-    tracker = _ReportTracker()
+    tracker = ReportTracker()
 
     pages_count = int(total / MAX_ITEMS_PER_PAGE)
     raw_list = [search_raw(total)] * pages_count
@@ -281,7 +149,7 @@ def test_high_volume_data_parsing(total: int, duration: tuple[float, ...]):
     ids=["10", "30", "50", "70", "100", "150"],
 )
 def test_high_volume_filtering_one_group(total: int, duration: float):
-    tracker = _ReportTracker()
+    tracker = ReportTracker()
 
     df = pd.DataFrame(
         {
@@ -315,7 +183,7 @@ def test_high_volume_filtering_one_group(total: int, duration: float):
     ids=["100", "500", "1.000", "2.000", "5.000", "10.000"],
 )
 def test_high_volume_filtering_groups(total: int, duration: float):
-    tracker = _ReportTracker()
+    tracker = ReportTracker()
     data, ngroups = [], int(total / 50)  # 50doc per group
 
     for _ in range(ngroups):
@@ -364,7 +232,7 @@ def test_high_volume_filtering_groups(total: int, duration: float):
 async def test_high_volume_csv_download(
     total: int, duration: float, mocker: Mocker, client: Client
 ):
-    tracker = _ReportTracker()
+    tracker = ReportTracker()
     mocker.stopall()
 
     data = ScopusAbstract(**abstract_raw()).model_dump(by_alias=True)
@@ -394,7 +262,7 @@ async def test_web_form_route_process_time(
     duration: float, lang: Lang, mocker: Mocker, client: Client
 ):
     mocker.stopall()
-    tracker = _ReportTracker()
+    tracker = ReportTracker()
 
     client.cookies.clear()
     client.headers.clear()
@@ -420,7 +288,7 @@ async def test_api_combination_route_process_time(
     duration: float, count: int, index: int, mocker: Mocker, client: Client
 ):
     mocker.stopall()
-    tracker = _ReportTracker()
+    tracker = ReportTracker()
 
     mocker.patch.dict(COMBINATION_PARAMS, {"keywords": KEYWORDS[:index]})
     mock = mocker.patch(*get_patch([response_mock(RAW_SEARCH_OK)] * count))
@@ -473,7 +341,7 @@ async def test_api_survey_route_process_time(  # pylint: disable=R0913,R0917
     client: Client,
 ):
     mocker.stopall()
-    tracker = _ReportTracker()
+    tracker = ReportTracker()
 
     mock = mocker.patch(*get_patch(res_mock))
 
@@ -494,7 +362,7 @@ async def test_api_survey_route_process_time(  # pylint: disable=R0913,R0917
 @mark.asyncio
 async def test_high_volume_complete_survey(mocker: Mocker, client: Client):
     mocker.stopall()
-    tracker = _ReportTracker()
+    tracker = ReportTracker()
 
     data = [
         response_mock(search_raw(50)),
