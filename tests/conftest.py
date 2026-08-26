@@ -1,13 +1,13 @@
 import asyncio
 import json
 import logging
+import sys
 from http import HTTPStatus
 from unittest.mock import AsyncMock
 from urllib.parse import urljoin
 
 import aiolimiter
 import httpx
-import uvloop
 from pytest import ExceptionInfo, LogCaptureFixture, MonkeyPatch, fixture
 from pytest_asyncio import fixture as async_fixture
 from pytest_mock import MockerFixture as Mocker
@@ -33,7 +33,11 @@ from tests.mocks.raw import (
 )
 
 
-uvloop.install()
+if sys.platform != "win32":
+    import uvloop
+
+    uvloop.install()
+
 
 BASE_URL = urljoin("http://127.0.0.1:123", PREFIX)
 TRANSPORT = httpx.ASGITransport(app=app, client=("127.0.0.1", 123))
