@@ -31,7 +31,7 @@ class MockAsyncContext:
 
 
 class ReportTracker:
-    _NOTE = "[{}] Duration ({:.4f}s) exceeded limit ({:.4f}s)"
+    _NOTE = "[{}] Duration ({:.3f}s) exceeded limit ({:.3f}s)"
     # e.g. 45 function calls
     _INDENT_RE = re.compile(r"\n? *(\d* function calls)")
     _FILTER = (tracemalloc.Filter(True, "*/src*"),)
@@ -62,9 +62,9 @@ class ReportTracker:
 
         report = {
             "Operation": op_name,
-            "Elapsed (s)": round(elapsed, 4),
-            "Target (s)": round(expected_time, 4),
-            "Limit (s)": round(time_limit, 4),
+            "Elapsed (s)": round(elapsed, 3),
+            "Target (s)": round(expected_time, 3),
+            "Limit (s)": round(time_limit, 3),
             "Status": status,
         }
         self._metrics.append(report)
