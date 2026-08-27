@@ -264,9 +264,9 @@ def combinations(keywords_count: int) -> None:
 
 
 def quota(
-    headers: ScopusHeaders, api_name: APIName, allow_empty: bool = None
+    headers: ScopusHeaders, api_name: APIName, empty_as_ok: bool = None
 ) -> None:
-    if allow_empty and headers.status and EMPTY_RESULT in headers.status:
+    if empty_as_ok and headers.status and EMPTY_RESULT in headers.status:
         headers.status = "OK"
 
     args = {

@@ -51,7 +51,7 @@ class ScopusVolumeScouter:
         )
         results.sort(key=self._key)
 
-        logger.quota(quota_headers, "search", allow_empty=True)
+        logger.quota(quota_headers, "search", empty_as_ok=True)
 
         # Interface Segregation for ScopusHeaders
         return results, quota_headers  # type: ignore[return-value]
