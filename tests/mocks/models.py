@@ -31,7 +31,11 @@ class MockAsyncContext:
 
 
 class ReportTracker:
-    _NOTE = "[{}] Duration ({:.3f}s) exceeded limit ({:.3f}s)"
+    _TIMEIT_NOTE = "[{}] Duration ({:.3f}s) exceeded limit ({:.3f}s)"
+    _THROUGHPUT_NOTE = (
+        "[Throughput] ({:.2f}items/s) exceeded limit ({:.2f}items/s)"
+    )
+    _LATENCY_NOTE = "[Latency] ({:.3f}s/item) exceeded limit ({:.3f}s/item)"
     # e.g. 45 function calls
     _INDENT_RE = re.compile(r"\n? *(\d* function calls)")
     _FILTER = (tracemalloc.Filter(True, "*/src*"),)
@@ -69,7 +73,7 @@ class ReportTracker:
         }
         self._metrics.append(report)
 
-        note = self._NOTE.format(op_name, elapsed, time_limit)
+        note = self._TIMEIT_NOTE.format(op_name, elapsed, time_limit)
         assert elapsed <= time_limit, note
 
     @contextlib.contextmanager
@@ -93,6 +97,38 @@ class ReportTracker:
         tracemalloc.stop()
         logging.disable(logging.NOTSET)
         self._peak_bytes = round(peak_bytes / (1024**2), 2)
+
+    @contextlib.contextmanager
+    def efficiency(
+        self, total: int, expected_throughput: float, expected_latency: float
+    ):
+        throughput_limit = expected_throughput * (1 + self._TOLERANCE)
+        latency_limit = expected_latency * (1 + self._TOLERANCE)
+
+        start_time = time.perf_counter()
+        yield
+        elapsed = time.perf_counter() - start_time
+
+        throughput = total / elapsed
+        latency = elapsed / total
+
+        report = {
+            "Total": total,
+            "Elapsed (s)": round(elapsed, 3),
+            "Throughput (items/s)": round(throughput, 2),
+            "T. Target (items/s)": round(expected_throughput, 2),
+            "T. Limit (items/s)": round(throughput_limit, 2),
+            "Latency (s/item)": round(latency, 3),
+            "L. Target (s/item)": round(expected_latency, 3),
+            "L. Limit (s/item)": round(latency_limit, 3),
+        }
+        self._metrics.append(report)
+
+        note = self._THROUGHPUT_NOTE.format(throughput, throughput_limit)
+        assert throughput <= throughput_limit, note
+
+        note = self._LATENCY_NOTE.format(latency, latency_limit)
+        assert latency <= latency_limit, note
 
     def _header(self, title: str, lib: str) -> None:
         print(f"\n\033[37;1m{title}\033[m (\033[36m{lib}\033[m)\n")

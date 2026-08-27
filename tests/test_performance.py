@@ -417,3 +417,73 @@ async def test_high_volume_complete_survey(mocker: Mocker, client: Client):
     assert df.shape[0] == 30  # 25 unique + 1 per group
 
     tracker.show_report()
+
+
+@mark.parametrize(
+    "total,throughput,latency",
+    [(25, 10.33, 0.100), (50, 08.90, 0.115), (75, 09.00, 0.120)],
+    ids=["25", "50", "75"],
+)
+@mark.asyncio
+async def test_throughput_and_latency(  # pylint: disable=R0914
+    total: int,
+    throughput: float,
+    latency: float,
+    mocker: Mocker,
+    client: Client,
+):
+    mocker.stopall()
+    tracker = ReportTracker()
+
+    pages_to_fetch = int(total / MAX_ITEMS_PER_PAGE) - 1
+    data = [
+        response_mock(search_raw(total)),
+        response_mock(
+            abstract_raw(
+                "any_title",
+                "".join(random.choices(string.ascii_letters, k=12)),
+                "2026-01-01",
+            )
+        ),
+    ]
+    data.extend([response_mock(search_raw(total))] * pages_to_fetch)
+    gp_count = int(total * 0.25)  # Take 25% for filtering
+
+    unique = [
+        response_mock(
+            abstract_raw(
+                "any_title",
+                "".join(random.choices(string.ascii_letters, k=12)),
+                "2026-01-01",
+            )
+        )
+        for _ in range(1, total - gp_count)
+    ]
+    data.extend(unique)
+    gp_size = int(gp_count / 3)  # For exact division of group count
+
+    for _ in range(3):
+        author = "".join(random.choices(string.ascii_letters, k=12))
+        group = [
+            response_mock(
+                abstract_raw(f"any_title_{index}", author, "2026-01-01")
+            )
+            for index in range(1, (gp_size + 1))
+        ]
+        assert len(group) == gp_size
+        data.extend(group)
+
+    rows_count = (total - gp_count) + int(gp_count / gp_size)
+    count = total + int(total / MAX_ITEMS_PER_PAGE)
+
+    assert len(data) == count  # Pages + abstracts
+    mock = mocker.patch(*get_patch(data))
+
+    with tracker.efficiency(total, throughput, latency):
+        res = await client.get(URL_SEARCH, params=SEARCH_PARAMS)
+
+        assert res.status_code == HTTP_200 and mock.call_count == count
+        df = load_csv_from_response(res)
+        assert df.shape[0] == rows_count  # Unique - filtered
+
+    tracker.show_report()
