@@ -40,8 +40,8 @@ if sys.platform != "win32":
     uvloop.install()
 
 
-BASE_URL = urljoin("http://127.0.0.1:123", PREFIX)
-TRANSPORT = httpx.ASGITransport(app=app, client=("127.0.0.1", 123))
+BASE_URL = urljoin("http://testserver", PREFIX)
+TRANSPORT = httpx.ASGITransport(app=app)
 
 SLEEP = fqn(HTTPClient, asyncio.sleep, "asyncio")
 LIMITER = fqn(HTTPClient, aiolimiter.AsyncLimiter, "aiolimiter")
