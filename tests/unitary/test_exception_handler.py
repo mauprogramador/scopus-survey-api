@@ -1,13 +1,17 @@
 # mypy: disable-error-code="index"
+from unittest.mock import Mock
+
 from fastapi.exceptions import HTTPException as FastAPIHTTPException
 from fastapi.exceptions import RequestValidationError, ResponseValidationError
 from pydantic import ValidationError
 from pytest import mark
+from pytest_mock import MockerFixture as Mocker
 from slowapi.errors import RateLimitExceeded
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from src.core.domain.types import ExcMsg
 from src.infra.middleware import exception_handlers as handler
+from src.infra.utils import logger
 from tests.conftest import assert_error_json
 from tests.mocks.errors import (
     COMMON_ERROR_EXC_GROUP,
@@ -81,9 +85,23 @@ async def test_scopus_api_error():
 
 
 @mark.asyncio
-async def test_starlette_http_exception():
+async def test_starlette_http_exception(mocker: Mocker):
+    spy = mocker.spy(logger, "error")
     exc = STARLETTE_HTTP_EXCEPTION
     res = await handler.starlette_http_exception(REQUEST, exc)
+    spy.assert_called_once()
+    details = assert_error_json(res, HTTP_500, trans(exc))
+    assert details[0]["type"] == fqn(StarletteHTTPException)
+    assert details[0]["message"] == "any"
+
+
+@mark.asyncio
+async def test_starlette_noisy_access(mocker: Mocker):
+    REQUEST.attach_mock(Mock(path="http://devtools.com"), "url")
+    spy = mocker.spy(logger, "error")
+    exc = STARLETTE_HTTP_EXCEPTION
+    res = await handler.starlette_http_exception(REQUEST, exc)
+    spy.assert_not_called()
     details = assert_error_json(res, HTTP_500, trans(exc))
     assert details[0]["type"] == fqn(StarletteHTTPException)
     assert details[0]["message"] == "any"

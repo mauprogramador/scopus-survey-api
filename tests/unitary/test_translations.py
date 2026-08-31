@@ -106,6 +106,7 @@ def test_translate_http_error():
         (None, Lang.EN_US),
         ("en-US", Lang.EN_US),
         ("pt-BR", Lang.PT_BR),
+        (";q", Lang.EN_US),
         ("en-US,en;q=0.9,pt-BR;q=0.8,pt;q=0.7", Lang.EN_US),
         ("en;q=0.9,pt-BR;q=0.8,pt;q=0.7", Lang.EN_US),
         ("pt-BR;q=0.8,pt;q=0.7", Lang.PT_BR),

@@ -81,6 +81,7 @@ def test_http_error():
     assert_http_error(info, HTTP_500, trans(info.value))
     assert info.value.details[0]["type"] == fqn(ValueError)
     assert info.value.details[0]["message"] == "any"
+    assert "status_code=500" in repr(info.value)
 
 
 def test_signature_error():
