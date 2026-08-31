@@ -42,6 +42,6 @@ class ResourceNotFoundError(BaseHTTPError):
 class DataSumMismatchError(BaseHTTPError):
     """HTTP error status code 502"""
 
-    def __init__(self, message: ExcMsg, cause: Exception = None) -> None:
+    def __init__(self, message: ExcMsg) -> None:
         """HTTP error status code 502"""
-        super().__init__(HTTPStatus.BAD_GATEWAY, message, cause)
+        super().__init__(HTTPStatus.BAD_GATEWAY, message)
