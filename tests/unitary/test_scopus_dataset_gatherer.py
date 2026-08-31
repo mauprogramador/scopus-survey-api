@@ -4,7 +4,7 @@ from unittest.mock import AsyncMock
 
 from pytest import mark, raises
 
-from src.adapters.exceptions import ResourceNotFoundError
+from src.adapters.exceptions import DataSumMismatchError, ResourceNotFoundError
 from src.adapters.gateway.context import ScopusContext
 from src.adapters.gateway.scopus_dataset_gatherer import (
     ScopusDatasetGatherer,
@@ -22,6 +22,8 @@ from tests.mocks.helpers import fqn
 from tests.mocks.raw import ALIAS_SEARCH_PARAMS, HTTP_404, HTTP_429, HTTP_502
 from tests.mocks.unitary import (
     ABSTRACT_QUOTA_EXCEEDED,
+    DATA_MISMATCH_MORE_RESULTS,
+    DATA_MISMATCH_TWO_RESULTS,
     EXACT_QUOTA_MORE_ABSTRACTS,
     EXACT_QUOTA_MORE_PAGES,
     EXACT_QUOTA_MORE_RESULTS,
@@ -307,3 +309,29 @@ async def test_gather_abstract_quota_exceeded():
 
     assert len(ctx.entry) == 1 and len(ctx.abstracts) == 0
     assert ctx.search_headers and not ctx.abstract_headers
+
+
+@mark.asyncio
+async def test_gather_data_mismatch_two_results():
+    gateway, api_call = _fixt(DATA_MISMATCH_TWO_RESULTS)
+    ctx = gateway._ctx  # pylint: disable=w0212
+
+    with raises(DataSumMismatchError) as info:
+        await gateway.fetch(PARAMS)
+
+    assert_http_error(info, HTTP_502, ExcMsg.DATA_MISMATCH_ERROR)
+    assert api_call.call_count == 2 and ctx.total_results == 2
+    assert len(ctx.entry) == 1 and len(ctx.abstracts) == 1
+
+
+@mark.asyncio
+async def test_gather_data_mismatch_more_results():
+    gateway, api_call = _fixt(DATA_MISMATCH_MORE_RESULTS)
+    ctx = gateway._ctx  # pylint: disable=w0212
+
+    with raises(DataSumMismatchError) as info:
+        await gateway.fetch(PARAMS)
+
+    assert_http_error(info, HTTP_502, ExcMsg.DATA_MISMATCH_ERROR)
+    assert api_call.call_count == 2 and ctx.total_results == 7
+    assert len(ctx.entry) == 1 and len(ctx.abstracts) == 1

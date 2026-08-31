@@ -57,10 +57,6 @@ class ScopusDatasetGatherer:
 
     def _validate_results(self) -> tuple[list[Json], ScopusDetails]:
         if self._ctx.total_results != len(self._ctx.abstracts):
-            logger.debug(
-                total_results=self._ctx.total_results,
-                total_abstracts=len(self._ctx.abstracts),
-            )
             raise DataSumMismatchError(ExcMsg.DATA_MISMATCH_ERROR)
 
         search_headers = ScopusHeaders.model_validate(self._ctx.search_headers)
@@ -148,6 +144,10 @@ class ScopusDatasetGatherer:
             return self._validate_results()
 
         if self._ctx.total_results == 2:
+
+            if self._ctx.total_results > len(self._ctx.entry):
+                raise DataSumMismatchError(ExcMsg.DATA_MISMATCH_ERROR)
+
             abstract_data, self._ctx.abstract_headers = (
                 await self._fetch_abstract(index=self._PAGE_TWO)
             )
@@ -171,6 +171,9 @@ class ScopusDatasetGatherer:
             for page in results:
                 self._ctx.entry.extend(page.entry)
 
+        if self._ctx.total_results > len(self._ctx.entry):
+            raise DataSumMismatchError(ExcMsg.DATA_MISMATCH_ERROR)
+
         abstracts_to_fetch = range(self._FIRST_PAGE, self._ctx.total_results)
 
         results, self._ctx.abstract_headers = await fetch_multiple(
@@ -185,5 +188,14 @@ class ScopusDatasetGatherer:
     ) -> tuple[list[Json], ScopusDetails]:
         try:
             return await self._run(params)
+
+        except DataSumMismatchError:
+            logger.debug(
+                total_results=self._ctx.total_results,
+                total_entry=len(self._ctx.entry),
+                total_abstracts=len(self._ctx.abstracts),
+            )
+            raise
+
         finally:
             await self._http_client.close()

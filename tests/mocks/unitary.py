@@ -208,6 +208,14 @@ ABSTRACT_QUOTA_EXCEEDED = [
     bundle_mock(search_raw(1)),
     bundle_mock(RAW_SERVICE_ERROR_QUOTA, HTTP_429, RAW_HEADERS_NO_QUOTA),
 ]
+DATA_MISMATCH_TWO_RESULTS = [
+    bundle_mock(search_raw(2, 1)),
+    bundle_mock(RAW_ABSTRACT_OK),
+]
+DATA_MISMATCH_MORE_RESULTS = [
+    bundle_mock(search_raw(7, 1)),
+    bundle_mock(RAW_ABSTRACT_OK),
+]
 
 # SimilarityFilter.filter
 
